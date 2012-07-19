@@ -11,3 +11,19 @@
     }
 //-->
 </script>
+
+<!-- Detect IE on load -->
+<script type="text/javascript">
+  <!--
+	function detectIE() {
+	  
+	  //if (YAHOO.env.ua.webkit) { // safari
+	  //if (YAHOO.env.ua.gecko > 0) { // FF 
+	  if (YAHOO.env.ua.ie > 0) { // IE
+		  //alert(YAHOO.env.ua.gecko);
+		  showMessage("Internet Explorer Detected", "Sorry, Internet Explorer is not supported by this web site.");
+	  } 
+	 }
+	 YAHOO.util.Event.onDOMReady(detectIE);
+  //-->
+</script>
