@@ -1,0 +1,34 @@
+COG PROJECT INSTALLATION INSTRUCTIONS
+
+o Download the software from the SVN repository:
+
+cd <install directory>
+svn co https://ncpp.svn.sourceforge.net/svnroot/ncpp/COG
+cd COG
+
+o Initialize the database
+manage.py syncdb (initializes tables for all applications NOT managed by 'south')
+manage.py migrate cog (initializes tables for applications managed by 'south')
+manage.py migrate remap
+manage.py migrate accounts
+
+o gather the static media files from the different applications into a single directory
+mkdir static
+python manage.py collectstatic
+
+o Create symbolic links to site_media
+cd COG/site_media
+ln -s ../filebrowser/media/filebrowser filebrowser
+ln -s ../cog/media/cog cog
+
+o Enable email notification
+To enable email notification for project membership, create a file in the home directory of the user running the server
+with name ~/.cog.cfg and the following content:
+
+[email]
+email.server=<your email server hostname>
+email.username=<email server username>
+email.password=<email server password>
+
+
+

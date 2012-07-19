@@ -1,0 +1,41 @@
+{% extends "layouts/layout_left_center_right.html" %}
+{% load comments %}
+{% block left %}&nbsp;{% endblock %}
+
+{% block main %}
+
+  <form action="{% comment_form_target %}" method="post">{% csrf_token %}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+ 
+
+    {% if not form.errors %}
+      <div class="box-colored"> 
+        <h2>Preview your comment:</h2>
+        <div class="box-rounded">{{ comment|linebreaks }}</div>
+        <p>
+            <input type="submit" name="submit" class="submit-post" value="Post" id="submit" />
+        </p>
+      </div>
+    {% endif %}
+ 
+    
+    <div class="box-colored">
+	    <h2>Make changes:</h2>
+	    {% for field in form %}
+	      {% if field.is_hidden %}
+	        {{ field }}
+	      {% else %}
+	        {% if field.errors %}{{ field.errors }}{% endif %}
+	        {% ifequal field.name "honeypot" %} <p style="display:none;">{{ field.label_tag }} {{ field }}</p>{% endifequal %}
+	        {% ifequal field.name "comment" %} <p>{{ field }}</p>{% endifequal %}
+	      {% endif %}
+	    {% endfor %}
+	    <p class="submit">
+	    <input type="submit" name="submit" class="submit-post" value="Post" />
+	    <input type="submit" name="preview" class="submit-preview" value="Preview" />
+	    </p>
+    </div>
+    
+  </form>
+  
+{% endblock %}

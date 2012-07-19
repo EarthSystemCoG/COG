@@ -1,0 +1,34 @@
+<!-- form table for home page -->
+
+<!-- immutable fields -->
+{{ form.url.as_hidden }}
+{{ form.template.as_hidden }}
+{{ form.topic.as_hidden }}
+{{ form.parent.as_hidden }}
+
+<!-- mutable fields -->
+<table>
+    <tr>
+	    <td valign="top">Author</td>
+	    <td>{{ request.user }} </td>		          
+    </tr>
+    <tr>
+        <td><b>Title</b></td>
+        <td class="long">{{ form.title }} {{ form.title.errors }}</td>
+    </tr>
+    {% if not form.instance.is_home %}
+    <!-- allow changing of the template, except for the home page -->
+    <tr>
+         <td><b>Template</b></td>
+         <td class="long">{{ form.template }} {{ form.template.errors }}</td>
+    </tr>   
+    {% endif %}   
+    <tr>
+          <td nowrap="nowrap">Private ?</td>
+          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                      
+    </tr>    
+    <tr>
+        <td><b>Body</b></td>
+        <td>{{ form.body }} {{ form.body.errors }}</td>
+    </tr>
+</table>

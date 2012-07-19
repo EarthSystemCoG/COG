@@ -1,0 +1,63 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+
+{% block main %} 
+
+	{% load cog_utils %}
+	
+	<form action="" method="post">
+	
+		 {% csrf_token %}
+	     {{ formset.management_form }}
+	     
+	     {% for form in formset.forms %}
+	     	
+     	    {{ form.id }}
+	        
+	        <div class="mybox">
+				<table>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap"><b>Title</b></td>
+	            		<td class="long">
+	            			{{ form.title.help_text }}
+	            			{{ form.title }} 
+	            			{{ form.title.errors }}
+	            		</td>
+	            	</tr>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap">Description</td>
+	            		<td class="long">
+	            			{{ form.description.help_text }} 
+	            			{{ form.description }} 
+	            			{{ form.description.errors }}
+	            		</td>
+	            	</tr>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap"><b>Type</b></td>
+	            		<td class="long">
+	            			{{ form.type.help_text }} 
+	            			{{ form.type }} 
+	            			{{ form.type.errors }}
+	            		</td>
+	            	</tr>
+	            	{% if form.instance.id %}
+		            	<tr>
+		            		<td valign="top">&nbsp;</td>
+		            		<td class="long">
+		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
+		            			&nbsp;<a href="{% url organizational_role_members form.instance.id %}" class="changelink" style="float:right">Update Members</a>
+		            	</tr>
+	            	{% endif %}
+	            	
+	            </table>
+            </div>
+	     		     	
+	     {% endfor %}
+    
+    	 <div style="text-align:right">
+	         <input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower %}'"/>
+	         <input type="submit" value="Submit" />
+         </div>    
+    
+    </form>     
+	
+{% endblock %}

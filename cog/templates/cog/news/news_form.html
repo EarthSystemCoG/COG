@@ -1,0 +1,50 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %} 
+
+    {% load cog_utils %}
+            
+    <div class="mybox">
+        <form action="" method="post">
+            
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td class="head"><b>Title</b></td>
+                    <td>{{ form.title }} {{ form.title.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="head"><b>Text</b></td>
+                    <td>{{ form.text }} {{ form.text.errors }}</td>
+                </tr>
+                
+                <tr>
+                    <td class="head"><b>Author</b></td>
+                    <td>{{ request.user }} </td>            
+                    <input type="hidden" name="author" value="{{request.user.id}}"/>      
+                </tr>
+                 <tr>
+                    <td class="tophead"><b>Publish to</b></td>
+                    <td>
+                        {{ form.instance.project }}
+                        <input type="hidden" name="project" value="{{form.instance.project.id}}"/>
+                        {% for other_project in other_projects %} 
+                            <br/>
+                            {% if user|hasUserPermission:other_project %}
+                                <input type="checkbox" name="other_projects" value="{{other_project.id}}" checked="checked"/> {{ other_project }}                 
+                            {% else %}
+                                <span style="color:red"> {{ other_project }} (Warning: Must be a member of this project to send news. News will not be delivered.) </span>
+                            {% endif %}                                             
+                        {% endfor %}
+                    </td>
+                </tr>             
+            </table>
+            <div style="text-align:right">
+                <input type="button" value="Cancel" onclick="window.location='{% url project_home project.short_name.lower %}'"/>
+                <input type="submit" value="Submit" />
+            </div>
+         </form>
+         
+    </div>
+
+{% endblock %}

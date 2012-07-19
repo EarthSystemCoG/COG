@@ -1,0 +1,45 @@
+<!-- 
+    Template snippet for search
+    #@param object_type : mandatory results type
+    @param url : mandatory search results url
+    @param query: optional previous query string
+    @param topic_list : optional list of topics for sub-selection
+    @param topic : optional currently selected topic
+-->
+ 
+<div class="box-colored">
+    
+    <form action="{{ url }}" method="GET">
+    
+        <input type="hidden" name="type" value="{{ request.GET.type }}"/>
+    
+        <!-- text box -->
+        <table>
+           <tr>
+            <td nowrap="nowrap" style="text-align: right"><img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"/></td>
+            <td nowrap="nowrap" style="text-align: left"><b>Data Search</b></td>
+            <td class="long"><input type="text" name="query" value="{{ query|escape }}"></td>
+            <td>
+            <!-- sub-select -->
+	        {% if topic_list %}
+	            <td nowrap="true"><b>Select Topic</b></td> 
+	            <td>
+		            <select name="topic">
+		                <option value="">-- Any --</option>
+		                {% for option in topic_list %}
+		                    {% if option.name == topic %}
+		                        <option value="{{option.name}}" selected='true'>{{option}}</option>
+		                    {% else %}
+		                        <option value="{{option.name}}">{{option}}</option>
+		                    {% endif %}
+		                {% endfor %}
+		            </select>
+	            </td> 
+	        {% endif %}  
+            </td>
+            <td><input type="submit" value="Search"></td>
+           </tr>
+        </table>
+    </form>
+</div>
+&nbsp;

@@ -1,0 +1,60 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% load url from future %}
+
+{% block main %}
+
+	{% load cog_utils %}
+
+	<!-- This project code -->
+	{% with project.code as external_urls %}
+		{% include 'cog/project/_external_urls_list.html' %}
+	{% endwith %}
+	
+	<hr/>
+	
+	<!-- Edit this project code - access restricted to project members -->
+    {% if user|hasUserPermission:project %}
+       <div style="text-align:center">
+        <a href="{% url 'code_update' project.short_name.lower %}" class="changelink">&nbsp;Update Code Repositories</a>
+	   </div>
+    {% endif %}
+    
+    <!--  Peer project code -->
+    {% if peers %}
+		<div class="header_bar"> 
+		     <a href="" onclick="javascript:toggle_visibility('peers_urls'); return false;" class="listlink">&nbsp;Peer Projects Code</a>
+		</div>
+		<div class="mybox" id="peers_urls" style="display:none">
+	   	    
+		    {% for prj in peers %}
+	    		{% with prj.code as external_urls %}
+	    			{% with prj.short_name as group_title %}
+						{% include 'cog/project/_external_urls_list.html' %}
+					{% endwith %}
+				{% endwith %}
+		    {% endfor %}
+		
+		</div>
+	{% endif %}
+	
+	<br/>
+	
+	<!--  Children project code -->
+	{% if children %}
+		<div class="header_bar"> 
+		     <a href="" onclick="javascript:toggle_visibility('children_urls'); return false;" class="listlink">&nbsp;Child Projects Code</a>
+		</div>
+		<div class="mybox" id="children_urls" style="display:none">
+	   	    
+		    {% for prj in children %}
+	    		{% with prj.code as external_urls %}
+	    			{% with prj.short_name as group_title %}
+						{% include 'cog/project/_external_urls_list.html' %}
+					{% endwith %}
+				{% endwith %}
+		    {% endfor %}	
+		    
+		</div>	
+	{% endif %}
+
+{% endblock %}

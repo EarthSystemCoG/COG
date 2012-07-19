@@ -1,0 +1,55 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% load url from future %}
+
+{% block main %}
+
+	{% load cog_utils %}
+	
+	
+     
+        <!-- note: action form can be "add" or "update" -->
+        <form action="" method="post">
+                
+            {% csrf_token %}
+ 		    {{ formset.management_form }}
+ 		    
+		    {% for form in formset.forms %}
+		        {{ form.id }}
+		        
+		        <div class="mybox">
+					<table>
+		            	<tr>
+		            		<td valign="top" nowrap="nowrap"><b>Title</b></td>
+		            		<td class="long">{{ form.title }} {{ form.title.errors }}</td>
+		            	</tr>
+		            	<tr>
+		            		<td valign="top" nowrap="nowrap"><b>URL</b></td>
+		            		<td class="long">{{ form.url }} {{ form.url.errors }}</td>
+		            	</tr>
+		            	<tr>
+		            		<td valign="top" nowrap="nowrap">Description</td>
+		            		<td class="long">{{ form.description }} {{ form.description.errors }}</td>
+		            	</tr>
+		            	{% if form.instance.id %}
+			            	<tr>
+			            		<td valign="top" nowrap="nowrap">Delete ?</td>
+			            		<td class="long">{{ form.DELETE }}</td>
+			            	</tr>
+		            	{% endif %}
+		            	
+		            </table>
+	            </div>
+	
+
+		    {% endfor %}
+			    
+			    <div style="text-align:right">
+                	<input type="button" value="Cancel" onclick="window.location='{% url 'project_home' project.short_name|lower %}'"/>
+                	<input type="submit" value="Submit" />
+            	</div>
+
+		</form>
+	
+
+                
+{% endblock %}

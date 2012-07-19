@@ -1,0 +1,30 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% load url from future %}
+
+{% block main %} 
+
+    <p/>
+    {{ project.description }}
+    <p/>
+	
+	<!-- Project Latest Signals -->     
+    {% if project_latest_signals %}
+       <hr/>
+       <div class="box-rounded">
+            <table>
+                <caption>Recent Activity</caption>
+                {% for signal in project_latest_signals %}
+                    <tr>
+                        <td>
+                           {{ signal.title }}:
+                           <a href="{{ signal.url }}">{{ signal.description|truncatewords:10 }}</a>
+                           &nbsp [<i>{{signal.user.username}} @ {{signal.update_date|date:"Y/m/d h:m:s"}}</i>]                 
+                       </td>
+                    </tr>
+                {% endfor %}
+            </table>  
+            <a href="{% url 'signal_list' project.short_name.lower %}">&nbsp;View All Project Activity &raquo;</a>
+        </div>
+    {% endif %}
+
+{% endblock %}

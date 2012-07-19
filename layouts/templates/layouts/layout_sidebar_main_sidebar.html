@@ -1,0 +1,16 @@
+{% extends "layouts/layout_base.html" %}
+
+{% block body %}   
+        
+    <div class="span-4">
+         {% block left %} &nbsp; {% endblock %}
+    </div>
+    <div class="span-16">
+         {% block title %} <h1 class="title">{{ title }}</h1> {% endblock %}
+         {% block main %} &nbsp; {% endblock %}
+    </div>
+    <div class="span-4 last">
+         {% block right %} &nbsp; {% endblock %}
+    </div>
+
+{% endblock %}

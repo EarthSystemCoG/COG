@@ -1,0 +1,40 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% load url from future %}
+
+{% block main %}
+
+{% load cog_utils %}
+
+<div class="mybox">
+    <form method="post" action="">
+        
+           {% csrf_token %}
+           
+            <table>
+                <tr>
+                    <td valign="top" nowrap="nowrap"><b>Name</b></td>
+                    <td class="long">{{ form.name }}{{ form.name.errors }}</td>
+                </tr>
+                <tr>
+                    <td valign="top" nowrap="nowrap"><b>Parent Folder</b></td>
+                    <td class="long">{{ form.parent }}{{ form.parent.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
+                </tr>                       
+            </table>
+            
+            <!-- hidden fields -->
+            {{ form.project.as_hidden }}
+            {{ form.user.as_hidden }}
+            {{ form.order.as_hidden }}
+            
+            <div style="text-align:right">
+                <input type="button" value="Cancel" onclick="window.location='{% url 'bookmark_list' project.short_name|lower %}'"/>
+                <input type="submit" value="Submit" />
+            </div>
+
+    </form>
+</div>
+
+{% endblock %}

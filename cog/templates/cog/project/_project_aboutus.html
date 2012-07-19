@@ -1,0 +1,60 @@
+<!-- project details page -->
+
+{% load cog_utils %}
+   
+<table>
+    <tr>
+		<td nowrap="nowrap"><b>Long Name</b></td>
+		<td class="long">{{proj.long_name}}</td>
+	</tr>
+	{% if proj.description %}
+	<tr>
+		<td nowrap="nowrap"><b>Description</b></td>
+		<td class="long">{{proj.description|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	{% if proj.external_homepage %}
+	<tr>
+		<td nowrap="nowrap"><b>Home Page</b></td>
+		<td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage}}</a></td>
+	</tr>
+	{% endif %}
+	{% if proj.mission %}
+	<tr>
+		<td nowrap="nowrap"><b>Mission</b></td>
+		<td class="long">{{proj.mission|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	{% if proj.vision %}
+	<tr>
+		<td nowrap="nowrap"><b>Vision</b></td>
+		<td class="long">{{proj.vision|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	{% if proj.values %}
+	<tr>
+		<td nowrap="nowrap"><b>Values</b></td>
+		<td class="long">{{proj.values|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	{% if proj.history %}
+	<tr>
+		<td nowrap="nowrap"><b>History</b></td>
+		<td class="long">{{proj.history|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	{% for organization in proj.organization_set.all %}
+	<tr>
+		<td nowrap="nowrap"><b>Organizational Partner</b></td>
+		<td class="long">{{organization.name}}</td>
+	</tr>    	
+	{% endfor %}
+	{% for fundingSource in proj.fundingsource_set.all %}
+	<tr>
+		<td nowrap="nowrap"><b>Funding Source</b></td>
+		<td class="long">{{fundingSource.name}}</td>
+	</tr>    	
+	{% endfor %}
+	
+</table>
+        

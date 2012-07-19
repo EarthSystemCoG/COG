@@ -1,0 +1,54 @@
+<!-- Organizational Roles -->
+
+{% load cog_utils %}
+
+<div id="{{category}}_organizational_roles">
+
+	<!-- header -->
+	<hr/>
+	<b>{{category}} Organizational Roles</b>
+	{% if user|hasAdminPermission:proj %}
+	    <div style="float:right">
+	    	<a href="{% url organizational_role_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
+	 	</div>
+	{% endif %}
+
+	<!-- content -->
+	{% if organizational_roles %}
+
+		<table>
+			{% for role in organizational_roles %}
+				<tr>
+					<td>
+						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
+							<tr>
+								<td class="leftcolumn"><b>{{role.type}}</b></td>
+								<td>{{role.title}}</td>
+							</tr>
+							{% if role.description %}
+							<tr>
+								<td class="leftcolumn">Description</td>
+								<td>{{role.description|linebreaksbr}}</td>
+							</tr>
+							{% endif %}
+							{% if role.members.all %}
+							<tr>
+								<td class="leftcolumn">Name</td>
+								<td>
+									{% for member in role.members.all %}{% if forloop.counter > 1 %}, {% endif %}
+										{{member.user.get_full_name}}{% endfor %}	
+								</td>
+							</tr>
+							{% endif %}							
+						</table>
+						
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+		
+	{% else %}
+		:&nbsp;<i>No information found.</i>
+	{% endif %}
+ 
+</div>

@@ -1,0 +1,34 @@
+FUNCTIONALIY
+o Hierarchical and peer-to-peer project model
+o Web site editing capabilities: project home page and child pages
+o Social communication capabilities:
+    - News (published to source project and any other project)
+    - Posts (via wysiwyg wiki)
+    - Document upload (of any kind)
+    - Commenting on posts and documents
+o Logging of all project related activity including new posts, documents, comments
+
+NOTES
+o Difference between a page and a blog:
+    - page is less collaborative: does not allow comments or loading of attachments, blog does
+    - page has user-assigned URL (within name space of home page), blog has a fixed (difficult to remember) URL
+    - page has a customizable layout, blog doesn't
+o Deleting a project will automatically remove all associated posts (pages and blogs) and news
+
+DEPENDENCIES
+o layouts
+    - for the web presentation layout
+o django.contrib.auth
+    - to tie projects to users and access control
+o django.tintMCE
+    - to provide WYSIWYG capabilities for editing posts
+o django comments 
+    - to comment on posts, documents
+o django signals
+    - to log and display all relevant activity within a project
+o south
+    - for database migration
+    
+ACKNOWLEDGMENTS
+
+o Some icons downloaded from the web site: http://findicons.com/

@@ -1,0 +1,22 @@
+<!-- form table for blog -->
+
+<!-- more immutable fields -->
+{{ form.url.as_hidden }}
+{{ form.template.as_hidden }}
+{{ form.parent.as_hidden }}
+
+<!-- mutable fields -->
+<table>
+    <tr>
+        <td><b>Title</b></td>
+        <td class="long">{{ form.title }} {{ form.title.errors }}</td>
+    </tr>
+    <tr>
+        <td><b>Body</b></td>
+        <td>{{ form.body }} {{ form.body.errors }}</td>
+     </tr>
+     <tr>
+          <td nowrap="nowrap"><b>Private ?</b></td>
+          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                
+     </tr>    
+</table>

@@ -1,0 +1,88 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+
+{% block main %} 
+
+	{% load cog_utils %}
+    
+	<form action="" method="post">
+	         
+	     {% csrf_token %}
+	     {{ formset.management_form }}
+	     
+	     {% for form in formset.forms %}
+	     	
+     	    {{ form.id }}
+	        
+	        <div class="mybox">
+				<table>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap"><b>Title</b></td>
+	            		<td class="long">
+	            			{{ form.title.help_text }}
+	            			{{ form.title }} 
+	            			{{ form.title.errors }}
+	            		</td>
+	            	</tr>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap"><b>Type</b></td>
+	            		<td class="long">
+	            			{{ form.type.help_text }} 
+	            			{{ form.type }} 
+	            			{{ form.type.errors }}
+	            		</td>
+	            	</tr>	            	
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap">Frequency</td>
+	            		<td class="long">
+	            			{{ form.frequency.help_text }} 
+	            			{{ form.frequency }} 
+	            			{{ form.frequency.errors }}
+	            		</td>
+	            	</tr>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap">Purpose</td>
+	            		<td class="long">
+	            			{{ form.purpose.help_text }} 
+	            			{{ form.purpose }} 
+	            			{{ form.purpose.errors }}
+	            		</td>
+	            	</tr>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap">Membership</td>
+	            		<td class="long">
+	            			{{ form.membership.help_text }} 
+	            			{{ form.membership }} 
+	            			{{ form.membership.errors }}
+	            		</td>
+	            	</tr>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap">Participation Details</td>
+	            		<td class="long">
+	            			{{ form.participationDetails.help_text }} 
+	            			{{ form.participationDetails }} 
+	            			{{ form.participationDetails.errors }}
+	            		</td>
+	            	</tr>
+	            	{% if form.instance.id %}
+		            	<tr>
+		            		<td valign="top">&nbsp;</td>
+		            		<td class="long">
+		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
+		            			&nbsp;<a href="{% url communication_means_members form.instance.id %}" class="changelink" style="float:right">Update Members</a>
+		            		</td>
+		            	</tr>
+	            	{% endif %}
+	            	
+	            </table>
+            </div>
+	     		     	
+	     {% endfor %}
+    
+    	 <div style="text-align:right">
+	         <input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower %}'"/>
+	         <input type="submit" value="Submit" />
+         </div>
+    
+    </form>    
+	
+{% endblock %}

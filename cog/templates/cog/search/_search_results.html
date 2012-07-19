@@ -1,0 +1,100 @@
+{% if request.GET.search_data %}
+
+  <!-- anchor for dialogs -->
+  <div id="myDialog" class="yui-skin-sam"></div>
+
+  <!-- don't display results if form submission resulted in error -->
+  {% if not error_message %}
+
+    {% with search_output.results as results %}
+        
+        {% load pagination_tags %}
+        {% autopaginate results 10 %}
+             
+        {% if results|length == 0 %}
+            <p/><div style="text-align:center; font-weight:bold">The search returned 0 results.</div>
+        {% else %}
+        
+            <p/>
+            <div style="text-align:center">Number of Results: {{ search_output.counts }} </div>
+            {% paginate %} 
+                   
+	        <div class="mybox">
+	            
+	            <!-- Table of search results -->
+	            <table>
+	            
+	                {% for record in results %}         
+	                    <tr>
+	                        <td class="tophead">{{ page_obj.start_index|add:forloop.counter|add:-1}}.</td>
+	                        <td class="long">
+	                        	<!-- Result title -->
+	                        	<b>{{record.fields.title.0}}</b>
+	                        	
+	                        	<!-- Result description -->                         
+	                            {% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 }}{% endif %}
+	                        	
+	                        	<br/>
+	                        	[ <a href="javascript:toggle_visibility('dataset_{{ record.id }}'); "><b>Show Metadata</b></a> ]
+	                        	          
+	                        	[ <a href="javascript:toggle_visibility('files_{{ record.id }}'); 
+	                        	          javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}');"><b>Show Files</b></a> ]
+	                        	
+	                        	<!-- display URL links -->
+	                        	{% for url in record.fields.url %}
+	                        		{% if url.1 == 'application/html+thredds' %}
+	                            		&nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]		  
+	                            	{% endif %} 
+	                            	{% if url.1 == 'application/las' %}
+	                            		&nbsp; [ <a href="{{url.0}}"><b>LAS Visualization</b></a> ]		  
+	                            	{% endif %} 	                            	
+	                            {% endfor %}    	          
+	                            
+	                            <!-- display CIM viewer link -->   
+  								&nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'hadgem2-es', '1pctCO2')"><b>Model Metadata</b> </a> ]
+  								{% comment %}
+  									&nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'canCM4', '1pctCO2')"><b>Model Metadata</b> </a> ]      
+	                            {% endcomment %}	                            
+	                            
+	                            <!-- dataset metadata container -->
+								<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
+									<b>Dataset Metadata</b>
+									<!-- display more record information -->
+		                            {% for key, values in record.fields.items %}
+		                                {% if key in search_output.facets.keys %}
+		                                {% if key != 'url' and key != 'description' and key != 'title' %}
+		                                    <br/><span style="text-decoration:underline">{{ key }}</span> = 
+		                                        {% for value in values %} 
+		                                          {{ value }}{% if forloop.counter != values|length %}, {% endif %} 
+		                                        {% endfor %}
+		                                {% endif %}
+		                                {% endif %}
+		                            {% endfor %}							
+								</div>
+	                                                      
+	                            <!-- files place-holder -->
+								<div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>	                            
+	                           	                            	                            
+	                            {% comment %}       
+	                            {% if request.user.is_authenticated %}
+	                               <br/>
+                                   <a href="javascript:bookmarkit('{{record.fields.url.0}}', '{{record.fields.title.0}}')">
+                                      <img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Save to Bookmarks</img>
+                                   </a>
+                                {% endif %}
+                                {% endcomment %}
+	                                                 
+	                            
+	                        </td>
+	                    </tr>       
+	                {% endfor %}
+	            
+	            </table>
+	            
+	        </div>
+        {% endif %}
+        
+        
+    {% endwith %}
+  {% endif %}
+{% endif %}

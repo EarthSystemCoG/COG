@@ -1,0 +1,45 @@
+<div class="mybox">
+    <table>
+        <caption>User Information</caption>
+        <tr>
+         <td class="head" nowrap="nowrap"><b>First Name</b></td>
+         <td class="long">{{ user_profile.user.first_name }}</td>
+        </tr>
+        <tr>
+            <td class="head" nowrap="nowrap"><b>Last Name</b></td>
+            <td class="long">{{ user_profile.user.last_name }}</td>
+        </tr>
+        <tr>
+            <td class="head" nowrap="nowrap"><b>User Name</b></td>
+            <td class="long">{{ user_profile.user.username }}</td>
+        </tr>
+        <tr>
+            <td class="head" nowrap="nowrap"><b>Email</b></td>
+            <td class="long">{{ user_profile.user.email }}</td>
+        </tr>
+        <tr>
+            <td class="head" nowrap="nowrap"><b>Institution</b></td>
+            <td class="long">{{ user_profile.institution }}</td>
+        </tr>      
+        <tr>
+            <td class="head" nowrap="nowrap"><b>Department</b></td>
+            <td class="long">{{ user_profile.department }}</td>
+        </tr>      
+        <tr>
+            <td class="head" nowrap="nowrap"><b>City</b></td>
+            <td class="long">{{ user_profile.city }}</td>
+        </tr>  
+        <tr>
+            <td class="head" nowrap="nowrap"><b>State</b></td>
+            <td class="long">{{ user_profile.state }}</td>
+        </tr>      
+        <tr>
+            <td class="head" nowrap="nowrap"><b>Country</b></td>
+            <td class="long">{{ user_profile.country }}</td>
+        </tr>  
+        <tr>
+            <td class="head" nowrap="nowrap"><b>COG Email List</b></td>
+            <td class="long">{% if user_profile.subscribed %}Subscribed{% else %}Not Subscribed{% endif %}</td>
+        </tr>      
+    </table>
+</div>

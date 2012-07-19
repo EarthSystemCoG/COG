@@ -1,0 +1,81 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% load url from future %}
+
+{% block main %}
+
+	{% load cog_utils %}
+	
+<div class="vertical_menu">
+	<form method="post" action="">
+	    {% csrf_token %}
+	    	     
+		    {% for ii in index %}
+		      {% with ii.topic.id as topic_id %}
+		    
+		    	<!-- topic header -->
+		    	<h3>	    		         		    		     	
+	    			 {% with "topic_id_"|concat:topic_id as topic_key %}	    			
+	    			  {% with index|length as length %}
+		    			<select name="{{ topic_key }}">
+		    				{% if forloop.counter == 1 %}
+		    					<option value="0" selected="selected">0</option>
+		    				{% else %}
+			    				{% with length|add:"-1" as lastNumber %}
+			    					{% with ii.order as selectedNumber %}
+			    						{{ lastNumber|numberOptions:selectedNumber }}
+			    					{% endwith %}
+			    				{% endwith %}			    				
+		    				{% endif %}
+		    			</select>
+		    			&nbsp; 
+		    			{% if ii.topic == None %}
+		    				{{ project.short_name }} Site Index
+		    			{% else %}
+		    				{{ ii.topic.name }}
+		    			{% endif %} 
+		    			{% if errors|dictKeyLookup:topic_key %}
+		    				<span class="errornote">{{ errors|dictKeyLookup:topic_key }}</span>
+		    			{% endif %}
+	    			 {% endwith %}
+	    			{% endwith %}
+		    	</h3>		    	
+		    	
+		    	<!-- topic pages -->
+		    	<ul>
+			    	{% for page in ii.pages %}
+			    		<li>		    						    				
+		    				{% with page.id as page_id %}
+		    				  {% with "topic_id_"|concat:topic_id|concat:"_page_id_"|concat:page_id as page_key %}
+		    				    {% with ii.pages|length as lastNumber %}
+		    					  {% with page.order as selectedNumber %}
+		    					  
+				    				   &nbsp;&nbsp;&nbsp;	
+				    				   <select name="{{page_key}}">
+												{{ lastNumber|numberOptions:selectedNumber }}			
+				    				   </select>		    				   
+					    			   &nbsp;{{ page.title }}
+					    			   {% if errors|dictKeyLookup:page_key %}
+					    			   		<span class="errornote">{{ errors|dictKeyLookup:page_key }}</span>
+					    			   {% endif %}
+	
+				    			{% endwith %}
+		    				  {% endwith %}
+		    			    {% endwith %}
+		    			  {% endwith %}
+			    			  
+		    			</li>
+			    	{% endfor %}
+		    	</ul>
+		    
+		      {% endwith %}
+		    {% endfor %}
+	    
+	    <div style="text-align:right">
+	    	<input type="button" value="Cancel" onclick="window.location='{% url 'project_home' project.short_name|lower %}'"/>
+            <input type="submit" value="Submit" />
+        </div>
+	       
+	</form>
+</div>
+
+{% endblock %}

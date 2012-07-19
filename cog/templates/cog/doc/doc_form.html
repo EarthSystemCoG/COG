@@ -1,0 +1,53 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %}
+
+	<div class="mybox">
+		<form action="" method="post" enctype="multipart/form-data">
+		
+		    <!-- extra hidden field to enable complex workflows (document creation + attachment) -->
+		    <input type="hidden" name="redirect" value="{{ request.GET.redirect }}"/>
+		    
+		    {% csrf_token %}
+		    
+		    <!-- document form fields -->
+            <table>
+                <tr>
+                    <td class="head">Project</td>
+                    <td colspan="3">{{ form.project }} </td>                
+                </tr>
+                <tr>
+                    <td class="head"><b>Publisher</b></td>
+                    <td>{{ request.user }} </td>                
+                </tr>
+                <tr>
+                    <td class="head"><b>File</b></td>
+                    <td>{{form.instance.file.name}} &nbsp; {{ form.file }} {{ form.file.errors }} </td>
+                </tr>                         
+                <tr>
+                    <td class="right">Title</td>
+                    <td class="long" nowrap="nowrap">{{ form.title }} {{ form.title.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="right">Description</td>
+                    <td>{{ form.description }} {{ form.description.errors }} </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td><i>Required fields are in</i> <b>bold</b>.</td>
+                </tr>
+            </table>
+
+            <span class="right">	   
+		        {% if form.instance.id %}
+		            <input type="reset" value="Cancel" onclick="self.location='{% url doc_detail form.instance.id %}'"/>
+		        {% else %}
+		            <input type="reset" value="Cancel" onclick="self.location='{% url project_home project.short_name.lower %}'"/>
+		        {% endif %}
+		        &nbsp; <input type="submit" value="Submit" />
+            </span> 		
+		    
+		</form>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,115 @@
+/* Customized CSS for YUI TabView */
+
+<style type="text/css">
+
+/* default space between tabs */
+.yui-navset .yui-nav li,
+.yui-navset .yui-navset-top .yui-nav li,
+.yui-navset .yui-navset-bottom .yui-nav li {
+    margin:0 0.5em 0 0; /* horizontal tabs */
+}
+.yui-navset-left .yui-nav li,
+.yui-navset-right .yui-nav li {
+    margin:0 0 0.5em; /* vertical tabs */
+}
+
+/* default width for side tabs */
+.yui-navset .yui-navset-left .yui-nav,
+.yui-navset .yui-navset-right .yui-nav,
+.yui-navset-left .yui-nav,
+.yui-navset-right .yui-nav { width:6em; }
+
+.yui-navset-top .yui-nav,
+.yui-navset-bottom .yui-nav {
+    width:auto;
+}
+.yui-navset .yui-navset-left,
+.yui-navset-left { padding:0 0 0 6em; } /* map to nav width */
+.yui-navset-right { padding:0 6em 0 0; } /* ditto */
+
+
+/* container for tabs */
+.yui-skin-sam .yui-navset .yui-nav,
+.yui-skin-sam .yui-navset .yui-navset-top .yui-nav { /* protect nested tabviews from other orientations */
+    border: 0px;
+    Xposition:relative;
+    border-width:1px;
+    zoom:1;
+    font-size: 8pt;
+    font-weight: bold;
+    background: #FCE79F;
+}
+
+.yui-skin-sam .yui-navset .yui-nav li,
+.yui-skin-sam .yui-navset .yui-navset-top .yui-nav li {
+    margin:0 0 0 0; /* space between tabs */
+    padding: 0px 0 0; /* gecko: make room for overflow */
+    zoom:1;
+}
+
+.yui-skin-sam .yui-navset .yui-nav .selected,
+.yui-skin-sam .yui-navset .yui-navset-top .yui-nav .selected { 
+    margin:0 0 0 0; /* for overlap */
+}
+
+/* un-selected tab */
+.yui-skin-sam .yui-navset .yui-nav a,
+.yui-skin-sam .yui-navset .yui-navset-top .yui-nav a {
+    background:#FCE79F;    /* tab background */
+    border: 0px solid #666666;
+    border-bottom: 0px solid #666666;
+    color:#666;            /* tab text color */
+    text-decoration:none;
+    font-weight: normal;
+}
+
+.yui-skin-sam .yui-navset .yui-nav a em,
+.yui-skin-sam .yui-navset .yui-navset-top .yui-nav a em {
+    border: 0px;
+    cursor:hand;
+    padding:0.35em .30em;
+    left:0; right: 0; bottom: 0; /* protect from other orientations */
+    /* top:-1px; for 1px rounded corners */
+    top: 0px;
+    position:relative;
+    border-left: 0px;
+}
+
+/* selected tab */
+.yui-skin-sam .yui-navset .yui-nav .selected a,
+.yui-skin-sam .yui-navset .yui-nav .selected a:focus, /* no focus effect for selected */
+.yui-skin-sam .yui-navset .yui-nav .selected a:hover { /* no hover effect for selected */
+    background: #FFFFFF; /* selected tab background */
+    color:#666666;
+    border: 1px solid #666666;
+    border-bottom: 1px solid #FFFFFF;
+	margin-bottom: -1px;
+}
+
+.yui-skin-sam .yui-navset .yui-nav a:hover,
+.yui-skin-sam .yui-navset .yui-nav a:focus {
+    background: #FCE79F;  /* hover over tab */
+    /* border: 1px dotted #666666; */
+    border-bottom: 0px;
+    outline:0;
+    text-decoration: underline;
+}
+
+.yui-skin-sam .yui-navset .yui-nav .selected a em {
+    /* padding:0.35em 0.75em; raise selected tab */
+}
+
+/* widget with expandable project trees */
+.yui-skin-sam .yui-navset .yui-content,
+.yui-skin-sam .yui-navset .yui-navset-top .yui-content {
+	background:#FFFFFF; /* content background color */
+    border: 0px;
+    padding:0.25em 0.5em;
+    border-top: 1px solid #666666;
+    height:200px; 
+    overflow-y: scroll;
+    /* overflow-y: scroll; */
+    overflow-x: hidden;
+}
+
+</style>

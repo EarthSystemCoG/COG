@@ -1,0 +1,27 @@
+{% extends "layouts/layout_center_right.html" %}
+
+{% block head %}
+	{% include 'cog/common/metatags.html' %} 
+	
+    {% include 'cog/common/yui.html' %} 
+    {% include 'cog/common/yui_panels.html' %}    
+
+    {% include 'cog/common/cog_js.html' %} 
+    {% include 'cog/common/mystyle.html' %} 
+{% endblock %}
+
+{% block header %}
+    {% include 'cog/common/cog_header.html' %} 
+{% endblock %}
+
+{% block main %}
+    {{ project }}
+{% endblock %}
+
+{% block right %}
+    {% include 'cog/project/project_right.html' %} 
+{% endblock %}
+
+{% block footer %}
+    {% include 'cog/common/cog_footer.html' %} 
+{% endblock %}

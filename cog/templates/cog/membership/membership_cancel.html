@@ -1,0 +1,45 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% load cog_utils %}
+
+{% block main %}
+   
+    {% if request.method = 'GET' %}
+        
+        <div class="instruction-box">
+        
+            {% if project|hasUser:request.user or project|hasUserPending:request.user %}
+            
+                {% if project|hasUser:request.user %}
+		            Are you sure you want to cancel your membership in project {{ project.short_name }} ?	            
+	            {% else %}
+	               Are you sure you want to cancel your request for membership in project {{ project.short_name }} ?
+	            {% endif %}
+	               <br/>Please remember that only project members can modify the content of the project workspace.
+	            
+	            <form action="" method="post">
+	                {% csrf_token %}
+	                <input type="reset" value="No, I Changed My Mind" onclick="self.location='{% url project_home project.short_name.lower %}'"/>
+	                &nbsp;
+	                <input type="submit" value="Yes, Cancel My Membership"/>
+	            </form>
+            
+            {% else %}
+            
+                Sorry: you are not part of, nor have requested membership in, project {{ project.short_name }}.
+                
+            {% endif %}
+        
+        </div>
+        
+	{% else %}
+	
+	   <div class="message-box">
+	   
+	       Your membership in project {{ project.short_name }} has been canceled.
+	   
+	   </div>
+	
+	{% endif %}
+    
+{% endblock %}

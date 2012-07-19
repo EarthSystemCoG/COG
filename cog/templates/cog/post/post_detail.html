@@ -1,0 +1,39 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+<!-- Blog post -->
+{% block main %}
+
+{% load cog_utils %}
+
+<div class="mybox">
+    <table>
+        <caption>
+            {{ post.type.capitalize }} written by {{ post.author }} on {{ post.publication_date|date:"d M Y, H:m" }}, last update: {{ post.update_date|timesince }} ago.
+            {% if post.topic %} <br/>Topic: {{ post.topic }} {% endif %}
+        </caption>
+        <tr>
+            <td>{{ post.body|safe }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- include action links -->
+{% include 'cog/post/_post_actions.html' %}
+            
+<!-- Attachments --> 
+{% with post as post %}
+   {% include 'cog/post/_post_attachements.html' %}
+{% endwith %}
+
+<!-- Hierarchy -->
+{% with post as post %}
+   {% include 'cog/post/_post_hierarchy.html' %}
+{% endwith %}
+    
+<!-- Comments -->
+{% url post_detail post.id as next_view %}
+{% with post as object %}
+    {% include 'cog/common/_comments.html' %}
+{% endwith %}
+
+{% endblock %}

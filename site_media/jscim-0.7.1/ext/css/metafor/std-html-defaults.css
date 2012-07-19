@@ -1,0 +1,38 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+/* Body */
+body {
+    padding-bottom: 58px;
+    font-size:0.8em;
+    font-family: "Arial", "Verdana", "Helvetica", "sans-serif";
+}
+
+/* Forms */
+fieldset {
+  border:0;
+  padding: 5px;
+}
+
+legend {
+  display:none;
+}
+
+label {
+    font-weight:bold;
+}
+
+select {
+
+}
+
+input {
+
+}
+
+button {
+    cursor: pointer;
+}

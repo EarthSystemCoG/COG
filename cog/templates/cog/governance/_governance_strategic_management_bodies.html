@@ -1,0 +1,12 @@
+<!-- Strategic Management Bodies -->
+{% load cog_utils %}
+
+{% if display == 'ALL' or display == 'STRATEGIC_MANAGEMENT_BODIES' %}
+
+  {% with proj|get_management_bodies:'Strategic' as management_bodies %}
+  	{% with 'Strategic' as category %}
+  		{% include 'cog/governance/_governance_management_bodies.html' %}
+  	{% endwith %}
+  {% endwith %}
+  
+{% endif %}

@@ -1,0 +1,37 @@
+<!-- Project Latest News --> 
+
+{% if project_latest_news %}
+
+    <!-- COG custom filters --> 
+    {% load cog_utils %}
+    
+    <div class="news_box">
+         <table>
+             <caption class="news_header">Project News</caption>
+             {% for news in project_latest_news %}
+                 <tr>
+                     <td>
+                        <b>{{news.project.short_name}}: {{ news.title|truncatewords:10 }}</b>
+                        <br/>
+                        {{ news.text|textToHtml|truncatewords:10 }} 
+                        &nbsp;<a href="{% url news_detail news.id %}">More &raquo;</a>
+                        <br/>
+                        <i>{{news.author.username}} @ {{news.update_date|date:"SHORT_DATETIME_FORMAT"}}</i>
+                        
+                        <!-- links to update, delete the news -->
+                        {% if user|hasUserPermission:project %}
+                        	<br/>&nbsp;<a href="{% url news_update news.id %}" class="changelink">Update</a>
+                        	     &nbsp;<a href="{% url news_delete news.id %}" class="deletelink">Delete</a>
+                        {% endif %}
+                                        
+                    </td>
+                 </tr>
+             {% endfor %}
+         </table>  
+         {% if project_latest_news|length == 1 %}
+         	<div class="news_footer">
+         		<a href="{% url news_list project.short_name.lower %}">&nbsp;More Project News &raquo;</a>
+         	</div>
+         {% endif %}
+     </div>
+{% endif %}

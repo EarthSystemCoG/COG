@@ -1,0 +1,126 @@
+{% extends "cog/common/layout_center.html" %}
+{% load url from future %}
+
+
+{% block main %}
+
+	{% load cog_utils %}
+	 
+     <div class="mybox">
+     
+        <!-- note: action form can be "add" or "update" -->
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <table>
+                <tr>
+                	<!-- new project -->
+                	{% if action == 'add' %}
+                    	<td valign="top" nowrap="nowrap"><b>Short Name</b></td>
+                    	<td>{{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> 
+                    		{{ form.short_name.errors }}
+                    		<br/>WARNING: the project's 'Short Name' CAN NOT be changed after project registration.
+                    	</td>
+                    <!-- project already existing - cannot change short name -->
+                    {% else %}
+                    	<td valign="top" nowrap="nowrap"><b>Short Name</b></td>
+                    	<td>{{ form.instance.short_name }} {{ form.short_name.as_hidden }}</td>                   	
+                    {% endif %}
+                </tr>               
+                <tr>
+                    <td nowrap="nowrap"><b>Long Name</b></td>
+                    <td class="long">{{ form.long_name }} {{ form.long_name.errors }}</td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap"><b>Creator</b></td>
+                    <td class="long">
+                        {% if form.instance.author %}
+                            {% if form.instance.author.get_full_name %}
+                                <a href="mailto:{{form.instance.author.email}}">{{ form.instance.author.get_full_name }}</a>
+                            {% else %}
+                                <a href="mailto:{{form.instance.author.email}}">{{ form.instance.author.username }}</a>
+                            {% endif %}
+                            <span style="margin-top:2px">[ You may email the project creator for any questions concerning its metadata. ]</span>
+                        {% endif %}
+                        {{ form.author.as_hidden }}
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap"><b>Description</b></td>
+                    <td>{{ form.description }} {{ form.description.errors }}</td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">Parent Project</td>
+                    <td>
+                        {{ form.parent }} {{ form.parent.errors }}
+                        &nbsp; [ Choose only one parent project, or none ].
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">Peer Projects</td>
+                    <td>
+                        {{ form.peers }} {{ form.peers.errors }}
+                        <br /> [ Hold down "Control", or "Command" on a Mac, to select more than one ].
+                    </td>
+                </tr>
+                <tr>
+                	<td nowrap="nowrap">Top Navigation Tabs</td>
+                	<td>
+                		<!-- Note: home tab checkbox is disabled because it must always be present -->
+						{% for tab in tabs %}
+							<input name="tab_{{tab.label}}"  
+								   {% if forloop.counter == 1 %}
+								   		disabled="disabled" checked="checked"
+								   {% else %}
+							       		{% if tab.active %} checked="checked" {% endif %}							       
+							       {% endif %}
+							       type="checkbox">
+							       {{tab.label}}
+						{% endfor %}
+                	</td>
+                </tr>
+                <tr>
+                    <td nowrap="nowrap">Project Logo</td>
+                    <td> 
+                    	{% if form.instance.logo %} 
+                    		{{ form.instance.logo.url }} &nbsp; 
+                    		{{ form.delete_logo }} Restore default COG logo
+                    		<br>&nbsp;</br>
+                    	{% endif %}
+                    	{{ form.logo }} {{ form.logo.errors }} &nbsp; <span style="margin-top:2px">[ optional project logo, will be displayed with height=74px ]</span>
+                    	<br>&nbsp;</br>
+                    	{{ form.logo_url }} &nbsp; <span style="margin-top:2px">[ optional URL to hyperlink logo, defaults to project home]</span></td>
+                </tr>                                         
+                <!-- only allow site administrators to change the active state of a project  -->
+                {% if request.user.is_staff and action == 'update' %}
+	                <tr>
+	                    <td nowrap="nowrap">Is Active ?</td>
+	                    <td>
+	                        {{ form.active }} 
+	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
+	                        {{ form.active.errors }}
+	                    </td>
+	                </tr>
+                {% else %}
+                   {{ form.active.as_hidden }}
+                {% endif %}
+                <tr>
+	            	<td nowrap="nowrap">Is Private ?</td>
+	                <td>
+	                    {{ form.private }} 
+	                    [ A private project is only visible to project members - users and administrators. ]
+	                    {{ form.private.errors }}
+	                </td>
+	            </tr>
+           </table>           
+                 
+          <div style="text-align:right">
+                <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
+                <input type="submit" value="Submit" />
+          </div>
+           
+        </form>
+        
+     </div>
+                
+{% endblock %}

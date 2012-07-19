@@ -1,0 +1,26 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %} 
+
+    {% load pagination_tags %}
+    {% autopaginate project_signals 20 %}
+    
+    {% for signal in project_signals %}
+
+	    <div class="mybox">
+		    <table>
+		       <caption>{{ signal.title }}</caption>
+		        <tr>
+		           <td class="long"> <a href="{{ signal.url }}">{{ signal.description }}</a></td>
+		        </tr>	        
+		        <tr>
+		          <td><i>{{signal.update_date|date:"Y/m/d h:m:s"}} by {{ signal.user }}</i></td>
+		        </tr>
+		    </table>
+	    </div>
+    
+      {% endfor %}
+    
+    {% paginate %}
+
+{% endblock %}

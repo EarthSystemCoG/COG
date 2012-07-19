@@ -1,0 +1,37 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %}
+
+    {% url doc_list as url %}
+    {% with 'document' as object_type %}
+        {% include 'cog/common/_search.html' %}
+    {% endwith %}
+
+    {% load comments %}
+    {% load pagination_tags %}
+    {% autopaginate object_list 10 %}
+
+    <div class="mybox">
+	    <table>
+	        <caption>{{ list_title }}</caption>
+			{% for doc in object_list %}
+			   {% get_comment_count for doc as comment_count %}
+			   <tr>
+			      <td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
+			      <td><b><a href="{% url doc_detail doc.id %}">{{ doc }}</a></b></td> 
+			      <td> {{ doc.description|truncatewords:8 }} </td>
+			      <td nowrap="true">{{ doc.update_date|date:"d M Y, H:m" }}</td> 
+			      <td nowrap="true">{{ comment_count }} Comment{{ comment_count|pluralize }} </td> 
+			   </tr>
+			{% endfor %}
+			<tr>
+              <td colspan="5">
+                 <small><span class="addlink">&nbsp;</span><a href="{% url doc_add project.short_name.lower %}">Upload New Document &#187;</a></small>
+              </td>
+            </tr>
+		</table>
+	</div>
+	
+    {% paginate %}
+	
+{% endblock %}

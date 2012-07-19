@@ -1,0 +1,36 @@
+<!-- Policies -->
+
+{% load cog_utils %}
+
+{% if display == 'ALL' or display == 'POLICIES' %}
+  <div id="governance_policies">
+
+	<!-- header -->
+	<hr/>
+	<b>Policies</b>
+	{% if user|hasAdminPermission:proj %}
+	    <div style="float:right">
+	    	<a href="{% url policies_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
+	 	</div>
+	{% endif %}
+	
+	<!-- content -->	
+	{% if proj.policies %}
+
+		<table>
+			{% for policy in proj.policies %}
+				<tr>
+					<td class="leftcolumn">
+						<a href="{{policy.url}}">{{policy.title}}</a>
+					</td>
+					<td>{{ policy.description|linebreaksbr }}</td>
+				</tr>
+			{% endfor %}
+		</table>
+		
+	{% else %}
+		:&nbsp;<i>No information found.</i>
+	{% endif %}
+
+  </div>
+{% endif %}

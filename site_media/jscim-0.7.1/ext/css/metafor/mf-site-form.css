@@ -1,0 +1,60 @@
+/* ************************** */
+/*  Form specific             */
+/* ************************** */
+
+.mf-form-group,
+.mf-form-group-last {
+}
+
+.mf-form-group {
+    margin-bottom: 20px;
+}
+
+.mf-form-group-last {
+    margin-bottom: 0px;
+}
+
+.mf-form-row,
+.mf-form-row-label,
+.mf-form-row-last {
+}
+
+.mf-form-row {
+    margin-bottom: 6px;
+}
+
+.mf-form-row-label {
+    margin-bottom: 3px;
+}
+
+.mf-form-row-last {
+    margin-bottom: 0px;
+}
+
+.mf-form-cell {
+    display: table-cell;
+}
+
+.mf-form-cell-w1 {
+    display: table-cell;
+    width: 100px;
+}
+
+.mf-form-cell-w1_3 {
+    display: table-cell;
+    width: 130px;
+}
+
+.mf-form-cell-w2 {
+    display: table-cell;
+    width: 200px;
+}
+
+.mf-form-cell-w3 {
+    display: table-cell;
+    width: 300px;
+}
+
+.mf-form-cell-last {
+    float: right;
+}

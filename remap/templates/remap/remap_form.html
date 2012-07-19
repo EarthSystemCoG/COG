@@ -1,0 +1,44 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+	{% load url from future %}
+
+    <div class="prepend-8 span-8">
+    <div class="mybox">      
+        
+        <form action="" method="post">
+            {{ form.non_field_errors }}
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td class="head" owrap="nowrap"><b>Source Grid</b></td>
+                    <td nowrap="nowrap">{{ form.srcgrid }} {{ form.srcgrid.errors }}</td>
+                </tr>      
+                <tr>
+                    <td class="head" nowrap="nowrap"><b>Destination Grid</b></td>
+                    <td nowrap="nowrap">{{ form.dstgrid }} {{ form.dstgrid.errors }}</td>
+                </tr>  
+                <tr>
+                    <td class="head" nowrap="nowrap"><b>Interpolation Method</b></td>
+                    <td nowrap="nowrap">{{ form.method}} {{ form.method.errors }}</td>
+                </tr>   
+                <tr>
+                    <td class="head">
+                        <input type="button" value="Cancel" onclick="window.location='{% url 'cog_index' %}'"/>
+                    </td>
+                    <td>
+                        <input type="submit" value="Submit" />                   
+                    </td>
+                </tr>
+            </table>
+            
+            <!-- hide the weights field -->
+            <!-- {{ form.weights.as_hidden }} -->
+            
+         </form>
+  
+    </div>
+    </div>
+    
+{% endblock %}

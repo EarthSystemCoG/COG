@@ -1,0 +1,20 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %}
+ 
+     <div align="center" class="box-colored">
+    
+        <form action="" method="post">
+            <p/>
+            {% csrf_token %}
+            <p/>
+            Are you sure you want to completely delete news <b>{{ news.title }} last updated on {{news.update_date|date:"Y/m/d h:m:s"}}</b> ?
+            <br><div style="color:red">Warning: this operation cannot be undone.</div>          
+            <p/> 
+            <input type="button" value="Cancel" onclick="window.location='{% url project_home project.short_name|lower %}'"/>
+            <input type="submit" value="Submit" />
+        </form>
+        
+     </div>
+                
+{% endblock %}

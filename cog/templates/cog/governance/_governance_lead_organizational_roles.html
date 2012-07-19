@@ -1,0 +1,13 @@
+<!-- Lead Organizational Roles -->
+
+{% load cog_utils %}
+
+{% if display == 'ALL' or display == 'LEAD_ORGANIZATIONAL_ROLES' %}
+
+  {% with proj|get_organizational_roles:'Lead' as organizational_roles %}
+  	{% with 'Lead' as category %}
+  		{% include 'cog/governance/_governance_organizational_roles.html' %}
+  	{% endwith %}
+  {% endwith %}
+  
+{% endif %}

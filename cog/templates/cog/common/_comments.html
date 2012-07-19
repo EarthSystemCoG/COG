@@ -1,0 +1,49 @@
+<!-- 
+    Django template snippet to render comments for an object
+    object: the object the comments refer to
+    next_view; the URL of the view to forward to after saving the comment
+-->
+
+{% load comments %}
+{% load pagination_tags %}
+
+{% get_comment_count for object as comment_count %}
+{% get_comment_list for object as comment_list %}
+{% autopaginate comment_list 10 %}
+
+<hr class="white"/>
+<div class="header_bar"> 
+     <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">&nbsp;Comments ({{ comment_count }})</a>
+</div>
+<div class="mybox" id="mycomments" style="display:none">
+    <br/>
+	{% for comment in comment_list %}
+	   <div id="comment_{{ comment.id }}" class="box-rounded">
+	       <div class="header_bar">{{ comment.name|escape }}, on {{ comment.submit_date|date:"d M Y, H:m" }}</div>
+	       {{ comment.comment|escape|urlizetrunc:40|linebreaks }}
+	   </div>
+	{% endfor %}
+	{% paginate %}
+	
+	<!-- only authenticated users can comment -->
+	{% if not request.user.is_anonymous %}
+		{% get_comment_form for object as form %}
+		<form action="{% comment_form_target %}" method="post">
+		    {{ form.content_type }}
+		    {{ form.object_pk }}
+		    {{ form.timestamp }}
+		    {{ form.security_hash }}
+		    {% csrf_token %} 
+		    <p style="display:none"><label for="id_honeypot">Leave blank</label>{{ form.honeypot }}</p>
+		    <input type="hidden" name="next" value="{{ next_view }}"/>
+		    
+		    &nbsp;<span class="addlink">&nbsp;</span><small>Post a New Comment &#187;</small>
+		    <textarea name="comment" id="id_comment" rows="6" cols="30"></textarea>
+		    <br/>
+		    <!-- <input type="submit" name="preview" value="Preview" />&nbsp; -->
+		    <input type="submit" name="post" value="Post" />
+		    
+		</form>
+	{% endif %}
+
+</div>

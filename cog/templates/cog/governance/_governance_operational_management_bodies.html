@@ -1,0 +1,12 @@
+<!-- Operational Management Bodies -->
+{% load cog_utils %}
+
+{% if display == 'ALL' or display == 'OPERATIONAL_MANAGEMENT_BODIES' %}
+
+  {% with proj|get_management_bodies:'Operational' as management_bodies %}
+  	{% with 'Operational' as category %}
+  		{% include 'cog/governance/_governance_management_bodies.html' %}
+  	{% endwith %}
+  {% endwith %}
+  
+{% endif %}

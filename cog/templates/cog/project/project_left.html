@@ -1,0 +1,91 @@
+{% block left %}
+
+    {% load cog_utils %}
+    {% load url from future %}
+    
+    <!-- project index -->
+    <div class="vertical_menu">
+	    {% for index_item in project|index %}
+	    
+	    	<!-- topic bar -->
+	    	{% if index_item.topic == None %}
+	    		<h3>{{ project.short_name }} Site Index</h3>
+	    	{% else %}
+	    		<h3>{{ index_item.topic.name }}</h3>
+	    	{% endif %}
+	    	
+	    	<!-- topic top-level pages -->
+    		<table>
+    			{% for page in index_item.pages %}
+    				<tr>
+                    	{% if page.is_home %}
+                       		<td>&nbsp;<a href="{% url 'project_home' project.short_name.lower %}" >Home</a></td>
+                       	{% else %}
+                            <td>&nbsp;<a href="{{ page.url }}">{{ page.get_label }}</a>{{ page|is_locked:request }}</td>
+                        {% endif %}
+    				</tr>
+    			{% endfor %}
+    		</table>
+
+	    {% endfor %}
+	    
+	    {% if user|hasAdminPermission:project %}
+		    <hr style="margin:0px"/>
+		    <ul>
+		    	<li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li>
+		    </ul>
+	    {% endif %}
+    </div>
+        
+    <br/>
+    <div class="vertical_menu">
+    
+       <!-- open access -->
+       <h3>{{ project.short_name }} Visitors</h3>
+       <ul>
+            <!-- <li><a href="{% url 'post_list' project.short_name.lower %}?type=blog" class="listlink">&nbsp;List All Blogs</a></li> -->
+            <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li>
+            <li><a href="{% url 'doc_list' project.short_name.lower %}" class="listlink">&nbsp;List All Documents</a></li>
+       </ul>       
+ 
+       <!-- access restricted to project members -->
+       {% if user|hasUserPermission:project %}
+       <h3>{{ project.short_name }} Members</h3>
+       <ul>
+            <li><a href="{% url 'post_add' project.short_name.lower %}?type=page" class="addlink">&nbsp;Add Page</a></li>
+            <!-- <li><a href="{% url 'post_add' project.short_name.lower %}?type=blog" class="addlink">&nbsp;Add Blog</a></li> -->
+            <li><a href="{% url 'doc_add' project.short_name.lower %}" class="addlink">&nbsp;Add Document</a></li>
+            <li><a href="{% url 'bookmark_add' project.short_name.lower %}" class="addlink">&nbsp;Add Bookmark</a></li>
+            <li><a href="{% url 'folder_add' project.short_name.lower %}" class="addlink">&nbsp;Add Folder</a></li>      
+       </ul>       
+       {% endif %}
+    
+       <!-- access restricted to project admins -->
+       {% if user|hasAdminPermission:project %}
+       <h3>{{ project.short_name }} Administrators</h3>
+       <ul>           
+            
+            <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
+            <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
+        
+            <li><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project</a></li>
+            <!-- <li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li> -->
+            <li><a href="{% url 'search_profile_config' project.short_name.lower %}" class="changelink">&nbsp;Configure Search</a></li>
+            <!-- <li><a href="{% url 'project_add' %}?parent={{ project.short_name.lower }}" class="addlink">&nbsp;Add Child Project</a></li> -->
+            <li><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">&nbsp;Delete Project</a></li>
+             
+       </ul>
+       {% endif %}  
+       
+       <!-- access restricted to site adminstrators -->
+       {% if user.is_staff %}
+       <h3>Site Administrators</h3>
+       <ul>
+            <li><a href="{% url 'admin_index' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
+            <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List System Users</a></li>                 
+       </ul>
+       {% endif %}      
+       
+    </div>
+
+{% endblock %}

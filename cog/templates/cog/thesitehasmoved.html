@@ -1,0 +1,31 @@
+<html>
+
+	<head>
+		<style type="text/css">
+			.message-box {
+			    /*background: #e5ecf9;*/
+			    background: #f4f379;
+			    padding: 5px;
+			    margin: 30px;
+			    border: 1px solid #417690;
+			    font-weight: bold;
+			    text-align: center;
+			    width: 400px;
+			    font-size: 9pt;
+    			font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;	
+    			float:center;		    
+			}
+		</style>
+	</head>
+	<body>
+		{% load url from future %}
+		<div align="center">
+			<div class="message-box">
+				<b>The {{ project.short_name }} site has moved.</b>
+				<br/>
+				Please access the site at the new URL: <a href="http://www.earthsystemcog.org{% url 'project_home' project.short_name.lower %}">http://www.earthsystemcog.org{% url project_home project.short_name.lower %}</a>
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,31 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+
+{% block main %}
+            
+    <!-- display submission form -->
+    {% if request.method == "GET" %}
+                  
+		<div class="instruction-box">    
+		     Are you sure you want to completely remove the {{ post.type }} titled:
+		     <br/>{{ post.title }}
+		     <br/>This action cannot be reversed, and all content will be lost.
+		
+		     <form method="post" action="">
+		        {% csrf_token %}
+		        <input type="button" value="Cancel" onclick="self.location='{% url project_home project.short_name.lower %}'"/>
+		        <input type="submit" value="Delete"/>
+		     </form>
+		     
+		 </div>
+		 
+    {% else %}
+        
+        <div class="message-box">
+            The post titled:
+            <br/>{{ post.title }}
+            <br/>was deleted.
+        </div>
+        
+    {% endif %}
+
+{% endblock %}

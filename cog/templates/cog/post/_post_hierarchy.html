@@ -1,0 +1,29 @@
+<!-- parent/children posts -->
+{% load cog_utils %}
+
+{% with post|relatedPostCount as counts %}
+   {% if counts > 0 %}
+   	   <hr class="white"/>
+	   <div class="header_bar"> 
+	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst }}{{ post.type|pluralize}} ({{ counts }})</a>
+	   </div>
+	   <div class="mybox" id="post_hierarchy" style="display:none">
+	        <table>
+	            {% if post.parent %} 
+	                <tr>
+	                    <td>
+	                       Parent {{ post.type|capfirst }}: <a href="{% url post_detail post.parent.id %}">{{ post.parent }}</a>{{ post.parent|is_locked:request }}          
+	                   </td>
+	                </tr>
+	            {% endif %}
+	            {% for child in post.post_set.all %}
+	                <tr>
+	                    <td>
+	                       Child {{ post.type|capfirst }}: <a href="{% url post_detail child.id %}">{{ child }}</a>{{ child|is_locked:request }}             
+	                   </td>
+	                </tr>
+	            {% endfor %}
+	        </table>  
+	    </div>
+	{% endif %}
+{% endwith %}

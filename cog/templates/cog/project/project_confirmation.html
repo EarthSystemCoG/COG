@@ -1,0 +1,16 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+    <div class="prepend-4 span-16">
+        <h2>{{ mytitle }}</h2>
+        <p/>
+        <div class="message-box">
+            Thank you for registering the project: {{ project.short_name }}.
+            <br/>
+            Your request will be reviewed by the site administrators as soon as possible,
+            <br/>and you will be notified of the outcome by email.
+        </div>
+    </div>
+
+{% endblock %}

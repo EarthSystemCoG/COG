@@ -1,0 +1,23 @@
+{% load cog_utils %}
+
+{% if post %}
+	<div style="font-size: 8pt; font-style: italic; text-align:center;">Last Update: {{ post.update_date }} by {{ post.author.get_full_name }}</div>
+    {% if request.user|canPost:post %}
+        <div style="text-align:center">
+	        <hr/>
+	        <a href="{% url post_update post.id %}" class="changelink">&nbsp;Update {{ post.type|capfirst }} &#187;</a>
+	        &nbsp;&nbsp;
+	        <a href="{% url doc_add post.project.short_name.lower %}?redirect={% url post_add_doc post.id %}" class="addlink">Add Attachment &#187;</a>
+            &nbsp;&nbsp;
+            <a href="{% url post_add post.project.short_name.lower %}?type={{ post.type }}&parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }} &#187;</a>
+            {% if user|hasUserPermission:post.project %}
+                {% if not post.is_predefined %}
+                    &nbsp;&nbsp;
+                    <a href="{% url post_delete post.id %}" class="deletelink">Delete {{ post.type|capfirst }} &#187;</a>  
+                {% endif %}  
+            {% endif %}   
+            &nbsp;&nbsp;
+            {% if post.is_private %}<span class='privatelink'>&nbsp;This page is private</span>{% endif %}       
+        </div>           
+    {% endif %}
+{% endif %}  

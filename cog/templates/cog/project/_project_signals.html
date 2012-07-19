@@ -1,0 +1,24 @@
+<!-- Project Latest Signals -->     
+{% load url from future %}
+
+{% if project_latest_signals %}
+   <hr class="white"/>
+   <div class="header_bar"> 
+        <a href="" onclick="javascript:toggle_visibility('project_signals'); return false;" class="listlink">&nbsp;Project Activity</a>
+   </div>
+   <div class="mybox" id="project_signals" style="display:none">
+        <table>
+            {% for signal in project_latest_signals %}
+                <tr>
+                    <td>
+                       {{ signal.title }}:
+                       <a href="{{ signal.url }}">{{ signal.description|truncatewords:10 }}</a>
+                       &nbsp [<i>{{signal.user.username}} @ {{signal.update_date|date:"Y/m/d h:m:s"}}</i>]                 
+                   </td>
+                </tr>
+            {% endfor %}
+        </table>  
+        <hr/>
+        <a href="{% url 'signal_list' project.short_name.lower %}">&nbsp;View All Project Activity &raquo;</a>
+    </div>
+{% endif %}

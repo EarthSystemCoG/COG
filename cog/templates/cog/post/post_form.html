@@ -1,0 +1,75 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+
+{% block main %}
+    {{ form.media }}
+    
+    {% load cog_utils %}
+    
+    <!-- display lock -->
+	{% if lock %}
+		<div class="warning">
+			Your lock on this page expires at {{ lock.get_expiration|date:"Y-m-d H:i:s" }}.
+			To renew the lock, save the page end edit it again.
+		</div>
+	{% endif %}
+       
+	<div class="mybox">
+		<form action="" method="post">
+		    
+		    {% csrf_token %}
+		    
+		    <!-- hidden fields carry immutable properties -->
+		    {{ form.project.as_hidden }}
+		    {{ form.type.as_hidden }}
+		    {{ form.is_home.as_hidden }}
+		    		    
+		    <!-- TYPE_PAGE -->
+		    {% if form.instance.type == 'page' %}
+		      {% if form.instance.id and form.instance.is_predefined %}
+		          <!-- if page exists already and is predefined, only some fields are mutable -->
+		          {% include 'cog/post/_post_form_home.html' %}
+		      {% else %}
+		          <!-- otherwise all fields are mutable -->
+		          {% include 'cog/post/_post_form_page.html' %}
+		      {% endif %}
+		    {% endif %}
+		    
+		    <!-- TYPE_NOTES -->
+		    {% if form.instance.type == 'notes' %}
+		          {% include 'cog/post/_post_form_notes.html' %}
+		    {% endif %}
+		    
+		    
+		    <!-- TYPE_BLOG -->
+		    {% if form.instance.type == 'blog' %}
+		          {% include 'cog/post/_post_form_blog.html' %}
+		    {% endif %}
+		    
+		    <!-- update to existing form -->
+			{% if form.instance.id %}
+				
+				<!-- must resubmit attachments as hidden fields (only if the post has been saved already to the database) -->
+			    {% for doc in form.instance.docs.all %}
+	                <input type="hidden" name="docs" value="{{doc.id}}"/>
+	            {% endfor %}
+	            
+	            <!-- must resubmit the page order as hidden field -->
+	            <input type="hidden" name="order" value="{{form.instance.order}}"/>
+	            
+            {% endif %}
+            
+            <div style="text-align:right">          
+                {% if form.instance.id %}
+                    <input type="reset" value="Cancel" onclick="self.location='{% url post_cancel form.instance.id %}'"/>
+                {% else %}
+                    <input type="reset" value="Cancel" onclick="self.location='{% url project_home project.short_name.lower %}'"/>
+                {% endif %}
+                &nbsp; <input type="submit" value="Submit" />
+            </div>
+            
+		   		    
+		</form>
+	</div>
+
+{% endblock %}

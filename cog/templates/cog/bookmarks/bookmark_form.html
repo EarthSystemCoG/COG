@@ -1,0 +1,55 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% load url from future %}
+
+{% block main %}
+
+    {% load cog_utils %}
+
+    <div class="mybox">
+	    <form method="post" action="">
+	    
+	       {% csrf_token %}
+	       
+	       <table>
+                <tr>
+                    <td class="right required" nowrap="nowrap">URL</td>
+                    <td class="long">{{ form.url }}{{ form.url.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="right required" nowrap="nowrap"><b>Name</b></td>
+                    <td class="long">{{ form.name }}{{ form.name.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="right" nowrap="nowrap">Description (optional)</td>
+                    <td class="long">{{ form.description }}{{ form.description.errors }}</td>
+                </tr>
+                
+                <tr>
+                    <td class="right required" nowrap="nowrap"><b>Folder</b></td>
+                    <td class="long">{{ form.folder }}{{ form.folder.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
+                </tr>                       
+            </table>
+            <!-- hidden fields not editable by the user -->
+            {{ form.order.as_hidden }}
+            
+            <table width="100%">
+            	<tr>
+            		{% if form.instance.id %}
+	            		<td style="text-align:left; vertical-align:bottom;">
+	            			<a href="{% url 'bookmark_add_notes' form.instance.id %}?type=notes" class="addlink">&nbsp;Edit Notes</a>
+	            		</td>
+            		{% endif %}
+            		<td style="text-align:right;">
+            			<input type="button" value="Cancel" onclick="window.location='{% url 'bookmark_list' project.short_name|lower %}'"/>
+                		<input type="submit" value="Submit" />
+            		</td>
+            	</tr>
+            </table>            
+	    
+	    </form>
+    </div>
+
+{% endblock %}

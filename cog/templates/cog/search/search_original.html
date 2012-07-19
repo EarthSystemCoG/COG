@@ -1,0 +1,33 @@
+{% extends "layouts/layout_main.html" %}
+
+{% block main %}
+         	
+	{% include 'cog/search/_search_js.html' %}
+	{% include 'cog/search/yui_accordion.html' %} 
+     
+     <div class="yui-skin-sam">
+    		<form action='' method="post" id="search-form">
+    		
+    		{% csrf_token %} 
+    		<input type="hidden" name="offset" value="{{search_input.offset}}" />
+			<input type="hidden" name="limit" value="{{search_input.limit}}" />
+    		
+    		<div class="span-6">
+    		    <!-- search facets -->
+                {% include 'search/_search_facets.html' %}                  
+    		</div>
+    		
+    		<div class="span-18 last">
+    		     <!-- form text box -->
+                 {% include 'cog/search/_search_text.html' %}        
+                 <!-- pagination controls
+                 <jsp:include page="search/_search_pagination.jsp" flush="true" />    -->        
+                 <!-- search results -->
+                 {% include 'cog/search/_search_results.html' %}    		  
+    		</div>
+    		
+		</form>
+     
+	</div>
+    
+{% endblock %}

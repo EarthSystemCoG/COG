@@ -1,0 +1,10 @@
+<!-- template for HTML meta tags -->
+
+{% load cog_utils %}
+
+{% if project and request|is_home_page:project %}
+	
+	<meta name="keywords" content="{{ project.short_name }}: {{ project.long_name}}" />
+	<meta name="description" content="{{ project.description }}" />
+
+{% endif %}

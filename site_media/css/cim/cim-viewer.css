@@ -1,0 +1,37 @@
+/* 
+    Document   : cim-viewer
+    Created on : Oct 7, 2011, 1:11:47 PM
+    Author     : markmorgan
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.cim-section-header {
+    font-size: large;
+    font-weight: bold;
+    width:100%;
+    padding: 4px;
+    margin-bottom: 5px;
+}
+.cim-row-group {
+    padding: 4px;
+    margin-bottom: 5px;
+    background-color: cyan;
+}
+.cim-row {
+    padding-bottom: 10px;
+}
+.cim-cell-label {
+    float:left;
+    font-weight: bold;
+}
+.cim-cell-input {
+    padding-left: 120px;
+}
+
+

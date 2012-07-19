@@ -1,0 +1,29 @@
+<!-- Attachments -->
+{% load cog_utils %}
+
+{% if post.docs.all %}
+   <hr class="white"/>
+   <div class="header_bar"> 
+        <a href="" onclick="javascript:toggle_visibility('attachments'); return false;" class="listlink">&nbsp;Attachments ({{ post.docs.all|length }})</a>
+   </div>
+   <div class="mybox" id="attachments" style="display:none">
+        <table>
+            {% for doc in post.docs.all %}
+                <tr>
+                    <td>
+                       <a href="{{ doc.file.url }}">{{ doc }}</a> uploaded by {{ doc.author }} on {{ doc.publication_date|date:"d M Y, H:m" }}
+                       {% if user|hasUserPermission:project %}
+                            &nbsp;[<a href="{% url post_remove_doc post.id doc.id %}" class="deletelink"
+                                      onclick="return urlConfirmationDialog('Delete Attachment Confirmation','Are you sure you want to remove the attachment ?',this)">Remove</a>]
+                       {% endif %}
+                       {% if doc.description %}
+                          <br/>
+                          <i>{{ doc.description }}</i>
+                       {% endif %}              
+                   </td>
+                </tr>
+            {% endfor %}
+        </table>  
+    </div>
+    <div id="myDialog" class="yui-skin-sam"></div>
+{% endif %}

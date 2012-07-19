@@ -1,0 +1,45 @@
+<!-- form table for generic page -->
+
+<table>
+    <tr>
+	    <td valign="top">Author</td>
+	    <td>{{ request.user }} </td>		          
+    </tr>
+    <tr>
+        <td><b>Title</b></td>
+        <td class="long">{{ form.title }} {{ form.title.errors }}</td>
+    </tr>
+    <tr>
+        <td>Label</td>
+        <td>{{ form.label }}  &nbsp; <i>Optional shorter label for left menu, max 25 characters, defaults to page title</i>
+            {{ form.label.errors }}</td>
+    </tr>
+    <tr>
+         <td><b>URL</b></td>
+         <td>/projects/{{ project.short_name|lower }}/{{ form.url }} &nbsp; <i>Use only letters, numbers, '_', '-' and '/'</i>
+         {{ form.url.errors }}
+         </td>
+    </tr>   
+    <tr>
+         <td><b>Template</b></td>
+         <td class="long">{{ form.template }} {{ form.template.errors }}</td>
+    </tr>      
+    <tr>
+          <td nowrap="nowrap">Parent Page</td>
+          <td>{{ form.parent }} </td>                
+    </tr>
+    <tr>
+          <td><b>Topic</b></td>
+          <td nowrap="nowrap">{{ form.topic }} &nbsp; <b>or New Topic</b>&nbsp;{{ form.newtopic }} 
+              {{ form.newtopic.errors }} {{ form.topic.errors }}
+          </td>
+    </tr>    
+    <tr>
+          <td nowrap="nowrap">Private ?</td>
+          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                   
+    </tr>    
+    <tr>
+        <td><b>Body</b></td>
+        <td>{{ form.body }} {{ form.body.errors }}</td>
+    </tr>
+</table>

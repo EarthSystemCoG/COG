@@ -1,0 +1,49 @@
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        
+        <title>{% block head_title %} {{ title|removetags:"h2"|safe }} {% endblock %}</title>
+            
+        <!-- CSS for grid layout -->
+        <!-- <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/screen.css" type="text/css" media="screen, projection"> -->
+        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/reset.css" type="text/css" media="screen, projection">
+        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/grid.css" type="text/css" media="screen, projection">
+        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/typography.css" type="text/css" media="screen, projection">
+        <!--<link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/print.css" type="text/css" media="print"> -->
+        <!-- [if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif] -->
+                
+        <!--  Django admin CSS --->
+        {% block style %}
+           <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
+	    {% endblock %}
+	    
+	    
+	    <!-- WorldPress tricolor CSS -->
+        <!--  <link rel="stylesheet" href="{{MEDIA_URL}}css/tricolor/mystyle.css" type="text/css"> -->
+            
+        {% block head %}{% endblock %}
+        
+        <!-- hooks for page-specific head content -->
+        {% block extrahead %}{% endblock %}
+        {% block extrastyle %}{% endblock %}
+    
+    </head>
+    
+    <body>
+        <div class="container">
+        
+            <div class="span-24 last">
+                {% block header %} {% include 'layouts/layout_header.html' %} {% endblock %}
+            </div>
+                        
+            {% block body %}{% endblock %}
+            
+            <div class="span-24 last">
+                {% block footer %} {% include 'layouts/layout_footer.html' %} {% endblock %}
+            </div>
+  
+        </div>
+    </body>
+    
+</html>

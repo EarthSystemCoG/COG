@@ -1,0 +1,42 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %}
+
+	{% load cog_utils %}
+	
+    <p/>   
+    <div align="center" class="mybox">
+        <table>
+            <caption>Uploaded by {{ doc.author }} on {{ doc.publication_date|date:"d M Y, H:m" }}, last update: {{ doc.update_date|timesince }} ago.</caption>
+            <tr>
+                <td class="head">Title</td>
+                <td>{{ doc.title }}</td>
+            </tr>
+            <tr>
+                <td class="head">Description</td>
+                <td>{{ doc.description }}</td>
+            </tr>
+            <tr>
+                <td class="head">Download URL</td>
+                <td><a href="{{ doc.file.url }}">{{ doc.file.url }}</a></td>
+            </tr>
+        </table>
+    </div> 
+    {% if request.user|hasUserPermission:project %}
+        <div style="text-align:center">
+            <hr/>
+            <a href="{% url doc_update doc.id %}" class="changelink">Update Document &#187;</a>
+            &nbsp; &nbsp;
+            <a href="{% url doc_remove doc.id %}" class="deletelink"
+               onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document ?',this)">Delete Document &#187;</a>       
+        </div>
+        <div id="myDialog" class="yui-skin-sam"></div>
+    {% endif %}
+
+    <!-- Comments -->
+    {% with doc as object %}
+        {% url doc_detail object.id as next_view %}
+        {% include 'cog/common/_comments.html' %}
+    {% endwith %}        
+
+{% endblock %}

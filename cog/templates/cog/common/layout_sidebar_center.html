@@ -1,0 +1,27 @@
+{% extends "layouts/layout_sidebar_center.html" %}
+
+{% block head %}
+	{% include 'cog/common/metatags.html' %} 
+	
+    {% include 'cog/common/yui.html' %} 
+    {% include 'cog/common/yui_panels.html' %}    
+
+    {% include 'cog/common/cog_js.html' %} 
+    {% include 'cog/common/mystyle.html' %} 
+{% endblock %}
+
+{% block header %}
+    {% include 'cog/common/cog_header.html' %} 
+{% endblock %}
+
+{% block main %}
+    {{ project }}
+{% endblock %}
+
+{% block left %}
+    {% include 'cog/project/project_left.html' %} 
+{% endblock %}
+
+{% block footer %}
+    {% include 'cog/common/cog_footer.html' %} 
+{% endblock %}

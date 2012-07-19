@@ -1,0 +1,34 @@
+{% load cog_utils %}
+{% load url from future %}
+
+    <div class="mybox">
+	    <table>
+	       <caption>User Affiliations</caption>
+	       <tr>
+	           <th class="tophead">Project</th>
+	           <th class="tophead">Status/Role</th>
+	           <th class="tophead"></th>
+	       </tr>
+	       {% for project in projects %}
+	           <tr>
+	               <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
+	               <td nowrap="nowrap">
+	                   {% if user_profile.user|hasAdminPermission:project %}
+	                       Administrator
+	                   {% else %}
+	                       {% if user_profile.user|hasUserPermission:project %}
+	                           User
+	                       {% else %}
+	                           Pending Approval
+	                       {% endif %}
+	                   {% endif %}
+	               </td>
+	               <td nowrap="nowrap">
+	                   {% if request.user.id = user_profile.user.id %}
+	                       <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel my Membership</a>
+	                   {% endif %}
+	               </td>
+	           </tr>
+	       {% endfor %}
+	    </table>
+    </div>

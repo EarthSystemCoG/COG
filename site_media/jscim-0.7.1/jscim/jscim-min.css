@@ -1,0 +1,178 @@
+/*!
+ * jscim - javascript Library v0.7.1
+ * https://github.com/ES-DOC/jscim
+ *
+ * Copyright 2012, ES-DOC (http://www.esrl.noaa.gov/cog/es-doc/)
+ *
+ * Licensed under the following licenses:.
+ *     CeCILL       http://www.cecill.info/licences/Licence_CeCILL_V2-en.html
+ *     GPL v3       http://www.gnu.org/licenses/gpl.html
+ *
+ * Date: Thu 15 Mar 2012 14:41:54 UTC
+ */
+
+/*
+**************************************
+   General styles.
+**************************************
+*/
+
+.cim-section-header {
+    font-size: large;
+    font-weight: bold;
+    width:100%;
+    padding: 4px;
+    margin-bottom: 5px;
+}
+
+.cim-row-group {
+    padding: 4px;
+    margin-bottom: 5px;
+    background-color: cyan;
+}
+
+.cim-row {
+    padding-bottom: 10px;
+}
+
+.cim-cell-label {
+    float:left;
+    font-weight: bold;
+}
+
+.cim-cell-input {
+    padding-left: 120px;
+}
+
+.cim-tab-button {
+    width: 120px;
+    text-align: center;
+}
+
+
+/*
+**************************************
+   Viewer header related styles.
+**************************************
+*/
+
+.cim-viewer-header-outer {
+    margin-bottom: 5px;
+}
+
+.cim-viewer-header-inner {
+    padding: 5px;
+}
+
+.cim-viewer-header-documentset-toolbar {
+
+}
+
+.cim-viewer-header-document-caption {
+    padding: 6px;
+    font-size: 18px;
+    font-weight: bolder;
+    float: right;
+    text-align: right;
+}
+
+/*
+**************************************
+   Viewer header related styles.
+**************************************
+*/
+
+.cim-viewer-content-outer {
+
+}
+
+.cim-viewer-content-inner {
+
+}
+
+/*
+**************************************
+   Viewer footer related styles.
+**************************************
+*/
+
+.cim-viewer-footer-outer {
+    font-size: 11px;
+}
+
+.cim-viewer-footer-inner {
+    padding: 3px 5px;
+}
+
+.cim-viewer-footer-document-count {
+}
+
+.cim-viewer-footer-document-count-label {
+    font-weight: bold;
+}
+.cim-viewer-footer-document-count-text {
+
+}
+
+.cim-viewer-footer-document {
+    float: right;
+    text-align: right;
+}
+
+.cim-viewer-footer-document-label {
+    font-weight: bold;
+}
+.cim-viewer-footer-document-text {
+
+}
+
+
+
+/*
+**************************************
+   User feedback related styles.
+**************************************
+*/
+.cim-message-text {
+    margin-top: 17px;
+}
+
+.cim-message-text-information,
+.cim-message-text-help,
+.cim-message-text-confirmation,
+.cim-message-text-confirmation-warning {
+    font-style: italic;
+}
+
+.cim-message-text-warning,
+.cim-message-text-error {
+    font-weight: bold;
+}
+
+.cim-message-icon {
+    width:32px;
+    height:32px;
+    margin-top: 10px;
+    margin-right: 10px;
+    float: left;
+}
+
+.cim-message-icon-confirmation {
+    background-image: url('icons/message.confirmation.png');
+}
+
+.cim-message-icon-error {
+    background-image: url('icons/message.error.png');
+}
+
+.cim-message-icon-help {
+    background-image: url('icons/message.help.png');
+}
+
+.cim-message-icon-information {
+    background-image: url('icons/message.information.png');
+}
+
+.cim-message-icon-warning {
+    background-image: url('icons/message.warning.png');
+}

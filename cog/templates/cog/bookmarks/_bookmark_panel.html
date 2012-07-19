@@ -1,0 +1,167 @@
+{% load cog_utils %}
+{% load url from future %}
+
+<!-- Javascript functionality -->
+<script type="text/javascript">
+
+    YAHOO.namespace("cog");
+
+    // function to pre-populate the panel form
+    // with a given (url,name) pair
+    // and then show the bookmark panel
+    function bookmarkit(myurl, myname) {
+        form = document.getElementById("bookmarkForm");
+        
+        form.url.value = myurl;
+        form.name.value = myname;
+        // display a truncated URL
+        var maxlength=100;
+        if (myurl.length<=maxlength) {
+            document.getElementById("urlid").innerHTML = myurl;
+        } else {
+        	document.getElementById("urlid").innerHTML = myurl.substring(0,maxlength) + "..."
+        }
+        
+        YAHOO.cog.bookmarkPanel.show()
+    }
+    
+    // function to check a field for bad characters
+    //var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+    var iChars = "!@#$%^&*[]/{}|\"<>?";
+    function isFieldValid(fieldName, fieldValue) {
+      for (var i = 0; i < fieldValue.length; i++) {
+            if (iChars.indexOf(fieldValue.charAt(i)) != -1) {
+                showMessage("Validation Error", "The field: '"+fieldName+"' contains the illegal character: '"+fieldValue.charAt(i)+"'");
+                return false;
+            }
+        }
+        // no bad characters
+        return true;
+    }
+
+    
+    YAHOO.util.Event.onDOMReady(function () {
+        
+	    // 'submit' handler
+	    // automatically hides the dialog
+	    var handleSubmit = function() {
+	        this.submit();
+	    };
+	    
+	    // 'cancel' handler
+	    var handleCancel = function() {
+	        this.cancel();
+	    };
+	    
+	    // 'success' handler
+	    // although the JSON response message may contain an error code
+	    var handleSuccess = function(o) {
+	    	var data = YAHOO.lang.JSON.parse(o.responseText);
+	        showMessage('Bookmark operation: '+ data.result, data.message)
+	    };
+	    
+	    // 'failure' handler
+	    var handleFailure = function(o) {
+	        showMessage('Bookmark operation: '+ data.result, data.message)
+	    };
+		    
+	    // instantiate the Dialog, don't show it
+	    YAHOO.cog.bookmarkPanel = new YAHOO.widget.Dialog("bookmarkPanel", 
+	                            { width : "60em",
+	                              fixedcenter : true,
+	                              visible : false, 
+	                              constraintoviewport : true,
+	                              buttons : [ { text:"Submit", handler:handleSubmit, isDefault:true },
+	                                          { text:"Cancel", handler:handleCancel } ]
+	                            });
+	    
+	    // validate form data
+	    // execute valdation client side because the dialog desappears when the ajax request is sent
+	    YAHOO.cog.bookmarkPanel.validate = function() {
+	    	
+	        // form data
+	    	var data = this.getData();
+	        
+	        if (data.name == "") {
+	            showMessage("Validation Error", "Please enter a valid name for this bookmark");
+	            return false;
+	        }
+	        
+	        // validate fields
+	        if (!isFieldValid('name', data.name)) return false;
+	        if (!isFieldValid('description', data.description)) return false;
+	        
+	        // data is valid
+	        return true;
+	    };
+	    	
+	    // wire up the success and failure handlers
+	    YAHOO.cog.bookmarkPanel.callback = { success: handleSuccess, failure: handleFailure };
+	
+	    // render the dialog
+	    YAHOO.cog.bookmarkPanel.render();
+	        
+    });
+   
+</script>
+
+<!-- anchor for confirmation dialog -->
+<div id="myDialog" class="yui-skin-sam"></div>
+
+<!-- skeleton bookmark form, initially hidden when page is loaded -->
+<div class="yui-skin-sam">
+    <div id="bookmarkPanel">
+    
+        <!-- panel header -->
+        <div class="hd">Bookmark this URL</div>
+        
+        <!-- panel body -->
+        <div class="bd">
+        
+	        <!-- panel form -->
+	        <!-- invoke the ajax bookmarking endpoint -->
+	        <form method="POST" action="{% url 'bookmark_add2' project.short_name|lower %}" id="bookmarkForm">
+	    
+	            {% csrf_token %}
+	
+			    <table>
+			        <tr>
+			            <td valign="top" nowrap="nowrap"><b>URL</b></td>
+			            <td class="long">
+			               <span id="urlid"></span>
+			               <input type="hidden" name="url"/><div id="url-error"></div>
+			            </td>
+			        </tr>
+			        <tr>
+			            <td valign="top" nowrap="nowrap"><b>Name</b></td>
+			            <td class="long"><input type="text" name="name" /><div id="name-error"></div></td>
+			        </tr>
+			        <tr>
+                        <td valign="top" nowrap="nowrap"><b>Description</b></td>
+                        <td class="long"><input type="text" name="description" /><div id="description-error"></div></td>
+                    </tr>			        
+			        <tr>
+			            <td valign="top" nowrap="nowrap"><b>Folder</b></td>
+			            <td class="long">
+			                <select name="folder">  
+							    {% for folder in project|listFolders:user %}
+							        <option value="{{ folder.0.id }}"> {{ folder.1 }}</option>
+							    {% endfor %}
+			                </select>
+			            </td>
+			        </tr>
+			        <tr>
+			           <td colspan="2">
+			             <i>Please note: the characters {{ project|getInvalidCharacters }}  are not allowed in the 'name' or 'description' fields.</i>
+			           </td>
+			        </tr>
+			    </table>
+			    <!-- hidden fields not editable by the user -->
+			    <input type="hidden" name="order" value="0" />
+			    
+	        </form>
+	        
+	    </div>
+	    
+	</div>
+</div>

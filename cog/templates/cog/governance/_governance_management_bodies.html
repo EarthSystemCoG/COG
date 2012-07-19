@@ -1,0 +1,59 @@
+<!-- Management Bodies -->
+{% load cog_utils %}
+
+ <div id="{{category}}_management_bodies">
+
+	<!-- header -->
+	<hr/>
+	<b>{{category}} Management Bodies</b>
+	{% if user|hasAdminPermission:proj %}
+	    <div style="float:right">
+	    	<a href="{% url management_body_update proj.short_name.lower category %}" class="changelink">&nbsp;Update</a>
+	 	</div>
+	{% endif %}
+	
+	<!-- content -->
+	{% if management_bodies %}
+		<table>
+			{% for mb in management_bodies %}
+				<tr>
+					<td>
+						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
+							<tr>
+								<td class="leftcolumn"><b>{{mb.title}}</b></td>
+								<td>{{mb.description|linebreaksbr}}</td>
+							</tr>
+							<tr>
+								<td class="leftcolumn">Purpose(s)</td>
+								<td>{% for purpose in mb.get_all_purposes %}
+										{% if not forloop.first %}, {% endif %}{{purpose}}
+									{% endfor %}
+								</td>
+							</tr>							
+							{% if mb.termsOfReference %}
+							<tr>
+								<td class="leftcolumn">Terms Of Reference</td>
+								<td>{{mb.termsOfReference|linebreaksbr}}</td>
+							</tr>
+							{% endif %}	
+							{% if mb.members.all %}
+							<tr>
+								<td class="leftcolumn">Members</td>
+								<td>
+									{% for member in mb.members.all %}{% if forloop.counter > 1 %}, {% endif %}
+										{{member.user.get_full_name}}{% endfor %}	
+								</td>
+							</tr>
+							{% endif %}								
+						</table>
+						
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+		
+	{% else %}
+		:&nbsp;<i>No information found.</i>
+	{% endif %}
+
+ </div>

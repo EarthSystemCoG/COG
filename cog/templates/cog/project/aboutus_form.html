@@ -1,0 +1,158 @@
+{% extends "cog/common/layout_center.html" %}
+{% load url from future %}
+
+{% block extrahead %}
+
+   <!-- dynamic formset JS libraries -->
+   {% include 'cog/common/django-dynamic-formset.html' %} 
+    
+   <!-- dynamic formset page specific code --> 
+   <script type="text/javascript">
+   		<!-- multiple formsets: must use formset prefix, and name a formset-specific css class -->
+         $(function() {
+             $('#organizationFormsetTable tbody tr').formset({
+                 prefix: '{{ organization_formset.prefix }}',
+                 formCssClass: 'organization_formset-css',
+                 addText: 'Add another',
+                 deleteText: 'Delete',
+                 addCssClass: 'addlink',
+                 deleteCssClass: 'deletelink'
+             });
+             $('#fundingSourceFormsetTable tbody tr').formset({
+                 prefix: '{{ fundingsource_formset.prefix }}',
+                 formCssClass: 'fundingsource_formset-css',
+                 addText: 'Add another',
+                 deleteText: 'Delete',
+                 addCssClass: 'addlink',
+                 deleteCssClass: 'deletelink'
+
+             });
+         })
+   </script>
+    
+{% endblock %}
+
+{% block main %}
+
+	{% load cog_utils %}
+	
+	<div class="mybox">
+		 <form action="" method="post">
+		         
+		     {% csrf_token %}
+		     {{ organization_formset.management_form }}
+		     {{ fundingsource_formset.management_form }}
+		     
+		     <table>
+		     	 <tr>
+			        <td nowrap="nowrap"><b>Project Long Name</b></td>
+			        <td class="long" colspan="2">
+			            {{ form.long_name }} 
+			            {{ form.long_name.errors }}
+			         </td>
+		         </tr>	     
+			     <tr>
+			        <td nowrap="nowrap"><b>Description</b></td>
+			        <td class="long" colspan="2">
+			        	{{form.description.help_text}}.
+			            {{ form.description }} 
+			            {{ form.description.errors }}
+			         </td>
+		         </tr>
+		         <tr>
+			        <td nowrap="nowrap">External Home Page</td>
+			        <td class="long" colspan="2">
+			            {{ form.external_homepage }} 
+			            {{ form.external_homepage.errors }}
+			         </td>
+		         </tr>
+		         <tr>
+			        <td nowrap="nowrap">Mission</td>
+			        <td class="long" colspan="2">
+			        	{{form.mission.help_text}}.
+			        	{{ form.mission }} 
+			        	{{ form.mission.errors }}
+			      	</td>
+		         </tr>
+		         <tr>
+			        <td nowrap="nowrap">Vision</td>
+			        <td class="long" colspan="2">
+			        	{{form.vision.help_text}}.
+			        	{{ form.vision }} 
+			        	{{ form.vision.errors }}
+			       	</td>
+		         </tr>	         
+		         <tr>
+			        <td nowrap="nowrap">Values</td>
+			        <td class="long" colspan="2">
+			        	{{form.values.help_text}}.
+			        	{{ form.values }} 
+			        	{{ form.values.errors }}
+			        </td>
+		         </tr>	         
+		         <tr>
+			        <td nowrap="nowrap">History</td>
+			        <td class="long" colspan="2">
+			        	{{form.history.help_text}}.
+			        	{{ form.history }} 
+			        	{{ form.history.errors }}
+			        </td>
+		         </tr>	     
+		         <tr>
+		         	<td valign="top" nowrap="nowrap">Organizational Partners</td>
+		         	<td class="long">
+		         		Projects or organizations that collaborate on this project.
+		         		<br/>
+		         		<table id="organizationFormsetTable">
+		         		 <tbody>
+					     {% for oform in organization_formset.forms %}
+					     	{{ oform.id }}	
+					     	<tr>					 			 	            		
+			           			<td class="long">
+			           			{{ oform.name }} {{ oform.name.errors }}
+			           			</td>
+				           		{% if oform.instance.id %}
+				         			<td nowrap="nowrap">{{ oform.DELETE }}</td>
+					           	{% else %}
+					           		<td></td>
+						        {% endif %}	            		
+			          	    </tr>	
+						 {% endfor %}
+						 </tbody>
+				 		</table>
+				 	</td>
+				 </tr>
+				 <tr>
+		         	<td valign="top" nowrap="nowrap">Funding Source</td>
+		         	<td class="long">
+		         		The organizations or agencies that financially support the project.
+		         		<br/>
+		         		<table id="fundingSourceFormsetTable"><tbody>
+					     {% for fsform in fundingsource_formset.forms %}
+					     	{{ fsform.id }}	
+					     	<tr>					 			 	            		
+			           			<td class="long">
+			           			{{ fsform.name }} {{ fsform.name.errors }}
+			           			</td>
+				           		{% if fsform.instance.id %}
+				         			<td nowrap="nowrap">{{ fsform.DELETE }}</td>
+					           	{% else %}
+					           		<td></td>
+						        {% endif %}	            		
+			          	    </tr>	
+						 {% endfor %}
+				 		</tbody></table>
+				 	</td>
+				 </tr>
+					 
+			 </table>
+			        	
+		     <div style="text-align:right">
+		         <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower %}'"/>
+		         <input type="submit" value="Submit" />
+	         </div>
+		     
+		</form>
+	</div>
+       
+{% endblock %}

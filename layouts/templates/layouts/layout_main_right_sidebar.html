@@ -1,0 +1,13 @@
+{% extends "layouts/layout_base.html" %}
+
+{% block body %}   
+ 
+    <div class="span-18">
+         {% block title %} <h1 class="title">{{ title }}</h1> {% endblock %}
+         {% block main %} Main content {% endblock %}
+    </div>
+    <div class="span-6 last">
+         {% block right %} Right sidebar {% endblock %}
+    </div>
+
+{% endblock %}

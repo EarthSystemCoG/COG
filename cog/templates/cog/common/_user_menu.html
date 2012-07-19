@@ -1,0 +1,47 @@
+{% load cog_utils %}
+{% load url from future %}
+
+{% if request.user.is_authenticated %}
+     
+     Welcome, <strong>{% filter force_escape %}{% firstof request.user.first_name request.user.username %}{% endfilter %}</strong>.                                
+          
+     <!-- display project membership -->
+     {% if request.user.is_staff %}
+           | You are the <b>Site Administrator</b>
+     {% else %}
+	     {% if project %}
+	        {% if project|hasUserPending:request.user %}
+	            | Your membership in project {{ project.short_name }} is <b>waiting for approval</b>
+	        {% else %}       
+		        {% if request.user|isEnrolled:project.getAdminGroup %}
+		            | You are a {{ project.short_name }} <b>project administrator</b>
+		        {% else %}
+		            {% if request.user|isEnrolled:project.getUserGroup %}
+		                | You are a {{ project.short_name }} <b>project member</b>
+		            {% else %}
+		                | <a href="{% url 'membership_request' project.short_name|lower %}">Join the {{ project.short_name }} project</a>
+		            {% endif %}
+		        {% endif %}
+		     {% endif %}
+	     {% endif %}
+     {% endif %}
+     <!--  | <a href="{% url 'user_detail' user.id %}">My Account</a> -->
+     
+     <!-- | <a href="{% url 'password_update' user.id %}">Change Password</a> -->
+     {% if request.user.is_staff %}
+         | <a href="{% url 'admin:index' %}">Django Admin</a> 
+         | <a href="{% url 'admin_index' %}">CoG Admin</a>         
+     {% endif %}
+     | <a href="{% url 'user_detail' request.user.id %}">My Profile</a>
+     | <a href="{% url 'project_add' %}">Register a New Project</a>
+     | <a href="{% url 'logout' %}?next={{ request.path }}">Log out</a>    
+       
+{% else %}
+     Welcome, <strong>Guest</strong>.            
+     | <a href="{% url 'login' %}?next={{ request.path }}">Log in</a>   
+     | <a href="{% url 'user_add' %}">Create Account</a>
+{% endif %}
+
+<!--  new project link 
+<br/>| <a href="{% url 'project_add' %}">Register a New Project</a>
+-->

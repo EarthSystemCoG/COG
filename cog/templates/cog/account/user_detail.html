@@ -1,0 +1,32 @@
+<!-- Template page to display user's profile -->
+{% extends "cog/common/layout_center.html" %}
+{% load url from future %}
+
+{% block main %}
+    
+    <div class="prepend-3 span-18">
+    
+        <h2>User Profile</h2>
+    
+	    <div class="span-8">
+	           
+	        {% include 'cog/account/_user_profile.html' %} 
+	        
+	        {% if request.user.id = user_profile.user.id %}
+	            <div style="text-align:center">
+	                <a href="{% url 'user_update' request.user.id %}">Update my profile</a>
+	                &nbsp; &nbsp;
+	                <a href="{% url 'password_update' request.user.id %}">Change my password</a>
+	            </div>
+	        {% endif %}
+	        
+	   </div>
+	        
+	   <div class="span-10 last">
+	        {% include 'cog/account/_user_projects.html' %} 
+	   </div>
+   
+   </div>
+        
+    
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+
+{% block main %}
+    
+    <!-- display submission form -->
+    {% if request.method == "GET" %}
+           
+        <div class="instruction-box">    
+	        Please note that the contents of this project's workspace can be read by anybody.
+	        <br/>To edit any page, you must request to join the project by clicking the button below.
+	        <br/>Thank you for your interest in project {{ project.short_name }}.
+	        <form method="post" action="">
+	           {% csrf_token %}
+	           <input type="submit" value="Join"/>
+	        </form>
+        </div>
+    
+    
+    <!-- display confirmation -->
+    {% else %}
+    
+	    <div class="message-box">
+		   Thanks for your interest in joining the {{ project.short_name }} project.
+		
+			<!-- Membership just requested -->
+			{% if status == "SUCCESS" %}
+			    
+			    <br/>Your request for membership has been received, 
+			    <br/>and will be reviewed by the project administrators as soon as possible.
+			    <br/>You will be notified of the administrators' decision by email.
+			
+			<!-- Memberhsip was already requested -->
+			{% else %}
+			
+			    <br/>Your request for membership <span style="text-decoration:underline">has already been submitted</span>, 
+			    <br/>and will be reviewed by the project administrators as soon as possible.
+			    
+			{% endif %}
+		
+	    </div>
+	    
+    {% endif %}
+    
+{% endblock %}

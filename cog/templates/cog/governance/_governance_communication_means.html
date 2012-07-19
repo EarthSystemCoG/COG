@@ -1,0 +1,74 @@
+<!-- Organizational Roles -->
+
+{% load cog_utils %}
+
+{% if display == 'ALL' or display == 'COMMUNICATION_MEANS' %}
+  <div id="communication">
+
+	<!-- header -->
+	<hr/>
+	<b>Communication and Coordination</b>
+	{% if user|hasAdminPermission:proj %}
+	    <div style="float:right">
+	    	<a href="{% url communication_means_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
+	 	</div>
+	{% endif %}
+	
+	<!-- content -->
+	{% if proj.communicationmeans_set.all %}
+
+		<table>
+			{% for obj in proj.communicationmeans_set.all %}
+				<tr>
+					<td>
+						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
+							<tr>
+								<td class="leftcolumn"><b>{{obj.title}}</b></td>
+								<td>{{obj.type}}</td>
+							</tr>
+							{% if obj.frequency %}
+							<tr>
+								<td class="leftcolumn">Frequency</td>
+								<td>{{obj.frequency}}</td>
+							</tr>
+							{% endif %}
+							{% if obj.purpose %}
+							<tr>
+								<td class="leftcolumn">Purpose</td>
+								<td>{{obj.purpose}}</td>
+							</tr>
+							{% endif %}
+							{% if obj.membership %}
+							<tr>
+								<td class="leftcolumn">Membership</td>
+								<td>{{obj.membership}}</td>
+							</tr>
+							{% endif %}
+							{% if obj.members.all %}
+							<tr>
+								<td class="leftcolumn">Members</td>
+								<td>
+									{% for member in obj.members.all %}{% if forloop.counter > 1 %}, {% endif %}
+										{{member.user.get_full_name}}{% endfor %}	
+								</td>
+							</tr>
+							{% endif %}	
+							{% if obj.participationDetails %}
+							<tr>
+								<td class="leftcolumn">Participation Details</td>
+								<td>{{obj.participationDetails|linebreaksbr}}</td>
+							</tr>							
+							{% endif %}						
+						</table>
+						
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+		
+	{% else %}
+		:&nbsp;<i>No information found.</i>
+	{% endif %}
+
+  </div>
+{% endif %}

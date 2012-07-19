@@ -1,0 +1,49 @@
+{% extends "cog/common/layout_center.html" %}
+{% load url from future %}
+
+{% block main %}
+
+<div class="prepend-7 span-10">
+
+	<h2>User Login</h2>
+	
+	<!-- display extra message if available -->
+	{% if request.GET.message %}
+	   <div class="message-box"> {{ request.GET.message }}</div>
+	   <p/>
+	{% endif %}
+	
+	<!-- display authentication errors -->
+	{% if form.errors %}
+	<p class="errornote">Your username and password didn't match. Please try again.</p>
+	{% endif %}
+	
+	<!-- authentication form -->
+	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+	   {% csrf_token %}
+		<div class="mybox">
+			<table>
+				<caption>User Login</caption>
+				<tr>
+				    <td>{{ form.username.label_tag }}</td>
+				    <td>{{ form.username }}</td>
+				</tr>
+				<tr>
+				    <td>{{ form.password.label_tag }}</td>
+				    <td>{{ form.password }}</td>
+				</tr>
+			</table>
+		</div>	
+		<div>
+			<span style="float:left">
+			  <input type="submit" value="login" />
+			  <input type="hidden" name="next" value="{{ next }}" />
+			</span>
+			<span style="float:right">
+			  <a href="{% url 'password_reset' %}">Forgot Password ?</a>
+			</span>
+		</div>
+	</form>
+
+</div>
+{% endblock %}

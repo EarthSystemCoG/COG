@@ -1,0 +1,28 @@
+<!-- page body -->
+{% load cog_utils %}
+
+<p/>
+{% autoescape off %}
+
+    {{ post.body }}
+    
+    <!-- include action links -->
+    {% include 'cog/post/_post_actions.html' %}
+        
+    <!-- Attachments -->  
+    {% include 'cog/post/_post_attachements.html' %}
+    
+    <!-- Hierarchy -->
+	{% include 'cog/post/_post_hierarchy.html' %}
+	
+	<!-- Comments -->
+    {% with post.url as next_view %}
+	    {% with post as object %}
+	        {% include 'cog/common/_comments.html' %}
+	    {% endwith %}
+    {% endwith %}
+    
+    <!-- include signals, if available -->
+    {% include 'cog/project/_project_signals.html' %}
+           	
+{% endautoescape %}

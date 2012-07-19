@@ -1,0 +1,54 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf290
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww21880\viewh11380\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 CAS RESOURCE MANAGER\
+\
+INSTALLATION\
+o cd /Users/cinquini/Documents/workspace/cas-build\
+o svn ls http://oodt/repo/cas-resource/tags/\
+o svn co http://oodt/repo/cas-resource/tags/1_3_1_release/  cas-resource-v1.3.1\
+o cd cas-resource-v1.3.1/\
+o mvn package\
+o cd target\
+o cp cas-resource-1.3.1-dist.tar.gz /Users/cinquini/Documents/workspace/cas-install/\
+o cd  /Users/cinquini/Documents/workspace/cas-install/\
+o tar xvfz cas-resource-1.3.1-dist.tar.gz\
+o ln -s ./cas-resource-1.3.1 ./cas-resource\
+\
+CONFIGURATION\
+\
+o bin/resmgr\
+	- SERVER_PORT=9012\
+	- JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home\
+	- RUN
+\fs22 _HOME\
+\
+o bin/resmgr-client\
+	-
+\fs24 JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home\
+
+\fs28 \
+o etc/logging.properties\
+\
+o etc/resource.properties\
+	- gov.nasa.jpl.oodt.cas.resource.monitor.nodes.dirs=file:///Users/cinquini/Documents/workspace/cas-install/cas-resource/policy\
+	- gov.nasa.jpl.oodt.cas.resource.scheduler.nodetoqueues.dirs=file:///Users/cinquini/Documents/workspace/cas-install/cas-resource/policy\
+(must point to the directory containing the nodes XML configuration)\
+\
+o policy/nodes.xml\
+o policy/node-to-queue-mapping.xml\
+\
+RUNNING\
+o cd bin\
+o ./resmgr start\
+	- starts the case resource manager\
+o ./batch_stub 2001\
+	- starts a batch node on port 2001\
+o java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.resource.tools.JobSubmitter --rUrl http://localhost:9012 --file ../policy/jobs/exJob.xml \
+\
+FIXME\
+o Cas-resource-manager distribution should contain the cas-workflow jar by default, so that CAS workflow can submit jobs to CAS resource without "class not found exception"\
+}

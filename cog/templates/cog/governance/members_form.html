@@ -1,0 +1,54 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+
+{% block main %}
+
+	{% load cog_utils %}
+    
+	 <form action="" method="post">
+	         
+	     {% csrf_token %}
+	     {{ formset.management_form }}
+	     	     
+	     {% for form in formset.forms %}
+	     	
+     	    {{ form.id }}
+	        
+	        <div class="mybox">
+				<table>
+	            	<tr>
+	            		<td valign="top" nowrap="nowrap"><b>User</b></td>
+	            		<td class="long" style="padding:2px">
+	            			{{ form.user }} 
+	            			{{ form.user.errors }}
+	            		</td>
+	            	</tr>            	
+	            	{% if form.instance.id %}
+		            	<tr>
+		            		<td valign="top">&nbsp;</td>
+		            		<td class="long">
+		            			 {{ form.DELETE }} <span style="padding:0px">Delete?</span>
+		            		</td>
+		            	</tr>
+	            	{% endif %}
+	            	
+	            </table>
+	            
+	            <ul class="errorlist">
+		            {% for error in form|get_form_global_errors %}
+		            	<li>{{ error }}</li>
+	            	{% endfor %}
+            	</ul>
+	            
+            </div>
+            	     		     	
+	     {% endfor %}
+    
+    	 <div style="text-align:right">
+	         <input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower %}'"/>
+	         <input type="submit" value="Submit" />
+         </div>
+    
+    </form>
+
+	
+{% endblock %}

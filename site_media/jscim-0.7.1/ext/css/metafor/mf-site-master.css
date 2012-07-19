@@ -1,0 +1,175 @@
+/* ************************** */
+/* Site header classes        */
+/* ************************** */
+.mf-siteHeaderContainer {
+    /* Standard */
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    /* Custom */
+    position:absolute;
+    top:0px;
+    left:0px;
+    z-index:999;
+    background-color: #dfeffc;
+    height: 70px;
+}
+
+.mf-siteHeader {
+    /* Standard */
+    height:70px;
+    width: 980px;
+    margin: auto;
+    /* Custom */
+}
+
+.mf-siteHeaderLogo {
+    height:64px;
+}
+
+.mf-siteHeaderTitle {
+    margin-top: 12px;
+    color: #2e6e9e;
+    font-size:32px;
+    font-style: italic;
+}
+
+.mf-siteHeaderVersion {
+    margin-top: 12px;
+    margin-left: 5px;
+    color: goldenrod;
+    font-size:16px;
+    font-style:italic;
+}
+
+.mf-siteHeaderSlogan {
+    color: #2e6e9e;
+    padding-top: 2px;
+}
+
+/* ************************** */
+/* Site footer classes        */
+/* ************************** */
+.mf-ftr-close {
+    padding-top: 20px;
+    width:80px;
+    float: right;
+    text-align: right;
+    color: goldenrod;
+    font-weight: bold;
+}
+
+.mf-siteFooterContainer {
+    /* Standard */
+    width: 100%;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    /* Custom */
+    position:fixed;
+    bottom: 0;
+    z-index:999;
+    height: 58px;
+    background-color: #dfeffc;
+    padding-top: 4px;
+}
+
+.mf-siteFooter {
+    /* Standard */
+    height:58px;
+    width: 980px;
+    margin: auto;
+    /* Custom */
+}
+
+.mf-siteFooterLinks {
+    margin-top: 20px;
+    margin-left: 220px;
+}
+
+.mf-siteFooterLink {
+   padding-left:20px;
+}
+
+.mf-siteFooterLogo {
+    height:48px;
+    background-color: transparent;
+    padding-right: 5px;
+}
+
+/* ************************** */
+/* Page classes        */
+/* ************************** */
+.mf-pageContainer {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    margin-bottom: -62px;
+    border: 0;
+    padding-top: 73px;
+}
+
+.mf-page {
+    width: 980px;
+    margin: auto;
+}
+
+
+/* ************************** */
+/* Page header classes        */
+/* ************************** */
+.mf-pageHeader {
+    margin-bottom: 3px;
+}
+
+.mf-pageHeaderIcon {
+    padding-top:3px;
+    height:32px;
+}
+
+.mf-pageHeaderTitle,
+.mf-pageHeaderFunction {
+    padding-top:3px;
+    vertical-align: top;
+    font-size: 36px;
+    font-style:italic;
+    font-weight: bold;
+    font-variant: small-caps;
+}
+
+.mf-pageHeaderToolbar {
+    position: relative;
+    top:2px;
+    left: 0px;
+    right: 0;
+    bottom: 0;
+    padding-right: 2px;
+}
+
+.mf-pageHeaderToolbarButton {
+    width: 120px;
+}
+
+.mf-pageHeaderToolbarButtonActive {
+    font-variant: small-caps;
+}
+
+
+/* ************************** */
+/* Page content classes       */
+/* ************************** */
+.mf-pageContent {
+
+}
+
+
+/* ************************** */
+/* Site widget classes        */
+/* ************************** */
+#mfSiteProgressMessage {
+    padding: 5px;
+    margin-top: 5px;
+    font-weight: bold;
+    text-align: center;
+}

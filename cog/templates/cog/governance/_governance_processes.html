@@ -1,0 +1,41 @@
+<!-- Organizational Roles -->
+
+{% load cog_utils %}
+
+{% if display == 'ALL' or display == 'PROCESSES' %}
+  <div id="governance_processes">
+
+	<!-- header -->
+	<hr/>
+	<b>Governance Processes</b>
+	{% if user|hasAdminPermission:proj %}
+	    <div style="float:right">
+	    	<a href="{% url governance_processes_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
+	 	</div>
+	{% endif %}
+	
+	<!-- content -->	
+	{% if proj.taskPrioritizationStrategy or proj.requirementsIdentificationProcess %}
+
+		<table>
+			{% if proj.taskPrioritizationStrategy %}
+				<tr>
+					<td class="leftcolumn"><b>Task Prioritization Strategy</b></td>
+					<td>{{proj.taskPrioritizationStrategy|linebreaksbr}}</td>
+				</tr>
+			{% endif %}
+			{% if proj.requirementsIdentificationProcess %}
+				<tr>
+					<td class="leftcolumn"><b>Requirements Identification Process</b></td>
+					<td>{{proj.requirementsIdentificationProcess|linebreaksbr}}</td>
+				</tr>
+			{% endif %}
+		</table>
+		
+	{% else %}
+		:&nbsp;<i>No information found.</i>
+	{% endif %}
+
+  </div>
+{% endif %}
+	

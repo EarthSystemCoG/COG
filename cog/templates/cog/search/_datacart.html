@@ -1,0 +1,79 @@
+<script language="javascript">
+
+	// function to obtain the HTML id for the files container
+	function getFilesDiv(dataset_id) {
+		id = "files_"+dataset_id;
+		return document.getElementById(id);
+	}
+	
+	// function to retrieve the files belonging to a given dataset
+	function showFiles(dataset_id, index_node) {
+		
+		fdiv = getFilesDiv(dataset_id);
+			
+		// only execute invocation for this dataset if not done laready
+		if (fdiv.innerHTML.length==0) {
+				
+			// relative path to COG application
+			// note: cannot execute HTTP requests to other hosts because if javascript security restrictions
+			var url = "/search_files/"+dataset_id+"/"+index_node+"/";
+		
+			// execute asynchronous GET request
+			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+		}
+		
+	}
+	
+	// function called if Ajax request succeded
+	var handleSuccess = function(o) {
+		
+		// parse JSON response into object		
+		var jsonResponse = eval('(' + o.responseText + ')');
+		var numFound = jsonResponse.response.numFound;
+		var docs = jsonResponse.response.docs;
+		var dataset_id = null;
+		for (var k=0; k<jsonResponse.responseHeader.params.fq.length; k++) {
+			var fqArray = jsonResponse.responseHeader.params.fq[k].split(":");
+			if (fqArray[0]=='dataset_id') {
+				dataset_id = fqArray[1].replace(/\"/g,'');
+			}	
+		}
+		
+		// populate files container
+		var fdiv = getFilesDiv(dataset_id);
+		fdiv.innerHTML = "<b>Total Number of Files</b>:"+numFound;
+		if (numFound>0) {
+			fdiv.innerHTML += "<table>";
+			for (var i=0; i<docs.length; i++) {
+				
+				var doc = docs[i];
+				fdiv.innerHTML += "<tr><td>"+doc.title+"</td><td>";
+				if (doc.url) {
+					for (var j=0; j<doc.url.length; j++) {
+						var urlArray = doc.url[j].split('|');
+						fdiv.innerHTML += "&nbsp;&nbsp;<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+					}
+				}
+				fdiv.innerHTML += "</td></tr>";
+			}
+			fdiv.innerHTML += "</table>";
+		}
+		fdiv.innerHTML += "<br/>"
+	}
+
+	// function called if Ajax request failed
+	var handleFailure = function(o) {
+		showMessage("An Error Occurred",
+				    "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
+	}
+
+	var callback =
+	{
+	  success:handleSuccess,
+	  failure: handleFailure,
+	  cache:false,
+	  timeout:5000,
+	  argument: {}
+	};
+	
+</script>

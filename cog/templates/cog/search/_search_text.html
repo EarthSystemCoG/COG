@@ -1,0 +1,13 @@
+<!-- Search Text widget-->
+<div class="box-colored" style="padding: 5px">
+	<div style="text-align: center">
+		Enter text &nbsp; <input type="text" name="text" size="30" value="{{search_input.text}}"/> 
+		&nbsp; <input type="submit" value="Search"/>
+		&nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
+	</div>
+</div>
+
+<!-- Form errors -->
+{% if error_message %}
+	<p/><div class="error-box">{{ error_message }}</div>
+{% endif %}
