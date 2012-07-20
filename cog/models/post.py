@@ -41,6 +41,8 @@ class Post(models.Model):
         is_home = models.BooleanField(verbose_name='Is Home Page ?', default=False, null=False)
         # public/private flag
         is_private = models.BooleanField(verbose_name='Private ?', default=False, null=False)
+        # version number
+        version = models.IntegerField(null=False, blank=False, default=1)
                 
         # method to check whether this is one of the project predefined pages
         def is_predefined(self):

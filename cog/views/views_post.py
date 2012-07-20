@@ -247,9 +247,19 @@ def createProjectTopicIfNotExisting(project, topic):
         pt.save()
 
 # function to return an error message if a post object is locked
+def getLostLockRedirect(request, project, post, lock):
+        messages = ["Sorry, your lock on this page has expired, and others have modified the page afterwards.",
+                    "Your changes cannot be saved. Please start the update from most current version of the page." ] 
+        return render_to_response('cog/common/message.html', 
+                                  {'mytitle':'Changes can not be saved', 
+                                   'project':project,
+                                   'messages':messages }, 
+                                  context_instance=RequestContext(request))
+        
+# function to return an error message if a user lost the lock on the object
 def getPostIsLockedRedirect(request, project, post, lock):
-        messages = ["The page '%s' is currently edited by %s" % (post.title, lock.owner.get_full_name()),
-                    "The current lock will expire at %s" % lock.get_expiration().strftime('%Y-%m-%d %H:%M:%S') ] 
+        messages = ["The page '%s' is currently being edited by %s." % (post.title, lock.owner.get_full_name()),
+                    "The current lock will expire at %s." % lock.get_expiration().strftime('%Y-%m-%d %H:%M:%S') ] 
         return render_to_response('cog/common/message.html', 
                                   {'mytitle':'Page is locked', 
                                    'project':project,
@@ -289,10 +299,11 @@ def post_update(request, post_id):
     lock = getLock(post)
     if isLockedOut(request.user, lock):
         return getPostIsLockedRedirect(request, post.project, post, lock)
-    # create/renew lock
-    lock = createLock(post, request.user)
-    
+        
     if (request.method=='GET'):
+        
+        # create/renew lock
+        lock = createLock(post, request.user)
                 
         # extract page partial URL
         if post.type==Post.TYPE_PAGE:
@@ -304,12 +315,23 @@ def post_update(request, post_id):
         return render_post_form(request, form, post.project, post.type, lock=lock)
         
     else:
+        
         # update existing database model with form data
         form = PostForm(post.type, post.project, request.POST, instance=post)
+        
+        # check versions       
+        if post.version!=int(request.REQUEST.get('version',-1)):
+            print 'database version=%s form version=%s' % (post.version, request.REQUEST.get('version',-1))
+            return getLostLockRedirect(request, post.project, post, lock)
+        
         #print "1 PAGE URL=%s" % form.data['url']
         if (form.is_valid()):
             # build instance from form data
             post = form.save(commit=False)
+                        
+            # increment version
+            post.version += 1
+            
             # rebuild full page URL
             if post.type==Post.TYPE_PAGE:
                 post.url = get_project_page_full_url(post.project, post.url)

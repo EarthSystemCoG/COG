@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from project_tab import ProjectTab
 from datetime import datetime, timedelta
 
-# default lock lifetime: 15 minutes
-EXPIRATION_LENGTH_IN_SECONDS = 900 
+# default lock lifetime: 30 minutes
+EXPIRATION_LENGTH_IN_SECONDS = 1800
 
 class Lock(models.Model):
     """Class that represents a lock on a generic object instance."""
@@ -54,24 +54,24 @@ def createLock(object, owner):
         # create new lock
         lock = Lock(object_type=object.__class__.__name__, object_id=object.id, owner=owner)
         lock.save()
-        print "Lock created"
+        #print "Lock created"
         return lock
     
     elif lock.owner == owner:
         # refresh lock
         lock.save()
-        print "Lock refreshed"
+        #print "Lock refreshed"
         return lock
     
     elif lock.is_expired():
         # reassign existing lock
         lock.owner = owner
         lock.save()
-        print "Lock reassigned"
+        #print "Lock reassigned"
         return lock
     
     else:
-        print "Lock already existing"
+        #print "Lock already existing"
         return None
     
 def deleteLock(object):
@@ -80,4 +80,4 @@ def deleteLock(object):
     lock = getLock(object)
     if lock is not None:
         lock.delete()
-        print "Lock removed"
+        #print "Lock removed"

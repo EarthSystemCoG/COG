@@ -10,7 +10,7 @@
 	{% if lock %}
 		<div class="warning">
 			Your lock on this page expires at {{ lock.get_expiration|date:"Y-m-d H:i:s" }}.
-			To renew the lock, save the page end edit it again.
+			To renew the lock, please submit the page end update it again.
 		</div>
 	{% endif %}
        
@@ -23,6 +23,8 @@
 		    {{ form.project.as_hidden }}
 		    {{ form.type.as_hidden }}
 		    {{ form.is_home.as_hidden }}
+		    {{ form.version.as_hidden }}
+		    
 		    		    
 		    <!-- TYPE_PAGE -->
 		    {% if form.instance.type == 'page' %}
