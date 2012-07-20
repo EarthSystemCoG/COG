@@ -355,6 +355,27 @@ def numberOptions(lastNumber, selectedNumber):
     # mark the result as safe from further escaping
     return mark_safe(html)
     
+# method to check whether a top level tab has been selected in the current request
+def isTopTabSelected(tab, request):
+    # home page
+    if 'Home' in tab[0]:
+        if tab[1] == request.path:
+            return True
+        else:
+            return False
+    else:
+        if tab[1] in request.path:
+            return True
+        else:
+            return False
+        
+# methid to check whether a sub-tab has been selected in current request
+def isSubTabSelected(tab, request):
+    if tab[1] == request.path:
+        return True
+    else:
+        return False
+    
 # Utility method to return a list of active project tabs
 # subtabs are returned only for the active tab
 @register.filter
@@ -370,8 +391,7 @@ def getTopNav(project, request):
             if idx==0:        
                 if ptab.active:
                     tablist.append( (ptab.label, ptab.url) )
-                    if request.path==ptab.url:
-                        selected = True
+                    selected = isTopTabSelected( (ptab.label, ptab.url), request)
             # sub-tab
             else:
                 if selected:
@@ -410,14 +430,11 @@ def getTopSubNav(project, request):
 @register.filter
 def selectedTabStyle(request, tablist):
     tab = tablist[0]
-    # selected tab
-    if request.path==tab[1]:
-    #if tab[1] in request.path:
+    if isTopTabSelected(tab, request):
         if len(tablist)>1:
             return mark_safe("style='color:#358C92; background-color: #B9E0E3'")
         else:
             return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
-    # unselected tab
     else:
         return ""
     
