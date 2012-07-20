@@ -415,7 +415,9 @@ def initProject(project):
 # method to set the state of the project tabs from the HTTP request parameters
 def setActiveProjectTabs(tabs, request, save=False):
     
+    # FIXME NOW
     for tab in tabs:
+        #for tab in tablist:
         # Home tab MUST always be active
         if tab.label.endswith("Home"):
             tab.active = True

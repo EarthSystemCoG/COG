@@ -1,17 +1,18 @@
 APPLICATION_LABEL = 'cog'
 
 # default template for project predefined pages, in the order they are displayed
+# the first list item is the top-level tab, the others are sub-tabs
 PROJECT_PAGES = (
-         ("Home", ""),
-         ("About Us", "aboutus/"),     
+         [("Home", "")],
+         [("About Us", "aboutus/"), ("About Us 1", "aboutus1/"), ("About Us 2", "aboutus2/"), ("About Us 3", "aboutus3/")],     
          # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
-         ("Bookmarks", "bookmarks/list/<project>/"),
-         ("Code", "code/"),
-         ("Trackers", "trackers/"),
-         ("Support", "support/"),
-         ("Governance", "governance/"),
-         ("Roadmap", "roadmap/"),
-         ("Contact Us", "contactus/"),            
+         [("Bookmarks", "bookmarks/list/<project>/")],
+         [("Code", "code/")],
+         [("Trackers", "trackers/")],
+         [("Support", "support/")],
+         [("Governance", "governance/"), ("Governance 1", "governance1/") ],
+         [("Roadmap", "roadmap/"), ("Roadmap 1", "roadmap2/"), ("Roadmap 2", "roadmap 2/")],
+         [("Contact Us", "contactus/")],            
          #("Administration", "admin/"),
         )
 

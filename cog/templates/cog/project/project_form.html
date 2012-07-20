@@ -64,19 +64,36 @@
                     </td>
                 </tr>
                 <tr>
-                	<td nowrap="nowrap">Top Navigation Tabs</td>
+                	<td nowrap="nowrap">Tabs</td>
                 	<td>
                 		<!-- Note: home tab checkbox is disabled because it must always be present -->
-						{% for tab in tabs %}
-							<input name="tab_{{tab.label}}"  
-								   {% if forloop.counter == 1 %}
-								   		disabled="disabled" checked="checked"
-								   {% else %}
-							       		{% if tab.active %} checked="checked" {% endif %}							       
-							       {% endif %}
-							       type="checkbox">
-							       {{tab.label}}
-						{% endfor %}
+                		<table>
+                			<tr>
+								{% for tablist in tabs %}
+									<!-- Home tab - always selected -->
+									{% if forloop.counter == 1 %}
+										<input name="tab_{{tablist.0.label}}" type="hidden"/>
+									{% else %}
+										<td>
+											<table>
+												{% for tab in tablist %}
+													<tr>
+														<td nowrap="nowrap">
+															{% if forloop.counter == 1 %}
+															{% endif %}
+															<input name="tab_{{tab.label}}"  
+															       {% if tab.active %} checked="checked" {% endif %}							       
+															       type="checkbox">
+															       {{tab.label}}										
+														</td>
+													</tr>
+												{% endfor %}
+											</table>
+										</td>
+									{% endif %}
+								{% endfor %}
+							</tr>
+						</table>
                 	</td>
                 </tr>
                 <tr>

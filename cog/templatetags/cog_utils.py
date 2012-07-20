@@ -356,22 +356,45 @@ def numberOptions(lastNumber, selectedNumber):
     return mark_safe(html)
     
 # Utility method to return a list of active project tabs
+# subtabs are returned only for the active tab
 @register.filter
-def getTopNav(project):
+def getTopNav(project, request):
         
     tabs = []
     ptabs = get_or_create_project_tabs(project, save=True)
-    for ptab in ptabs:
-        if ptab.active:
-            tabs.append( (ptab.label, ptab.url) )
-            
+    for ptablist in ptabs:
+        tablist = []
+        selected = False
+        for idx, ptab in enumerate(ptablist):
+            # top-tab
+            if idx==0:        
+                if ptab.active:
+                    tablist.append( (ptab.label, ptab.url) )
+                    if request.path==ptab.url:
+                        selected = True
+            # sub-tab
+            else:
+                if selected:
+                    tablist.append( (ptab.label, ptab.url) )
+                    print 'Sub-Tab: %s %s' % (ptab.label, ptab.url) 
+                
+        tabs.append(tablist)
     return tabs
 
+# Utility method to return a list of sub-tabs for the active tab
 @register.filter
-def selectedTabStyle(request, tab):
+def getTopSubNav(project, request):
+    pass
+        
+@register.filter
+def selectedTabStyle(request, tablist):
+    tab = tablist[0]
     # selected tab
     if request.path==tab[1]:
-        return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
+        if len(tablist)>1:
+            return mark_safe("style='color:#358C92; background-color: #B9E0E3'")
+        else:
+            return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
     # unselected tab
     else:
         return ""
