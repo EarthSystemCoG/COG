@@ -428,13 +428,20 @@ def getTopSubNav(project, request):
     return tabs
         
 @register.filter
-def selectedTabStyle(request, tablist):
+def getTopTabStyle(request, tablist):
     tab = tablist[0]
     if isTopTabSelected(tab, request):
         if len(tablist)>1:
             return mark_safe("style='color:#358C92; background-color: #B9E0E3'")
         else:
             return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
+    else:
+        return ""
+ 
+@register.filter   
+def getSubTabStyle(request, tab):
+    if isTopTabSelected(tab, request):
+        return mark_safe("style='color:#358C92;'")
     else:
         return ""
     
