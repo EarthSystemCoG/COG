@@ -179,15 +179,16 @@ class Project(models.Model):
     # method to return an ordered list of the project predefined pages
     # the page URLs returned start with the project home page base URL
     def predefined_pages(self):
-        ppages = []
+        predefpages = []
         home_page_url = self.home_page_url()
         #ppages.append( ( self.short_name + " Home",  home_page_url ) )
-        for ppage in PROJECT_PAGES:
-            if ppage[1]=="":
-                ppages.append( ( self.short_name + " " + ppage[0], home_page_url ) )
-            else:
-                ppages.append( ( ppage[0], home_page_url + ppage[1]  ) )
-        return ppages
+        for ppages in PROJECT_PAGES:
+            for ppage in ppages:
+                if ppage[1]=="":
+                    predefpages.append( ( self.short_name + " " + ppage[0], home_page_url ) )
+                else:
+                    predefpages.append( ( ppage[0], home_page_url + ppage[1]  ) )
+        return predefpages
     
     # method to determine if this project has been initialized,
     # currently based on the existence of any associated posts (such as the home page)

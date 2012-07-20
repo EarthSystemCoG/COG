@@ -58,7 +58,8 @@ def project_add(request):
             # create project tabs
             tabs = get_or_create_project_tabs(project, save=False)
             # set active state of project tabs from HTTP parameters 
-            setActiveProjectTabs(tabs, request, save=True)
+            for tablist in tabs:
+                setActiveProjectTabs(tablist, request, save=True)
             
             # notify site administrator
             notifySiteAdminsOfProjectRequest(project, request)
@@ -78,7 +79,8 @@ def project_add(request):
             project = form.instance
             # create and set state of project tabs, do not persist
             tabs = get_or_create_project_tabs(project=project, save=False)
-            setActiveProjectTabs(tabs, request, save=False)
+            for tablist in tabs:
+                setActiveProjectTabs(tablist, request, save=False)
             return render_to_response('cog/project/project_form.html', 
                                       {'form': form, 'title': 'Register New Project', 'action':'add', 'tabs':tabs },
                                       context_instance=RequestContext(request))
@@ -413,11 +415,10 @@ def initProject(project):
     folder = getTopFolder(project)
     
 # method to set the state of the project tabs from the HTTP request parameters
+# note: tabs is a list of tabs (not a list of lists of tabs)
 def setActiveProjectTabs(tabs, request, save=False):
     
-    # FIXME NOW
     for tab in tabs:
-        #for tab in tablist:
         # Home tab MUST always be active
         if tab.label.endswith("Home"):
             tab.active = True

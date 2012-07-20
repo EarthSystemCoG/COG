@@ -103,18 +103,19 @@ def create_project_page(url, project):
         home_url = project.home_page_url()
         home_page = Post.objects.get(url=home_url)
         if home_page:
-            for _page in PROJECT_PAGES:
-                if url == home_url + _page[1]:
-                    page = Post.objects.create(type=Post.TYPE_PAGE, 
-                                               author=home_page.author, # same author as home page
-                                               url= url,
-                                               template="cog/post/page_template_sidebar_center.html",
-                                               title='%s %s' % (project.short_name, _page[0]),
-                                               is_home=False,
-                                               parent=home_page,
-                                               #topic='Home Page',
-                                               project=project,
-                                               body='')
-                    print "Created project page: %s" % url
-                    return page
+            for _pages in PROJECT_PAGES:
+                for _page in _pages:
+                    if url == home_url + _page[1]:
+                        page = Post.objects.create(type=Post.TYPE_PAGE, 
+                                                   author=home_page.author, # same author as home page
+                                                   url= url,
+                                                   template="cog/post/page_template_sidebar_center.html",
+                                                   title='%s %s' % (project.short_name, _page[0]),
+                                                   is_home=False,
+                                                   parent=home_page,
+                                                   #topic='Home Page',
+                                                   project=project,
+                                                   body='')
+                        print "Created project page: %s" % url
+                        return page
     return None

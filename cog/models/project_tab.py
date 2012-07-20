@@ -13,6 +13,8 @@ class ProjectTab(models.Model):
     label =  models.CharField(max_length=40, blank=False, null=False)
     # whether or not the tab will be displayed
     active = models.BooleanField(default=True, null=False, blank=False)
+    # optional parent tab (null for top-level tabs)
+    parent = models.ForeignKey('self', blank=True, null=True)
     
     def __unicode__(self):
         return "Project Tab label='%s', url='%s', active=%s" % (self.label, self.url, self.active)
@@ -53,6 +55,12 @@ def get_or_create_project_tabs(project, save=True):
                 if save:
                     tab.save()      
                     print "Created %s" % tab
+                    # assign parent tab
+                    if i>0:
+                        tab.parent = tablist[0]
+                        tab.save()
+                        print "Assigned parent tab=%s to child tab=%s" % (tablist[0], tab)
+
             tablist.append(tab)
         tabs.append(tablist)
     return tabs           
