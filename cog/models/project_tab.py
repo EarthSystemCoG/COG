@@ -22,10 +22,10 @@ class ProjectTab(models.Model):
     class Meta:
         app_label= APPLICATION_LABEL
         
-# function to retrieve the project tabs in the display order
-# the tabs can be optionally created if not existing already
-# each item in the list is itself a list, containing the top-level tab, 
-# followed by all sub-tabs
+# Function to retrieve the project tabs in the order to be displayed.
+# The tabs can be optionally created if not existing already.
+# Each item in the list is itself a list, containing the top-level tab, 
+# followed by all sub-tabs.
 def get_or_create_project_tabs(project, save=True):
             
     tabs = []
