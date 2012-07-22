@@ -400,30 +400,6 @@ def getTopNav(project, request):
                 
         tabs.append(tablist)
     return tabs
-
-# Utility method to return a list of sub-tabs for the active tab
-@register.filter
-def getTopSubNav(project, request):
-    tabs = []
-    ptabs = get_or_create_project_tabs(project, save=True)
-    for ptablist in ptabs:
-        tablist = []
-        selected = False
-        for idx, ptab in enumerate(ptablist):
-            # top-tab
-            if idx==0:        
-                if ptab.active:
-                    tablist.append( (ptab.label, ptab.url) )
-                    if request.path==ptab.url:
-                        selected = True
-            # sub-tab
-            else:
-                if selected:
-                    if ptab.active:
-                        tablist.append( (ptab.label, ptab.url) )
-                
-        tabs.append(tablist)
-    return tabs
         
 @register.filter
 def getTopTabStyle(request, tablist):
