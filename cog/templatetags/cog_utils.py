@@ -397,7 +397,6 @@ def getTopNav(project, request):
                 if selected:
                     if ptab.active:
                         tablist.append( (ptab.label, ptab.url) )
-                        print 'Sub-Tab: %s %s' % (ptab.label, ptab.url) 
                 
         tabs.append(tablist)
     return tabs
@@ -422,7 +421,6 @@ def getTopSubNav(project, request):
                 if selected:
                     if ptab.active:
                         tablist.append( (ptab.label, ptab.url) )
-                        print 'Sub-Tab: %s %s' % (ptab.label, ptab.url) 
                 
         tabs.append(tablist)
     return tabs

@@ -220,28 +220,32 @@
 	</div>
 </div>
 <!-- top navigation sub-menu -->
-<div id="top_nav">
-	<div class="span-19">
-		<div id="top_subnav_left">
-			{% if project %}
-			    <ul>
-					{% for tablist in project|getTopNav:request %}
-						{% for tab in tablist %}
-							<!-- sub-tabs only -->
-							{% if forloop.counter > 1 %}
-								<li><a href="{{ tab.1 }}" {{ request|getSubTabStyle:tab }}>{{ tab.0 }}</a></li>
-							{% endif %}
-						{% endfor %}
-					{% endfor %}
-			    </ul>
-		    {% endif %}
-		</div>
+{% if project %}
+	<div id="top_nav">
+		{% for tablist in project|getTopNav:request %}
+			{% if tablist|length > 1 %}
+	
+					<div class="span-19">
+						<div id="top_subnav_left">					
+							    <ul>							
+									{% for tab in tablist %}
+										<!-- sub-tabs only -->
+										{% if forloop.counter > 1 %}
+											<li><a href="{{ tab.1 }}" {{ request|getSubTabStyle:tab }}>{{ tab.0 }}</a></li>
+										{% endif %}
+									{% endfor %}						
+							    </ul>				   
+						</div>
+					</div>
+					<div class="span-5 last">
+						<div id="top_subnav_right">
+						</div>
+					</div>
+			
+			{% endif %}
+		{% endfor %}
 	</div>
-	<div class="span-5 last">
-		<div id="top_subnav_right">
-		</div>
-	</div>
-</div>
+{% endif %}
 
 <!-- ancor for message dialogs -->
 <div id="myDialog" class="yui-skin-sam"></div>
