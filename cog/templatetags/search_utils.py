@@ -21,4 +21,5 @@ def getSelectedState(constraints, key):
 def getFacetOptionLabel(facet_key, facet_value):
     """Return the label to be displayed for a given (facet key, facet value) combination, 
        or the facet_value itself if a mapping is not found."""
-    return searchMappings.getFacetOptionLabel(facet_key, facet_value)
+    label = searchMappings.getFacetOptionLabel(facet_key, facet_value)
+    return label.replace("_"," ")
