@@ -13,7 +13,23 @@ from django.conf import settings
 def notifyAdminsOfUserRegistration(user):
     
     subject = 'New User Registration'
-    message = 'User %s has created a new account name: %s' % (user.get_full_name(), user.username)
+    message = 'User %s has created a new account' % user.get_full_name()   
+    
+    # user attributes
+    message += "\nFirst Name: %s" % user.first_name
+    message += "\nLast Name: %s" % user.last_name
+    message += "\nUser Name: %s" % user.username
+    message += "\nEmail: %s" % user.email
+    
+    # user profile attributes
+    profile = UserProfile.objects.get(user=user)
+    message += "\nInstitution: %s" % profile.institution
+    message += "\nDepartment: %s" % profile.department
+    message += "\nCity: %s" % profile.city
+    message += "\nState: %s" % profile.state
+    message += "\nCountry: %s" % profile.country
+    message += "\nSubscribe to COG email list? %s" % profile.subscribed
+    
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
         
