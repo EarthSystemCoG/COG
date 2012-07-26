@@ -1,3 +1,5 @@
+{% load cog_utils %}
+
 {% if request.GET.search_data %}
 
   <!-- anchor for dialogs -->
@@ -75,17 +77,19 @@
 	                                                      
 	                            <!-- files place-holder -->
 								<div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>	                            
-	                           	                            	                            
-	                            {% comment %}       
-	                            {% if request.user.is_authenticated %}
-	                               <br/>
-                                   <a href="javascript:bookmarkit('{{record.fields.url.0}}', '{{record.fields.title.0}}')">
-                                      <img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Save to Bookmarks</img>
-                                   </a>
+	                           	                            	                               
+	                            {% if user|hasUserPermission:project %}
+	                               <br/>           	                        	
+		                        	<!-- loop over URls, use THREDDS catalog URL -->
+		                        	{% for url in record.fields.url %}
+		                        		{% if url.1 == 'application/html+thredds' %}	  	                               
+                                   			<a href="javascript:bookmarkit('{{url.0}}', '{{record.fields.title.0}}')">
+                                      			<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Save to Bookmarks</img>
+                                   			</a>	  
+		                            	{% endif %} 
+		                            {% endfor %}    	          	                               
                                 {% endif %}
-                                {% endcomment %}
-	                                                 
-	                            
+	                                                 	                            
 	                        </td>
 	                    </tr>       
 	                {% endfor %}
