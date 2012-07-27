@@ -1,29 +1,22 @@
+<!-- Standard CSS -->
+<!-- <link href="{{ MEDIA_URL }}jquery/css/metafor/std-html-all.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="{{ MEDIA_URL }}jquery/css/metafor/mf-site-all.css" media="screen" rel="stylesheet" type="text/css" />
+ -->
+ 
+<!-- jsCIM external dependencies -->
+<script src="{{ MEDIA_URL }}jquery/jquery-1.4.4.min.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}jquery/underscore-1.3.3.min.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}jquery/backbone-0.9.2.min.js" type="text/javascript"></script>
+<link href="{{ MEDIA_URL }}jquery/css/jquery-ui/redmond/jquery-ui-1.8.6.custom.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="{{ MEDIA_URL }}jquery/jquery-ui-1.8.12.custom.min.js" type="text/javascript"></script>
 
-<!-- jquery libraries -->
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery-1.4.4.min.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/underscore-min.js'> </script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/backbone-min.js'> </script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery-ui-1.8.12.custom.min.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/overlay.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/overlay.apple.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/toolbox.mousewheel.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/scrollable.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/scrollable.navigator.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/scrollable.autoscroll.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/tooltip.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery.tmpl.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery.livequery.js'></script>
-<script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery.autocomplete.js'></script>
+<!-- jsCIM (production mode) -->
+<link href="{{ MEDIA_URL }}jscim/jscim-min.css" media="screen" rel="stylesheet" type="text/css" />
+<script src="{{ MEDIA_URL }}jscim/jscim-min.js" type="text/javascript"></script>
+ 
+<!-- <link href="http://purl.org/org/es-doc/plugins/jscim-0.8.0.js" media="screen" rel="stylesheet" type="text/css" />
+<script src="http://purl.org/org/es-doc/plugins/jscim-0.8.0.css" type="text/javascript"></script> -->
 
-<link rel="stylesheet" href='{{ MEDIA_URL }}css/jquery/lightgray/jquery-ui-1.8.10.custom.css' type="text/css" media="screen">
-			
-<!-- CIM Viewer library -->			
-<script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim-0.8.0.js'></script>
-<link rel="stylesheet" href='http://purl.org/org/es-doc/plugins/jscim-0.8.0.css' type="text/css" media="screen, projection">
-<!-- <script type="text/javascript" src='{{ MEDIA_URL }}jscim/jscim-0.8.0.js'> </script> -->
-<!-- <link rel="stylesheet" href='{{ MEDIA_URL }}jscim/jscim-0.8.0.css' type="text/css" media="screen, projection"> -->
-
-			        
 			
 <!-- Custom JS to invoke the CIM viewer -->
 <script language="JavaScript">
@@ -40,7 +33,6 @@
 	
 	// function triggered by clicking on a CIM model link
 	function onModelClicked(project, model) {
-		
 		cim.viewer.renderFromName( {
 			  project : project,
 			  name : model,

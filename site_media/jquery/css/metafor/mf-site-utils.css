@@ -1,0 +1,63 @@
+/* Width overrides */
+.mf-w80 {
+    width: 80px;
+}
+.mf-w1 {
+    width: 100px;
+}
+.mf-w110 {
+    width: 110px;
+}
+.mf-w170 {
+    width: 170px;
+}
+.mf-w150 {
+    width: 150px;
+}
+.mf-w155 {
+    width: 160px;
+}
+.mf-w130 {
+    width: 130px;
+}
+.mf-w15 {
+    width: 150px;
+}
+.mf-w2 {
+    width: 200px;
+}
+.mf-w200 {
+    width: 200px;
+}
+.mf-w3 {
+    width: 300px;
+}
+.mf-w4 {
+    width: 400px;
+}
+.mf-w5 {
+    width: 500px;
+}
+
+
+.mf-utilClearBoth {
+    clear:both;
+    margin:0;
+    border: 0;
+    padding: 0;
+}
+
+.mf-utilClearLeft {
+    clear:left;
+    margin:0;
+    border: 0;
+    padding: 0;
+}
+
+.mf-utilFloatLeft {
+    float:left;
+}
+
+.mf-utilFloatRight {
+    float:right;
+}

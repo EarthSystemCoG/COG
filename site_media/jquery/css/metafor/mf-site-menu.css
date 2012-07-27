@@ -1,0 +1,130 @@
+/* Site menu */
+.mf-siteMenu{
+	border:none;
+	border:0px;
+	margin:14px 0 0 0;
+	padding:0px;
+	font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+	font-size:14px;
+	font-weight:bold;
+	}
+.mf-siteMenu ul{
+	height:40px;
+	list-style:none;
+	margin: 4px 0 4px 0;
+	padding:0;
+	}
+	.mf-siteMenu ul li{
+		float:left;
+                margin-top: 4px;
+                padding:0px;
+		width:110px;
+		text-align:center;
+		}
+	.mf-siteMenu ul li a{
+		background:transparent bottom right no-repeat;
+		color:#5c9ccc;
+		display:block;
+		font-weight:bold;
+		line-height:35px;
+		margin:0px;
+		padding:0px 0px;
+		text-align:center;
+		text-decoration:none;
+		}
+		.mf-siteMenu ul li a:hover, .mf-siteMenu ul li:hover a{
+			background: #5c9ccc bottom center no-repeat;
+			color:#FFFFFF;
+			text-decoration:none;
+			}
+	.mf-siteMenu ul li ul{
+		background:#5c9ccc;
+		display:none;
+		height:auto;
+		padding:0px;
+		margin:0px;
+		border:0px;
+		position:absolute;
+		width:110px;
+		z-index:200;
+		/*top:1em;
+		/*left:0;*/
+		}
+	.mf-siteMenu ul li:hover ul{
+		display:block;
+
+		}
+	.mf-siteMenu ul li li {
+		display:block;
+		float:none;
+		margin:0px;
+		padding:0px;
+		width:110px;
+		}
+	.mf-siteMenu ul li:hover li a{
+		background:none;
+
+		}
+	.mf-siteMenu ul li ul a{
+		display:block;
+		height:35px;
+		font-size:12px;
+		font-style:normal;
+		margin:0px;
+		padding:0px 10px 0px 15px;
+                text-align:center;
+		}
+		.mf-siteMenu ul li ul a:hover, .mf-siteMenu ul li ul li:hover a{
+			background:#2580a2 center left no-repeat;
+			border:0px;
+			color:#ffffff;
+			text-decoration:none;
+			}
+	.mf-siteMenu p{
+		clear:left;
+		}
+
+
+
+/* Site footer menu */
+.mf-siteFooterMenu{
+	border:none;
+	border:0px;
+	margin:7px -7px 0px 0px;
+	padding:0px;
+	font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+	font-size:13px;
+	}
+.mf-siteFooterMenu ul{
+	height:36px;
+	list-style:none;
+	margin: 0;
+	padding:0;
+	}
+	.mf-siteFooterMenu ul li{
+		float:left;
+                margin-top: 2px;
+                padding:0px;
+		width:90px;
+		text-align:center;
+		}
+	.mf-siteFooterMenu ul li a{
+		background:transparent bottom right no-repeat;
+		color:#5c9ccc;
+		display:block;
+		font-weight:bold;
+		line-height:35px;
+		margin:0px;
+		padding:0px 0px;
+		text-align:center;
+		text-decoration:none;
+		}
+		.mf-siteFooterMenu ul li a:hover{
+			background: #5c9ccc bottom center no-repeat;
+			color:#FFFFFF;
+			text-decoration:none;
+                        height: 30px;
+			}
+
+
+

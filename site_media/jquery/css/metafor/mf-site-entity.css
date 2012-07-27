@@ -1,0 +1,22 @@
+/* ************************** */
+/*  Entity specific             */
+/* ************************** */
+.mf-entity-form-info {
+    width:100%;
+    padding:3px;
+    margin: 0px 0px 4px 0px;
+    font-style: italic;
+}
+
+.mf-entity-form {
+    width:100%;
+    padding:3px;
+    margin: 2px 0px 2px 0px;
+}
+
+.mf-entity-form-toolbar {
+    width:100%;
+    text-align: right;
+    padding:3px;
+    margin: 4px 0px 0px 0px;
+}
