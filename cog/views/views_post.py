@@ -251,7 +251,7 @@ def getLostLockRedirect(request, project, post, lock):
         messages = ["Sorry, your lock on this page has expired, and others have modified the page afterwards.",
                     "Your changes cannot be saved. Please start the update from most current version of the page." ] 
         return render_to_response('cog/common/message.html', 
-                                  {'mytitle':'Changes can not be saved', 
+                                  {'mytitle':'Changes cannot be saved', 
                                    'project':project,
                                    'messages':messages }, 
                                   context_instance=RequestContext(request))
