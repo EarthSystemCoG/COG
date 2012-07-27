@@ -54,10 +54,9 @@
 	                            {% endfor %}    	          
 	                            
 	                            <!-- display CIM viewer link -->   
-  								&nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'hadgem2-es', '1pctCO2')"><b>Model Metadata</b> </a> ]
-  								{% comment %}
-  									&nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'canCM4', '1pctCO2')"><b>Model Metadata</b> </a> ]      
-	                            {% endcomment %}	                            
+  								&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.master_id.0}}')"><b>Model Metadata</b> </a> ]	                            
+	                            {% comment %} &nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'hadgem2-es', '1pctCO2')"><b>Model Metadata2</b> </a> ] {% endcomment %}
+	                            
 	                            
 	                            <!-- dataset metadata container -->
 								<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">

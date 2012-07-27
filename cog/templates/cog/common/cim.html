@@ -14,30 +14,48 @@
 <script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery.tmpl.js'></script>
 <script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery.livequery.js'></script>
 <script type="text/javascript" src='{{ MEDIA_URL }}jquery/jquery.autocomplete.js'></script>
+
+<link rel="stylesheet" href='{{ MEDIA_URL }}css/jquery/lightgray/jquery-ui-1.8.10.custom.css' type="text/css" media="screen">
 			
 <!-- CIM Viewer library -->			
-<!-- <script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim-esgf-web-fe.js'> </script> -->
-<script type="text/javascript" src='{{ MEDIA_URL }}jscim/jscim-0.7.1.js'> </script>
-
-<!-- CSS -->			
-<link rel="stylesheet" href='{{ MEDIA_URL }}css/jquery/lightgray/jquery-ui-1.8.10.custom.css' type="text/css" media="screen">
-<!-- <link rel="stylesheet" href='http://purl.org/org/es-doc/plugins/jscim-esgf-web-fe.css' type="text/css" media="screen, projection"> -->
-<link rel="stylesheet" href='{{ MEDIA_URL }}jscim/jscim-0.7.1.css' type="text/css" media="screen, projection">
+<script type="text/javascript" src='http://purl.org/org/es-doc/plugins/jscim-0.8.0.js'></script>
+<link rel="stylesheet" href='http://purl.org/org/es-doc/plugins/jscim-0.8.0.css' type="text/css" media="screen, projection">
+<!-- <script type="text/javascript" src='{{ MEDIA_URL }}jscim/jscim-0.8.0.js'> </script> -->
+<!-- <link rel="stylesheet" href='{{ MEDIA_URL }}jscim/jscim-0.8.0.css' type="text/css" media="screen, projection"> -->
 
 			        
 			
 <!-- Custom JS to invoke the CIM viewer -->
 <script language="JavaScript">
     
-	// function triggered by CIM link
-	function onCIMLinkClicked(project, institute, model, experiment) {
-		var drs_components = {'project' : project, 'institute' : institute, 'model' : model, 'experiment' : experiment};
-		renderFromDRS(drs_components);
+	// function triggered by clicking on a CIM dataset link
+	function onDatasetClicked(project, dataset) {
+		
+		cim.viewer.renderFromExternalID( {
+			  project : project,
+			  externalID : dataset,
+			  externalType : 'dataset'
+			});
 	}	
 	
-    // Renders a CIM instance based upon type and name.
-    var renderFromDRS = function(drsMap) {
-       	cim.viewer.renderFromDRS(drsMap);
-    };
+	// function triggered by clicking on a CIM model link
+	function onModelClicked(project, model) {
+		
+		cim.viewer.renderFromName( {
+			  project : project,
+			  name : model,
+			  type : 'model'
+			});
+	}	
+	
+	<!-- FIXME -->
+	// function triggered by CIM link
+	function onCIMLinkClicked(project, institute, model, experiment) {
+		
+		var drs_components = {'project' : project, 'institute' : institute, 'model' : model, 'experiment' : experiment};
+		cim.viewer.renderFromDRS(drs_components);
+		
+	}	
+	
 
 </script>
