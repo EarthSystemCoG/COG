@@ -64,6 +64,8 @@
 	                            <!-- dataset metadata container -->
 								<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
 									<b>Dataset Metadata</b>
+									<br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
+									<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
 									<!-- display more record information -->
 		                            {% for key, values in record.fields.items %}
 		                                {% if key in search_output.facets.keys %}
