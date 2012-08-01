@@ -1,0 +1,130 @@
+/* ************************** */
+/* Icon classes               */
+/* ************************** */
+.mf-icon-confirmation-16 {
+    background-image: url('../img/16x16/std-confirmation.png');
+}
+.mf-icon-confirmation-24 {
+    background-image: url('../img/24x24/std-confirmation.png');
+}
+.mf-icon-confirmation-32 {
+    background-image: url('../img/32x32/std-confirmation.png');
+}
+.mf-icon-confirmation-48 {
+    background-image: url('../img/48x48/std-confirmation.png');
+}
+.mf-icon-confirmation-64 {
+    background-image: url('../img/64x64/std-confirmation.png');
+}
+
+.mf-icon-delete-16 {
+    background-image: url('../img/16x16/std-delete.png');
+}
+.mf-icon-delete-24 {
+    background-image: url('../img/24x24/std-delete.png');
+}
+.mf-icon-delete-32 {
+    background-image: url('../img/32x32/std-delete.png');
+}
+.mf-icon-delete-48 {
+    background-image: url('../img/48x48/std-delete.png');
+}
+.mf-icon-delete-64 {
+    background-image: url('../img/64x64/std-delete.png');
+}
+
+.mf-icon-error-16 {
+    background-image: url('../img/16x16/std-error.png');
+}
+.mf-icon-error-24 {
+    background-image: url('../img/24x24/std-error.png');
+}
+.mf-icon-error-32 {
+    background-image: url('../img/32x32/std-error.png');
+}
+.mf-icon-error-48 {
+    background-image: url('../img/48x48/std-error.png');
+}
+.mf-icon-error-64 {
+    background-image: url('../img/64x64/std-error.png');
+}
+
+.mf-icon-help-16 {
+    background-image: url('../img/16x16/std-help.png');
+}
+.mf-icon-help-24 {
+    background-image: url('../img/24x24/std-help.png');
+}
+.mf-icon-help-32 {
+    background-image: url('../img/32x32/std-help.png');
+}
+.mf-icon-help-48 {
+    background-image: url('../img/48x48/std-help.png');
+}
+.mf-icon-help-64 {
+    background-image: url('../img/64x64/std-help.png');
+}
+
+.mf-icon-information-16 {
+    background-image: url('../img/16x16/std-information.png');
+}
+.mf-icon-information-24 {
+    background-image: url('../img/24x24/std-information.png');
+}
+.mf-icon-information-32 {
+    background-image: url('../img/32x32/std-information.png');
+}
+.mf-icon-information-48 {
+    background-image: url('../img/48x48/std-information.png');
+}
+.mf-icon-information-64 {
+    background-image: url('../img/64x64/std-information.png');
+}
+
+.mf-icon-search-16 {
+    background-image: url('../img/16x16/std-search.png');
+}
+.mf-icon-search-24 {
+    background-image: url('../img/24x24/std-search.png');
+}
+.mf-icon-search-32 {
+    background-image: url('../img/32x32/std-search.png');
+}
+.mf-icon-search-48 {
+    background-image: url('../img/48x48/std-search.png');
+}
+.mf-icon-search-64 {
+    background-image: url('../img/64x64/std-search.png');
+}
+
+.mf-icon-user-16 {
+    background-image: url('../img/16x16/std-user.png');
+}
+.mf-icon-user-24 {
+    background-image: url('../img/24x24/std-user.png');
+}
+.mf-icon-user-32 {
+    background-image: url('../img/32x32/std-user.png');
+}
+.mf-icon-user-48 {
+    background-image: url('../img/48x48/std-user.png');
+}
+.mf-icon-user-64 {
+    background-image: url('../img/64x64/std-user.png');
+}
+
+.mf-icon-warning-16 {
+    background-image: url('../img/16x16/std-warning.png');
+}
+.mf-icon-warning-24 {
+    background-image: url('../img/24x24/std-warning.png');
+}
+.mf-icon-warning-32 {
+    background-image: url('../img/32x32/std-warning.png');
+}
+.mf-icon-warning-48 {
+    background-image: url('../img/48x48/std-warning.png');
+}
+.mf-icon-warning-64 {
+    background-image: url('../img/64x64/std-warning.png');
+}

@@ -1,0 +1,75 @@
+/* ************************** */
+/*  Search specific           */
+/* ************************** */
+.mf-search {
+    width: 100%;
+}
+
+.mf-searchLabel {
+    font-weight: bold;
+    font-size: medium;
+}
+
+.mf-search-criteria {
+    float:left;
+    margin-bottom: 3px;
+    width: 100%;
+}
+
+.mf-search-criteria-form {
+    width: 824px;
+    padding-left: 5px;
+}
+
+.mf-search-criteria-toolbar {
+    float:right;
+    width: 150px;
+}
+
+.mf-searchToolbar {
+    float:right;
+    display: table-cell;
+}
+
+.mf-search-results-tabs {
+    float:left;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.mf-search-resultsHeader,
+.mf-search-resultsFooter {
+    float:left;
+    width: 100%;
+}
+
+.mf-searchFilter {
+    float:left;
+    padding-left: 5px;
+}
+
+.mf-searchInfobar {
+    float:left;
+    padding-left: 5px;
+}
+
+.mf-searchNavbar {
+    float:right;
+    padding-right: 5px;
+}
+
+.mf-search-button,
+.mf-search-reset-button {
+    width: 100px;
+}
+
+.mf-search-results {
+    float:left;
+    width: 100%;
+}
+
+.mf-searchCellViewDetail {
+}
+
+.mf-searchCellDelete {
+}

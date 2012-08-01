@@ -39,11 +39,13 @@ def cancelMembershipRequest(user, group):
 def addMembership(user, group):
     if not group in user.groups.all():
         user.groups.add(group)
-        cancelMembershipRequest(user, group)
         print "Enrolled user=%s in group=%s" % (user.username, group.name)
+        cancelMembershipRequest(user, group)
+        
         return RESULT_SUCCESS
     else:
         print "User=%s is already enrolled in group=%s" % (user.username, group.name)
+        cancelMembershipRequest(user, group)
         return RESULT_DUPLICATE
 
 # Method to disenroll a user from a group

@@ -1,0 +1,74 @@
+/*
+    CIM Viewer accordion stylings
+*/
+
+.accordion .outer { 
+    padding-left: 15px;
+    }
+
+.accordion .inner .a { 
+    padding-top: 1px;
+    }
+
+.accordion .h {
+    font-size: 1.3em;
+    padding-top: 1em; 
+    margin: 0px
+    }
+
+.accordion p {
+    margin: 0; 
+    padding: 1em;
+    line-height: 1.2;
+    letter-spacing: 0.1em;
+    font-size: 1.2em;
+    text-align: justify;
+    font: georgia, sans-serif;
+    color: #555753;
+    }
+ 
+ 
+/*
+    Styles for all links in the 'accordion':
+*/
+
+a.trigger {
+    background-image: url(/metafor/1_0b2/img/cim/cim_viewer_plus.gif);
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: 1px 50%;
+    border: 1px solid #DCDCDC;
+    padding: 10px 10px 10px 20px;
+    }
+
+a.trigger.open {
+    background-image: url('/metafor/1_0b2/img/cim/cim_viewer_minus.gif');
+    background-color: #FBEC88;
+    border: 1px solid #DCDCDC;
+    }
+
+#main a.trigger {
+    color: #555753;
+    font: georgia, sans-serif;
+    font-weight: 500;
+    text-decoration:none;
+    }
+
+/* 
+    support for tables in accordion
+*/
+
+.acc_row {
+    background-color: #DFEFFC;  
+    border: 1px solid #FFFFFF;
+    width: 100%;
+    }
+    
+.accnametext {
+    font-weight: 500;
+    width: 25%
+    }
+
+.accvaluetext {
+    font-weight: 400;
+    }

@@ -1,0 +1,35 @@
+/* ************************** */
+/*  Dialog specific           */
+/* ************************** */
+
+.mf-dialog-text {
+    margin-top: 17px;
+}
+
+.mf-dialog-text-information {
+    font-style: italic;
+}
+
+.mf-dialog-text-help {
+    font-style: italic;
+}
+
+.mf-dialog-text-confirmation {
+    font-style: italic;
+}
+
+.mf-dialog-text-warning {
+    font-style: bold;
+}
+
+.mf-dialog-text-error {
+    font-style: bold;
+}
+
+.mf-dialog-icon {
+    width:32px;
+    height:32px;
+    margin-right: 10px;
+    margin-top: 10px;
+    float: left;
+}

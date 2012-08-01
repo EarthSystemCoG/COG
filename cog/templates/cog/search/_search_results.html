@@ -1,3 +1,5 @@
+{% load cog_utils %}
+
 {% if request.GET.search_data %}
 
   <!-- anchor for dialogs -->
@@ -18,7 +20,7 @@
             <p/>
             <div style="text-align:center">Number of Results: {{ search_output.counts }} </div>
             {% paginate %} 
-                   
+                               
 	        <div class="mybox">
 	            
 	            <!-- Table of search results -->
@@ -46,19 +48,24 @@
 	                            		&nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]		  
 	                            	{% endif %} 
 	                            	{% if url.1 == 'application/las' %}
-	                            		&nbsp; [ <a href="{{url.0}}"><b>LAS Visualization</b></a> ]		  
+	                            		&nbsp; [ <input type="checkbox" name="las_checkbox" value="{{url.0}}" onclick="javascript:setup_las(this)"/>
+	                            		<a href="#" onclick="javascript:start_las('{{url.0}}')"><b>LAS Visualization</b></a> ]		  
 	                            	{% endif %} 	                            	
 	                            {% endfor %}    	          
 	                            
 	                            <!-- display CIM viewer link -->   
-  								&nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'hadgem2-es', '1pctCO2')"><b>Model Metadata</b> </a> ]
+  								&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.master_id.0}}')"><b>Model Metadata</b> </a> ]
   								{% comment %}
-  									&nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'canCM4', '1pctCO2')"><b>Model Metadata</b> </a> ]      
-	                            {% endcomment %}	                            
+  								&nbsp; [ <a href="#" onClick="onModelClicked('{{record.fields.project.0}}', 'icon-iap')"><b>Model Metadata2</b> </a> ]	                            
+	                            &nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'hadgem2-es', '1pctCO2')"><b>Model Metadata3</b> </a> ]
+	                            {% endcomment %}
+	                            
 	                            
 	                            <!-- dataset metadata container -->
 								<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
 									<b>Dataset Metadata</b>
+									<br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
+									<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
 									<!-- display more record information -->
 		                            {% for key, values in record.fields.items %}
 		                                {% if key in search_output.facets.keys %}
@@ -74,17 +81,19 @@
 	                                                      
 	                            <!-- files place-holder -->
 								<div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>	                            
-	                           	                            	                            
-	                            {% comment %}       
-	                            {% if request.user.is_authenticated %}
-	                               <br/>
-                                   <a href="javascript:bookmarkit('{{record.fields.url.0}}', '{{record.fields.title.0}}')">
-                                      <img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Save to Bookmarks</img>
-                                   </a>
+	                           	                            	                               
+	                            {% if user|hasUserPermission:project %}
+	                               <br/>           	                        	
+		                        	<!-- loop over URls, use THREDDS catalog URL -->
+		                        	{% for url in record.fields.url %}
+		                        		{% if url.1 == 'application/html+thredds' %}	  	                               
+                                   			<a href="javascript:bookmarkit('{{url.0}}', '{{record.fields.title.0}}')">
+                                      			<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Save to Bookmarks</img>
+                                   			</a>	  
+		                            	{% endif %} 
+		                            {% endfor %}    	          	                               
                                 {% endif %}
-                                {% endcomment %}
-	                                                 
-	                            
+	                                                 	                            
 	                        </td>
 	                    </tr>       
 	                {% endfor %}

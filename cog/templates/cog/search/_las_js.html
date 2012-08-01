@@ -1,0 +1,61 @@
+ <!-- Javascript controls for LAS functionality -->
+ 
+ <script>
+ 
+ 	// global array containing selected datasets (up to a maximum of 4)
+	var catids = new Array();
+	
+	// function to manage the local set of LAS datasets
+	function setup_las(widget) {
+
+		var url = widget.value;
+		var checked = widget.checked
+		catid = url.substring( url.indexOf("catid=")+6 );
+
+		// add dataset
+		if (checked) {
+			if (catids.length<4) {
+				catids.push(catid);
+			} else {
+				showMessage('Too many datasets',"Please select a maximum of 4 datasets for comparison");
+				widget.checked = false;
+			}
+		// remove dataset
+		} else {
+			for (i=0; i<catids.length; i++) {
+				if (catids[i]==catid) {
+					catids.splice(i,1);
+				}
+			}
+		}
+		
+		// print
+		//alert(getQueryString());
+	}
+	
+	// fuction to assemble the selected catid into the LAS URL
+	function getQueryString() {
+		
+		var queryString = ""
+   		for (i=0; i<catids.length; i++) {
+   			if (queryString.length==0) queryString += "?catid=" + catids[i];
+   			else queryString += "&catid=" + catids[i];
+   		}
+		
+		return queryString;
+	}
+	
+	// function to invoke LAS with one or more datasets
+	function start_las(url) {
+		
+		if (catids.length>0) {
+			// use selected datasets
+			window.location= url.substring(0, url.indexOf("?catid")) + getQueryString();           			
+		} else {
+			// use clicked-on dataset
+			window.location = url;
+		}
+		
+	}
+  	
+ </script>

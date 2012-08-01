@@ -1,0 +1,52 @@
+/* Metafor specific data tables css */
+.mf-datatable {
+    width: 100%;
+}
+
+
+.dataTables_info {
+    width: 50%;
+    float: left;
+    padding: 5px 0px 0px 0px;
+}
+
+.dataTables_filter {
+    width: 50%;
+    float: right;
+    text-align: right;
+    padding: 0px 0px 0px 0px;
+}
+
+.dataTables_length {
+    width: 40%;
+    float: left;
+    padding: 4px 0px 0px 0px;
+}
+
+.dataTables_paginate {
+    width: auto;
+    float: right;
+    text-align: right;
+    padding: 8px 0px 0px 0px;
+}
+
+.dataTables_empty {
+    text-align: center;
+    padding: 100px 0px 0px 0px;
+}
+
+.sorting_asc {
+    padding: 0px 0px 0px 0px;
+}
+
+.sorting_desc {
+    padding: 0px 0px 0px 0px;
+}
+
+.sorting {
+    padding: 0px 0px 0px 0px;
+}
+
+.css_right {
+    float: right;
+}
