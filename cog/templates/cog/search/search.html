@@ -9,14 +9,7 @@
 	{% include 'cog/search/_search_js.html' %}
 	{% include 'cog/search/yui_accordion.html' %} 
 	{% include 'cog/search/_las_js.html' %}
-	
-	<!-- bookmark functionality -->
-	{% if not user.is_anonymous %}
-	    {% include 'cog/common/yui_panels.html' %}
-        {% include 'cog/bookmarks/_bookmark_panel.html' %}
-    {% endif %}
-
-     
+	     
      <div class="yui-skin-sam">
     		<form action='' method="post" id="search-form">
     		
@@ -55,5 +48,12 @@
     		
 		</form>    
 	</div>
+	
+	<!-- book-mark functionality -->
+	{% if not user.is_anonymous %}
+	    {% include 'cog/common/yui_panels.html' %}
+        {% include 'cog/bookmarks/_bookmark_panel.html' %}
+    {% endif %}
+	
     
 {% endblock %}
