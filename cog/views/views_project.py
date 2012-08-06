@@ -232,7 +232,10 @@ def project_update(request, project_short_name):
             print 'Form is invalid %s' % form.errors
             
             # update project tabs, but do not persist state since form had errors
-            tabs = setActiveProjectTabs(project.tabs.all(), request, save=False)
+            tabs = get_or_create_project_tabs(project, save=False)
+            # set active state of project tabs from HTTP parameters 
+            for tablist in tabs:
+                setActiveProjectTabs(tablist, request, save=False)
             
             return render_to_response('cog/project/project_form.html', 
                                       {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs }, 
