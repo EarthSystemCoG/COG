@@ -261,6 +261,19 @@ def project_delete(request, project_short_name):
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_index'))
     
+def _hasTemplatedInfo(project, template_title):
+    '''Utility function to determine whether a project has been populated 
+       with the requested templated metadata, depending on type.'''
+    
+    if (template_title=='About Us'):
+        return True
+    elif (template_title=='Contact Us') and project.description is not None and len(project.description.strip()) > 0:
+        return True
+    elif (template_title=='Support') and project.mission is not None and len(project.mission.strip()) > 0:
+        return True
+    else:
+        return False
+    
 def aboutus_display(request, project_short_name):
     ''' View to display the project "About Us" page. '''
     
@@ -311,6 +324,18 @@ def _templated_page_display(request, project, template_page, template_title, tem
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
+    # build list of children with relevant metadata that are visible to user
+    children = []
+    for child in project.children():
+        if _hasTemplatedInfo(child, template_title) and child.isVisible(request.user):
+            children.append(child)
+    
+    # build list of peers with relevant metadata that are visible to user
+    peers = []
+    for peer in project.peers.all():
+        if _hasTemplatedInfo(peer, template_title) and peer.isVisible(request.user):
+            peers.append(peer)
+   
     return render_templated_page(request, project, template_page, template_title, template_form_name, children, peers)
 
 def render_templated_page(request, project, template_page, template_title, template_form_name, children, peers):
