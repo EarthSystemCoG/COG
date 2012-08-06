@@ -261,8 +261,28 @@ def project_delete(request, project_short_name):
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_index'))
     
-# method to display the project details
 def aboutus_display(request, project_short_name):
+    ''' View to display the project "About Us" page. '''
+    
+    template_page = 'cog/project/_project_aboutus.html'
+    template_title = 'About Us'
+    return _templated_page_display(request, project_short_name, template_page, template_title)
+
+def contactus_display(request, project_short_name):
+    ''' View to display the project "Contact Us" page. '''
+    
+    template_page = 'cog/project/_project_contactus.html'
+    template_title = 'Contact Us'
+    return _templated_page_display(request, project_short_name, template_page, template_title)
+
+def support_display(request, project_short_name):
+    ''' View to display the project "Support" page. '''
+    
+    template_page = 'cog/project/_project_support.html'
+    template_title = 'Support'
+    return _templated_page_display(request, project_short_name, template_page, template_title)
+    
+def _templated_page_display(request, project_short_name, template_page, template_title):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -273,7 +293,13 @@ def aboutus_display(request, project_short_name):
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
-    return render_aboutus(request, project)
+    return render_templated_page(request, project, template_page, template_title)
+
+def render_templated_page(request, project, template_page, template_title):
+    return render_to_response('cog/project/project_rollup.html', 
+                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
+                               'template_page': template_page, 'template_title': template_title },
+                              context_instance=RequestContext(request))
 
 
 # method to update the project details
@@ -337,11 +363,6 @@ def render_aboutus_form(request, project, form, organization_formset, fundingsou
                            'fundingsource_formset':fundingsource_formset,
                            'title': 'Update Project Details', 'project': project }, 
                           context_instance=RequestContext(request))
-
-def render_aboutus(request, project):
-    return render_to_response('cog/project/project_aboutus.html', 
-                              {'project': project, 'title': '%s About Us' % project.short_name },
-                              context_instance=RequestContext(request))
     
 # method to delete a project and all its associated groups, permissions
 def deleteProject(project):
