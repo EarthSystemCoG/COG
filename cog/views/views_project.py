@@ -269,9 +269,11 @@ def aboutus_display(request, project_short_name):
     
     template_page = 'cog/project/_project_aboutus.html'
     template_title = 'About Us'
+    template_form_name = "aboutus_update"
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, template_page, template_title, children, peers, children, peers)
+    return _templated_page_display(request, project, 
+                                   template_page, template_title, template_form_name, children, peers)
 
 def contactus_display(request, project_short_name):
     ''' View to display the project "Contact Us" page. '''
@@ -281,9 +283,11 @@ def contactus_display(request, project_short_name):
     
     template_page = 'cog/project/_project_contactus.html'
     template_title = 'Contact Us'
+    template_form_name = "contactus_update"
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, template_page, template_title, children, peers)
+    return _templated_page_display(request, project, 
+                                   template_page, template_title, template_form_name, children, peers)
 
 def support_display(request, project_short_name):
     ''' View to display the project "Support" page. '''
@@ -293,11 +297,13 @@ def support_display(request, project_short_name):
     
     template_page = 'cog/project/_project_support.html'
     template_title = 'Support'
+    template_form_name = "support_update"
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, template_page, template_title, children, peers)
+    return _templated_page_display(request, project, 
+                                   template_page, template_title, template_form_name, children, peers)
     
-def _templated_page_display(request, project, template_page, template_title, children, peers):
+def _templated_page_display(request, project, template_page, template_title, template_form_name, children, peers):
         
     # check project is active
     if project.active==False:
@@ -305,19 +311,106 @@ def _templated_page_display(request, project, template_page, template_title, chi
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
-    return render_templated_page(request, project, template_page, template_title, children, peers)
+    return render_templated_page(request, project, template_page, template_title, template_form_name, children, peers)
 
-def render_templated_page(request, project, template_page, template_title, children, peers):
+def render_templated_page(request, project, template_page, template_title, template_form_name, children, peers):
     return render_to_response('cog/project/project_rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title,
+                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
                                'children':children, 'peers':peers },
                               context_instance=RequestContext(request))
 
+@login_required
+def contactus_update(request, project_short_name):
+    '''View to update the project "Contact Us" metadata.'''
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if (request.method=='GET'):
+        
+        # create form object from model
+        form = ContactusForm(instance=project)
+        
+        # display form view
+        return render_contactus_form(request, project, form)
+    
+    # POST
+    else:
+        # update existing database model with form data
+        form = ContactusForm(request.POST, instance=project)
 
-# method to update the project details
+        if form.is_valid():
+            
+            # save form data
+            project = form.save()           
+            
+            # redirect to contact us display (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('contactus_display', args=[project.short_name.lower()]))
+            
+        else:
+            # re-display form view
+            if not form.is_valid():
+                print 'Form is invalid  %s' % form.errors
+            return render_contactus_form(request, project, form)
+
+def render_contactus_form(request, project, form):
+    return render_to_response('cog/project/contactus_form.html', 
+                          {'form': form, 'title': 'Update Project Contact Us', 'project': project }, 
+                          context_instance=RequestContext(request))
+
+@login_required
+def support_update(request, project_short_name):
+    '''View to update the project "Support" metadata.'''
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if (request.method=='GET'):
+        
+        # create form object from model
+        form = SupportForm(instance=project)
+        
+        # display form view
+        return render_support_form(request, project, form)
+    
+    # POST
+    else:
+        # update existing database model with form data
+        form = SupportForm(request.POST, instance=project)
+
+        if form.is_valid():
+            
+            # save form data
+            project = form.save()           
+            
+            # redirect to support display (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('support_display', args=[project.short_name.lower()]))
+            
+        else:
+            # re-display form view
+            if not form.is_valid():
+                print 'Form is invalid  %s' % form.errors
+            return render_support_form(request, project, form)
+
+def render_support_form(request, project, form):
+    return render_to_response('cog/project/support_form.html', 
+                          {'form': form, 'title': 'Update Project Support', 'project': project }, 
+                          context_instance=RequestContext(request))
+
 @login_required
 def aboutus_update(request, project_short_name):
+    '''View to update the project "About Us" metadata.'''
 
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)

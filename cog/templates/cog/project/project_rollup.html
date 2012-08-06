@@ -14,7 +14,7 @@
 	{% if user|hasAdminPermission:project %}
 	   <hr/>
 	   <div style="text-align:center">
-	   		<a href="{% url 'aboutus_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project About Us</a>
+	   		<a href="{% url template_form_name project.short_name.lower %}" class="changelink">&nbsp;Update Project {{ template_title }}</a>
 	</div>
 	{% endif %}
 	
