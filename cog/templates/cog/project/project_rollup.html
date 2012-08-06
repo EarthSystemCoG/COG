@@ -1,0 +1,60 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% load url from future %}
+
+{% load cog_utils %}
+
+{% block main %} 
+
+	<!-- this project -->
+	{% with project as proj %}
+		{% include template_page %}	
+	{% endwith %}
+	
+	<!-- Edit this project details - access restricted to project administrators -->
+	{% if user|hasAdminPermission:project %}
+	   <hr/>
+	   <div style="text-align:center">
+	   		<a href="{% url 'aboutus_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project About Us</a>
+	</div>
+	{% endif %}
+	
+    <!-- children projects-->    
+ 	{% if project.children %}
+		<p/>
+		<div class="header_bar"> 
+		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;Child Project {{ template_title}}</a>
+		</div>
+		<div id="children_rollup" style="display:none">	   	    
+		    {% for child in project.children %}
+	    		{% with child as proj %}
+	    			<br/>
+	    			<div class="mybox" style="padding:2px;">
+	    				<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}}</div>
+						{% include template_page %}
+					</div>
+				{% endwith %}
+		    {% endfor %}		
+		</div>
+	{% endif %}
+ 
+    <!-- peer projects-->    
+ 	{% if project.peers.all %}
+		<p/>
+		<div class="header_bar"> 
+		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;Peer Project {{ template_title}}</a>
+		</div>
+		<div id="peer_rollup" style="display:none">	   	    
+		    {% for peer in project.peers.all %}
+	    		{% with peer as proj %}
+	    			<br/>
+	    			<div class="mybox" style="padding:2px;">
+	    				<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}} </div>
+						{% include template_page %}
+					</div>
+				{% endwith %}
+		    {% endfor %}		
+		</div>
+	{% endif %}
+    
+	
+{% endblock %}
