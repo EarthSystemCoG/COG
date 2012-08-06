@@ -19,13 +19,13 @@
 	{% endif %}
 	
     <!-- children projects-->    
- 	{% if project.children %}
+ 	{% if children %}
 		<p/>
 		<div class="header_bar"> 
 		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;Child Project {{ template_title}}</a>
 		</div>
 		<div id="children_rollup" style="display:none">	   	    
-		    {% for child in project.children %}
+		    {% for child in children %}
 	    		{% with child as proj %}
 	    			<br/>
 	    			<div class="mybox" style="padding:2px;">
@@ -38,13 +38,13 @@
 	{% endif %}
  
     <!-- peer projects-->    
- 	{% if project.peers.all %}
+ 	{% if peers %}
 		<p/>
 		<div class="header_bar"> 
 		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;Peer Project {{ template_title}}</a>
 		</div>
 		<div id="peer_rollup" style="display:none">	   	    
-		    {% for peer in project.peers.all %}
+		    {% for peer in peers %}
 	    		{% with peer as proj %}
 	    			<br/>
 	    			<div class="mybox" style="padding:2px;">

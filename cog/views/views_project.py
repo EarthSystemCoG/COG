@@ -264,41 +264,54 @@ def project_delete(request, project_short_name):
 def aboutus_display(request, project_short_name):
     ''' View to display the project "About Us" page. '''
     
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
     template_page = 'cog/project/_project_aboutus.html'
     template_title = 'About Us'
-    return _templated_page_display(request, project_short_name, template_page, template_title)
+    children = project.children()
+    peers = project.peers.all()
+    return _templated_page_display(request, project, template_page, template_title, children, peers, children, peers)
 
 def contactus_display(request, project_short_name):
     ''' View to display the project "Contact Us" page. '''
     
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
     template_page = 'cog/project/_project_contactus.html'
     template_title = 'Contact Us'
-    return _templated_page_display(request, project_short_name, template_page, template_title)
+    children = project.children()
+    peers = project.peers.all()
+    return _templated_page_display(request, project, template_page, template_title, children, peers)
 
 def support_display(request, project_short_name):
     ''' View to display the project "Support" page. '''
     
-    template_page = 'cog/project/_project_support.html'
-    template_title = 'Support'
-    return _templated_page_display(request, project_short_name, template_page, template_title)
-    
-def _templated_page_display(request, project_short_name, template_page, template_title):
-    
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
+    template_page = 'cog/project/_project_support.html'
+    template_title = 'Support'
+    children = project.children()
+    peers = project.peers.all()
+    return _templated_page_display(request, project, template_page, template_title, children, peers)
+    
+def _templated_page_display(request, project, template_page, template_title, children, peers):
+        
     # check project is active
     if project.active==False:
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
-    return render_templated_page(request, project, template_page, template_title)
+    return render_templated_page(request, project, template_page, template_title, children, peers)
 
-def render_templated_page(request, project, template_page, template_title):
+def render_templated_page(request, project, template_page, template_title, children, peers):
     return render_to_response('cog/project/project_rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title },
+                               'template_page': template_page, 'template_title': template_title,
+                               'children':children, 'peers':peers },
                               context_instance=RequestContext(request))
 
 
