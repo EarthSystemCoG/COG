@@ -485,3 +485,6 @@ def is_home_page(request, project):
     else:
         return False
     
+@register.filter
+def get_external_urls(project, external_url_type):
+    return project.get_external_urls(external_url_type)

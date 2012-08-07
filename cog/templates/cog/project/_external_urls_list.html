@@ -5,24 +5,26 @@
 
 {% load cog_utils %}
 
-<table>
-	{% if group_title %}
-		<tr>
-			<td colspan="3"><b>{{group_title}}</b></td>
-		</tr>
-	{% else %}
-		<tr>
-			<td width="100px"><b>Title</b></td>
-			<td width="300px"><b>URL</b></td>
-			<td><b>Description</b></td>
-		</tr>
-	{% endif %}
-	{% for exturl in external_urls %}
-		<tr>
-			<td nowrap="nowrap" width="100px">{{exturl.title}}</td>
-			<!-- truncate URLs to max length -->
-			<td nowrap="nowrap" width="300px"><a href="{{exturl.url}}">{{ exturl.url|urlizetrunc:60 }}</a></td>
-			<td valign="top">{{exturl.description}}</td>
-		</tr>
-	{% endfor %}	
-</table>
+{% with proj|get_external_urls:external_url_type as external_urls %}
+	<table>
+		{% if group_title %}
+			<tr>
+				<td colspan="3"><b>{{group_title}}</b></td>
+			</tr>
+		{% else %}
+			<tr>
+				<td width="100px"><b>Title</b></td>
+				<td width="300px"><b>URL</b></td>
+				<td><b>Description</b></td>
+			</tr>
+		{% endif %}
+		{% for exturl in external_urls %}
+			<tr>
+				<td nowrap="nowrap" width="100px">{{exturl.title}}</td>
+				<!-- truncate URLs to max length -->
+				<td nowrap="nowrap" width="300px"><a href="{{exturl.url}}">{{ exturl.url|urlizetrunc:60 }}</a></td>
+				<td valign="top">{{exturl.description}}</td>
+			</tr>
+		{% endfor %}	
+	</table>
+{% endwith %}
