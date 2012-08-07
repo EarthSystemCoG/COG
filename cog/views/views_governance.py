@@ -60,10 +60,15 @@ def governance_display(request, project_short_name):
         if _hasGovernanceInfo(peer, display) and peer.isVisible(request.user):
             peers.append(peer)
     
-    return render_to_response('cog/governance/governance.html',
-                              {'project':project, 'peers' : peers, 'children': children,
-                               'display':display, 'title':'%s Governance' % project.short_name },
-                               context_instance=RequestContext(request))
+    template_page = 'cog/governance/_governance.html'
+    template_title = 'Governance'
+    template_form_name = None
+    return render_to_response('cog/project/project_rollup.html', 
+                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
+                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
+                               'children':children, 'peers':peers,
+                               'display':display },
+                              context_instance=RequestContext(request))
 
 # view to update the project Management Body objects
 @login_required

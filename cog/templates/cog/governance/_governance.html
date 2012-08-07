@@ -1,4 +1,35 @@
 
+
+<!-- style used to allign all governance tables across pages -->
+<style type="text/css">
+	.leftcolumn {
+		width: 130px;
+		text-align: right;
+		vertical-align: top;
+	}
+</style>
+
+
+<!-- selective display -->
+{% comment %}
+<div class="box-blue" style="padding:4px">
+	<form method="get" action="." id="displayForm">
+		Select information to display:
+		<select name="display" onchange="javascript:document.getElementById('displayForm').submit()">
+			<option value="ALL"               {% if display == 'ALL' %}selected="selected"{% endif %}>Display All Information</option>
+			<option value="STRATEGIC_MANAGEMENT_BODIES" {% if display == 'STRATEGIC_MANAGEMENT_BODIES' %}selected="selected"{% endif %}>Display Strategic Management Bodies</option>
+			<option value="OPERATIONAL_MANAGEMENT_BODIES" {% if display == 'OPERATIONAL_MANAGEMENT_BODIES' %}selected="selected"{% endif %}>Display Operational Management Bodies</option>				
+			<option value="LEAD_ORGANIZATIONAL_ROLES" {% if display == 'LEAD_ORGANIZATIONAL_ROLES' %}selected="selected"{% endif %}>Display Lead Organizational Roles</option>
+			<option value="MEMBER_ORGANIZATIONAL_ROLES" {% if display == 'MEMBER_ORGANIZATIONAL_ROLES' %}selected="selected"{% endif %}>Display Member Organizational Roles</option>
+			<option value="COMMUNICATION_MEANS" {% if display == 'COMMUNICATION_MEANS' %}selected="selected"{% endif %}>Display Communication and Coordination</option>
+			<option value="PROCESSES" {% if display == 'PROCESSES' %}selected="selected"{% endif %}>Display Governance Processes</option>
+			<option value="POLICIES" {% if display == 'POLICIES' %}selected="selected"{% endif %}>Display Policies</option>
+		</select>
+	</form>			
+</div>
+{% endcomment %}
+
+
 {% include 'cog/governance/_governance_strategic_management_bodies.html' %}
 
 {% include 'cog/governance/_governance_operational_management_bodies.html' %}
