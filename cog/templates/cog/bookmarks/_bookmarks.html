@@ -1,6 +1,3 @@
-{% extends "cog/common/layout_sidebar_center_right.html" %}
-
-{% block main %}
 
     <!-- note: pixel styles must be adjusted to specific icons -->
     <style type="text/css"> 
@@ -8,11 +5,12 @@
          .bookmark { margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0px no-repeat;  } 
     </style>  
 
-
     <!-- create and display bookmark tree -->
+    {% comment %}
     <p>
        This is a set of external resources for {{ project.short_name }}.
     </p>
+    {% endcomment %}
  
     <script>
           
@@ -38,36 +36,5 @@
     <div id="myDialog" class="yui-skin-sam"></div>
        
     <!-- This project bookmarks -->
-    {{ project|list_bookmarks:user }}
+    {{ proj|list_bookmarks:user }}
     
-    <!-- Child project Bookmarks -->
-	{% if children %}
-		<p/>
-		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('children_bookmarks'); return false;" class="listlink">&nbsp;Child Project Bookmarks</a>
-		</div>
-		<div id="children_bookmarks" style="display:none">	   	    
-		    {% for child in children %}
-    			<div class="mybox" style="padding:4px; margin-top:4px;">
-					{{ child|list_bookmarks:user }}
-				</div>
-		    {% endfor %}		
-		</div>
-	{% endif %}
-	
-	<!-- Peer project Bookmarks -->
-	{% if peers %}
-		<p/>
-		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('peers_bookmarks'); return false;" class="listlink">&nbsp;Peer Project Bookmarks</a>
-		</div>
-		<div id="peers_bookmarks" style="display:none">	   	    
-		    {% for peer in peers %}
-    			<div class="mybox" style="padding:4px; margin-top:4px;">
-					{{ peer|list_bookmarks:user }}
-				</div>
-		    {% endfor %}		
-		</div>
-	{% endif %}
-  
-{% endblock %}
