@@ -51,7 +51,7 @@ def bookmark_list(request, project_short_name):
     template_page = 'cog/bookmarks/_bookmarks.html'
     template_title = 'Bookmarks'
     template_form_name = None
-    return render_to_response('cog/project/project_rollup.html', 
+    return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
                                'children':children, 'peers':peers },

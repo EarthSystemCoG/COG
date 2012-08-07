@@ -63,7 +63,7 @@ def external_urls_display(request, project_short_name, external_url_type,
         if len(peer.get_external_urls(external_url_type)) > 0 and peer.isVisible(request.user):
             peers.append(peer)
             
-    return render_to_response('cog/project/project_rollup.html', 
+    return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
                                'children':children, 'peers':peers,

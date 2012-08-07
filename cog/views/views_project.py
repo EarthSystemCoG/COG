@@ -342,7 +342,7 @@ def _templated_page_display(request, project, template_page, template_title, tem
     return render_templated_page(request, project, template_page, template_title, template_form_name, children, peers)
 
 def render_templated_page(request, project, template_page, template_title, template_form_name, children, peers):
-    return render_to_response('cog/project/project_rollup.html', 
+    return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
                                'children':children, 'peers':peers },
