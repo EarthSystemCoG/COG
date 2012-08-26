@@ -113,7 +113,9 @@ class Project(models.Model):
         
     # return True if the user is allowed to view the project pages
     def isVisible(self, user):
-        if self.private==False:
+        if self.active==False:
+            return False
+        elif self.private==False:
             return True
         elif userHasUserPermission(user, self):
             return True
@@ -275,7 +277,8 @@ def getPermissionLabel(permission):
 def getSiteAdministrators():
     return User.objects.filter(is_staff=True)
     
-# method to return an ordered list of projects the user belongs to, or has applied for.
+# Method to return an ordered list of projects the user belongs to, or has applied for.
+# Inactive projects are NOT included.
 def getProjectsForUser(user, includePending):
     
     # set of groups the user belongs to
@@ -294,7 +297,7 @@ def getProjectsForUser(user, includePending):
     for group in groups:
         try:
             project = getProjectForGroup(group)
-            if not project in projects:
+            if not project in projects and project.active==True:
                 projects.append(project)
         # in case he group has not been deleted with the project
         except Project.DoesNotExist:
