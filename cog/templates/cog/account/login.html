@@ -40,7 +40,9 @@
 			  <input type="hidden" name="next" value="{{ next }}" />
 			</span>
 			<span style="float:right">
-			  <a href="{% url 'password_reset' %}">Forgot Password ?</a>
+			  <a href="{% url 'username_reminder' %}">Forgot Username?</a>
+			  &nbsp;
+			  <a href="{% url 'password_reset' %}">Forgot Password?</a>
 			</span>
 		</div>
 	</form>

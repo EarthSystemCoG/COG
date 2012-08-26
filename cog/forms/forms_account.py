@@ -24,6 +24,18 @@ class PasswordResetForm(Form):
         validate_field(self, 'email', email)
         
         return self.cleaned_data
+    
+class UsernameReminderForm(Form):
+    
+    email = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    
+    # validate data against bad characters
+    def clean(self):
+        
+        email = self.cleaned_data.get('email')
+        validate_field(self, 'email', email)
+                
+        return self.cleaned_data
         
         
 class PasswordChangeForm(Form):

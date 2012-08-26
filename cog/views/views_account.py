@@ -215,6 +215,43 @@ def password_update(request, user_id):
             print "Form is invalid: %s" % form.errors
             return render_password_change_form(request, form)
         
+def username_reminder(request):
+    
+    if (request.method=='GET'):
+        form = UsernameReminderForm()
+        return render_username_reminder_form(request, form)
+    
+    else:
+        form = UsernameReminderForm(request.POST)
+        
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            
+            # look up username
+            users = User.objects.filter(email__iexact=email)
+            
+            if len(users)>0:
+                
+                # send email with username(s) to user
+                subject = "Username Reminder"
+                message = ""
+                for user in users:
+                    message +=  "Your username is: %s\n"  % user.username
+                notify(user, subject, message)
+
+                # redirect to login page with special message
+                message = 'Your username has been emailed to the address you provided. Please check your email box.'
+                return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
+
+            # user not found
+            else:            
+                return render_username_reminder_form(request, form, "This email address cannot be found")
+            
+        else:
+            print "Form is invalid: %s" % form.errors
+            return render_username_reminder_form(request, form)
+    
+        
 def password_reset(request):
     
     if (request.method=='GET'):
@@ -280,4 +317,9 @@ def render_password_change_form(request, form):
 def render_password_reset_form(request, form, message=""):
     return render_to_response('cog/account/password_reset.html', 
                               {'form':form, 'mytitle':'Reset User Password', 'message':message }, 
+                              context_instance=RequestContext(request))
+    
+def render_username_reminder_form(request, form, message=""):
+    return render_to_response('cog/account/username_reminder.html', 
+                              {'form':form, 'mytitle':'Username Reminder', 'message':message }, 
                               context_instance=RequestContext(request))

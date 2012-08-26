@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^user/detail/(?P<user_id>\d+)/$', 'cog.views.user_detail', name='user_detail'),
     url(r'^password/update/(?P<user_id>\d+)/$', 'cog.views.password_update', name='password_update'),
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
+    url(r'^username/reminder/$', 'cog.views.username_reminder', name='username_reminder'),
 
     # projects
     url(r'^project/add/$', 'cog.views.project_add', name='project_add' ),
