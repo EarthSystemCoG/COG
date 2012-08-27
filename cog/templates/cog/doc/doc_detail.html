@@ -18,7 +18,7 @@
             </tr>
             <tr>
                 <td class="head">Download URL</td>
-                <td><a href="{{ doc.file.url }}">{{ doc.file.url }}</a></td>
+                <td><a href="{{ doc.file.url }}">http://{{ request.get_host }}{{ doc.file.url }}</a></td>
             </tr>
         </table>
     </div> 
