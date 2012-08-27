@@ -86,7 +86,7 @@ def create_project_home(project, user):
                                author=user,
                                url= project.home_page_url(),
                                template="cog/post/page_template_sidebar_center_right.html",
-                               title='%s Home' % project,
+                               title=project.long_name,
                                is_home=True,
                                #topic='Home Page',
                                project=project,
