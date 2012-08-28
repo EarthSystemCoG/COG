@@ -16,9 +16,13 @@
         <!-- text box -->
         <table>
            <tr>
-            <td nowrap="nowrap" style="text-align: right" valign="top"><img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"/></td>
-            <td valign="baseline"><b>Search</b></td>
-            <td class="long"><input type="text" name="query" value="{{ query|escape }}"></td>
+            <td valign="top" nowrap="nowrap">
+            	<img src="{{STATIC_URL}}/cog/img/icon_listlink.gif">
+            	&nbsp;<b>Search</b>
+            </td>
+            <td class="long">
+            	<input type="text" name="query" value="{{ query|escape }}">
+            </td>
             <td>
             <!-- sub-select -->
 	        {% if topic_list %}
