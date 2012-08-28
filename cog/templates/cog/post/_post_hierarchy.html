@@ -5,7 +5,7 @@
    {% if counts > 0 %}
    	   <hr class="white"/>
 	   <div class="header_bar"> 
-	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst }}{{ post.type|pluralize}} ({{ counts }})</a>
+	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst}}{{counts|pluralize }} ({{ counts }})</a>
 	   </div>
 	   <div class="mybox" id="post_hierarchy" style="display:none">
 	        <table>
