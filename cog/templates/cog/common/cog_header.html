@@ -230,7 +230,9 @@
 									{% for tab in tablist %}
 										<!-- sub-tabs only -->
 										{% if forloop.counter > 1 %}
-											<li><a href="{{ tab.1 }}" {{ request|getSubTabStyle:tab }}>{{ tab.0 }}</a></li>
+											<li><a href="{{ tab.1 }}" {{ request|getSubTabStyle:tab }}>
+												<span style="color: #666">{{ tab.0 }}</span>
+												</a></li>
 										{% endif %}
 									{% endfor %}						
 							    </ul>				   
