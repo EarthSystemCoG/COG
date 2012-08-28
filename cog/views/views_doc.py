@@ -112,13 +112,17 @@ def doc_list(request, project_short_name):
             Q(title__icontains=query) |
             Q(description__icontains=query) 
         )
-        list_title = "Search Results for '%s'" % query        
+        list_title = "Search Results for '%s'" % query    
         
+    order_by = request.GET.get('order_by', 'title')
+    list_title += " (order by %s)" % order_by
+    
     # execute query, order by descending update date
-    results = Doc.objects.filter(qset).distinct().order_by('-update_date')
+    results = Doc.objects.filter(qset).distinct().order_by( order_by )
    
     return render_to_response('cog/doc/doc_list.html', 
-                              {"object_list": results, 'project': project, 'title':'%s Documents' % project.short_name, "query": query, "list_title":list_title }, 
+                              {"object_list": results, 'project': project, 'title':'%s Documents' % project.short_name, 
+                               "query": query, "order_by":order_by, "list_title":list_title }, 
                               context_instance=RequestContext(request))
     
 def render_doc_form(request, form, project):

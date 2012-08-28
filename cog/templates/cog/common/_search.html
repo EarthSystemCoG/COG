@@ -16,13 +16,13 @@
         <!-- text box -->
         <table>
            <tr>
-            <td nowrap="nowrap" style="text-align: right"><img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"/></td>
-            <td nowrap="nowrap" style="text-align: left"><b>Data Search</b></td>
-            <td class="long"><input type="text" name="query" value="{{ query|escape }}"></td>
+            <td nowrap="nowrap" style="text-align: right" valign="top"><img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"/></td>
+            <td nowrap="nowrap" style="text-align: left" valign="top"><b>Search</b></td>
+            <td class="long" valign="top"><input type="text" name="query" value="{{ query|escape }}"></td>
             <td>
             <!-- sub-select -->
 	        {% if topic_list %}
-	            <td nowrap="true"><b>Select Topic</b></td> 
+	            <td nowrap="nowrap"><b>Select Topic</b></td> 
 	            <td>
 		            <select name="topic">
 		                <option value="">-- Any --</option>
@@ -36,6 +36,16 @@
 		            </select>
 	            </td> 
 	        {% endif %}  
+            </td>
+            <!-- order by -->
+            <td nowrap="nowrap" valign="top"><b>Order By</b></td>
+            <td valign="top">
+            	<select name="order_by">
+            		<option value="title"        {% if order_by = 'title' %}  selected="selected" {% endif %}>Title
+            		<option value="-title"       {% if order_by = '-title' %} selected="selected" {% endif %}>Title (reversed)
+            		<option value="-update_date" {% if order_by = '-update_date' %} selected="selected" {% endif %}>Last Update
+            		<option value="update_date"  {% if order_by = 'update_date' %} selected="selected" {% endif %}>Last Update (reversed)
+            	</select>
             </td>
             <td><input type="submit" value="Search"></td>
            </tr>
