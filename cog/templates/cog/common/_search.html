@@ -17,8 +17,8 @@
         <table>
            <tr>
             <td nowrap="nowrap" style="text-align: right" valign="top"><img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"/></td>
-            <td nowrap="nowrap" style="text-align: left" valign="top"><b>Search</b></td>
-            <td class="long" valign="top"><input type="text" name="query" value="{{ query|escape }}"></td>
+            <td valign="baseline"><b>Search</b></td>
+            <td class="long"><input type="text" name="query" value="{{ query|escape }}"></td>
             <td>
             <!-- sub-select -->
 	        {% if topic_list %}
@@ -38,8 +38,8 @@
 	        {% endif %}  
             </td>
             <!-- order by -->
-            <td nowrap="nowrap" valign="top"><b>Order By</b></td>
-            <td valign="top">
+            <td nowrap="nowrap" valign="top">
+            	<b>Order By</b>
             	<select name="order_by">
             		<option value="title"        {% if order_by = 'title' %}  selected="selected" {% endif %}>Title
             		<option value="-title"       {% if order_by = '-title' %} selected="selected" {% endif %}>Title (reversed)
