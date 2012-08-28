@@ -277,21 +277,6 @@ def _project_tree(user, project, esc, expanded=False, dopeers=False, icon='child
         
     return html
 
-# filter that embeds words starting with http(s) in HTML <a> tags
-@register.filter
-def textToHtml(text, autoescape=None):
-    
-    p = re.compile('(https*://[^\s]+)', re.IGNORECASE)
-    esc = get_escape_function(autoescape)
-    esctext = esc(text)
-    
-    html = p.sub('<a href="\g<1>">\g<1></a>', esctext)
-    
-    return mark_safe(html)
-    
-textToHtml.needs_autoescape = True
-
-
 # filter to determine whether a user is enrolled in a group
 @register.filter
 def isEnrolled(user, group):
