@@ -321,8 +321,8 @@ def canPost(user, post):
     return userCanPost(user, post)
 
 @register.filter
-def relatedPostCount(post):
-    count = len(post.post_set.all())
+def relatedPostCount(post, related_posts):
+    count = len( related_posts )
     if post.parent:
         count += 1
     return count

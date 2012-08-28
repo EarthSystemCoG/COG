@@ -97,11 +97,15 @@ def page_detail(request, project_short_name):
     
     dict = {"title": page.title, "post": page, "project" : project }
     
+    related_pages = []
+    for post in page.post_set.all():
+        if not post.is_predefined():
+            related_pages.append(post)
+    dict['related_pages'] = related_pages
+    
     # add extra objects for home page
-    # FIXME
     if page.is_home:
-            dict['project_latest_news']=project.news()[0:5]
-            dict['project_latest_signals']=project.signals()[0:5]
+        dict['project_latest_signals']=project.signals()[0:5]
             
     # render page template
     return render_to_response(page.template, dict, context_instance=RequestContext(request) )

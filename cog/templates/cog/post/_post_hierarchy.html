@@ -1,7 +1,7 @@
 <!-- parent/children posts -->
 {% load cog_utils %}
 
-{% with post|relatedPostCount as counts %}
+{% with post|relatedPostCount:related_posts as counts %}
    {% if counts > 0 %}
    	   <hr class="white"/>
 	   <div class="header_bar"> 
@@ -16,7 +16,7 @@
 	                   </td>
 	                </tr>
 	            {% endif %}
-	            {% for child in post.post_set.all %}
+	            {% for child in related_posts %}
 	                <tr>
 	                    <td>
 	                       Child {{ post.type|capfirst }}: <a href="{% url post_detail child.id %}">{{ child }}</a>{{ child|is_locked:request }}             
