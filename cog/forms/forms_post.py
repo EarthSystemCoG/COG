@@ -113,3 +113,7 @@ class PostForm(ModelForm):
             #'body': Textarea(attrs={'rows': 20}),
             'body': Textarea(attrs={'class':'ckeditor'}),
         }
+        
+    #class Media:
+    #        js = ("ckeditor/ckeditor.js",
+    #             "filebrowser/js/FB_CKEditor.js")
