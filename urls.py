@@ -2,6 +2,8 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
 
+from filebrowser.sites import site
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -23,9 +25,13 @@ urlpatterns = patterns('',
     
     # site index
     url(r'^$', 'cog.views.index', name='site_index'),
-                       
+                           
+    # Grappelli
+    (r'^grappelli/', include('grappelli.urls')),
+    
     # Filebrowser Admin pages
-    (r'^filebrowser/', include('filebrowser.urls')),
+    #(r'^filebrowser/', include('filebrowser.urls')),
+    url(r'^admin/filebrowser/', include(site.urls)),
 
     # Administrator application
     #(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -33,31 +39,14 @@ urlpatterns = patterns('',
         
     # Comments
     (r'^comments/', include('django.contrib.comments.urls')),
-
-    # TinyMCE
-    (r'^tinymce/', include('tinymce.urls')),
     
     # media
     (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
-    
-    # POSTS application
-    #(r'^posts/', include('posts.urls')),
-    
-    # MYAPP application
-    #(r'^myapp/', include('myapp.urls')),
-    
-
-    # REMAPPING application
-    #(r'^remap/', include('remap.urls')),
-    
-    # SEARCH application
-    # Note: the actual search URLs used by COG are redefined in cog.urls
-    #(r'^search/', include('search.urls')),
-    
+        
     # COG application
     (r'', include('cog.urls')),
     
-    # cim-forms
+    # CIM-forms
     (r'^metadata/', include('django_cim_forms.urls')),
     (r'', include('dycore.urls')),
 
