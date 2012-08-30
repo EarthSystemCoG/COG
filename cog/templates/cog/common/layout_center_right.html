@@ -1,6 +1,7 @@
 {% extends "layouts/layout_center_right.html" %}
 
 {% block head %}
+
 	{% include 'cog/common/metatags.html' %} 
 	
     {% include 'cog/common/yui.html' %} 
@@ -11,7 +12,7 @@
     
     {% include 'cog/common/cim.html' %} 
     
-    <script type="text/javascript" src="{{ MEDIA_URL }}/ckeditor/ckeditor.js"></script>
+    {% include 'cog/common/wiki.html' %}   
     
 {% endblock %}
 

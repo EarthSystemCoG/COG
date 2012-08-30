@@ -111,9 +111,6 @@ class PostForm(ModelForm):
             'url': TextInput(attrs={'size':'60'}),
             'template': Select(choices=POST_TEMPLATES),
             #'body': Textarea(attrs={'rows': 20}),
+            # IMPORTANT: USE CKeditor to edit this field.
             'body': Textarea(attrs={'class':'ckeditor'}),
         }
-        
-    #class Media:
-    #        js = ("ckeditor/ckeditor.js",
-    #             "filebrowser/js/FB_CKEditor.js")

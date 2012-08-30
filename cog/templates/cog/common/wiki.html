@@ -1,0 +1,10 @@
+<!-- JS libraries needed for Wiki functionality -->
+
+<script type="text/javascript" src="{{ MEDIA_URL }}ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}filebrowser/js/FB_CKEditor.js"></script>
+<script type="text/javascript">
+    
+if (CKEDITOR) {
+	CKEDITOR.config.filebrowserBrowseUrl = '/admin/filebrowser/browse?pop=3&type=image';
+}
+</script>

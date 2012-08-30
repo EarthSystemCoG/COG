@@ -10,15 +10,8 @@
     {% include 'cog/common/mystyle.html' %}
     
     {% include 'cog/common/cim.html' %}  
-    
-    <script type="text/javascript" src="{{ MEDIA_URL }}/ckeditor/ckeditor.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}/filebrowser/js/FB_CKEditor.js"></script>
-    <script type="text/javascript">
-        
-    if (CKEDITOR) {
-    	CKEDITOR.config.filebrowserBrowseUrl = '/filebrowser/browse?pop=3';
-    }
-    </script>
+ 
+ 	{% include 'cog/common/wiki.html' %}   
     
 {% endblock %}
 
