@@ -24,11 +24,11 @@
     </tr>   
     {% endif %}   
     <tr>
-          <td nowrap="nowrap">Private ?</td>
-          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                      
-    </tr>    
-    <tr>
         <td><b>Body</b></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>
     </tr>
+    <tr>
+          <td nowrap="nowrap">Private ?</td>
+          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                      
+    </tr>    
 </table>
