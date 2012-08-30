@@ -166,3 +166,7 @@ COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
 
 # ATOM feed information
 ATOM_FEED_DIR = '/esg/content/atom_feed_home'
+
+
+# Filebrowser (IMPORTANT: must have traiing slash)
+FILEBROWSER_DIRECTORY = "images/"
