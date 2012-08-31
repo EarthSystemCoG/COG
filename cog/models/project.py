@@ -269,6 +269,14 @@ def userHasUserPermission(user, project):
 def userHasAdminPermission(user, project):
     return user.has_perm( getPermissionLabel(project.getAdminPermission()) )
 
+def userHasProjectRole(user, project, role):
+    if role=='user':
+        return userHasUserPermission(user, project)
+    elif role=='admin':
+        return userHasAdminPermission(user, project)
+    else:
+        return False
+
 # method to return the full permission label: cog.<pCodeName>
 def getPermissionLabel(permission):
     return "%s.%s" % (APPLICATION_LABEL, permission.codename)
