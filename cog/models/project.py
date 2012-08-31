@@ -10,6 +10,7 @@ from os.path import basename
 from urllib import quote, unquote
 import re
 from django.conf import settings
+import os, sys
 
 # Project
 class Project(models.Model):
@@ -331,3 +332,11 @@ def get_project_page_sub_url(project, full_url):
     else:
         sub_url = ''
     return unquote(sub_url)
+
+def create_filebrowser_upload_directory(project):
+    
+    # create filebrowser upload directory
+    fb_upload_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name)
+    if not os.path.exists(fb_upload_dir):
+        os.makedirs(fb_upload_dir)
+        print 'Filebrowser Upload directory created: %s' % fb_upload_dir

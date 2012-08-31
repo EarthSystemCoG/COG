@@ -5,6 +5,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from django.forms.models import modelformset_factory, inlineformset_factory
 import string
+import os
+from django.conf import settings
 
 from cog.models import *
 from cog.forms import *
@@ -568,6 +570,9 @@ def initProject(project):
     
     # create top-level bookmarks folder
     folder = getTopFolder(project)
+    
+    # create images upload directory
+    create_filebrowser_upload_directory(project)
     
 # method to set the state of the project tabs from the HTTP request parameters
 # note: tabs is a list of tabs (not a list of lists of tabs)
