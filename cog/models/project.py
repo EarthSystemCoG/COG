@@ -336,7 +336,7 @@ def get_project_page_sub_url(project, full_url):
 def create_filebrowser_upload_directory(project):
     
     # create filebrowser upload directory
-    fb_upload_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name)
+    fb_upload_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
     if not os.path.exists(fb_upload_dir):
         os.makedirs(fb_upload_dir)
         print 'Filebrowser Upload directory created: %s' % fb_upload_dir
