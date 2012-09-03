@@ -131,6 +131,8 @@ EXTERNAL_URL_TYPES = (
     (TYPE_ROADMAP, 'Roadmap'),      
 )
 
+ROLE_USER = 'user'
+ROLE_ADMIN = 'admin'
 
 # path of default logo relative to MEDIA_ROOT
 # use a location outside of "logos/" so that the default logo can

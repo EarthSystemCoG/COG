@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, PROJECT_PAGES
+from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
 from django.contrib.auth.models import User, Permission, Group
 from topic import Topic
 from membership import MembershipRequest
@@ -271,9 +271,9 @@ def userHasAdminPermission(user, project):
     return user.has_perm( getPermissionLabel(project.getAdminPermission()) )
 
 def userHasProjectRole(user, project, role):
-    if role=='user':
-        return userHasUserPermission(user, project)
-    elif role=='admin':
+    if role==ROLE_USER:
+        return userHasUserPermission(user, project) or userHasAdminPermission(user, project)
+    elif role==ROLE_ADMIN:
         return userHasAdminPermission(user, project)
     else:
         return False
