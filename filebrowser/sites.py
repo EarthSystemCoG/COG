@@ -5,7 +5,7 @@
 # to enforce a specific role for the project associated with a specific target folder
 #
 from django.contrib.auth.decorators import login_required
-from cog.decorators import filebrowser_check_project_role
+from cog.decorators import filebrowser_check
 
 # coding: utf-8
 
@@ -283,7 +283,7 @@ class FileBrowserSite(object):
     filebrowser_pre_createdir = Signal(providing_args=["path", "name"])
     filebrowser_post_createdir = Signal(providing_args=["path", "name"])
 
-    @filebrowser_check_project_role('user')
+    @filebrowser_check()
     def createdir(self, request):
         """
         Create Directory.
@@ -324,7 +324,7 @@ class FileBrowserSite(object):
         }, context_instance=Context(request, current_app=self.name))
     
 
-    @filebrowser_check_project_role('user')
+    @filebrowser_check()
     def upload(self, request):
         """
         Multipe File Upload.
@@ -341,6 +341,7 @@ class FileBrowserSite(object):
             'filebrowser_site': self
         }, context_instance=Context(request, current_app=self.name))
 
+    @filebrowser_check()
     def delete_confirm(self, request):
         """
         Delete existing File/Directory.
@@ -379,6 +380,7 @@ class FileBrowserSite(object):
     filebrowser_pre_delete = Signal(providing_args=["path", "name"])
     filebrowser_post_delete = Signal(providing_args=["path", "name"])
 
+    @filebrowser_check()
     def delete(self, request):
         """
         Delete existing File/Directory.
@@ -407,6 +409,7 @@ class FileBrowserSite(object):
     filebrowser_actions_pre_apply = Signal(providing_args=['action_name', 'fileobjects',])
     filebrowser_actions_post_apply = Signal(providing_args=['action_name', 'filebjects', 'result'])
 
+    # this view must be public as there is no 'dir' information
     def detail(self, request):
         """
         Show detail page for a file.
