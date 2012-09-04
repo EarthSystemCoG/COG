@@ -585,3 +585,10 @@ td ul.errorlist li {
 .invisible {
 	display: none;
 }
+
+@media print {
+	div.vertical_menu	{ display: none !important; }
+	div.project_widget 	{ display: none !important; }
+	div.search-box		{ display: none !important; }
+	div#top_nav_right	{ display: none !important; }
+}
