@@ -9,7 +9,7 @@
  
 <div class="box-colored">
     
-    <form action="{{ url }}" method="GET">
+    <form action="{{ url }}" method="GET" id="searchForm">
     
         <input type="hidden" name="type" value="{{ request.GET.type }}"/>
     
@@ -44,7 +44,7 @@
             <!-- order by -->
             <td nowrap="nowrap" valign="top">
             	<b>Order By</b>
-            	<select name="order_by">
+            	<select name="order_by" onChange="document.getElementById('searchForm').submit()">
             		<option value="title"        {% if order_by = 'title' %}  selected="selected" {% endif %}>Title
             		<option value="-title"       {% if order_by = '-title' %} selected="selected" {% endif %}>Title (reversed)
             		<option value="-update_date" {% if order_by = '-update_date' %} selected="selected" {% endif %}>Last Update
