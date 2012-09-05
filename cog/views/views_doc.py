@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from cog.models import *
 from cog.forms import *
 from constants import PERMISSION_DENIED_MESSAGE
+from os.path import basename
 
 @login_required   
 def doc_add(request, project_short_name):
@@ -35,6 +36,8 @@ def doc_add(request, project_short_name):
         if form.is_valid():
             doc = form.save(commit=False)
             doc.author = request.user
+            if doc.title is None or len(doc.title.strip())==0:
+                doc.title = basename(doc.file.name)
             doc.save()
             
             # optional redirect
