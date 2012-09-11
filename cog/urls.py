@@ -61,6 +61,7 @@ urlpatterns = patterns('',
     url(r'^doc/update/(?P<doc_id>\d+)/$', 'cog.views.doc_update', name='doc_update'),
     url(r'^doc/remove/(?P<doc_id>\d+)/$', 'cog.views.doc_remove', name='doc_remove'),
     url(r'^doc/list/(?P<project_short_name>.+)/$', 'cog.views.doc_list', name='doc_list'), 
+     url(r'^doc/upload/(?P<project_short_name>.+)/$', 'cog.views.doc_upload', name='doc_upload'), 
     
     # posts and documents
     url(r'^post/add_doc/(?P<post_id>\d+)/$', 'cog.views.post_add_doc', name='post_add_doc'),

@@ -7,6 +7,38 @@ from cog.models import *
 from cog.forms import *
 from constants import PERMISSION_DENIED_MESSAGE
 from os.path import basename
+from django.views.decorators.csrf import csrf_exempt
+from cog.forms import UploadImageForm
+
+@csrf_exempt
+def doc_upload(request, project_short_name):
+    '''
+    View to support upload of documents (images) from CKeditor
+    '''
+        
+    # retrieve project
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    print 'Uploading to project=%s' % project
+            
+    if request.method == 'POST':
+        form = UploadImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            # create 'Doc' instance with required fields
+            # the HTTP parameter name 'upload' is assigned by CKeditor
+            file = request.FILES['upload']
+            instance = Doc(file=file, author=request.user, project=project, title=file.name)
+            instance.save()
+            # retrieve the file URL (after it has been saved!), 
+            # pass it on to the view for use by CKeditor
+            url = instance.file.url
+
+        else:
+            form = UploadFileForm()
+    
+        return render_to_response('cog/doc/doc_upload.html', 
+                                  { 'title': 'File Upload', 'url':url }, 
+                                  context_instance=RequestContext(request) )    
 
 @login_required   
 def doc_add(request, project_short_name):

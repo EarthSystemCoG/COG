@@ -2,7 +2,11 @@ from django.db import models
 from constants import APPLICATION_LABEL
 from project import Project
 from django.contrib.auth.models import User
-from os.path import basename
+import os
+
+# function to determine the upload path dynamically at runtime
+def get_upload_path(instance, filename):
+    return os.path.join('docs/', str(instance.project.short_name), filename)
 
 # A generic document that can be uploaded to the server and attached to a Post
 class Doc(models.Model):
@@ -10,7 +14,8 @@ class Doc(models.Model):
     author = models.ForeignKey(User, related_name='documents', verbose_name='Publisher', blank=False)
     title = models.CharField(max_length=200, blank=True)
     description = models.TextField(blank=True)
-    file = models.FileField(upload_to='docs/')
+    # upload path is obtained dynamically from the callable function
+    file = models.FileField(upload_to=get_upload_path)
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
     project = models.ForeignKey(Project)
@@ -19,7 +24,7 @@ class Doc(models.Model):
         if self.title: 
             return self.title 
         else : 
-            return basename(self.file.name)
+            return os.basename(self.file.name)
     
     class Meta:
         app_label= APPLICATION_LABEL

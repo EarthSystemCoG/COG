@@ -9,6 +9,8 @@ if (CKEDITOR) {
 	// integration with django-filebrowser
 	// type=image restricts uploads to image files ('.jpg','.jpeg','.gif','.png','.tif','.tiff')
 	CKEDITOR.config.filebrowserBrowseUrl = '/admin/filebrowser/browse?pop=3&type=image';
+	// NOTE: assumes project is available from request object
+	CKEDITOR.config.filebrowserUploadUrl = '/doc/upload/{{project.short_name}}/'
 	
 	// custom toolbar color
 	CKEDITOR.config.uiColor = "#B9E0E3";
