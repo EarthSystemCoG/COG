@@ -572,7 +572,7 @@ def initProject(project):
     folder = getTopFolder(project)
     
     # create images upload directory
-    create_filebrowser_upload_directory(project)
+    create_upload_directory(project)
     
 # method to set the state of the project tabs from the HTTP request parameters
 # note: tabs is a list of tabs (not a list of lists of tabs)
