@@ -91,7 +91,8 @@ MIDDLEWARE_CLASSES = (
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-ROOT_URLCONF = 'COG.urls'
+#ROOT_URLCONF = 'COG.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -168,4 +169,4 @@ ATOM_FEED_DIR = '/esg/content/atom_feed_home'
 
 
 # Filebrowser (IMPORTANT: must have traiing slash)
-FILEBROWSER_DIRECTORY = "images/"
+FILEBROWSER_DIRECTORY = "projects/"
