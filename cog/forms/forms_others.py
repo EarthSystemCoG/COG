@@ -29,3 +29,4 @@ class DocForm(ModelForm):
 class UploadImageForm(forms.Form):
     # note: field MUST be named 'upload' as this is the parameter named used by CKeditor
     upload  = forms.ImageField()
+    

@@ -34,7 +34,8 @@ def doc_upload(request, project_short_name):
             url = instance.file.url
 
         else:
-            form = UploadFileForm()
+            print 'Form errors:%s' % form.errors
+            form = UploadImageForm()
     
         return render_to_response('cog/doc/doc_upload.html', 
                                   { 'title': 'File Upload', 'url':url }, 
