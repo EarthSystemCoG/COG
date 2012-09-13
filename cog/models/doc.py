@@ -24,8 +24,8 @@ class Doc(models.Model):
     def __unicode__(self):
         if self.title: 
             return self.title 
-        else : 
-            return os.basename(self.file.name)
+        else:
+            return os.path.basename(self.file.name)
     
     class Meta:
         app_label= APPLICATION_LABEL

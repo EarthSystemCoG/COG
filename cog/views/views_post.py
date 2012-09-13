@@ -215,7 +215,7 @@ def post_add(request, project_short_name, owner=None):
             # assign post order, if top-level
             # note that the post.topic may be None
             if post.parent is None:
-                pages = Post.objects.filter(project=project).filter(topic=post.topic).filter(parent=None).order_by('order')
+                pages = Post.objects.filter(project=project).filter(topic=post.topic).filter(parent=None).filter(type='page').order_by('order')
                 post.order = len(pages)+1
             else:
                 post.order = 0
