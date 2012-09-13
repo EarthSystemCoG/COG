@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from cog.forms import UploadImageForm
 
 @csrf_exempt
+@login_required
 def doc_upload(request, project_short_name):
     '''
     View to support upload of documents (images) from CKeditor
@@ -18,9 +19,7 @@ def doc_upload(request, project_short_name):
         
     # retrieve project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    print 'Uploading to project=%s' % project
-            
+                
     if request.method == 'POST':
         form = UploadImageForm(request.POST, request.FILES)
         if form.is_valid():
