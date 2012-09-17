@@ -7,7 +7,7 @@ from django.conf import settings
 
 # function to determine the upload path dynamically at runtime
 def get_upload_path(instance, filename):
-    return os.path.join(getattr(settings, "FILEBROWSER_DIRECTORY"), str(instance.project.short_name), filename)
+    return os.path.join(getattr(settings, "FILEBROWSER_DIRECTORY"), str(instance.project.short_name.lower()), filename)
 
 # A generic document that can be uploaded to the server and attached to a Post
 class Doc(models.Model):

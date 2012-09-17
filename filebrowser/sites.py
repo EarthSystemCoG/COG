@@ -8,6 +8,7 @@
 from django.contrib.auth.decorators import login_required
 from cog.cog_filebrowser import filebrowser_check, project_filter, get_browsable_projects
 from cog.models.project import Project, getProjectsForUser
+from cog.models.doc import Doc
 from django.shortcuts import get_object_or_404
 
 # coding: utf-8
@@ -401,6 +402,13 @@ class FileBrowserSite(object):
         
         if request.GET:
             try:
+                
+                # COG: must delete Doc objects
+                docs = Doc.objects.filter(file=fileobject.path)
+                for doc in docs:
+                    print 'Deleting doc=%s' % doc
+                    doc.delete()
+                
                 self.filebrowser_pre_delete.send(sender=request, path=fileobject.path, name=fileobject.filename)
                 fileobject.delete_versions()
                 fileobject.delete()
