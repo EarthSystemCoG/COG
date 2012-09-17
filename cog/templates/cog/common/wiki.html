@@ -11,8 +11,9 @@ if (CKEDITOR) {
 	
 	// uncomment 'filebrowserBrowseUrl ' link to enable browsing of server directories
 	// type=image restricts uploads to image files ('.jpg','.jpeg','.gif','.png','.tif','.tiff')
-	// NOTE: additional parameter 'project' provides context for browsing
-	CKEDITOR.config.filebrowserBrowseUrl = '/admin/filebrowser/browse?pop=3&type=image&project={{project.short_name}}';
+	CKEDITOR.config.filebrowserBrowseUrl = '/admin/filebrowser/browse?pop=3&type=image';
+	// NOTE: additional parameter 'project' limits browsing to current project only
+	//CKEDITOR.config.filebrowserBrowseUrl = '/admin/filebrowser/browse?pop=3&type=image&project={{project.short_name}}';
 	
 	// uncomment 'filebrowserUploadUrl' to enable direct upload of images to server
 	// NOTE: assumes project is available from request object

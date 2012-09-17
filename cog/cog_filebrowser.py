@@ -1,3 +1,7 @@
+#
+# Module that extends django-filebrowser by imposing COG-specific access control.
+#
+
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 
@@ -19,14 +23,26 @@ def mydecorator(func):
         
     return wrapper
 
+def get_browsable_projects(request):
+    '''Function to return a list of projects to browse for the current HTTP request.'''
+    
+    project_short_name = request.GET.get('project', None)
+    if project_short_name:
+        # show only selected project folder
+        projects = [ get_object_or_404(Project, short_name__iexact=project_short_name) ]
+    elif request.user.is_staff:
+        # show all projects for administrators
+         projects = Project.objects.all()
+    else:
+        # show only projects available to user
+        projects = getProjectsForUser(request.user, False) # includePending==False
+    return projects
+
+
 def project_filter(fileobject, user, projects):
     ''' Utility function to filter a file object instance through the user's member projects.
         Returns True if the file object passes the test (i.e. it is to be accepted).'''
-        
-    # administrators can browse any directory
-    if user.is_staff:
-        return True
-    
+            
     # extract project directory from fileobject path
     # example: filepject.path = 'projects/dcmip/folder1/123.gif'
     prjdir = fileobject.path.split('/')[1]

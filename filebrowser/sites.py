@@ -6,8 +6,9 @@
 
 # COG imports
 from django.contrib.auth.decorators import login_required
-from cog.decorators import filebrowser_check, project_filter
-from cog.models.project import getProjectsForUser
+from cog.cog_filebrowser import filebrowser_check, project_filter, get_browsable_projects
+from cog.models.project import Project, getProjectsForUser
+from django.shortcuts import get_object_or_404
 
 # coding: utf-8
 
@@ -216,7 +217,7 @@ class FileBrowserSite(object):
             filter_re.append(re.compile(exp))
             
         # COG: retrieve all active projects for authenticated user
-        projects = getProjectsForUser(request.user, False) # includePending==False
+        projects = get_browsable_projects(request)
 
         def filter_browse(item):
             filtered = item.filename.startswith('.')
