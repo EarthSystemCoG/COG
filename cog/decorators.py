@@ -10,6 +10,35 @@ from django.template import RequestContext
 
 SYSTEM_DIR = 'system'
 
+def mydecorator(func):
+    
+    def wrapper(fb, *args, **kwargs):
+        request = args[0]
+        print 'Wrapping request: %s' % request
+        return func(fb, *args, **kwargs)
+        
+    return wrapper
+
+def project_filter(fileobject, user, projects):
+    ''' Utility function to filter a file object instance through the user's member projects.
+        Returns True if the file object passes the test (i.e. it is to be accepted).'''
+        
+    # administrators can browse any directory
+    if user.is_staff:
+        return True
+    
+    # extract project directory from fileobject path
+    # example: filepject.path = 'projects/dcmip/folder1/123.gif'
+    prjdir = fileobject.path.split('/')[1]
+    
+    for prj in projects:
+        #print 'path=%s project=%s' % (fileobject.path, prj.short_name.lower())
+        if prjdir == prj.short_name.lower():
+            return True
+    
+    # reject this file object
+    return False
+        
 class filebrowser_check(object):
     '''
     Decorator that wraps the filebrowser views by enforcing

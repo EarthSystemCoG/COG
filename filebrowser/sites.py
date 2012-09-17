@@ -3,9 +3,11 @@
 # 'staff_member_required' decorator with the 'login_required' decorator
 # Also, it used the COG-specific decorator 'filebrowser_check_role' 
 # to enforce a specific role for the project associated with a specific target folder
-#
+
+# COG imports
 from django.contrib.auth.decorators import login_required
-from cog.decorators import filebrowser_check
+from cog.decorators import filebrowser_check, project_filter
+from cog.models.project import getProjectsForUser
 
 # coding: utf-8
 
@@ -212,9 +214,16 @@ class FileBrowserSite(object):
         for k,v in VERSIONS.iteritems():
             exp = (r'_%s(%s)') % (k, '|'.join(EXTENSION_LIST))
             filter_re.append(re.compile(exp))
+            
+        # COG: retrieve all active projects for authenticated user
+        projects = getProjectsForUser(request.user, False) # includePending==False
 
         def filter_browse(item):
             filtered = item.filename.startswith('.')
+            
+            # COG: additional filtering by project
+            filtered = filtered or not project_filter(item, request.user, projects)
+
             for re_prefix in filter_re:
                 if re_prefix.search(item.filename):
                     filtered = True
