@@ -26,7 +26,7 @@ def doc_upload(request, project_short_name):
             # create 'Doc' instance with required fields
             # the HTTP parameter name 'upload' is assigned by CKeditor
             file = request.FILES['upload']
-            instance = Doc(file=file, author=request.user, project=project, title=file.name)
+            instance = Doc(file=file, author=request.user, project=project, title=file.name, path=file.name)
             instance.save()
             # retrieve the file URL (after it has been saved!), 
             # pass it on to the view for use by CKeditor
@@ -70,7 +70,13 @@ def doc_add(request, project_short_name):
             doc.author = request.user
             if doc.title is None or len(doc.title.strip())==0:
                 doc.title = basename(doc.file.name)
+            # save the document so to assign path in project directory: 'projects/<this project>/<filename>'
             doc.save()
+            # store path explicitely in the database so it can be used for searching
+            doc.path = doc.file.name
+            # must save again
+            doc.save()
+
             
             # optional redirect
             redirect = form.cleaned_data['redirect']
@@ -145,7 +151,8 @@ def doc_list(request, project_short_name):
     if query:
         qset = qset & (
             Q(title__icontains=query) |
-            Q(description__icontains=query) 
+            Q(description__icontains=query) |
+            Q(path__icontains=query) 
         )
         list_title = "Search Results for '%s'" % query    
         

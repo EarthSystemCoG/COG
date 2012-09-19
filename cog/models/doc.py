@@ -14,6 +14,8 @@ class Doc(models.Model):
     
     author = models.ForeignKey(User, related_name='documents', verbose_name='Publisher', blank=False)
     title = models.CharField(max_length=200, blank=True)
+    # path == 'file.name' but stored in the database for searching
+    path = models.CharField(max_length=400, blank=True)
     description = models.TextField(blank=True)
     # upload path is obtained dynamically from the callable function
     file = models.FileField(upload_to=get_upload_path)
