@@ -124,12 +124,13 @@
         <!-- DATE -->
         <td><span class="small">{{ fileobject.datetime|date:"N j, Y" }}</span></td>
         
-        <!-- EDIT -->
+        <!-- COG: comment EDIT functionality -->
+        <!-- EDIT 
         <td>
             <ul class="grp-actions">
                 <li class="grp-change-link"><a href="{% url filebrowser:fb_detail %}{% query_string "" "p" %}&amp;filename={{ fileobject.filename|urlencode }}"><strong>{% trans "Change" %}</strong></a></li>
             </ul>
-        </td>
+        </td> -->
         
     </tr>
 {% endfor %}

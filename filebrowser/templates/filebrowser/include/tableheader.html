@@ -26,7 +26,7 @@
         <!-- DATE -->
         {% if query.o == "date" %}<th class="grp-sorted {{ query.ot }}ending"><a href="{% query_string "" "o,ot,p" %}&amp;ot={% ifequal query.ot "grp-desc" %}grp-asc{% else %}grp-desc{% endifequal %}&amp;o=date">{% trans "Date" %}</a></th>{% endif %}
         {% if query.o != "date" %}<th><a href="{% query_string "" "o,ot,p" %}&amp;ot=grp-asc&amp;o=date">{% trans "Date" %}</a></th>{% endif %}
-        <!-- EDIT -->
-        <th>&nbsp;</th>
+        <!-- COG: EDIT 
+        <th>&nbsp;</th> -->
     </tr>
 </thead>
