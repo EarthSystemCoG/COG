@@ -134,6 +134,20 @@ EXTERNAL_URL_TYPES = (
 ROLE_USER = 'user'
 ROLE_ADMIN = 'admin'
 
+DOCUMENT_TYPE_ALL = 'All'
+DOCUMENT_TYPE_IMAGE = 'Image'
+DOCUMENT_TYPE_TEXT = 'Text'
+DOCUMENT_TYPE_PRESENTATION = 'Presentation'
+DOCUMENT_TYPE_PROGRAM = 'Program'
+
+DOCUMENT_TYPES = { 
+                   DOCUMENT_TYPE_IMAGE: ['.gif', '.png', 'jpg,', '.jpeg'],
+                   DOCUMENT_TYPE_TEXT:  ['.txt', '.pds', '.doc', '.docx'], 
+                   DOCUMENT_TYPE_PRESENTATION: ['.ppt','.pptx','.key'],
+                   DOCUMENT_TYPE_PROGRAM: ['.java', '.py', '.sh']
+                 }
+
+
 # path of default logo relative to MEDIA_ROOT
 # use a location outside of "logos/" so that the default logo can
 #DEFAULT_LOGO = "img/admin/logo_1109_cog.JPG"

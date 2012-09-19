@@ -9,6 +9,7 @@ from cog.models.project import Project, userHasProjectRole
 
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import ROLE_USER, ROLE_ADMIN
+from cog.models.project import getProjectsForUser
 
 from django.template import RequestContext
 

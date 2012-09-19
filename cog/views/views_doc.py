@@ -9,6 +9,7 @@ from constants import PERMISSION_DENIED_MESSAGE
 from os.path import basename
 from django.views.decorators.csrf import csrf_exempt
 from cog.forms import UploadImageForm
+from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES
 
 @csrf_exempt
 @login_required
@@ -156,15 +157,25 @@ def doc_list(request, project_short_name):
         )
         list_title = "Search Results for '%s'" % query    
         
+    # document type        
+    filter_by = request.GET.get('filter_by', DOCUMENT_TYPE_ALL)
+    if filter_by != DOCUMENT_TYPE_ALL:
+        types = DOCUMENT_TYPES[filter_by]
+        _qset = Q(path__endswith=types[0])
+        for type in types[1:]:
+            _qset = _qset | Q(path__endswith=type)
+        list_title += " (type: %s," % filter_by
+        qset = qset & _qset
+    
     order_by = request.GET.get('order_by', 'title')
-    list_title += " (order by %s)" % order_by
+    list_title += " order by %s)" % order_by
     
     # execute query, order by descending update date
     results = Doc.objects.filter(qset).distinct().order_by( order_by )
    
     return render_to_response('cog/doc/doc_list.html', 
                               {"object_list": results, 'project': project, 'title':'%s Documents' % project.short_name, 
-                               "query": query, "order_by":order_by, "list_title":list_title }, 
+                               "query": query, "order_by":order_by, "filter_by":filter_by, "list_title":list_title }, 
                               context_instance=RequestContext(request))
     
 def render_doc_form(request, form, project):

@@ -41,6 +41,18 @@
 	            </td> 
 	        {% endif %}  
             </td>
+            <!-- filter by -->
+            <td nowrap="nowrap" valign="top">
+            	<b>Type</b>
+            	<select name="filter_by" onChange="document.getElementById('searchForm').submit()">
+            		<option value="All"           {% if filter_by = 'All' %}  selected="selected" {% endif %}>All Documents
+            		<option value="Image"         {% if filter_by = 'Image' %} selected="selected" {% endif %}>Images
+            		<option value="Text"          {% if filter_by = 'Text' %} selected="selected" {% endif %}>Text
+            		<option value="Presentation"  {% if filter_by = 'Presentation' %} selected="selected" {% endif %}>Presentations
+            		<option value="Program"       {% if filter_by = 'Program' %} selected="selected" {% endif %}>Programs
+            	</select>
+            </td>
+            
             <!-- order by -->
             <td nowrap="nowrap" valign="top">
             	<b>Order By</b>
