@@ -179,7 +179,7 @@ def doc_list(request, project_short_name):
     
     # query by project
     qset = Q(project=project)
-    list_title = 'All Documents'
+    #list_title = 'All Documents'
     
     # do not list private documents unless user is a project member
     if request.user.is_anonymous() or not userHasUserPermission(request.user, project):
@@ -193,7 +193,7 @@ def doc_list(request, project_short_name):
             Q(description__icontains=query) |
             Q(path__icontains=query) 
         )
-        list_title = "Search Results for '%s'" % query    
+        #list_title = "Search Results for '%s'" % query    
         
     # document type        
     filter_by = request.GET.get('filter_by', DOCUMENT_TYPE_ALL)
@@ -202,15 +202,16 @@ def doc_list(request, project_short_name):
         _qset = Q(path__endswith=types[0])
         for type in types[1:]:
             _qset = _qset | Q(path__endswith=type)
-        list_title += " (type: %s," % filter_by
+        #list_title += ", type: %s, " % filter_by
         qset = qset & _qset
     
     order_by = request.GET.get('order_by', 'title')
-    list_title += " order by %s)" % order_by
-    
+    #list_title += ", order by %s" % order_by
+        
     # execute query, order by descending update date
     results = Doc.objects.filter(qset).distinct().order_by( order_by )
-    
+    list_title = "Total Number of Matching Documents: %d" % len(results)
+   
     return render_to_response('cog/doc/doc_list.html', 
                               {"object_list": results, 'project': project, 'title':'%s Documents' % project.short_name, 
                                "query": query, "order_by":order_by, "filter_by":filter_by, "list_title":list_title }, 

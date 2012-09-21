@@ -9,7 +9,7 @@
 
     {% load comments %}
     {% load pagination_tags %}
-    {% autopaginate object_list 50 %}
+    {% autopaginate object_list 100 %}
 
     <div class="mybox">
 	    <table>
@@ -18,15 +18,16 @@
 			   {% get_comment_count for doc as comment_count %}
 			   <tr>
 			      <td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
-			      <td><b><a href="{% url doc_detail doc.id %}">{{ doc }}</a></b></td> 
+			      <td><b><a href="{{ doc.file.url }}">{{ doc }}</a></b></td> 
 			      <td> {{ doc.description|truncatewords:8 }} </td>
 			      <td>{% if doc.is_private %} <span class='privatelink'>&nbsp;</span>{% endif %}</td> 
 			      <td nowrap="true">{{ doc.update_date|date:"d M Y, H:m" }}</td> 
+			      <td nowrap="true"><a href="{% url doc_detail doc.id %}"><img src="{{STATIC_URL}}cog/img/icon_listlink.gif"/></a></td>
 			      <td nowrap="true">{{ comment_count }} Comment{{ comment_count|pluralize }} </td>
 			   </tr>
 			{% endfor %}
 			<tr>
-              <td colspan="6">
+              <td colspan="7">
                  <small><span class="addlink">&nbsp;</span><a href="{% url doc_add project.short_name.lower %}">Upload New Document &#187;</a></small>
               </td>
             </tr>
