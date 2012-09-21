@@ -39,10 +39,7 @@ urlpatterns = patterns('',
         
     # Comments
     (r'^comments/', include('django.contrib.comments.urls')),
-    
-    # media
-    (r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
-        
+            
     # COG application
     (r'', include('cog.urls')),
     
