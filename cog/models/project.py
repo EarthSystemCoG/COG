@@ -263,15 +263,17 @@ def createGroup(group_name):
 # shortcut method to check for project user permission
 # note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
 def userHasUserPermission(user, project):
-    return user.has_perm( getPermissionLabel(project.getUserPermission()) )
+    return user.is_staff or user.has_perm( getPermissionLabel(project.getUserPermission()) )
 
 # shortcut method to check for project admin permission
 # note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
 def userHasAdminPermission(user, project):
-    return user.has_perm( getPermissionLabel(project.getAdminPermission()) )
+    return user.is_staff or user.has_perm( getPermissionLabel(project.getAdminPermission()) )
 
 def userHasProjectRole(user, project, role):
-    if role==ROLE_USER:
+    if user.is_staff:
+        return True
+    elif role==ROLE_USER:
         return userHasUserPermission(user, project) or userHasAdminPermission(user, project)
     elif role==ROLE_ADMIN:
         return userHasAdminPermission(user, project)

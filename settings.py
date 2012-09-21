@@ -59,6 +59,12 @@ USE_L10N = True
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = rel('site_media/')
 
+# Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have traiing slash)
+FILEBROWSER_DIRECTORY = "projects/"
+
+# absolute path to directory containig project specific media
+PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
+
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
@@ -69,7 +75,6 @@ MEDIA_URL = '/site_media/'
 # Examples: "http://foo.com/media/", "/media/".
 STATIC_URL = '/static/'
 STATIC_ROOT = rel('static/')
-#ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
@@ -166,7 +171,3 @@ COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
 
 # ATOM feed information
 ATOM_FEED_DIR = '/esg/content/atom_feed_home'
-
-
-# Filebrowser (IMPORTANT: must have traiing slash)
-FILEBROWSER_DIRECTORY = "projects/"

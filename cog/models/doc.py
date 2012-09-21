@@ -22,6 +22,8 @@ class Doc(models.Model):
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
     project = models.ForeignKey(Project)
+    # public/private flag
+    is_private = models.BooleanField(verbose_name='Private ?', default=False, null=False)
     
     def __unicode__(self):
         if self.title: 

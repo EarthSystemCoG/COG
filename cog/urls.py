@@ -138,4 +138,11 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/$', 'cog.views.project_home', name='project_home'),
     url(r'^projects/(?P<project_short_name>[^/]+)/.+$', 'cog.views.page_detail', name='page_detail'),
     
+    # project media
+    url(r'^site_media/projects/(?P<path>.*)$', 'cog.views.doc_download', name='doc_download'),
+    
+    # other media
+    url(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),    
+
+    
 )

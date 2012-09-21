@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from cog.models import *
 from cog.forms import *
@@ -9,7 +9,10 @@ from constants import PERMISSION_DENIED_MESSAGE
 from os.path import basename
 from django.views.decorators.csrf import csrf_exempt
 from cog.forms import UploadImageForm
-from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES
+from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES, SYSTEM_DOCS, SYSTEM_IMAGES
+from django.conf import settings
+from django.views.static import serve
+from cog.models.project import userHasUserPermission
 
 @csrf_exempt
 @login_required
@@ -77,7 +80,6 @@ def doc_add(request, project_short_name):
             doc.path = doc.file.name
             # must save again
             doc.save()
-
             
             # optional redirect
             redirect = form.cleaned_data['redirect']
@@ -96,6 +98,32 @@ def doc_detail(request, doc_id):
     return render_to_response('cog/doc/doc_detail.html', 
                               { 'doc': doc, 'project':doc.project, 'title': doc.title }, 
                                context_instance=RequestContext(request) )    
+    
+@login_required
+def doc_download(request, path):
+    ''' Method to serve project media. 
+        This is a wrapper around the standard django media view to enable CoG access control.
+    '''
+    
+    # extract project path from downlaod request
+    #print 'Download document path=%s' % path
+    # example: path='nesii/myimage.jpg'
+    project_short_name_lower = path.split("/")[0]
+    
+    # media in legacy storage locations
+    if project_short_name_lower==SYSTEM_DOCS or project_short_name_lower==SYSTEM_IMAGES:
+        return serve(request, path, document_root=settings.PROJECTS_ROOT )
+    
+    # load document by path
+    doc = Doc.objects.get(path__endswith=path)
+    
+    # check user authorization
+    if not doc.is_private or userHasUserPermission(request.user, doc.project):
+        return serve(request, path, document_root=settings.PROJECTS_ROOT )
+    
+    else:
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
 @login_required
 def doc_remove(request, doc_id):
     
@@ -147,6 +175,10 @@ def doc_list(request, project_short_name):
     qset = Q(project=project)
     list_title = 'All Documents'
     
+    # do not list private documents unless user is a project member
+    if request.user.is_anonymous() or not userHasUserPermission(request.user, project):
+        qset = qset & Q(is_private=False)
+    
     # optional query parameters
     query = request.GET.get('query', '')
     if query:
@@ -172,7 +204,7 @@ def doc_list(request, project_short_name):
     
     # execute query, order by descending update date
     results = Doc.objects.filter(qset).distinct().order_by( order_by )
-   
+    
     return render_to_response('cog/doc/doc_list.html', 
                               {"object_list": results, 'project': project, 'title':'%s Documents' % project.short_name, 
                                "query": query, "order_by":order_by, "filter_by":filter_by, "list_title":list_title }, 
