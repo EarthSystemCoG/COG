@@ -99,11 +99,9 @@ def doc_detail(request, doc_id):
                               { 'doc': doc, 'project':doc.project, 'title': doc.title }, 
                                context_instance=RequestContext(request) )    
     
-@login_required
 def doc_download(request, path):
     ''' Method to serve project media. 
-        This is a wrapper around the standard django media view to enable CoG access control.
-    '''
+        This is a wrapper around the standard django media view to enable CoG access control.'''
     
     # extract project path from downlaod request
     #print 'Download document path=%s' % path
@@ -117,10 +115,18 @@ def doc_download(request, path):
     # load document by path
     doc = Doc.objects.get(path__endswith=path)
     
-    # check user authorization
-    if not doc.is_private or userHasUserPermission(request.user, doc.project):
+    # public documents
+    if not doc.is_private:
         return serve(request, path, document_root=settings.PROJECTS_ROOT )
+    else:
+        return doc_download_private(request, path, doc)
+ 
+@login_required   
+def doc_download_private(request, path, doc):
+    '''Download view that requires user to login, then checks authorization.'''
     
+    if userHasUserPermission(request.user, doc.project):
+        return serve(request, path, document_root=settings.PROJECTS_ROOT )
     else:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
