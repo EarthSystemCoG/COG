@@ -30,8 +30,10 @@ def doc_upload(request, project_short_name):
             # create 'Doc' instance with required fields
             # the HTTP parameter name 'upload' is assigned by CKeditor
             file = request.FILES['upload']
-            instance = Doc(file=file, author=request.user, project=project, title=file.name, path=file.name)
+            path = "%s/%s" % (project_short_name.lower(), file.name)
+            instance = Doc(file=file, author=request.user, project=project, title=file.name, path=path)
             instance.save()
+            #print 'uploaded document path=%s' % instance.path
             # retrieve the file URL (after it has been saved!), 
             # pass it on to the view for use by CKeditor
             url = instance.file.url
@@ -113,6 +115,7 @@ def doc_download(request, path):
         return serve(request, path, document_root=settings.PROJECTS_ROOT )
     
     # load document by path
+    #print 'looking for doc ending in path=%s' % path
     doc = Doc.objects.get(path__endswith=path)
     
     # public documents
