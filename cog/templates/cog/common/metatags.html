@@ -3,7 +3,7 @@
 {% load cog_utils %}
 
 <!-- favicon -->
-<link rel="Shortcut Icon" href="http://localhost:8000/static/cog/img/favicon_cog.png" type="image/x-icon" />
+<link rel="Shortcut Icon" href="{{STATIC_URL}}/cog/img/favicon_cog.png" type="image/x-icon" />
 
 {% if project and request|is_home_page:project %}
 	
