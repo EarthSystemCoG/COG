@@ -62,6 +62,19 @@ MEDIA_ROOT = rel('site_media/')
 # Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have traiing slash)
 FILEBROWSER_DIRECTORY = "projects/"
 
+# versions generated when browsing images
+FILEBROWSER_VERSIONS = {
+    'admin_thumbnail': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    #'small': {'verbose_name': 'Small (2 col)', 'width': 140, 'height': '', 'opts': ''},
+    #'medium': {'verbose_name': 'Medium (4col )', 'width': 300, 'height': '', 'opts': ''},
+    #'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': ''},
+    #'large': {'verbose_name': 'Large (8 col)', 'width': 680, 'height': '', 'opts': ''},
+} 
+
+# versions selectable through admin interface
+FILEBROWSER_ADMIN_VERSIONS = ['thumbnail']
+
 # absolute path to directory containig project specific media
 PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
 

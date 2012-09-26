@@ -13,6 +13,9 @@ from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES, SYSTEM_DOCS,
 from django.conf import settings
 from django.views.static import serve
 from cog.models.project import userHasUserPermission
+from cog.utils import create_resized_image
+from cog.models.doc import get_upload_path
+import os
 
 @csrf_exempt
 @login_required
@@ -37,6 +40,15 @@ def doc_upload(request, project_short_name):
             # retrieve the file URL (after it has been saved!), 
             # pass it on to the view for use by CKeditor
             url = instance.file.url
+            
+            # create thumbnail
+            # NOTE: already executed automatic when browsing through django-browser
+            #imagepath = os.path.join( getattr(settings, "MEDIA_ROOT"),  instance.file.name )
+            #(path, filename) = os.path.split(imagepath)
+            #(name, ext) = os.path.splitext(filename)
+            #thumbnailpath = os.path.join( path, "%s_thumbnail.jpeg" % name )
+            #print 'Creating thumbnail: %s' % thumbnailpath
+            #create_resized_image(thumbnailpath, imagepath)         
 
         else:
             print 'Form errors:%s' % form.errors

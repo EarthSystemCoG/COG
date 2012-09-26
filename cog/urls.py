@@ -138,6 +138,12 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/$', 'cog.views.project_home', name='project_home'),
     url(r'^projects/(?P<project_short_name>[^/]+)/.+$', 'cog.views.page_detail', name='page_detail'),
     
+    # resized project media (must be served without any access control since they are not wrapped by "Doc" objects)
+    url(r'^site_media/(?P<path>.*_thumbnail.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_small.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_medium.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_big.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_large.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
     # project media
     url(r'^site_media/projects/(?P<path>.*)$', 'cog.views.doc_download', name='doc_download'),
     
