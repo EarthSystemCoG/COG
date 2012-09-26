@@ -2,7 +2,7 @@ from django.db import models
 from constants import APPLICATION_LABEL, ORGANIZATIONAL_ROLE_CV, ORGANIZATIONAL_ROLE_CATEGORIES_CV
 from project import Project
 from django.contrib.auth.models import User
-from cog.models.constants import ROLE_CATEGORY_LEAD, ROLE_CATEGORY_MEMBER, ORGANIZATIONAL_ROLES_DICT
+from cog.models.constants import ROLE_CATEGORY_LEAD, ROLE_CATEGORY_MEMBER, ORGANIZATIONAL_ROLES_DICT, LEAD_ORGANIZATIONAL_ROLES_DICT
 
 
 class OrganizationalRole(models.Model):
@@ -16,12 +16,12 @@ class OrganizationalRole(models.Model):
     def set_category(self):
         """Method to select the object category from the other fields, and persist changes."""
         
-        if role.type in LEAD_ORGANIZATIONAL_ROLES_DICT:
-            role.category = ROLE_CATEGORY_LEAD
+        if self.type in LEAD_ORGANIZATIONAL_ROLES_DICT:
+            self.category = ROLE_CATEGORY_LEAD
         else:
-            role.category = ROLE_CATEGORY_MEMBER
-        role.save()
-        print 'role=%s category=%s' % (role.type, role.category)
+            self.category = ROLE_CATEGORY_MEMBER
+        self.save()
+        print 'role=%s category=%s' % (self.type, self.category)
  
     def members(self):
         return self.organizationalrolemember_set.all()
