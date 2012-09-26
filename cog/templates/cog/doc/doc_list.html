@@ -22,7 +22,7 @@
 			      <td> {{ doc.description|truncatewords:8 }} </td>
 			      <td>{% if doc.is_private %} <span class='privatelink'>&nbsp;</span>{% endif %}</td> 
 			      <td nowrap="true">{{ doc.update_date|date:"d M Y, H:m" }}</td> 
-			      <td nowrap="true"><a href="{% url doc_detail doc.id %}"><img src="{{STATIC_URL}}cog/img/icon_listlink.gif"/></a></td>
+			      <td nowrap="true"><a href="{% url doc_detail doc.id %}" class="listlink">&nbsp;Info</a></td>
 			      <td nowrap="true">{{ comment_count }} Comment{{ comment_count|pluralize }} </td>
 			   </tr>
 			{% endfor %}

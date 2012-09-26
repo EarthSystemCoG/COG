@@ -27,12 +27,12 @@
         </table>
     </div> 
     {% if request.user|hasUserPermission:project %}
-        <div style="text-align:center">
+        <div style="text-align:right">
             <hr/>
-            <a href="{% url doc_update doc.id %}" class="changelink">Update Document &#187;</a>
-            &nbsp; &nbsp;
+            <a href="{% url doc_update doc.id %}" class="changelink">Update</a>
+            &nbsp;
             <a href="{% url doc_remove doc.id %}" class="deletelink"
-               onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document ?',this)">Delete Document &#187;</a>       
+               onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document ?',this)">Delete</a>       
         </div>
         <div id="myDialog" class="yui-skin-sam"></div>
     {% endif %}
