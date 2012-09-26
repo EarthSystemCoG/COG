@@ -43,6 +43,11 @@ urlpatterns = patterns('',
     # COG application
     (r'', include('cog.urls')),
     
+    # other media (when NOT served through the Apache web server)
+    url(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    url(r'^static_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT} ),    
+
+    
     # CIM-forms
     (r'^metadata/', include('django_cim_forms.urls')),
     (r'', include('dycore.urls')),

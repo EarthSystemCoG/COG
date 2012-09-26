@@ -141,8 +141,4 @@ urlpatterns = patterns('',
     # project media
     url(r'^site_media/projects/(?P<path>.*)$', 'cog.views.doc_download', name='doc_download'),
     
-    # other media
-    url(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),    
-
-    
 )
