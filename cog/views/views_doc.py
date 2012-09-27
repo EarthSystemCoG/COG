@@ -214,9 +214,9 @@ def doc_list(request, project_short_name):
     filter_by = request.GET.get('filter_by', DOCUMENT_TYPE_ALL)
     if filter_by != DOCUMENT_TYPE_ALL:
         types = DOCUMENT_TYPES[filter_by]
-        _qset = Q(path__endswith=types[0])
+        _qset = Q(path__iendswith=types[0])
         for type in types[1:]:
-            _qset = _qset | Q(path__endswith=type)
+            _qset = _qset | Q(path__iendswith=type)
         #list_title += ", type: %s, " % filter_by
         qset = qset & _qset
     

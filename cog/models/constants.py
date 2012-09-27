@@ -145,7 +145,7 @@ DOCUMENT_TYPE_PROGRAM = 'Program'
 
 DOCUMENT_TYPES = { 
                    DOCUMENT_TYPE_IMAGE: ['.gif', '.png', 'jpg,', '.jpeg'],
-                   DOCUMENT_TYPE_TEXT:  ['.txt', '.pds', '.doc', '.docx'], 
+                   DOCUMENT_TYPE_TEXT:  ['.txt', '.pdf', '.doc', '.docx'], 
                    DOCUMENT_TYPE_PRESENTATION: ['.ppt','.pptx','.key'],
                    DOCUMENT_TYPE_PROGRAM: ['.java', '.py', '.sh']
                  }
