@@ -22,3 +22,6 @@ for doc in Doc.objects.all():
         # explicitly assign
         doc.is_private = False
         doc.save()
+    doc.path = doc.file.name
+    doc.save()
+    
