@@ -159,8 +159,12 @@ def doc_remove(request, doc_id):
     # delete document from database
     doc.delete()
     
+    # redirect to original page
+    redirect = request.REQUEST['redirect']
+    
     # redirect to project home page
-    return HttpResponseRedirect( reverse('project_home', kwargs={'project_short_name': project.short_name.lower() } ) ) 
+    #return HttpResponseRedirect( reverse('doc_list', kwargs={'project_short_name': project.short_name.lower() } ) ) 
+    return HttpResponseRedirect( redirect ) 
     
 
 @login_required
