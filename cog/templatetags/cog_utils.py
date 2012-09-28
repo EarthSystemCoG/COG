@@ -277,21 +277,6 @@ def _project_tree(user, project, esc, expanded=False, dopeers=False, icon='child
         
     return html
 
-# filter that embeds words starting with http(s) in HTML <a> tags
-@register.filter
-def textToHtml(text, autoescape=None):
-    
-    p = re.compile('(https*://[^\s]+)', re.IGNORECASE)
-    esc = get_escape_function(autoescape)
-    esctext = esc(text)
-    
-    html = p.sub('<a href="\g<1>">\g<1></a>', esctext)
-    
-    return mark_safe(html)
-    
-textToHtml.needs_autoescape = True
-
-
 # filter to determine whether a user is enrolled in a group
 @register.filter
 def isEnrolled(user, group):
@@ -336,8 +321,8 @@ def canPost(user, post):
     return userCanPost(user, post)
 
 @register.filter
-def relatedPostCount(post):
-    count = len(post.post_set.all())
+def relatedPostCount(post, related_posts):
+    count = len( related_posts )
     if post.parent:
         count += 1
     return count
@@ -355,24 +340,76 @@ def numberOptions(lastNumber, selectedNumber):
     # mark the result as safe from further escaping
     return mark_safe(html)
     
-# Utility method to return a list of active project tabs
+
+def isTopTabSelected(tab, request):
+    """ Method to check whether a top level tab has been selected in the current request."""
+    
+    # home page
+    if 'Home' in tab[0]:
+        # exact match
+        if tab[1] == request.path:
+            return True
+        else:
+            return False
+    else:
+        # partial match
+        if tab[1] in request.path:
+            return True
+        else:
+            return False
+        
+def isSubTabSelected(tab, request):
+    # Method to check whether a sub-tab has been selected in current request. """
+    
+    # exact match
+    if tab[1] == request.path:
+        return True
+    else:
+        return False
+    
+# Utility method to return a list of ACTIVE project tabs (top-tabs and sub-tabs).
+# Returns a list of list: [ [tab1], [tab2], [tab3-selected, sub-tab3a, subtab3b, subtab3c,...], [tab4], [tab5], ...]
+# where sub-tabs are returned only for the currently selected top-tab.
 @register.filter
-def getTopNav(project):
+def getTopNav(project, request):
         
     tabs = []
     ptabs = get_or_create_project_tabs(project, save=True)
-    for ptab in ptabs:
-        if ptab.active:
-            tabs.append( (ptab.label, ptab.url) )
-            
+    for ptablist in ptabs:
+        tablist = []
+        selected = False
+        for idx, ptab in enumerate(ptablist):
+            # top-tab
+            if idx==0:        
+                if ptab.active:
+                    tablist.append( (ptab.label, ptab.url) )
+                    selected = isTopTabSelected( (ptab.label, ptab.url), request)
+            # sub-tab
+            else:
+                if selected and ptab.active:
+                    tablist.append( (ptab.label, ptab.url) )
+                
+        tabs.append(tablist)
     return tabs
-
+        
 @register.filter
-def selectedTabStyle(request, tab):
-    # selected tab
-    if request.path==tab[1]:
-        return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
-    # unselected tab
+def getTopTabStyle(request, tablist):
+    """Method to return the top-tab CSS style, depending on whether it is selected, and it has sub-tabs."""
+    
+    tab = tablist[0]
+    if isTopTabSelected(tab, request):
+        if len(tablist)>1:
+            return mark_safe("style='color:#358C92; background-color: #B9E0E3'")
+        else:
+            return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
+    else:
+        return ""
+ 
+@register.filter   
+def getSubTabStyle(request, tab):
+    """ Method to return the sub-tab CSS style depending on whether it is selected."""
+    if isTopTabSelected(tab, request):
+        return mark_safe("style='color:#358C92;'")
     else:
         return ""
     
@@ -433,3 +470,6 @@ def is_home_page(request, project):
     else:
         return False
     
+@register.filter
+def get_external_urls(project, external_url_type):
+    return project.get_external_urls(external_url_type)

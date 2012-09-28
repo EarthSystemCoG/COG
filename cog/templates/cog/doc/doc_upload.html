@@ -1,0 +1,13 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block extrahead %}
+
+	<script type="text/javascript" src="{{ MEDIA_URL }}ckeditor/ckeditor.js"></script>
+	<script type="text/javascript">
+	window.parent.CKEDITOR.tools.callFunction( '{{ request.REQUEST.CKEditorFuncNum }}' , '{{ url }}' );
+	</script>
+
+{% endblock %}
+
+{% block main %}
+{% endblock %}

@@ -52,3 +52,17 @@ class AboutusForm(ModelForm):
                    'values':      Textarea(attrs={'rows':6}),
                    'history':     Textarea(attrs={'rows':6}),
                    }
+        
+class ContactusForm(ModelForm):
+    
+    class Meta:
+        model = Project
+        fields = ('long_name', 'description')
+        widgets = { 'description': Textarea(attrs={'rows':6}), }
+        
+class SupportForm(ModelForm):
+    
+    class Meta:
+        model = Project
+        fields = ('long_name', 'mission')
+        widgets = { 'mission': Textarea(attrs={'rows':6}), }

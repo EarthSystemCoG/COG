@@ -1,17 +1,22 @@
 APPLICATION_LABEL = 'cog'
 
 # default template for project predefined pages, in the order they are displayed
+# the first list item is the top-level tab, the others are sub-tabs
+# IMPORTANT: the sub-tab URLs must start with the parent-tab URL (so that tabs can be properly selected)
 PROJECT_PAGES = (
-         ("Home", ""),
-         ("About Us", "aboutus/"),     
+         [("Home", "")],
+         #[("About Us", "aboutus/"), ("About Us 1", "aboutus/page1/"), ("About Us 2", "aboutus/page2/"), ("About Us 3", "aboutus/page3/")], 
+         [("About Us", "aboutus/")],     
          # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
-         ("Bookmarks", "bookmarks/list/<project>/"),
-         ("Code", "code/"),
-         ("Trackers", "trackers/"),
-         ("Support", "support/"),
-         ("Governance", "governance/"),
-         ("Roadmap", "roadmap/"),
-         ("Contact Us", "contactus/"),            
+         [("Bookmarks", "bookmarks/list/<project>/")],
+         [("Code", "code/")],
+         [("Trackers", "trackers/")],
+         [("Support", "support/")],
+         #[("Governance", "governance/"), ("Governance 1", "governance/g1/") ],
+         [("Governance", "governance/")],
+         #[("Roadmap", "roadmap/"), ("Roadmap 1", "roadmap/road1/"), ("Roadmap 2", "roadmap/road2/")],
+         [("Roadmap", "roadmap/")],
+         [("Contact Us", "contactus/")],            
          #("Administration", "admin/"),
         )
 
@@ -129,9 +134,29 @@ EXTERNAL_URL_TYPES = (
     (TYPE_ROADMAP, 'Roadmap'),      
 )
 
+ROLE_USER = 'user'
+ROLE_ADMIN = 'admin'
+
+DOCUMENT_TYPE_ALL = 'All'
+DOCUMENT_TYPE_IMAGE = 'Image'
+DOCUMENT_TYPE_TEXT = 'Text'
+DOCUMENT_TYPE_PRESENTATION = 'Presentation'
+DOCUMENT_TYPE_PROGRAM = 'Program'
+
+DOCUMENT_TYPES = { 
+                   DOCUMENT_TYPE_IMAGE: ['.gif', '.png', 'jpg,', '.jpeg'],
+                   DOCUMENT_TYPE_TEXT:  ['.txt', '.pdf', '.doc', '.docx'], 
+                   DOCUMENT_TYPE_PRESENTATION: ['.ppt','.pptx','.key'],
+                   DOCUMENT_TYPE_PROGRAM: ['.java', '.py', '.sh']
+                 }
+
 
 # path of default logo relative to MEDIA_ROOT
 # use a location outside of "logos/" so that the default logo can
 #DEFAULT_LOGO = "img/admin/logo_1109_cog.JPG"
 DEFAULT_LOGO = "cog/img/cog_web_beta.png"
 FOOTER_LOGO = "cog/img/logo_nsf_and_noaa.bmp"
+
+# legacy media sub-directories of 'projects/'
+SYSTEM_DOCS = 'system_docs'
+SYSTEM_IMAGES = 'system_images'

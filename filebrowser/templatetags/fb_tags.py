@@ -1,11 +1,10 @@
 # coding: utf-8
 
-# django imports
+# DJANGO IMPORTS
 from django import template
-from django.utils.encoding import smart_unicode
-from django.utils.safestring import mark_safe
+from django.utils.http import urlquote
 
-# filebrowser imports
+# FILEBROWSER IMPORTS
 from filebrowser.settings import SELECT_FORMATS
 
 register = template.Library()
@@ -60,7 +59,7 @@ def get_query_string(p, new_params=None, remove=None):
             del p[k]
         elif v is not None:
             p[k] = v
-    return mark_safe('?' + '&'.join([u'%s=%s' % (k, v) for k, v in p.items()]).replace(' ', '%20'))
+    return '?' + '&'.join([u'%s=%s' % (urlquote(k), urlquote(v)) for k, v in p.items()])
 
 
 def string_to_dict(string):
@@ -138,3 +137,5 @@ def selectable(parser, token):
     return SelectableNode(filetype, format)
     
 register.tag(selectable)
+
+

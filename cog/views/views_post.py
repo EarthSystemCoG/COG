@@ -97,11 +97,15 @@ def page_detail(request, project_short_name):
     
     dict = {"title": page.title, "post": page, "project" : project }
     
+    related_pages = []
+    for post in page.post_set.all():
+        if not post.is_predefined():
+            related_pages.append(post)
+    dict['related_pages'] = related_pages
+    
     # add extra objects for home page
-    # FIXME
     if page.is_home:
-            dict['project_latest_news']=project.news()[0:5]
-            dict['project_latest_signals']=project.signals()[0:5]
+        dict['project_latest_signals']=project.signals()[0:5]
             
     # render page template
     return render_to_response(page.template, dict, context_instance=RequestContext(request) )
@@ -211,7 +215,7 @@ def post_add(request, project_short_name, owner=None):
             # assign post order, if top-level
             # note that the post.topic may be None
             if post.parent is None:
-                pages = Post.objects.filter(project=project).filter(topic=post.topic).order_by('order')
+                pages = Post.objects.filter(project=project).filter(topic=post.topic).filter(parent=None).filter(type='page').order_by('order')
                 post.order = len(pages)+1
             else:
                 post.order = 0

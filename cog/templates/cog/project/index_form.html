@@ -49,14 +49,21 @@
 		    				    {% with ii.pages|length as lastNumber %}
 		    					  {% with page.order as selectedNumber %}
 		    					  
-				    				   &nbsp;&nbsp;&nbsp;	
+		    					  	&nbsp;&nbsp;&nbsp;
+		    					  	{% if page.is_home %}
+		    					  		<select name="{{page_key}}">
+		    					  			<option value="1">1</option>
+		    					  		</select>
+		    					  		&nbsp;Home
+		    					  	{% else %}				    				   	
 				    				   <select name="{{page_key}}">
-												{{ lastNumber|numberOptions:selectedNumber }}			
-				    				   </select>		    				   
-					    			   &nbsp;{{ page.title }}
-					    			   {% if errors|dictKeyLookup:page_key %}
-					    			   		<span class="errornote">{{ errors|dictKeyLookup:page_key }}</span>
-					    			   {% endif %}
+											{{ lastNumber|numberOptions:selectedNumber }}			
+				    				   </select>	
+				    				   &nbsp;{{ page.title }}
+				    				{% endif %}	    				   					    			   
+					    			{% if errors|dictKeyLookup:page_key %}
+					    				<span class="errornote">{{ errors|dictKeyLookup:page_key }}</span>
+					    			{% endif %}
 	
 				    			{% endwith %}
 		    				  {% endwith %}

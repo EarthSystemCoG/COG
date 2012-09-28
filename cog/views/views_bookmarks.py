@@ -47,11 +47,16 @@ def bookmark_list(request, project_short_name):
         if _hasBookmarks(peer) and peer.isVisible(request.user):
             peers.append(peer)
                       
-    # return to view
-    return render_to_response('cog/bookmarks/bookmark_list.html', 
-                              {'project':project, 'peers' : peers, 'children': children, 
-                               'title': '%s Bookmarks' % project.short_name},
-                               context_instance=RequestContext(request))
+    # return to view    
+    template_page = 'cog/bookmarks/_bookmarks.html'
+    template_title = 'Bookmarks'
+    template_form_name = None
+    return render_to_response('cog/common/rollup.html', 
+                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
+                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
+                               'children':children, 'peers':peers },
+                              context_instance=RequestContext(request))
+
     
 # View to add a bookmark via a standard web form
 @login_required

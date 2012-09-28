@@ -1,19 +1,20 @@
 # coding: utf-8
 
-# Python
+# PYTHON IMPORTS
 import os, re
 
-# Django
+# DJANGO IMPORTS
 from django.core.management.base import BaseCommand, CommandError
 
-# filebrowser
+# FILEBROWSER IMPORTS
 from filebrowser.settings import EXTENSION_LIST, EXCLUDE, MEDIA_ROOT, DIRECTORY, VERSIONS, EXTENSIONS
 from filebrowser.functions import version_generator
 
+
 class Command(BaseCommand):
     args = '<media_path>'
-    help = "(Re)Generate versions of Images within the FILEBROWSER_DIRECTORY or a "
-
+    help = "(Re)Generate Image-Versions within FILEBROWSER_DIRECTORY/MEDIA_ROOT."
+    
     def handle(self, *args, **options):
         media_path = ""
         
@@ -28,7 +29,7 @@ class Command(BaseCommand):
         
         # get version name
         while 1:
-            self.stdout.write('\nSelect a version you whant to generate:\n')
+            self.stdout.write('\nSelect a version you want to generate:\n')
             for version in VERSIONS:
                 self.stdout.write(' * %s\n' % version)
             
@@ -52,7 +53,7 @@ class Command(BaseCommand):
         for exp in EXCLUDE:
            filter_re.append(re.compile(exp))
         for k,v in VERSIONS.iteritems():
-            exp = (r'_%s.(%s)') % (k, '|'.join(EXTENSION_LIST))
+            exp = (r'_%s(%s)') % (k, '|'.join(EXTENSION_LIST))
             filter_re.append(re.compile(exp))
         
         # walkt throu the filebrowser directory
@@ -73,7 +74,6 @@ class Command(BaseCommand):
                 if extension in EXTENSIONS["Image"]:
                     self.createVersions(os.path.join(dirpath, filename), selected_version)
     
-    
     def createVersions(self, path, selected_version):
         if selected_version:
             self.stdout.write('generating version "%s" for: %s\n' % (selected_version, path))
@@ -82,3 +82,5 @@ class Command(BaseCommand):
             self.stdout.write('generating all versions for: %s\n' % path)
             for version in VERSIONS:
                 version_generator(path, version, True)
+
+

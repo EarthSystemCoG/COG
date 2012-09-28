@@ -9,20 +9,24 @@
  
 <div class="box-colored">
     
-    <form action="{{ url }}" method="GET">
+    <form action="{{ url }}" method="GET" id="searchForm">
     
         <input type="hidden" name="type" value="{{ request.GET.type }}"/>
     
         <!-- text box -->
         <table>
            <tr>
-            <td nowrap="nowrap" style="text-align: right"><img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"/></td>
-            <td nowrap="nowrap" style="text-align: left"><b>Data Search</b></td>
-            <td class="long"><input type="text" name="query" value="{{ query|escape }}"></td>
+            <td valign="top" nowrap="nowrap">
+            	<img src="{{STATIC_URL}}/cog/img/icon_listlink.gif">
+            	&nbsp;<b>Search</b>
+            </td>
+            <td class="long">
+            	<input type="text" name="query" value="{{ query|escape }}">
+            </td>
             <td>
             <!-- sub-select -->
 	        {% if topic_list %}
-	            <td nowrap="true"><b>Select Topic</b></td> 
+	            <td nowrap="nowrap"><b>Select Topic</b></td> 
 	            <td>
 		            <select name="topic">
 		                <option value="">-- Any --</option>
@@ -36,6 +40,28 @@
 		            </select>
 	            </td> 
 	        {% endif %}  
+            </td>
+            <!-- filter by -->
+            <td nowrap="nowrap" valign="top">
+            	<b>Type</b>
+            	<select name="filter_by" onChange="document.getElementById('searchForm').submit()">
+            		<option value="All"           {% if filter_by = 'All' %}  selected="selected" {% endif %}>All Documents
+            		<option value="Image"         {% if filter_by = 'Image' %} selected="selected" {% endif %}>Images
+            		<option value="Text"          {% if filter_by = 'Text' %} selected="selected" {% endif %}>Text
+            		<option value="Presentation"  {% if filter_by = 'Presentation' %} selected="selected" {% endif %}>Presentations
+            		<option value="Program"       {% if filter_by = 'Program' %} selected="selected" {% endif %}>Programs
+            	</select>
+            </td>
+            
+            <!-- order by -->
+            <td nowrap="nowrap" valign="top">
+            	<b>Order By</b>
+            	<select name="order_by" onChange="document.getElementById('searchForm').submit()">
+            		<option value="title"        {% if order_by = 'title' %}  selected="selected" {% endif %}>Title
+            		<option value="-title"       {% if order_by = '-title' %} selected="selected" {% endif %}>Title (reversed)
+            		<option value="-update_date" {% if order_by = '-update_date' %} selected="selected" {% endif %}>Last Update
+            		<option value="update_date"  {% if order_by = 'update_date' %} selected="selected" {% endif %}>Last Update (reversed)
+            	</select>
             </td>
             <td><input type="submit" value="Search"></td>
            </tr>

@@ -27,7 +27,9 @@
 
 <!-- Hierarchy -->
 {% with post as post %}
-   {% include 'cog/post/_post_hierarchy.html' %}
+	{% with post.post_set.all as related_posts %}
+   		{% include 'cog/post/_post_hierarchy.html' %}
+   	{% endwith %}
 {% endwith %}
     
 <!-- Comments -->

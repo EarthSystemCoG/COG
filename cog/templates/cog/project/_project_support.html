@@ -1,0 +1,17 @@
+<!-- project details page -->
+
+{% load cog_utils %}
+   
+<table>
+    <tr>
+		<td nowrap="nowrap"><b>Long Name</b></td>
+		<td class="long">{{proj.long_name}}</td>
+	</tr>
+	{% if proj.description %}
+	<tr>
+		<td nowrap="nowrap"><b>Mission</b></td>
+		<td class="long">{{proj.mission|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+</table>
+        

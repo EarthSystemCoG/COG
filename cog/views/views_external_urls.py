@@ -13,24 +13,34 @@ from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedir
 
 # View to display the project trackers.
 def trackers_display(request, project_short_name):
-        
-    return external_urls_display(request, project_short_name, TYPE_TRACKER, 'cog/project/trackers.html', 'Trackers')
+    
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Trackers'
+    template_form_name = 'trackers_update'
+    return external_urls_display(request, project_short_name, TYPE_TRACKER, template_page, template_name, template_form_name)
 
 # View to display the project code URLs.
 def code_display(request, project_short_name):
         
-    return external_urls_display(request, project_short_name, TYPE_CODE, 'cog/project/code.html', 'Code')
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Code Repositories'
+    template_form_name = 'code_update'
+    return external_urls_display(request, project_short_name, TYPE_CODE, template_page, template_name, template_form_name)
 
 # View to display the project roadmap.
 def roadmap_display(request, project_short_name):
-        
-    return external_urls_display(request, project_short_name, TYPE_ROADMAP, 'cog/project/roadmap.html', 'Roadmap')
+     
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Roadmap'
+    template_form_name = 'roadmap_update'
+    return external_urls_display(request, project_short_name, TYPE_ROADMAP, template_page, template_name, template_form_name)
 
     
 # Generic view to display a given type of external URLs.
 # This view sub-selects the project peer and children that external URLs of that type, 
 # so that the page can render the widgets only if the URLs are found.
-def external_urls_display(request, project_short_name, external_url_type, template, title):
+def external_urls_display(request, project_short_name, external_url_type, 
+                          template_page, template_title, template_form_name):
     
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
@@ -52,11 +62,13 @@ def external_urls_display(request, project_short_name, external_url_type, templa
     for peer in project.peers.all():
         if len(peer.get_external_urls(external_url_type)) > 0 and peer.isVisible(request.user):
             peers.append(peer)
-        
-    return render_to_response(template, 
-                              {'title' : '%s %s' % (project.short_name, title), 
-                               'project':project, 'peers' : peers, 'children': children },
-                               context_instance=RequestContext(request))
+            
+    return render_to_response('cog/common/rollup.html', 
+                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
+                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
+                               'children':children, 'peers':peers,
+                               'external_url_type':external_url_type },
+                              context_instance=RequestContext(request))
     
 # View to update the project trackers
 @login_required

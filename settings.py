@@ -4,7 +4,6 @@ import os
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -60,6 +59,25 @@ USE_L10N = True
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = rel('site_media/')
 
+# Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have traiing slash)
+FILEBROWSER_DIRECTORY = "projects/"
+
+# versions generated when browsing images
+FILEBROWSER_VERSIONS = {
+    'admin_thumbnail': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    #'small': {'verbose_name': 'Small (2 col)', 'width': 140, 'height': '', 'opts': ''},
+    #'medium': {'verbose_name': 'Medium (4col )', 'width': 300, 'height': '', 'opts': ''},
+    #'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': ''},
+    #'large': {'verbose_name': 'Large (8 col)', 'width': 680, 'height': '', 'opts': ''},
+} 
+
+# versions selectable through admin interface
+FILEBROWSER_ADMIN_VERSIONS = ['thumbnail']
+
+# absolute path to directory containig project specific media
+PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
+
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
@@ -70,7 +88,6 @@ MEDIA_URL = '/site_media/'
 # Examples: "http://foo.com/media/", "/media/".
 STATIC_URL = '/static/'
 STATIC_ROOT = rel('static/')
-#ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
@@ -92,7 +109,8 @@ MIDDLEWARE_CLASSES = (
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-ROOT_URLCONF = 'COG.urls'
+#ROOT_URLCONF = 'COG.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -111,18 +129,16 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'grappelli',
+    'filebrowser',
     'django.contrib.admin',
     'django.contrib.comments',
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
-    #'django.contrib.flatpages',
     'pagination',
-    'filebrowser',
-    'tinymce',
     'south',
     'layouts',
     'cog',
-    #'search',
     'django_cim_forms', 'django_cim_forms.cim_1_5', 'dycore', 'cascade',
 )
 

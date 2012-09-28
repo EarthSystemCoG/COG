@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^user/detail/(?P<user_id>\d+)/$', 'cog.views.user_detail', name='user_detail'),
     url(r'^password/update/(?P<user_id>\d+)/$', 'cog.views.password_update', name='password_update'),
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
+    url(r'^username/reminder/$', 'cog.views.username_reminder', name='username_reminder'),
 
     # projects
     url(r'^project/add/$', 'cog.views.project_add', name='project_add' ),
@@ -60,6 +61,7 @@ urlpatterns = patterns('',
     url(r'^doc/update/(?P<doc_id>\d+)/$', 'cog.views.doc_update', name='doc_update'),
     url(r'^doc/remove/(?P<doc_id>\d+)/$', 'cog.views.doc_remove', name='doc_remove'),
     url(r'^doc/list/(?P<project_short_name>.+)/$', 'cog.views.doc_list', name='doc_list'), 
+     url(r'^doc/upload/(?P<project_short_name>.+)/$', 'cog.views.doc_upload', name='doc_upload'), 
     
     # posts and documents
     url(r'^post/add_doc/(?P<post_id>\d+)/$', 'cog.views.post_add_doc', name='post_add_doc'),
@@ -89,9 +91,17 @@ urlpatterns = patterns('',
     
     url(r'^bookmarks/add_notes/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_add_notes', name='bookmark_add_notes'),
         
-    # project details ("about us")
+    # project "about us"
     url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/update/$', 'cog.views.aboutus_update', name='aboutus_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/$', 'cog.views.aboutus_display', name='aboutus_display'),
+    
+    # project "contact us"
+    url(r'^projects/(?P<project_short_name>[^/]+)/contactus/update/$', 'cog.views.contactus_update', name='contactus_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
+    
+    # project "support"
+    url(r'^projects/(?P<project_short_name>[^/]+)/support/update/$', 'cog.views.support_update', name='support_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/support/$', 'cog.views.support_display', name='support_display'),   
        
     # project trackers
     url(r'^projects/(?P<project_short_name>[^/]+)/trackers/update/$', 'cog.views.trackers_update', name='trackers_update'),   
@@ -127,5 +137,14 @@ urlpatterns = patterns('',
     url(r'^projects/$', 'cog.views.index', name='unspecified_project'),
     url(r'^projects/(?P<project_short_name>[^/]+)/$', 'cog.views.project_home', name='project_home'),
     url(r'^projects/(?P<project_short_name>[^/]+)/.+$', 'cog.views.page_detail', name='page_detail'),
+    
+    # resized project media (must be served without any access control since they are not wrapped by "Doc" objects)
+    url(r'^site_media/(?P<path>.*_thumbnail.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_small.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_medium.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_big.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    #url(r'^site_media/(?P<path>.*_large.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
+    # project media
+    url(r'^site_media/projects/(?P<path>.*)$', 'cog.views.doc_download', name='doc_download'),
     
 )

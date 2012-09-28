@@ -2,24 +2,54 @@ from django.db import models
 from constants import APPLICATION_LABEL
 from project import Project
 from django.contrib.auth.models import User
-from os.path import basename
+import os
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
+def get_upload_path(instance, filename):
+    '''Function to determine the upload path dynamically at runtime.'''
+    return os.path.join(getattr(settings, "FILEBROWSER_DIRECTORY"), str(instance.project.short_name.lower()), filename)
+
+class OverridingFileStorage(FileSystemStorage):
+    '''Subclass of FileSystemStorage that overrides existing files (in the same folder).'''
+
+    # This method is actually defined in Storage
+    def save(self, name, content):
+      # must delete current file first  
+      if self.exists(name):
+          print 'Deleting existing file=%s' % name
+          self.delete(name)     
+      # also, look for Doc objects for the same named file  
+      prefix = getattr(settings, "FILEBROWSER_DIRECTORY", "")
+      filepath = name[len(prefix):]
+      docs = Doc.objects.filter(path__endswith=filepath)
+      for doc in docs:
+          doc.delete()
+      return super(OverridingFileStorage, self).save(name, content)
+  
+ofs = OverridingFileStorage()
 
 # A generic document that can be uploaded to the server and attached to a Post
 class Doc(models.Model):
     
     author = models.ForeignKey(User, related_name='documents', verbose_name='Publisher', blank=False)
     title = models.CharField(max_length=200, blank=True)
+    # path == 'file.name' but stored in the database for searching
+    path = models.CharField(max_length=400, blank=True)
     description = models.TextField(blank=True)
-    file = models.FileField(upload_to='docs/')
+    # upload path is obtained dynamically from the callable function
+    file = models.FileField(upload_to=get_upload_path, storage=ofs)
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
     project = models.ForeignKey(Project)
+    # public/private flag
+    is_private = models.BooleanField(verbose_name='Private ?', default=False, null=False)
     
     def __unicode__(self):
         if self.title: 
             return self.title 
-        else : 
-            return basename(self.file.name)
+        else:
+            return os.path.basename(self.file.name)
     
     class Meta:
         app_label= APPLICATION_LABEL

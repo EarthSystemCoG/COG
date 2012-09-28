@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, PROJECT_PAGES
+from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
 from django.contrib.auth.models import User, Permission, Group
 from topic import Topic
 from membership import MembershipRequest
@@ -10,6 +10,7 @@ from os.path import basename
 from urllib import quote, unquote
 import re
 from django.conf import settings
+import os, sys
 
 # Project
 class Project(models.Model):
@@ -113,7 +114,9 @@ class Project(models.Model):
         
     # return True if the user is allowed to view the project pages
     def isVisible(self, user):
-        if self.private==False:
+        if self.active==False:
+            return False
+        elif self.private==False:
             return True
         elif userHasUserPermission(user, self):
             return True
@@ -179,15 +182,16 @@ class Project(models.Model):
     # method to return an ordered list of the project predefined pages
     # the page URLs returned start with the project home page base URL
     def predefined_pages(self):
-        ppages = []
+        predefpages = []
         home_page_url = self.home_page_url()
         #ppages.append( ( self.short_name + " Home",  home_page_url ) )
-        for ppage in PROJECT_PAGES:
-            if ppage[1]=="":
-                ppages.append( ( self.short_name + " " + ppage[0], home_page_url ) )
-            else:
-                ppages.append( ( ppage[0], home_page_url + ppage[1]  ) )
-        return ppages
+        for ppages in PROJECT_PAGES:
+            for ppage in ppages:
+                if ppage[1]=="":
+                    predefpages.append( ( self.short_name + " " + ppage[0], home_page_url ) )
+                else:
+                    predefpages.append( ( ppage[0], home_page_url + ppage[1]  ) )
+        return predefpages
     
     # method to determine if this project has been initialized,
     # currently based on the existence of any associated posts (such as the home page)
@@ -259,12 +263,22 @@ def createGroup(group_name):
 # shortcut method to check for project user permission
 # note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
 def userHasUserPermission(user, project):
-    return user.has_perm( getPermissionLabel(project.getUserPermission()) )
+    return user.is_staff or user.has_perm( getPermissionLabel(project.getUserPermission()) )
 
 # shortcut method to check for project admin permission
 # note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
 def userHasAdminPermission(user, project):
-    return user.has_perm( getPermissionLabel(project.getAdminPermission()) )
+    return user.is_staff or user.has_perm( getPermissionLabel(project.getAdminPermission()) )
+
+def userHasProjectRole(user, project, role):
+    if user.is_staff:
+        return True
+    elif role==ROLE_USER:
+        return userHasUserPermission(user, project) or userHasAdminPermission(user, project)
+    elif role==ROLE_ADMIN:
+        return userHasAdminPermission(user, project)
+    else:
+        return False
 
 # method to return the full permission label: cog.<pCodeName>
 def getPermissionLabel(permission):
@@ -274,7 +288,8 @@ def getPermissionLabel(permission):
 def getSiteAdministrators():
     return User.objects.filter(is_staff=True)
     
-# method to return an ordered list of projects the user belongs to, or has applied for.
+# Method to return an ordered list of projects the user belongs to, or has applied for.
+# Inactive projects are NOT included.
 def getProjectsForUser(user, includePending):
     
     # set of groups the user belongs to
@@ -293,7 +308,7 @@ def getProjectsForUser(user, includePending):
     for group in groups:
         try:
             project = getProjectForGroup(group)
-            if not project in projects:
+            if not project in projects and project.active==True:
                 projects.append(project)
         # in case he group has not been deleted with the project
         except Project.DoesNotExist:
@@ -319,3 +334,11 @@ def get_project_page_sub_url(project, full_url):
     else:
         sub_url = ''
     return unquote(sub_url)
+
+def create_upload_directory(project):
+    
+    # create filebrowser upload directory
+    fb_upload_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
+    if not os.path.exists(fb_upload_dir):
+        os.makedirs(fb_upload_dir)
+        print 'Project Upload directory created: %s' % fb_upload_dir

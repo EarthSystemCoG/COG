@@ -1,11 +1,11 @@
 <!-- parent/children posts -->
 {% load cog_utils %}
 
-{% with post|relatedPostCount as counts %}
+{% with post|relatedPostCount:related_posts as counts %}
    {% if counts > 0 %}
    	   <hr class="white"/>
 	   <div class="header_bar"> 
-	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst }}{{ post.type|pluralize}} ({{ counts }})</a>
+	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst}}{{counts|pluralize }} ({{ counts }})</a>
 	   </div>
 	   <div class="mybox" id="post_hierarchy" style="display:none">
 	        <table>
@@ -16,7 +16,7 @@
 	                   </td>
 	                </tr>
 	            {% endif %}
-	            {% for child in post.post_set.all %}
+	            {% for child in related_posts %}
 	                <tr>
 	                    <td>
 	                       Child {{ post.type|capfirst }}: <a href="{% url post_detail child.id %}">{{ child }}</a>{{ child|is_locked:request }}             

@@ -111,21 +111,6 @@ class PostForm(ModelForm):
             'url': TextInput(attrs={'size':'60'}),
             'template': Select(choices=POST_TEMPLATES),
             #'body': Textarea(attrs={'rows': 20}),
-            'body' : TinyMCE(attrs={'cols': 60, 'rows': 30}, 
-                             mce_attrs={'theme' : 'advanced',
-                             'plugins' : 'safari, searchreplace, insertdatetime, preview, table, emotions, media, print, fullscreen, contextmenu, paste, directionality',
-                             'theme_advanced_buttons1' : 'save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect',
-                             #'theme_advanced_buttons1' : 'save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect',
-                             'theme_advanced_buttons2' : 'cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,|,insertdate,inserttime,preview,|,forecolor,backcolor',
-                             'theme_advanced_buttons3' : 'tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen',
-                             'theme_advanced_buttons4' : '',
-                             #'theme_advanced_buttons4' : 'insertlayer,moveforward,movebackward,absolute,|,styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak,|,insertfile,insertimage',
-                             'theme_advanced_toolbar_location' : 'top',
-                             'theme_advanced_statusbar_location':'',
-                             #'external_image_list_url' : 'http://localhost:8000/posts/image_list',
-                             #'file_browser_callback' : 'CustomFileBrowser',
-                             #'external_image_list_url' : reverse('image_list'),
-                             'extended_valid_elements' : 'iframe[src|width|height|name|align]',
-                            })   
-
+            # IMPORTANT: USE CKeditor to edit this field.
+            'body': Textarea(attrs={'class':'ckeditor'}),
         }

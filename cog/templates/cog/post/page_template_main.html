@@ -13,7 +13,9 @@
     {% include 'cog/post/_post_attachements.html' %}
     
     <!-- Hierarchy -->
-	{% include 'cog/post/_post_hierarchy.html' %}
+    {% with related_pages as related_posts %}
+		{% include 'cog/post/_post_hierarchy.html' %}
+	{% endwith %}
 	
 	<!-- Comments -->
     {% with post.url as next_view %}

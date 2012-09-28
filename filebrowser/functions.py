@@ -1,16 +1,14 @@
 # coding: utf-8
 
 # imports
-import os, re, decimal
+import os, unicodedata, re
 from time import gmtime, strftime, localtime, mktime, time
-from urlparse import urlparse
+from tempfile import NamedTemporaryFile
 
 # django imports
 from django.utils.translation import ugettext as _
-from django.utils.safestring import mark_safe
 from django.core.files import File
-from django.core.files.storage import default_storage
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_unicode
 
 # filebrowser imports
 from filebrowser.settings import *
@@ -25,78 +23,78 @@ else:
         import Image
 
 
-def url_to_path(value):
-    """
-    Change URL to PATH.
-    Value has to be an URL relative to MEDIA URL or a full URL (including MEDIA_URL).
-    
-    Returns a PATH relative to MEDIA_ROOT.
-    """
-    
-    mediaurl_re = re.compile(r'^(%s)' % (MEDIA_URL))
-    value = mediaurl_re.sub('', value)
-    return value
+def path_strip(path, root):
+    if not path or not root:
+        return path
+    path = os.path.normcase(path)
+    root = os.path.normcase(root)
+    if path.startswith(root):
+        return path[len(root):]
+    return path
+
+def url_strip(url, root):
+    if not url or not root:
+        return url
+    if url.startswith(root):
+        return url[len(root):]
+    return url
+
+def get_version_filename(filename, version_prefix):
+    filename, ext = os.path.splitext(filename)
+    version_filename = filename + "_" + version_prefix + ext
+    return version_filename
 
 
-def path_to_url(value):
-    """
-    Change PATH to URL.
-    Value has to be a PATH relative to MEDIA_ROOT.
-    
-    Return an URL relative to MEDIA_ROOT.
-    """
-    
-    mediaroot_re = re.compile(r'^(%s)' % (MEDIA_ROOT))
-    value = mediaroot_re.sub('', value)
-    return url_join(MEDIA_URL, value)
+def get_original_filename(filename):
+    filename, ext = os.path.splitext(filename)
+    tmp = filename.split("_")
+    if tmp[len(tmp)-1] in VERSIONS:
+        original_filename = filename.replace("_" + tmp[len(tmp)-1], "") + ext
+        return original_filename
+    else:
+        return None
 
 
-def dir_from_url(value):
-    """
-    Get the relative server directory from a URL.
-    URL has to be an absolute URL including MEDIA_URL or
-    an URL relative to MEDIA_URL.
-    """
-    
-    mediaurl_re = re.compile(r'^(%s)' % (MEDIA_URL))
-    value = mediaurl_re.sub('', value)
-    directory_re = re.compile(r'^(%s)' % (DIRECTORY))
-    value = directory_re.sub('', value)
-    return os.path.split(value)[0]
-
-
-def get_version_path(value, version_prefix):
+def get_version_path(value, version_prefix, site=None):
     """
     Construct the PATH to an Image version.
-    Value has to be server-path, relative to MEDIA_ROOT.
+    value has to be a path relative to the location of 
+    the site's storage.
     
     version_filename = filename + version_prefix + ext
-    Returns a path relative to MEDIA_ROOT.
+    Returns a relative path to the location of the site's storage.
     """
     
-    if os.path.isfile(smart_str(os.path.join(MEDIA_ROOT, value))):
+    if site.storage.isfile(value):
         path, filename = os.path.split(value)
+        relative_path = path_strip(os.path.join(path,''), site.directory)
         filename, ext = os.path.splitext(filename)
-        
-        # check if this file is a version of an other file
-        # to return filename_<version>.ext instead of filename_<version>_<version>.ext
-        tmp = filename.split("_")
-        if tmp[len(tmp)-1] in ADMIN_VERSIONS:
-            # it seems like the "original" is actually a version of an other original
-            # so we strip the suffix (aka. version_perfix)
-            new_filename = filename.replace("_" + tmp[len(tmp)-1], "")
-            # check if the version exists when we use the new_filename
-            if os.path.isfile(smart_str(os.path.join(MEDIA_ROOT, path, new_filename + "_" + version_prefix + ext))):
-                # our "original" filename seem to be filename_<version> construct
-                # so we replace it with the new_filename
-                filename = new_filename
-                # if a VERSIONS_BASEDIR is set we need to strip it from the path
-                # or we get a <VERSIONS_BASEDIR>/<VERSIONS_BASEDIR>/... construct
-                if VERSIONS_BASEDIR != "":
-                        path = path.replace(VERSIONS_BASEDIR + "/", "")
-        
         version_filename = filename + "_" + version_prefix + ext
-        return os.path.join(VERSIONS_BASEDIR, path, version_filename)
+        if VERSIONS_BASEDIR:
+            return os.path.join(VERSIONS_BASEDIR, relative_path, version_filename)
+        else:
+            return os.path.join(site.directory, relative_path, version_filename)
+    else:
+        return None
+
+
+def get_original_path(value, site=None):
+    """
+    Construct the PATH to an original Image based on a Image version.
+    value has to be an absolute server-path, including MEDIA_ROOT.
+    
+    Returns an absolute path, including MEDIA_ROOT.
+    """
+    
+    if site.storage.isfile(value):
+        path, filename = os.path.split(value)
+        if VERSIONS_BASEDIR:
+            relative_path = path.replace(VERSIONS_BASEDIR, "")
+        else:
+            relative_path = path.replace(site.directory, "")
+        relative_path = relative_path.lstrip("/")
+        original_filename = get_original_filename(filename)
+        return os.path.join(site.directory, relative_path, original_filename)
     else:
         return None
 
@@ -131,13 +129,15 @@ def url_join(*args):
     
     if args[0].startswith("http://"):
         url = "http://"
+    elif args[0].startswith("https://"):
+        url = "https://"
     else:
         url = "/"
     for arg in args:
         arg = arg.replace("\\", "/")
         arg_split = arg.split("/")
         for elem in arg_split:
-            if elem != "" and elem != "http:":
+            if elem != "" and elem != "http:" and elem != "https:":
                 url = url + elem + "/"
     # remove trailing slash for filenames
     if os.path.splitext(args[-1])[1]:
@@ -145,26 +145,37 @@ def url_join(*args):
     return url
 
 
-def get_path(path):
+def get_path(path, site=None):
     """
-    Get Path.
+    Get path.
     """
-    
-    if path.startswith('.') or os.path.isabs(path) or not os.path.isdir(os.path.join(MEDIA_ROOT, DIRECTORY, path)):
+    if path.startswith('.') or os.path.isabs(path) or not site.storage.isdir(os.path.join(site.directory, path)):
         return None
     return path
 
 
-def get_file(path, filename):
+def get_file(path, filename, site=None):
     """
-    Get File.
+    Get file (or folder).
     """
-    
-    converted_path = smart_str(os.path.join(MEDIA_ROOT, DIRECTORY, path, filename))
-    
-    if not os.path.isfile(converted_path) and not os.path.isdir(converted_path):
+    converted_path = smart_unicode(os.path.join(site.directory, path, filename))
+    if not site.storage.isfile(converted_path) and not site.storage.isdir(converted_path):
         return None
     return filename
+
+
+def get_file_type(filename):
+    """
+    Get file type as defined in EXTENSIONS.
+    """
+    
+    file_extension = os.path.splitext(filename)[1].lower()
+    file_type = ''
+    for k,v in EXTENSIONS.iteritems():
+        for extension in v:
+            if file_extension == extension.lower():
+                file_type = k
+    return file_type
 
 
 def get_breadcrumbs(query, path):
@@ -198,17 +209,16 @@ def get_filterdate(filterDate, dateTime):
     return returnvalue
 
 
-def get_settings_var():
+def get_settings_var(directory=DIRECTORY):
     """
     Get settings variables used for FileBrowser listing.
     """
     
     settings_var = {}
     # Main
-    settings_var['DEBUG'] = DEBUG
     settings_var['MEDIA_ROOT'] = MEDIA_ROOT
     settings_var['MEDIA_URL'] = MEDIA_URL
-    settings_var['DIRECTORY'] = DIRECTORY
+    settings_var['DIRECTORY'] = directory
     # FileBrowser
     settings_var['URL_FILEBROWSER_MEDIA'] = URL_FILEBROWSER_MEDIA
     settings_var['PATH_FILEBROWSER_MEDIA'] = PATH_FILEBROWSER_MEDIA
@@ -223,40 +233,29 @@ def get_settings_var():
     settings_var['VERSIONS'] = VERSIONS
     settings_var['ADMIN_VERSIONS'] = ADMIN_VERSIONS
     settings_var['ADMIN_THUMBNAIL'] = ADMIN_THUMBNAIL
-    settings_var['PREVIEW_VERSION'] = PREVIEW_VERSION
     # FileBrowser Options
     settings_var['MAX_UPLOAD_SIZE'] = MAX_UPLOAD_SIZE
+    # Normalize Filenames
+    settings_var['NORMALIZE_FILENAME'] = NORMALIZE_FILENAME
     # Convert Filenames
     settings_var['CONVERT_FILENAME'] = CONVERT_FILENAME
+    # Traverse directories when searching
+    settings_var['SEARCH_TRAVERSE'] = SEARCH_TRAVERSE
     return settings_var
 
 
-def handle_file_upload(path, file):
+def handle_file_upload(path, file, site):
     """
     Handle File Upload.
     """
+    
+    uploadedfile = None
     try:
         file_path = os.path.join(path, file.name)
-        uploadedfile = default_storage.save(file_path, file)
+        uploadedfile = site.storage.save(file_path, file)
     except Exception, inst:
-        print "___filebrowser.functions.handle_file_upload(): could not save uploaded file"
-        print "ERROR: ", inst
-        print "___"
+        raise inst
     return uploadedfile
-
-
-def get_file_type(filename):
-    """
-    Get file type as defined in EXTENSIONS.
-    """
-    
-    file_extension = os.path.splitext(filename)[1].lower()
-    file_type = ''
-    for k,v in EXTENSIONS.iteritems():
-        for extension in v:
-            if file_extension == extension.lower():
-                file_type = k
-    return file_type
 
 
 def is_selectable(filename, selecttype):
@@ -273,7 +272,7 @@ def is_selectable(filename, selecttype):
     return select_types
 
 
-def version_generator(value, version_prefix, force=None):
+def version_generator(value, version_prefix, force=None, site=None):
     """
     Generate Version for an Image.
     value has to be a serverpath relative to MEDIA_ROOT.
@@ -289,28 +288,40 @@ def version_generator(value, version_prefix, force=None):
         except ImportError:
             import ImageFile
     ImageFile.MAXBLOCK = IMAGE_MAXBLOCK # default is 64k
-    
+    if not site:
+        from filebrowser.sites import site as default_site
+        site = default_site
+    tmpfile = File(NamedTemporaryFile())
     try:
-        im = Image.open(smart_str(os.path.join(MEDIA_ROOT, value)))
-        version_path = get_version_path(value, version_prefix)
-        absolute_version_path = smart_str(os.path.join(MEDIA_ROOT, version_path))
-        version_dir = os.path.split(absolute_version_path)[0]
-        if not os.path.isdir(version_dir):
-            os.makedirs(version_dir)
-            os.chmod(version_dir, 0775)
+        f = site.storage.open(value)
+        im = Image.open(f)
+        version_path = get_version_path(value, version_prefix, site=site)
+        version_dir, version_basename = os.path.split(version_path)
+        root, ext = os.path.splitext(version_basename)
         version = scale_and_crop(im, VERSIONS[version_prefix]['width'], VERSIONS[version_prefix]['height'], VERSIONS[version_prefix]['opts'])
-        if version:
-            try:
-                version.save(absolute_version_path, quality=VERSION_QUALITY, optimize=(os.path.splitext(version_path)[1].lower() != '.gif'))
-            except IOError:
-                version.save(absolute_version_path, quality=VERSION_QUALITY)
-        else:
-            # version wasn't created
-            pass
+        if not version:
+            version = im
+        if 'methods' in VERSIONS[version_prefix].keys():
+            for m in VERSIONS[version_prefix]['methods']:
+                if callable(m):
+                    version = m(version)
+        try:
+            version.save(tmpfile, format=Image.EXTENSION[ext.lower()], quality=VERSION_QUALITY, optimize=(os.path.splitext(version_path)[1] != '.gif'))
+        except IOError:
+            version.save(tmpfile, format=Image.EXTENSION[ext.lower()], quality=VERSION_QUALITY)
+        # Remove the old version, if there's any
+        if version_path != site.storage.get_available_name(version_path):
+            site.storage.delete(version_path)
+        site.storage.save(version_path, tmpfile)
         return version_path
     except:
         return None
-
+    finally:
+        tmpfile.close()
+        try:
+            f.close()
+        except:
+            pass
 
 def scale_and_crop(im, width, height, opts):
     """
@@ -348,30 +359,6 @@ def scale_and_crop(im, width, height, opts):
             im = im.crop((int(ex), int(ey), int(x-ex), int(y-ey)))
     return im
     
-    # if 'crop' in opts:
-    #     if 'top_left' in opts:
-    #         #draw cropping box from upper left corner of image
-    #         box = (0, 0, int(min(x, xr)), int(min(y, yr)))
-    #         im = im.resize((int(x), int(y)), resample=Image.ANTIALIAS).crop(box)
-    #     elif 'top_right' in opts:
-    #         #draw cropping box from upper right corner of image
-    #         box = (int(x-min(x, xr)), 0, int(x), int(min(y, yr)))
-    #         im = im.resize((int(x), int(y)), resample=Image.ANTIALIAS).crop(box)
-    #     elif 'bottom_left' in opts:
-    #         #draw cropping box from lower left corner of image
-    #         box = (0, int(y-min(y, yr)), int(xr), int(y))
-    #         im = im.resize((int(x), int(y)), resample=Image.ANTIALIAS).crop(box)
-    #     elif 'bottom_right' in opts:
-    #         #draw cropping box from lower right corner of image
-    #         (int(x-min(x, xr)), int(y-min(y, yr)), int(x), int(y))
-    #         im = im.resize((int(x), int(y)), resample=Image.ANTIALIAS).crop(box)
-    #     else:
-    #         ex, ey = (x-min(x, xr))/2, (y-min(y, yr))/2
-    #         if ex or ey:
-    #             box = (int(ex), int(ey), int(x-ex), int(y-ey))
-    #             im = im.resize((int(x), int(y)), resample=Image.ANTIALIAS).crop(box)
-    # return im
-    
 scale_and_crop.valid_options = ('crop', 'upscale')
 
 
@@ -379,10 +366,21 @@ def convert_filename(value):
     """
     Convert Filename.
     """
-    
+
+    if NORMALIZE_FILENAME:
+        chunks = value.split(os.extsep)
+        normalized = []
+        for v in chunks:
+            v = unicodedata.normalize('NFKD', unicode(v)).encode('ascii', 'ignore')
+            v = re.sub('[^\w\s-]', '', v).strip()
+            normalized.append(v)
+
+        if len(normalized) > 1:
+            value = '.'.join(normalized)
+        else:
+            value = normalized[0]
+
     if CONVERT_FILENAME:
-        return value.replace(" ", "_").lower()
-    else:
-        return value
+        value = value.replace(" ", "_").lower()
 
-
+    return value
