@@ -26,7 +26,11 @@
                 
                 <tr>
                     <td class="right required" nowrap="nowrap"><b>Folder</b></td>
-                    <td class="long">{{ form.folder }}{{ form.folder.errors }}</td>
+                    <td class="long">
+                        {{ form.folder }}
+                        <a href="{% url 'folder_add' project.short_name.lower %}" class="addlink">&nbsp;New Bookmarks Folder</a>                        
+                        {{ form.folder.errors }}
+                    </td>
                 </tr>
                 <tr>
                     <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
