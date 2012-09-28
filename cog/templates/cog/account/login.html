@@ -19,8 +19,11 @@
 	{% endif %}
 	
 	<!-- authentication form -->
+	<div style="font-style: italic; text-align:center;">
+		Please note that username and password are case-sensitive.
+	</div>
 	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-	   {% csrf_token %}
+	   {% csrf_token %}	   	
 		<div class="mybox">
 			<table>
 				<caption>User Login</caption>
@@ -33,7 +36,7 @@
 				    <td>{{ form.password }}</td>
 				</tr>
 			</table>
-		</div>	
+		</div>
 		<div>
 			<span style="float:left">
 			  <input type="submit" value="login" />
@@ -44,7 +47,7 @@
 			  &nbsp;
 			  <a href="{% url 'password_reset' %}">Forgot Password?</a>
 			</span>
-		</div>
+		</div>		
 	</form>
 
 </div>
