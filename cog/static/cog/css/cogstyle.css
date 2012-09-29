@@ -138,10 +138,12 @@ td.right {
 
 .right {
     text-align: right;
+    vertical-align: middle;
 }
 
 .left {
     text-align: left;
+    vertical-align: middle;
 }
 
 caption {

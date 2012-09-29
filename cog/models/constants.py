@@ -160,3 +160,13 @@ FOOTER_LOGO = "cog/img/logo_nsf_and_noaa.bmp"
 # legacy media sub-directories of 'projects/'
 SYSTEM_DOCS = 'system_docs'
 SYSTEM_IMAGES = 'system_images'
+
+# 2.5MB - 2621440
+# 5MB - 5242880
+# 10MB - 10485760
+# 20MB - 20971520
+# 50MB - 5242880
+# 100MB 104857600
+# 250MB - 214958080
+# 500MB - 429916160
+MAX_UPLOADES_BYTES = 5242880

@@ -13,16 +13,17 @@
 		    <!-- document form fields -->
             <table>
                 <tr>
-                    <td class="head">Project</td>
+                    <td class="right"><b>Project</b></td>
                     <td colspan="3">{{ form.project }} </td>                
                 </tr>
                 <tr>
-                    <td class="head"><b>Publisher</b></td>
+                    <td class="right"><b>Publisher</b></td>
                     <td>{{ request.user }} </td>                
                 </tr>
                 <tr>
-                    <td class="head"><b>File</b></td>
-                    <td>{{form.instance.file.name}} &nbsp; {{ form.file }} {{ form.file.errors }} </td>
+                    <td class="right"><b>File</b></td>
+                    <td class="left">{{form.instance.file.name}} &nbsp; {{ form.file }} (maximum size: 50 MB) 
+                    <span style="color:red; font-weight:bold">&nbsp;{{ form.file.errors }}</span> </td>
                 </tr>                         
                 <tr>
                     <td class="right">Title</td>
@@ -33,7 +34,7 @@
                     <td>{{ form.description }} {{ form.description.errors }} </td>
                 </tr>
                 <tr>
-          			<td nowrap="nowrap">Private ?</td>
+          			<td nowrap="nowrap" class="right">Private ?</td>
           			<td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to download this document</i>)</td>                   
     			</tr>    
                 <tr>
