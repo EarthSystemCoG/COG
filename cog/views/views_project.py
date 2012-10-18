@@ -298,15 +298,13 @@ def aboutus_subtab_display(request, project_short_name, subtab):
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
 
+    template_page = 'cog/project/_project_aboutus.html'   
     if subtab is None:
-        template_page = 'cog/aboutus/_aboutus.html'
         template_title = 'About Us'
         template_form_name = "aboutus_update"
     else:      
-        template_page = 'cog/aboutus/_aboutus.html'
-        template_title = subtab.capitalize()
-        template_form_name = "aboutus_subtab_update"
-
+         template_form_name = "aboutus_subtab_update"
+         template_title = subtab.capitalize()
     children = project.children()
     peers = project.peers.all()
     return _templated_page_display(request, project, subtab,
@@ -520,7 +518,7 @@ def aboutus_subtab_update(request, project_short_name, subtab):
             return render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset)
 
 def render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset):
-    return render_to_response('cog/aboutus/aboutus_form.html', 
+    return render_to_response('cog/project/aboutus_form.html', 
                           {'form': form, 'subtab':subtab,
                            'organization_formset':organization_formset, 
                            'fundingsource_formset':fundingsource_formset,
