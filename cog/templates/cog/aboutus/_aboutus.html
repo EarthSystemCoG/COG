@@ -64,6 +64,41 @@
 			</tr>    	
 			{% endfor %}
 		{% endif %}
+		
+		{% if subtab = 'people' %}
+			{% load pagination_tags %}
+			{% with proj.getUsers as users %}
+				{% autopaginate users 50 %}			
+				<tr>
+					<td class="long" colspan="2">
+						<div class="mybox">
+		        			<table>
+		        				<caption>{{ proj.short_name }} Users</caption>
+					            <tr>
+					                <td class="tophead">Last Name</td>
+					                <td class="tophead">First Name</td>
+					                <td class="tophead">User Name</td>
+					                <td class="tophead">Role</td>
+					            </tr>
+					            {% for user in users %}
+	                			<tr>
+                    				<td><a href="{% url user_detail user.id %}">{{ user.last_name }}</a></td>
+                    				<td><a href="{% url user_detail user.id %}">{{ user.first_name }}</a></td>
+                    				<td><a href="{% url user_detail user.id %}">{{ user.username }}</a></td>
+                    				<td>
+                    					{% for role in user|roles:project %}{% if forloop.counter != 1 %}, {% endif %}{{ role }}{% endfor %}
+                    				</td>
+					            </tr>
+					            {% endfor %}
+					        </table>
+					    </div>
+			    	</td>
+			    </tr>
+			    
+			    {% paginate %}
+			      							
+			{% endwith %}
+		{% endif %}
 	
 	{% endif %}
 </table>

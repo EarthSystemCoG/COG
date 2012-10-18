@@ -16,7 +16,9 @@
 		   <hr/>
 		   <div style="text-align:center">
 		   		{% if subtab %}
-		   			<a href="{% url template_form_name project.short_name.lower subtab %}" class="changelink">&nbsp;Update Project {{ template_title }}</a>
+		   			{% if subtab != 'people' %}
+		   				<a href="{% url template_form_name project.short_name.lower subtab %}" class="changelink">&nbsp;Update Project {{ template_title }}</a>
+		   			{% endif %}
 		   		{% else %}
 		   			<a href="{% url template_form_name project.short_name.lower %}" class="changelink">&nbsp;Update Project {{ template_title }}</a>
 		   		{% endif %}

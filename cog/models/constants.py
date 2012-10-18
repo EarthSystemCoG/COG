@@ -6,7 +6,7 @@ APPLICATION_LABEL = 'cog'
 PROJECT_PAGES = (
          [("Home", "")],
          [("About Us", "aboutus/"), ("Mission", "aboutus/mission/"), ("Vision", "aboutus/vision/"), ("Values", "aboutus/values/"),
-          ("Partners", "aboutus/partners/"), ("Sponsors", "aboutus/sponsors/"), ("Poeple", "aboutus/people/")], 
+          ("Partners", "aboutus/partners/"), ("Sponsors", "aboutus/sponsors/"), ("People", "aboutus/people/")], 
          #[("About Us", "aboutus/")],     
          # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
          [("Bookmarks", "bookmarks/list/<project>/")],
@@ -135,8 +135,9 @@ EXTERNAL_URL_TYPES = (
     (TYPE_ROADMAP, 'Roadmap'),      
 )
 
-ROLE_USER = 'user'
 ROLE_ADMIN = 'admin'
+ROLE_USER = 'user'
+ROLES = [ROLE_ADMIN, ROLE_USER]
 
 DOCUMENT_TYPE_ALL = 'All'
 DOCUMENT_TYPE_IMAGE = 'Image'

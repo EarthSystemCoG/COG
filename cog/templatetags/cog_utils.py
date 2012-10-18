@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 import re
 from cog.utils import smart_truncate, INVALID_CHARS
 from django.conf import settings
-from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO
+from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 
 register = template.Library()
 
@@ -473,3 +473,14 @@ def is_home_page(request, project):
 @register.filter
 def get_external_urls(project, external_url_type):
     return project.get_external_urls(external_url_type)
+
+@register.filter
+def roles(user, project):
+    '''Lists the roles of a user in a project. '''
+    
+    roles = []
+    for role in ROLES:
+        if userHasProjectRole(user, project, role):
+            roles.append(role)
+                        
+    return roles

@@ -266,15 +266,25 @@ def project_delete(request, project_short_name):
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_index'))
     
-def _hasTemplatedInfo(project, template_title):
+def _hasTemplatedInfo(project, subtab):
     '''Utility function to determine whether a project has been populated 
        with the requested templated metadata, depending on type.'''
     
-    if (template_title=='About Us'):
+    if (subtab is None):
+        # 'About Us' always populated with long_name, description
         return True
-    elif (template_title=='Contact Us') and project.description is not None and len(project.description.strip()) > 0:
+    elif (subtab=='mission') and project.mission is not None and len(project.mission.strip()) > 0:
         return True
-    elif (template_title=='Support') and project.mission is not None and len(project.mission.strip()) > 0:
+    elif (subtab=='vision') and project.vision is not None and len(project.vision.strip()) > 0:
+        return True
+    elif (subtab=='values') and project.values is not None and len(project.values.strip()) > 0:
+        return True
+    elif (subtab=='partners') and project.values is not None and len(project.organization_set.all()) > 0:
+        return True
+    elif (subtab=='sponsors') and project.values is not None and len(project.fundingsource_set.all()) > 0:
+        return True   
+    elif (subtab=='people'):
+        # "People" always populated with project users
         return True
     else:
         return False
@@ -341,13 +351,13 @@ def _templated_page_display(request, project, subtab, template_page, template_ti
     # build list of children with relevant metadata that are visible to user
     children = []
     for child in project.children():
-        if _hasTemplatedInfo(child, template_title) and child.isVisible(request.user):
+        if _hasTemplatedInfo(child, subtab) and child.isVisible(request.user):
             children.append(child)
     
     # build list of peers with relevant metadata that are visible to user
     peers = []
     for peer in project.peers.all():
-        if _hasTemplatedInfo(peer, template_title) and peer.isVisible(request.user):
+        if _hasTemplatedInfo(peer, subtab) and peer.isVisible(request.user):
             peers.append(peer)
    
     return render_templated_page(request, project, subtab, template_page, template_title, template_form_name, children, peers)
