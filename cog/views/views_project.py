@@ -293,7 +293,7 @@ def aboutus_subtab_display(request, project_short_name, subtab):
         template_title = 'About Us'
         template_form_name = "aboutus_update"
     else:      
-        template_page = 'cog/aboutus/_aboutus_subtab.html'
+        template_page = 'cog/aboutus/_aboutus.html'
         template_title = subtab.capitalize()
         template_form_name = "aboutus_subtab_update"
 
@@ -454,9 +454,6 @@ def aboutus_update(request, project_short_name):
 @login_required
 def aboutus_subtab_update(request, project_short_name, subtab):
     '''View to update the project "About Us" metadata.'''
-    
-    # FIXME
-    print 'updating subtab=%s' % subtab
 
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
