@@ -280,17 +280,26 @@ def _hasTemplatedInfo(project, template_title):
         return False
     
 def aboutus_display(request, project_short_name):
-    ''' View to display the project "About Us" page. '''
+    return aboutus_subtab_display(request, project_short_name, None) # no subtab
+            
+def aboutus_subtab_display(request, project_short_name, subtab):
+    ''' View to display an "About Us" page. '''
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    template_page = 'cog/project/_project_aboutus.html'
-    template_title = 'About Us'
-    template_form_name = "aboutus_update"
+
+    if subtab is None:
+        template_page = 'cog/aboutus/_aboutus.html'
+        template_title = 'About Us'
+        template_form_name = "aboutus_update"
+    else:      
+        template_page = 'cog/aboutus/_aboutus_subtab.html'
+        template_title = subtab.capitalize()
+        template_form_name = "aboutus_subtab_update"
+
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, 
+    return _templated_page_display(request, project, subtab,
                                    template_page, template_title, template_form_name, children, peers)
 
 def contactus_display(request, project_short_name):
@@ -321,7 +330,7 @@ def support_display(request, project_short_name):
     return _templated_page_display(request, project, 
                                    template_page, template_title, template_form_name, children, peers)
     
-def _templated_page_display(request, project, template_page, template_title, template_form_name, children, peers):
+def _templated_page_display(request, project, subtab, template_page, template_title, template_form_name, children, peers):
         
     # check project is active
     if project.active==False:
@@ -341,11 +350,11 @@ def _templated_page_display(request, project, template_page, template_title, tem
         if _hasTemplatedInfo(peer, template_title) and peer.isVisible(request.user):
             peers.append(peer)
    
-    return render_templated_page(request, project, template_page, template_title, template_form_name, children, peers)
+    return render_templated_page(request, project, subtab, template_page, template_title, template_form_name, children, peers)
 
-def render_templated_page(request, project, template_page, template_title, template_form_name, children, peers):
+def render_templated_page(request, project, subtab, template_page, template_title, template_form_name, children, peers):
     return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
+                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 'subtab' : subtab,
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
                                'children':children, 'peers':peers },
                               context_instance=RequestContext(request))
@@ -440,7 +449,14 @@ def render_support_form(request, project, form):
 
 @login_required
 def aboutus_update(request, project_short_name):
+    return aboutus_subtab_update(request, project_short_name, None) # no sub-tab
+
+@login_required
+def aboutus_subtab_update(request, project_short_name, subtab):
     '''View to update the project "About Us" metadata.'''
+    
+    # FIXME
+    print 'updating subtab=%s' % subtab
 
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -465,7 +481,7 @@ def aboutus_update(request, project_short_name):
         fundingsource_formset = FundingSourceFormSet(instance=project, prefix='fundfs')
         
         # display form view
-        return render_aboutus_form(request, project, form, organization_formset, fundingsource_formset)
+        return render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset)
 
     # POST request
     else:
@@ -481,7 +497,10 @@ def aboutus_update(request, project_short_name):
             fsinstances = fundingsource_formset.save()
             
             # redirect to about us display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower()]))
+            if subtab is None:
+                return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower()]))
+            else:
+                return HttpResponseRedirect(reverse('aboutus_subtab_display', args=[project.short_name.lower(), subtab]))
             
         else:
             # re-display form view
@@ -491,11 +510,12 @@ def aboutus_update(request, project_short_name):
                 print 'Organization formset is invalid  %s' % organization_formset.errors
             if not fundingsource_formset.is_valid():
                 print 'Funding Source formset is invalid  %s' % fundingsource_formset.errors
-            return render_aboutus_form(request, project, form, organization_formset, fundingsource_formset)
+            return render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset)
 
-def render_aboutus_form(request, project, form, organization_formset, fundingsource_formset):
-    return render_to_response('cog/project/aboutus_form.html', 
-                          {'form': form, 'organization_formset':organization_formset, 
+def render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset):
+    return render_to_response('cog/aboutus/aboutus_form.html', 
+                          {'form': form, 'subtab':subtab,
+                           'organization_formset':organization_formset, 
                            'fundingsource_formset':fundingsource_formset,
                            'title': 'Update Project Details', 'project': project }, 
                           context_instance=RequestContext(request))

@@ -5,8 +5,9 @@ APPLICATION_LABEL = 'cog'
 # IMPORTANT: the sub-tab URLs must start with the parent-tab URL (so that tabs can be properly selected)
 PROJECT_PAGES = (
          [("Home", "")],
-         #[("About Us", "aboutus/"), ("About Us 1", "aboutus/page1/"), ("About Us 2", "aboutus/page2/"), ("About Us 3", "aboutus/page3/")], 
-         [("About Us", "aboutus/")],     
+         [("About Us", "aboutus/"), ("Mission", "aboutus/mission/"), ("Vision", "aboutus/vision/"), ("Values", "aboutus/values/"),
+          ("Partners", "aboutus/partners/"), ("Sponsors", "aboutus/sponsors/"), ("Poeple", "aboutus/people/")], 
+         #[("About Us", "aboutus/")],     
          # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
          [("Bookmarks", "bookmarks/list/<project>/")],
          [("Code", "code/")],

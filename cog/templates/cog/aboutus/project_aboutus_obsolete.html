@@ -7,7 +7,7 @@
 
 	<!-- This project details -->
 	{% with project as proj %}
-		{% include 'cog/project/_project_aboutus.html' %}	
+		{% include 'cog/aboutus/_project_aboutus.html' %}	
 	{% endwith %}
 	
 	<!-- Edit this project details - access restricted to project administrators -->
@@ -30,7 +30,7 @@
 	    			<br/>
 	    			<div class="mybox" style="padding:2px;">
 	    				<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project About Us</div>
-						{% include 'cog/project/_project_aboutus.html' %}
+						{% include 'cog/aboutus/_project_aboutus.html' %}
 					</div>
 				{% endwith %}
 		    {% endfor %}		
@@ -49,7 +49,7 @@
 	    			<br/>
 	    			<div class="mybox" style="padding:2px;">
 	    				<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project About Us</div>
-						{% include 'cog/project/_project_aboutus.html' %}
+						{% include 'cog/aboutus/_project_aboutus.html' %}
 					</div>
 				{% endwith %}
 		    {% endfor %}		

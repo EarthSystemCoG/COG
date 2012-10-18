@@ -148,7 +148,11 @@
 			 </table>
 			        	
 		     <div style="text-align:right">
-		         <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower %}'"/>
+		     	{% if subtab %}
+		        	<input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_subtab_display' project.short_name|lower subtab %}'"/>
+		        {% else %}
+		        	<input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower %}'"/>
+		        {% endif %}
 		         <input type="submit" value="Submit" />
 	         </div>
 		     
