@@ -323,7 +323,7 @@ def contactus_display(request, project_short_name):
     template_form_name = "contactus_update"
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, 
+    return _templated_page_display(request, project, None,
                                    template_page, template_title, template_form_name, children, peers)
 
 def support_display(request, project_short_name):
@@ -337,7 +337,7 @@ def support_display(request, project_short_name):
     template_form_name = "support_update"
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, 
+    return _templated_page_display(request, project, None,
                                    template_page, template_title, template_form_name, children, peers)
     
 def _templated_page_display(request, project, subtab, template_page, template_title, template_form_name, children, peers):

@@ -37,7 +37,9 @@
 	    		{% with child as proj %}
 	    			<br/>
 	    			<div class="mybox" style="padding:2px;">
-	    				<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}}</div>
+	    				<div class="box-blue">
+	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}}</div>
+	    				</div>
 						{% include template_page %}
 					</div>
 				{% endwith %}
@@ -56,7 +58,9 @@
 	    		{% with peer as proj %}
 	    			<br/>
 	    			<div class="mybox" style="padding:2px;">
-	    				<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}} </div>
+	    				<div class="box-blue">
+	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}} </div>
+	    				</div>
 						{% include template_page %}
 					</div>
 				{% endwith %}
