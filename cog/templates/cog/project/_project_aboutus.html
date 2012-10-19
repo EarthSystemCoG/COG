@@ -3,7 +3,7 @@
 {% load cog_utils %}
 
 <table>
-	{% if subtab = None %}
+	{% if tab = 'aboutus' %}
 	    <tr>
 			<td nowrap="nowrap"><b>Long Name</b></td>
 			<td class="long">{{proj.long_name}}</td>
@@ -29,25 +29,25 @@
 	
 	{% else %}
 	
-		{% if subtab = 'mission' and proj.mission %}
+		{% if tab = 'mission' and proj.mission %}
 			<tr>
 				<td class="long" colspan="2">{{proj.mission|linebreaksbr}}</td>
 			</tr>
 		{% endif %}
 	
-		{% if subtab = 'vision' and proj.vision %}
+		{% if tab = 'vision' and proj.vision %}
 			<tr>
 				<td class="long" colspan="2">{{proj.vision|linebreaksbr}}</td>
 			</tr>
 		{% endif %}
 		
-		{% if subtab = 'values' and proj.values %}
+		{% if tab = 'values' and proj.values %}
 		<tr>
 			<td class="long" class="long" colspan="2">{{proj.values|linebreaksbr}}</td>
 		</tr>
 		{% endif %}
 		
-		{% if subtab = 'partners' %}
+		{% if tab = 'partners' %}
 			{% for organization in proj.organization_set.all %}
 			<tr>
 				<td nowrap="nowrap"><b>Organizational Partner</b></td>
@@ -56,7 +56,7 @@
 			{% endfor %}
 		{% endif %}
 		
-		{% if subtab = 'sponsors' %}
+		{% if tab = 'sponsors' %}
 			{% for fundingSource in proj.fundingsource_set.all %}
 			<tr>
 				<td nowrap="nowrap"><b>Funding Source</b></td>
@@ -65,7 +65,7 @@
 			{% endfor %}
 		{% endif %}
 		
-		{% if subtab = 'people' %}
+		{% if tab = 'people' %}
 			{% load pagination_tags %}
 			{% with proj.getUsers as users %}
 				{% autopaginate users 50 %}			

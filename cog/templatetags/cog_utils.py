@@ -348,14 +348,25 @@ def getTopTabUrl(project, request):
     
     # "/projects/cog/"
     homeurl = project.home_page_url()
-    # request.path = "/projects/cog/aboutus/mission/"
-    # subtaburl = "aboutus/mission/"
-    subtaburl = request.path[ len(homeurl) : ]
-    # taburl = "/projects/cog/" + "aboutus/"
-    taburl = homeurl + INVNAVMAP[subtaburl]
-    #print "subtaburl=%s" % subtaburl
-    #print "taburl=%s" % taburl
-    return taburl
+    
+    # requested URL start with project base URL
+    if homeurl in request.path:
+        # request.path = "/projects/cog/aboutus/mission/" or "/projects/cog/nav/aboutus/update/"
+        # subtaburl = "aboutus/mission/"
+        print 'request path=%s' % request.path
+        subtaburl = request.path[ len(homeurl) : ]
+        # FIXME ?
+        subtaburl = subtaburl.replace('update/','')
+        print 'subtaburl=%s' % subtaburl
+        # taburl = "/projects/cog/" + "aboutus/"
+        print 'subtaburl=%s' % subtaburl
+        if subtaburl in INVNAVMAP:
+            taburl = homeurl + INVNAVMAP[subtaburl]
+            #print "subtaburl=%s" % subtaburl
+            #print "taburl=%s" % taburl
+            return taburl
+    # default: no tab selected
+    return None
     
 # Utility method to return a list of ACTIVE project tabs (top-tabs and sub-tabs).
 # Returns a list of list: [ [(tab1,False)], [(tab2,False)], [(tab3,True), (sub-tab3a,False), (subtab3b,True), (subtab3c,False),...], [(tab4,True)], [(tab5,True)], ...]

@@ -15,9 +15,9 @@
 		{% if user|hasAdminPermission:project %}
 		   <hr/>
 		   <div style="text-align:center">
-		   		{% if subtab %}
-		   			{% if subtab != 'people' %}
-		   				<a href="{% url template_form_name project.short_name.lower subtab %}" class="changelink">&nbsp;Update Project {{ template_title }}</a>
+		   		{% if tab %}
+		   			{% if tab != 'people' %}
+		   				<a href="{% url template_form_name project.short_name.lower tab %}" class="changelink">&nbsp;Update Project {{ template_title }}</a>
 		   			{% endif %}
 		   		{% else %}
 		   			<a href="{% url template_form_name project.short_name.lower %}" class="changelink">&nbsp;Update Project {{ template_title }}</a>

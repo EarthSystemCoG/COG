@@ -266,48 +266,42 @@ def project_delete(request, project_short_name):
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_index'))
     
-def _hasTemplatedInfo(project, subtab):
+def _hasTemplatedInfo(project, tab):
     '''Utility function to determine whether a project has been populated 
        with the requested templated metadata, depending on type.'''
     
-    if (subtab is None):
+    if (tab=='aboutus'):
         # 'About Us' always populated with long_name, description
         return True
-    elif (subtab=='mission') and project.mission is not None and len(project.mission.strip()) > 0:
+    elif (tab=='mission') and project.mission is not None and len(project.mission.strip()) > 0:
         return True
-    elif (subtab=='vision') and project.vision is not None and len(project.vision.strip()) > 0:
+    elif (tab=='vision') and project.vision is not None and len(project.vision.strip()) > 0:
         return True
-    elif (subtab=='values') and project.values is not None and len(project.values.strip()) > 0:
+    elif (tab=='values') and project.values is not None and len(project.values.strip()) > 0:
         return True
-    elif (subtab=='partners') and project.values is not None and len(project.organization_set.all()) > 0:
+    elif (tab=='partners') and project.values is not None and len(project.organization_set.all()) > 0:
         return True
-    elif (subtab=='sponsors') and project.values is not None and len(project.fundingsource_set.all()) > 0:
+    elif (tab=='sponsors') and project.values is not None and len(project.fundingsource_set.all()) > 0:
         return True   
-    elif (subtab=='people'):
+    elif (tab=='people'):
         # "People" always populated with project users
         return True
     else:
         return False
-    
-def aboutus_display(request, project_short_name):
-    return aboutus_subtab_display(request, project_short_name, None) # no subtab
             
-def aboutus_subtab_display(request, project_short_name, subtab):
-    ''' View to display an "About Us" page. '''
+def navtab_display(request, project_short_name, tab):
+    ''' View to display an project tab page. '''
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-
-    template_page = 'cog/project/_project_aboutus.html'   
-    if subtab is None:
-        template_title = 'About Us'
-        template_form_name = "aboutus_update"
-    else:      
-         template_form_name = "aboutus_subtab_update"
-         template_title = subtab.capitalize()
+    
+    # FIXME NOW
+    template_page = 'cog/project/_project_aboutus.html'
+    template_form_name = "navtab_update"
+    template_title = tab.capitalize()    
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, subtab,
+    return _templated_page_display(request, project, tab,
                                    template_page, template_title, template_form_name, children, peers)
 
 def contactus_display(request, project_short_name):
@@ -338,7 +332,7 @@ def support_display(request, project_short_name):
     return _templated_page_display(request, project, None,
                                    template_page, template_title, template_form_name, children, peers)
     
-def _templated_page_display(request, project, subtab, template_page, template_title, template_form_name, children, peers):
+def _templated_page_display(request, project, tab, template_page, template_title, template_form_name, children, peers):
         
     # check project is active
     if project.active==False:
@@ -349,20 +343,20 @@ def _templated_page_display(request, project, subtab, template_page, template_ti
     # build list of children with relevant metadata that are visible to user
     children = []
     for child in project.children():
-        if _hasTemplatedInfo(child, subtab) and child.isVisible(request.user):
+        if _hasTemplatedInfo(child, tab) and child.isVisible(request.user):
             children.append(child)
     
     # build list of peers with relevant metadata that are visible to user
     peers = []
     for peer in project.peers.all():
-        if _hasTemplatedInfo(peer, subtab) and peer.isVisible(request.user):
+        if _hasTemplatedInfo(peer, tab) and peer.isVisible(request.user):
             peers.append(peer)
    
-    return render_templated_page(request, project, subtab, template_page, template_title, template_form_name, children, peers)
+    return render_templated_page(request, project, tab, template_page, template_title, template_form_name, children, peers)
 
-def render_templated_page(request, project, subtab, template_page, template_title, template_form_name, children, peers):
+def render_templated_page(request, project, tab, template_page, template_title, template_form_name, children, peers):
     return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 'subtab' : subtab,
+                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 'tab' : tab,
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
                                'children':children, 'peers':peers },
                               context_instance=RequestContext(request))
@@ -456,11 +450,7 @@ def render_support_form(request, project, form):
                           context_instance=RequestContext(request))
 
 @login_required
-def aboutus_update(request, project_short_name):
-    return aboutus_subtab_update(request, project_short_name, None) # no sub-tab
-
-@login_required
-def aboutus_subtab_update(request, project_short_name, subtab):
+def navtab_update(request, project_short_name, tab):
     '''View to update the project "About Us" metadata.'''
 
     # retrieve project from database
@@ -486,7 +476,7 @@ def aboutus_subtab_update(request, project_short_name, subtab):
         fundingsource_formset = FundingSourceFormSet(instance=project, prefix='fundfs')
         
         # display form view
-        return render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset)
+        return render_aboutus_form(request, project, tab, form, organization_formset, fundingsource_formset)
 
     # POST request
     else:
@@ -502,10 +492,7 @@ def aboutus_subtab_update(request, project_short_name, subtab):
             fsinstances = fundingsource_formset.save()
             
             # redirect to about us display (GET-POST-REDIRECT)
-            if subtab is None:
-                return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower()]))
-            else:
-                return HttpResponseRedirect(reverse('aboutus_subtab_display', args=[project.short_name.lower(), subtab]))
+            return HttpResponseRedirect(reverse('navtab_display', args=[project.short_name.lower(), tab]))
             
         else:
             # re-display form view
@@ -515,11 +502,12 @@ def aboutus_subtab_update(request, project_short_name, subtab):
                 print 'Organization formset is invalid  %s' % organization_formset.errors
             if not fundingsource_formset.is_valid():
                 print 'Funding Source formset is invalid  %s' % fundingsource_formset.errors
-            return render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset)
+            return render_aboutus_form(request, project, tab, form, organization_formset, fundingsource_formset)
 
-def render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset):
+def render_aboutus_form(request, project, tab, form, organization_formset, fundingsource_formset):
+    print 'tab=%s' % tab
     return render_to_response('cog/project/aboutus_form.html', 
-                          {'form': form, 'subtab':subtab,
+                          {'form': form, 'tab':tab,
                            'organization_formset':organization_formset, 
                            'fundingsource_formset':fundingsource_formset,
                            'title': 'Update Project Details', 'project': project }, 

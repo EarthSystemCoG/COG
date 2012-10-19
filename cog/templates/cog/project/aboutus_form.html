@@ -45,7 +45,7 @@
 		     
 		     <table>
 		     
-			     {% if not subtab %}		     
+			     {% if tab = 'aboutus' %}		     
 			     	 <!-- Update "About Us" tab -->
 			     	 <tr>
 				        <td nowrap="nowrap"><b>Project Long Name</b></td>
@@ -81,7 +81,7 @@
 					
 				{% else %}
 						     
-			         {% if subtab = 'mission' %}
+			         {% if tab = 'mission' %}
 				         <tr>
 					        <td nowrap="nowrap">Mission</td>
 					        <td class="long" colspan="2">
@@ -92,7 +92,7 @@
 				         </tr>
 				     {% endif %}
 				     
-				     {% if subtab = 'vision' %}
+				     {% if tab = 'vision' %}
 					     <tr>
 					        <td nowrap="nowrap">Vision</td>
 					        <td class="long" colspan="2">
@@ -103,7 +103,7 @@
 				         </tr>	         			     			         
 				     {% endif %}
 				     
-			         {% if subtab = 'values' %}
+			         {% if tab = 'values' %}
 				         <tr>
 					        <td nowrap="nowrap">Values</td>
 					        <td class="long" colspan="2">
@@ -114,7 +114,7 @@
 				         </tr>	   
 				     {% endif %}
 				           
-				     {% if subtab = 'partners' %}
+				     {% if tab = 'partners' %}
 				         <tr>
 				         	<td valign="top" nowrap="nowrap">Organizational Partners</td>
 				         	<td class="long">
@@ -141,7 +141,7 @@
 						 </tr>
 					 {% endif %}
 					 
-					 {% if subtab = 'sponsors' %}
+					 {% if tab = 'sponsors' %}
 						 <tr>
 				         	<td valign="top" nowrap="nowrap">Funding Source</td>
 				         	<td class="long">
@@ -169,33 +169,33 @@
 				 {% endif %} 
 			 
 				 <!-- IF NOT DISPLAYED, MUST RESUBMIT ALL FIELDS AS HIDDEN -->				 
-				 {% if subtab != None %}
+				 {% if tab != 'aboutus' %}
 					{{ form.long_name.as_hidden }}
 					{{ form.description.as_hidden }}
 				 	{{ form.external_homepage.as_hidden }} 
 				 	{{ form.history.as_hidden }} 				 	
 				 {% endif %}
 				 
-				 {% if subtab != 'mission' %}
+				 {% if tab != 'mission' %}
 				 	{{ form.mission.as_hidden }}
 				 {% endif %}
 				 
-				 {% if subtab != 'vision' %}
+				 {% if tab != 'vision' %}
 				 	{{ form.vision.as_hidden }}
 				 {% endif %}
 				 
-				 {% if subtab != 'values' %}
+				 {% if tab != 'values' %}
 				 	{{ form.values.as_hidden }}
 				 {% endif %}				 
 				 				
-				{% if subtab != 'partners' %}	 
+				{% if tab != 'partners' %}	 
 					 {% for oform in organization_formset.forms %}
 						{{ oform.id }}	
 				        {{ oform.name.as_hidden }}
 					 {% endfor %}
 				 {% endif %}
 				 
-				 {% if subtab != 'sponsors' %}
+				 {% if tab != 'sponsors' %}
 			 		 {% for fsform in fundingsource_formset.forms %}
 				    	{{ fsform.id }}	
 						{{ fsform.name.as_hidden }}
@@ -205,12 +205,8 @@
 			 </table>
 			        	
 		     <div style="text-align:right">
-		     	{% if subtab %}
-		        	<input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_subtab_display' project.short_name|lower subtab %}'"/>
-		        {% else %}
-		        	<input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower %}'"/>
-		        {% endif %}
-		         <input type="submit" value="Submit" />
+		        <input type="button" value="Cancel" onclick="window.location='{% url 'navtab_display' project.short_name|lower tab %}'"/>
+		        <input type="submit" value="Submit" />
 	         </div>
 		     
 		</form>

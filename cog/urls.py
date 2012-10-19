@@ -91,11 +91,15 @@ urlpatterns = patterns('',
     
     url(r'^bookmarks/add_notes/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_add_notes', name='bookmark_add_notes'),
         
+    # navogation (a.k.a. templetated content)
+    url(r'^projects/(?P<project_short_name>[^/]+)/nav/(?P<tab>[^/]+)/$', 'cog.views.navtab_display', name='navtab_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/nav/(?P<tab>[^/]+)/update/$', 'cog.views.navtab_update', name='navtab_update'),
+
     # project "about us", subtabs: mission, vision, values, partners, sponsors, people
-    url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/$', 'cog.views.aboutus_display', name='aboutus_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/(?P<subtab>[^/]+)/$', 'cog.views.aboutus_subtab_display', name='aboutus_subtab_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/(?P<subtab>[^/]+)/update/$', 'cog.views.aboutus_subtab_update', name='aboutus_subtab_update'),
+    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/$', 'cog.views.aboutus_display', name='aboutus_display'),
+    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
+    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/(?P<subtab>[^/]+)/$', 'cog.views.aboutus_subtab_display', name='aboutus_subtab_display'),
+    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/(?P<subtab>[^/]+)/update/$', 'cog.views.aboutus_subtab_update', name='aboutus_subtab_update'),
     
     # project "contact us"
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/update/$', 'cog.views.contactus_update', name='contactus_update'),   
