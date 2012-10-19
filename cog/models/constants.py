@@ -2,6 +2,13 @@ APPLICATION_LABEL = 'cog'
 
 # default template for project predefined pages, in the order they are displayed
 # the first list item is the top-level tab, the others are sub-tabs
+#
+# RULES FOR TAB HIERARCHY
+# o tab and subtab URLs must be of the form: 'projects/<project_short_name_lower>/<tab_label>/'
+# o the selected sub-tab is found by matching the request path to the PROJECT_PAGES urls
+# o the selected tab will be the one in position '0' in the list containing the selected sub-tab
+# o everything after the third '/' is disregarded in computing the highlihghted tab and subtab
+# o the tab/sub-tab URLs can be arbitrary except containing a '/'
 PROJECT_PAGES = (
          [("Home", "")],
          [("About Us", "aboutus/"), ("Mission", "mission/"), ("Vision", "vision/"), ("Values", "values/"),
