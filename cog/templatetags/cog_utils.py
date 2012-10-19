@@ -344,10 +344,7 @@ def numberOptions(lastNumber, selectedNumber):
 
 def isTopTabSelected(tab, request):
     """ Method to check whether a top level tab has been selected in the current request."""
-    
-    print tab
-    print request.path
-    
+        
     # home page
     if 'Home' in tab[0]:
         # exact match
@@ -387,8 +384,8 @@ def getTopTabUrl(project, request):
     return taburl
     
 # Utility method to return a list of ACTIVE project tabs (top-tabs and sub-tabs).
-# Returns a list of list: [ [tab1], [tab2], [tab3-selected, sub-tab3a, subtab3b, subtab3c,...], [tab4], [tab5], ...]
-# where sub-tabs are returned only for the currently selected top-tab.
+# Returns a list of list: [ [(tab1,False)], [(tab2,False)], [(tab3,True), (sub-tab3a,False), (subtab3b,True), (subtab3c,False),...], [(tab4,True)], [(tab5,True)], ...]
+# where sub-tabs are returned only for the currently selected top-tab, and each 3-tuple has the form: (tab label, tab url, selected)
 @register.filter
 def getTopNav(project, request):
     
@@ -407,24 +404,26 @@ def getTopNav(project, request):
             # top-tab
             if idx == 0:        
                 if ptab.active:
-                    tablist.append((ptab.label, ptab.url))
                     if str(ptab.url) == taburl:
                         selected = True
+                    tablist.append((ptab.label, ptab.url, selected))
                     #selected = isTopTabSelected( (ptab.label, ptab.url), request)
             # sub-tab
             else:
                 if selected and ptab.active:
-                    tablist.append((ptab.label, ptab.url))
+                    _selected = False
+                    if request.path == ptab.url:
+                        _selected = True
+                    tablist.append((ptab.label, ptab.url, _selected))
                 
         tabs.append(tablist)
     return tabs
         
 @register.filter
-def getTopTabStyle(request, tablist):
+def getTopTabStyle(tablist, selected):
     """Method to return the top-tab CSS style, depending on whether it is selected, and it has sub-tabs."""
     
-    tab = tablist[0]
-    if isTopTabSelected(tab, request):
+    if selected:
         if len(tablist) > 1:
             return mark_safe("style='color:#358C92; background-color: #B9E0E3'")
         else:
@@ -433,10 +432,22 @@ def getTopTabStyle(request, tablist):
         return ""
  
 @register.filter   
-def getSubTabStyle(request, tab):
-    """ Method to return the sub-tab CSS style depending on whether it is selected."""
-    if isTopTabSelected(tab, request):
-        return mark_safe("style='color:#358C92;'")
+def getSubTabStyle(tablist, tab):
+    """ Method to return the sub-tab CSS style depending on whether it is selected.
+        tablist: full list of tuples (label, url, selected) for current top tab
+        tab: current subtab
+    """
+    toptab = tablist[0]
+    # top-tab selected
+    if toptab[2]:
+        # sub-tab selected
+        if tab[2]:
+            #return mark_safe("style='color:#358C92; background-color: #FFFFFF''")
+            #return mark_safe("style='color:#358C92; text-decoration: underline;'")
+            return mark_safe("style='color:#358C92;'")
+        # sub-tab not selected
+        else:
+            return mark_safe("style='color:#358C92;'")
     else:
         return ""
     
