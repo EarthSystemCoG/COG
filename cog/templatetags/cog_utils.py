@@ -359,8 +359,9 @@ def getTopTabUrl(project, request):
         # subtaburl = "aboutus/mission/"
         print 'request path=%s' % request.path
         subtaburl = request.path[ len(homeurl) : ]
-        # FIXME ?
-        subtaburl = subtaburl.replace('update/','')
+        # disregard everything after 'update/'
+        if 'update/' in subtaburl:
+            subtaburl = subtaburl[0:subtaburl.find('update/')]
         print 'subtaburl=%s' % subtaburl
         # taburl = "/projects/cog/" + "aboutus/"
         print 'subtaburl=%s' % subtaburl

@@ -60,7 +60,7 @@
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
 		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
-		            			&nbsp;<a href="{% url management_body_members form.instance.id %}" class="changelink" style="float:right">Update Members</a>
+		            			&nbsp;<a href="{% url management_body_members project.short_name|lower form.instance.id %}" class="changelink" style="float:right">Update Members</a>
 		            		</td>
 		            	</tr>
 	            	{% endif %}

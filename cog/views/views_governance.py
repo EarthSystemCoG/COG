@@ -169,7 +169,7 @@ def render_governance_object_form(request, project, formset, title, template):
 
 # view to update a Management Body object members
 @login_required
-def management_body_members(request, object_id):
+def management_body_members(request, project_short_name, object_id):
     
     # retrieve object
     managementBody = get_object_or_404(ManagementBody, pk=object_id)
@@ -178,7 +178,8 @@ def management_body_members(request, object_id):
     managementBodyMemberForm = staticmethod(curry(ManagementBodyMemberForm, project=managementBody.project))
     
     # delegate to generic view with specific object types
-    return members_update(request, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm)
+    tab = 'bodies'
+    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm)
   
 # view to update a Communication Means object members  
 @login_required
@@ -189,7 +190,8 @@ def communication_means_members(request, object_id):
     communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
     
     # delegate to generic view with specific object types
-    return members_update(request, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm)
+    tab = 'processes'
+    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm)
 
 # view to update an Organizational Role object members  
 @login_required
@@ -201,7 +203,8 @@ def organizational_role_members(request, object_id):
     organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
     
     # delegate to generic view with specific object types
-    return members_update(request, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm)
+    tab = 'roles'
+    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm)
 
 # 
 # Generic view to update members for:
@@ -212,7 +215,7 @@ def organizational_role_members(request, object_id):
 # obj.project
 # obj.__unicode__
 #
-def members_update(request, objectId, objectType, objectMemberType, objectForm):
+def members_update(request, tab, objectId, objectType, objectMemberType, objectForm):
     
     # retrieve governance object
     obj = get_object_or_404(objectType, pk=objectId)
@@ -246,7 +249,7 @@ def members_update(request, objectId, objectType, objectMemberType, objectForm):
             instances = formset.save()
             
             # redirect to governance display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('governance_display', args=[obj.project.short_name.lower()]))
+            return HttpResponseRedirect(reverse('governance_display', args=[obj.project.short_name.lower(), tab]))
           
         else:
             print 'Formset is invalid: %s' % formset.errors
