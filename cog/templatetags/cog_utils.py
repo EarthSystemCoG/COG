@@ -346,6 +346,10 @@ def getTopTabUrl(project, request):
     ''' Returns the full URL of the top tab for the current request.
         Example: request.path = "/projects/cog/aboutus/mission/" --> "/projects/cog/aboutus/". '''
     
+    # FIXME: bookmarks special case
+    if 'bookmark' in request.path:
+        return reverse('bookmark_list', args=[project.short_name.lower()])
+    
     # "/projects/cog/"
     homeurl = project.home_page_url()
     
