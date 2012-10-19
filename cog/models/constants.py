@@ -8,7 +8,7 @@ PROJECT_PAGES = (
           ("Partners", "partners/"), ("Sponsors", "sponsors/"), ("People", "people/")], 
          #[("About Us", "aboutus/")],     
          # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
-         [("Bookmarks", "bookmarks/list/<project>/")],
+         [("Bookmarks", "bookmarks/")],
          [("Development", "development/"), ("Code", "code/"), ("Trackers", "trackers/")],
          [("Roadmap", "roadmap/")],
          #[("Governance", "governance/"), ("Governance 1", "governance/g1/") ],

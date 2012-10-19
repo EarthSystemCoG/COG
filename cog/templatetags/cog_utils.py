@@ -182,8 +182,8 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
     
     # add edit/delete links, but not to top level folder
     if folder.parent:
-        deleteurl = reverse('folder_delete', args=[folder.id])
-        updateurl = reverse('folder_update', args=[folder.id])
+        deleteurl = reverse('folder_delete', args=[folder.project.short_name.lower(), folder.id])
+        updateurl = reverse('folder_update', args=[folder.project.short_name.lower(), folder.id])
         if hasUserPermission(user, folder.project):
             html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
             html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
@@ -195,9 +195,10 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         html += "<ul>"
                 
         # display bookmarks
+        project = folder.project
         for bookmark in folder.bookmark_set.all():
-            deleteurl = reverse('bookmark_delete', args=[bookmark.id])
-            updateurl = reverse('bookmark_update', args=[bookmark.id])
+            deleteurl = reverse('bookmark_delete', args=[project.short_name.lower(), bookmark.id])
+            updateurl = reverse('bookmark_update', args=[project.short_name.lower(), bookmark.id])
             html += "<li><span class='bookmark'>"
             html += "<a href='%s'>%s</a>" % (bookmark.url, bookmark.name)
             # display [Edit|Delete] links
@@ -347,8 +348,8 @@ def getTopTabUrl(project, request):
         Example: request.path = "/projects/cog/aboutus/mission/" --> "/projects/cog/aboutus/". '''
     
     # FIXME: bookmarks special case
-    if 'bookmark' in request.path:
-        return reverse('bookmark_list', args=[project.short_name.lower()])
+    #if 'bookmark' in request.path:
+    #    return reverse('bookmark_list', args=[project.short_name.lower()])
     
     # "/projects/cog/"
     homeurl = project.home_page_url()
@@ -359,9 +360,8 @@ def getTopTabUrl(project, request):
         # subtaburl = "aboutus/mission/"
         print 'request path=%s' % request.path
         subtaburl = request.path[ len(homeurl) : ]
-        # disregard everything after 'update/'
-        if 'update/' in subtaburl:
-            subtaburl = subtaburl[0:subtaburl.find('update/')]
+        # disregard everything after the first '/'
+        subtaburl = subtaburl[0:subtaburl.find('/')+1]
         print 'subtaburl=%s' % subtaburl
         # taburl = "/projects/cog/" + "aboutus/"
         print 'subtaburl=%s' % subtaburl

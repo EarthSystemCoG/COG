@@ -43,7 +43,7 @@
             	<tr>
             		{% if form.instance.id %}
 	            		<td style="text-align:left; vertical-align:bottom;">
-	            			<a href="{% url 'bookmark_add_notes' form.instance.id %}?type=notes" class="addlink">&nbsp;Edit Notes</a>
+	            			<a href="{% url 'bookmark_add_notes' project.short_name.lower form.instance.id %}?type=notes" class="addlink">&nbsp;Edit Notes</a>
 	            		</td>
             		{% endif %}
             		<td style="text-align:right;">
