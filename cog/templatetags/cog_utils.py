@@ -340,33 +340,7 @@ def numberOptions(lastNumber, selectedNumber):
         html += ">%d</option>" % n
     # mark the result as safe from further escaping
     return mark_safe(html)
-    
 
-def isTopTabSelected(tab, request):
-    """ Method to check whether a top level tab has been selected in the current request."""
-        
-    # home page
-    if 'Home' in tab[0]:
-        # exact match
-        if tab[1] == request.path:
-            return True
-        else:
-            return False
-    else:
-        # partial match
-        if tab[1] in request.path:
-            return True
-        else:
-            return False
-        
-def isSubTabSelected(tab, request):
-    # Method to check whether a sub-tab has been selected in current request. """
-    
-    # exact match
-    if tab[1] == request.path:
-        return True
-    else:
-        return False
     
 def getTopTabUrl(project, request):
     ''' Returns the full URL of the top tab for the current request.
@@ -407,7 +381,6 @@ def getTopNav(project, request):
                     if str(ptab.url) == taburl:
                         selected = True
                     tablist.append((ptab.label, ptab.url, selected))
-                    #selected = isTopTabSelected( (ptab.label, ptab.url), request)
             # sub-tab
             else:
                 if selected and ptab.active:
