@@ -9,12 +9,12 @@ PROJECT_PAGES = (
          #[("About Us", "aboutus/")],     
          # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
          [("Bookmarks", "bookmarks/list/<project>/")],
-         [("Development", "nav/development/"), ("Code", "nav/code/"), ("Trackers", "nav/trackers/")],
-         [("Support", "support/")],
-         #[("Governance", "governance/"), ("Governance 1", "governance/g1/") ],
-         [("Governance", "governance/")],
-         #[("Roadmap", "roadmap/"), ("Roadmap 1", "roadmap/road1/"), ("Roadmap 2", "roadmap/road2/")],
+         [("Development", "development/"), ("Code", "code/"), ("Trackers", "trackers/")],
          [("Roadmap", "roadmap/")],
+         #[("Governance", "governance/"), ("Governance 1", "governance/g1/") ],
+         [("Governance", "governance/"), ("Bodies", "bodies/"), ("Roles", "roles/"), ("Processes", "processes/")],
+         [("Get Involved", "getinvolved/")],
+         [("Support", "support/")],
          [("Contact Us", "contactus/")],            
          #("Administration", "admin/"),
         )

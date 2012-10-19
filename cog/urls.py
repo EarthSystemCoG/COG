@@ -91,7 +91,7 @@ urlpatterns = patterns('',
     
     url(r'^bookmarks/add_notes/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_add_notes', name='bookmark_add_notes'),
         
-    # navigation (a.k.a. templetated content)
+    # "About Us" pages: aboutus, mission, vision, values, partners, sponsors, people
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>aboutus)/$', 'cog.views.aboutus_display', name='aboutus_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>aboutus)/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>mission)/$', 'cog.views.aboutus_display', name='aboutus_display'),
@@ -107,11 +107,13 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>people)/$', 'cog.views.aboutus_display', name='aboutus_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>people)/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
 
-    # project "about us", subtabs: mission, vision, values, partners, sponsors, people
-    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/$', 'cog.views.aboutus_display', name='aboutus_display'),
-    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
-    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/(?P<subtab>[^/]+)/$', 'cog.views.aboutus_subtab_display', name='aboutus_subtab_display'),
-    #url(r'^projects/(?P<project_short_name>[^/]+)/aboutus/(?P<subtab>[^/]+)/update/$', 'cog.views.aboutus_subtab_update', name='aboutus_subtab_update'),
+    # "Development" pages: development, code and trackers
+
+    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/update/$', 'cog.views.trackers_update', name='trackers_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/$', 'cog.views.trackers_display', name='trackers_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/code/update/$', 'cog.views.code_update', name='code_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/code/$', 'cog.views.code_display', name='code_display'),
+
     
     # project "contact us"
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/update/$', 'cog.views.contactus_update', name='contactus_update'),   
@@ -123,13 +125,6 @@ urlpatterns = patterns('',
     # FIXME: uncomment when object model is available
     #url(r'^projects/(?P<project_short_name>[^/]+)/support/$', 'cog.views.support_display', name='support_display'),   
        
-    # project trackers
-    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/update/$', 'cog.views.trackers_update', name='trackers_update'),   
-    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/$', 'cog.views.trackers_display', name='trackers_display'),
-
-    # project code
-    url(r'^projects/(?P<project_short_name>[^/]+)/code/update/$', 'cog.views.code_update', name='code_update'),   
-    url(r'^projects/(?P<project_short_name>[^/]+)/code/$', 'cog.views.code_display', name='code_display'),
     
     # project policies
     url(r'^projects/(?P<project_short_name>[^/]+)/policies/update/$', 'cog.views.policies_update', name='policies_update'),
