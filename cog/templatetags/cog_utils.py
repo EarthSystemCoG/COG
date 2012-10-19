@@ -11,6 +11,7 @@ import re
 from cog.utils import smart_truncate, INVALID_CHARS
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
+from cog.models.constants import NAVMAP, INVNAVMAP
 
 register = template.Library()
 
@@ -89,7 +90,7 @@ def projects_tree(user, projects, autoescape, treeId):
         # loop over all projects
         for project in projects:
             if project.isVisible(user):
-                html += "<li><span class='%s'><a href='%s'>%s</a></span>" % ('child', reverse('project_home',args=[project.short_name.lower()]), esc(project.short_name))
+                html += "<li><span class='%s'><a href='%s'>%s</a></span>" % ('child', reverse('project_home', args=[project.short_name.lower()]), esc(project.short_name))
         html += "</ul>"
         html += "</div>"
         html += "</div>"
@@ -119,7 +120,7 @@ def project_tree(user, project, autoescape, i):
         html += "<div id='%s' class='ygtv-highlight1'>" % treeId
     if project.parent:
         html += "<ul><li class='expanded'><span class='parent'><a href='%s'>%s</a></span>" \
-        % (reverse('project_home',args=[project.parent.short_name.lower()]),esc(project.parent.short_name))
+        % (reverse('project_home', args=[project.parent.short_name.lower()]), esc(project.parent.short_name))
     html += "<ul>"
     # expand first child
     html += _project_tree(user, project, esc, expanded=True, dopeers=True, icon='this')
@@ -145,7 +146,7 @@ def list_bookmarks(project, user, autoescape=None):
     folder = getTopFolder(project)
     
     esc = get_escape_function(autoescape)
-    treeId = project.short_name+"folderTree"
+    treeId = project.short_name + "folderTree"
     
     html = "<div id='folder_tree' class='yui-skin-sam'>" 
     html += "<div id='%s'>" % treeId
@@ -184,8 +185,8 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         deleteurl = reverse('folder_delete', args=[folder.id])
         updateurl = reverse('folder_update', args=[folder.id])
         if hasUserPermission(user, folder.project):
-            html += "&nbsp;&nbsp;[ <a href='"+updateurl+"' class='changelink'>Edit</a> | "
-            html += "<a href='"+deleteurl+"' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
+            html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
+            html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
                  + "'Are you sure you want to delete this folder (including all the bookmarks and folders it contains) ?', this)\">Delete</a> ]"
     html += "</span> "
    
@@ -198,11 +199,11 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             deleteurl = reverse('bookmark_delete', args=[bookmark.id])
             updateurl = reverse('bookmark_update', args=[bookmark.id])
             html += "<li><span class='bookmark'>"
-            html += "<a href='%s'>%s</a>"  % (bookmark.url, bookmark.name)
+            html += "<a href='%s'>%s</a>" % (bookmark.url, bookmark.name)
             # display [Edit|Delete] links
             if hasUserPermission(user, folder.project):
-                html += "&nbsp;&nbsp;[ <a href='"+updateurl+"' class='changelink'>Edit</a> | "
-                html += "<a href='"+deleteurl+"' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Bookmark Confirmation','Are you sure you want to delete this bookmark ?', this)\">Delete</a> ]"
+                html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
+                html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Bookmark Confirmation','Are you sure you want to delete this bookmark ?', this)\">Delete</a> ]"
             # display "Notes" link
             if bookmark.notes:
                 html += "&nbsp;&nbsp;[ <img src='%scog/img/notes_16x16.png' style='vertical-align:bottom;' /><a href='%s'> Notes</a> ]" % (static_url, reverse('post_detail', args=[bookmark.notes.id]))
@@ -228,18 +229,18 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
 def listFolders(project, user):
 
     folders = []
-    _listSubfolders( getTopFolder(project), '', folders)
+    _listSubfolders(getTopFolder(project), '', folders)
     return folders
 
-def _listSubfolders( folder, hierarchy_label, folders):
+def _listSubfolders(folder, hierarchy_label, folders):
     # add parent folder, append its name to hierarchy label
     hierarchy_label = "%s %s" % (hierarchy_label, folder.name)
     # truncate the folder hierarchy names to 100 characters
-    folders.append( (folder, smart_truncate(hierarchy_label, 100)) )
+    folders.append((folder, smart_truncate(hierarchy_label, 100)))
     #folders.append( folder )
     # recursion over children
     for subFolder in folder.children():
-        _listSubfolders( subFolder, "%s >" % hierarchy_label, folders)
+        _listSubfolders(subFolder, "%s >" % hierarchy_label, folders)
 
 # Filter that returns the top-level folder for a given project.
 @register.filter
@@ -259,7 +260,7 @@ def _project_tree(user, project, esc, expanded=False, dopeers=False, icon='child
         html = "<li class='expanded'>"
     else:
         html = "<li>"
-    html += "<span class='%s'><a href='%s'>%s</a></span>" % (icon, reverse('project_home',args=[project.short_name.lower()]), esc(project.short_name))
+    html += "<span class='%s'><a href='%s'>%s</a></span>" % (icon, reverse('project_home', args=[project.short_name.lower()]), esc(project.short_name))
     
     # this project's children
     if project.children:
@@ -322,7 +323,7 @@ def canPost(user, post):
 
 @register.filter
 def relatedPostCount(post, related_posts):
-    count = len( related_posts )
+    count = len(related_posts)
     if post.parent:
         count += 1
     return count
@@ -332,9 +333,9 @@ def numberOptions(lastNumber, selectedNumber):
     lastNumberPlusOne = int(lastNumber)
     selectedNumber = int(selectedNumber)
     html = ""
-    for n in range(1, lastNumber+1):
+    for n in range(1, lastNumber + 1):
         html += "<option value='%d'" % n
-        if n==selectedNumber:
+        if n == selectedNumber:
             html += "selected='selected'"
         html += ">%d</option>" % n
     # mark the result as safe from further escaping
@@ -343,6 +344,9 @@ def numberOptions(lastNumber, selectedNumber):
 
 def isTopTabSelected(tab, request):
     """ Method to check whether a top level tab has been selected in the current request."""
+    
+    print tab
+    print request.path
     
     # home page
     if 'Home' in tab[0]:
@@ -367,27 +371,50 @@ def isSubTabSelected(tab, request):
     else:
         return False
     
+def getTopTabUrl(project, request):
+    ''' Returns the full URL of the top tab for the current request.
+        Example: request.path = "/projects/cog/aboutus/mission/" --> "/projects/cog/aboutus/". '''
+    
+    # "/projects/cog/"
+    homeurl = project.home_page_url()
+    # request.path = "/projects/cog/aboutus/mission/"
+    # subtaburl = "aboutus/mission/"
+    subtaburl = request.path[ len(homeurl) : ]
+    # taburl = "/projects/cog/" + "aboutus/"
+    taburl = homeurl + INVNAVMAP[subtaburl]
+    #print "subtaburl=%s" % subtaburl
+    #print "taburl=%s" % taburl
+    return taburl
+    
 # Utility method to return a list of ACTIVE project tabs (top-tabs and sub-tabs).
 # Returns a list of list: [ [tab1], [tab2], [tab3-selected, sub-tab3a, subtab3b, subtab3c,...], [tab4], [tab5], ...]
 # where sub-tabs are returned only for the currently selected top-tab.
 @register.filter
 def getTopNav(project, request):
-        
+    
+    taburl = getTopTabUrl(project, request)
+    
     tabs = []
     ptabs = get_or_create_project_tabs(project, save=True)
+    # project tabs have full URLs:
+    # (u'Contact Us', u'/projects/cog/contactus/')
+    # (u'Mission', u'/projects/cog/aboutus/mission/')
+    # .....
     for ptablist in ptabs:
         tablist = []
         selected = False
         for idx, ptab in enumerate(ptablist):
             # top-tab
-            if idx==0:        
+            if idx == 0:        
                 if ptab.active:
-                    tablist.append( (ptab.label, ptab.url) )
-                    selected = isTopTabSelected( (ptab.label, ptab.url), request)
+                    tablist.append((ptab.label, ptab.url))
+                    if str(ptab.url) == taburl:
+                        selected = True
+                    #selected = isTopTabSelected( (ptab.label, ptab.url), request)
             # sub-tab
             else:
                 if selected and ptab.active:
-                    tablist.append( (ptab.label, ptab.url) )
+                    tablist.append((ptab.label, ptab.url))
                 
         tabs.append(tablist)
     return tabs
@@ -398,7 +425,7 @@ def getTopTabStyle(request, tablist):
     
     tab = tablist[0]
     if isTopTabSelected(tab, request):
-        if len(tablist)>1:
+        if len(tablist) > 1:
             return mark_safe("style='color:#358C92; background-color: #B9E0E3'")
         else:
             return mark_safe("style='color:#358C92; background-color: #FFFFFF'")

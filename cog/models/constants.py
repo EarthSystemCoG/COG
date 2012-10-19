@@ -2,7 +2,6 @@ APPLICATION_LABEL = 'cog'
 
 # default template for project predefined pages, in the order they are displayed
 # the first list item is the top-level tab, the others are sub-tabs
-# IMPORTANT: the sub-tab URLs must start with the parent-tab URL (so that tabs can be properly selected)
 PROJECT_PAGES = (
          [("Home", "")],
          [("About Us", "aboutus/"), ("Mission", "aboutus/mission/"), ("Vision", "aboutus/vision/"), ("Values", "aboutus/values/"),
@@ -20,6 +19,39 @@ PROJECT_PAGES = (
          [("Contact Us", "contactus/")],            
          #("Administration", "admin/"),
         )
+
+# Navigational map: tab --> [suntabs]
+# {
+#  '': [], 
+#  'support/': [], 
+#  'governance/': [], 
+# 'trackers/': [], 
+# 'bookmarks/list/<project>/': [], 
+# 'roadmap/': [], 
+# 'contactus/': [], 
+# 'aboutus/': ['aboutus/mission/', 'aboutus/vision/', 'aboutus/values/', 'aboutus/partners/', 'aboutus/sponsors/', 'aboutus/people/'], 
+#'code/': []
+# }
+NAVMAP = {}
+# Inverse navigational map: subtab --> tab
+# { 
+#   '': '', 
+#   'aboutus/people/': 'aboutus/', 
+#   'aboutus/vision/': 'aboutus/', 
+#   'aboutus/partners/': 'aboutus/', 'governance/': 'governance/', 'aboutus/mission/': 'aboutus/', 'bookmarks/list/<project>/': 'bookmarks/list/<project>/', 'contactus/': 'contactus/', 'trackers/': 'trackers/', 'aboutus/values/': 'aboutus/', 'aboutus/sponsors/': 'aboutus/', 'roadmap/': 'roadmap/', 'support/': 'support/', 'aboutus/': 'aboutus/', 
+#   'code/': 'code/'
+# }
+INVNAVMAP = {}
+for tabs in PROJECT_PAGES:  
+    taburl = tabs[0][1] 
+    NAVMAP[ taburl ] = []
+    INVNAVMAP[ taburl ] = taburl
+    if len(tabs)>1:
+        for ppage in tabs[1:]:
+            subtaburl = ppage[1]
+            NAVMAP[ taburl ].append( subtaburl )
+            INVNAVMAP[ subtaburl ] = taburl
+
 
 PURPOSE_TYPES = (
                  'Overall Project Coordination',
