@@ -31,7 +31,7 @@
 		{{ form.project.as_hidden }}
 	     
 	    <div style="text-align:right">
-	         <input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower %}'"/>
+	         <input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower 'processes' %}'"/>
 	         <input type="submit" value="Submit" />
         </div>
 

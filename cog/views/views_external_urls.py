@@ -99,7 +99,8 @@ def roadmap_update(request, project_short_name):
 def policies_update(request, project_short_name):
     
     type = TYPE_POLICY
-    redirect = reverse('governance_display', args=[project_short_name])
+    tab = 'processes'
+    redirect = reverse('governance_display', args=[project_short_name, tab])
     return external_urls_update(request, project_short_name, type, redirect)
 
 # Generic view to update external URLs

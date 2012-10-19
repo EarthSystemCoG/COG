@@ -134,8 +134,11 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/roadmap/$', 'cog.views.roadmap_display', name='roadmap_display'),
 
     # project governance
-    url(r'^projects/(?P<project_short_name>[^/]+)/governance/$', 'cog.views.governance_display', name='governance_display'),
-    
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>governance)/$', 'cog.views.governance_display', name='governance_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>bodies)/$', 'cog.views.governance_display', name='governance_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>roles)/$', 'cog.views.governance_display', name='governance_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>processes)/$', 'cog.views.governance_display', name='governance_display'),
+       
     url(r'^projects/(?P<project_short_name>[^/]+)/management_body/update/(?P<category>[^/]+)/$', 'cog.views.management_body_update', name='management_body_update'),
     url(r'^management_body/(?P<object_id>[^/]+)/members/$', 'cog.views.management_body_members', name='management_body_members'),
     

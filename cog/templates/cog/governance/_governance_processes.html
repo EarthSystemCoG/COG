@@ -2,8 +2,7 @@
 
 {% load cog_utils %}
 
-{% if display == 'ALL' or display == 'PROCESSES' %}
-  <div id="governance_processes">
+<div id="governance_processes">
 
 	<!-- header -->
 	<hr/>
@@ -16,7 +15,7 @@
 	
 	<!-- content -->	
 	{% if proj.taskPrioritizationStrategy or proj.requirementsIdentificationProcess %}
-
+	
 		<table>
 			{% if proj.taskPrioritizationStrategy %}
 				<tr>
@@ -36,6 +35,4 @@
 		:&nbsp;<i>No information found.</i>
 	{% endif %}
 
-  </div>
-{% endif %}
-	
+</div>
