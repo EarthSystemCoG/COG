@@ -4,13 +4,12 @@ APPLICATION_LABEL = 'cog'
 # the first list item is the top-level tab, the others are sub-tabs
 PROJECT_PAGES = (
          [("Home", "")],
-         [("About Us", "nav/aboutus/"), ("Mission", "nav/mission/"), ("Vision", "nav/vision/"), ("Values", "nav/values/"),
-          ("Partners", "nav/partners/"), ("Sponsors", "nav/sponsors/"), ("People", "nav/people/")], 
+         [("About Us", "aboutus/"), ("Mission", "mission/"), ("Vision", "vision/"), ("Values", "values/"),
+          ("Partners", "partners/"), ("Sponsors", "sponsors/"), ("People", "people/")], 
          #[("About Us", "aboutus/")],     
          # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
          [("Bookmarks", "bookmarks/list/<project>/")],
-         [("Code", "code/")],
-         [("Trackers", "trackers/")],
+         [("Development", "nav/development/"), ("Code", "nav/code/"), ("Trackers", "nav/trackers/")],
          [("Support", "support/")],
          #[("Governance", "governance/"), ("Governance 1", "governance/g1/") ],
          [("Governance", "governance/")],
