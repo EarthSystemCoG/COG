@@ -580,6 +580,7 @@ td ul.errorlist li {
 	display: none;
 }
 
+
 @media print {
 	div.vertical_menu {
 		display: none !important;
@@ -593,4 +594,14 @@ td ul.errorlist li {
 	div#top_nav_right {
 		display: none !important;
 	}
+}
+
+
+/* THERE IS A KNOWN ISSUE W/ IE WHERE THE LAST COLUMN CONTENTS APPEAR AT THE BOTTOM OF THE PAGE */
+/* THIS IS KNOWN AS A "DROPPED FLOAT" BUG */
+/* BY APPLYING THE FOLLOWING STYLE TO THE LAST COLUMNS, THE CONTENTS ARE PREVENTED FROM OVERFLOWING ON THE RIGHT */
+/*.ie-drop-float-fix {*/
+div.last {
+  margin-right:-100px;
+  position:relative;
 }
