@@ -608,7 +608,7 @@ div.last {
   margin-right:-100px;
   position:relative;
 }
-div.last li a {
+div.last div#top_nav_right li a {
     padding-left: 3px;
     padding-right: 3px;
 }
