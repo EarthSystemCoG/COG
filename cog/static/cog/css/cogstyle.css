@@ -2,7 +2,9 @@
 
 /* page body */
 body {
-	margin: 0;
+
+        margin-right: auto !important; margin-left: auto !important;
+        margin-top: 0 !important; margin-bottom: 0 !important;
 	padding: 0;
 	font-size: 9pt;
 	font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans",
@@ -601,7 +603,22 @@ td ul.errorlist li {
 /* THIS IS KNOWN AS A "DROPPED FLOAT" BUG */
 /* BY APPLYING THE FOLLOWING STYLE TO THE LAST COLUMNS, THE CONTENTS ARE PREVENTED FROM OVERFLOWING ON THE RIGHT */
 /*.ie-drop-float-fix {*/
+/*div.search-box {*/
 div.last {
   margin-right:-100px;
   position:relative;
+}
+div.last div#top_nav_right li a {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+/* THESE ARE REQUIRED TO FORCE IE TO CENTER THE PAGE CONTENT */
+body {
+    text-align: center;
+    margin-right: auto; margin-left: auto;
+    margin-top: 0; margin-bottom: 0;
+}
+body .container {
+    text-align: left;
 }
