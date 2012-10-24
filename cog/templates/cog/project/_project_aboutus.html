@@ -86,7 +86,7 @@
                     				<td>{{ user.last_name }}</td>
                     				<td>{{ user.first_name }}</td>
                     				<td>{{ user.username }}</td>
-                    				<td>{{ user.istitution }}</td>
+                    				<td>{{ user|getUserProfileAttribute:"institution" }}</td> 
                     				<td>
                     					{% for role in user|roles:project %}{% if forloop.counter != 1 %}, {% endif %}{{ role }}{% endfor %}
                     				</td>

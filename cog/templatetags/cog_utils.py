@@ -511,3 +511,8 @@ def roles(user, project):
             roles.append(role)
                         
     return roles
+
+@register.filter
+def getUserProfileAttribute(user, attribute):
+    profile = UserProfile.objects.get(user=user)
+    return getattr(profile, attribute)
