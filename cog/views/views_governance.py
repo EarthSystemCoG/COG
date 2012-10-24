@@ -19,7 +19,10 @@ def _hasGovernanceInfo(project, tab):
     '''Utility function to determine whether a project has been populated 
        with the requested type of governance object.'''
     
-    if tab=='bodies':
+    if tab=='governance':
+        if project.governanceOverview is not None and len(project.governanceOverview) > 0:     
+            return True
+    elif tab=='bodies':
         if len(project.managementbody_set.all()) > 0:
             return True
     elif tab == 'roles':
@@ -60,7 +63,10 @@ def governance_display(request, project_short_name, tab):
             peers.append(peer)
     
     template_page = 'cog/governance/_governance.html'
-    template_title = 'Governance %s' % tab.capitalize()
+    if tab == 'governance':
+        template_title = 'Governance Overview'
+    else:
+        template_title = 'Governance %s' % tab.capitalize()
     template_form_name = None
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
@@ -98,6 +104,46 @@ def communication_means_update(request, project_short_name):
     tab = 'processes'
     return governance_object_update(request, project_short_name, tab, CommunicationMeans, CommunicationMeansForm, BaseInlineFormSet,
                                     'Communication and Coordination Update', 'cog/governance/communication_means_form.html')
+    
+@login_required
+def governance_overview_update(request, project_short_name):
+
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if request.method=='GET':
+                
+        # create form object from model
+        form = GovernanceOverviewForm(instance=project)
+
+        # render form
+        return render_governance_overview_form(request, form, project)
+    
+    # POST request
+    else:
+        
+        # update object from form data
+        form = GovernanceOverviewForm(request.POST, instance=project)
+        
+        # validate form data
+        if form.is_valid():
+            
+            # persist changes
+            project = form.save()
+            
+            # redirect to governance display (GET-POST-REDIRECT)
+            tab = 'governance'
+            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower(), tab]))            
+            
+        # return to form
+        else:
+            print 'Form is invalid %s' % form.errors
+            return render_governance_overview_form(request, form, project)
 
     
 # Subclass of BaseInlineFormset that is used to 
@@ -308,6 +354,11 @@ def govprocesses_update(request, project_short_name):
 def render_governance_processes_form(request, form, project):
     return render_to_response('cog/governance/governance_processes_form.html',
                               {'title' : 'Governance Processes Update', 'project': project, 'form':form },
+                               context_instance=RequestContext(request))
+    
+def render_governance_overview_form(request, form, project):
+    return render_to_response('cog/governance/governance_overview_form.html',
+                              {'title' : 'Governance Overview Update', 'project': project, 'form':form },
                                context_instance=RequestContext(request))
     
 # Method to update an organizationl role

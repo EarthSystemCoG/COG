@@ -77,14 +77,16 @@
 					            <tr>
 					                <td class="tophead">Last Name</td>
 					                <td class="tophead">First Name</td>
-					                <td class="tophead">User Name</td>
+					                <td class="tophead">User Name</td>				                
+					                <td class="tophead">Institution</td>
 					                <td class="tophead">Role</td>
 					            </tr>
 					            {% for user in users %}
 	                			<tr>
-                    				<td><a href="{% url user_detail user.id %}">{{ user.last_name }}</a></td>
-                    				<td><a href="{% url user_detail user.id %}">{{ user.first_name }}</a></td>
-                    				<td><a href="{% url user_detail user.id %}">{{ user.username }}</a></td>
+                    				<td>{{ user.last_name }}</td>
+                    				<td>{{ user.first_name }}</td>
+                    				<td>{{ user.username }}</td>
+                    				<td>{{ user.istitution }}</td>
                     				<td>
                     					{% for role in user|roles:project %}{% if forloop.counter != 1 %}, {% endif %}{{ role }}{% endfor %}
                     				</td>

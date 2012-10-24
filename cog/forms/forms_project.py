@@ -37,7 +37,7 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         # Note: must exclude the many2many field mapped through an intermediary table
-        exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess')
+        exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess','governanceOverview','developmentOverview')
 
     
 class AboutusForm(ModelForm):

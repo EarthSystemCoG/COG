@@ -14,6 +14,12 @@ class Migration(SchemaMigration):
         # Deleting field 'Project.development_overview'
         db.delete_column('cog_project', 'development_overview')
 
+        # Adding field 'Project.governanceOverview'
+        db.add_column('cog_project', 'governanceOverview', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
+
+        # Adding field 'Project.developmentOverview'
+        db.add_column('cog_project', 'developmentOverview', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
+
 
     def backwards(self, orm):
         
@@ -22,6 +28,12 @@ class Migration(SchemaMigration):
 
         # Adding field 'Project.development_overview'
         db.add_column('cog_project', 'development_overview', self.gf('django.db.models.fields.TextField')(null=True, blank=True), keep_default=False)
+
+        # Deleting field 'Project.governanceOverview'
+        db.delete_column('cog_project', 'governanceOverview')
+
+        # Deleting field 'Project.developmentOverview'
+        db.delete_column('cog_project', 'developmentOverview')
 
 
     models = {
@@ -40,7 +52,7 @@ class Migration(SchemaMigration):
         },
         'auth.user': {
             'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 18, 14, 40, 16, 345658)'}),
+            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 24, 12, 22, 33, 446473)'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -48,7 +60,7 @@ class Migration(SchemaMigration):
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 18, 14, 40, 16, 345548)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2012, 10, 24, 12, 22, 33, 446363)'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
@@ -225,7 +237,9 @@ class Migration(SchemaMigration):
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'author': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
+            'developmentOverview': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'external_homepage': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'governanceOverview': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'history': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'logo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
