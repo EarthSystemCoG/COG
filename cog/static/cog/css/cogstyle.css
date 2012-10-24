@@ -604,11 +604,11 @@ td ul.errorlist li {
 /* BY APPLYING THE FOLLOWING STYLE TO THE LAST COLUMNS, THE CONTENTS ARE PREVENTED FROM OVERFLOWING ON THE RIGHT */
 /*.ie-drop-float-fix {*/
 /*div.search-box {*/
-div.span-5,.last {
+div.last {
   margin-right:-100px;
   position:relative;
 }
-#top_nav_right ul li a {
+div.last li a {
     padding-left: 3px;
     padding-right: 3px;
 }
