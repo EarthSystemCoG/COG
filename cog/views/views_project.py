@@ -495,3 +495,79 @@ def getProjectNotVisibleRedirect(request, project):
                                    'project':project,
                                    'messages':messages }, 
                                   context_instance=RequestContext(request))
+        
+        
+def development_display(request, project_short_name):
+    ''' Dispatcher for governance view pages. '''
+    
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check project is active
+    if project.active==False:
+        return getProjectNotActiveRedirect(request, project)
+    elif project.isNotVisible(request.user):
+        return getProjectNotVisibleRedirect(request, project)
+        
+    # build list of children with development info that are visible to user
+    children = []
+    for child in project.children():
+        if child.developmentOverview is not None and len(child.developmentOverview)>0 and child.isVisible(request.user):
+            children.append(child)
+    
+    # build list of peers with development info that are visible to user
+    peers = []
+    for peer in project.peers.all():
+        if peer.developmentOverview is not None and len(peer.developmentOverview)>0 and peer.isVisible(request.user):
+            peers.append(peer)
+    
+    template_page = 'cog/project/_project_development.html'
+    template_title = 'Development Overview'
+    template_form_name = None
+    return render_to_response('cog/common/rollup.html', 
+                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
+                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
+                               'children':children, 'peers':peers },
+                              context_instance=RequestContext(request))
+@login_required
+def development_update(request, project_short_name):
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if request.method=='GET':
+                
+        # create form object from model
+        form = DevelopmentOverviewForm(instance=project)
+
+        # render form
+        return render_development_form(request, form, project)
+    
+    # POST request
+    else:
+        
+        # update object from form data
+        form = DevelopmentOverviewForm(request.POST, instance=project)
+        
+        # validate form data
+        if form.is_valid():
+            
+            # persist changes
+            project = form.save()
+            
+            # redirect to development overview (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('development_display', args=[project.short_name.lower()]))            
+            
+        # return to form
+        else:
+            print 'Form is invalid %s' % form.errors
+            return render_development_form(request, form, project)
+        
+def render_development_form(request, form, project):
+    return render_to_response('cog/project/development_form.html',
+                              {'title' : 'Development Overview Update', 'project': project, 'form':form },
+                               context_instance=RequestContext(request))

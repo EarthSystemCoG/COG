@@ -27,7 +27,7 @@ class Project(models.Model):
     
     governanceOverview = models.TextField(blank=False, null=True, verbose_name='Governance Overview', \
                                           help_text='One or more paragraphs providing a general overview of the governance structure for the project.')
-    developmentOverview = models.TextField(blank=True, null=True, verbose_name='Development Overview', \
+    developmentOverview = models.TextField(blank=False, null=True, verbose_name='Development Overview', \
                                            help_text='One or more paragraphs providing a general overview of the development processes for the project.')
     taskPrioritizationStrategy = models.TextField(blank=True, null=True, verbose_name='Task Prioritization Strategy', \
                                                   help_text='A paragraph describing how tasks are prioritized. This description may include who participates, how often they meet, how they meet, and whether the results are public.')

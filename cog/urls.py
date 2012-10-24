@@ -95,7 +95,9 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>people)/$', 'cog.views.aboutus_display', name='aboutus_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>people)/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
 
-    # "Development" pages: development, code and trackers
+    # "Development" pages: development, code and trackers    
+    url(r'^projects/(?P<project_short_name>[^/]+)/development/update/$', 'cog.views.development_update', name='development_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/development/$', 'cog.views.development_display', name='development_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/trackers/update/$', 'cog.views.trackers_update', name='trackers_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/trackers/$', 'cog.views.trackers_display', name='trackers_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/code/update/$', 'cog.views.code_update', name='code_update'),   

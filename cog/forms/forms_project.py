@@ -66,3 +66,10 @@ class SupportForm(ModelForm):
         model = Project
         fields = ('long_name', 'mission')
         widgets = { 'mission': Textarea(attrs={'rows':6}), }
+        
+class DevelopmentOverviewForm(ModelForm):
+    
+    class Meta:
+        model = Project
+        widgets = { 'developmentOverview': Textarea(attrs={'rows':10}), }
+        fields = ( 'developmentOverview', )

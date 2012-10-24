@@ -72,7 +72,7 @@ class GovernanceOverviewForm(ModelForm):
     
     class Meta:
         model = Project
-        widgets = { 'governanceOverview': Textarea(attrs={'rows':6}), }
+        widgets = { 'governanceOverview': Textarea(attrs={'rows':10}), }
         fields = ( 'governanceOverview', )
         
 class OrganizationalRoleForm(ModelForm):
