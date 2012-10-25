@@ -4,7 +4,7 @@ Module containing functionality for rendering templated pages.
 
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
-from cog.models import Project
+from cog.models import Project, getLeadOrganizationalRoles, getMemberOrganizationalRoles
 from cog.models.constants import TABS
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 
@@ -13,27 +13,40 @@ def _hasTemplatedInfo(project, tab):
     '''Utility function to determine whether a project has been populated 
        with the requested templated metadata, depending on type.'''
     
-    if (tab==TABS["ABOUTUS"]):
+    if tab==TABS["ABOUTUS"]:
         # 'About Us' always populated with long_name, description
         return True
-    elif (tab==TABS["MISSION"]) and project.mission is not None and len(project.mission.strip()) > 0:
+    elif tab==TABS["MISSION"] and project.mission is not None and len(project.mission.strip()) > 0:
         return True
-    elif (tab==TABS["VISION"]) and project.vision is not None and len(project.vision.strip()) > 0:
+    elif tab==TABS["VISION"] and project.vision is not None and len(project.vision.strip()) > 0:
         return True
-    elif (tab==TABS["VALUES"]) and project.values is not None and len(project.values.strip()) > 0:
+    elif tab==TABS["VALUES"] and project.values is not None and len(project.values.strip()) > 0:
         return True
-    elif (tab==TABS["PARTNERS"]) and project.values is not None and len(project.organization_set.all()) > 0:
+    elif tab==TABS["PARTNERS"] and project.values is not None and len(project.organization_set.all()) > 0:
         return True
-    elif (tab==TABS["SPONSORS"]) and project.values is not None and len(project.fundingsource_set.all()) > 0:
+    elif tab==TABS["SPONSORS"] and project.values is not None and len(project.fundingsource_set.all()) > 0:
         return True   
-    elif (tab==TABS["PEOPLE"]):
+    elif tab==TABS["PEOPLE"]:
         # "People" always populated with project users
         return True
-    elif (tab==TABS["CONTACTUS"] or tab==TABS["SUPPORT"]):
+    elif tab==TABS["CONTACTUS"] or tab==TABS["SUPPORT"]:
         # 'contactus' and 'support' always populated
         return True
-    elif (tab==TABS["DEVELOPMENT"]) and project.developmentOverview is not None and len(project.developmentOverview)>0:
+    elif tab==TABS["DEVELOPMENT"] and project.developmentOverview is not None and len(project.developmentOverview)>0:
         return True
+    elif tab==TABS["GOVERNANCE"] and project.governanceOverview is not None and len(project.governanceOverview) > 0:     
+        return True
+    elif tab==TABS["BODIES"] and len(project.managementbody_set.all()) > 0:
+         return True
+    elif tab == TABS["ROLES"]:
+        if len(getLeadOrganizationalRoles(project)) > 0 or len(getMemberOrganizationalRoles(project)) > 0:
+            return True
+    elif tab == TABS["PROCESSES"]:
+        if len(project.communicationmeans_set.all()) > 0 \
+        or project.taskPrioritizationStrategy is not None \
+        or project.requirementsIdentificationProcess is not None\
+        or len(project.policies()) > 0:
+            return True
     else:
         return False
 

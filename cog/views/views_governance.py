@@ -5,75 +5,33 @@ from cog.models.constants import LEAD_ORGANIZATIONAL_ROLES_DICT, \
     MANAGEMENT_BODY_CATEGORY_OPERATIONAL
 from constants import PERMISSION_DENIED_MESSAGE
 from django.contrib.auth.decorators import login_required
-from django.forms.models import BaseInlineFormSet, modelformset_factory, \
-    inlineformset_factory
-from django.http import HttpResponseRedirect, HttpResponse, \
-    HttpResponseForbidden
+from django.forms.models import BaseInlineFormSet, modelformset_factory, inlineformset_factory
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.functional import curry
-from views_project import getProjectNotActiveRedirect, \
-    getProjectNotVisibleRedirect
+from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from cog.models.constants import TABS, TAB_LABELS
+from cog.views.views_templated import templated_page_display
 
-def _hasGovernanceInfo(project, tab):
-    '''Utility function to determine whether a project has been populated 
-       with the requested type of governance object.'''
-    
-    if tab=='governance':
-        if project.governanceOverview is not None and len(project.governanceOverview) > 0:     
-            return True
-    elif tab=='bodies':
-        if len(project.managementbody_set.all()) > 0:
-            return True
-    elif tab == 'roles':
-        if len(getLeadOrganizationalRoles(project)) > 0 or len(getMemberOrganizationalRoles(project)) > 0:
-            return True
-    elif tab == 'processes':
-        if len(project.communicationmeans_set.all()) > 0 \
-        or project.taskPrioritizationStrategy is not None \
-        or project.requirementsIdentificationProcess is not None\
-        or len(project.policies()) > 0:
-            return True
-    return False
 
 def governance_display(request, project_short_name, tab):
-    ''' Dispatcher for governance view pages. '''
-    
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # check project is active
-    if project.active==False:
-        return getProjectNotActiveRedirect(request, project)
-    elif project.isNotVisible(request.user):
-        return getProjectNotVisibleRedirect(request, project)
-    
-    # selective display parameter
-    #display = request.GET.get('display','ALL')
-    
-    # build list of children with governance info that are visible to user
-    children = []
-    for child in project.children():
-        if _hasGovernanceInfo(child, tab) and child.isVisible(request.user):
-            children.append(child)
-    
-    # build list of peers with governance info that are visible to user
-    peers = []
-    for peer in project.peers.all():
-        if _hasGovernanceInfo(peer, tab) and peer.isVisible(request.user):
-            peers.append(peer)
+    ''' Dispatcher for display of governance pages. '''
     
     template_page = 'cog/governance/_governance.html'
-    if tab == 'governance':
+    template_page = 'cog/governance/_governance.html'
+    template_title = TAB_LABELS[tab]
+    if tab == TABS["GOVERNANCE"]:
         template_title = 'Governance Overview'
-    else:
-        template_title = 'Governance %s' % tab.capitalize()
-    template_form_name = None
-    return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers,
-                               'tab':tab },
-                              context_instance=RequestContext(request))
+        template_form_page = reverse( "governance_overview_update", args=[project_short_name] )
+    elif tab == TABS["BODIES"]:
+        template_form_page = None # multiple update forms hyper-linked in context
+    elif tab == TABS["ROLES"]:
+        template_form_page = None # multiple update forms hyper-linked in context
+    elif tab == TABS["PROCESSES"]:
+        template_form_page = None # multiple update forms hyper-linked in context
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+
 
 # view to update the project Management Body objects
 @login_required

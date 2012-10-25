@@ -17,7 +17,7 @@ from cog.models.utils import *
 
 from cog.views.views_templated import templated_page_display
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import TABS
+from cog.models.constants import TABS, TAB_LABELS
 
 # method to add a new project, with optional parent project
 @login_required
@@ -268,30 +268,71 @@ def project_delete(request, project_short_name):
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_index'))
     
-            
+def getinvolved_display(request, project_short_name):
+    ''' View to display the project "Get Involved" page. '''
+        
+    tab = TABS["GETINVOLVED"]
+    template_page = 'cog/project/_project_getinvolved.html'
+    template_title = TAB_LABELS[tab]
+    template_form_page = reverse("getinvolved_update", args=[project_short_name])
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)            
 
 def contactus_display(request, project_short_name):
     ''' View to display the project "Contact Us" page. '''
         
+    tab = TABS["CONTACTUS"]
     template_page = 'cog/project/_project_contactus.html'
-    template_title = 'Contact Us'
-    template_form_name = "contactus_update"
-    children = project.children()
-    peers = project.peers.all()
-    tab = 'contactus'
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_name)
+    template_title = TAB_LABELS[tab]
+    template_form_page = reverse("contactus_update", args=[project_short_name])
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
 
 def support_display(request, project_short_name):
     ''' View to display the project "Support" page. '''
         
+    tab = TABS["SUPPORT"]
     template_page = 'cog/project/_project_support.html'
-    template_title = 'Support'
-    template_form_name = "support_update"
-    children = project.children()
-    peers = project.peers.all()
-    tab = 'support'
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_name)
+    template_title = TAB_LABELS[tab]
+    template_form_page = reverse("support_update", args=[project_short_name])
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
     
+@login_required
+def getinvolved_update(request, project_short_name):
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if (request.method=='GET'):
+        
+        # create form object from model
+        form = GetInvolvedForm(instance=project)
+        
+        # display form view
+        return render_getinvolved_form(request, project, form)
+    
+    # POST
+    else:
+        # update existing database model with form data
+        form = GetInvolvedForm(request.POST, instance=project)
+
+        if form.is_valid():
+            
+            # save form data
+            project = form.save()           
+            
+            # redirect to support display (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('getinvolved_display', args=[project.short_name.lower()]))
+            
+        else:
+            # re-display form view
+            if not form.is_valid():
+                print 'Form is invalid  %s' % form.errors
+            return render_getinvolved_form(request, project, form)
+
 @login_required
 def contactus_update(request, project_short_name):
     '''View to update the project "Contact Us" metadata.'''
@@ -520,7 +561,7 @@ def development_update(request, project_short_name):
         form = DevelopmentOverviewForm(instance=project)
 
         # render form
-        return render_development_form(request, form, project)
+        return render_development_form(request, project, form)
     
     # POST request
     else:
@@ -540,9 +581,14 @@ def development_update(request, project_short_name):
         # return to form
         else:
             print 'Form is invalid %s' % form.errors
-            return render_development_form(request, form, project)
+            return render_development_form(request, project, form)
         
-def render_development_form(request, form, project):
+def render_development_form(request, project, form):
     return render_to_response('cog/project/development_form.html',
                               {'title' : 'Development Overview Update', 'project': project, 'form':form },
+                               context_instance=RequestContext(request))
+    
+def render_getinvolved_form(request, project, form):
+    return render_to_response('cog/project/getinvolved_form.html',
+                              {'title' : 'Get Involved Update', 'project': project, 'form':form },
                                context_instance=RequestContext(request))

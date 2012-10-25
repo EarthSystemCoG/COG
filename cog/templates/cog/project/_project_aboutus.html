@@ -3,7 +3,7 @@
 {% load cog_utils %}
 
 <table>
-	{% if tab = 'aboutus' %}
+	{% if tab = "ABOUTUS"|tabs %}
 	    <tr>
 			<td nowrap="nowrap"><b>Long Name</b></td>
 			<td class="long">{{proj.long_name}}</td>
@@ -27,81 +27,80 @@
 		</tr>
 		{% endif %}
 	
-	{% else %}
-	
-		{% if tab = 'mission' and proj.mission %}
-			<tr>
-				<td class="long" colspan="2">{{proj.mission|linebreaksbr}}</td>
-			</tr>
-		{% endif %}
-	
-		{% if tab = 'vision' and proj.vision %}
-			<tr>
-				<td class="long" colspan="2">{{proj.vision|linebreaksbr}}</td>
-			</tr>
-		{% endif %}
-		
-		{% if tab = 'values' and proj.values %}
-		<tr>
-			<td class="long" class="long" colspan="2">{{proj.values|linebreaksbr}}</td>
-		</tr>
-		{% endif %}
-		
-		{% if tab = 'partners' %}
-			{% for organization in proj.organization_set.all %}
-			<tr>
-				<td nowrap="nowrap"><b>Organizational Partner</b></td>
-				<td class="long">{{organization.name}}</td>
-			</tr>    	
-			{% endfor %}
-		{% endif %}
-		
-		{% if tab = 'sponsors' %}
-			{% for fundingSource in proj.fundingsource_set.all %}
-			<tr>
-				<td nowrap="nowrap"><b>Funding Source</b></td>
-				<td class="long">{{fundingSource.name}}</td>
-			</tr>    	
-			{% endfor %}
-		{% endif %}
-		
-		{% if tab = 'people' %}
-			{% load pagination_tags %}
-			{% with proj.getUsers as users %}
-				{% autopaginate users 50 %}			
-				<tr>
-					<td class="long" colspan="2">
-						<div class="mybox">
-		        			<table>
-		        				<caption>{{ proj.short_name }} Users</caption>
-					            <tr>
-					                <td class="tophead">Last Name</td>
-					                <td class="tophead">First Name</td>
-					                <td class="tophead">User Name</td>				                
-					                <td class="tophead">Institution</td>
-					                <td class="tophead">Role</td>
-					            </tr>
-					            {% for user in users %}
-	                			<tr>
-                    				<td>{{ user.last_name }}</td>
-                    				<td>{{ user.first_name }}</td>
-                    				<td>{{ user.username }}</td>
-                    				<td>{{ user|getUserProfileAttribute:"institution" }}</td> 
-                    				<td>
-                    					{% for role in user|roles:project %}{% if forloop.counter != 1 %}, {% endif %}{{ role }}{% endfor %}
-                    				</td>
-					            </tr>
-					            {% endfor %}
-					        </table>
-					    </div>
-			    	</td>
-			    </tr>
-			    
-			    {% paginate %}
-			      							
-			{% endwith %}
-		{% endif %}
-	
 	{% endif %}
+	
+	{% if tab = "MISSION"|tabs and proj.mission %}
+		<tr>
+			<td class="long" colspan="2">{{proj.mission|linebreaksbr}}</td>
+		</tr>
+	{% endif %}
+	
+	{% if tab = "VISION"|tabs and proj.vision %}
+		<tr>
+			<td class="long" colspan="2">{{proj.vision|linebreaksbr}}</td>
+		</tr>
+	{% endif %}
+		
+	{% if tab = "VALUES"|tabs and proj.values %}
+	<tr>
+		<td class="long" class="long" colspan="2">{{proj.values|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	
+	{% if tab = "PARTNERS"|tabs %}
+		{% for organization in proj.organization_set.all %}
+		<tr>
+			<td nowrap="nowrap"><b>Organizational Partner</b></td>
+			<td class="long">{{organization.name}}</td>
+		</tr>    	
+		{% endfor %}
+	{% endif %}
+	
+	{% if tab = "SPONSORS"|tabs %}
+		{% for fundingSource in proj.fundingsource_set.all %}
+		<tr>
+			<td nowrap="nowrap"><b>Funding Source</b></td>
+			<td class="long">{{fundingSource.name}}</td>
+		</tr>    	
+		{% endfor %}
+	{% endif %}
+	
+	{% if tab = "PEOPLE"|tabs %}
+		{% load pagination_tags %}
+		{% with proj.getUsers as users %}
+			{% autopaginate users 50 %}			
+			<tr>
+				<td class="long" colspan="2">
+					<div class="mybox">
+	        			<table>
+	        				<caption>{{ proj.short_name }} Users</caption>
+				            <tr>
+				                <td class="tophead">Last Name</td>
+				                <td class="tophead">First Name</td>
+				                <td class="tophead">User Name</td>				                
+				                <td class="tophead">Institution</td>
+				                <td class="tophead">Role</td>
+				            </tr>
+				            {% for user in users %}
+                			<tr>
+                   				<td>{{ user.last_name }}</td>
+                   				<td>{{ user.first_name }}</td>
+                   				<td>{{ user.username }}</td>
+                   				<td>{{ user|getUserProfileAttribute:"institution" }}</td> 
+                   				<td>
+                   					{% for role in user|roles:project %}{% if forloop.counter != 1 %}, {% endif %}{{ role }}{% endfor %}
+                   				</td>
+				            </tr>
+				            {% endfor %}
+				        </table>
+				    </div>
+		    	</td>
+		    </tr>
+		    
+		    {% paginate %}
+		      							
+		{% endwith %}
+	{% endif %}
+	
 </table>
         
