@@ -19,6 +19,9 @@ class UserProfile(models.Model):
     # opt-in mailing list (but defaults to true to migrate existing users)
     subscribed = models.BooleanField(verbose_name='Subscribe to COG mailing list ?', default=True, null=False)
     
+    # opt-out privacy option
+    private = models.BooleanField(verbose_name='Do NOT list me among project members', default=False, null=False)
+    
     class Meta:
         app_label= APPLICATION_LABEL
 

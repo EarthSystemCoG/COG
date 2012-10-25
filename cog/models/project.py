@@ -1,16 +1,19 @@
-from django.db import models
-from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
-from django.contrib.auth.models import User, Permission, Group
-from topic import Topic
-from membership import MembershipRequest
-from django.db.models import Q
+from cog.models import UserProfile
 from cog.utils import smart_truncate
-from django.contrib.contenttypes.models import ContentType
-from os.path import basename
-from urllib import quote, unquote
-import re
+from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, \
+    TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
 from django.conf import settings
-import os, sys
+from django.contrib.auth.models import User, Permission, Group
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.db.models import Q
+from membership import MembershipRequest
+from os.path import basename
+from topic import Topic
+from urllib import quote, unquote
+import os
+import sys
+import re
 
 # Project
 class Project(models.Model):
@@ -95,6 +98,15 @@ class Project(models.Model):
         #users.sort(key=lambda x: x.last_name, reverse=True)
         users.sort(key=lambda x: x.last_name)
         return users
+    
+    # Method to return the project users that are not private
+    def getPublicUsers(self):
+        users = self.getUsers()
+        pubUsers = []
+        for user in users:
+            if not user.get_profile().private:
+               pubUsers.append(user)
+        return pubUsers
     
     def getGroups(self):
         return [ self.getUserGroup(), self.getAdminGroup() ]

@@ -67,7 +67,7 @@
 	
 	{% if tab = "PEOPLE"|tabs %}
 		{% load pagination_tags %}
-		{% with proj.getUsers as users %}
+		{% with proj.getPublicUsers as users %}
 			{% autopaginate users 50 %}			
 			<tr>
 				<td class="long" colspan="2">
