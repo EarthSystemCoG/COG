@@ -599,18 +599,20 @@ td ul.errorlist li {
 }
 
 
-/* THERE IS A KNOWN ISSUE W/ IE WHERE THE LAST COLUMN CONTENTS APPEAR AT THE BOTTOM OF THE PAGE */
-/* THIS IS KNOWN AS A "DROPPED FLOAT" BUG */
+/* THERE IS A KNOWN ("DROPPED FLOAT") ISSUE W/ IE WHERE THE LAST COLUMN CONTENTS APPEAR AT THE BOTTOM OF THE PAGE */
 /* BY APPLYING THE FOLLOWING STYLE TO THE LAST COLUMNS, THE CONTENTS ARE PREVENTED FROM OVERFLOWING ON THE RIGHT */
-/*.ie-drop-float-fix {*/
-/*div.search-box {*/
 div.last {
   margin-right:-100px;
   position:relative;
 }
+
+/* SOME OF THE SPACING NEEDS TO BE FINE-TUNED IN IE */
 div.last div#top_nav_right li a {
     padding-left: 3px;
     padding-right: 3px;
+}
+div.last div#top_nav {
+    padding-top: 2px;
 }
 
 /* THESE ARE REQUIRED TO FORCE IE TO CENTER THE PAGE CONTENT */
