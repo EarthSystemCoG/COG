@@ -11,7 +11,7 @@ import re
 from cog.utils import smart_truncate, INVALID_CHARS
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
-from cog.models.constants import NAVMAP, INVNAVMAP
+from cog.models.constants import NAVMAP, INVNAVMAP, TABS
 
 register = template.Library()
 
@@ -358,13 +358,10 @@ def getTopTabUrl(project, request):
     if homeurl in request.path:
         # request.path = "/projects/cog/aboutus/mission/" or "/projects/cog/nav/aboutus/update/"
         # subtaburl = "aboutus/mission/"
-        print 'request path=%s' % request.path
         subtaburl = request.path[ len(homeurl) : ]
         # disregard everything after the first '/'
         subtaburl = subtaburl[0:subtaburl.find('/')+1]
-        print 'subtaburl=%s' % subtaburl
         # taburl = "/projects/cog/" + "aboutus/"
-        print 'subtaburl=%s' % subtaburl
         if subtaburl in INVNAVMAP:
             taburl = homeurl + INVNAVMAP[subtaburl]
             #print "subtaburl=%s" % subtaburl
@@ -516,3 +513,7 @@ def roles(user, project):
 def getUserProfileAttribute(user, attribute):
     profile = UserProfile.objects.get(user=user)
     return getattr(profile, attribute)
+
+@register.filter
+def tabs(label):
+    return TABS[label]

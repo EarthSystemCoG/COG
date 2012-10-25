@@ -9,79 +9,27 @@ import os
 from django.conf import settings
 
 from cog.models import *
+from cog.models.constants import TABS, TAB_LABELS
 from cog.forms import *
 from cog.utils import *
 from cog.notification import notify
 from cog.services.membership import addMembership
 from cog.models.utils import *
+from cog.views.views_templated import templated_page_display
 
 from constants import PERMISSION_DENIED_MESSAGE        
 
 def aboutus_display(request, project_short_name, tab):
     ''' View to display an project tab page. '''
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    template_page = 'cog/project/_project_aboutus.html'
-    template_form_name = "aboutus_update"
-    template_title = tab.capitalize()    
-    children = project.children()
-    peers = project.peers.all()
-    return _templated_page_display(request, project, tab,
-                                   template_page, template_title, template_form_name, children, peers)
-    
-def _hasTemplatedInfo(project, tab):
-    '''Utility function to determine whether a project has been populated 
-       with the requested templated metadata, depending on type.'''
-    
-    if (tab=='aboutus'):
-        # 'About Us' always populated with long_name, description
-        return True
-    elif (tab=='mission') and project.mission is not None and len(project.mission.strip()) > 0:
-        return True
-    elif (tab=='vision') and project.vision is not None and len(project.vision.strip()) > 0:
-        return True
-    elif (tab=='values') and project.values is not None and len(project.values.strip()) > 0:
-        return True
-    elif (tab=='partners') and project.values is not None and len(project.organization_set.all()) > 0:
-        return True
-    elif (tab=='sponsors') and project.values is not None and len(project.fundingsource_set.all()) > 0:
-        return True   
-    elif (tab=='people'):
-        # "People" always populated with project users
-        return True
-    else:
-        return False
-
-def _templated_page_display(request, project, tab, template_page, template_title, template_form_name, children, peers):
         
-    # check project is active
-    if project.active==False:
-        return getProjectNotActiveRedirect(request, project)
-    elif project.isNotVisible(request.user):
-        return getProjectNotVisibleRedirect(request, project)
+    template_page = 'cog/project/_project_aboutus.html'
+    if tab==TABS["PEOPLE"]:
+        template_form_page = None
+    else:
+        template_form_page = reverse('aboutus_update', args=[project_short_name, tab])
+    template_title = TAB_LABELS[tab]
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
     
-    # build list of children with relevant metadata that are visible to user
-    children = []
-    for child in project.children():
-        if _hasTemplatedInfo(child, tab) and child.isVisible(request.user):
-            children.append(child)
-    
-    # build list of peers with relevant metadata that are visible to user
-    peers = []
-    for peer in project.peers.all():
-        if _hasTemplatedInfo(peer, tab) and peer.isVisible(request.user):
-            peers.append(peer)
-   
-    return render_templated_page(request, project, tab, template_page, template_title, template_form_name, children, peers)
-
-def render_templated_page(request, project, tab, template_page, template_title, template_form_name, children, peers):
-    return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 'tab' : tab,
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers },
-                              context_instance=RequestContext(request))
 
 @login_required
 def aboutus_update(request, project_short_name, tab):
@@ -143,5 +91,6 @@ def render_aboutus_form(request, project, tab, form, organization_formset, fundi
                           {'form': form, 'tab':tab,
                            'organization_formset':organization_formset, 
                            'fundingsource_formset':fundingsource_formset,
-                           'title': 'Update Project Details', 'project': project }, 
+                           'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
+                           'project': project }, 
                           context_instance=RequestContext(request))

@@ -15,7 +15,9 @@ from cog.notification import notify
 from cog.services.membership import addMembership
 from cog.models.utils import *
 
-from constants import PERMISSION_DENIED_MESSAGE
+from cog.views.views_templated import templated_page_display
+from cog.views.constants import PERMISSION_DENIED_MESSAGE
+from cog.models.constants import TABS
 
 # method to add a new project, with optional parent project
 @login_required
@@ -270,31 +272,25 @@ def project_delete(request, project_short_name):
 
 def contactus_display(request, project_short_name):
     ''' View to display the project "Contact Us" page. '''
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
+        
     template_page = 'cog/project/_project_contactus.html'
     template_title = 'Contact Us'
     template_form_name = "contactus_update"
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, None,
-                                   template_page, template_title, template_form_name, children, peers)
+    tab = 'contactus'
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_name)
 
 def support_display(request, project_short_name):
     ''' View to display the project "Support" page. '''
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
+        
     template_page = 'cog/project/_project_support.html'
     template_title = 'Support'
     template_form_name = "support_update"
     children = project.children()
     peers = project.peers.all()
-    return _templated_page_display(request, project, None,
-                                   template_page, template_title, template_form_name, children, peers)
+    tab = 'support'
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_name)
     
 @login_required
 def contactus_update(request, project_short_name):
@@ -498,36 +494,15 @@ def getProjectNotVisibleRedirect(request, project):
         
         
 def development_display(request, project_short_name):
-    ''' Dispatcher for governance view pages. '''
-    
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # check project is active
-    if project.active==False:
-        return getProjectNotActiveRedirect(request, project)
-    elif project.isNotVisible(request.user):
-        return getProjectNotVisibleRedirect(request, project)
-        
-    # build list of children with development info that are visible to user
-    children = []
-    for child in project.children():
-        if child.developmentOverview is not None and len(child.developmentOverview)>0 and child.isVisible(request.user):
-            children.append(child)
-    
-    # build list of peers with development info that are visible to user
-    peers = []
-    for peer in project.peers.all():
-        if peer.developmentOverview is not None and len(peer.developmentOverview)>0 and peer.isVisible(request.user):
-            peers.append(peer)
-    
+   
+    tab = TABS["DEVELOPMENT"] 
     template_page = 'cog/project/_project_development.html'
-    template_title = 'Development Overview'
-    template_form_name = None
-    return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers },
-                              context_instance=RequestContext(request))
+    template_form_page = reverse('development_update', args=[project_short_name])
+    template_title = "Development Overview"
+   
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+
+
 @login_required
 def development_update(request, project_short_name):
     

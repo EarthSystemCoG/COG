@@ -1,4 +1,5 @@
 from constants import *
+from views_templated import *
 from views_bookmarks import *
 from views_account import *
 from views_doc import *
