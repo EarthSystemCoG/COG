@@ -614,6 +614,9 @@ div.last div#top_nav_right li a {
 div.last div#top_nav {
     padding-top: 2px;
 }
+div.last ol {
+    margin-left: 3px;
+}
 
 /* THESE ARE REQUIRED TO FORCE IE TO CENTER THE PAGE CONTENT */
 body {
