@@ -84,7 +84,8 @@ def user_add(request):
                                 state=form.cleaned_data['state'],
                                 country=form.cleaned_data['country'],
                                 department=form.cleaned_data['department'],
-                                subscribed=form.cleaned_data['subscribed'])
+                                subscribed=form.cleaned_data['subscribed'],
+                                private=form.cleaned_data['private'])
             userp.save()
             print 'Created profile for user=%s' % user.get_full_name()
             
@@ -146,7 +147,8 @@ def user_update(request, user_id):
                                                  'state':profile.state,
                                                  'country':profile.country, 
                                                  'department':profile.department,
-                                                 'subscribed':profile.subscribed })
+                                                 'subscribed':profile.subscribed,
+                                                 'private':profile.private })
                 
         return render_user_form(request, form, title='Update User Profile')
 
@@ -154,6 +156,7 @@ def user_update(request, user_id):
         form = UserForm(request.POST, instance=user) # form with bounded data
         
         if form.is_valid():
+            
             # update user
             user = form.save()
                         
@@ -166,8 +169,9 @@ def user_update(request, user_id):
             user_profile.country=form.cleaned_data['country']
             user_profile.department=form.cleaned_data['department']
             user_profile.subscribed=form.cleaned_data['subscribed']
+            user_profile.private=form.cleaned_data['private']
             user_profile.save()
-            
+                        
             # subscribe/unsubscribe user is mailing list selection changed
             if oldSubscribed==True and form.cleaned_data['subscribed']==False:
                 unSubscribeUserToMailingList(user, request)

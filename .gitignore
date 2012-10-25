@@ -5,3 +5,8 @@
 # Compiled files
 *.pyc
 
+# CKEditor
+cog/static/cog/ckeditor
+
+# static files
+static

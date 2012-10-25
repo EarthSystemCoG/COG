@@ -37,14 +37,15 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         # Note: must exclude the many2many field mapped through an intermediary table
-        exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess')
+        exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess','governanceOverview','developmentOverview')
 
     
 class AboutusForm(ModelForm):
     
     class Meta:
         model = Project
-        exclude = ('short_name','parent','peers','author','active','private','logo','logo_url','topics','taskPrioritizationStrategy','requirementsIdentificationProcess')
+        exclude = ('short_name','parent','peers','author','active','private','logo','logo_url',
+                   'topics','taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview')
         widgets = {
                    'description': Textarea(attrs={'rows':6}),
                    'mission':     Textarea(attrs={'rows':6}),
@@ -66,3 +67,17 @@ class SupportForm(ModelForm):
         model = Project
         fields = ('long_name', 'mission')
         widgets = { 'mission': Textarea(attrs={'rows':6}), }
+        
+class GetInvolvedForm(ModelForm):
+    
+    class Meta:
+        model = Project
+        fields = ('long_name', 'mission')
+        widgets = { 'mission': Textarea(attrs={'rows':6}), }
+        
+class DevelopmentOverviewForm(ModelForm):
+    
+    class Meta:
+        model = Project
+        widgets = { 'developmentOverview': Textarea(attrs={'rows':10}), }
+        fields = ( 'developmentOverview', )

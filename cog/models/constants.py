@@ -1,25 +1,74 @@
 APPLICATION_LABEL = 'cog'
 
-# default template for project predefined pages, in the order they are displayed
-# the first list item is the top-level tab, the others are sub-tabs
-# IMPORTANT: the sub-tab URLs must start with the parent-tab URL (so that tabs can be properly selected)
+TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"values",
+         "PARTNERS":"partners", "SPONSORS":"sponsors", "PEOPLE":"people",
+         "BOOKMARKS":"bookmarks",
+         "DEVELOPMENT":"development", "CODE":"code", "TRACKERS":"trackers",
+         "ROADMAP":"roadmap",
+         "GOVERNANCE":"governance","BODIES":"bodies","ROLES":"roles", "PROCESSES":"processes",
+         "GETINVOLVED":"getinvolved", 
+         "SUPPORT":"support",
+         "CONTACTUS":"contactus"}
+
+#
+# RULES FOR TAB HIERARCHY
+# o tab and subtab URLs must be of the form: 'projects/<project_short_name_lower>/<tab_label>/' whwre tab_label is unique
+# o the selected sub-tab is found by matching the request path to the PROJECT_PAGES urls
+# o the selected tab will be the one in position '0' in the list containing the selected sub-tab
+# o everything after the third '/' is disregarded in computing the high-lihghted tab and sub-tab
+# o the tab/sub-tab URLs can be arbitrary except containing a '/'
 PROJECT_PAGES = (
          [("Home", "")],
-         [("About Us", "aboutus/"), ("Mission", "aboutus/mission/"), ("Vision", "aboutus/vision/"), ("Values", "aboutus/values/"),
-          ("Partners", "aboutus/partners/"), ("Sponsors", "aboutus/sponsors/"), ("People", "aboutus/people/")], 
-         #[("About Us", "aboutus/")],     
-         # note that the bookmarks page is outside the project context, its URL is created later through a "reverse" lookup
-         [("Bookmarks", "bookmarks/list/<project>/")],
-         [("Code", "code/")],
-         [("Trackers", "trackers/")],
-         [("Support", "support/")],
-         #[("Governance", "governance/"), ("Governance 1", "governance/g1/") ],
-         [("Governance", "governance/")],
-         #[("Roadmap", "roadmap/"), ("Roadmap 1", "roadmap/road1/"), ("Roadmap 2", "roadmap/road2/")],
-         [("Roadmap", "roadmap/")],
-         [("Contact Us", "contactus/")],            
-         #("Administration", "admin/"),
+         [("About Us", "%s/" % TABS["ABOUTUS"]), ("Mission", "%s/" % TABS["MISSION"]), ("Vision", "%s/" % TABS["VISION"]), ("Values", "%s/" % TABS["VALUES"]),
+          ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])], 
+         [("Bookmarks", "%s/" % TABS["BOOKMARKS"])],
+         [("Development", "%s/" % TABS["DEVELOPMENT"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"])],
+         [("Roadmap", "%s/" % TABS["ROADMAP"])],
+         [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), ("Processes", "%s/" % TABS["PROCESSES"])],
+         [("Get Involved", "%s/" % TABS["GETINVOLVED"])],
+         [("Support", "%s/" % TABS["SUPPORT"])],
+         [("Contact Us", "%s/" % TABS["CONTACTUS"])],            
         )
+
+# "aboutus" --> "About Us"
+TAB_LABELS = {}
+for pages in PROJECT_PAGES:
+    for page in pages:
+        # remove trailing '/' from key
+        TAB_LABELS[page[1][0:len(page[1])-1]] = page[0]
+
+# Navigational map: tab --> [suntabs]
+# {
+#  '': [], 
+#  'support/': [], 
+#  'governance/': [], 
+# 'trackers/': [], 
+# 'bookmarks/list/<project>/': [], 
+# 'roadmap/': [], 
+# 'contactus/': [], 
+# 'aboutus/': ['aboutus/mission/', 'aboutus/vision/', 'aboutus/values/', 'aboutus/partners/', 'aboutus/sponsors/', 'aboutus/people/'], 
+#'code/': []
+# }
+NAVMAP = {}
+# Inverse navigational map: subtab --> tab
+# { 
+#   '': '', 
+#   'aboutus/people/': 'aboutus/', 
+#   'aboutus/vision/': 'aboutus/', 
+#   'aboutus/partners/': 'aboutus/', 'governance/': 'governance/', 'aboutus/mission/': 'aboutus/', 'bookmarks/list/<project>/': 'bookmarks/list/<project>/', 'contactus/': 'contactus/', 'trackers/': 'trackers/', 'aboutus/values/': 'aboutus/', 'aboutus/sponsors/': 'aboutus/', 'roadmap/': 'roadmap/', 'support/': 'support/', 'aboutus/': 'aboutus/', 
+#   'code/': 'code/'
+# }
+INVNAVMAP = {}
+for tabs in PROJECT_PAGES:  
+    taburl = tabs[0][1] 
+    NAVMAP[ taburl ] = []
+    INVNAVMAP[ taburl ] = taburl
+    if len(tabs)>1:
+        for ppage in tabs[1:]:
+            subtaburl = ppage[1]
+            NAVMAP[ taburl ].append( subtaburl )
+            INVNAVMAP[ subtaburl ] = taburl
+
 
 PURPOSE_TYPES = (
                  'Overall Project Coordination',

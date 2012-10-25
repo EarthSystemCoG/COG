@@ -1,0 +1,35 @@
+{% extends "cog/common/layout_sidebar_center_right.html" %}
+
+{% block main %} 
+
+	{% load cog_utils %}
+    
+	<form action="" method="post">
+	         
+	     {% csrf_token %}
+	     
+	        <div class="mybox">
+				<table>
+					<tr>
+	            		<td class="long">
+	            			{{ form.developmentOverview.help_text }}
+	            		</td>
+	            	</tr>
+	            	<tr>
+	            		<td>
+	            			{{ form.developmentOverview }} 
+	            			{{ form.developmentOverview.errors }}
+	            		</td>
+	            	</tr>
+				</table>
+		</div>	
+		{{ form.project.as_hidden }}
+	     
+	    <div style="text-align:right">
+	         <input type="button" value="Cancel" onclick="window.location='{% url development_display project.short_name|lower %}'"/>
+	         <input type="submit" value="Submit" />
+        </div>
+
+	</form>
+	
+{% endblock %}

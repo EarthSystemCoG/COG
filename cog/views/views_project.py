@@ -15,7 +15,9 @@ from cog.notification import notify
 from cog.services.membership import addMembership
 from cog.models.utils import *
 
-from constants import PERMISSION_DENIED_MESSAGE
+from cog.views.views_templated import templated_page_display
+from cog.views.constants import PERMISSION_DENIED_MESSAGE
+from cog.models.constants import TABS, TAB_LABELS
 
 # method to add a new project, with optional parent project
 @login_required
@@ -266,106 +268,70 @@ def project_delete(request, project_short_name):
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_index'))
     
-def _hasTemplatedInfo(project, subtab):
-    '''Utility function to determine whether a project has been populated 
-       with the requested templated metadata, depending on type.'''
-    
-    if (subtab is None):
-        # 'About Us' always populated with long_name, description
-        return True
-    elif (subtab=='mission') and project.mission is not None and len(project.mission.strip()) > 0:
-        return True
-    elif (subtab=='vision') and project.vision is not None and len(project.vision.strip()) > 0:
-        return True
-    elif (subtab=='values') and project.values is not None and len(project.values.strip()) > 0:
-        return True
-    elif (subtab=='partners') and project.values is not None and len(project.organization_set.all()) > 0:
-        return True
-    elif (subtab=='sponsors') and project.values is not None and len(project.fundingsource_set.all()) > 0:
-        return True   
-    elif (subtab=='people'):
-        # "People" always populated with project users
-        return True
-    else:
-        return False
-    
-def aboutus_display(request, project_short_name):
-    return aboutus_subtab_display(request, project_short_name, None) # no subtab
-            
-def aboutus_subtab_display(request, project_short_name, subtab):
-    ''' View to display an "About Us" page. '''
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-
-    template_page = 'cog/project/_project_aboutus.html'   
-    if subtab is None:
-        template_title = 'About Us'
-        template_form_name = "aboutus_update"
-    else:      
-         template_form_name = "aboutus_subtab_update"
-         template_title = subtab.capitalize()
-    children = project.children()
-    peers = project.peers.all()
-    return _templated_page_display(request, project, subtab,
-                                   template_page, template_title, template_form_name, children, peers)
+def getinvolved_display(request, project_short_name):
+    ''' View to display the project "Get Involved" page. '''
+        
+    tab = TABS["GETINVOLVED"]
+    template_page = 'cog/project/_project_getinvolved.html'
+    template_title = TAB_LABELS[tab]
+    template_form_page = reverse("getinvolved_update", args=[project_short_name])
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)            
 
 def contactus_display(request, project_short_name):
     ''' View to display the project "Contact Us" page. '''
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
+        
+    tab = TABS["CONTACTUS"]
     template_page = 'cog/project/_project_contactus.html'
-    template_title = 'Contact Us'
-    template_form_name = "contactus_update"
-    children = project.children()
-    peers = project.peers.all()
-    return _templated_page_display(request, project, None,
-                                   template_page, template_title, template_form_name, children, peers)
+    template_title = TAB_LABELS[tab]
+    template_form_page = reverse("contactus_update", args=[project_short_name])
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
 
 def support_display(request, project_short_name):
     ''' View to display the project "Support" page. '''
+        
+    tab = TABS["SUPPORT"]
+    template_page = 'cog/project/_project_support.html'
+    template_title = TAB_LABELS[tab]
+    template_form_page = reverse("support_update", args=[project_short_name])
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+    
+@login_required
+def getinvolved_update(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
-    template_page = 'cog/project/_project_support.html'
-    template_title = 'Support'
-    template_form_name = "support_update"
-    children = project.children()
-    peers = project.peers.all()
-    return _templated_page_display(request, project, None,
-                                   template_page, template_title, template_form_name, children, peers)
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-def _templated_page_display(request, project, subtab, template_page, template_title, template_form_name, children, peers):
+    # GET request
+    if (request.method=='GET'):
         
-    # check project is active
-    if project.active==False:
-        return getProjectNotActiveRedirect(request, project)
-    elif project.isNotVisible(request.user):
-        return getProjectNotVisibleRedirect(request, project)
+        # create form object from model
+        form = GetInvolvedForm(instance=project)
+        
+        # display form view
+        return render_getinvolved_form(request, project, form)
     
-    # build list of children with relevant metadata that are visible to user
-    children = []
-    for child in project.children():
-        if _hasTemplatedInfo(child, subtab) and child.isVisible(request.user):
-            children.append(child)
-    
-    # build list of peers with relevant metadata that are visible to user
-    peers = []
-    for peer in project.peers.all():
-        if _hasTemplatedInfo(peer, subtab) and peer.isVisible(request.user):
-            peers.append(peer)
-   
-    return render_templated_page(request, project, subtab, template_page, template_title, template_form_name, children, peers)
+    # POST
+    else:
+        # update existing database model with form data
+        form = GetInvolvedForm(request.POST, instance=project)
 
-def render_templated_page(request, project, subtab, template_page, template_title, template_form_name, children, peers):
-    return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 'subtab' : subtab,
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers },
-                              context_instance=RequestContext(request))
+        if form.is_valid():
+            
+            # save form data
+            project = form.save()           
+            
+            # redirect to support display (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('getinvolved_display', args=[project.short_name.lower()]))
+            
+        else:
+            # re-display form view
+            if not form.is_valid():
+                print 'Form is invalid  %s' % form.errors
+            return render_getinvolved_form(request, project, form)
 
 @login_required
 def contactus_update(request, project_short_name):
@@ -455,75 +421,7 @@ def render_support_form(request, project, form):
                           {'form': form, 'title': 'Update Project Support', 'project': project }, 
                           context_instance=RequestContext(request))
 
-@login_required
-def aboutus_update(request, project_short_name):
-    return aboutus_subtab_update(request, project_short_name, None) # no sub-tab
 
-@login_required
-def aboutus_subtab_update(request, project_short_name, subtab):
-    '''View to update the project "About Us" metadata.'''
-
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # check permission
-    if not userHasAdminPermission(request.user, project):
-        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
-    # initialize formset factories for this project related objects
-    OrganizationFormSet  = inlineformset_factory(Project, Organization, extra=1, can_delete=True)
-    FundingSourceFormSet = inlineformset_factory(Project, FundingSource, extra=1, can_delete=True)
-    
-    # GET request
-    if (request.method=='GET'):
-        
-        # create form object from model
-        form = AboutusForm(instance=project)
-        
-        # create formset instances backed by current saved instances
-        # assign a unix prefix to each formset to avoid colilsions
-        organization_formset = OrganizationFormSet(instance=project, prefix='orgfs')
-        fundingsource_formset = FundingSourceFormSet(instance=project, prefix='fundfs')
-        
-        # display form view
-        return render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset)
-
-    # POST request
-    else:
-        # update existing database model with form data
-        form = AboutusForm(request.POST, instance=project)
-        organization_formset = OrganizationFormSet(request.POST, instance=project, prefix='orgfs')
-        fundingsource_formset = FundingSourceFormSet(request.POST, instance=project, prefix='fundfs')
-        
-        if form.is_valid() and organization_formset.is_valid() and fundingsource_formset.is_valid():
-            # save project data
-            project = form.save()           
-            oinstances = organization_formset.save()
-            fsinstances = fundingsource_formset.save()
-            
-            # redirect to about us display (GET-POST-REDIRECT)
-            if subtab is None:
-                return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower()]))
-            else:
-                return HttpResponseRedirect(reverse('aboutus_subtab_display', args=[project.short_name.lower(), subtab]))
-            
-        else:
-            # re-display form view
-            if not form.is_valid():
-                print 'Form is invalid  %s' % form.errors
-            if not organization_formset.is_valid():
-                print 'Organization formset is invalid  %s' % organization_formset.errors
-            if not fundingsource_formset.is_valid():
-                print 'Funding Source formset is invalid  %s' % fundingsource_formset.errors
-            return render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset)
-
-def render_aboutus_form(request, project, subtab, form, organization_formset, fundingsource_formset):
-    return render_to_response('cog/project/aboutus_form.html', 
-                          {'form': form, 'subtab':subtab,
-                           'organization_formset':organization_formset, 
-                           'fundingsource_formset':fundingsource_formset,
-                           'title': 'Update Project Details', 'project': project }, 
-                          context_instance=RequestContext(request))
     
 # method to delete a project and all its associated groups, permissions
 def deleteProject(project):
@@ -634,3 +532,63 @@ def getProjectNotVisibleRedirect(request, project):
                                    'project':project,
                                    'messages':messages }, 
                                   context_instance=RequestContext(request))
+        
+        
+def development_display(request, project_short_name):
+   
+    tab = TABS["DEVELOPMENT"] 
+    template_page = 'cog/project/_project_development.html'
+    template_form_page = reverse('development_update', args=[project_short_name])
+    template_title = "Development Overview"
+   
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+
+
+@login_required
+def development_update(request, project_short_name):
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if request.method=='GET':
+                
+        # create form object from model
+        form = DevelopmentOverviewForm(instance=project)
+
+        # render form
+        return render_development_form(request, project, form)
+    
+    # POST request
+    else:
+        
+        # update object from form data
+        form = DevelopmentOverviewForm(request.POST, instance=project)
+        
+        # validate form data
+        if form.is_valid():
+            
+            # persist changes
+            project = form.save()
+            
+            # redirect to development overview (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('development_display', args=[project.short_name.lower()]))            
+            
+        # return to form
+        else:
+            print 'Form is invalid %s' % form.errors
+            return render_development_form(request, project, form)
+        
+def render_development_form(request, project, form):
+    return render_to_response('cog/project/development_form.html',
+                              {'title' : 'Development Overview Update', 'project': project, 'form':form },
+                               context_instance=RequestContext(request))
+    
+def render_getinvolved_form(request, project, form):
+    return render_to_response('cog/project/getinvolved_form.html',
+                              {'title' : 'Get Involved Update', 'project': project, 'form':form },
+                               context_instance=RequestContext(request))

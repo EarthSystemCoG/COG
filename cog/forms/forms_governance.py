@@ -68,6 +68,13 @@ class GovernanceProcessesForm(ModelForm):
         widgets = { 'taskPrioritizationStrategy': Textarea(attrs={'rows':6}),
                     'requirementsIdentificationProcess': Textarea(attrs={'rows':6}), }
         
+class GovernanceOverviewForm(ModelForm):
+    
+    class Meta:
+        model = Project
+        widgets = { 'governanceOverview': Textarea(attrs={'rows':10}), }
+        fields = ( 'governanceOverview', )
+        
 class OrganizationalRoleForm(ModelForm):
     
     class Meta:

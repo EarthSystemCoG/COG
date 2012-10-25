@@ -206,7 +206,7 @@
 						{% for tab in tablist %}
 							<!-- top-level tab only -->
 							{% if forloop.counter == 1 %}
-								<li><a href="{{ tab.1 }}" {{ request|getTopTabStyle:tablist }}>{{ tab.0 }}</a></li>
+								<li><a href="{{ tab.1 }}" {{ tablist|getTopTabStyle:tab.2 }}>{{ tab.0 }}</a></li>
 							{% endif %}
 						{% endfor %}
 					{% endfor %}
@@ -235,7 +235,7 @@
 									{% for tab in tablist %}
 										<!-- sub-tabs only -->
 										{% if forloop.counter > 1 %}
-											<li><a href="{{ tab.1 }}" {{ request|getSubTabStyle:tab }}>
+											<li><a href="{{ tab.1 }}" {{ tablist|getSubTabStyle:tab }}>
 												<span style="color: #666">{{ tab.0 }}</span>
 												</a></li>
 										{% endif %}

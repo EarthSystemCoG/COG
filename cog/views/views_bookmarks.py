@@ -137,7 +137,7 @@ def bookmark_add2(request, project_short_name):
 
 # View to delete a bookmark
 @login_required
-def bookmark_delete(request, bookmark_id):
+def bookmark_delete(request, project_short_name, bookmark_id):
     
     bookmark = get_object_or_404(Bookmark, pk=bookmark_id)
     project = bookmark.folder.project
@@ -158,7 +158,7 @@ def bookmark_delete(request, bookmark_id):
 
 # View to update a bookmark
 @login_required
-def bookmark_update(request, bookmark_id):
+def bookmark_update(request, project_short_name, bookmark_id):
     
     bookmark = get_object_or_404(Bookmark, pk=bookmark_id)
     project = bookmark.folder.project
@@ -235,7 +235,7 @@ def folder_add(request, project_short_name):
             return render_folder_form(request, project, form) 
 
 @login_required
-def folder_update(request, folder_id):
+def folder_update(request, project_short_name, folder_id):
     
     # retrieve folder from request
     folder = get_object_or_404(Folder, pk=folder_id)
@@ -265,7 +265,7 @@ def folder_update(request, folder_id):
             return render_folder_form(request, folder.project, form) 
 
 @login_required
-def folder_delete(request, folder_id):
+def folder_delete(request, project_short_name, folder_id):
     
     # retrieve folder from request
     folder = get_object_or_404(Folder, pk=folder_id)
@@ -309,7 +309,7 @@ def render_bookmark_form(request, project, form):
                               context_instance=RequestContext(request))     
     
 @login_required
-def bookmark_add_notes(request, bookmark_id):
+def bookmark_add_notes(request, project_short_name, bookmark_id):
     
     # bookmark object
     bookmark = get_object_or_404(Bookmark, pk=bookmark_id)

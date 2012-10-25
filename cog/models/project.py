@@ -1,16 +1,19 @@
-from django.db import models
-from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
-from django.contrib.auth.models import User, Permission, Group
-from topic import Topic
-from membership import MembershipRequest
-from django.db.models import Q
+from cog.models import UserProfile
 from cog.utils import smart_truncate
-from django.contrib.contenttypes.models import ContentType
-from os.path import basename
-from urllib import quote, unquote
-import re
+from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, \
+    TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
 from django.conf import settings
-import os, sys
+from django.contrib.auth.models import User, Permission, Group
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.db.models import Q
+from membership import MembershipRequest
+from os.path import basename
+from topic import Topic
+from urllib import quote, unquote
+import os
+import sys
+import re
 
 # Project
 class Project(models.Model):
@@ -25,6 +28,10 @@ class Project(models.Model):
     history = models.TextField(blank=True, help_text='A narrative describing the origination and evolution of the project')
     external_homepage = models.URLField(max_length=200, blank=True, null=True, help_text='External Home Page')
     
+    governanceOverview = models.TextField(blank=False, null=True, verbose_name='Governance Overview', \
+                                          help_text='One or more paragraphs providing a general overview of the governance structure for the project.')
+    developmentOverview = models.TextField(blank=False, null=True, verbose_name='Development Overview', \
+                                           help_text='One or more paragraphs providing a general overview of the development processes for the project.')
     taskPrioritizationStrategy = models.TextField(blank=True, null=True, verbose_name='Task Prioritization Strategy', \
                                                   help_text='A paragraph describing how tasks are prioritized. This description may include who participates, how often they meet, how they meet, and whether the results are public.')
     requirementsIdentificationProcess = models.TextField(blank=True, null=True, verbose_name='Requirements Identification Process', \
@@ -91,6 +98,15 @@ class Project(models.Model):
         #users.sort(key=lambda x: x.last_name, reverse=True)
         users.sort(key=lambda x: x.last_name)
         return users
+    
+    # Method to return the project users that are not private
+    def getPublicUsers(self):
+        users = self.getUsers()
+        pubUsers = []
+        for user in users:
+            if not user.get_profile().private:
+               pubUsers.append(user)
+        return pubUsers
     
     def getGroups(self):
         return [ self.getUserGroup(), self.getAdminGroup() ]

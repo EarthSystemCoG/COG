@@ -40,6 +40,10 @@
         <tr>
             <td class="head" nowrap="nowrap"><b>COG Email List</b></td>
             <td class="long">{% if user_profile.subscribed %}Subscribed{% else %}Not Subscribed{% endif %}</td>
+        </tr>    
+        <tr>
+            <td class="head" nowrap="nowrap"><b>Listed in Projects</b></td>
+            <td class="long">{% if user_profile.private %}No{% else %}Yes{% endif %}</td>
         </tr>      
     </table>
 </div>

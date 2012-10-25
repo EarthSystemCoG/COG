@@ -79,12 +79,13 @@ class UserForm(ModelForm):
     state = CharField(required=False)
     country = CharField(required=True)
     subscribed = BooleanField(required=False)
+    private = BooleanField(required=False)
     
     class Meta:
         # note: use User model, not UserProfile
         model = User
         # define fields to be used, so to exclude last_login and date_joined
-        fields = ('first_name', 'last_name', 'username', 'password', 'email','institution','city','state','country','department','subscribed')
+        fields = ('first_name', 'last_name', 'username', 'password', 'email','institution','city','state','country','department','subscribed','private')
         
     # override form clean() method to execute custom validation on fields, 
     # including combined validation on multiple fields

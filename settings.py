@@ -148,8 +148,9 @@ LOGIN_URL = '/login'
 # page to redirect after successfull authentication, if 'next' parameter is not provided
 #LOGIN_REDIRECT_URL='/cog/' # COG projects index
 LOGIN_REDIRECT_URL='/' # welcome page
+
 # Custom user profile
-#AUTH_PROFILE_MODULE = "cog.UserProfile"
+AUTH_PROFILE_MODULE = "cog.UserProfile"
 
 # makes 'request' object available in templates
 TEMPLATE_CONTEXT_PROCESSORS += (

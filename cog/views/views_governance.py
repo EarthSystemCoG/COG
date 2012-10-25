@@ -6,69 +6,32 @@ from cog.models.constants import LEAD_ORGANIZATIONAL_ROLES_DICT, \
 from constants import PERMISSION_DENIED_MESSAGE
 from django.contrib.auth.decorators import login_required
 from django.forms.models import BaseInlineFormSet, modelformset_factory, inlineformset_factory
-from django.http import HttpResponseRedirect, HttpResponse, \
-    HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.functional import curry
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from cog.models.constants import TABS, TAB_LABELS
+from cog.views.views_templated import templated_page_display
 
-def _hasGovernanceInfo(project, display):
-    '''Utility function to determine whether a project has been populated 
-       with the requested type of governance object.'''
-    
-    if (display=='ALL' or display=='MANAGEMENT_BODIES') and len(project.managementbody_set.all()) > 0:
-        return True
-    elif (display=='ALL' or display=='LEAD_ORGANIZATIONAL_ROLES') and len(getLeadOrganizationalRoles(project)) > 0:
-        return True
-    elif (display=='ALL' or display=='MEMBER_ORGANIZATIONAL_ROLES') and len(getMemberOrganizationalRoles(project)) > 0:
-        return True
-    elif (display=='ALL' or display=='COMMUNICATION_MEANS') and len(project.communicationmeans_set.all()) > 0:
-        return True
-    elif (display=='ALL' or display=='PROCESSES') and project.taskPrioritizationStrategy is not None:
-        return True
-    elif (display=='ALL' or display=='PROCESSES') and project.requirementsIdentificationProcess is not None:
-        return True
-    elif (display=='ALL' or display=='POLICIES') and len(project.policies()) > 0:
-        return True
-    else:
-        return False
 
-# view to display all governance objects at once
-def governance_display(request, project_short_name):
-    
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # check project is active
-    if project.active==False:
-        return getProjectNotActiveRedirect(request, project)
-    elif project.isNotVisible(request.user):
-        return getProjectNotVisibleRedirect(request, project)
-    
-    # selective display parameter
-    display = request.GET.get('display','ALL')
-    
-    # build list of children with governance info that are visible to user
-    children = []
-    for child in project.children():
-        if _hasGovernanceInfo(child, display) and child.isVisible(request.user):
-            children.append(child)
-    
-    # build list of peers with governance info that are visible to user
-    peers = []
-    for peer in project.peers.all():
-        if _hasGovernanceInfo(peer, display) and peer.isVisible(request.user):
-            peers.append(peer)
+def governance_display(request, project_short_name, tab):
+    ''' Dispatcher for display of governance pages. '''
     
     template_page = 'cog/governance/_governance.html'
-    template_title = 'Governance'
-    template_form_name = None
-    return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers,
-                               'display':display },
-                              context_instance=RequestContext(request))
+    template_page = 'cog/governance/_governance.html'
+    template_title = TAB_LABELS[tab]
+    if tab == TABS["GOVERNANCE"]:
+        template_title = 'Governance Overview'
+        template_form_page = reverse( "governance_overview_update", args=[project_short_name] )
+    elif tab == TABS["BODIES"]:
+        template_form_page = None # multiple update forms hyper-linked in context
+    elif tab == TABS["ROLES"]:
+        template_form_page = None # multiple update forms hyper-linked in context
+    elif tab == TABS["PROCESSES"]:
+        template_form_page = None # multiple update forms hyper-linked in context
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+
 
 # view to update the project Management Body objects
 @login_required
@@ -87,7 +50,8 @@ def management_body_update(request, project_short_name, category):
         formsetType = OperationalManagementBodyInlineFormset
     
     # delegate to view for generic governance object
-    return governance_object_update(request, project_short_name, ManagementBody, objectTypeForm, formsetType,
+    tab = 'bodies'
+    return governance_object_update(request, project_short_name, tab, ManagementBody, objectTypeForm, formsetType,
                                     '%s Management Bodies Update' % category, 'cog/governance/management_body_form.html')
 
 # view to update the project Communication Means objects
@@ -95,8 +59,49 @@ def management_body_update(request, project_short_name, category):
 def communication_means_update(request, project_short_name):
 
     # delegate to view for generic governance object
-    return governance_object_update(request, project_short_name, CommunicationMeans, CommunicationMeansForm, BaseInlineFormSet,
+    tab = 'processes'
+    return governance_object_update(request, project_short_name, tab, CommunicationMeans, CommunicationMeansForm, BaseInlineFormSet,
                                     'Communication and Coordination Update', 'cog/governance/communication_means_form.html')
+    
+@login_required
+def governance_overview_update(request, project_short_name):
+
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if request.method=='GET':
+                
+        # create form object from model
+        form = GovernanceOverviewForm(instance=project)
+
+        # render form
+        return render_governance_overview_form(request, form, project)
+    
+    # POST request
+    else:
+        
+        # update object from form data
+        form = GovernanceOverviewForm(request.POST, instance=project)
+        
+        # validate form data
+        if form.is_valid():
+            
+            # persist changes
+            project = form.save()
+            
+            # redirect to governance display (GET-POST-REDIRECT)
+            tab = 'governance'
+            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower(), tab]))            
+            
+        # return to form
+        else:
+            print 'Form is invalid %s' % form.errors
+            return render_governance_overview_form(request, form, project)
 
     
 # Subclass of BaseInlineFormset that is used to 
@@ -119,7 +124,7 @@ class OperationalManagementBodyInlineFormset(BaseInlineFormSet):
 # The object must have the following attributes and methods:
 # obj.project
 # obj.__unicode__
-def governance_object_update(request, project_short_name, objectType, objectTypeForm, formsetType, title, template):
+def governance_object_update(request, project_short_name, tab, objectType, objectTypeForm, formsetType, title, template):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -154,7 +159,7 @@ def governance_object_update(request, project_short_name, objectType, objectType
                 instance.set_category()
                        
             # redirect to governance display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower()]))
+            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower(), tab]))
             
         else:
             print 'Formset is invalid  %s' % formset.errors
@@ -168,7 +173,7 @@ def render_governance_object_form(request, project, formset, title, template):
 
 # view to update a Management Body object members
 @login_required
-def management_body_members(request, object_id):
+def management_body_members(request, project_short_name, object_id):
     
     # retrieve object
     managementBody = get_object_or_404(ManagementBody, pk=object_id)
@@ -177,7 +182,8 @@ def management_body_members(request, object_id):
     managementBodyMemberForm = staticmethod(curry(ManagementBodyMemberForm, project=managementBody.project))
     
     # delegate to generic view with specific object types
-    return members_update(request, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm)
+    tab = 'bodies'
+    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm)
   
 # view to update a Communication Means object members  
 @login_required
@@ -188,7 +194,8 @@ def communication_means_members(request, object_id):
     communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
     
     # delegate to generic view with specific object types
-    return members_update(request, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm)
+    tab = 'processes'
+    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm)
 
 # view to update an Organizational Role object members  
 @login_required
@@ -200,7 +207,8 @@ def organizational_role_members(request, object_id):
     organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
     
     # delegate to generic view with specific object types
-    return members_update(request, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm)
+    tab = 'roles'
+    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm)
 
 # 
 # Generic view to update members for:
@@ -211,7 +219,7 @@ def organizational_role_members(request, object_id):
 # obj.project
 # obj.__unicode__
 #
-def members_update(request, objectId, objectType, objectMemberType, objectForm):
+def members_update(request, tab, objectId, objectType, objectMemberType, objectForm):
     
     # retrieve governance object
     obj = get_object_or_404(objectType, pk=objectId)
@@ -245,7 +253,7 @@ def members_update(request, objectId, objectType, objectMemberType, objectForm):
             instances = formset.save()
             
             # redirect to governance display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('governance_display', args=[obj.project.short_name.lower()]))
+            return HttpResponseRedirect(reverse('governance_display', args=[obj.project.short_name.lower(), tab]))
           
         else:
             print 'Formset is invalid: %s' % formset.errors
@@ -293,7 +301,8 @@ def govprocesses_update(request, project_short_name):
             project = form.save()
             
             # redirect to governance display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower()]))            
+            tab = 'processes'
+            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower(), tab]))            
             
         # return to form
         else:
@@ -303,6 +312,11 @@ def govprocesses_update(request, project_short_name):
 def render_governance_processes_form(request, form, project):
     return render_to_response('cog/governance/governance_processes_form.html',
                               {'title' : 'Governance Processes Update', 'project': project, 'form':form },
+                               context_instance=RequestContext(request))
+    
+def render_governance_overview_form(request, form, project):
+    return render_to_response('cog/governance/governance_overview_form.html',
+                              {'title' : 'Governance Overview Update', 'project': project, 'form':form },
                                context_instance=RequestContext(request))
     
 # Method to update an organizationl role
@@ -342,7 +356,8 @@ def organizational_role_update(request, project_short_name):
                 role.set_category()
             
             # redirect to governance display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower()]))
+            tab = 'roles'
+            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower(), tab]))
             
         else:
             print 'Organizational Role formset is invalid: %s' % organizational_role_formset.errors

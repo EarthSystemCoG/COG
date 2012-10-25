@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_center.html" %}
+{% extends "cog/common/layout_sidebar_center.html" %}
 {% load url from future %}
 
 {% block extrahead %}
@@ -35,185 +35,194 @@
 {% block main %}
 
 	{% load cog_utils %}
-	
-	<div class="mybox">
-		 <form action="" method="post">
-		         
-		     {% csrf_token %}
-		     {{ organization_formset.management_form }}
-		     {{ fundingsource_formset.management_form }}		     
-		     
+		
+	 <form action="" method="post">
+	         
+	     {% csrf_token %}
+	     {{ organization_formset.management_form }}
+	     {{ fundingsource_formset.management_form }}		     
+	     
+	     
+		 {% if tab = "ABOUTUS"|tabs %}	
+		 <div class="mybox">
+		 	<table>	     
+		     	 <!-- Update "About Us" tab -->
+		     	 <tr>
+			        <td nowrap="nowrap"><b>Project Long Name</b></td>
+			        <td class="long" colspan="2">
+			            {{ form.long_name }} 
+			            {{ form.long_name.errors }}
+			         </td>
+		         </tr>	     
+			     <tr>
+			        <td nowrap="nowrap"><b>Description</b></td>
+			        <td class="long" colspan="2">
+			        	{{form.description.help_text}}.
+			            {{ form.description }} 
+			            {{ form.description.errors }}
+			         </td>
+		         </tr>
+		         <tr>
+			        <td nowrap="nowrap">External Home Page</td>
+			        <td class="long" colspan="2">
+			            {{ form.external_homepage }} 
+			            {{ form.external_homepage.errors }}
+			         </td>
+		         </tr>	
+		         <tr>
+			        <td nowrap="nowrap">History</td>
+			        <td class="long" colspan="2">
+			        	{{form.history.help_text}}.
+			        	{{ form.history }} 
+			        	{{ form.history.errors }}
+			        </td>
+		         </tr>	     
+		      </table>
+		 </div>		
+		{% endif %}	
+					     
+         {% if tab = "MISSION"|tabs %}
+         <div class="mybox">
+	         <table>
+	         	 <tr>
+	         	 	<td class="long">{{form.mission.help_text}}</td>
+	         	 </tr>
+		         <tr>
+			        <td class="long">{{ form.mission }} {{ form.mission.errors }}</td>
+		         </tr>
+		     </table>
+		 </div>
+		 {% endif %}
+			     
+	     {% if tab = "VISION"|tabs %}
+	     <div class="mybox">
+	         <table>
+	         	 <tr>
+	         	 	<td class="long">{{form.vision.help_text}}</td>
+	         	 </tr>
+		         <tr>
+			        <td class="long">{{ form.vision }} {{ form.vision.errors }}</td>
+		         </tr>
+		     </table>	
+		     </div>	     			         
+	     {% endif %}
+			     
+		 {% if tab = "VALUES"|tabs %}
+		 <div class="mybox">
+	         <table>
+	         	 <tr>
+	         	 	<td class="long">{{form.values.help_text}}</td>
+	         	 </tr>
+		         <tr>
+			        <td class="long">{{ form.values }} {{ form.values.errors }}</td>
+		         </tr>
+		     </table>
+		 </div>
+		 {% endif %}
+			           
+	     {% if tab = "PARTNERS"|tabs %}
+	     <div class="mybox">
 		     <table>
-		     
-			     {% if not subtab %}		     
-			     	 <!-- Update "About Us" tab -->
-			     	 <tr>
-				        <td nowrap="nowrap"><b>Project Long Name</b></td>
-				        <td class="long" colspan="2">
-				            {{ form.long_name }} 
-				            {{ form.long_name.errors }}
-				         </td>
-			         </tr>	     
-				     <tr>
-				        <td nowrap="nowrap"><b>Description</b></td>
-				        <td class="long" colspan="2">
-				        	{{form.description.help_text}}.
-				            {{ form.description }} 
-				            {{ form.description.errors }}
-				         </td>
-			         </tr>
-			         <tr>
-				        <td nowrap="nowrap">External Home Page</td>
-				        <td class="long" colspan="2">
-				            {{ form.external_homepage }} 
-				            {{ form.external_homepage.errors }}
-				         </td>
-			         </tr>	
-			         <tr>
-				        <td nowrap="nowrap">History</td>
-				        <td class="long" colspan="2">
-				        	{{form.history.help_text}}.
-				        	{{ form.history }} 
-				        	{{ form.history.errors }}
-				        </td>
-			         </tr>	     
-			         	 		
-					
-				{% else %}
-						     
-			         {% if subtab = 'mission' %}
-				         <tr>
-					        <td nowrap="nowrap">Mission</td>
-					        <td class="long" colspan="2">
-					        	{{form.mission.help_text}}.
-					        	{{ form.mission }} 
-					        	{{ form.mission.errors }}
-					      	</td>
-				         </tr>
-				     {% endif %}
-				     
-				     {% if subtab = 'vision' %}
-					     <tr>
-					        <td nowrap="nowrap">Vision</td>
-					        <td class="long" colspan="2">
-					        	{{form.vision.help_text}}.
-					        	{{ form.vision }} 
-					        	{{ form.vision.errors }}
-					       	</td>
-				         </tr>	         			     			         
-				     {% endif %}
-				     
-			         {% if subtab = 'values' %}
-				         <tr>
-					        <td nowrap="nowrap">Values</td>
-					        <td class="long" colspan="2">
-					        	{{form.values.help_text}}.
-					        	{{ form.values }} 
-					        	{{ form.values.errors }}
-					        </td>
-				         </tr>	   
-				     {% endif %}
-				           
-				     {% if subtab = 'partners' %}
-				         <tr>
-				         	<td valign="top" nowrap="nowrap">Organizational Partners</td>
-				         	<td class="long">
-				         		Projects or organizations that collaborate on this project.
-				         		<br/>
-				         		<table id="organizationFormsetTable">
-				         		 <tbody>
-							     {% for oform in organization_formset.forms %}
-							     	{{ oform.id }}	
-							     	<tr>					 			 	            		
-					           			<td class="long">
-					           			{{ oform.name }} {{ oform.name.errors }}
-					           			</td>
-						           		{% if oform.instance.id %}
-						         			<td nowrap="nowrap">{{ oform.DELETE }}</td>
-							           	{% else %}
-							           		<td></td>
-								        {% endif %}	            		
-					          	    </tr>	
-								 {% endfor %}
-								 </tbody>
-						 		</table>
-						 	</td>
-						 </tr>
-					 {% endif %}
-					 
-					 {% if subtab = 'sponsors' %}
-						 <tr>
-				         	<td valign="top" nowrap="nowrap">Funding Source</td>
-				         	<td class="long">
-				         		The organizations or agencies that financially support the project.
-				         		<br/>
-				         		<table id="fundingSourceFormsetTable"><tbody>
-							     {% for fsform in fundingsource_formset.forms %}
-							     	{{ fsform.id }}	
-							     	<tr>					 			 	            		
-					           			<td class="long">
-					           			{{ fsform.name }} {{ fsform.name.errors }}
-					           			</td>
-						           		{% if fsform.instance.id %}
-						         			<td nowrap="nowrap">{{ fsform.DELETE }}</td>
-							           	{% else %}
-							           		<td></td>
-								        {% endif %}	            		
-					          	    </tr>	
-								 {% endfor %}
-						 		</tbody></table>
-						 	</td>
-						 </tr>
-			     	 {% endif %}	     
-						
-				 {% endif %} 
-			 
-				 <!-- IF NOT DISPLAYED, MUST RESUBMIT ALL FIELDS AS HIDDEN -->				 
-				 {% if subtab != None %}
-					{{ form.long_name.as_hidden }}
-					{{ form.description.as_hidden }}
-				 	{{ form.external_homepage.as_hidden }} 
-				 	{{ form.history.as_hidden }} 				 	
-				 {% endif %}
-				 
-				 {% if subtab != 'mission' %}
-				 	{{ form.mission.as_hidden }}
-				 {% endif %}
-				 
-				 {% if subtab != 'vision' %}
-				 	{{ form.vision.as_hidden }}
-				 {% endif %}
-				 
-				 {% if subtab != 'values' %}
-				 	{{ form.values.as_hidden }}
-				 {% endif %}				 
-				 				
-				{% if subtab != 'partners' %}	 
-					 {% for oform in organization_formset.forms %}
-						{{ oform.id }}	
-				        {{ oform.name.as_hidden }}
-					 {% endfor %}
-				 {% endif %}
-				 
-				 {% if subtab != 'sponsors' %}
-			 		 {% for fsform in fundingsource_formset.forms %}
-				    	{{ fsform.id }}	
-						{{ fsform.name.as_hidden }}
-					 {% endfor %}	
-				{% endif %}
-
+		         <tr>
+		         	<td class="long">
+		         		Projects or organizations that collaborate on this project.
+		         	</td>
+		         </tr>
+		         <tr>
+		         	<td>
+		         		<table id="organizationFormsetTable">
+		         		 <tbody>
+					     {% for oform in organization_formset.forms %}
+					     	{{ oform.id }}	
+					     	<tr>					 			 	            		
+			           			<td class="long">
+			           			{{ oform.name }} {{ oform.name.errors }}
+			           			</td>
+				           		{% if oform.instance.id %}
+				         			<td nowrap="nowrap">{{ oform.DELETE }}</td>
+					           	{% else %}
+					           		<td></td>
+						        {% endif %}	            		
+			          	    </tr>	
+						 {% endfor %}
+						 </tbody>
+				 		</table>
+				 	</td>
+				 </tr>
 			 </table>
-			        	
-		     <div style="text-align:right">
-		     	{% if subtab %}
-		        	<input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_subtab_display' project.short_name|lower subtab %}'"/>
-		        {% else %}
-		        	<input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower %}'"/>
-		        {% endif %}
-		         <input type="submit" value="Submit" />
-	         </div>
-		     
-		</form>
-	</div>
+		 </div>
+		 {% endif %}
+		 
+		 {% if tab = "SPONSORS"|tabs %}
+		 <div class="mybox">
+			 <table>
+				 <tr>
+		         	<td class="long">
+		         		The organizations or agencies that financially support the project.
+		         	</td>
+		        </tr>
+		        <tr>
+		        	<td>
+		         		<table id="fundingSourceFormsetTable"><tbody>
+					     {% for fsform in fundingsource_formset.forms %}
+					     	{{ fsform.id }}	
+					     	<tr>					 			 	            		
+			           			<td class="long">
+			           			{{ fsform.name }} {{ fsform.name.errors }}
+			           			</td>
+				           		{% if fsform.instance.id %}
+				         			<td nowrap="nowrap">{{ fsform.DELETE }}</td>
+					           	{% else %}
+					           		<td></td>
+						        {% endif %}	            		
+			          	    </tr>	
+						 {% endfor %}
+				 		</tbody></table>
+				 	</td>
+				 </tr>
+				 </table>
+		 </div>
+     	 {% endif %}	     
+								 
+		 <!-- IF NOT DISPLAYED, MUST RESUBMIT ALL FIELDS AS HIDDEN -->				 
+		 {% if tab != 'ABOUTUS'|tabs %}
+			{{ form.long_name.as_hidden }}
+			{{ form.description.as_hidden }}
+		 	{{ form.external_homepage.as_hidden }} 
+		 	{{ form.history.as_hidden }} 				 	
+		 {% endif %}
+		 
+		 {% if tab != 'MISSION'|tabs %}
+		 	{{ form.mission.as_hidden }}
+		 {% endif %}
+		 
+		 {% if tab != 'VISION'|tabs %}
+		 	{{ form.vision.as_hidden }}
+		 {% endif %}
+		 
+		 {% if tab != 'VALUES'|tabs %}
+		 	{{ form.values.as_hidden }}
+		 {% endif %}				 
+		 				
+		{% if tab != 'PARTNERS'|tabs %}	 
+			 {% for oform in organization_formset.forms %}
+				{{ oform.id }}	
+		        {{ oform.name.as_hidden }}
+			 {% endfor %}
+		 {% endif %}
+		 
+		 {% if tab != 'SPONSORS'|tabs %}
+	 		 {% for fsform in fundingsource_formset.forms %}
+		    	{{ fsform.id }}	
+				{{ fsform.name.as_hidden }}
+			 {% endfor %}	
+		 {% endif %}
+
+	     <div style="text-align:right">
+	        <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower tab %}'"/>
+	        <input type="submit" value="Submit" />
+         </div>
+	     
+	 </form>
        
 {% endblock %}

@@ -2,13 +2,8 @@
 
 {% load cog_utils %}
 
-
-{% if display == 'ALL' or display == 'MEMBER_ORGANIZATIONAL_ROLES' %}
-
-  {% with proj|get_organizational_roles:'Member' as organizational_roles %}
-  	{% with 'Member' as category %}
-  		{% include 'cog/governance/_governance_organizational_roles.html' %}
-  	{% endwith %}
-  {% endwith %}
-  
-{% endif %}
+{% with proj|get_organizational_roles:'Member' as organizational_roles %}
+	{% with 'Member' as category %}
+		{% include 'cog/governance/_governance_organizational_roles.html' %}
+	{% endwith %}
+{% endwith %}

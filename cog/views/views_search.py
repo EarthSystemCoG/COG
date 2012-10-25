@@ -47,13 +47,13 @@ def getTestSearchConfig(request):
     
     return SearchConfig(facetProfile, fixedConstraints, testSearchService)
 
-def search(request):
+#def search(request):
     """
     Default view entry point that configures the search with a test search configuration.
     """
     
-    config = getTestSearchConfig(request)
-    return search_config(request, config)
+#    config = getTestSearchConfig(request)
+#    return search_config(request, config)
 
 def search_config(request, searchConfig, extra={}):
     """

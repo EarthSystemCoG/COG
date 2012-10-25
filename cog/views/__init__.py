@@ -1,4 +1,5 @@
 from constants import *
+from views_templated import *
 from views_bookmarks import *
 from views_account import *
 from views_doc import *
@@ -10,5 +11,6 @@ from views_membership import *
 from views_news import *
 from views_post import *
 from views_project import *
-from views_search import *
 from views_signal import *
+from views_aboutus import *
+from views_search import *
