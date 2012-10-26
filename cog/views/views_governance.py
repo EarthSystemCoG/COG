@@ -184,13 +184,12 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
                         
             # set additional object flags
             for instance in instances:
+                dict = {}
                 if formsetType == InternalCommunicationMeansInlineFormset:
-                    instance.internal = True
+                    dict['internal'] = True
                 elif formsetType == ExternalCommunicationMeansInlineFormset:
-                    instance.internal = False
-                else:
-                    # set the object category from the other fields, save again
-                    instance.set_category()
+                    dict['internal'] = False
+                instance.set_category(dict=dict)
                 instance.save()
                        
             # redirect to governance display (GET-POST-REDIRECT)

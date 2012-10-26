@@ -19,9 +19,10 @@ class CommunicationMeans(models.Model):
     def members(self):
         return self.communicationmeansmember_set.all()
     
-    def set_category(self):
-        """Method to select the object category from the other fields."""
-        pass
+    def set_category(self, dict={}):
+        """Method to select the object 'internal' field."""
+        
+        self.internal = dict['internal']
 
 
     def __unicode__(self):

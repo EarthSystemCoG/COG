@@ -37,7 +37,7 @@ class ManagementBody(models.Model):
         print purposes
         return purposes
     
-    def set_category(self):
+    def set_category(self, dict={}):
         """Method to select the object category from the other fields. """
         
         for purpose in self.purposes.all():
