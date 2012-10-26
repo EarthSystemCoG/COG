@@ -15,12 +15,12 @@
 <div class="header_bar"> 
      <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">&nbsp;Comments ({{ comment_count }})</a>
 </div>
-<div class="mybox" id="mycomments" style="display:none">
-    <br/>
+<!-- NOTE: open up comments when page is first loaded -->
+<div class="mybox" id="mycomments" style="display:block">
 	{% for comment in comment_list %}
 	   <div id="comment_{{ comment.id }}" class="box-rounded">
-	       <div class="header_bar">{{ comment.name|escape }}, on {{ comment.submit_date|date:"d M Y, H:m" }}</div>
-	       {{ comment.comment|escape|urlizetrunc:40|linebreaks }}
+	       <div class="caption">{{ comment.name|escape }}, on {{ comment.submit_date|date:"d M Y, H:m" }}</div>
+	       {{ comment.comment|escape|urlizetrunc:40|linebreaksbr }}
 	   </div>
 	{% endfor %}
 	{% paginate %}

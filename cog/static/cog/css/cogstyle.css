@@ -351,8 +351,7 @@ strong {
 
 .box-rounded {
 	padding: 5px;
-	margin: 1px;
-	margin-bottom: 5px;
+	margin: 2px;
 	border: 1px solid #417690;
 	/* COG STYLE: COMMENTS BACKGROUND COLOR */
 	background: #FFFFFF;
@@ -364,6 +363,9 @@ strong {
 
 .box-rounded .caption {
 	color: 417690;
+	background: B9E0E3;
+	border: 1px solid #417690;
+	margin-bottom: 3px;
 	font-weight: bold;
 	font-style: italic;
 }
