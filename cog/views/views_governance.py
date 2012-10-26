@@ -71,6 +71,15 @@ def communication_means_update(request, project_short_name, internal):
     return governance_object_update(request, project_short_name, tab, 
                                     CommunicationMeans, CommunicationMeansForm, formsetType,
                                    'Communication and Coordination Update', 'cog/governance/communication_means_form.html', redirect)
+
+
+# note: view located here instead of cog.views.views_project to avoid circular imports
+@login_required
+def getinvolved_update(request, project_short_name):      
+
+    # delegate to governance views
+    return communication_means_update(request, project_short_name, 'external')
+
     
 @login_required
 def governance_overview_update(request, project_short_name):

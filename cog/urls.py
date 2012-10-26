@@ -117,7 +117,7 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add_notes/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_add_notes', name='bookmark_add_notes'),
 
     # project 'get involved'
-    # NOTE: getinvolved updates is handled by '...../processes/update/communication_means/external/'
+    url(r'^projects/(?P<project_short_name>[^/]+)/getinvolved/update/$', 'cog.views.getinvolved_update', name='getinvolved_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/getinvolved/$', 'cog.views.getinvolved_display', name='getinvolved_display'),
    
     # project "contact us"
