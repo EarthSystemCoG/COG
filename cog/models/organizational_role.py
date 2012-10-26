@@ -14,14 +14,12 @@ class OrganizationalRole(models.Model):
     project = models.ForeignKey(Project)
     
     def set_category(self):
-        """Method to select the object category from the other fields, and persist changes."""
+        """Method to select the object category from the other fields. """
         
         if self.type in LEAD_ORGANIZATIONAL_ROLES_DICT:
             self.category = ROLE_CATEGORY_LEAD
         else:
             self.category = ROLE_CATEGORY_MEMBER
-        self.save()
-        print 'role=%s category=%s' % (self.type, self.category)
  
     def members(self):
         return self.organizationalrolemember_set.all()

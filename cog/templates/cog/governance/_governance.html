@@ -24,7 +24,9 @@
 {% endif %}
 
 {% if tab = "PROCESSES"|tabs %}
-	{% include 'cog/governance/_governance_communication_means.html' %}
+	{% with 'True' as internal %}
+		{% include 'cog/governance/_governance_communication_means.html' %}
+	{% endwith %}
 	{% include 'cog/governance/_governance_processes.html' %}
 	{% include 'cog/governance/_governance_policies.html' %}
 {% endif %}

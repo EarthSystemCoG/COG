@@ -13,11 +13,14 @@ class CommunicationMeans(models.Model):
     participationDetails = models.TextField(blank=True, null=True, verbose_name='Participation Details', help_text='Information about how a person would participate: phone number, pass code, meeting venue, etc.')
     project = models.ForeignKey(Project)
     
+    # opt-out privacy option
+    internal = models.BooleanField(default=True, null=False)
+    
     def members(self):
         return self.communicationmeansmember_set.all()
     
     def set_category(self):
-        """Method to select the object category from the other fields, and persist changes."""
+        """Method to select the object category from the other fields."""
         pass
 
 

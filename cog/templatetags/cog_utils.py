@@ -9,6 +9,7 @@ from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 import re
 from cog.utils import smart_truncate, INVALID_CHARS
+from cog.models.utils import get_project_communication_means
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 from cog.models.constants import NAVMAP, INVNAVMAP, TABS
@@ -517,3 +518,10 @@ def getUserProfileAttribute(user, attribute):
 @register.filter
 def tabs(label):
     return TABS[label]
+
+def parseBoolString(theString):
+    return theString[0].upper()=='T'
+
+@register.filter
+def getCommunicationMeans(project, internal):
+    return get_project_communication_means(project, parseBoolString(internal))

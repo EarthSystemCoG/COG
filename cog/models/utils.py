@@ -1,6 +1,7 @@
 from project import Project
 from project_topic import ProjectTopic
 from search_profile import SearchProfile
+from communication_means import CommunicationMeans
 from search_facet import SearchFacet
 from post import Post
 from constants import PROJECT_PAGES
@@ -119,3 +120,12 @@ def create_project_page(url, project):
                         print "Created project page: %s" % url
                         return page
     return None
+
+def get_project_communication_means(project, internal):
+    return CommunicationMeans.objects.filter(project=project).filter(internal=internal)
+
+def get_project_internal_communication_means(project):
+    return get_project_communication_means(project, True)
+
+def get_project_external_communication_means(project):
+    return get_project_communication_means(project, False)

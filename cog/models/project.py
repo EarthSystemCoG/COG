@@ -181,7 +181,7 @@ class Project(models.Model):
     # generic method to return a list of the project's external URLs of a given type
     def get_external_urls(self, type):
         return self.externalurl_set.filter(project=self, type=type)
-    
+        
     # method to return the project home page URL
     def home_page_url(self):
         return '/projects/%s/' % self.short_name.lower()
