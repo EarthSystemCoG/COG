@@ -208,8 +208,9 @@ def management_body_members(request, project_short_name, object_id):
     managementBodyMemberForm = staticmethod(curry(ManagementBodyMemberForm, project=managementBody.project))
     
     # delegate to generic view with specific object types
-    tab = 'bodies'
-    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm)
+    tab = TABS["BODIES"]
+    redirect = reverse('governance_display', args=[managementBody.project.short_name.lower(), tab])
+    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm, redirect)
   
 # view to update a Communication Means object members  
 @login_required
@@ -221,7 +222,11 @@ def communication_means_members(request, object_id):
     
     # delegate to generic view with specific object types
     tab = TABS["PROCESSES"]
-    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm)
+    if commnicationMeans.internal:
+        redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
+    else:
+        redirect = reverse('getinvolved_display', args=[commnicationMeans.project.short_name.lower()])
+    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm, redirect)
 
 # view to update an Organizational Role object members  
 @login_required
@@ -233,8 +238,9 @@ def organizational_role_members(request, object_id):
     organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
     
     # delegate to generic view with specific object types
-    tab = 'roles'
-    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm)
+    tab = TABS["ROLES"]
+    redirect = reverse('governance_display', args=[organizationalRole.project.short_name.lower(), tab])
+    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm, redirect)
 
 # 
 # Generic view to update members for:
@@ -245,7 +251,7 @@ def organizational_role_members(request, object_id):
 # obj.project
 # obj.__unicode__
 #
-def members_update(request, tab, objectId, objectType, objectMemberType, objectForm):
+def members_update(request, tab, objectId, objectType, objectMemberType, objectForm, redirect):
     
     # retrieve governance object
     obj = get_object_or_404(objectType, pk=objectId)
@@ -267,7 +273,7 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
         formset = ObjectFormSet(instance=obj)
         
         # render view
-        return render_members_form(request, obj, formset)
+        return render_members_form(request, obj, formset, redirect)
         
     # POST request
     else:
@@ -278,26 +284,21 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
             # save updated members
             instances = formset.save()
             
-            # FIXME
-            if obj.internal:
-                # redirect to governance display (GET-POST-REDIRECT)
-                return HttpResponseRedirect(reverse('governance_display', args=[obj.project.short_name.lower(), tab]))
-            else:
-                # redirect to getinvolved display (GET-POST-REDIRECT)
-                return HttpResponseRedirect(reverse('getinvolved_display', args=[obj.project.short_name.lower()]))
-          
+            # redirect to display (GET-POST-REDIRECT)
+            return HttpResponseRedirect(redirect)
+                      
         else:
             print 'Formset is invalid: %s' % formset.errors
             
             # redirect to form view
-            return render_members_form(request, obj, formset)
+            return render_members_form(request, obj, formset, redirect)
         
-def render_members_form(request, object, formset):
+def render_members_form(request, object, formset, redirect):
         
     return render_to_response('cog/governance/members_form.html',
                               {'title' : '%s Members Update' % object, 
                                'project': object.project,
-                               'formset':formset },
+                               'formset':formset, 'redirect':redirect },
                                context_instance=RequestContext(request))
     
 @login_required
