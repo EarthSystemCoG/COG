@@ -11,7 +11,7 @@
     {% if not form.errors %}
       <div class="box-colored"> 
         <h2>Preview your comment:</h2>
-        <div class="box-rounded">{{ comment|linebreaks }}</div>
+        <div class="box-comment">{{ comment|linebreaks }}</div>
         <p>
             <input type="submit" name="submit" class="submit-post" value="Post" id="submit" />
         </p>
