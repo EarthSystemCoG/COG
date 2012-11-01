@@ -226,8 +226,8 @@ def folder_add(request, project_short_name):
             
             folder = form.save()
             
-            # redirect to bookmark listing
-            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()] ))
+            # redirect to bookmark add page
+            return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()] ))
             
         else:
             # return to view
