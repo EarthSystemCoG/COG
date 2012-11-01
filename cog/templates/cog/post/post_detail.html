@@ -19,10 +19,16 @@
 
 <!-- include action links -->
 {% include 'cog/post/_post_actions.html' %}
-            
+
 <!-- Attachments --> 
 {% with post as post %}
    {% include 'cog/post/_post_attachements.html' %}
+{% endwith %}
+
+<!-- Comments -->
+{% url post_detail post.id as next_view %}
+{% with post as object %}
+    {% include 'cog/common/_comments.html' %}
 {% endwith %}
 
 <!-- Hierarchy -->
@@ -30,12 +36,6 @@
 	{% with post.post_set.all as related_posts %}
    		{% include 'cog/post/_post_hierarchy.html' %}
    	{% endwith %}
-{% endwith %}
-    
-<!-- Comments -->
-{% url post_detail post.id as next_view %}
-{% with post as object %}
-    {% include 'cog/common/_comments.html' %}
 {% endwith %}
 
 {% endblock %}

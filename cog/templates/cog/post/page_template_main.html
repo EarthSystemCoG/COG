@@ -11,11 +11,6 @@
         
     <!-- Attachments -->  
     {% include 'cog/post/_post_attachements.html' %}
-    
-    <!-- Hierarchy -->
-    {% with related_pages as related_posts %}
-		{% include 'cog/post/_post_hierarchy.html' %}
-	{% endwith %}
 	
 	<!-- Comments -->
     {% with post.url as next_view %}
@@ -23,6 +18,11 @@
 	        {% include 'cog/common/_comments.html' %}
 	    {% endwith %}
     {% endwith %}
+    
+    <!-- Hierarchy -->
+    {% with related_pages as related_posts %}
+		{% include 'cog/post/_post_hierarchy.html' %}
+	{% endwith %}
     
     <!-- include signals, if available -->
     {% include 'cog/project/_project_signals.html' %}
