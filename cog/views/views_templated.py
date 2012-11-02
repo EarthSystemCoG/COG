@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from cog.models import Project, getLeadOrganizationalRoles, getMemberOrganizationalRoles
 from cog.models.constants import TABS
+from cog.models.utils import get_project_communication_means
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 
 
@@ -42,13 +43,16 @@ def _hasTemplatedInfo(project, tab):
         if len(getLeadOrganizationalRoles(project)) > 0 or len(getMemberOrganizationalRoles(project)) > 0:
             return True
     elif tab == TABS["COMMUNICATION"]:
-        if len(project.communicationmeans_set.all()) > 0:
+        if len( get_project_communication_means(project, True) ) > 0:
             return True
     elif tab == TABS["PROCESSES"]:
         if project.taskPrioritizationStrategy is not None or project.requirementsIdentificationProcess is not None:
             return True
     elif tab == TABS["POLICIES"]:
         if len(project.policies()) > 0:
+            return True
+    elif tab == TABS["GETINVOLVED"]:
+        if len( get_project_communication_means(project, False) ) > 0:
             return True
     else:
         return False

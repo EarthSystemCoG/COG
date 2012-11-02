@@ -274,8 +274,7 @@ def getinvolved_display(request, project_short_name):
     tab = TABS["GETINVOLVED"]
     template_page = 'cog/project/_project_getinvolved.html'
     template_title = TAB_LABELS[tab]
-    #template_form_page = reverse("getinvolved_update", args=[project_short_name])
-    template_form_page = None # multiple update forms hyper-linked in context
+    template_form_page = reverse( "getinvolved_update", args=[project_short_name] )
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)    
 
 
