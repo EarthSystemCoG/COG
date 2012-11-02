@@ -4,19 +4,6 @@
 
  <div id="communication">
 
-<!-- header -->
-<hr/>
-<b>Communication and Coordination</b>
-{% if user|hasAdminPermission:proj %}
-    <div style="float:right">
-    	{% if internal = 'True' %}
-    		<a href="{% url communication_means_update proj.short_name.lower 'internal' %}" class="changelink">&nbsp;Update</a>
-    	{% else %}
-    		<a href="{% url getinvolved_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
-    	{% endif %}
- 	</div>
-{% endif %}
-
 <!-- content -->
 {% if proj|getCommunicationMeans:internal %}
 

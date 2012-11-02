@@ -3,15 +3,6 @@
 {% load cog_utils %}
 
 <div id="governance_processes">
-
-	<!-- header -->
-	<hr/>
-	<b>Governance Processes</b>
-	{% if user|hasAdminPermission:proj %}
-	    <div style="float:right">
-	    	<a href="{% url governance_processes_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
-	 	</div>
-	{% endif %}
 	
 	<!-- content -->	
 	{% if proj.taskPrioritizationStrategy or proj.requirementsIdentificationProcess %}

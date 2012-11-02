@@ -19,7 +19,6 @@ def governance_display(request, project_short_name, tab):
     ''' Dispatcher for display of governance pages. '''
     
     template_page = 'cog/governance/_governance.html'
-    template_page = 'cog/governance/_governance.html'
     template_title = TAB_LABELS[tab]
     if tab == TABS["GOVERNANCE"]:
         template_title = 'Governance Overview'
@@ -28,8 +27,12 @@ def governance_display(request, project_short_name, tab):
         template_form_page = None # multiple update forms hyper-linked in context
     elif tab == TABS["ROLES"]:
         template_form_page = None # multiple update forms hyper-linked in context
-    elif tab == TABS["PROCESSES"] or tab == TABS["COMMUNICATION"] or tab == TABS["POLICIES"]:
-        template_form_page = None # multiple update forms hyper-linked in context
+    elif tab == TABS["PROCESSES"]:
+        template_form_page = reverse( "governance_processes_update", args=[project_short_name] )
+    elif tab == TABS["COMMUNICATION"]:
+        template_form_page = reverse( "communication_means_update", args=[project_short_name, 'internal'] )
+    elif tab == TABS["POLICIES"]:
+        template_form_page = reverse( "policies_update", args=[project_short_name] )
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
 
 
