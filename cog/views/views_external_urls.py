@@ -120,7 +120,7 @@ def roadmap_update(request, project_short_name):
 def policies_update(request, project_short_name):
     
     type = TYPE_POLICY
-    tab = TABS["PROCESSES"]
+    tab = TABS["POLICIES"]
     redirect = reverse('governance_display', args=[project_short_name, tab])
     return external_urls_update(request, project_short_name, type, redirect)
 

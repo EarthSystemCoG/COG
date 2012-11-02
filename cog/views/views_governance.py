@@ -28,7 +28,7 @@ def governance_display(request, project_short_name, tab):
         template_form_page = None # multiple update forms hyper-linked in context
     elif tab == TABS["ROLES"]:
         template_form_page = None # multiple update forms hyper-linked in context
-    elif tab == TABS["PROCESSES"]:
+    elif tab == TABS["PROCESSES"] or tab == TABS["COMMUNICATION"] or tab == TABS["POLICIES"]:
         template_form_page = None # multiple update forms hyper-linked in context
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
 
@@ -60,14 +60,14 @@ def management_body_update(request, project_short_name, category):
 @login_required
 def communication_means_update(request, project_short_name, internal):
     
-    # delegate to view for generic governance object
-    tab = TABS["PROCESSES"]
+    tab = TABS["COMMUNICATION"]
     if internal=='internal':
         formsetType = InternalCommunicationMeansInlineFormset
         redirect = HttpResponseRedirect(reverse('governance_display', args=[project_short_name.lower(), tab]))
     else:
         formsetType = ExternalCommunicationMeansInlineFormset
         redirect = HttpResponseRedirect(reverse('getinvolved_display', args=[project_short_name]))
+    # delegate to view for generic governance object
     return governance_object_update(request, project_short_name, tab, 
                                     CommunicationMeans, CommunicationMeansForm, formsetType,
                                    'Communication and Coordination Update', 'cog/governance/communication_means_form.html', redirect)
@@ -310,7 +310,7 @@ def render_members_form(request, object, formset, redirect):
                                context_instance=RequestContext(request))
     
 @login_required
-def govprocesses_update(request, project_short_name):
+def processes_update(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)

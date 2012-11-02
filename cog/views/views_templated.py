@@ -41,11 +41,14 @@ def _hasTemplatedInfo(project, tab):
     elif tab == TABS["ROLES"]:
         if len(getLeadOrganizationalRoles(project)) > 0 or len(getMemberOrganizationalRoles(project)) > 0:
             return True
+    elif tab == TABS["COMMUNICATION"]:
+        if len(project.communicationmeans_set.all()) > 0:
+            return True
     elif tab == TABS["PROCESSES"]:
-        if len(project.communicationmeans_set.all()) > 0 \
-        or project.taskPrioritizationStrategy is not None \
-        or project.requirementsIdentificationProcess is not None\
-        or len(project.policies()) > 0:
+        if project.taskPrioritizationStrategy is not None or project.requirementsIdentificationProcess is not None:
+            return True
+    elif tab == TABS["POLICIES"]:
+        if len(project.policies()) > 0:
             return True
     else:
         return False
