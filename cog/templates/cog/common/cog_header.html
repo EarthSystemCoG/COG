@@ -36,6 +36,18 @@
     padding-top: 0px;
 }
 
+#project_title {
+    float: bottom;
+    background: #FFFFFF; 
+    margin-top: 0px;
+    height:15px; 
+    padding-bottom:5px; 
+    padding-top: 55px;
+    color: #333;
+    font-weight: bold;
+	font-style: italic;
+}
+
 #right_logo {
     float:right;
     background: #FFFFFF; 
@@ -182,8 +194,13 @@
 	    		<a href="{% url 'project_home' 'cog'%}">
 	    			<img src="{{ request|getDefaultLogo }}" height="70px" />
 	    		</a>
-	    	{% endif %}        
+	    	{% endif %}      
     	</div>
+    	<div id="project_title">
+			{% if project %}
+				&nbsp; {{ project.long_name|capfirst }}
+			{% endif %}
+		</div>
 	</div>
 	
 	<!-- right column -->
