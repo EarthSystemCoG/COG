@@ -1,6 +1,6 @@
 from cog.models import UserProfile
 from cog.utils import smart_truncate
-from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, \
+from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_USECASE, \
     TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
 from django.conf import settings
 from django.contrib.auth.models import User, Permission, Group
@@ -168,6 +168,9 @@ class Project(models.Model):
     
     def trackers(self):
         return self.get_external_urls(TYPE_TRACKER)
+    
+    def usecases(self):
+        return self.get_external_urls(TYPE_USECASE)
     
     def roadmap(self):
         return self.get_external_urls(TYPE_ROADMAP)

@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse  
 from django.forms.models import modelformset_factory
 from constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP
+from cog.models.constants import TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, TYPE_USECASE, EXTERNAL_URL_DICT
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.constants import TABS
 
@@ -20,6 +20,14 @@ def trackers_display(request, project_short_name):
     template_name = 'Trackers'
     template_form_page = reverse('trackers_update', args=[project_short_name])
     return external_urls_display(request, project_short_name, TYPE_TRACKER, template_page, template_name, template_form_page)
+
+# View to display the project use cases.
+def usecases_display(request, project_short_name):
+    
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Use Cases'
+    template_form_page = reverse('usecases_update', args=[project_short_name])
+    return external_urls_display(request, project_short_name, TYPE_USECASE, template_page, template_name, template_form_page)
 
 # View to display the project code URLs.
 def code_display(request, project_short_name):
@@ -53,13 +61,13 @@ def external_urls_display(request, project_short_name, external_url_type,
         return getProjectNotVisibleRedirect(request, project)
 
     
-    # build list of children with trackers
+    # build list of children with external urls of this type
     children = []
     for child in project.children():
         if len(child.get_external_urls(external_url_type)) > 0 and child.isVisible(request.user):
             children.append(child)
     
-    # build list of peers with trackers
+    # build list of peers with with external urls of this type
     peers = []
     for peer in project.peers.all():
         if len(peer.get_external_urls(external_url_type)) > 0 and peer.isVisible(request.user):
@@ -81,6 +89,14 @@ def trackers_update(request, project_short_name):
     
     type = TYPE_TRACKER
     redirect = reverse('trackers_display', args=[project_short_name])
+    return external_urls_update(request, project_short_name, type, redirect)
+
+# View to update the project use cases
+@login_required
+def usecases_update(request, project_short_name):
+    
+    type = TYPE_USECASE
+    redirect = reverse('usecases_display', args=[project_short_name])
     return external_urls_update(request, project_short_name, type, redirect)
 
 # View to update the project code
@@ -159,5 +175,5 @@ def external_urls_update(request, project_short_name, type, redirect):
      
 def render_external_urls_form(request, project, formset, type, redirect):
      return render_to_response('cog/project/external_urls_form.html', 
-                              {'project':project, 'formset':formset, 'title' : '%s Update' % str.capitalize(type), 'type' : type, 'redirect':redirect },
+                              {'project':project, 'formset':formset, 'title' : '%s Update' % EXTERNAL_URL_DICT[type], 'type' : type, 'redirect':redirect },
                                 context_instance=RequestContext(request))

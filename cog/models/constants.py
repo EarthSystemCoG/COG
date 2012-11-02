@@ -3,7 +3,7 @@ APPLICATION_LABEL = 'cog'
 TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"values",
          "PARTNERS":"partners", "SPONSORS":"sponsors", "PEOPLE":"people",
          "BOOKMARKS":"bookmarks",
-         "DEVELOPMENT":"development", "CODE":"code", "TRACKERS":"trackers",
+         "DEVELOPMENT":"development", "CODE":"code", "TRACKERS":"trackers", "USECASES":"usecases",
          "ROADMAP":"roadmap",
          "GOVERNANCE":"governance","BODIES":"bodies","ROLES":"roles", "PROCESSES":"processes",
          "GETINVOLVED":"getinvolved", 
@@ -22,7 +22,7 @@ PROJECT_PAGES = (
          [("About Us", "%s/" % TABS["ABOUTUS"]), ("Mission", "%s/" % TABS["MISSION"]), ("Vision", "%s/" % TABS["VISION"]), ("Values", "%s/" % TABS["VALUES"]),
           ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])], 
          [("Bookmarks", "%s/" % TABS["BOOKMARKS"])],
-         [("Development", "%s/" % TABS["DEVELOPMENT"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"])],
+         [("Development", "%s/" % TABS["DEVELOPMENT"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
          [("Roadmap", "%s/" % TABS["ROADMAP"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), ("Processes", "%s/" % TABS["PROCESSES"])],
          [("Get Involved", "%s/" % TABS["GETINVOLVED"])],
@@ -171,6 +171,7 @@ TYPE_CODE = 'code'
 TYPE_HOMEPAGE = 'homepage'
 TYPE_REFERENCE = 'reference'
 TYPE_TRACKER = 'tracker'
+TYPE_USECASE = 'usecase'
 TYPE_POLICY = 'policy'
 TYPE_ROADMAP = 'roadmap'
 
@@ -180,9 +181,14 @@ EXTERNAL_URL_TYPES = (
     (TYPE_HOMEPAGE,'Home Page'),
     (TYPE_REFERENCE,'Reference'),
     (TYPE_TRACKER, 'Tracker'),   
+    (TYPE_USECASE, 'Use Case'),
     (TYPE_POLICY, 'Policy'),
     (TYPE_ROADMAP, 'Roadmap'),      
 )
+
+EXTERNAL_URL_DICT = {}
+for tuple in EXTERNAL_URL_TYPES:
+    EXTERNAL_URL_DICT[tuple[0]] = tuple[1]
 
 ROLE_ADMIN = 'admin'
 ROLE_USER = 'user'
