@@ -100,16 +100,15 @@
                 	</td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">Project Logo</td>
-                    <td> 
-                    	{% if form.instance.logo %} 
-                    		{{ form.instance.logo.url }} &nbsp; 
-                    		{{ form.delete_logo }} Restore default COG logo
-                    		<br>&nbsp;</br>
-                    	{% endif %}
-                    	{{ form.logo }} {{ form.logo.errors }} &nbsp; <span style="margin-top:2px">[ optional project logo, will be displayed with height=74px ]</span>
-                    	<br>&nbsp;</br>
-                    	{{ form.logo_url }} &nbsp; <span style="margin-top:2px">[ optional URL to hyperlink logo, defaults to project home]</span></td>
+                    <td nowrap="nowrap"><div style="margin-top:2px">Project Logo</div></td>
+                    <td> <span style="margin-top:2px">
+                    	 	{{ form.logo }} 
+                         	{{ form.logo.errors }} &nbsp; 
+                         	[ optional project logo, will be displayed with height=70px ]
+                    	 	<br>&nbsp;</br>
+                    	 	{{ form.logo_url }} &nbsp; [ optional URL to hyperlink logo, defaults to project home]
+                    	</span>
+                    </td>
                 </tr>                                         
                 <!-- only allow site administrators to change the active state of a project  -->
                 {% if request.user.is_staff and action == 'update' %}

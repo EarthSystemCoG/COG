@@ -26,26 +26,22 @@
     display:block;
 }
 
-#left_logo {
+#project_header {
+
     float: left;
     background: #FFFFFF; 
     margin-top: 0px;
-    padding-bottom: 0px;
     height:75px; 
-    padding-bottom:5px; 
     padding-top: 0px;
-}
+    padding-bottom: 5px;
 
-#project_title {
-    float: bottom;
-    background: #FFFFFF; 
-    margin-top: 0px;
-    height:15px; 
-    padding-bottom:5px; 
-    padding-top: 55px;
-    color: #333;
+	color: #333;
     font-weight: bold;
 	font-style: italic;
+	font-size: 12pt;
+	text-align: left;
+	vertical-align: bottom;
+
 }
 
 #right_logo {
@@ -179,8 +175,10 @@
 
 	<!-- sidebar and center -->
 	<div class="span-17">
-		<div id="left_logo">
+		<div id="project_header">
+		
 	    	{% if project.logo %}
+	    		<!-- project logo -->
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
 	    				<img src="{{ project.logo.url }}" height="70px" />
@@ -190,12 +188,16 @@
 	    				<img src="{{ project.logo.url }}" height="70px" />
 	    			</a>
 	    		{% endif %}
+	    	{% else %}
+	    		<!-- or insert blank space -->
+	    		<div style="height:55px;">&nbsp;</div>
 	    	{% endif %}      
-    	</div>
-    	<div id="project_title">
+			
 			{% if project %}
+				<!-- project title -->
 				{{ project.short_name }} : {{ project.long_name|capfirst }}
 			{% endif %}
+			
 		</div>
 	</div>
 	
