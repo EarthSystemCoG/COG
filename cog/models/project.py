@@ -190,13 +190,13 @@ class Project(models.Model):
         return '/projects/%s/' % self.short_name.lower()
     
     # method to return the relative URL of the project logo
-    def get_logo(self):
-        
-        if self.logo:            
-            return self.logo.url
-        else: 
-            url = getattr(settings, "STATIC_URL", "") + DEFAULT_LOGO
-        return url
+    #def get_logo(self):
+    #    
+    #    if self.logo:            
+    #        return self.logo.url
+    #    else: 
+    #        url = getattr(settings, "STATIC_URL", "") + DEFAULT_LOGO
+    #    return url
     
     # method to return an ordered list of the project predefined pages
     # the page URLs returned start with the project home page base URL

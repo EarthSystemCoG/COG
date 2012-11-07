@@ -183,22 +183,18 @@
 	    	{% if project.logo %}
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
-	    				<img src="{{ project.get_logo }}" height="70px" />
+	    				<img src="{{ project.logo.url }}" height="70px" />
 	    			</a>
 	    		{% else %}
 	    			<a href="{% url 'project_home' project.short_name|lower %}">
-	    				<img src="{{ project.get_logo }}" height="70px" />
+	    				<img src="{{ project.logo.url }}" height="70px" />
 	    			</a>
 	    		{% endif %}
-	    	{% else %}
-	    		<a href="{% url 'project_home' 'cog'%}">
-	    			<img src="{{ request|getDefaultLogo }}" height="70px" />
-	    		</a>
 	    	{% endif %}      
     	</div>
     	<div id="project_title">
 			{% if project %}
-				&nbsp; {{ project.long_name|capfirst }}
+				{{ project.short_name }} : {{ project.long_name|capfirst }}
 			{% endif %}
 		</div>
 	</div>
