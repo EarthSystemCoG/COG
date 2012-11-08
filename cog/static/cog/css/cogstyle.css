@@ -624,6 +624,6 @@ body {
     margin-right: auto; margin-left: auto;
     margin-top: 0; margin-bottom: 0;
 }
-body .container {
+body div {
     text-align: left;
 }
