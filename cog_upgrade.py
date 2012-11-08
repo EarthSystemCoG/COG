@@ -4,24 +4,33 @@ import sys, os
 sys.path.append( os.path.abspath(os.path.dirname('.')) )
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
-from cog.models import Project, create_upload_directory, Doc
+from cog.models import Project, create_upload_directory, Doc, CommunicationMeans
 from cog.models.logged_event import log_instance_event
 from django.db.models.signals import post_save
 
 print 'Upgrading COG'
 
-for project in Project.objects.all():
-    create_upload_directory(project)
+# 0.9 release
+
+#for project in Project.objects.all():
+#    create_upload_directory(project)
     
 # assign is_private=False to all documents
 # must first disconnect the signal sent when saving a Doc object (to avoid spurious signals for all Docs)
-post_save.disconnect(log_instance_event, sender=Doc, dispatch_uid="log_doc_event")
-for doc in Doc.objects.all():
-    print 'doc=%s' % doc
-    if not doc.is_private:
-        # explicitly assign
-        doc.is_private = False
-        doc.save()
-    doc.path = doc.file.name
-    doc.save()
-    
+#post_save.disconnect(log_instance_event, sender=Doc, dispatch_uid="log_doc_event")
+#for doc in Doc.objects.all():
+#    print 'doc=%s' % doc
+#    if not doc.is_private:
+#        # explicitly assign
+#        doc.is_private = False
+#        doc.save()
+#    doc.path = doc.file.name
+#    doc.save()
+ 
+ 
+# 1.0 release
+for cm in CommunicationMeans.objects.all():
+    print "Communication Means: title=%s internal=%s" % (cm.title, cm.internal)   
+    cm.internal=True
+    cm.save()
+    print "Communication Means: title=%s internal=%s" % (cm.title, cm.internal) 

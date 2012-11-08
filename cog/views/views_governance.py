@@ -19,7 +19,6 @@ def governance_display(request, project_short_name, tab):
     ''' Dispatcher for display of governance pages. '''
     
     template_page = 'cog/governance/_governance.html'
-    template_page = 'cog/governance/_governance.html'
     template_title = TAB_LABELS[tab]
     if tab == TABS["GOVERNANCE"]:
         template_title = 'Governance Overview'
@@ -29,7 +28,11 @@ def governance_display(request, project_short_name, tab):
     elif tab == TABS["ROLES"]:
         template_form_page = None # multiple update forms hyper-linked in context
     elif tab == TABS["PROCESSES"]:
-        template_form_page = None # multiple update forms hyper-linked in context
+        template_form_page = reverse( "governance_processes_update", args=[project_short_name] )
+    elif tab == TABS["COMMUNICATION"]:
+        template_form_page = reverse( "communication_means_update", args=[project_short_name, 'internal'] )
+    elif tab == TABS["POLICIES"]:
+        template_form_page = reverse( "policies_update", args=[project_short_name] )
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
 
 
@@ -50,18 +53,36 @@ def management_body_update(request, project_short_name, category):
         formsetType = OperationalManagementBodyInlineFormset
     
     # delegate to view for generic governance object
-    tab = 'bodies'
+    tab = TABS["BODIES"]
+    redirect = HttpResponseRedirect(reverse('governance_display', args=[project_short_name.lower(), tab]))
     return governance_object_update(request, project_short_name, tab, ManagementBody, objectTypeForm, formsetType,
-                                    '%s Management Bodies Update' % category, 'cog/governance/management_body_form.html')
+                                    '%s Management Bodies Update' % category, 'cog/governance/management_body_form.html',
+                                    redirect)
 
 # view to update the project Communication Means objects
 @login_required
-def communication_means_update(request, project_short_name):
-
+def communication_means_update(request, project_short_name, internal):
+    
+    tab = TABS["COMMUNICATION"]
+    if internal=='internal':
+        formsetType = InternalCommunicationMeansInlineFormset
+        redirect = HttpResponseRedirect(reverse('governance_display', args=[project_short_name.lower(), tab]))
+    else:
+        formsetType = ExternalCommunicationMeansInlineFormset
+        redirect = HttpResponseRedirect(reverse('getinvolved_display', args=[project_short_name]))
     # delegate to view for generic governance object
-    tab = 'processes'
-    return governance_object_update(request, project_short_name, tab, CommunicationMeans, CommunicationMeansForm, BaseInlineFormSet,
-                                    'Communication and Coordination Update', 'cog/governance/communication_means_form.html')
+    return governance_object_update(request, project_short_name, tab, 
+                                    CommunicationMeans, CommunicationMeansForm, formsetType,
+                                   'Communication and Coordination Update', 'cog/governance/communication_means_form.html', redirect)
+
+
+# note: view located here instead of cog.views.views_project to avoid circular imports
+@login_required
+def getinvolved_update(request, project_short_name):      
+
+    # delegate to governance views
+    return communication_means_update(request, project_short_name, 'external')
+
     
 @login_required
 def governance_overview_update(request, project_short_name):
@@ -110,21 +131,31 @@ class StrategicManagementBodyInlineFormset(BaseInlineFormSet):
         
     def get_queryset(self):
         # standard BaseInlineFormSet that sub-selects by instance=project
-        querySet = super(StrategicManagementBodyInlineFormset, self ).get_queryset() 
+        querySet = super(StrategicManagementBodyInlineFormset, self).get_queryset() 
         # additionally sub-select by category='Strategic'
         return querySet.filter(category='Strategic')
     
 class OperationalManagementBodyInlineFormset(BaseInlineFormSet):
         
     def get_queryset(self):
-        return  super(OperationalManagementBodyInlineFormset, self ).get_queryset().filter(category='Operational')
+        return  super(OperationalManagementBodyInlineFormset, self).get_queryset().filter(category='Operational')
+    
+class InternalCommunicationMeansInlineFormset(BaseInlineFormSet):
+    
+    def get_queryset(self):
+        return super(InternalCommunicationMeansInlineFormset, self).get_queryset().filter(internal=True)
+    
+class ExternalCommunicationMeansInlineFormset(BaseInlineFormSet):
+    
+    def get_queryset(self):
+        return super(ExternalCommunicationMeansInlineFormset, self).get_queryset().filter(internal=False)
         
 # Generic view for updating a governance object.
 #
 # The object must have the following attributes and methods:
 # obj.project
 # obj.__unicode__
-def governance_object_update(request, project_short_name, tab, objectType, objectTypeForm, formsetType, title, template):
+def governance_object_update(request, project_short_name, tab, objectType, objectTypeForm, formsetType, title, template, redirect):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -153,13 +184,19 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
             
             # save changes to databaase
             instances = formset.save()
-            
-            # set the object category from the other fields, save again
+                        
+            # set additional object flags
             for instance in instances:
-                instance.set_category()
+                dict = {}
+                if formsetType == InternalCommunicationMeansInlineFormset:
+                    dict['internal'] = True
+                elif formsetType == ExternalCommunicationMeansInlineFormset:
+                    dict['internal'] = False
+                instance.set_category(dict=dict)
+                instance.save()
                        
             # redirect to governance display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('governance_display', args=[project.short_name.lower(), tab]))
+            return redirect
             
         else:
             print 'Formset is invalid  %s' % formset.errors
@@ -182,8 +219,9 @@ def management_body_members(request, project_short_name, object_id):
     managementBodyMemberForm = staticmethod(curry(ManagementBodyMemberForm, project=managementBody.project))
     
     # delegate to generic view with specific object types
-    tab = 'bodies'
-    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm)
+    tab = TABS["BODIES"]
+    redirect = reverse('governance_display', args=[managementBody.project.short_name.lower(), tab])
+    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm, redirect)
   
 # view to update a Communication Means object members  
 @login_required
@@ -194,8 +232,12 @@ def communication_means_members(request, object_id):
     communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
     
     # delegate to generic view with specific object types
-    tab = 'processes'
-    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm)
+    tab = TABS["PROCESSES"]
+    if commnicationMeans.internal:
+        redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
+    else:
+        redirect = reverse('getinvolved_display', args=[commnicationMeans.project.short_name.lower()])
+    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm, redirect)
 
 # view to update an Organizational Role object members  
 @login_required
@@ -207,8 +249,9 @@ def organizational_role_members(request, object_id):
     organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
     
     # delegate to generic view with specific object types
-    tab = 'roles'
-    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm)
+    tab = TABS["ROLES"]
+    redirect = reverse('governance_display', args=[organizationalRole.project.short_name.lower(), tab])
+    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm, redirect)
 
 # 
 # Generic view to update members for:
@@ -219,7 +262,7 @@ def organizational_role_members(request, object_id):
 # obj.project
 # obj.__unicode__
 #
-def members_update(request, tab, objectId, objectType, objectMemberType, objectForm):
+def members_update(request, tab, objectId, objectType, objectMemberType, objectForm, redirect):
     
     # retrieve governance object
     obj = get_object_or_404(objectType, pk=objectId)
@@ -241,7 +284,7 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
         formset = ObjectFormSet(instance=obj)
         
         # render view
-        return render_members_form(request, obj, formset)
+        return render_members_form(request, obj, formset, redirect)
         
     # POST request
     else:
@@ -252,25 +295,25 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
             # save updated members
             instances = formset.save()
             
-            # redirect to governance display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('governance_display', args=[obj.project.short_name.lower(), tab]))
-          
+            # redirect to display (GET-POST-REDIRECT)
+            return HttpResponseRedirect(redirect)
+                      
         else:
             print 'Formset is invalid: %s' % formset.errors
             
             # redirect to form view
-            return render_members_form(request, obj, formset)
+            return render_members_form(request, obj, formset, redirect)
         
-def render_members_form(request, object, formset):
+def render_members_form(request, object, formset, redirect):
         
     return render_to_response('cog/governance/members_form.html',
                               {'title' : '%s Members Update' % object, 
                                'project': object.project,
-                               'formset':formset },
+                               'formset':formset, 'redirect':redirect },
                                context_instance=RequestContext(request))
     
 @login_required
-def govprocesses_update(request, project_short_name):
+def processes_update(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -354,6 +397,7 @@ def organizational_role_update(request, project_short_name):
             # assign role category and save again
             for role in orgrole_instances:
                 role.set_category()
+                role.save()
             
             # redirect to governance display (GET-POST-REDIRECT)
             tab = 'roles'

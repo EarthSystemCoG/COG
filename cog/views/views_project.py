@@ -274,8 +274,9 @@ def getinvolved_display(request, project_short_name):
     tab = TABS["GETINVOLVED"]
     template_page = 'cog/project/_project_getinvolved.html'
     template_title = TAB_LABELS[tab]
-    template_form_page = reverse("getinvolved_update", args=[project_short_name])
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)            
+    template_form_page = reverse( "getinvolved_update", args=[project_short_name] )
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)    
+
 
 def contactus_display(request, project_short_name):
     ''' View to display the project "Contact Us" page. '''
@@ -295,43 +296,6 @@ def support_display(request, project_short_name):
     template_form_page = reverse("support_update", args=[project_short_name])
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
     
-@login_required
-def getinvolved_update(request, project_short_name):
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # check permission
-    if not userHasAdminPermission(request.user, project):
-        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
-    # GET request
-    if (request.method=='GET'):
-        
-        # create form object from model
-        form = GetInvolvedForm(instance=project)
-        
-        # display form view
-        return render_getinvolved_form(request, project, form)
-    
-    # POST
-    else:
-        # update existing database model with form data
-        form = GetInvolvedForm(request.POST, instance=project)
-
-        if form.is_valid():
-            
-            # save form data
-            project = form.save()           
-            
-            # redirect to support display (GET-POST-REDIRECT)
-            return HttpResponseRedirect(reverse('getinvolved_display', args=[project.short_name.lower()]))
-            
-        else:
-            # re-display form view
-            if not form.is_valid():
-                print 'Form is invalid  %s' % form.errors
-            return render_getinvolved_form(request, project, form)
 
 @login_required
 def contactus_update(request, project_short_name):

@@ -102,6 +102,9 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/trackers/$', 'cog.views.trackers_display', name='trackers_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/code/update/$', 'cog.views.code_update', name='code_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/code/$', 'cog.views.code_display', name='code_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/usecases/update/$', 'cog.views.usecases_update', name='usecases_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/usecases/$', 'cog.views.usecases_display', name='usecases_display'),
+
 
     # folders and bookmarks
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/$', 'cog.views.bookmark_list', name='bookmark_list'),
@@ -117,24 +120,24 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add_notes/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_add_notes', name='bookmark_add_notes'),
 
     # project 'get involved'
-    # FIXME: uncomment when object model is available
     url(r'^projects/(?P<project_short_name>[^/]+)/getinvolved/update/$', 'cog.views.getinvolved_update', name='getinvolved_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/getinvolved/$', 'cog.views.getinvolved_display', name='getinvolved_display'),
    
     # project "contact us"
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/update/$', 'cog.views.contactus_update', name='contactus_update'),   
     # FIXME: uncomment when object model is available
-    url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
+    #url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
     
     # project "support"
     url(r'^projects/(?P<project_short_name>[^/]+)/support/update/$', 'cog.views.support_update', name='support_update'),
     # FIXME: uncomment when object model is available
-    url(r'^projects/(?P<project_short_name>[^/]+)/support/$', 'cog.views.support_display', name='support_display'),   
+    #url(r'^projects/(?P<project_short_name>[^/]+)/support/$', 'cog.views.support_display', name='support_display'),   
        
     
     # project policies
-    url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/policies/$', 'cog.views.policies_update', name='policies_update'),
-    
+    #url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/policies/$', 'cog.views.policies_update', name='policies_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/policies/update/$', 'cog.views.policies_update', name='policies_update'),
+   
     # project roadmap
     url(r'^projects/(?P<project_short_name>[^/]+)/roadmap/update/$', 'cog.views.roadmap_update', name='roadmap_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/roadmap/$', 'cog.views.roadmap_display', name='roadmap_display'),
@@ -143,18 +146,20 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>governance)/$', 'cog.views.governance_display', name='governance_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>bodies)/$', 'cog.views.governance_display', name='governance_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>roles)/$', 'cog.views.governance_display', name='governance_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>communication)/$', 'cog.views.governance_display', name='governance_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>processes)/$', 'cog.views.governance_display', name='governance_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>policies)/$', 'cog.views.governance_display', name='governance_display'),
     
-
     url(r'^projects/(?P<project_short_name>[^/]+)/governance/update/$', 'cog.views.governance_overview_update', name='governance_overview_update'),    
        
     url(r'^projects/(?P<project_short_name>[^/]+)/bodies/update/(?P<category>[^/]+)/$', 'cog.views.management_body_update', name='management_body_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/bodies/update/members/(?P<object_id>[^/]+)/$', 'cog.views.management_body_members', name='management_body_members'),
     
-    url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/communication_means/$', 'cog.views.communication_means_update', name='communication_means_update'),
+    #url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/communication_means/(?P<internal>[^/]+)/$', 'cog.views.communication_means_update', name='communication_means_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/communication/update/(?P<internal>[^/]+)/$', 'cog.views.communication_means_update', name='communication_means_update'),    
     url(r'^communication_means/(?P<object_id>[^/]+)/members/$', 'cog.views.communication_means_members', name='communication_means_members'),
     
-    url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/$', 'cog.views.govprocesses_update', name='governance_processes_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/$', 'cog.views.processes_update', name='governance_processes_update'),
     
     url(r'^projects/(?P<project_short_name>[^/]+)/roles/update/$', 'cog.views.organizational_role_update', name='organizational_role_update'),
     url(r'^organizational_role/(?P<object_id>[^/]+)/members/$', 'cog.views.organizational_role_members', name='organizational_role_members'),

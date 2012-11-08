@@ -26,14 +26,22 @@
     display:block;
 }
 
-#left_logo {
+#project_header {
+
     float: left;
     background: #FFFFFF; 
     margin-top: 0px;
-    padding-bottom: 0px;
     height:75px; 
-    padding-bottom:5px; 
     padding-top: 0px;
+    padding-bottom: 5px;
+
+	color: #333;
+    font-weight: bold;
+	font-style: italic;
+	font-size: 12pt;
+	text-align: left;
+	vertical-align: bottom;
+
 }
 
 #right_logo {
@@ -167,23 +175,30 @@
 
 	<!-- sidebar and center -->
 	<div class="span-17">
-		<div id="left_logo">
+		<div id="project_header">
+		
 	    	{% if project.logo %}
+	    		<!-- project logo -->
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
-	    				<img src="{{ project.get_logo }}" height="70px" />
+	    				<img src="{{ project.logo.url }}" height="70px" />
 	    			</a>
 	    		{% else %}
 	    			<a href="{% url 'project_home' project.short_name|lower %}">
-	    				<img src="{{ project.get_logo }}" height="70px" />
+	    				<img src="{{ project.logo.url }}" height="70px" />
 	    			</a>
 	    		{% endif %}
 	    	{% else %}
-	    		<a href="{% url 'project_home' 'cog'%}">
-	    			<img src="{{ request|getDefaultLogo }}" height="70px" />
-	    		</a>
-	    	{% endif %}        
-    	</div>
+	    		<!-- or insert blank space -->
+	    		<div style="height:55px;">&nbsp;</div>
+	    	{% endif %}      
+			
+			{% if project %}
+				<!-- project title -->
+				{{ project.short_name }} : {{ project.long_name|capfirst }}
+			{% endif %}
+			
+		</div>
 	</div>
 	
 	<!-- right column -->

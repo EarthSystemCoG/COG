@@ -349,21 +349,23 @@ strong {
 	padding: 5px;
 }
 
-.box-rounded {
+.box-comment {
 	padding: 5px;
-	margin: 1px;
-	margin-bottom: 5px;
-	border: 1px solid #417690;
+	margin: 2px;
+	border: 0px solid #417690;
 	/* COG STYLE: COMMENTS BACKGROUND COLOR */
 	background: #FFFFFF;
 	/*font: normal 9pt Arial, Helvetica, sans-serif;*/
-	-moz-border-radius: 8px;
+	/*-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
-	border-radius: 8px;
+	border-radius: 8px; */
 }
 
-.box-rounded .caption {
+.box-comment .caption {
 	color: 417690;
+	background: B9E0E3;
+	border: 1px solid #417690;
+	margin-bottom: 3px;
 	font-weight: bold;
 	font-style: italic;
 }

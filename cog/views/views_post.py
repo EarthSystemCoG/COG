@@ -83,8 +83,7 @@ def page_detail(request, project_short_name):
     try:
         page = Post.objects.get(url=url)
     except Post.DoesNotExist:
-        print 'Page does not exist, creating it'
-        # dynamically create page if url matches one of the pre-defined values
+        # dynamically create a templated project page if url matches one of the pre-defined values
         page = create_project_page(url, project)
         # if page has not been created, return error
         if not page:

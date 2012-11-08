@@ -4,15 +4,6 @@
 
  <div id="governance_policies">
 
-<!-- header -->
-<hr/>
-<b>Policies</b>
-{% if user|hasAdminPermission:proj %}
-    <div style="float:right">
-    	<a href="{% url policies_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
- 	</div>
-{% endif %}
-
 <!-- content -->	
 {% if proj.policies %}
 
@@ -27,8 +18,6 @@
 		{% endfor %}
 	</table>
 	
-{% else %}
-	:&nbsp;<i>No information found.</i>
 {% endif %}
 
- </div>
+</div>

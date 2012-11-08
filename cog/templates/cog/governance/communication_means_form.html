@@ -62,7 +62,7 @@
 	            			{{ form.participationDetails }} 
 	            			{{ form.participationDetails.errors }}
 	            		</td>
-	            	</tr>
+	            	</tr>	            	
 	            	{% if form.instance.id %}
 		            	<tr>
 		            		<td valign="top">&nbsp;</td>
@@ -75,12 +75,19 @@
 	            	
 	            </table>
             </div>
+            
+            <!-- preserve 'internal' flag -->
+	        {{ form.internal.as_hidden }}
 	     		     	
 	     {% endfor %}
     
     	 <div style="text-align:right">
-	         <input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower 'processes' %}'"/>
-	         <input type="submit" value="Submit" />
+    	 	{% if 'internal' in request.path %}
+	        	<input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower 'communication' %}'"/>
+	        {% else %}
+	        	<input type="button" value="Cancel" onclick="window.location='{% url getinvolved_display project.short_name|lower %}'"/>
+	        {% endif %}
+	        <input type="submit" value="Submit" />
          </div>
     
     </form>    

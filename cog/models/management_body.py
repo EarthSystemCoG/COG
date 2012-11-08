@@ -37,12 +37,11 @@ class ManagementBody(models.Model):
         print purposes
         return purposes
     
-    def set_category(self):
-        """Method to select the object category from the other fields, and persist changes."""
+    def set_category(self, dict={}):
+        """Method to select the object category from the other fields. """
         
         for purpose in self.purposes.all():
             self.category = purpose.category
-        self.save()
 
 
     def __unicode__(self):

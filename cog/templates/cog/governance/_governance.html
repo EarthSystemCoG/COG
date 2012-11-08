@@ -23,8 +23,14 @@
 	{% include 'cog/governance/_governance_member_organizational_roles.html' %}
 {% endif %}
 
+{% if tab = "COMMUNICATION"|tabs %}
+	{% with 'True' as internal %}
+		{% include 'cog/governance/_governance_communication_means.html' %}
+	{% endwith %}
+{% endif %}
 {% if tab = "PROCESSES"|tabs %}
-	{% include 'cog/governance/_governance_communication_means.html' %}
 	{% include 'cog/governance/_governance_processes.html' %}
+{% endif %}
+{% if tab = "POLICIES"|tabs %}
 	{% include 'cog/governance/_governance_policies.html' %}
 {% endif %}

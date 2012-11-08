@@ -4,20 +4,11 @@
 
  <div id="communication">
 
-<!-- header -->
-<hr/>
-<b>Communication and Coordination</b>
-{% if user|hasAdminPermission:proj %}
-    <div style="float:right">
-    	<a href="{% url communication_means_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
- 	</div>
-{% endif %}
-
 <!-- content -->
-{% if proj.communicationmeans_set.all %}
+{% if proj|getCommunicationMeans:internal %}
 
 	<table>
-		{% for obj in proj.communicationmeans_set.all %}
+		{% for obj in proj|getCommunicationMeans:internal %}
 			<tr>
 				<td>
 					<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
@@ -64,9 +55,7 @@
 			</tr>
 		{% endfor %}
 	</table>
-	
-{% else %}
-	:&nbsp;<i>No information found.</i>
+
 {% endif %}
 
  </div>

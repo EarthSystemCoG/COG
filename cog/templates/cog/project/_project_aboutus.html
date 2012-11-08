@@ -79,7 +79,6 @@
 				                <td class="tophead">First Name</td>
 				                <td class="tophead">User Name</td>				                
 				                <td class="tophead">Institution</td>
-				                <td class="tophead">Role</td>
 				            </tr>
 				            {% for user in users %}
                 			<tr>
@@ -87,9 +86,6 @@
                    				<td>{{ user.first_name }}</td>
                    				<td>{{ user.username }}</td>
                    				<td>{{ user|getUserProfileAttribute:"institution" }}</td> 
-                   				<td>
-                   					{% for role in user|roles:project %}{% if forloop.counter != 1 %}, {% endif %}{{ role }}{% endfor %}
-                   				</td>
 				            </tr>
 				            {% endfor %}
 				        </table>
