@@ -14,7 +14,7 @@ class Post(models.Model):
         TYPE_NOTES = 'notes'
         POST_TYPES = ( (TYPE_BLOG, TYPE_BLOG.capitalize()), (TYPE_PAGE, TYPE_PAGE.capitalize()), (TYPE_NOTES, TYPE_NOTES.capitalize()) )
       
-        author = models.ForeignKey(User, related_name='posts', verbose_name='Author', blank=False)
+        author = models.ForeignKey(User, related_name='posts', verbose_name='Author', blank=False, null=True, on_delete=models.SET_NULL)
         title = models.CharField(max_length=200, verbose_name='Title', blank=False)
         label = models.CharField(max_length=25, verbose_name='Label', help_text='Short index label', blank=True, null=True)
         body = models.TextField(verbose_name='Content', blank=True, default="")
@@ -25,9 +25,9 @@ class Post(models.Model):
         # order of post within project index
         order = models.IntegerField(blank=True, null=False, default=0)
         # optional topic
-        topic = models.ForeignKey(Topic, blank=True, null=True)
+        topic = models.ForeignKey(Topic, blank=True, null=True, on_delete=models.SET_NULL)
         # optional parent post - must specify both blank=True (form validation) and null=True (model)
-        parent = models.ForeignKey('self', verbose_name='Parent Post', blank=True, null=True)
+        parent = models.ForeignKey('self', verbose_name='Parent Post', blank=True, null=True, on_delete=models.SET_NULL)
         # optional attached documents - must specify both blank=True (form validation) and null=True (model)
         docs = models.ManyToManyField(Doc, verbose_name='Attachments', blank=True, null=True)
         
