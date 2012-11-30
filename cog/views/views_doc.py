@@ -237,7 +237,7 @@ def doc_list(request, project_short_name):
                               context_instance=RequestContext(request))
     
 def render_doc_form(request, form, project):
-    title = 'Upload %s Document' % project.short_name
+    title = 'Upload %s File' % project.short_name
     return render_to_response('cog/doc/doc_form.html', 
                              {'form': form, 'project':project, 'title':title}, 
                               context_instance=RequestContext(request))
