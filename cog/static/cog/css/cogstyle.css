@@ -630,3 +630,8 @@ body div {
     /* stop centering */
     text-align: left;
 }
+
+/* YUI treeview introduces a bug; when user is logged the background of the tree is teal
+   this forces it to be white
+ */
+#project_views .yui-content td { background-color: #ffffff !important; }
