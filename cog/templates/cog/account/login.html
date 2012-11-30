@@ -4,7 +4,7 @@
 {% block main %}
 
 <div class="prepend-7 span-10">
-
+        
 	<h2>User Login</h2>
 	
 	<!-- display extra message if available -->
@@ -36,19 +36,21 @@
 				    <td>{{ form.password }}</td>
 				</tr>
 			</table>
-		</div>
-		<div>
-			<span style="float:left">
+                </div>
+		<div style="position: relative;">
+			<span style="position: absolute; left: 0px;">
 			  <input type="submit" value="login" />
 			  <input type="hidden" name="next" value="{{ next }}" />
 			</span>
-			<span style="float:right">
+			<span style="position: absolute; right: 0px;">
 			  <a href="{% url 'username_reminder' %}">Forgot Username?</a>
 			  &nbsp;
 			  <a href="{% url 'password_reset' %}">Forgot Password?</a>
 			</span>
-		</div>		
+                        <br/>
+		</div>
 	</form>
+        
 
 </div>
 {% endblock %}
