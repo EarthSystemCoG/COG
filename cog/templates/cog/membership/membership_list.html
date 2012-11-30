@@ -4,7 +4,7 @@
 
    {% load cog_utils %}
    {% load pagination_tags %}
-   {% autopaginate users 10 %}
+   {% autopaginate users 50 %}
          
    {% if request.GET.status == 'success' %}
 	   <p class="message-box">
