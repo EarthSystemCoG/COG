@@ -39,6 +39,7 @@ class Project(models.Model):
 
     
     parent = models.ForeignKey('self', blank=True, null=True, related_name='Parent Project')
+    # NOTE: by defaul, a ManyToManyField assumes symmetrical=True
     peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects')
     
     # the initial requestor of the project, if any
