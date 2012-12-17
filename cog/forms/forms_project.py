@@ -23,6 +23,23 @@ class ProjectForm(ModelForm):
     # specify size of logo_url text field
     logo_url = forms.CharField(required=False, widget=TextInput(attrs={'size':'80'}))
     
+    # override __init__ method to change the querysets for 'parent' and 'peers'
+    def __init__(self,  *args,**kwargs):
+        
+        super(ProjectForm, self ).__init__(*args,**kwargs) # populates the post
+         
+        if 'instance' in kwargs:
+            instance = kwargs.get('instance')
+            # parent query-set options: exclude the project itself, and all its children  
+            parentQueryset =  ~Q(id=instance.id)
+            # exclude children from parent
+            for child in instance.children():
+                parentQueryset = parentQueryset & ~Q(id=child.id)
+            self.fields['parent'].queryset =  Project.objects.filter( parentQueryset ).distinct().order_by('short_name')
+            # peer query-set options: exclude the project itself
+            self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().order_by('short_name')
+
+    
     # overridden validation method for project short name 
     def clean_short_name(self):
         short_name = self.cleaned_data['short_name']
