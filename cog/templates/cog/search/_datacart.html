@@ -43,22 +43,21 @@
 		var fdiv = getFilesDiv(dataset_id);
 		fdiv.innerHTML = "<b>Total Number of Files</b>:"+numFound;
 		if (numFound>0) {
-			fdiv.innerHTML += "<table>";
+			var html = "<table>";
 			for (var i=0; i<docs.length; i++) {
-				
 				var doc = docs[i];
-				fdiv.innerHTML += "<tr><td>"+doc.title+"</td><td>";
+				html += "<tr><td>"+doc.title+"</td><td>";
 				if (doc.url) {
 					for (var j=0; j<doc.url.length; j++) {
 						var urlArray = doc.url[j].split('|');
-						fdiv.innerHTML += "&nbsp;&nbsp;<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+						html += "&nbsp;&nbsp;<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
 					}
 				}
-				fdiv.innerHTML += "</td></tr>";
+				html += "</td></tr>";
 			}
-			fdiv.innerHTML += "</table>";
+			html += "</table>";
 		}
-		fdiv.innerHTML += "<br/>"
+		fdiv.innerHTML = html;
 	}
 
 	// function called if Ajax request failed
