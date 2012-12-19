@@ -50,7 +50,11 @@
 				if (doc.url) {
 					for (var j=0; j<doc.url.length; j++) {
 						var urlArray = doc.url[j].split('|');
-						html += "&nbsp;&nbsp;<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+						if (urlArray[1].indexOf("image")>=0) {
+							html += "<a href='"+urlArray[0]+"'><img src='"+urlArray[0]+"' width='50px'/></a>";
+						} else {
+							html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+						}
 					}
 				}
 				html += "</td></tr>";
