@@ -9,4 +9,4 @@
 cog/static/cog/ckeditor
 
 # static files
-static
+./static
