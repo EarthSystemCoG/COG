@@ -1,0 +1,176 @@
+
+
+/*************************headers***********************/
+
+h1{
+color: #666;
+font-align:left;
+font-size: 18pt;
+font-weight: bold;
+}
+
+h3.teal_box{
+font-size:  10pt;
+color:      #333;
+text-align: center;
+padding-top: 10px;
+}
+
+h2.splash_functions{
+margin-bottom: 0px;
+padding-bottom: 0px;
+font-size: 11pt;
+margin-top: 0px;
+padding-bottom: 0px;
+}
+
+
+
+table.inner tbody tr td {
+background-color: white;
+}
+
+table.splash_functions{
+width:      100%;
+margin-top: 30px;
+}
+
+table.splash_functions tbody tr td{
+background-color: white;
+}
+
+td.function{
+padding:0px;
+margin:0px;
+vertical-align: middle;
+}
+
+p.splash_functions{
+margin-top:     0px;
+padding-top:    0px;
+/*margin-bottom: 50px;  index1 */
+margin-bottom: 0px;
+}
+
+p.splash_functions_last{
+margin-top:    0px;
+margin-bottom: 0px;
+}
+
+
+td.icon{
+width:90px;
+height: 105px;
+vertical-align: middle;
+}
+
+td.yellow_col{
+vertical-align: top;
+}
+
+
+td.col_1{
+vertical-align: middle;
+/*padding-top: 100px;*/
+width: 500px;
+}
+td.col_2{
+vertical-align:middle;
+width: 300px;
+}
+
+div.teal_box {
+background-color: white;
+border: 3px solid #358C92;
+width:  247px;
+}
+
+/* hyperlinks */
+a:link, a:visited {
+    color: #358C92;
+    text-decoration: none;
+}
+a:hover {
+    color: #205559;
+}
+
+
+ul.teal_box > li{
+margin-left:  10px;
+margin-right: 10px;
+margin-bottom: 10px;
+padding:       0px;
+color:        #333;
+}
+
+
+div.yellow_box{
+background-color:#FAC24A;
+width:           250px;
+height:          70px;
+/*display:       table-cell;*/
+vertical-align:  middle;
+padding:         0px;
+}
+
+div.white_button{
+display:         inline-block;
+width:           150px;
+margin-right:    50px;
+margin-left:     50px;
+margin-top:      20px;
+background-color:white;
+height:          30px;
+border-radius:   15px;
+}
+
+
+div.logo{
+margin-top: 30px;
+}
+
+div.main{
+margin-left: 10px;
+margin-right:10px;
+margin-top:  10px;
+}
+
+p{
+text-align: left;
+}
+
+p.yellow_box{
+margin-bottom:  0px;
+margin-left:    5px;
+margin-right:   5px;
+margin-top:     7px;
+padding:        0px;
+text-align:     center;
+}
+
+p.white_button{
+font-size:      11pt;
+text-align:     center;
+margin-bottom:  0px;
+padding-bottom: 0px;
+margin-top:     5px;
+color:          #333;
+
+}
+
+
+p.tagline{
+font-size:      15pt;
+font-style:     italic;
+color:          #333;
+margin-bottom:  0px;
+padding-bottom: 0px;
+margin-top:     45px;
+}
+
+
+
+hr.top{
+background-color: #358C92;
+height: 4px;
+}

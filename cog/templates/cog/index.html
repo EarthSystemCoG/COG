@@ -1,3 +1,102 @@
-<img src="/static/cog/img/cog_web_beta.png" height="70px" />
+{% extends "cog/common/layout_center.html" %}
+{% load url from future %}
 
-<h1>Welcome to COG</h1>         
+{% block header %}
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cog.css" />
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+<div class="span-24 last">
+<div class="logo">
+<table>
+<tr>
+<td style="width:100px;"><a href="http://www.earthsystemcog.org/projects/cog"><img src = "{{STATIC_URL}}/cog/img/cog_barb_shadow.png"></a></td>
+<td><p class="tagline" style="margin-top:80px;font-size:25px;">Connecting Resources in the Earth Sciences</p></td>
+</tr>
+</table>
+</div>
+
+
+
+<hr class="top">
+<div class="main">
+<p>CoG is a 
+multi-institutional project that seeks to examine, within the Earth sciences, the organizational characteristics of community 
+software projects and to create software insfrastructure to support their effecient governance and operation. 
+<a href="http://www.earthsystemcog.org/projects/cog">Learn More</a>
+</p>
+
+<table class="splash_functions">
+
+<tr>
+<td colspan="2">
+<p style="text-align:center;">Below is a list of CoG's features. Click on the yellow box to start exploring these capabilities.</p>
+</tr>
+
+<tr>
+<td class="col_1">
+<table class="inner">
+
+<tr>
+<td class="icon"><img style="width:90%;" src="{{STATIC_URL}}/cog/img/project_icon_sjm.png"></td>
+<td class="function"> <h2 class="splash_functions">Collaborative Project Workspaces</h2>
+<p class="splash_functions">The heart of CoG are CoG project workspaces. Workspaces come with their own wiki, news, data space, and customizable navigation. Projects can be linked to other projects in a heirarchy of parents, peers, and children. Information can be shared across this network. 
+</td>
+</tr>
+
+<tr>
+<td class="icon"><img style="width:85%;" src="{{STATIC_URL}}/cog/img/governance_sjm.png"></td>
+<td class="function"><h2 class="splash_functions">Project Governance</h2>
+<p class="splash_functions">CoG allows projects to define their project governance through the description of management bodies, organizational roles, prioritization strategies, mission, vision, values, partners, etc.</a>
+</p>
+</td>
+</tr>
+
+<tr>
+<td class="icon"><img style="width:95%;" src="{{STATIC_URL}}/cog/img/data_sjm.png"></td>
+<td class="function" ><h2 class="splash_functions">Data Services</h2>
+<p class="splash_functions">CoG comes bundled with an Earth System Grid Federation (ESGF) datanode. Individual projects can store data on the node and customize a search to their project's holdings.
+</td>
+</tr>
+
+
+<tr>
+<td class="icon"><img style="width:95%;" src="{{STATIC_URL}}/cog/img/metadata_sjm.png"></td>
+<td class="function"><h2 class="splash_functions">Metadata Services</h2>
+<p class="splash_functions_last" >CoG has partnered with the <a href="esdoc.org">ES-DOC</a> project to provide services to create and display Earth system model metadata.</p>
+</td>
+</tr>
+</table>
+
+</td>
+
+
+<td class="col_2">
+<center>
+<div class="yellow_box">
+  <div class="white_button">
+    <p class="white_button"><a href="http://earthsystemcog.org/login/?next=/projects/cog/">Login/Register</a></p>
+  </div>
+</div>
+<br><br>
+<div class="teal_box" style="width:250px;margin-left:auto;margin-right:auto;">
+<h3 class="teal_box">Who is Using CoG?</h3>
+<ul class="teal_box">
+<li>National Climate Predications and Projections Platform<a href="http://earthsystemcog.org/projects/ncpp/"> (NCPP)</a></li>
+<li>Earth System Documentation-Models <a href="http://earthsystemcog.org/projects/es-doc-models/"> (ES-DOC-Models)</a></li>
+<li>Dynamical Core Model Intercomparison Project<a href="http://earthsystemcog.org/projects/dcmip-2012/"> (DCMIP) 2012</a></li>
+</ul>
+
+</table>
+</div>
+
+</center>
+
+</td>
+
+</tr>
+</table>  
+
+{% endblock %}
