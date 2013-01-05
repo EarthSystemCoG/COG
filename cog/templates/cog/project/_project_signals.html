@@ -13,7 +13,7 @@
                     <td>
                        {{ signal.title }}:
                        <a href="{{ signal.url }}">{{ signal.description|truncatewords:10 }}</a>
-                       &nbsp [<i>{{signal.user.username}} @ {{signal.update_date|date:"Y/m/d h:m:s"}}</i>]                 
+                       &nbsp [<i>{{signal.user.username}} @ {{signal.update_date|date:"Y/m/d H:i:s"}}</i>]                 
                    </td>
                 </tr>
             {% endfor %}
