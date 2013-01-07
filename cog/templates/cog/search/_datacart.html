@@ -46,7 +46,12 @@
 			var html = "<table>";
 			for (var i=0; i<docs.length; i++) {
 				var doc = docs[i];
-				html += "<tr><td>"+doc.title+"</td><td>";
+				html += "<tr><td><b>"+doc.title+"</b>";
+				// additional file-level metadata
+				// TODO: loop over generic json dictionary
+				if (doc.algorithm) html += "<br/>Algorithm: "+doc.algorithm;
+				if (doc.algorithm) html += "<br/>Description: "+doc.description;				
+				html += "</td><td>";
 				if (doc.url) {
 					for (var j=0; j<doc.url.length; j++) {
 						var urlArray = doc.url[j].split('|');
