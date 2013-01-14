@@ -7,7 +7,7 @@
 	   <div class="header_bar"> 
 	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst}}{{counts|pluralize }} ({{ counts }})</a>
 	   </div>
-	   <div class="mybox" id="post_hierarchy" style="display:block">
+	   <div class="mybox" id="post_hierarchy" style="display:none">
 	        <table>
 	            {% if post.parent %} 
 	                <tr>
