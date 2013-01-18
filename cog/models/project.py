@@ -39,7 +39,6 @@ class Project(models.Model):
 
     
     parent = models.ForeignKey('self', blank=True, null=True, related_name='Parent Project')
-    # NOTE: by defaul, a ManyToManyField assumes symmetrical=True
     peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects')
     
     # the initial requestor of the project, if any
@@ -88,11 +87,18 @@ class Project(models.Model):
     
     # Method to return all project users 
     # (i.e. associated with either the project Users or Admins group)
-    def getUsers(self):
-        # users
-        uset = set( self.getUserGroup().user_set.all() )
-        # administrators
-        aset = set( self.getAdminGroup().user_set.all() )
+    def getUsers(self,exclude_superuser=False):
+        if exclude_superuser:
+            # users
+            uset = set( self.getUserGroup().user_set.all().exclude(is_superuser=True) )
+            # administrators
+            aset = set( self.getAdminGroup().user_set.all().exclude(is_superuser=True) )
+        else:
+            # users
+            uset = set( self.getUserGroup().user_set.all() )
+            # administrators
+            aset = set( self.getAdminGroup().user_set.all() )
+
         # join the two groups
         users = list( uset.union( aset ) )
         # sort by username
@@ -102,13 +108,14 @@ class Project(models.Model):
     
     # Method to return the project users that are not private
     def getPublicUsers(self):
-        users = self.getUsers()
+        users = self.getUsers(exclude_superuser=True)
         pubUsers = []
         for user in users:
             if not user.get_profile().private:
                pubUsers.append(user)
         return pubUsers
-    
+
+
     def getGroups(self):
         return [ self.getUserGroup(), self.getAdminGroup() ]
     
