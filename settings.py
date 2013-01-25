@@ -75,8 +75,11 @@ FILEBROWSER_VERSIONS = {
 # versions selectable through admin interface
 FILEBROWSER_ADMIN_VERSIONS = ['thumbnail']
 
-# absolute path to directory containig project specific media
+# absolute path to directory containing project specific media
 PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
+
+# absolute path to root directory containing projects data
+DATA_ROOT = os.path.join(MEDIA_ROOT, "data/")
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).

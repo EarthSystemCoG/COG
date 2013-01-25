@@ -178,5 +178,7 @@ urlpatterns = patterns('',
     #url(r'^site_media/(?P<path>.*_large.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
     # project media
     url(r'^site_media/projects/(?P<path>.*)$', 'cog.views.doc_download', name='doc_download'),
+    # project data
+    url(r'^site_media/data/(?P<path>.*)$', 'cog.views.data_download', name='data_download'),
     
 )

@@ -135,13 +135,33 @@ def doc_download(request, path):
         return serve(request, path, document_root=settings.PROJECTS_ROOT )
     else:
         return doc_download_private(request, path, doc)
- 
+
+
+def data_download(request, path):
+    '''Method to serve project data to authorized users.'''
+    
+    project_short_name = path.split("/")[0]
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    print 'Data for project=%s' % project
+    
+    # TODO: check if data is public before forcing login
+    return secure_data_download(request, path, project)
+    
+@login_required   
+def secure_data_download(request, path, project):
+    
+    # TODO: generalize authorization by looking up regular expressions matching path
+    if userHasUserPermission(request.user, project):
+        return serve(request, path, document_root=settings.DATA_ROOT )
+    else:
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)    
+     
 @login_required   
 def doc_download_private(request, path, doc):
     '''Download view that requires user to login, then checks authorization.'''
     
     if userHasUserPermission(request.user, doc.project):
-        return serve(request, path, document_root=settings.PROJECTS_ROOT )
+        return serve(request, path, document_root=settings.PROJECTS_ROOT)
     else:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
