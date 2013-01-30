@@ -133,8 +133,9 @@ td.tophead {
 	vertical-align: top;
 }
 
-td.right {
-	
+td.righttop {
+	text-align: right;
+	vertical-align: top;
 }
 
 .top {

@@ -13,7 +13,7 @@ from django.db.models import Q
 from cog.models.constants import MAX_UPLOADES_BYTES
 
 # list of invalid characters in uploaded documents filenames
-INVALID_CHARS = "[^a-zA-Z0-9_\-\.]"
+INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/]"
 
 class NewsForm(ModelForm):
     class Meta:
