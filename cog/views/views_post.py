@@ -371,6 +371,10 @@ def post_add_doc(request, post_id):
     
     # attach doc to post
     post.docs.add(doc)
+    
+    # set the latest author of the page
+    post.author = request.user    
+
     post.save()
     
     return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id': post.id}) )
