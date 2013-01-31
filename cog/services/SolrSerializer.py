@@ -93,7 +93,8 @@ def deserialize(xml, facetProfile):
                                         else:
                                             record.addField(name, (url, mimeType, serviceName) ) # store full URL triple in list of values
                                     else:
-                                        record.addField(name, strEl.text.strip())  
+                                        if strEl.text is not None:
+                                            record.addField(name, strEl.text.strip())  
                     output.results.append(record)
             
         # loop over facets
