@@ -11,7 +11,12 @@
             {% for doc in post.docs.all %}
                 <tr>
                     <td>
-                       <a href="{{ doc.file.url }}">{{ doc }}</a> uploaded by {{ doc.author }} on {{ doc.publication_date|date:"d M Y, H:m" }}
+                       {% if doc.is_private %}
+                            <a class="privatelink" href="{{ doc.file.url }}">&nbsp;
+                       {% else %}
+                            <a href="{{ doc.file.url }}">
+                       {% endif %}
+                       {{ doc }}</a> uploaded by {{ doc.author }} on {{ doc.publication_date|date:"d M Y, H:m" }}
                        &nbsp;<a href="{% url doc_detail doc.id %}" class="listlink"> Info</a>
                        {% if user|hasUserPermission:project %}
                             &nbsp;<a href="{% url post_remove_doc post.id doc.id %}?redirect={{ request.path }}" class="deletelink"
