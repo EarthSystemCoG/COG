@@ -31,7 +31,11 @@ class DocForm(ModelForm):
             so if error is thrown there is no need to remove it from disk.'''
         cleaned_data = self.cleaned_data
         file = cleaned_data.get("file")
-        
+	
+        if not file:
+            self._errors["file"] = self.error_class(["Sorry, the file is empty."])
+	    return cleaned_data
+
         if re.search(INVALID_CHARS, file.name):
             self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters"])
         
