@@ -636,3 +636,5 @@ body div {
    this forces it to be white
  */
 #project_views .yui-content td { background-color: #ffffff !important; }
+
+textarea.ckeditor { resize: vertical; }
