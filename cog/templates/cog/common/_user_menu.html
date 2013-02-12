@@ -14,10 +14,10 @@
 	            | Your membership in project {{ project.short_name }} is <b>waiting for approval</b>
 	        {% else %}       
 		        {% if request.user|isEnrolled:project.getAdminGroup %}
-		            | You are a {{ project.short_name }} <b>project administrator</b>
+                            | You are a <b>project administrator</b>
 		        {% else %}
 		            {% if request.user|isEnrolled:project.getUserGroup %}
-		                | You are a {{ project.short_name }} <b>project member</b>
+		                | You are a <b>project member</b>
 		            {% else %}
 		                | <a href="{% url 'membership_request' project.short_name|lower %}">Join the {{ project.short_name }} project</a>
 		            {% endif %}
