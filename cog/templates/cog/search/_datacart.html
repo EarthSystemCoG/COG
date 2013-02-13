@@ -24,7 +24,7 @@
 		
 	}
 	
-	// function called if Ajax request succeded
+	// function called if Ajax request succeded to create the files display widget
 	var handleSuccess = function(o) {
 		
 		// parse JSON response into object		
@@ -52,16 +52,46 @@
 				if (doc.algorithm) html += "<br/>Algorithm: "+doc.algorithm;
 				if (doc.algorithm) html += "<br/>Description: "+doc.description;				
 				html += "</td><td>";
+				
+				// file access
 				if (doc.url) {
+					
+					var thumbnailUrl = null;
+					var imageUrl = null;
+					
+					// loop over file access URLs, create hyperlinks
 					for (var j=0; j<doc.url.length; j++) {
 						var urlArray = doc.url[j].split('|');
-						if (urlArray[1].indexOf("image")>=0) {
-							html += "<a href='"+urlArray[0]+"'><img src='"+urlArray[0]+"' width='50px'/></a>";
+						
+						// special case: 'Thumbnail' service
+						if (urlArray[2].toLowerCase() == 'thumbnail') {
+							thumbnailUrl = urlArray[0]; // store thumbnail URL for later replacement
+							
 						} else {
-							html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+							
+							// images: create hyperlink with graphic
+							if (urlArray[1].indexOf("image")>=0) {
+								html += "<a href='"+urlArray[0]+"'><img src='IMAGE_URL' width='50px'/></a>"; // 'IMAGE_URL'
+								imageUrl = urlArray[0]; // always store reference to image URL
+								
+							// non-images: create hyperlink with text
+							} else {
+								html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+							}
+						}						
+					} // loop over URLs
+					
+					// replace placeholder with thumbnail of full image
+					if (html.indexOf("IMAGE_URL")>0) {
+						if (thumbnailUrl!=null) {
+							html = html.replace("IMAGE_URL",thumbnailUrl);								
+						} else {
+							html = html.replace("IMAGE_URL",imageUrl);
 						}
 					}
-				}
+
+				} // file access
+				 
 				html += "</td></tr>";
 			}
 			html += "</table>";
