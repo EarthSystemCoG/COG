@@ -21,8 +21,8 @@
                     <td>{{ request.user }} </td>                
                 </tr>
                 <tr>
-                    <td class="right"><b>File</b></td>
-                    <td class="left">{{form.instance.file.name}} &nbsp; {{ form.file }} (Max size: 50 MB. The file name can contain only letters, numbers and _-.) 
+                    <td style="vertical-align: top !important;" class="right"><b>File</b></td>
+                    <td style="vertical-align: top !important;" class="left">{{form.instance.file.name}} &nbsp; {{ form.file }} (Max size: 50 MB. The file name can contain only letters, numbers and _-.) 
                     <span style="color:red; font-weight:bold">&nbsp;{{ form.file.errors }}</span> </td>
                 </tr>                         
                 <tr>
