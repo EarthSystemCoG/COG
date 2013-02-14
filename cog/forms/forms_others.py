@@ -37,8 +37,7 @@ class DocForm(ModelForm):
 	    return cleaned_data
 
         if re.search(INVALID_CHARS, file.name):
-            invalid_chars = [u"'%s'"%char for char in re.findall(INVALID_CHARS, file.name)]
-            self._errors['file'] = self.error_class(["Sorry, the filename contains the following invalid characters: %s" % (", ").join(invalid_chars)])
+            self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters.  It can only contain letters, numbers, and one of _ - . /"])
         
         if file.size > MAX_UPLOADES_BYTES:
             self._errors["file"] = self.error_class(["Sorry, the file size exceeds the maximum allowed."])
