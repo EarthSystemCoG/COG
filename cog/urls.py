@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^search_facet/update/(?P<facet_id>.+)/$', 'cog.views.search_facet_update', name='search_facet_update'),
     url(r'^search_facet/delete/(?P<facet_id>.+)/$', 'cog.views.search_facet_delete', name='search_facet_delete'),
     url(r'^search_files/(?P<dataset_id>.+)/(?P<index_node>.+)/$', 'cog.views.search_files', name='search_files'),
+    url(r'^metadata_display/(?P<project_short_name>.+)/$', 'cog.views.metadata_display', name='metadata_display' ),
+    
     
     # authentication - use django auth
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),

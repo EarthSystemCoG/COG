@@ -7,7 +7,7 @@
 	}
 	
 	// function to retrieve the files belonging to a given dataset
-	function showFiles(dataset_id, index_node) {
+	function showFiles(dataset_id, index_node, project) {
 		
 		fdiv = getFilesDiv(dataset_id);
 			
@@ -18,6 +18,9 @@
 			// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 			var url = "/search_files/"+dataset_id+"/"+index_node+"/";
 		
+			// pass in project short name as extra argument to callback functions
+			callback.argument[0] = project
+			
 			// execute asynchronous GET request
 			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
 		}
@@ -26,6 +29,9 @@
 	
 	// function called if Ajax request succeded to create the files display widget
 	var handleSuccess = function(o) {
+		
+		// retrieve project short name from callback extra argument
+		project = o.argument[0]
 		
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
@@ -47,10 +53,27 @@
 			for (var i=0; i<docs.length; i++) {
 				var doc = docs[i];
 				html += "<tr><td><b>"+doc.title+"</b>";
-				// additional file-level metadata
-				// TODO: loop over generic json dictionary
-				if (doc.algorithm) html += "<br/>Algorithm: "+doc.algorithm;
-				if (doc.algorithm) html += "<br/>Description: "+doc.description;				
+				
+				// display additional file-level metadata
+				for (var field in doc) {
+					if (field != 'data_node' && field != 'index_node' && field != 'type' 
+						&& field != 'id' && field != 'dataset_id' && field != 'score' 
+						&& field != 'url' && field != 'subtype'
+						&& field != 'latest' && field != 'replica') {
+						html += "<br/><span style='text-transform:capitalize;'>"+field +"</span>: "+doc[field];	
+					}
+				}
+				
+				if (doc.subtype == 'image') {
+					html += "<br/><a href='/metadata_display/"+project
+					     +"?id="+doc.id
+					     +"&dataset_id="+doc.dataset_id
+					     +"&index_node="+doc.index_node
+					     +"&type="+doc.type
+					     +"&subtype="+doc.subtype
+					     +"'>Full Image Metadata</a>";
+				}
+				
 				html += "</td><td>";
 				
 				// file access
@@ -111,7 +134,7 @@
 	  failure: handleFailure,
 	  cache:false,
 	  timeout:5000,
-	  argument: {}
+	  argument: [],
 	};
 	
 </script>

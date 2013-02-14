@@ -39,8 +39,7 @@
 	                        	<br/>
 	                        	[ <a href="javascript:toggle_visibility('dataset_{{ record.id }}'); "><b>Show Metadata</b></a> ]
 	                        	          
-	                        	[ <a href="javascript:toggle_visibility('files_{{ record.id }}'); 
-	                        	          javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}');"><b>Show Files</b></a> ]
+	                        	[ <a href="javascript:toggle_visibility('files_{{ record.id }}'); javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{ project.short_name.lower }}');"><b>Show Files</b></a> ]
 	                        	
 	                        	<!-- display URL links -->
 	                        	{% for url in record.fields.url %}
@@ -54,12 +53,7 @@
 	                            {% endfor %}    	          
 	                            
 	                            <!-- display CIM viewer link -->   
-  								&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.master_id.0}}')"><b>Model Metadata</b> </a> ]
-  								{% comment %}
-  								&nbsp; [ <a href="#" onClick="onModelClicked('{{record.fields.project.0}}', 'icon-iap')"><b>Model Metadata2</b> </a> ]	                            
-	                            &nbsp; [ <a href="#" onClick="onCIMLinkClicked('cmip5', 'mohc', 'hadgem2-es', '1pctCO2')"><b>Model Metadata3</b> </a> ]
-	                            {% endcomment %}
-	                            
+  								&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.master_id.0}}')"><b>Model Metadata</b> </a> ]	                            
 	                            
 	                            <!-- dataset metadata container -->
 								<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
