@@ -12,6 +12,7 @@ from string import Template
 from urllib import quote, unquote
 import copy
 from constants import PERMISSION_DENIED_MESSAGE
+from cog.models.constants import SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from django.utils.timezone import now
  
@@ -56,6 +57,9 @@ def post_delete(request, post_id):
              
         # pass a temporary copy of the object to the view
         _post = copy.copy(post)  
+                
+        # send post update signal
+        post.send_signal(SIGNAL_OBJECT_DELETED)
         
         # delete the post
         post.delete()
@@ -206,6 +210,9 @@ def post_add(request, project_short_name, owner=None):
             post = form.save(commit=False)
             # modify the post object
             post.author = request.user
+            # update date 
+            post.update_date = now()
+
             # page: build full page URL
             if post.type==Post.TYPE_PAGE:
                 post.url = get_project_page_full_url(project, post.url)
@@ -234,6 +241,9 @@ def post_add(request, project_short_name, owner=None):
             if owner is not None:
                 owner.setPost(post)
                 owner.save()
+                       
+            # send post update signal
+            post.send_signal(SIGNAL_OBJECT_CREATED)
                 
             # redirect to post (GET-POST-REDIRECT)
             return redirect_to_post(request, post)
@@ -351,6 +361,9 @@ def post_update(request, post_id):
                 
             # release lock
             deleteLock(post)
+            
+            # send post update signal
+            post.send_signal(SIGNAL_OBJECT_UPDATED)
 
             # redirect to post (GET-POST-REDIRECT)
             return redirect_to_post(request, post)

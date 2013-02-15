@@ -1,9 +1,10 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from project import Project
 from django.contrib.auth.models import User
 from doc import Doc
 from topic import Topic
+import django.dispatch
 
 # A web site post, which can be of different types
 class Post(models.Model):
@@ -54,6 +55,10 @@ class Post(models.Model):
                     return True
             return False
         
+        # method used to send a signal that this Post has been created or updated
+        def send_signal(self, signal_type):
+            post_signal.send(sender=self, signal_type=signal_type)
+            
         def get_label(self):
             if self.label is not None and len(self.label)>0:
                 return self.label
@@ -65,3 +70,7 @@ class Post(models.Model):
         
         class Meta:
             app_label= APPLICATION_LABEL
+            
+# signal sent when a Post is created or updated
+# these signals are caught by the function 'post_signal_receiver' that creates a LoggedEvent
+post_signal = django.dispatch.Signal(providing_args=["signal_type"])

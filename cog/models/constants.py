@@ -229,3 +229,8 @@ SYSTEM_IMAGES = 'system_images'
 # 250MB - 214958080
 # 500MB - 429916160
 MAX_UPLOADES_BYTES = 5242880
+
+# signals
+SIGNAL_OBJECT_CREATED = 'object_created'
+SIGNAL_OBJECT_UPDATED = 'object_updated'
+SIGNAL_OBJECT_DELETED = 'object_deleted'
