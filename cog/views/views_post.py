@@ -13,7 +13,8 @@ from urllib import quote, unquote
 import copy
 from constants import PERMISSION_DENIED_MESSAGE
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
-
+from django.utils.timezone import now
+ 
 # view to render a generic post
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
@@ -340,6 +341,8 @@ def post_update(request, post_id):
                 post.url = get_project_page_full_url(post.project, post.url)
             # change the author to the last editor
             post.author = request.user
+            # update date 
+            post.update_date = now()
             # save instance
             post.save()
             # create project-topic relation if not existing already

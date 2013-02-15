@@ -19,7 +19,7 @@ class Post(models.Model):
         label = models.CharField(max_length=25, verbose_name='Label', help_text='Short index label', blank=True, null=True)
         body = models.TextField(verbose_name='Content', blank=True, default="")
         publication_date = models.DateTimeField('Date Published', auto_now_add=True)
-        update_date = models.DateTimeField('Date Updated', auto_now=True)
+        update_date = models.DateTimeField('Date Updated')
         # project context
         project = models.ForeignKey(Project)
         # order of post within project index
