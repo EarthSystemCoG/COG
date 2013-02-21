@@ -1,5 +1,5 @@
 from cog.models import *
-from cog.models.utils import site_index
+from cog.models.utils import site_index, listPeople
 from cog.views import encodeMembershipPar, NEW_MEMBERSHIP, OLD_MEMBERSHIP, NO_MEMBERSHIP
 from cog.views import userCanPost, userCanView
 from django import template
@@ -525,3 +525,7 @@ def parseBoolString(theString):
 @register.filter
 def getCommunicationMeans(project, internal):
     return get_project_communication_means(project, parseBoolString(internal))
+
+@register.filter
+def getPeople(project):
+    return listPeople(project)

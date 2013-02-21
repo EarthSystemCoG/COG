@@ -1,4 +1,5 @@
 from project import Project
+from collaborator import Collaborator
 from project_topic import ProjectTopic
 from search_profile import SearchProfile
 from communication_means import CommunicationMeans
@@ -129,3 +130,15 @@ def get_project_internal_communication_means(project):
 
 def get_project_external_communication_means(project):
     return get_project_communication_means(project, False)
+
+def listPeople(project):
+    '''
+    Function to return a merged list of project public users, and project external collaborators.
+    '''
+    
+    pubUsers = project.getPublicUsers()
+    collaborators = list( Collaborator.objects.filter(project=project) )
+    
+    people = pubUsers + collaborators
+    return sorted(people, key=lambda user: user.last_name)
+    
