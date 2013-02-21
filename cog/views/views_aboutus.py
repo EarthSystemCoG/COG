@@ -23,10 +23,7 @@ def aboutus_display(request, project_short_name, tab):
     ''' View to display an project tab page. '''
         
     template_page = 'cog/project/_project_aboutus.html'
-    if tab==TABS["PEOPLE"]:
-        template_form_page = None
-    else:
-        template_form_page = reverse('aboutus_update', args=[project_short_name, tab])
+    template_form_page = reverse('aboutus_update', args=[project_short_name, tab])
     template_title = TAB_LABELS[tab]
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
     
@@ -47,7 +44,7 @@ def aboutus_update(request, project_short_name, tab):
     FundingSourceFormSet = inlineformset_factory(Project, FundingSource, extra=1, can_delete=True)
     
     # GET request
-    if (request.method=='GET'):
+    if request.method=='GET':
         
         # create form object from model
         form = AboutusForm(instance=project)
@@ -94,3 +91,57 @@ def render_aboutus_form(request, project, tab, form, organization_formset, fundi
                            'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
                            'project': project }, 
                           context_instance=RequestContext(request))
+        
+@login_required
+def people_update(request, project_short_name, tab):
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # Collaborator formset
+    CollaboratorFormSet  = modelformset_factory(Collaborator, 
+                                                form=CollaboratorForm, # explicit reference to form to use custom text widgets
+                                                extra=5, can_delete=True, exclude=('project',) )
+    
+    if (request.method=='GET'):
+        
+        # select Collaborator instances for current project
+        formset = CollaboratorFormSet(queryset=Collaborator.objects.filter(project=project).order_by('last_name'))
+        
+        return render_people_form(request, formset, tab, project)
+    
+    else:
+        # create formset from POST data
+        formset = CollaboratorFormSet(request.POST, request.FILES,
+                                      queryset=Collaborator.objects.filter(project=project).order_by('last_name'))
+        
+        # validate formset
+        if formset.is_valid():
+            # persist formset data
+            collaborators = formset.save(commit=False)
+            
+            # assign collaborator to project and persist
+            for collaborator in collaborators:
+                collaborator.project = project
+                collaborator.save()
+            
+            # redirect to people display (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower(), tab]))
+
+            
+        else:
+            print 'Formset is invalid  %s' % formset.errors
+            return render_people_form(request, formset, tab, project)
+        
+
+def render_people_form(request, formset, tab, project):
+    
+    return render_to_response("cog/project/people_form.html", 
+                              { "formset": formset, "tab":tab, 
+                               "title":"Update %s People" % project.short_name,
+                               "project":project },
+                              context_instance=RequestContext(request))

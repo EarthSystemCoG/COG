@@ -131,3 +131,13 @@ def projectUsersQuerySet(project):
         aGroup = getAdminGroupName(project)
         query = Q(groups__name=uGroup) | Q(groups__name=aGroup)
         return User.objects.filter(query).distinct().order_by('username')
+    
+# use a custom form for the Collaborator formset to explicitely define the widget properties
+class CollaboratorForm(forms.ModelForm):
+  class Meta:
+    model = Collaborator
+    widgets = {
+        'first_name' : forms.fields.TextInput(attrs={'size':25}),
+        'last_name' : forms.fields.TextInput(attrs={'size':25}),
+        'institution' : forms.fields.TextInput(attrs={'size':25}),
+        }
