@@ -13,6 +13,7 @@ from cog.models.utils import get_project_communication_means
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 from cog.models.constants import NAVMAP, INVNAVMAP, TABS
+from cog.models.constants import DEFAULT_PHOTO
 
 register = template.Library()
 
@@ -536,3 +537,14 @@ def getCommunicationMeans(project, internal):
 @register.filter
 def getPeople(project):
     return listPeople(project)
+
+@register.filter
+def getPhoto(user):
+    
+    profile = UserProfile.objects.get(user=user)
+    try:
+        # if profile.photo has no associated file
+        return profile.photo.url
+    except ValueError:
+        return getattr(settings, "MEDIA_URL") + DEFAULT_PHOTO
+    

@@ -2,6 +2,8 @@
 {% extends "cog/common/layout_center.html" %}
 {% load url from future %}
 
+{% load cog_utils %}
+
 {% block head %}
 
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
@@ -56,7 +58,7 @@
     <div class="yui-skin-sam">        
 	    <div class="mybox" id="userDiv">
 	    	    
-	        <form action="" method="post">
+	        <form action="" method="post" enctype="multipart/form-data">
 	        
 	            {% csrf_token %}
 	            
@@ -72,7 +74,7 @@
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
 	                    <td>{{ form.username }}
-	                        [ <i>Must be at least 5 characters</i> ] 
+	                        <i>[ Must be at least 5 characters ]</i>
 	                        {{ form.username.errors }}</td>
 	                </tr>
 	                <tr>
@@ -89,13 +91,13 @@
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
 		                    <td>{{ form.password }} 
-		                       [ <i>At least 6 characters, all characters are allowed</i> ] 
+		                       <i>[ At least 6 characters, all characters are allowed ]</i>
 		                       {{ form.password.errors }}</td>
 		                </tr>
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
 		                    <td>{{ form.confirm_password }} 
-		                        [ <i>At least 6 characters, all characters are allowed</i> ]
+		                        <i>[ At least 6 characters, all characters are allowed ]</i>
 		                        {{ form.confirm_password.errors }}</td>
 		                </tr>
 	                {% endif %}
@@ -127,11 +129,22 @@
                     </tr>
                     <tr>
                         <td class="head" nowrap="nowrap">Subscribe to COG Email List ?</td>
-                        <td class="long">{{ form.subscribed }} [ <i>'cog_info', low traffic list</i> ] {{ form.subscribed.errors }}</td>
+                        <td class="long">{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
                     </tr>                    
                     <tr>
                         <td class="head" nowrap="nowrap">Do not list me among project members</td>
                         <td class="long">{{ form.private }} {{ form.private.errors }}</td>
+                    </tr>                    
+                    <tr>
+                        <td class="head" nowrap="nowrap">Picture</td>
+                        <td class="long"> 
+                        	<span style="margin-top:2px">
+                        	{% if request.user|getPhoto %}
+                        		Current Picture: {{ request.user|getPhoto }}
+                        		{{ form.delete_photo }} Delete ?
+                        	{% endif %}
+                        	{{ form.photo }} {{ form.photo.errors }}
+                        	</span></td>
                     </tr>                    
                     
  	            </table>

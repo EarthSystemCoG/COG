@@ -148,12 +148,13 @@ def user_update(request, user_id):
                                                  'country':profile.country, 
                                                  'department':profile.department,
                                                  'subscribed':profile.subscribed,
-                                                 'private':profile.private })
+                                                 'private':profile.private,
+                                                 'photo':profile.photo })
                 
         return render_user_form(request, form, title='Update User Profile')
 
     else:
-        form = UserForm(request.POST, instance=user) # form with bounded data
+        form = UserForm(request.POST, request.FILES, instance=user) # form with bounded data
         
         if form.is_valid():
             
@@ -170,6 +171,14 @@ def user_update(request, user_id):
             user_profile.department=form.cleaned_data['department']
             user_profile.subscribed=form.cleaned_data['subscribed']
             user_profile.private=form.cleaned_data['private']
+            
+            # delete photo ?
+            if form.cleaned_data.get('delete_photo')==True:
+                user_profile.photo.delete()
+            elif form.cleaned_data['photo'] is not None:
+                user_profile.photo=form.cleaned_data['photo']
+            
+            # persist changes
             user_profile.save()
                         
             # subscribe/unsubscribe user is mailing list selection changed

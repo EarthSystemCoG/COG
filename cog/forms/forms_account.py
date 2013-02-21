@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField
+from django.forms import Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, ImageField, FileInput
 from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
@@ -81,12 +81,19 @@ class UserForm(ModelForm):
     subscribed = BooleanField(required=False)
     private = BooleanField(required=False)
     
+    # do NOT use deafult widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
+    photo = ImageField(required=False, widget=FileInput) 
+    # extra field not present in model, used for deletion of previously uploaded photo
+    delete_photo = BooleanField(required=False)
+
+    
     class Meta:
         # note: use User model, not UserProfile
         model = User
         # define fields to be used, so to exclude last_login and date_joined
-        fields = ('first_name', 'last_name', 'username', 'password', 'email','institution','city','state','country','department','subscribed','private')
-        
+        fields = ('first_name', 'last_name', 'username', 'password', 'email','institution','city','state','country','department','subscribed','private',
+                  'photo', 'delete_photo')
+                
     # override form clean() method to execute custom validation on fields, 
     # including combined validation on multiple fields
     def clean(self):

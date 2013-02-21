@@ -216,6 +216,8 @@ DOCUMENT_TYPES = {
 DEFAULT_LOGO = "cog/img/cog_web_beta.png"
 FOOTER_LOGO = "cog/img/logo_nsf_and_noaa.bmp"
 
+DEFAULT_PHOTO = "/photos/unknown.jpeg"
+
 # legacy media sub-directories of 'projects/'
 SYSTEM_DOCS = 'system_docs'
 SYSTEM_IMAGES = 'system_images'
