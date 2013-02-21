@@ -511,9 +511,16 @@ def roles(user, project):
     return roles
 
 @register.filter
-def getUserProfileAttribute(user, attribute):
-    profile = UserProfile.objects.get(user=user)
-    return getattr(profile, attribute)
+def getUserAttribute(user, attribute):
+    '''
+    Utility to look for a named attribute in the User/Collaborator object first,
+    or in the UserProfile object if not found.
+    '''
+    try:
+        return getattr(user, attribute)
+    except AttributeError:
+        profile = UserProfile.objects.get(user=user)
+        return getattr(profile, attribute)
 
 @register.filter
 def tabs(label):
