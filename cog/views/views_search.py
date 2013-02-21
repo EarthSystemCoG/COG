@@ -138,6 +138,36 @@ def search_get(request, searchInput, facetProfile, searchService, extra={}):
             data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
         
     return render_to_response('cog/search/search.html', data, context_instance=RequestContext(request))    
+
+def metadata_display(request, project_short_name):
+    
+    project = request.GET.get('project', None)
+    id = request.GET.get('id', None)
+    dataset_id = request.GET.get('dataset_id', None)
+    type = request.GET.get('type', None)
+    subtype = request.GET.get('subtype', None)
+    index_node = request.GET.get('index_node', None)
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    config = getSearchConfig(request, project)
+
+    params = [ ('type', type), ('id', id), ("format", "application/solr+json") ]
+    if type == 'File':
+        params.append( ('dataset_id', dataset_id) )
+                
+    url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
+    #print 'Solr search URL=%s' % url
+    fh = urllib2.urlopen( url )
+    response = fh.read().decode("UTF-8")
+    # FIXME
+    #print response
+    return HttpResponse(response, mimetype="application/json")
+
+    
+    #return render_to_response('cog/search/metadata_file.html', 
+    #                          {'title':'File Metadata', 'project' : project, 'dataset_id':dataset_id, 'file_id':'file_id'}, 
+    #                          context_instance=RequestContext(request))
     
     
 def search_post(request, searchInput, facetProfile, searchService, extra={}):
@@ -396,13 +426,11 @@ def search_files(request, dataset_id, index_node):
     
     params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json") ]
  
-                
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
     #print 'Solr search URL=%s' % url
     fh = urllib2.urlopen( url )
     response = fh.read().decode("UTF-8")
-    # FIXME
-    #print response
+
     return HttpResponse(response, mimetype="application/json")
 
             

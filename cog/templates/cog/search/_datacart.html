@@ -7,7 +7,7 @@
 	}
 	
 	// function to retrieve the files belonging to a given dataset
-	function showFiles(dataset_id, index_node) {
+	function showFiles(dataset_id, index_node, project) {
 		
 		fdiv = getFilesDiv(dataset_id);
 			
@@ -18,14 +18,20 @@
 			// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 			var url = "/search_files/"+dataset_id+"/"+index_node+"/";
 		
+			// pass in project short name as extra argument to callback functions
+			callback.argument[0] = project
+			
 			// execute asynchronous GET request
 			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
 		}
 		
 	}
 	
-	// function called if Ajax request succeded
+	// function called if Ajax request succeded to create the files display widget
 	var handleSuccess = function(o) {
+		
+		// retrieve project short name from callback extra argument
+		project = o.argument[0]
 		
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
@@ -47,21 +53,71 @@
 			for (var i=0; i<docs.length; i++) {
 				var doc = docs[i];
 				html += "<tr><td><b>"+doc.title+"</b>";
-				// additional file-level metadata
-				// TODO: loop over generic json dictionary
-				if (doc.algorithm) html += "<br/>Algorithm: "+doc.algorithm;
-				if (doc.algorithm) html += "<br/>Description: "+doc.description;				
-				html += "</td><td>";
-				if (doc.url) {
-					for (var j=0; j<doc.url.length; j++) {
-						var urlArray = doc.url[j].split('|');
-						if (urlArray[1].indexOf("image")>=0) {
-							html += "<a href='"+urlArray[0]+"'><img src='"+urlArray[0]+"' width='50px'/></a>";
-						} else {
-							html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
-						}
+				
+				// display additional file-level metadata
+				for (var field in doc) {
+					if (field != 'data_node' && field != 'index_node' && field != 'type' 
+						&& field != 'id' && field != 'dataset_id' && field != 'score' 
+						&& field != 'url' && field != 'subtype'
+						&& field != 'dataset_id_template_' 
+						&& field != 'instance_id' && field != 'master_id'
+						&& field != 'metadata_format' && field != 'timestamp'
+						&& field != 'latest' && field != 'replica') {
+						html += "<br/><span style='text-transform:capitalize;'>"+field +"</span>: "+doc[field];	
 					}
 				}
+				
+				if (doc.subtype == 'image') {
+					html += "<br/><a href='/metadata_display/"+project
+					     +"?id="+doc.id
+					     +"&dataset_id="+doc.dataset_id
+					     +"&index_node="+doc.index_node
+					     +"&type="+doc.type
+					     +"&subtype="+doc.subtype
+					     +"'>Full Image Metadata</a>";
+				}
+				
+				html += "</td><td>";
+				
+				// file access
+				if (doc.url) {
+					
+					var thumbnailUrl = null;
+					var imageUrl = null;
+					
+					// loop over file access URLs, create hyperlinks
+					for (var j=0; j<doc.url.length; j++) {
+						var urlArray = doc.url[j].split('|');
+						
+						// special case: 'Thumbnail' service
+						if (urlArray[2].toLowerCase() == 'thumbnail') {
+							thumbnailUrl = urlArray[0]; // store thumbnail URL for later replacement
+							
+						} else {
+							
+							// images: create hyperlink with graphic
+							if (urlArray[1].indexOf("image")>=0) {
+								html += "<a href='"+urlArray[0]+"'><img src='IMAGE_URL' width='50px'/></a>"; // 'IMAGE_URL'
+								imageUrl = urlArray[0]; // always store reference to image URL
+								
+							// non-images: create hyperlink with text
+							} else {
+								html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+							}
+						}						
+					} // loop over URLs
+					
+					// replace placeholder with thumbnail of full image
+					if (html.indexOf("IMAGE_URL")>0) {
+						if (thumbnailUrl!=null) {
+							html = html.replace("IMAGE_URL",thumbnailUrl);								
+						} else {
+							html = html.replace("IMAGE_URL",imageUrl);
+						}
+					}
+
+				} // file access
+				 
 				html += "</td></tr>";
 			}
 			html += "</table>";
@@ -81,7 +137,7 @@
 	  failure: handleFailure,
 	  cache:false,
 	  timeout:5000,
-	  argument: {}
+	  argument: [],
 	};
 	
 </script>

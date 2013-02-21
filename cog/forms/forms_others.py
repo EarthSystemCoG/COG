@@ -13,7 +13,7 @@ from django.db.models import Q
 from cog.models.constants import MAX_UPLOADES_BYTES
 
 # list of invalid characters in uploaded documents filenames
-INVALID_CHARS = "[^a-zA-Z0-9_\-\.]"
+INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/]"
 
 class NewsForm(ModelForm):
     class Meta:
@@ -31,9 +31,13 @@ class DocForm(ModelForm):
             so if error is thrown there is no need to remove it from disk.'''
         cleaned_data = self.cleaned_data
         file = cleaned_data.get("file")
-        
+	
+        if not file:
+            self._errors["file"] = self.error_class(["Sorry, the file is empty."])
+	    return cleaned_data
+
         if re.search(INVALID_CHARS, file.name):
-            self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters"])
+            self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters.  It can only contain letters, numbers, and one of _ - . /"])
         
         if file.size > MAX_UPLOADES_BYTES:
             self._errors["file"] = self.error_class(["Sorry, the file size exceeds the maximum allowed."])

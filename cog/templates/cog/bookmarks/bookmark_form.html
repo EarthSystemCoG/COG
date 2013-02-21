@@ -16,7 +16,7 @@
                     <td class="long">
                         {{ form.folder }}{{ form.folder.errors }}
                         &nbsp; <span style="vertical-align:abs_middle"> <b>-OR-</b>&nbsp;</span>
-                        <a href="{% url 'folder_add' project.short_name.lower %}" class="addlink">&nbsp;Create New Bookmarks Folder</a>
+                        <a href="{% url 'folder_add' project.short_name.lower %}" class="addlink">&nbsp;Create New</a>
                     </td>
                 </tr>
                 <tr>
@@ -31,12 +31,6 @@
                     <td class="right" nowrap="nowrap">Description (optional)</td>
                     <td class="long">{{ form.description }}{{ form.description.errors }}</td>
                 </tr>               
-                <tr>
-                    <td class="right required" nowrap="nowrap"><b>Folder</b></td>
-                    <td class="long">
-                        {{ form.folder }}{{ form.folder.errors }}
-                    </td>
-                </tr>
                 <tr>
                     <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
                 </tr>                       
