@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from cog.models import *
+from cog.util.thumbnails import *
 
 from cog.notification import notify, sendEmail
 from django.conf import settings
@@ -172,14 +173,22 @@ def user_update(request, user_id):
             user_profile.subscribed=form.cleaned_data['subscribed']
             user_profile.private=form.cleaned_data['private']
             
-            # delete photo ?
+            # photo management
+            _generateThumbnail = False
             if form.cleaned_data.get('delete_photo')==True:
+                deleteThumbnail(user_profile.photo.path)
                 user_profile.photo.delete()
+                
             elif form.cleaned_data['photo'] is not None:
                 user_profile.photo=form.cleaned_data['photo']
+                _generateThumbnail = True
             
             # persist changes
             user_profile.save()
+            
+            # generate thumbnail - after picture has been saved
+            if _generateThumbnail:
+                generateThumbnail(user_profile.photo.path)
                         
             # subscribe/unsubscribe user is mailing list selection changed
             if oldSubscribed==True and form.cleaned_data['subscribed']==False:
@@ -193,7 +202,7 @@ def user_update(request, user_id):
         else: 
             print "Form is invalid: %s" % form.errors
             return render_user_form(request, form, title='Update User Profile')
-    
+            
 @login_required
 def password_update(request, user_id):
     

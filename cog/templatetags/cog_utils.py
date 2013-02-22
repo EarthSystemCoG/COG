@@ -14,6 +14,7 @@ from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 from cog.models.constants import NAVMAP, INVNAVMAP, TABS
 from cog.models.constants import DEFAULT_PHOTO
+from cog.util.thumbnails import getThumbnailPath
 
 register = template.Library()
 
@@ -547,4 +548,13 @@ def getPhoto(user):
         return profile.photo.url
     except ValueError:
         return getattr(settings, "MEDIA_URL") + DEFAULT_PHOTO
+ 
+@register.filter   
+def getThumbnail(user):
+    
+    photoPath = getPhoto(user)
+    thumbnailPath = getThumbnailPath(photoPath)
+    print photoPath
+    print thumbnailPath
+    return thumbnailPath
     

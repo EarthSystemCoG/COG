@@ -5,6 +5,7 @@ from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
 from django.contrib.auth.models import check_password
+from os.path import exists
 
 # list of invalid characters in text fields
 INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s]"
@@ -81,7 +82,7 @@ class UserForm(ModelForm):
     subscribed = BooleanField(required=False)
     private = BooleanField(required=False)
     
-    # do NOT use deafult widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
+    # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
     photo = ImageField(required=False, widget=FileInput) 
     # extra field not present in model, used for deletion of previously uploaded photo
     delete_photo = BooleanField(required=False)
@@ -91,7 +92,9 @@ class UserForm(ModelForm):
         # note: use User model, not UserProfile
         model = User
         # define fields to be used, so to exclude last_login and date_joined
-        fields = ('first_name', 'last_name', 'username', 'password', 'email','institution','city','state','country','department','subscribed','private',
+        fields = ('first_name', 'last_name', 'username', 'password', 'email',
+                  'institution','city','state','country','department',
+                  'subscribed','private',
                   'photo', 'delete_photo')
                 
     # override form clean() method to execute custom validation on fields, 
@@ -109,6 +112,13 @@ class UserForm(ModelForm):
         
         # validate 'username' field
         validate_username(self, user_id)
+        
+        # do not override existing photos
+        photo = cleaned_data["photo"]
+        if photo is not None:
+            filepath = settings.MEDIA_ROOT+'photos/'+photo.name
+            if exists(filepath):
+                self._errors['photo'] = self.error_class(['File %s already exists.' % photo.name])   
         
         # validate all other fields against injection attacks
         for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country']:

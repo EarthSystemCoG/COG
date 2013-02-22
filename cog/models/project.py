@@ -108,7 +108,7 @@ class Project(models.Model):
     
     # Method to return the project users that are not private
     def getPublicUsers(self):
-        users = self.getUsers(exclude_superuser=True)
+        users = self.getUsers(exclude_superuser=False)
         pubUsers = []
         for user in users:
             if not user.get_profile().private:

@@ -6,10 +6,10 @@
 
 {% block main %}
     
-    <div class="prepend-3 span-18">
-    
+    <div class="prepend-1 span-22">
+        
         <h2>User Profile</h2>
-    
+        
 	    <div class="span-8">
 	           
 	        {% include 'cog/account/_user_profile.html' %} 
@@ -24,13 +24,14 @@
 	        
 	   </div>
 	        
-	   <div class="span-10 last">
+	   <div class="span-10">
 	        {% include 'cog/account/_user_projects.html' %} 
+	   </div>
+	   <div class="span-4 last">
+	   		<img src="{{ user|getPhoto }}" style="border: 1px solid #666666;"/>
 	   </div>
    
    </div>
-   
-   <img src="{{ user|getPhoto }}"/>
         
     
 {% endblock %}

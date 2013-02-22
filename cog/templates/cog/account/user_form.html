@@ -136,15 +136,23 @@
                         <td class="long">{{ form.private }} {{ form.private.errors }}</td>
                     </tr>                    
                     <tr>
-                        <td class="head" nowrap="nowrap">Picture</td>
+                        <td class="optional" nowrap="nowrap">Picture</td>
                         <td class="long"> 
-                        	<span style="margin-top:2px">
-                        	{% if request.user|getPhoto %}
-                        		Current Picture: {{ request.user|getPhoto }}
-                        		{{ form.delete_photo }} Delete ?
-                        	{% endif %}
-                        	{{ form.photo }} {{ form.photo.errors }}
-                        	</span></td>
+                        	<table>
+                        		<tr>
+                        			<td><img src="{{ request.user|getPhoto }}"/></td>
+                        			<td align="left">
+			                        	<div style="margin-top:2px">
+			                        		{% if not 'unknown' in request.user|getPhoto %}
+			                        			Current picture: <b>{{ request.user|getPhoto|cut:"/site_media/photos/" }}</b>
+			                        			{{ form.delete_photo }} Delete ? 			                        		
+			                        		{% endif %}                      	                    		
+			                        		{{ form.photo }} 
+			                        		&nbsp;{{ form.photo.errors }}
+			                        	</div>
+                        			</td>
+                        	</table>
+                        </td>
                     </tr>                    
                     
  	            </table>

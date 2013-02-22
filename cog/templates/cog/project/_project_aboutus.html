@@ -75,16 +75,16 @@
 	        			<table>
 	        				<caption>{{ proj.short_name }} Users</caption>
 				            <tr>
+				            	<td class="tophead">&nbsp;</td>
 				                <td class="tophead">Last Name</td>
-				                <td class="tophead">First Name</td>
-				                <td class="tophead">User Name</td>				                
+				                <td class="tophead">First Name</td>				                				                
 				                <td class="tophead">Institution</td>
 				            </tr>
 				            {% for user in users %}
                 			<tr>
+                				<td><img src="{{ user|getThumbnail }}" style="border: 1px solid #666666;"/></td>
                    				<td>{{ user.last_name }}</td>
-                   				<td>{{ user.first_name }}</td>
-                   				<td>{{ user.username }}</td>
+                   				<td>{{ user.first_name }}</td>                  				
                    				<td>{{ user|getUserAttribute:"institution" }}</td> 
 				            </tr>
 				            {% endfor %}
