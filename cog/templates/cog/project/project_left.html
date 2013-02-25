@@ -44,7 +44,7 @@
        <h3>{{ project.short_name }} Visitors</h3>
        <ul>
             <!-- <li><a href="{% url 'post_list' project.short_name.lower %}?type=blog" class="listlink">&nbsp;List All Blogs</a></li> -->
-            <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li>
+            {% if project.news|length > 0 %} <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li> {% endif %}
             <li><a href="{% url 'doc_list' project.short_name.lower %}" class="listlink">&nbsp;List All Files</a></li>
        </ul>       
  
