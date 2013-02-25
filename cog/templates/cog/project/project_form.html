@@ -135,7 +135,11 @@
            </table>           
                  
           <div style="text-align:right">
+          	{% if project %}
                 <input type="button" value="Cancel" onclick="window.location='{% url 'project_home' project.short_name|lower %}'"/>
+            {% else %}
+            	<input type="button" value="Cancel" onclick="window.location='{% url 'cog_index' %}'"/>
+            {% endif %}
                 <input type="submit" value="Submit" />
           </div>
            
