@@ -19,7 +19,7 @@
     			{% for page in index_item.pages %}
     				<tr>
                     	{% if page.is_home %}
-                       		<td>&nbsp;<a href="{% url 'project_home' project.short_name.lower %}" >Home</a></td>
+                       		<td>&nbsp;<a href="{% url 'project_home' project.short_name.lower %}" >Home</a>{{ page|is_locked:request }}</td>
                        	{% else %}
                             <td>&nbsp;<a href="{{ page.url }}">{{ page.get_label }}</a>{{ page|is_locked:request }}</td>
                         {% endif %}
@@ -44,7 +44,7 @@
        <h3>{{ project.short_name }} Visitors</h3>
        <ul>
             <!-- <li><a href="{% url 'post_list' project.short_name.lower %}?type=blog" class="listlink">&nbsp;List All Blogs</a></li> -->
-            <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li>
+            {% if project.news|length > 0 %} <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li> {% endif %}
             <li><a href="{% url 'doc_list' project.short_name.lower %}" class="listlink">&nbsp;List All Files</a></li>
        </ul>       
  
