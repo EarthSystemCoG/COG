@@ -16,6 +16,7 @@ from cog.notification import notify
 from cog.services.membership import addMembership
 from cog.models.utils import *
 from cog.views.views_templated import templated_page_display
+from cog.util.thumbnails import *
 
 from constants import PERMISSION_DENIED_MESSAGE        
 
@@ -121,13 +122,31 @@ def people_update(request, project_short_name, tab):
         
         # validate formset
         if formset.is_valid():
+            
+            # photo management
+            for form in formset:
+                
+                if form.cleaned_data.get('DELETE', False):
+                    try:
+                        deletePhotoAndThumbnail(form.instance)
+                    except Exception as error:
+                        print error                    
+            
             # persist formset data
             collaborators = formset.save(commit=False)
             
             # assign collaborator to project and persist
-            for collaborator in collaborators:
+            for collaborator in collaborators:                
                 collaborator.project = project
                 collaborator.save()
+                
+                # generate photo thumbnail, 
+                # after the photo has been saved to disk
+                if collaborator.photo is not None:
+                    try:
+                        generateThumbnail(collaborator.photo.path)
+                    except ValueError:
+                        pass # no photo supplied
             
             # redirect to people display (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower(), tab]))

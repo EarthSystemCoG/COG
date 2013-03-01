@@ -9,6 +9,9 @@ class Collaborator(models.Model):
     institution = models.CharField(max_length=100, blank=False, default='')
     project = models.ForeignKey(Project, blank=False)
     
+    # optional picture
+    photo = models.ImageField(upload_to='photos/', blank=True, null=True)
+
     def __unicode__(self):
         return "%s %s" % (self.first_name, self.last_name)
 

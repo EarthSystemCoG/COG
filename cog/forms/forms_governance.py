@@ -12,6 +12,7 @@ from tinymce.widgets import TinyMCE
 import re
 from django.db.models import Q
 from cog.models.constants import MANAGEMENT_BODY_CATEGORY_STRATEGIC, MANAGEMENT_BODY_CATEGORY_OPERATIONAL
+from os.path import exists
 
         
 class ExternalUrlForm(ModelForm):
@@ -132,12 +133,32 @@ def projectUsersQuerySet(project):
         query = Q(groups__name=uGroup) | Q(groups__name=aGroup)
         return User.objects.filter(query).distinct().order_by('username')
     
-# use a custom form for the Collaborator formset to explicitely define the widget properties
+# Use a custom form for the Collaborator formset to 
+# a) explicitely define the widget properties
+# b) use custom validation on the 'photo' field
 class CollaboratorForm(forms.ModelForm):
-  class Meta:
-    model = Collaborator
-    widgets = {
-        'first_name' : forms.fields.TextInput(attrs={'size':25}),
-        'last_name' : forms.fields.TextInput(attrs={'size':25}),
-        'institution' : forms.fields.TextInput(attrs={'size':25}),
-        }
+    
+    def clean(self):
+        
+        # invoke superclass cleaning method
+        super(CollaboratorForm, self).clean()
+                
+        # if new collaborator, do not override existing photos
+        # note that the system does NOT allow to change picture for existing collaborators
+        if self.instance.id is None:
+            
+            photo = self.cleaned_data.get("photo", None)
+            if photo is not None:
+                filepath = settings.MEDIA_ROOT+'photos/'+photo.name
+                if exists(filepath):
+                    self._errors['photo'] = self.error_class(['File %s already exists.' % photo.name]) 
+                
+        return self.cleaned_data
+        
+    class Meta:
+        model = Collaborator
+        widgets = {
+            'first_name' : forms.fields.TextInput(attrs={'size':20}),
+            'last_name' : forms.fields.TextInput(attrs={'size':20}),
+            'institution' : forms.fields.TextInput(attrs={'size':20}),
+            }

@@ -1,12 +1,14 @@
-{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% extends "cog/common/layout_sidebar_center.html" %}
 {% load url from future %}
+
+{% load cog_utils %}
 
 {% block main %}
 
 	Use this form to update the project external collaborators. Project member are automatically listed.
 	
 	<p/>
-	<form method="post" action="">
+	<form method="post" action="" enctype="multipart/form-data">
 		
 		{% csrf_token %}
 	    {{ formset.management_form }}
@@ -18,6 +20,7 @@
 		    		<td class="tophead" nowrap="nowrap">First Name</td>
 		    		<td class="tophead" nowrap="nowrap">Last Name</td>
 		    		<td class="tophead" nowrap="nowrap">Institution</td>
+		    		<td class="tophead" nowrap="nowrap">Picture</td>
 		    		<td class="tophead" nowrap="nowrap">Delete ?</td>
 		    	</tr>
 		    {% for form in formset %}
@@ -26,6 +29,15 @@
 		            <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
 		            <td>{{ form.last_name }} {{ form.last_name.errors }}</td>
 		            <td>{{ form.institution }} {{ form.institution.errors }}</td>
+		            <td>
+		            	{% if form.instance.photo and form.photo.errors|length == 0 %}
+		            		<!-- show existing photo if no errors -->
+		            		<img src="{{ form.instance|getThumbnail }}" style="border: 1px solid #666666;"/>
+		            	{% else %}
+		            		<!-- show upload widget and errors -->
+		            		{{ form.photo }} {{ form.photo.errors }}
+		            	{% endif %}
+		            </td>
 		            <td>{{ form.DELETE }}</td>
 		        </tr>
 			{% endfor %}

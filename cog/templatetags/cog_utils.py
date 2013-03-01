@@ -542,20 +542,26 @@ def getPeople(project):
 @register.filter
 def getPhoto(user):
     
-    profile = UserProfile.objects.get(user=user)
     try:
-        # if profile.photo has no associated file
-        return profile.photo.url
+        # User
+        if isinstance(user, User):
+            profile = UserProfile.objects.get(user=user)
+            return profile.photo.url
+        
+        # Collaborator        
+        elif isinstance(user, Collaborator):
+            return user.photo.url
+        
     except ValueError:
+        # if the photo field has no associated file -> return default (no photo found)
         return getattr(settings, "MEDIA_URL") + DEFAULT_PHOTO
+
  
 @register.filter   
 def getThumbnail(user):
     
     photoPath = getPhoto(user)
     thumbnailPath = getThumbnailPath(photoPath)
-    print photoPath
-    print thumbnailPath
     return thumbnailPath
 
 @register.filter 
