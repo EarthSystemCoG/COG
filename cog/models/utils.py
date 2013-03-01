@@ -7,6 +7,7 @@ from search_facet import SearchFacet
 from post import Post
 from constants import PROJECT_PAGES
 from django.conf import settings
+from django.utils.timezone import now
 
 # method to return a list of project pages, organized by topic, and ordered by topic order first, page order second
 def site_index(project):
@@ -90,6 +91,7 @@ def create_project_home(project, user):
                                template="cog/post/page_template_sidebar_center_right.html",
                                title=project.long_name,
                                is_home=True,
+                               update_date=now(),
                                #topic='Home Page',
                                project=project,
                                body=project.description)
