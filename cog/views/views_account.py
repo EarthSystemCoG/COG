@@ -176,10 +176,16 @@ def user_update(request, user_id):
             # photo management
             _generateThumbnail = False
             if form.cleaned_data.get('delete_photo')==True:
-                deleteThumbnail(user_profile.photo.path)
-                user_profile.photo.delete()
+                deletePhotoAndThumbnail(user_profile)
                 
             elif form.cleaned_data['photo'] is not None:
+                # delete previous photo
+                try:
+                   deletePhotoAndThumbnail(user_profile) 
+                except ValueError:
+                    # photo not existing, ignore
+                    pass
+                   
                 user_profile.photo=form.cleaned_data['photo']
                 _generateThumbnail = True
             

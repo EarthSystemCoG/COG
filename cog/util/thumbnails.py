@@ -40,3 +40,8 @@ def deleteThumbnail(filePath):
         except IOError as error:
             print "Cannot delete thumbnail for", filePath
             print error
+            
+def deletePhotoAndThumbnail(user_profile):
+    '''Method to delete a user photo and thumbnail simultaneously.'''
+    deleteThumbnail(user_profile.photo.path)
+    user_profile.photo.delete()
