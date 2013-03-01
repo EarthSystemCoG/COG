@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect, \
-    ModelForm, Textarea, TextInput, Select
+    ModelForm, Textarea, TextInput, Select, BooleanField, FileInput
 from os.path import basename
 from tinymce.widgets import TinyMCE
 import re
@@ -136,29 +136,50 @@ def projectUsersQuerySet(project):
 # Use a custom form for the Collaborator formset to 
 # a) explicitely define the widget properties
 # b) use custom validation on the 'photo' field
+# c) use the extra field 'delete_photo'
 class CollaboratorForm(forms.ModelForm):
+    
+    # extra field not present in model, used for deletion of previously uploaded photo
+    delete_photo = BooleanField(required=False)
     
     def clean(self):
         
         # invoke superclass cleaning method
         super(CollaboratorForm, self).clean()
-                
-        # if new collaborator, do not override existing photos
-        # note that the system does NOT allow to change picture for existing collaborators
-        if self.instance.id is None:
-            
-            photo = self.cleaned_data.get("photo", None)
-            if photo is not None:
-                filepath = settings.MEDIA_ROOT+'photos/'+photo.name
-                if exists(filepath):
-                    self._errors['photo'] = self.error_class(['File %s already exists.' % photo.name]) 
+        
+        # do not override existing photos
+        photo = self.cleaned_data.get("photo", None)
+        if photo is not None:
+            try:              
+                # a) new collaborator, new photo
+                if self.instance.id is None:                    
+                    self._validate_photo(photo)             
+                # b) existing collaborator     
+                else:
+                    collaborator = Collaborator.objects.get(pk=self.instance.id)
+                    # b1) new photo
+                    if photo.name not in collaborator.photo.name:
+                        self._validate_photo(photo)
+                    # b2) same photo, but without the 'photos/' path prepended
+                    elif len(photo.name) != len(collaborator.photo.name):
+                        self._errors['photo'] = self.error_class(['File %s already exists.' % photo.name]) 
+                        
+            except ValueError as error:
+                print error
                 
         return self.cleaned_data
+    
+    def _validate_photo(self, photo):
+        
+        filepath = settings.MEDIA_ROOT+'photos/'+photo.name
+        if exists(filepath):
+            self._errors['photo'] = self.error_class(['File %s already exists.' % photo.name])         
         
     class Meta:
         model = Collaborator
         widgets = {
-            'first_name' : forms.fields.TextInput(attrs={'size':20}),
-            'last_name' : forms.fields.TextInput(attrs={'size':20}),
-            'institution' : forms.fields.TextInput(attrs={'size':20}),
+            'first_name' : forms.fields.TextInput(attrs={'size':25}),
+            'last_name' : forms.fields.TextInput(attrs={'size':25}),
+            'institution' : forms.fields.TextInput(attrs={'size':25}),
+            'photo': FileInput(),
             }

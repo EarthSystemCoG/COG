@@ -556,6 +556,17 @@ def getPhoto(user):
         # if the photo field has no associated file -> return default (no photo found)
         return getattr(settings, "MEDIA_URL") + DEFAULT_PHOTO
 
+
+@register.filter
+def getThumbnailById(id):
+    
+    if id is not None:
+        collaborator = Collaborator.objects.get(pk=id)
+        return getThumbnail(collaborator)
+    
+    else: 
+        photopath = getattr(settings, "MEDIA_URL") + DEFAULT_PHOTO
+        return getThumbnailPath(photopath)
  
 @register.filter   
 def getThumbnail(user):

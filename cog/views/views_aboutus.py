@@ -125,18 +125,27 @@ def people_update(request, project_short_name, tab):
             
             # photo management
             for form in formset:
-                
-                if form.cleaned_data.get('DELETE', False):
-                    try:
-                        deletePhotoAndThumbnail(form.instance)
-                    except Exception as error:
-                        print error                    
+                try:
+                    # request to delete photo or whole collaborator
+                    if (form.cleaned_data.get('delete_photo', False) 
+                        or form.cleaned_data.get('DELETE', False) ): 
+                            deletePhotoAndThumbnail(form.instance)                   
+                    # request to replace photo
+                    else:                   
+                        photo = form.cleaned_data.get('photo',None)
+                        if photo is not None and form.instance.id is not None:
+                            collaborator = Collaborator.objects.get(pk=form.instance.id)
+                            if photo.name not in collaborator.photo.name:
+                                deletePhotoAndThumbnail(collaborator)                               
+                except ValueError as error:
+                    print error                        
             
             # persist formset data
+            # only objects that have changed are returned
             collaborators = formset.save(commit=False)
             
             # assign collaborator to project and persist
-            for collaborator in collaborators:                
+            for collaborator in collaborators:              
                 collaborator.project = project
                 collaborator.save()
                 

@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_center.html" %}
 {% load url from future %}
 
 {% load cog_utils %}
@@ -21,6 +21,7 @@
 		    		<td class="tophead" nowrap="nowrap">Last Name</td>
 		    		<td class="tophead" nowrap="nowrap">Institution</td>
 		    		<td class="tophead" nowrap="nowrap">Picture</td>
+		    		<td class="tophead" nowrap="nowrap">&nbsp;</td>
 		    		<td class="tophead" nowrap="nowrap">Delete ?</td>
 		    	</tr>
 		    {% for form in formset %}
@@ -30,13 +31,19 @@
 		            <td>{{ form.last_name }} {{ form.last_name.errors }}</td>
 		            <td>{{ form.institution }} {{ form.institution.errors }}</td>
 		            <td>
-		            	{% if form.instance.photo and form.photo.errors|length == 0 %}
-		            		<!-- show existing photo if no errors -->
-		            		<img src="{{ form.instance|getThumbnail }}" style="border: 1px solid #666666;"/>
-		            	{% else %}
-		            		<!-- show upload widget and errors -->
-		            		{{ form.photo }} {{ form.photo.errors }}
-		            	{% endif %}
+		            	<!-- always show picture on disk, not latest value from form -->
+		            	<img src="{{ form.instance.id|getThumbnailById }}" style="border: 1px solid #666666;" />
+		            </td>
+		            <td>
+		            	<!-- show option to remove current picture -->
+		            	{% if not 'unknown' in form.instance|getPhoto and form.photo.errors|length == 0 %}		
+		            		<span style="margin-top:2px">	
+			            		Current picture: <b>{{ form.instance|getPhoto|cut:"/site_media/photos/" }}</b>
+			                	{{ form.delete_photo }} Delete ? 		
+			                </span>	  						                            		
+			            {% endif %} 
+			            <!-- photo upload widget -->      					            	
+		            	{{ form.photo }} &nbsp; {{ form.photo.errors }}
 		            </td>
 		            <td>{{ form.DELETE }}</td>
 		        </tr>
