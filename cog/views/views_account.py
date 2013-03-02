@@ -107,7 +107,7 @@ def user_add(request):
         
 # view to display user data
 # require login to limit exposure of user information
-@login_required 
+#@login_required 
 def user_detail(request, user_id):
     
     # load User object

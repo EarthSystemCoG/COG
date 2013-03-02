@@ -19,7 +19,6 @@ def generateThumbnail(filePath):
         
     thumbnailPath = getThumbnailPath(filePath)
     if not os.path.exists(thumbnailPath) or os.path.getsize(thumbnailPath)==0:
-        print 'Generating thumbnail: %s' % thumbnailPath
         try:
             im = Image.open(filePath)
             if im.mode != "RGB":
@@ -34,7 +33,6 @@ def generateThumbnail(filePath):
 def deleteThumbnail(filePath):
     thumbnailPath = getThumbnailPath(filePath)
     if os.path.exists(thumbnailPath):
-        print 'Deleting thumbnail: %s' % thumbnailPath
         try:
             os.remove(thumbnailPath)
         except IOError as error:

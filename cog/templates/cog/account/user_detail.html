@@ -28,9 +28,7 @@
 	        {% include 'cog/account/_user_projects.html' %} 
 	   </div>
 	   <div class="span-4 last">
-	   		<a href="{% url 'user_update' request.user.id %}">
-	   			<img src="{{ user|getPhoto }}" style="border: 1px solid #666666;"/>
-	   		</a>
+	   	<img src="{{ user_profile.user|getPhoto }}" style="border: 1px solid #666666;"/>
 	   </div>
    
    </div>
