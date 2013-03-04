@@ -95,6 +95,12 @@ class GetInvolvedForm(ModelForm):
 class DevelopmentOverviewForm(ModelForm):
     
     class Meta:
-        model = Project
-        widgets = { 'developmentOverview': Textarea(attrs={'rows':10}), }
-        fields = ( 'developmentOverview', )
+        model = Project        
+        widgets = {'developmentOverview': Textarea(attrs={'rows':6}),
+                   'license': TextInput(),
+                   'implementationLanguage': TextInput(),
+                   'bindingLanguage': TextInput(),
+                   'supportedPlatforms': TextInput(),
+                   'externalDependencies': Textarea(attrs={'rows':4}), }                                     
+        fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
+                   'supportedPlatforms', 'externalDependencies')
