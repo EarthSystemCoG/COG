@@ -525,3 +525,14 @@ def parseBoolString(theString):
 @register.filter
 def getCommunicationMeans(project, internal):
     return get_project_communication_means(project, parseBoolString(internal))
+
+@register.filter
+def doc_redirect(doc):
+    
+    if len(doc.post_set.all()) > 0:
+        for doc in doc.post_set.all():
+            redirect = reverse('post_detail', kwargs={'post_id': doc.id })
+    else:
+        redirect = reverse('project_home', kwargs={'project_short_name': doc.project.short_name.lower() })
+    return redirect
+    

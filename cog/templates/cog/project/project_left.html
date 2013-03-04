@@ -19,7 +19,7 @@
     			{% for page in index_item.pages %}
     				<tr>
                     	{% if page.is_home %}
-                       		<td>&nbsp;<a href="{% url 'project_home' project.short_name.lower %}" >Home</a></td>
+                       		<td>&nbsp;<a href="{% url 'project_home' project.short_name.lower %}" >Home</a>{{ page|is_locked:request }}</td>
                        	{% else %}
                             <td>&nbsp;<a href="{{ page.url }}">{{ page.get_label }}</a>{{ page|is_locked:request }}</td>
                         {% endif %}
