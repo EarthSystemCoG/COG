@@ -3,13 +3,14 @@ from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, Select
+from django.forms import ModelForm, Textarea, TextInput, Select, FileInput
 from django.core.exceptions import ObjectDoesNotExist
 from tinymce.widgets import TinyMCE
 from os.path import basename
 import re
 from cog.utils import *
 from django.db.models import Q
+from cog.forms.forms_images import ImageForm
 
 
 class ProjectForm(ModelForm):
@@ -104,3 +105,23 @@ class DevelopmentOverviewForm(ModelForm):
                    'externalDependencies': Textarea(attrs={'rows':4}), }                                     
         fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
                    'supportedPlatforms', 'externalDependencies')
+        
+class OrganizationForm(ImageForm):
+    
+    class Meta:
+        model = Organization
+        widgets = {
+            'name' : forms.fields.TextInput(attrs={'size':30}),
+            'url' : forms.fields.TextInput(attrs={'size':30}),
+            'image': FileInput(),
+        }
+        
+class FundingSourceForm(ImageForm):
+    
+    class Meta:
+        model = FundingSource
+        widgets = {
+            'name' : forms.fields.TextInput(attrs={'size':30}),
+            'url' : forms.fields.TextInput(attrs={'size':30}),
+            'image': FileInput(),
+        }

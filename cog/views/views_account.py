@@ -150,7 +150,7 @@ def user_update(request, user_id):
                                                  'department':profile.department,
                                                  'subscribed':profile.subscribed,
                                                  'private':profile.private,
-                                                 'photo':profile.photo })
+                                                 'image':profile.image })
                 
         return render_user_form(request, form, title='Update User Profile')
 
@@ -173,20 +173,20 @@ def user_update(request, user_id):
             user_profile.subscribed=form.cleaned_data['subscribed']
             user_profile.private=form.cleaned_data['private']
             
-            # photo management
+            # image management
             _generateThumbnail = False
-            if form.cleaned_data.get('delete_photo')==True:
-                deletePhotoAndThumbnail(user_profile)
+            if form.cleaned_data.get('delete_image')==True:
+                deleteImageAndThumbnail(user_profile)
                 
-            elif form.cleaned_data['photo'] is not None:
-                # delete previous photo
+            elif form.cleaned_data['image'] is not None:
+                # delete previous image
                 try:
-                   deletePhotoAndThumbnail(user_profile) 
+                   deleteImageAndThumbnail(user_profile) 
                 except ValueError:
-                    # photo not existing, ignore
+                    # image not existing, ignore
                     pass
                    
-                user_profile.photo=form.cleaned_data['photo']
+                user_profile.image=form.cleaned_data['image']
                 _generateThumbnail = True
             
             # persist changes
@@ -194,7 +194,7 @@ def user_update(request, user_id):
             
             # generate thumbnail - after picture has been saved
             if _generateThumbnail:
-                generateThumbnail(user_profile.photo.path)
+                generateThumbnail(user_profile.image.path, THUMBNAIL_SIZE_SMALL)
                         
             # subscribe/unsubscribe user is mailing list selection changed
             if oldSubscribed==True and form.cleaned_data['subscribed']==False:

@@ -13,7 +13,7 @@ from cog.models.utils import get_project_communication_means
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 from cog.models.constants import NAVMAP, INVNAVMAP, TABS
-from cog.models.constants import DEFAULT_PHOTO
+from cog.models.constants import DEFAULT_IMAGES
 from cog.util.thumbnails import getThumbnailPath
 
 register = template.Library()
@@ -540,39 +540,47 @@ def getPeople(project):
     return listPeople(project)
 
 @register.filter
-def getPhoto(user):
+def getImage(obj):
     
     try:
         # User
-        if isinstance(user, User):
-            profile = UserProfile.objects.get(user=user)
-            return profile.photo.url
+        if isinstance(obj, User):
+            profile = UserProfile.objects.get(user=obj)
+            return profile.image.url
         
         # Collaborator        
-        elif isinstance(user, Collaborator):
-            return user.photo.url
+        elif isinstance(obj, Collaborator):
+            return obj.image.url
+        
+        elif isinstance(obj, Organization) or isinstance(obj, FundingSource):
+            return obj.image.url
         
     except ValueError:
-        # if the photo field has no associated file -> return default (no photo found)
-        return getattr(settings, "MEDIA_URL") + DEFAULT_PHOTO
+        # if the image field has no associated file -> return default (no image found)
+        return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['%s' % obj.__class__.__name__]
 
 
 @register.filter
-def getThumbnailById(id):
+def getThumbnailById(id, type):
     
     if id is not None:
-        collaborator = Collaborator.objects.get(pk=id)
-        return getThumbnail(collaborator)
+        if type == 'Collaborator':
+            obj = Collaborator.objects.get(pk=id)
+        elif type == 'Organization':
+            obj = Organization.objects.get(pk=id)
+        elif type == 'FundingSource':
+            obj = FundingSource.objects.get(pk=id)
+        return getThumbnail(obj)
     
     else: 
-        photopath = getattr(settings, "MEDIA_URL") + DEFAULT_PHOTO
-        return getThumbnailPath(photopath)
+        imagepath = getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES[type]
+        return getThumbnailPath(imagepath)
  
 @register.filter   
 def getThumbnail(user):
     
-    photoPath = getPhoto(user)
-    thumbnailPath = getThumbnailPath(photoPath)
+    imagePath = getImage(user)
+    thumbnailPath = getThumbnailPath(imagePath)
     return thumbnailPath
 
 @register.filter 

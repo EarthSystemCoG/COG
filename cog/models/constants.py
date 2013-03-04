@@ -216,7 +216,13 @@ DOCUMENT_TYPES = {
 DEFAULT_LOGO = "cog/img/cog_web_beta.png"
 FOOTER_LOGO = "cog/img/logo_nsf_and_noaa.bmp"
 
-DEFAULT_PHOTO = "/photos/unknown.jpeg"
+UPLOAD_DIR_PHOTOS = "photos/"
+UPLOAD_DIR_LOGOS = "logos/"
+
+DEFAULT_IMAGES = { 'User':'/%s/unknown.jpeg' % UPLOAD_DIR_PHOTOS,
+                   'Collaborator':'/%s/unknown.jpeg' % UPLOAD_DIR_PHOTOS,
+                   'Organization':'/%s/notfound.jpeg' % UPLOAD_DIR_LOGOS,
+                   'FundingSource':'/%s/notfound.jpeg' % UPLOAD_DIR_LOGOS }
 
 # legacy media sub-directories of 'projects/'
 SYSTEM_DOCS = 'system_docs'

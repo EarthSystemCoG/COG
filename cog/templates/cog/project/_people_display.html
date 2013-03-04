@@ -1,0 +1,68 @@
+{% load cog_utils %}
+{% load url from future %}
+
+{% load pagination_tags %}
+{% with project|getPeople as users %}
+
+	{% autopaginate users 50 %}	
+				
+	<table>
+		<caption>{{ proj.short_name }} Users</caption>
+	    <tr>
+	    	<td class="tophead">&nbsp;</td>
+	        <td class="tophead">Last Name</td>
+	        <td class="tophead">First Name</td>				                				                
+	        <td class="tophead">Institution</td>
+	    </tr>
+	    {% for user in users %}
+			<tr>               				
+				{% if user.username %}
+					<!-- User -->
+					<td>
+						<a href="{% url 'user_detail' user.id %}">
+							<img src="{{ user|getThumbnail }}" style="border: 1px solid #666666;" />
+						</a>
+					</td>
+					<td>
+						<div class="middle">
+							<a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a>
+						</div>
+					</td>
+					<td>
+						<div class="middle">
+							<a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a>
+						</div>
+					</td>                  				
+					<td>
+						<div class="middle">
+							{{ user|getUserAttribute:"institution" }}
+						</div>
+					</td> 
+				{% else %}
+					<!-- Collaborator -->
+					<td>
+						<img src="{{ user|getThumbnail }}" style="border: 1px solid #666666;"/>
+					</td>
+					<td>
+						<div class="middle">
+							{{ user.last_name }}
+						</div>
+					</td>
+					<td>
+						<div class="middle">
+							{{ user.first_name }}
+						</div>
+					</td>                  				
+					<td>
+						<div class="middle">
+							{{ user|getUserAttribute:"institution" }}
+						</div>
+					</td>                   					
+				{% endif %}
+		    </tr>
+	    {% endfor %}
+	</table>
+	    
+	{% paginate %}
+      							
+{% endwith %}

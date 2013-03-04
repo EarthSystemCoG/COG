@@ -31,19 +31,18 @@
 		            <td>{{ form.last_name }} {{ form.last_name.errors }}</td>
 		            <td>{{ form.institution }} {{ form.institution.errors }}</td>
 		            <td>
-		            	<!-- always show picture on disk, not latest value from form -->
-		            	<img src="{{ form.instance.id|getThumbnailById }}" style="border: 1px solid #666666;" />
+		            	<!-- always show image on disk, not latest value from form -->
+		            	<img src="{{ form.instance.id|getThumbnailById:'Collaborator' }}" style="border: 1px solid #666666;" />
 		            </td>
 		            <td>
 		            	<!-- show option to remove current picture -->
-		            	{% if not 'unknown' in form.instance|getPhoto and form.photo.errors|length == 0 %}		
+		            	{% if not 'unknown' in form.instance|getImage and form.image.errors|length == 0 %}		
 		            		<span style="margin-top:2px">	
-			            		Current picture: <b>{{ form.instance|getPhoto|cut:"/site_media/photos/" }}</b>
-			                	{{ form.delete_photo }} Delete ? 		
+			                	{{ form.delete_image }} Delete current picture ? 		
 			                </span>	  						                            		
 			            {% endif %} 
-			            <!-- photo upload widget -->      					            	
-		            	{{ form.photo }} &nbsp; {{ form.photo.errors }}
+			            <!-- image upload widget -->      					            	
+		            	{{ form.image }} &nbsp; {{ form.image.errors }}
 		            </td>
 		            <td>{{ form.DELETE }}</td>
 		        </tr>

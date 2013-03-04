@@ -90,11 +90,11 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>values)/$', 'cog.views.aboutus_display', name='aboutus_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>values)/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>partners)/$', 'cog.views.aboutus_display', name='aboutus_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>partners)/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>partners)/update/$', 'cog.views.organization_update', name='organization_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>sponsors)/$', 'cog.views.aboutus_display', name='aboutus_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>sponsors)/update/$', 'cog.views.aboutus_update', name='aboutus_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>sponsors)/update/$', 'cog.views.fundingsource_update', name='fundingsource_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>people)/$', 'cog.views.aboutus_display', name='aboutus_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>people)/update/$', 'cog.views.people_update', name='aboutus_update'),    
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>people)/update/$', 'cog.views.people_update', name='people_update'),    
     
 
     # "Development" pages: development, code and trackers    

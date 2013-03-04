@@ -4,8 +4,8 @@ import os
 import Image
 
 THUMBNAIL_EXT = "jpeg"
-THUMBNAIL_WIDTH = 25
-THUMBNAIL_HEIGHT = 25
+THUMBNAIL_SIZE_SMALL = 25,25
+THUMBNAIL_SIZE_BIG = 60,60
 
 def getThumbnailPath(filePath):
     
@@ -15,7 +15,7 @@ def getThumbnailPath(filePath):
     return thumbnailPath
     
     
-def generateThumbnail(filePath):
+def generateThumbnail(filePath, thumbnail_size):
         
     thumbnailPath = getThumbnailPath(filePath)
     if not os.path.exists(thumbnailPath) or os.path.getsize(thumbnailPath)==0:
@@ -23,8 +23,7 @@ def generateThumbnail(filePath):
             im = Image.open(filePath)
             if im.mode != "RGB":
                 im = im.convert("RGB")
-            size = THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT
-            im.thumbnail(size)
+            im.thumbnail(thumbnail_size)
             im.save(thumbnailPath, "JPEG")
         except IOError as error:
             print "Cannot create thumbnail for", filePath
@@ -39,7 +38,7 @@ def deleteThumbnail(filePath):
             print "Cannot delete thumbnail for", filePath
             print error
             
-def deletePhotoAndThumbnail(user):
-    '''Method to delete a user photo and thumbnail simultaneously.'''
-    deleteThumbnail(user.photo.path)
-    user.photo.delete()
+def deleteImageAndThumbnail(obj):
+    '''Method to delete an object image and thumbnail simultaneously.'''
+    deleteThumbnail(obj.image.path)
+    obj.image.delete()

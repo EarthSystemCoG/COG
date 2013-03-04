@@ -1,0 +1,31 @@
+
+{% load cog_utils %}
+{% load url from future %}
+
+<style type="text/css">
+	.middle { margin-top:20px; }
+</style>
+
+<table>
+	<!-- loop over partners -->
+	{% for organization in proj.organization_set.all %}
+		<tr>
+			<td>
+				{% if organization.image %}
+					<img src="{{ organization|getThumbnail }}" style="border: 1px solid #666666;" />
+				{% else %}
+					&nbsp;
+				{% endif %}
+			</td>
+			<td class="long" nowrap="nowrap">
+				{% if organization.url %}				
+					<div class="middle"><a href="{{ organization.url }}">{{organization.name}}</a></div>
+				{% else %}
+					{{organization.name}}
+				{% endif %}	
+			</td>			
+		</tr>    	
+	{% endfor %}
+		
+		
+</table>

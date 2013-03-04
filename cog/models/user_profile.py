@@ -23,7 +23,7 @@ class UserProfile(models.Model):
     private = models.BooleanField(verbose_name='Do NOT list me among project members', default=False, null=False)
     
     # optional picture
-    photo = models.ImageField(upload_to='photos/', blank=True, null=True)
+    image = models.ImageField(upload_to='photos/', blank=True, null=True)
     
     class Meta:
         app_label= APPLICATION_LABEL

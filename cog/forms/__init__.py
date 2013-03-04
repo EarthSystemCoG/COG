@@ -1,3 +1,4 @@
+from forms_images import *
 from forms_account import *
 from forms_bookmarks import *
 from forms_governance import *

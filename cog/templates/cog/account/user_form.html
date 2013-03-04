@@ -140,15 +140,14 @@
                         <td class="long"> 
                         	<table>
                         		<tr>
-                        			<td><img src="{{ request.user|getPhoto }}"/></td>
+                        			<td><img src="{{ request.user|getImage }}"/></td>
                         			<td align="left">
 			                        	<div style="margin-top:2px">
-			                        		{% if not 'unknown' in request.user|getPhoto %}
-			                        			Current picture: <b>{{ request.user|getPhoto|cut:"/site_media/photos/" }}</b>
-			                        			{{ form.delete_photo }} Delete ? 			                        		
+			                        		{% if not 'unknown' in request.user|getImage %}
+			                        			{{ form.delete_image }} Delete current picture ? 			                        		
 			                        		{% endif %}                      	                    		
-			                        		{{ form.photo }} 
-			                        		&nbsp;{{ form.photo.errors }}
+			                        		{{ form.image }} 
+			                        		&nbsp;{{ form.image.errors }}
 			                        	</div>
                         			</td>
                         	</table>

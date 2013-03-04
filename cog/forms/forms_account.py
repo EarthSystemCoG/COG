@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import re
 from django.contrib.auth.models import check_password
 from os.path import exists
+from cog.models.constants import UPLOAD_DIR_PHOTOS
 
 # list of invalid characters in text fields
 INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s]"
@@ -83,9 +84,9 @@ class UserForm(ModelForm):
     private = BooleanField(required=False)
     
     # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
-    photo = ImageField(required=False, widget=FileInput) 
-    # extra field not present in model, used for deletion of previously uploaded photo
-    delete_photo = BooleanField(required=False)
+    image = ImageField(required=False, widget=FileInput) 
+    # extra field not present in model, used for deletion of previously uploaded image
+    delete_image = BooleanField(required=False)
 
     
     class Meta:
@@ -95,7 +96,7 @@ class UserForm(ModelForm):
         fields = ('first_name', 'last_name', 'username', 'password', 'email',
                   'institution','city','state','country','department',
                   'subscribed','private',
-                  'photo', 'delete_photo')
+                  'image', 'delete_image')
                 
     # override form clean() method to execute custom validation on fields, 
     # including combined validation on multiple fields
@@ -112,14 +113,7 @@ class UserForm(ModelForm):
         
         # validate 'username' field
         validate_username(self, user_id)
-        
-        # do not override existing photos
-        photo = cleaned_data["photo"]
-        if photo is not None:
-            filepath = settings.MEDIA_ROOT+'photos/'+photo.name
-            if exists(filepath):
-                self._errors['photo'] = self.error_class(['File %s already exists.' % photo.name])   
-        
+                
         # validate all other fields against injection attacks
         for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country']:
             try:

@@ -1,0 +1,31 @@
+
+{% load cog_utils %}
+{% load url from future %}
+
+<style type="text/css">
+	.middle { margin-top: 20px; }
+</style>
+
+<table>
+	<!-- loop over sponsors -->
+	{% for sponsor in proj.fundingsource_set.all %}
+		<tr>
+			<td>
+				{% if sponsor.image %}
+					<img src="{{ sponsor|getThumbnail }}" style="border: 1px solid #666666;" />
+				{% else %}
+					&nbsp;
+				{% endif %}
+			</td>
+			<td class="long" nowrap="nowrap">
+				{% if sponsor.url %}				
+					<div class="middle"><a href="{{ sponsor.url }}">{{ sponsor.name }}</a></div>
+				{% else %}
+					{{ sponsor.name }}
+				{% endif %}	
+			</td>			
+		</tr>    	
+	{% endfor %}
+		
+		
+</table>
