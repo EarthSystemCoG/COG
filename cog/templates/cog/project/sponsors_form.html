@@ -27,7 +27,7 @@
 		            <td>{{ form.url }} {{ form.url.errors }}</td>
 		            <td>
 		            	<!-- always show picture on disk, not latest value from form -->
-		            	<img src="{{ form.instance.id|getThumbnailById:'FundingSource' }}" style="border: 1px solid #666666;" />
+		            	<img src="{{ form.instance|getImage }}" style="border: 1px solid #666666;" width="40px" />
 		            </td>
 		            <td>
 		            	<!-- show option to remove current picture -->

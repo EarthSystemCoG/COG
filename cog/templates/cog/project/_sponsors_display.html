@@ -12,17 +12,20 @@
 		<tr>
 			<td>
 				{% if sponsor.image %}
-					<img src="{{ sponsor|getThumbnail }}" style="border: 1px solid #666666;" />
+					<img src="{{ sponsor|getImage }}" style="border: 1px solid #666666;" width="60px" />
 				{% else %}
 					&nbsp;
 				{% endif %}
 			</td>
 			<td class="long" nowrap="nowrap">
+				{% if sponsor.image %}<div class="middle">{% endif %}
 				{% if sponsor.url %}				
-					<div class="middle"><a href="{{ sponsor.url }}">{{ sponsor.name }}</a></div>
+					<a href="{{ sponsor.url }}">{{ sponsor.name }}</a>
 				{% else %}
 					{{ sponsor.name }}
 				{% endif %}	
+				{% if sponsor.image %}</div>{% endif %}
+				</div>
 			</td>			
 		</tr>    	
 	{% endfor %}
