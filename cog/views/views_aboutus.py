@@ -139,6 +139,7 @@ def partners_update(request, project_short_name, tab):
     return _imageformset_update(request, project, tab,
                                 clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size)
 
+# generic view to update many objects (formsets) containing an image
 def _imageformset_update(request, project, tab,
                         clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size):
         
@@ -179,17 +180,16 @@ def _imageformset_update(request, project, tab,
                         
             # assign instance to project and persist
             for instance in instances:         
-                
-                print 'instance changed=%s' % instance
-                
-                # replace current image
-                # for a newly chosen image, 'upload_dir' is not present in the path
-                if (instance.id is not None and instance.image is not None 
-                    and instance.image.name is not None and not upload_dir in instance.image.name):
+                                
+                # replace current image BEFORE the new image is persisted to disk
+                # newly uploaded images are characterized by the fact that 'upload_dir' is not present in the path
+                if (instance.id is not None                     # instance is not new (i.e. it's already in database)
+                    and instance.image is not None              # instance contains an image
+                    and instance.image.name is not None 
+                    and not upload_dir in instance.image.name): # image has been newly selected
                     obj = clazz.objects.get(pk=instance.id)
                     try:
                         deleteImageAndThumbnail(obj) 
-                        print 'DELETING IMAGE'
                     except ValueError as error:
                         pass # "The 'image' attribute has no file associated with it"
                 
