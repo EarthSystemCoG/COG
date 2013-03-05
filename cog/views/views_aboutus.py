@@ -25,9 +25,9 @@ def aboutus_display(request, project_short_name, tab):
         
     template_page = 'cog/project/_project_aboutus.html'
     if tab == TABS["PARTNERS"]:
-        template_form_page = reverse('organization_update', args=[project_short_name, tab])
+        template_form_page = reverse('partners_update', args=[project_short_name, tab])
     elif tab == TABS["SPONSORS"]:
-        template_form_page = reverse('fundingsource_update', args=[project_short_name, tab])    
+        template_form_page = reverse('sponsors_update', args=[project_short_name, tab])    
     elif tab == TABS["PEOPLE"]:
         template_form_page = reverse('people_update', args=[project_short_name, tab])
     else:

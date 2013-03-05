@@ -133,14 +133,3 @@ def projectUsersQuerySet(project):
         aGroup = getAdminGroupName(project)
         query = Q(groups__name=uGroup) | Q(groups__name=aGroup)
         return User.objects.filter(query).distinct().order_by('username')
-    
-class CollaboratorForm(ImageForm):
-            
-    class Meta:
-        model = Collaborator
-        widgets = {
-            'first_name' : forms.fields.TextInput(attrs={'size':25}),
-            'last_name' : forms.fields.TextInput(attrs={'size':25}),
-            'institution' : forms.fields.TextInput(attrs={'size':25}),
-            'image': FileInput(),
-            }

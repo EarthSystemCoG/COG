@@ -56,21 +56,6 @@ class ProjectForm(ModelForm):
         model = Project
         # Note: must exclude the many2many field mapped through an intermediary table
         exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess','governanceOverview','developmentOverview')
-
-    
-class AboutusForm(ModelForm):
-    
-    class Meta:
-        model = Project
-        exclude = ('short_name','parent','peers','author','active','private','logo','logo_url',
-                   'topics','taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview')
-        widgets = {
-                   'description': Textarea(attrs={'rows':6}),
-                   'mission':     Textarea(attrs={'rows':6}),
-                   'vision':      Textarea(attrs={'rows':6}),
-                   'values':      Textarea(attrs={'rows':6}),
-                   'history':     Textarea(attrs={'rows':6}),
-                   }
         
 class ContactusForm(ModelForm):
     
@@ -105,23 +90,3 @@ class DevelopmentOverviewForm(ModelForm):
                    'externalDependencies': Textarea(attrs={'rows':4}), }                                     
         fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
                    'supportedPlatforms', 'externalDependencies')
-        
-class OrganizationForm(ImageForm):
-    
-    class Meta:
-        model = Organization
-        widgets = {
-            'name' : forms.fields.TextInput(attrs={'size':30}),
-            'url' : forms.fields.TextInput(attrs={'size':30}),
-            'image': FileInput(),
-        }
-        
-class FundingSourceForm(ImageForm):
-    
-    class Meta:
-        model = FundingSource
-        widgets = {
-            'name' : forms.fields.TextInput(attrs={'size':30}),
-            'url' : forms.fields.TextInput(attrs={'size':30}),
-            'image': FileInput(),
-        }
