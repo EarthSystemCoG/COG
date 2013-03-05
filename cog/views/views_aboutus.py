@@ -81,7 +81,27 @@ def render_aboutus_form(request, project, tab, form):
                           context_instance=RequestContext(request))
     
 @login_required
-def fundingsource_update(request, project_short_name, tab):
+def people_update(request, project_short_name, tab):
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # Collaborator specific parameters
+    clazz = Collaborator
+    formset_factory =  modelformset_factory(Collaborator, 
+                                            form=CollaboratorForm, # explicit reference to form to use custom text widgets
+                                            extra=5, can_delete=True, exclude=('project',) )
+    queryset = Collaborator.objects.filter(project=project).order_by('last_name')
+    
+    form_template = 'cog/project/people_form.html'
+    upload_dir = UPLOAD_DIR_PHOTOS
+    thumbnail_size = THUMBNAIL_SIZE_SMALL
+
+    return _imageformset_update(request, project, tab,
+                                clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size)
+
+@login_required
+def sponsors_update(request, project_short_name, tab):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -100,7 +120,7 @@ def fundingsource_update(request, project_short_name, tab):
                                 clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size)
         
 @login_required
-def organization_update(request, project_short_name, tab):
+def partners_update(request, project_short_name, tab):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -197,24 +217,3 @@ def render_formset(template, request, project, tab, formset):
                               'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
                               'project': project }, 
                               context_instance=RequestContext(request))
-    
-    
-@login_required
-def people_update(request, project_short_name, tab):
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # Collaborator specific parameters
-    clazz = Collaborator
-    formset_factory =  modelformset_factory(Collaborator, 
-                                            form=CollaboratorForm, # explicit reference to form to use custom text widgets
-                                            extra=5, can_delete=True, exclude=('project',) )
-    queryset = Collaborator.objects.filter(project=project).order_by('last_name')
-    
-    form_template = 'cog/project/people_form.html'
-    upload_dir = UPLOAD_DIR_PHOTOS
-    thumbnail_size = THUMBNAIL_SIZE_SMALL
-
-    return _imageformset_update(request, project, tab,
-                                clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size)
