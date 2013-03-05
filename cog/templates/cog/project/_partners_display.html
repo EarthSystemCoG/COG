@@ -8,7 +8,7 @@
 
 <table>
 	<!-- loop over partners -->
-	{% for organization in proj.organization_set.all %}
+	{% for organization in proj|partners %}
 		<tr>
 			<td>
 				{% if organization.image %}

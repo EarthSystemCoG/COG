@@ -593,3 +593,12 @@ def doc_redirect(doc):
         redirect = reverse('project_home', kwargs={'project_short_name': doc.project.short_name.lower() })
     return redirect
     
+@register.filter 
+def partners(project):
+    organizations = list( project.organization_set.all() )
+    return sorted(organizations, key=lambda org: org.name)
+
+@register.filter 
+def sponsors(project):
+    fundingsources = list( project.fundingsource_set.all() )
+    return sorted(fundingsources, key=lambda fs: fs.name)

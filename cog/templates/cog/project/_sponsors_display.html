@@ -8,7 +8,7 @@
 
 <table>
 	<!-- loop over sponsors -->
-	{% for sponsor in proj.fundingsource_set.all %}
+	{% for sponsor in proj|sponsors %}
 		<tr>
 			<td>
 				{% if sponsor.image %}
