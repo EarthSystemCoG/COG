@@ -25,6 +25,10 @@ class UserProfile(models.Model):
     # optional picture
     image = models.ImageField(upload_to='photos/', blank=True, null=True)
     
+    # optional research information
+    reserchInterests = models.CharField(max_length=200, blank=True, null=True, default='')
+    reserchKeywords = models.CharField(max_length=50, blank=True, null=True, default='')
+    
     class Meta:
         app_label= APPLICATION_LABEL
 
