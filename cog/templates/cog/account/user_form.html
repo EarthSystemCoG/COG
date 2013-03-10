@@ -128,6 +128,19 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="optional" nowrap="nowrap">Research Keywords</td>
+                        <td class="long"> 
+                        A short list of science fields you are involved with (50 characters maximum).
+                        <br/>Example: Software Engineering, Grid Computing, Climate Change.
+                        <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td class="optional" nowrap="nowrap">Research Interests</td>
+                        <td class="long">
+                        A short paragraph describing your research interests (200 characters maximum).
+                        <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
+                    </tr>                    
+                    <tr>
                         <td class="head" nowrap="nowrap">Subscribe to COG Email List ?</td>
                         <td class="long">{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
                     </tr>                    
@@ -152,8 +165,7 @@
                         			</td>
                         	</table>
                         </td>
-                    </tr>                    
-                    
+                    </tr>                                        
  	            </table>
 	            
 	            <div style="text-align:center">

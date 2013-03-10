@@ -1,0 +1,16 @@
+{% load cog_utils %}
+{% load url from future %}
+
+<div class="mybox">
+	 <table>
+	     <caption>User Research</caption>
+		 <tr>
+		 		<td><b>Keywords</b></td>
+		 		<td class="long">{{ user_profile.researchKeywords }}</td>
+		 </tr>
+		 <tr>
+		 		<td><b>Interests</b></td>
+		 		<td class="long">{{ user_profile.researchInterests }}</td>
+		 </tr>		   
+	 </table>
+</div>

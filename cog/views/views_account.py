@@ -148,6 +148,8 @@ def user_update(request, user_id):
                                                  'state':profile.state,
                                                  'country':profile.country, 
                                                  'department':profile.department,
+                                                 'researchKeywords':profile.researchKeywords,
+                                                 'researchInterests':profile.researchInterests,
                                                  'subscribed':profile.subscribed,
                                                  'private':profile.private,
                                                  'image':profile.image })
@@ -170,6 +172,8 @@ def user_update(request, user_id):
             user_profile.state=form.cleaned_data['state']
             user_profile.country=form.cleaned_data['country']
             user_profile.department=form.cleaned_data['department']
+            user_profile.researchKeywords=form.cleaned_data['researchKeywords']
+            user_profile.researchInterests=form.cleaned_data['researchInterests']
             user_profile.subscribed=form.cleaned_data['subscribed']
             user_profile.private=form.cleaned_data['private']
             

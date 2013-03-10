@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, ImageField, FileInput
+from django.forms import Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, ImageField, FileInput, Textarea
 from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
@@ -9,7 +9,7 @@ from os.path import exists
 from cog.models.constants import UPLOAD_DIR_PHOTOS
 
 # list of invalid characters in text fields
-INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s]"
+INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()]"
 
 class PasswordResetForm(Form):
     
@@ -82,6 +82,8 @@ class UserForm(ModelForm):
     country = CharField(required=True)
     subscribed = BooleanField(required=False)
     private = BooleanField(required=False)
+    researchInterests = CharField(required=False, widget=Textarea(attrs={'rows': 6}))
+    researchKeywords = CharField(required=False)
     
     # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
     image = ImageField(required=False, widget=FileInput) 
@@ -96,7 +98,7 @@ class UserForm(ModelForm):
         fields = ('first_name', 'last_name', 'username', 'password', 'email',
                   'institution','city','state','country','department',
                   'subscribed','private',
-                  'image', 'delete_image')
+                  'image', 'delete_image', 'researchInterests', 'researchKeywords')
                 
     # override form clean() method to execute custom validation on fields, 
     # including combined validation on multiple fields
@@ -115,7 +117,8 @@ class UserForm(ModelForm):
         validate_username(self, user_id)
                 
         # validate all other fields against injection attacks
-        for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country']:
+        for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country', 
+                      'researchInterests', 'researchKeywords']:
             try:
                 validate_field(self, field, cleaned_data[field])
             except KeyError: # field not set (validation occurs later)
