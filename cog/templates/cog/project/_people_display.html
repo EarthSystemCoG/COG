@@ -10,10 +10,11 @@
 		<table>
 			<caption>{{ proj.short_name }} Users</caption>
 		    <tr>
-		    	<td class="tophead">&nbsp;</td>
-		        <td class="tophead">Last Name</td>
-		        <td class="tophead">First Name</td>				                				                
-		        <td class="tophead">Institution</td>
+		    	<td class="tophead" width="40px">&nbsp;</td>
+		        <td class="tophead" width="80px">Last Name</td>
+		        <td class="tophead" width="80px">First Name</td>				                				                
+		        <td class="tophead" width="100px">Institution</td>
+		        <td class="tophead">Research</td>
 		    </tr>
 		    {% for user in users %}
 				<tr>               				
@@ -39,6 +40,11 @@
 								{{ user|getUserAttribute:"institution" }}
 							</div>
 						</td> 
+						<td>
+							<div class="middle">
+								{{ user|getUserAttribute:"researchKeywords" }}
+							</div>
+						</td> 
 					{% else %}
 						<!-- Collaborator -->
 						<td>
@@ -58,6 +64,9 @@
 							<div class="middle">
 								{{ user|getUserAttribute:"institution" }}
 							</div>
+						</td>  
+						<td>
+							&nbsp;
 						</td>                   					
 					{% endif %}
 			    </tr>
