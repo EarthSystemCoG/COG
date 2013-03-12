@@ -20,6 +20,7 @@
 		    		<td class="tophead" nowrap="nowrap">First Name</td>
 		    		<td class="tophead" nowrap="nowrap">Last Name</td>
 		    		<td class="tophead" nowrap="nowrap">Institution</td>
+		    		<td class="tophead" nowrap="nowrap">Interests</td>
 		    		<td class="tophead" nowrap="nowrap">Picture</td>
 		    		<td class="tophead" nowrap="nowrap">&nbsp;</td>
 		    		<td class="tophead" nowrap="nowrap">Delete ?</td>
@@ -30,6 +31,7 @@
 		            <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
 		            <td>{{ form.last_name }} {{ form.last_name.errors }}</td>
 		            <td>{{ form.institution }} {{ form.institution.errors }}</td>
+		            <td>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
 		            <td>
 		            	<!-- always show image on disk, not latest value from form -->
 		            	<img src="{{ form.instance.id|getThumbnailById:'Collaborator' }}" style="border: 1px solid #666666;" />

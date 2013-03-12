@@ -66,8 +66,10 @@
 							</div>
 						</td>  
 						<td>
-							&nbsp;
-						</td>                   					
+							<div class="middle">
+								{{ user|getUserAttribute:"researchKeywords" }}
+							</div>
+						</td>              					
 					{% endif %}
 			    </tr>
 		    {% endfor %}

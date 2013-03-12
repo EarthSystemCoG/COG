@@ -57,8 +57,9 @@ class CollaboratorForm(ImageForm):
     class Meta:
         model = Collaborator
         widgets = {
-            'first_name' : TextInput(attrs={'size':25}),
-            'last_name' : TextInput(attrs={'size':25}),
-            'institution' : TextInput(attrs={'size':25}),
+            'first_name' : TextInput(attrs={'size':20}),
+            'last_name' : TextInput(attrs={'size':20}),
+            'institution' : TextInput(attrs={'size':15}),
+            'researchKeywords' : TextInput(attrs={'size':20}),
             'image': FileInput(),
             }

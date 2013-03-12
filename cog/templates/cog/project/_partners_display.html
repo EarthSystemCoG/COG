@@ -11,11 +11,7 @@
 	{% for organization in proj|partners %}
 		<tr>
 			<td>
-				{% if organization.image %}
-					<img src="{{ organization|getImage }}" style="border: 1px solid #666666;" width="60px" />
-				{% else %}
-					&nbsp;
-				{% endif %}
+				<img src="{{ organization|getImage }}" style="border: 1px solid #666666;" width="60px" />
 			</td>
 			<td class="long" nowrap="nowrap">
 				{% if organization.image %}<div class="middle">{% endif %}	
