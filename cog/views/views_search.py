@@ -163,7 +163,7 @@ def metadata_display(request, project_short_name):
     fh = urllib2.urlopen( url )
     response = fh.read().decode("UTF-8")
     #return HttpResponse(response, mimetype="application/json")
-    
+
     # parse JSON response (containing only one matching 'doc)
     json = simplejson.loads(response)
     metadata = _processDoc( json["response"]["docs"][0] )
@@ -183,7 +183,6 @@ def metadata_display(request, project_short_name):
                               {'title':metadata.title, 'project' : project, 'metadata':metadata, 'parentMetadata':parentMetadata }, 
                               context_instance=RequestContext(request))
     
-    
 class MetaDoc:
     ''' Utility class containing display metadata extracted from a Solr result document.'''
     
@@ -196,6 +195,7 @@ class MetaDoc:
         self.subtype = ''
         self.url = ''
         self.mime_type = ''
+        self.thumbnail = ''
         # container for all other metadata as (key, values[]) tuples ordered by key
         self.fields = []
     
@@ -224,8 +224,11 @@ def _processDoc(doc):
         elif key == 'url':
             for val in value:
                 parts = val.split('|')
-                metadoc.url = parts[0]
-                metadoc.mime_type = parts[1]
+                if parts[2] == 'Thumbnail':
+                    metadoc.thumbnail = parts[0]
+                else:
+                    metadoc.url = parts[0]
+                    metadoc.mime_type = parts[1]
         else:
             # fields NOT to be displayed
             if (key != 'score' and key != 'index_node' and key != 'data_node' and key != 'dataset_id'

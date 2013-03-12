@@ -5,7 +5,11 @@
 <!-- display image -->
 <p/>
 <div style="text-align:center">
-	<a href="{{ metadata.url}}"><img src='{{ metadata.url}}' width="400px"/></a>
+	{% if metadata.thumbnail %}
+		<a href="{{ metadata.url }}"><img src='{{ metadata.thumbnail }}' /></a>
+	{% else %}
+		<a href="{{ metadata.url}}"><img src='{{ metadata.url}}' width="400px"/></a>
+	{% endif %}
 	<br/>
 	<b>{{ metadata.title }}</b>
 	<br/>
