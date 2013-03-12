@@ -7,6 +7,7 @@ import re
 from django.contrib.auth.models import check_password
 from os.path import exists
 from cog.models.constants import UPLOAD_DIR_PHOTOS
+from cog.forms.forms_image import ImageForm
 
 # list of invalid characters in text fields
 INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()]"
@@ -64,7 +65,7 @@ class PasswordChangeForm(Form):
         
         return self.cleaned_data
 
-class UserForm(ModelForm):
+class UserForm(ImageForm):
     
     # override User form fields to make them required
     first_name = CharField(required=True)
@@ -87,8 +88,10 @@ class UserForm(ModelForm):
     
     # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
     image = ImageField(required=False, widget=FileInput) 
+    
     # extra field not present in model, used for deletion of previously uploaded image
-    delete_image = BooleanField(required=False)
+    # inherited from ImageForm
+    #delete_image = BooleanField(required=False)
 
     
     class Meta:
@@ -104,6 +107,9 @@ class UserForm(ModelForm):
     # including combined validation on multiple fields
     def clean(self):
         
+        # invoke superclass cleaning method
+        super(UserForm, self).clean()
+       
         # flags an existing user
         user_id = self.instance.id
         

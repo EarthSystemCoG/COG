@@ -149,11 +149,11 @@
                         <td class="long">{{ form.private }} {{ form.private.errors }}</td>
                     </tr>                    
                     <tr>
-                        <td class="optional" nowrap="nowrap">Picture</td>
+                        <td class="optional" nowrap="nowrap">Picture (Maximum Size: 1MB)</td>
                         <td class="long"> 
                         	<table>
                         		<tr>
-                        			<td><img src="{{ request.user|getImage }}"/></td>
+                        			<td><img src="{{ request.user|getImage }}" width="150px"/></td>
                         			<td align="left">
 			                        	<div style="margin-top:2px">
 			                        		{% if not 'unknown' in request.user|getImage %}
