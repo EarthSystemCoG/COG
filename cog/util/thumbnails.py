@@ -4,7 +4,7 @@ import os
 import Image
 
 THUMBNAIL_EXT = "jpeg"
-THUMBNAIL_SIZE_SMALL = 25,25
+THUMBNAIL_SIZE_SMALL = 35,35
 THUMBNAIL_SIZE_BIG = 60,60
 
 def getThumbnailPath(filePath):
