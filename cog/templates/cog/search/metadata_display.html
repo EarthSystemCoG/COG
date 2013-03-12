@@ -2,8 +2,57 @@
 
 {% block main %}   
 
+<!-- display image -->
+<p/>
+<div style="text-align:center">
+	<a href="{{ metadata.url}}"><img src='{{ metadata.url}}' width="400px"/></a>
+	<br/>
+	<b>{{ metadata.title }}</b>
+	<br/>
+	{{ metadata.description }}
+</div>
 
-FILE METADATA
+<!-- image metadata table -->
+{% if metadata.fields|length > 0 %}
+	<p/>
+	<div class="mybox">
+		<table>
+			<caption>{{ metadata.subtype }} Metadata</caption>
+			{% for tuple in metadata.fields %}
+			<tr>
+				<td class="head" nowrap="nowrap">{{ tuple.0 }}</td>
+				<td class="long">
+					{% for val in tuple.1 %}
+						{% if forloop.counter > 1 %}, &nbsp; {% endif %}
+						{{ val }}
+					{% endfor %}
+				</td>	
+			</tr>
+			{% endfor %}
+		</table>	
+	</div>
+{% endif %}
+	
+<!-- dataset metadata -->
+{% if parentMetadata.fields|length > 0 %}
+	<p/>
+	<div class="mybox">
+		<table>
+			<caption>Dataset Metadata</caption>
+			{% for tuple in parentMetadata.fields %}
+			<tr>
+				<td class="head" nowrap="nowrap">{{ tuple.0 }}</td>
+				<td class="long">
+					{% for val in tuple.1 %}
+						{% if forloop.counter > 1 %}, &nbsp; {% endif %}
+						{{ val }}
+					{% endfor %}
+				</td>	
+			</tr>
+			{% endfor %}
+		</table>	
+	</div>
+{% endif %}
 
 {% endblock %}
 
