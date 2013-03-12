@@ -228,6 +228,7 @@ DEFAULT_IMAGES = { 'User':'/%s/unknown.jpeg' % UPLOAD_DIR_PHOTOS,
 SYSTEM_DOCS = 'system_docs'
 SYSTEM_IMAGES = 'system_images'
 
+# 1MB - 1048576
 # 2.5MB - 2621440
 # 5MB - 5242880
 # 10MB - 10485760
