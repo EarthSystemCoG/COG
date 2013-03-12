@@ -173,7 +173,7 @@ def metadata_display(request, project_short_name):
     if type == 'File':
         params = [ ('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json") ]
         url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-        print 'Solr search URL=%s' % url
+        #print 'Solr search URL=%s' % url
         fh = urllib2.urlopen( url )
         response = fh.read().decode("UTF-8")
         json = simplejson.loads(response)
@@ -200,14 +200,14 @@ class MetaDoc:
         self.fields = []
     
 def _formatKey(key):
+    '''Utility method to format a metadata key before display.'''
     key = key.capitalize()
     return replace(key,'_',' ')
     
 def _processDoc(doc): 
-    '''Utility method to process the JSOM metadata object before display.'''
+    '''Utility method to process the JSON metadata object before display.'''
     
     metadoc = MetaDoc()
-    print doc.keys()
     for key in sorted(doc.keys()):
         value = doc[key]
         

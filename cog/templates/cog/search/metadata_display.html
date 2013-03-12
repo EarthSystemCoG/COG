@@ -2,14 +2,22 @@
 
 {% block main %}   
 
+<script language="javascript">
+	// function to replace the image source with a thumbnail in case of error due to lack of authorization
+	function imgError(image) {
+		html = '<a href="{{ metadata.url}}"><img src="{{ metadata.thumbnail }}"/></a>'
+			 + '<br/>(Please click on the image to enlarge it)';
+		document.getElementById("image").innerHTML = html;
+	    return true;
+	}
+</script>
+
 <!-- display image -->
 <p/>
 <div style="text-align:center">
-	{% if metadata.thumbnail %}
-		<a href="{{ metadata.url }}"><img src='{{ metadata.thumbnail }}' /></a>
-	{% else %}
-		<a href="{{ metadata.url}}"><img src='{{ metadata.url}}' width="400px"/></a>
-	{% endif %}
+	<div id="image" style="text-align:center">
+		<a href="{{ metadata.url}}"><img src="{{ metadata.url}}" width="400px" onerror="imgError(this);"/></a>
+	</div>
 	<br/>
 	<b>{{ metadata.title }}</b>
 	<br/>
@@ -37,7 +45,7 @@
 	</div>
 {% endif %}
 	
-<!-- dataset metadata -->
+<!-- dataset metadata table -->
 {% if parentMetadata.fields|length > 0 %}
 	<p/>
 	<div class="mybox">
