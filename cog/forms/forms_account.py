@@ -8,6 +8,7 @@ from django.contrib.auth.models import check_password
 from os.path import exists
 from cog.models.constants import UPLOAD_DIR_PHOTOS
 from cog.forms.forms_image import ImageForm
+from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 
 # list of invalid characters in text fields
 INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()]"
@@ -83,8 +84,8 @@ class UserForm(ImageForm):
     country = CharField(required=True)
     subscribed = BooleanField(required=False)
     private = BooleanField(required=False)
-    researchInterests = CharField(required=False, widget=Textarea(attrs={'rows': 6}))
-    researchKeywords = CharField(required=False)
+    researchInterests = CharField(required=False, widget=Textarea(attrs={'rows': 6}), max_length=RESEARCH_INTERESTS_MAX_CHARS)
+    researchKeywords = CharField(required=False, max_length=RESEARCH_KEYWORDS_MAX_CHARS)
     
     # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
     image = ImageField(required=False, widget=FileInput) 

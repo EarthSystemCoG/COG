@@ -1,6 +1,7 @@
-from django.forms import ModelForm, BooleanField, Textarea, FileInput, TextInput
+from django.forms import ModelForm, BooleanField, Textarea, FileInput, TextInput, CharField
 from cog.models import *
 from cog.forms.forms_image import ImageForm
+from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS
 
 class AboutusForm(ModelForm):
     
@@ -40,7 +41,7 @@ class FundingSourceForm(ImageForm):
 
 # Custom form to define custom widget, and use 'delete_image' field
 class CollaboratorForm(ImageForm):
-            
+             
     class Meta:
         model = Collaborator
         widgets = {
