@@ -2,10 +2,6 @@
 {% load cog_utils %}
 {% load url from future %}
 
-<style type="text/css">
-	.middle { margin-top:20px; }
-</style>
-
 <table>
 	<!-- loop over partners -->
 	{% for organization in proj|partners %}
@@ -13,14 +9,12 @@
 			<td>
 				<img src="{{ organization|getImage }}" style="border: 1px solid #666666;" width="60px" />
 			</td>
-			<td class="long" nowrap="nowrap">
-				{% if organization.image %}<div class="middle">{% endif %}	
+			<td class="long_middle" nowrap="nowrap">
 				{% if organization.url %}				
 					<a href="{{ organization.url }}">{{organization.name}}</a>
 				{% else %}
 					{{organization.name}}
 				{% endif %}	
-				{% if organization.image %}</div>{% endif %}
 				</div>
 			</td>			
 		</tr>    	

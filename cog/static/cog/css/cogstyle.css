@@ -117,6 +117,12 @@ td,th {
 	vertical-align: top;
 }
 
+.long_middle {
+	width: 100%;
+	text-align: left;
+	vertical-align: middle;
+}
+
 th { /*text-align: right;*/
 	font-weight: bold;
 	width: 100%;
