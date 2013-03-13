@@ -11,7 +11,8 @@ from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 
 # list of invalid characters in text fields
-INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()]"
+#INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
+INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
 class PasswordResetForm(Form):
     

@@ -177,7 +177,7 @@
 	                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' request.user.id %}'"/>
 	                {% endif %}
 	                &nbsp; &nbsp;
-	                Except when noted, please use only letters, numbers and the special characters: _ - + @ .
+	                The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
 	                &nbsp; &nbsp;
 	                <input type="submit" value="Submit" />
 	            </div>   
