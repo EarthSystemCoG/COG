@@ -10,16 +10,16 @@
         
         <h2>User Profile</h2>
         
-        <div class="span-18">
+        <div class="span-17">
         
 		    <div class="span-8">
 		        {% include 'cog/account/_user_profile.html' %} 		        
 		   </div>    
-		   <div class="span-10 last">
+		   <div class="span-9 last">
 		        {% include 'cog/account/_user_projects.html' %} 
 	   	   </div>
 	   	   
-	   	   <div class="span-18 last">
+	   	   <div class="span-17 last">
 	   	   		{% include 'cog/account/_user_research.html' %} 
 	   	   			   	   				        
 		        {% if request.user.id = user_profile.user.id %}
@@ -33,7 +33,7 @@
 	   
 	   </div>
 	   
-	   <div class="span-4 last">
+	   <div class="span-5 last">
 	   		<img src="{{ user_profile.user|getImage }}" class="myimage" />
 	   </div>
    

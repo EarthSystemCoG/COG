@@ -641,9 +641,9 @@ body div {
 /* CSS class to limit the maximum width of an uploaded image. */
 .myimage {
   width: 100%;
-  max-width: 150px;
+  max-width: 200px;
   /* max-height: 400px; */
-  width: expression(this.width > 150 ? "150"+"px" : true);
+  width: expression(this.width > 200 ? "200"+"px" : true);
   /* height: expression(this.height > 400 ? "400"+"px" : true); */
   border: 1px solid #666666;
 }
