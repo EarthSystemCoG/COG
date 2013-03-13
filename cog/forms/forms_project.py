@@ -10,7 +10,7 @@ from os.path import basename
 import re
 from cog.utils import *
 from django.db.models import Q
-from cog.forms.forms_images import ImageForm
+from cog.forms.forms_image import ImageForm
 
 
 class ProjectForm(ModelForm):
