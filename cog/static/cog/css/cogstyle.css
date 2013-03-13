@@ -638,6 +638,16 @@ body div {
     text-align: left;
 }
 
+/* CSS class to limit the maximum width of an uploaded image. */
+.myimage {
+  width: 100%;
+  max-width: 150px;
+  /* max-height: 400px; */
+  width: expression(this.width > 150 ? "150"+"px" : true);
+  /* height: expression(this.height > 400 ? "400"+"px" : true); */
+  border: 1px solid #666666;
+}
+
 /* YUI treeview introduces a bug; when user is logged the background of the tree is teal
    this forces it to be white
  */
