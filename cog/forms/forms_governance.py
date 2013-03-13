@@ -13,7 +13,7 @@ import re
 from django.db.models import Q
 from cog.models.constants import MANAGEMENT_BODY_CATEGORY_STRATEGIC, MANAGEMENT_BODY_CATEGORY_OPERATIONAL
 from os.path import exists
-from cog.forms.forms_images import ImageForm
+from cog.forms.forms_image import ImageForm
 
         
 class ExternalUrlForm(ModelForm):
