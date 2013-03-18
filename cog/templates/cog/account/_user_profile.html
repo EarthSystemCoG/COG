@@ -41,6 +41,12 @@
             <td class="head" nowrap="nowrap"><b>Country</b></td>
             <td class="long">{{ user_profile.country }}</td>
         </tr>  
+        {% for userurl in user_profile.userurl_set.all %}
+	        <tr>
+	            <td class="head" nowrap="nowrap"><b>Web Site</b></td>
+	            <td class="long"><a href="{{ userurl.url }}">{{ userurl.name }}</a></td>
+	        </tr>  
+        {% endfor %}
         {% if user.is_staff or user_profile.user == user %}
         <tr>
             <td class="head" nowrap="nowrap"><b>COG Email List</b></td>

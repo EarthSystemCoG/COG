@@ -14,6 +14,23 @@ from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS
 #INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
+class UserUrlForm(ModelForm):
+    
+    url = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
+    name = CharField(required=True, widget=TextInput(attrs={'size':'15'}))
+    
+    # validate data against bad characters
+    def clean(self):
+        
+        url = self.cleaned_data.get('url')
+        validate_field(self, 'url', url)
+        
+        name = self.cleaned_data.get('name')
+        validate_field(self, 'name', name)
+        
+        return self.cleaned_data
+
+
 class PasswordResetForm(Form):
     
     username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))

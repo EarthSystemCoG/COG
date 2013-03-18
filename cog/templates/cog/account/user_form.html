@@ -61,6 +61,7 @@
 	        <form action="" method="post" enctype="multipart/form-data">
 	        
 	            {% csrf_token %}
+	            {{ formset.management_form }}
 	            
 	            <table>
 	                <tr>
@@ -158,15 +159,38 @@
 			                        	<div style="margin-top:2px">
 			                        		{% if not 'unknown' in request.user|getImage %}
 			                        			{{ form.delete_image }} Delete current picture ? 			                        		
-			                        		{% endif %}                      	                    		
+			                        		{% endif %}     
+			                        		<br/>                 	                    		
 			                        		{{ form.image }} 
 			                        		&nbsp;{{ form.image.errors }}
 			                        	</div>
                         			</td>
+                        		</tr>
                         	</table>
                         </td>
-                    </tr>                                        
- 	            </table>
+                    </tr>        
+              </table>
+              
+              <!-- URLs -->
+              <table>            
+                    {% for urlform in formset %}
+		       			{{ urlform.id }}
+			        	<tr>
+			        		<td class="optional" nowrap="nowrap" valign="top">
+			        			Web Site:
+			        		</td>
+			        		<td>
+			        			<b>URL</b> {{ urlform.url }} {{ urlform.url.errors }}
+			        		</td>
+			        		<td>
+			        			<b>Title</b>{{ urlform.name }} ('Home Page', 'My Blog', ...) {{ urlform.name.errors }}
+			        		</td>
+			        		<td>
+			        			&nbsp; {{ urlform.DELETE }} Delete ?
+			        		</td>
+				        </tr>
+		    		{% endfor %}                                                                               
+  	            </table> 	            
 	            
 	            <div style="text-align:center">
 	                <hr/>

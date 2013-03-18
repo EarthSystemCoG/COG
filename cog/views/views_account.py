@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from cog.models import *
 from cog.util.thumbnails import *
+from django.forms.models import modelformset_factory
 
 from cog.notification import notify, sendEmail
 from django.conf import settings
@@ -137,11 +138,14 @@ def user_update(request, user_id):
     
     # get user
     user = get_object_or_404(User, pk=user_id)
+    profile = get_object_or_404(UserProfile, user=user)
+    
+    # create URLs formset
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=3 )
     
     if (request.method=='GET'):
         
         # pre-populate form, including value of extra field 'confirm_password'
-        profile = get_object_or_404(UserProfile, user=user)
         form = UserForm(instance=user, initial={ 'confirm_password':user.password,
                                                  'institution':profile.institution, 
                                                  'city':profile.city, 
@@ -153,13 +157,17 @@ def user_update(request, user_id):
                                                  'subscribed':profile.subscribed,
                                                  'private':profile.private,
                                                  'image':profile.image })
+        
+        # retrieve existing URLs associated to this user
+        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile))
                 
-        return render_user_form(request, form, title='Update User Profile')
+        return render_user_form(request, form, formset, title='Update User Profile')
 
     else:
         form = UserForm(request.POST, request.FILES, instance=user) # form with bounded data
+        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile))   # formset with bounded data
         
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             
             # update user
             user = form.save()
@@ -192,9 +200,17 @@ def user_update(request, user_id):
                    
                 user_profile.image=form.cleaned_data['image']
                 _generateThumbnail = True
-            
+                        
             # persist changes
             user_profile.save()
+            
+            # must assign URL to this user
+            urls = formset.save(commit=False)
+            for url in urls:
+                print 'URL=%s name=%s' % (url.url, url.name)
+                url.profile = profile
+                url.save()
+
             
             # generate thumbnail - after picture has been saved
             if _generateThumbnail:
@@ -210,8 +226,11 @@ def user_update(request, user_id):
             return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':user.id }))
              
         else: 
-            print "Form is invalid: %s" % form.errors
-            return render_user_form(request, form, title='Update User Profile')
+            if not form.is_valid():
+                print "Form is invalid: %s" % form.errors
+            elif not formset.is_valid():
+                print "Formset is invalid: %s" % formset.errors
+            return render_user_form(request, form, formset, title='Update User Profile')
             
 @login_required
 def password_update(request, user_id):
@@ -336,9 +355,9 @@ def password_reset(request):
             print "Form is invalid: %s" % form.errors
             return render_password_reset_form(request, form)
             
-def render_user_form(request, form, title=''):
+def render_user_form(request, form, formset, title=''):
     return render_to_response('cog/account/user_form.html', 
-                              {'form': form, 'mytitle' : title }, 
+                              {'form': form, 'formset':formset, 'mytitle' : title }, 
                               context_instance=RequestContext(request))
     
 def render_password_change_form(request, form):
