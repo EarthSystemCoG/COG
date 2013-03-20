@@ -2,6 +2,8 @@
 
 {% block main %}   
 
+{% load url from future %}
+
 <script language="javascript">
 	// function to replace the image source with a thumbnail in case of error due to lack of authorization
 	function imgError(image) {
@@ -22,6 +24,8 @@
 	<br/>
 	{{ metadata.description }}
 	<br/>(Click on the image to enlarge it)
+	<br/>
+	<a href="{% url 'search' project.short_name|lower %}?search_data=True">Back to Search Results</a>
 </div>
 
 <!-- image metadata table -->
@@ -65,6 +69,7 @@
 		</table>	
 	</div>
 {% endif %}
+
 
 {% endblock %}
 
