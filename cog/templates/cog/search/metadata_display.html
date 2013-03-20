@@ -5,8 +5,7 @@
 <script language="javascript">
 	// function to replace the image source with a thumbnail in case of error due to lack of authorization
 	function imgError(image) {
-		html = '<a href="{{ metadata.url}}"><img src="{{ metadata.thumbnail }}"/></a>'
-			 + '<br/>(Please click on the image to enlarge it)';
+		html = '<a href="{{ metadata.url}}" target="imgwin"><img src="{{ metadata.thumbnail }}"/></a>';
 		document.getElementById("image").innerHTML = html;
 	    return true;
 	}
@@ -16,12 +15,13 @@
 <p/>
 <div style="text-align:center">
 	<div id="image" style="text-align:center">
-		<a href="{{ metadata.url}}"><img src="{{ metadata.url}}" width="400px" onerror="imgError(this);"/></a>
+		<a href="{{ metadata.url}}" target="imgwin"><img src="{{ metadata.url}}" width="400px" onerror="imgError(this);"/></a>
 	</div>
 	<br/>
 	<b>{{ metadata.title }}</b>
 	<br/>
 	{{ metadata.description }}
+	<br/>(Click on the image to enlarge it)
 </div>
 
 <!-- image metadata table -->
