@@ -642,9 +642,9 @@ body div {
 .myimage {
   width: 100%;
   max-width: 200px;
-  /* max-height: 400px; */
+  /* max-height: 200px; */
   width: expression(this.width > 200 ? "200"+"px" : true);
-  /* height: expression(this.height > 400 ? "400"+"px" : true); */
+  /* height: expression(this.height > 200 ? "200"+"px" : true); */
   border: 1px solid #666666;
 }
 

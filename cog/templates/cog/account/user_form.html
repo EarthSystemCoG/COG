@@ -129,16 +129,16 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">Research Keywords</td>
+                        <td class="optional" nowrap="nowrap">Interest Keywords</td>
                         <td class="long"> 
                         A short list of science fields you are involved with (60 characters maximum).
                         <br/>Example: Software Engineering, Grid Computing, Climate Change.
                         <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">Research Interests</td>
+                        <td class="optional" nowrap="nowrap">Interest Statement</td>
                         <td class="long">
-                        A short paragraph describing your research interests (1000 characters maximum).
+                        A short paragraph describing your professional interests (1000 characters maximum).
                         <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
                     </tr>                    
                     <tr>
@@ -154,7 +154,9 @@
                         <td class="long"> 
                         	<table>
                         		<tr>
-                        			<td><img src="{{ request.user|getImage }}" class="myimage" /></td>
+                        			<td>
+                        				<img src="{{ request.user|getImage }}" {% if not 'unknown' in request.user|getImage %} class="myimage" {% endif %}/>
+                        			</td>
                         			<td align="left">
 			                        	<div style="margin-top:2px">
 			                        		{% if not 'unknown' in request.user|getImage %}
