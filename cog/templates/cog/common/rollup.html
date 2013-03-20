@@ -24,7 +24,7 @@
  	{% if children %}
 		<p/>
 		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;Child Project {{ template_title}}</a>
+		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;Child Project {{ template_title}} ({{ children|length }})</a>
 		</div>
 		<div id="children_rollup" style="display:none">	   	    
 		    {% for child in children %}
@@ -45,7 +45,7 @@
  	{% if peers %}
 		<p/>
 		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;Peer Project {{ template_title}}</a>
+		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;Peer Project {{ template_title}} ({{ peers|length }})</a>
 		</div>
 		<div id="peer_rollup" style="display:none">	   	    
 		    {% for peer in peers %}
