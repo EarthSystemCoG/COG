@@ -1,4 +1,10 @@
 /* CSS for Django admin style */
+/*
+	colors:
+	light gray: #EEEEEE;
+	teal: #B9E0E3;
+	yellow: #FCE79F;
+*/
 
 /* page body */
 body {
@@ -331,12 +337,13 @@ strong {
 	float: center;
 }
 
-.box-blue {
-	border: 1px solid #358C92;
-	margin-bottom: 5px;
-	background: #B9E0E3;
+.header-gray {
+	border-bottom: 1px solid #666666;
+	margin-bottom: 0px;
+	background: #EEEEEE;
 	float: center;
 	text-align: left;
+	font-size: 9pt;
 }
 
 .news_box { /* COG STYLE: NEWS WIDGET */
