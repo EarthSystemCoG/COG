@@ -7,7 +7,7 @@
 	{% for organization in proj|partners %}
 		<tr>
 			<td>
-				<img src="{{ organization|getImage }}" style="border: 1px solid #666666;" width="60px" />
+				<img src="{{ organization|getImage }}" width="60px" />
 			</td>
 			<td class="long_middle" nowrap="nowrap">
 				{% if organization.url %}				
