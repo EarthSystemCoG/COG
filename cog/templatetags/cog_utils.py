@@ -15,6 +15,7 @@ from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 from cog.models.constants import NAVMAP, INVNAVMAP, TABS
 from cog.models.constants import DEFAULT_IMAGES
 from cog.util.thumbnails import getThumbnailPath
+from django.contrib.auth.models import AnonymousUser
 
 register = template.Library()
 
@@ -543,8 +544,12 @@ def getPeople(project):
 def getImage(obj):
     
     try:
+        # AnonymousUser
+        if isinstance(obj, AnonymousUser):
+            return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['User']
+            
         # User
-        if isinstance(obj, User):
+        elif isinstance(obj, User):
             profile = UserProfile.objects.get(user=obj)
             return profile.image.url
         

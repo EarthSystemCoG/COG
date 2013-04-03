@@ -60,16 +60,22 @@ def notifyAdminsOfUserSubscription(user, request, action):
 # view to create a user account
 def user_add(request):
     
+    # create URLs formset
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=3 )
+    
     if (request.method=='GET'):
         
         form = UserForm() # unbound form     
+        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.none()) # empty formset
                 
-        return render_user_form(request, form, title='Create User Profile')
+        return render_user_form(request, form, formset, title='Create User Profile')
 
     else:
-        form = UserForm(request.POST) # form with bounded data
+        form = UserForm(request.POST, request.FILES,) # form with bounded data
+        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.none())   # formset with bounded data
+
         
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             
             # create a user from the form but don't save it to the database yet because the password is not encoded yet
             user = form.save(commit=False)
@@ -86,10 +92,24 @@ def user_add(request):
                                 state=form.cleaned_data['state'],
                                 country=form.cleaned_data['country'],
                                 department=form.cleaned_data['department'],
+                                researchKeywords=form.cleaned_data['researchKeywords'],
+                                researchInterests=form.cleaned_data['researchInterests'],
                                 subscribed=form.cleaned_data['subscribed'],
-                                private=form.cleaned_data['private'])
+                                private=form.cleaned_data['private'],
+                                image=form.cleaned_data['image'])
             userp.save()
             print 'Created profile for user=%s' % user.get_full_name()
+            
+            # must assign URL to this user
+            urls = formset.save(commit=False)
+            for url in urls:
+                print 'URL=%s name=%s' % (url.url, url.name)
+                url.profile = userp
+                url.save()
+                
+            # generate thumbnail image
+            if userp.image is not None:
+                generateThumbnail(userp.image.path, THUMBNAIL_SIZE_SMALL)
             
             # notify site administrators
             notifyAdminsOfUserRegistration(user)
@@ -103,8 +123,11 @@ def user_add(request):
             return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
              
         else: 
-            print "Form is invalid: %s" % form.errors
-            return render_user_form(request, form, title='Create User Profile')
+            if not form.is_valid():
+                print "Form is invalid: %s" % form.errors
+            elif not formset.is_valid():
+                print "Formset is invalid: %s" % formset.errors
+            return render_user_form(request, form, formset, title='Create User Profile')
         
 # view to display user data
 # require login to limit exposure of user information
