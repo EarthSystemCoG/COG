@@ -14,6 +14,7 @@ from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedir
 from cog.models.constants import TABS, TAB_LABELS
 from cog.views.views_templated import templated_page_display
 
+# management_body_update proj.short_name.lower category
 
 def governance_display(request, project_short_name, tab):
     ''' Dispatcher for display of governance pages. '''
@@ -22,18 +23,19 @@ def governance_display(request, project_short_name, tab):
     template_title = TAB_LABELS[tab]
     if tab == TABS["GOVERNANCE"]:
         template_title = 'Governance Overview'
-        template_form_page = reverse( "governance_overview_update", args=[project_short_name] )
+        template_form_pages = { reverse( "governance_overview_update", args=[project_short_name] ) : 'Governance Overview' }
     elif tab == TABS["BODIES"]:
-        template_form_page = None # multiple update forms hyper-linked in context
+        template_form_pages = { reverse( "management_body_update", args=[project_short_name, 'Strategic'] ) : 'Strategic Bodies',
+                                reverse( "management_body_update", args=[project_short_name, 'Operational'] ) : 'Operational Bodies' }
     elif tab == TABS["ROLES"]:
-        template_form_page = None # multiple update forms hyper-linked in context
+        template_form_pages = { reverse( "organizational_role_update", args=[project_short_name] ) : 'Roles' }
     elif tab == TABS["PROCESSES"]:
-        template_form_page = reverse( "governance_processes_update", args=[project_short_name] )
+        template_form_pages = { reverse( "governance_processes_update", args=[project_short_name] ) : 'Processes' }
     elif tab == TABS["COMMUNICATION"]:
-        template_form_page = reverse( "communication_means_update", args=[project_short_name, 'internal'] )
+        template_form_pages = { reverse( "communication_means_update", args=[project_short_name, 'internal'] ) : 'Communication' }
     elif tab == TABS["POLICIES"]:
-        template_form_page = reverse( "policies_update", args=[project_short_name] )
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+        template_form_pages = { reverse( "policies_update", args=[project_short_name] ) : 'Policies' }
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 
 # view to update the project Management Body objects

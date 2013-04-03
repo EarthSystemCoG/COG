@@ -18,39 +18,39 @@ def trackers_display(request, project_short_name):
     
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Trackers'
-    template_form_page = reverse('trackers_update', args=[project_short_name])
-    return external_urls_display(request, project_short_name, TYPE_TRACKER, template_page, template_name, template_form_page)
+    template_form_pages = { reverse('trackers_update', args=[project_short_name]) : 'Trackers' }
+    return external_urls_display(request, project_short_name, TYPE_TRACKER, template_page, template_name, template_form_pages)
 
 # View to display the project use cases.
 def usecases_display(request, project_short_name):
     
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Use Cases'
-    template_form_page = reverse('usecases_update', args=[project_short_name])
-    return external_urls_display(request, project_short_name, TYPE_USECASE, template_page, template_name, template_form_page)
+    template_form_pages = { reverse('usecases_update', args=[project_short_name]) : 'Use Cases' }
+    return external_urls_display(request, project_short_name, TYPE_USECASE, template_page, template_name, template_form_pages)
 
 # View to display the project code URLs.
 def code_display(request, project_short_name):
         
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Code Repositories'
-    template_form_page = reverse('code_update', args=[project_short_name])
-    return external_urls_display(request, project_short_name, TYPE_CODE, template_page, template_name, template_form_page)
+    template_form_pages = { reverse('code_update', args=[project_short_name]) : 'Code' }
+    return external_urls_display(request, project_short_name, TYPE_CODE, template_page, template_name, template_form_pages)
 
 # View to display the project roadmap.
 def roadmap_display(request, project_short_name):
      
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Roadmap'
-    template_form_page = reverse('roadmap_update', args=[project_short_name])
-    return external_urls_display(request, project_short_name, TYPE_ROADMAP, template_page, template_name, template_form_page)
+    template_form_pages = { reverse('roadmap_update', args=[project_short_name]) : 'Roadmap' }
+    return external_urls_display(request, project_short_name, TYPE_ROADMAP, template_page, template_name, template_form_pages)
 
     
 # Generic view to display a given type of external URLs.
 # This view sub-selects the project peer and children that external URLs of that type, 
 # so that the page can render the widgets only if the URLs are found.
 def external_urls_display(request, project_short_name, external_url_type, 
-                          template_page, template_title, template_form_page):
+                          template_page, template_title, template_form_pages):
     
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
@@ -78,7 +78,7 @@ def external_urls_display(request, project_short_name, external_url_type,
                                'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': template_page, 
                                'template_title': template_title, 
-                               'template_form_page':template_form_page,
+                               'template_form_pages':template_form_pages,
                                'children':children, 'peers':peers,
                                'external_url_type':external_url_type },
                               context_instance=RequestContext(request))

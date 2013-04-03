@@ -25,15 +25,15 @@ def aboutus_display(request, project_short_name, tab):
         
     template_page = 'cog/project/_project_aboutus.html'
     if tab == TABS["PARTNERS"]:
-        template_form_page = reverse('partners_update', args=[project_short_name, tab])
+        template_form_pages = { reverse('partners_update', args=[project_short_name, tab]) : 'Partners' }
     elif tab == TABS["SPONSORS"]:
-        template_form_page = reverse('sponsors_update', args=[project_short_name, tab])    
+        template_form_pages = { reverse('sponsors_update', args=[project_short_name, tab]) : 'Sponsors' }  
     elif tab == TABS["PEOPLE"]:
-        template_form_page = reverse('people_update', args=[project_short_name, tab])
+        template_form_pages = { reverse('people_update', args=[project_short_name, tab]) : 'People' }
     else:
-        template_form_page = reverse('aboutus_update', args=[project_short_name, tab])
+        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'About Us' }
     template_title = TAB_LABELS[tab]
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
     
 
 @login_required

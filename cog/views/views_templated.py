@@ -57,7 +57,7 @@ def _hasTemplatedInfo(project, tab):
     else:
         return False
 
-def templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page):
+def templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -80,11 +80,11 @@ def templated_page_display(request, project_short_name, tab, template_page, temp
         if _hasTemplatedInfo(peer, tab) and peer.isVisible(request.user):
             peers.append(peer)
    
-    return render_templated_page(request, project, tab, template_page, template_title, template_form_page, children, peers)
+    return render_templated_page(request, project, tab, template_page, template_title, template_form_pages, children, peers)
 
-def render_templated_page(request, project, tab, template_page, template_title, template_form_page, children, peers):
+def render_templated_page(request, project, tab, template_page, template_title, template_form_pages, children, peers):
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 'tab' : tab,
-                               'template_page': template_page, 'template_title': template_title, 'template_form_page':template_form_page,
+                               'template_page': template_page, 'template_title': template_title, 'template_form_pages':template_form_pages,
                                'children':children, 'peers':peers },
                               context_instance=RequestContext(request))
