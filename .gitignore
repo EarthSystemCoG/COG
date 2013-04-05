@@ -1,6 +1,7 @@
 # Eclipse configuration files
 .project
 .pydevproject
+.settings/
 
 # Compiled files
 *.pyc
@@ -9,4 +10,10 @@
 cog/static/cog/ckeditor
 
 # static files
-./static
+static/
+
+# site media
+site_media/
+
+# database directory
+database/
