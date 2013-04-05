@@ -124,12 +124,14 @@ def project_tree(user, project, autoescape, i):
         html += "<div id='%s' class='ygtv-highlight1'>" % treeId
     if len(project.parents.all())>0:
         html += "<ul>"
-        for i, parent in enumerate(project.parents.all()):
-            # FIXME PARENT
+        # loop over parents sorted in alphabetical order
+        for i, parent in enumerate( sorted(project.parents.all(), key=lambda prj: prj.short_name) ):
             html += "<li class='expanded'><span class='parent'><a href='%s'>%s</a></span>" \
             % (reverse('project_home', args=[parent.short_name.lower()]), esc(parent.short_name))
+            # only close item if NOT last in loop
             if i!= len(project.parents.all())-1:
                 html += "</li>"
+    # open list for this project
     html += "<ul>"
     # expand first child
     html += _project_tree(user, project, esc, expanded=True, dopeers=True, dochildren=True, icon='this')

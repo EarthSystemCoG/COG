@@ -166,8 +166,7 @@ class Project(models.Model):
         return not self.isVisible(user)
     
     def children(self):
-        # FIXME PARENT - order_by('short_name')
-        return Project.objects.filter(parents__id=self.id)
+        return Project.objects.filter(parents__id=self.id).order_by('short_name')
     
     def full_name(self):
         return '%s : %s' % (self.short_name, self.long_name)

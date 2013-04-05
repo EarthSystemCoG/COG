@@ -33,7 +33,7 @@ class ProjectForm(ModelForm):
             instance = kwargs.get('instance')
             # parent query-set options: exclude the project itself, and all its children  
             parentQueryset =  ~Q(id=instance.id)
-            # FIXME PARENT ?
+            # FIXME ? Should children be excluded from list of possible parents ?
             # exclude children from parents
             #for child in instance.children():
             #    parentQueryset = parentQueryset & ~Q(id=child.id)
