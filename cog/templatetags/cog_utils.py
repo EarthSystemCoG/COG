@@ -124,12 +124,11 @@ def project_tree(user, project, autoescape, i):
         html += "<div id='%s' class='ygtv-highlight1'>" % treeId
     if len(project.parents.all())>0:
         # FIXME PARENT
-
         html += "<ul><li class='expanded'><span class='parent'><a href='%s'>%s</a></span>" \
         % (reverse('project_home', args=[project.parents.all()[0].short_name.lower()]), esc(project.parents.all()[0].short_name))
     html += "<ul>"
     # expand first child
-    html += _project_tree(user, project, esc, expanded=True, dopeers=True, icon='this')
+    html += _project_tree(user, project, esc, expanded=True, dopeers=True, dochildren=True, icon='this')
     html += "</ul>"
     if len(project.parents.all())>0:
         html += "</li></ul>"
@@ -255,7 +254,7 @@ def getTopFolderForProject(project):
     return getTopFolder(project)
     
 # recursive function to build the project hierarchy tree
-def _project_tree(user, project, esc, expanded=False, dopeers=False, icon='child'):
+def _project_tree(user, project, esc, expanded=False, dopeers=False, dochildren=False, icon='child'):
    
     if project.isNotVisible(user):
         return ""
@@ -270,10 +269,10 @@ def _project_tree(user, project, esc, expanded=False, dopeers=False, icon='child
     html += "<span class='%s'><a href='%s'>%s</a></span>" % (icon, reverse('project_home', args=[project.short_name.lower()]), esc(project.short_name))
     
     # this project's children
-    if project.children:
+    if project.children and dochildren:
         html += "<ul>"
         for child in project.children():
-                # recursion (do not expand children and do not retrieve their peers)
+                # recursion (do not expand children, do not retrieve their peers, do not retrieve their children)
                 html += _project_tree(user, child, esc) 
         html += "</ul>"
     html += "</li>"

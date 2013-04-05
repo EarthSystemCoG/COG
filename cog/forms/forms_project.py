@@ -35,8 +35,8 @@ class ProjectForm(ModelForm):
             parentQueryset =  ~Q(id=instance.id)
             # FIXME PARENT ?
             # exclude children from parents
-            for child in instance.children():
-                parentQueryset = parentQueryset & ~Q(id=child.id)
+            #for child in instance.children():
+            #    parentQueryset = parentQueryset & ~Q(id=child.id)
             self.fields['parents'].queryset =  Project.objects.filter( parentQueryset ).distinct().order_by('short_name')
             # peer query-set options: exclude the project itself
             self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().order_by('short_name')
