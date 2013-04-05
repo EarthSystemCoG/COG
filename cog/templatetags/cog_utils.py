@@ -123,9 +123,13 @@ def project_tree(user, project, autoescape, i):
         # use class ygtv-highlight1 because it doesn't show any blue background when selected
         html += "<div id='%s' class='ygtv-highlight1'>" % treeId
     if len(project.parents.all())>0:
-        # FIXME PARENT
-        html += "<ul><li class='expanded'><span class='parent'><a href='%s'>%s</a></span>" \
-        % (reverse('project_home', args=[project.parents.all()[0].short_name.lower()]), esc(project.parents.all()[0].short_name))
+        html += "<ul>"
+        for i, parent in enumerate(project.parents.all()):
+            # FIXME PARENT
+            html += "<li class='expanded'><span class='parent'><a href='%s'>%s</a></span>" \
+            % (reverse('project_home', args=[parent.short_name.lower()]), esc(parent.short_name))
+            if i!= len(project.parents.all())-1:
+                html += "</li>"
     html += "<ul>"
     # expand first child
     html += _project_tree(user, project, esc, expanded=True, dopeers=True, dochildren=True, icon='this')
