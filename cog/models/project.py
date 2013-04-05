@@ -47,7 +47,9 @@ class Project(models.Model):
 
     
     parent = models.ForeignKey('self', blank=True, null=True, related_name='Parent Project')
-    peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects')
+    # NOTE: define the peers set to be non-symmetrical.
+    # the attribute peers_set will automatically contain the projects that define this project to be a peer
+    peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects', symmetrical=False)
     
     # the initial requestor of the project, if any
     author = models.ForeignKey(User, blank=True, null=True, default=None)
