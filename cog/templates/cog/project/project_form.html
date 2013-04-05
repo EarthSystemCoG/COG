@@ -104,10 +104,12 @@
                     <td>{{ form.description }} {{ form.description.errors }}</td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">Parent Project</td>
+                    <td nowrap="nowrap">Parent Projects</td>
                     <td>
-                        {{ form.parent }} {{ form.parent.errors }}
-                        &nbsp; [ If desired, select only one parent. Selecting a parent is NOT required. ]
+                        {{ form.parents }} {{ form.parents.errors }}
+                        <br /> [ To RETAIN or ADD new selections hold down the "Control" key (Windows), or the "Command" key (Mac).
+                                 Assigning parent projects is NOT required. ]
+                        
                     </td>
                 </tr>
                 <tr>

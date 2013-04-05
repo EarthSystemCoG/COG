@@ -46,9 +46,12 @@ class Project(models.Model):
                                                   help_text='A paragraph describing how requirements are identified. This description may include who participates, what system is used to track requirements, and whether the results are public.')
 
     
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='Parent Project')
-    # NOTE: define the peers set to be non-symmetrical.
-    # the attribute peers_set will automatically contain the projects that define this project to be a peer
+    # A project may have many parents. The relationship is not symmetrical.
+    # The attribute parents_set contains the inverse relationship
+    parents = models.ManyToManyField('self', blank=True, related_name='Parent Projects', symmetrical=False)
+    
+    # A project may have many peers. The relationship is not symmetrical.
+    # The attribute peers_set contains the inverse relationship
     peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects', symmetrical=False)
     
     # the initial requestor of the project, if any
@@ -163,7 +166,8 @@ class Project(models.Model):
         return not self.isVisible(user)
     
     def children(self):
-        return Project.objects.filter(parent=self).order_by('short_name')
+        # FIXME PARENT - order_by('short_name')
+        return Project.objects.filter(parents__id=self.id)
     
     def full_name(self):
         return '%s : %s' % (self.short_name, self.long_name)
