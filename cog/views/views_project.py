@@ -274,8 +274,8 @@ def getinvolved_display(request, project_short_name):
     tab = TABS["GETINVOLVED"]
     template_page = 'cog/project/_project_getinvolved.html'
     template_title = TAB_LABELS[tab]
-    template_form_page = reverse( "getinvolved_update", args=[project_short_name] )
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)    
+    template_form_pages = { reverse( "getinvolved_update", args=[project_short_name] ) : 'Get Involved' }
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)    
 
 
 def contactus_display(request, project_short_name):
@@ -284,8 +284,8 @@ def contactus_display(request, project_short_name):
     tab = TABS["CONTACTUS"]
     template_page = 'cog/project/_project_contactus.html'
     template_title = TAB_LABELS[tab]
-    template_form_page = reverse("contactus_update", args=[project_short_name])
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+    template_form_pages = { reverse("contactus_update", args=[project_short_name]) : 'Contact Us' }
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 def support_display(request, project_short_name):
     ''' View to display the project "Support" page. '''
@@ -293,8 +293,8 @@ def support_display(request, project_short_name):
     tab = TABS["SUPPORT"]
     template_page = 'cog/project/_project_support.html'
     template_title = TAB_LABELS[tab]
-    template_form_page = reverse("support_update", args=[project_short_name])
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+    template_form_pages = { reverse("support_update", args=[project_short_name]) : 'Suport' }
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
     
 
 @login_required
@@ -502,10 +502,10 @@ def development_display(request, project_short_name):
    
     tab = TABS["DEVELOPMENT"] 
     template_page = 'cog/project/_project_development.html'
-    template_form_page = reverse('development_update', args=[project_short_name])
+    template_form_pages = { reverse('development_update', args=[project_short_name]) : "Development" }
     template_title = "Development"
    
-    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_page)
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 
 @login_required
