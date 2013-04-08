@@ -1,4 +1,4 @@
-from cog.models import UserProfile
+
 from cog.utils import smart_truncate
 from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_USECASE, \
     TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
@@ -9,7 +9,9 @@ from django.db import models
 from django.db.models import Q
 from membership import MembershipRequest
 from os.path import basename
-from topic import Topic
+from cog.models.user_profile import UserProfile
+from cog.models.topic import Topic
+from cog.models.project_tag import ProjectTag
 from urllib import quote, unquote
 import os
 import sys
@@ -72,6 +74,9 @@ class Project(models.Model):
     
     # list of available topics for this project
     topics =  models.ManyToManyField(Topic, blank=True, null=True, through='ProjectTopic')
+    
+    # list of project tags
+    tags = models.ManyToManyField(ProjectTag, blank=True, null=True)
         
     class Meta:
         app_label= APPLICATION_LABEL

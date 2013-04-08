@@ -10,6 +10,7 @@ from project import *
 from project_topic import ProjectTopic
 from project_tab import *
 from news import News
+from project_tag import ProjectTag
 
 # Posts
 from doc import Doc
