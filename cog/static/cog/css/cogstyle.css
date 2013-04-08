@@ -1,4 +1,10 @@
 /* CSS for Django admin style */
+/*
+	colors:
+	light gray: #EEEEEE;
+	teal: #B9E0E3;
+	yellow: #FCE79F;
+*/
 
 /* page body */
 body {
@@ -115,6 +121,12 @@ td,th {
 	width: 100%;
 	text-align: left;
 	vertical-align: top;
+}
+
+.long_middle {
+	width: 100%;
+	text-align: left;
+	vertical-align: middle;
 }
 
 th { /*text-align: right;*/
@@ -325,12 +337,13 @@ strong {
 	float: center;
 }
 
-.box-blue {
-	border: 1px solid #358C92;
-	margin-bottom: 5px;
-	background: #B9E0E3;
+.header-gray {
+	border-bottom: 1px solid #666666;
+	margin-bottom: 0px;
+	background: #EEEEEE;
 	float: center;
 	text-align: left;
+	font-size: 9pt;
 }
 
 .news_box { /* COG STYLE: NEWS WIDGET */
@@ -475,7 +488,7 @@ strong {
 .header_bar {
 	margin: 0px;
 	padding: 2px 5px 3px 5px;
-	font-size: 8pt;
+	font-size: 9pt;
 	text-align: left;
 	font-weight: bold;
 	/* COG STYLE: HEADER BAR BACKGROUND COLOR */
@@ -495,7 +508,7 @@ strong {
 	margin: 0 auto;
 	padding: 6px 0 15px 0;
 	padding-top: 6px;
-	font-size: 10pt;
+	font-size: 8pt;
 	text-align: center;
 	color: #333;
 }
@@ -630,6 +643,16 @@ body {
 body div {
     /* stop centering */
     text-align: left;
+}
+
+/* CSS class to limit the maximum width of an uploaded image. */
+.myimage {
+  width: 100%;
+  max-width: 200px;
+  /* max-height: 200px; */
+  width: expression(this.width > 200 ? "200"+"px" : true);
+  /* height: expression(this.height > 200 ? "200"+"px" : true); */
+  border: 1px solid #666666;
 }
 
 /* YUI treeview introduces a bug; when user is logged the background of the tree is teal

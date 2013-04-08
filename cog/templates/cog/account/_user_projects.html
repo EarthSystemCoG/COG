@@ -25,7 +25,7 @@
 	               </td>
 	               <td nowrap="nowrap">
 	                   {% if request.user.id = user_profile.user.id %}
-	                       <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel my Membership</a>
+	                       <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a>
 	                   {% endif %}
 	               </td>
 	           </tr>

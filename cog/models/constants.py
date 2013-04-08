@@ -216,10 +216,19 @@ DOCUMENT_TYPES = {
 DEFAULT_LOGO = "cog/img/cog_web_beta.png"
 FOOTER_LOGO = "cog/img/logo_nsf_and_noaa.bmp"
 
+UPLOAD_DIR_PHOTOS = "photos/"
+UPLOAD_DIR_LOGOS = "logos/"
+
+DEFAULT_IMAGES = { 'User':'/%s/unknown.jpeg' % UPLOAD_DIR_PHOTOS,
+                   'Collaborator':'/%s/unknown.jpeg' % UPLOAD_DIR_PHOTOS,
+                   'Organization':'/%s/notfound.jpeg' % UPLOAD_DIR_LOGOS,
+                   'FundingSource':'/%s/notfound.jpeg' % UPLOAD_DIR_LOGOS }
+
 # legacy media sub-directories of 'projects/'
 SYSTEM_DOCS = 'system_docs'
 SYSTEM_IMAGES = 'system_images'
 
+# 1MB - 1048576
 # 2.5MB - 2621440
 # 5MB - 5242880
 # 10MB - 10485760
@@ -229,6 +238,9 @@ SYSTEM_IMAGES = 'system_images'
 # 250MB - 214958080
 # 500MB - 429916160
 MAX_UPLOADES_BYTES = 52428800
+
+RESEARCH_KEYWORDS_MAX_CHARS = 60
+RESEARCH_INTERESTS_MAX_CHARS = 1000
 
 # signals
 SIGNAL_OBJECT_CREATED = 'object_created'

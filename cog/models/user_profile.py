@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import Group, Permission, User, Group
-from constants import APPLICATION_LABEL
+from constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 
 class UserProfile(models.Model):
     
@@ -21,6 +21,13 @@ class UserProfile(models.Model):
     
     # opt-out privacy option
     private = models.BooleanField(verbose_name='Do NOT list me among project members', default=False, null=False)
+    
+    # optional picture
+    image = models.ImageField(upload_to='photos/', blank=True, null=True)
+    
+    # optional research information
+    researchInterests = models.CharField(max_length=RESEARCH_INTERESTS_MAX_CHARS, blank=True, null=True, default='')
+    researchKeywords = models.CharField(max_length=RESEARCH_KEYWORDS_MAX_CHARS, blank=True, null=True, default='')
     
     class Meta:
         app_label= APPLICATION_LABEL

@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from cog.models import *
+from cog.util.thumbnails import *
+from django.forms.models import modelformset_factory
 
 from cog.notification import notify, sendEmail
 from django.conf import settings
@@ -58,16 +60,22 @@ def notifyAdminsOfUserSubscription(user, request, action):
 # view to create a user account
 def user_add(request):
     
+    # create URLs formset
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=3 )
+    
     if (request.method=='GET'):
         
         form = UserForm() # unbound form     
+        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.none()) # empty formset
                 
-        return render_user_form(request, form, title='Create User Profile')
+        return render_user_form(request, form, formset, title='Create User Profile')
 
     else:
-        form = UserForm(request.POST) # form with bounded data
+        form = UserForm(request.POST, request.FILES,) # form with bounded data
+        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.none())   # formset with bounded data
+
         
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             
             # create a user from the form but don't save it to the database yet because the password is not encoded yet
             user = form.save(commit=False)
@@ -84,10 +92,24 @@ def user_add(request):
                                 state=form.cleaned_data['state'],
                                 country=form.cleaned_data['country'],
                                 department=form.cleaned_data['department'],
+                                researchKeywords=form.cleaned_data['researchKeywords'],
+                                researchInterests=form.cleaned_data['researchInterests'],
                                 subscribed=form.cleaned_data['subscribed'],
-                                private=form.cleaned_data['private'])
+                                private=form.cleaned_data['private'],
+                                image=form.cleaned_data['image'])
             userp.save()
             print 'Created profile for user=%s' % user.get_full_name()
+            
+            # must assign URL to this user
+            urls = formset.save(commit=False)
+            for url in urls:
+                print 'URL=%s name=%s' % (url.url, url.name)
+                url.profile = userp
+                url.save()
+                
+            # generate thumbnail image
+            if userp.image is not None:
+                generateThumbnail(userp.image.path, THUMBNAIL_SIZE_SMALL)
             
             # notify site administrators
             notifyAdminsOfUserRegistration(user)
@@ -101,12 +123,15 @@ def user_add(request):
             return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
              
         else: 
-            print "Form is invalid: %s" % form.errors
-            return render_user_form(request, form, title='Create User Profile')
+            if not form.is_valid():
+                print "Form is invalid: %s" % form.errors
+            elif not formset.is_valid():
+                print "Formset is invalid: %s" % formset.errors
+            return render_user_form(request, form, formset, title='Create User Profile')
         
 # view to display user data
 # require login to limit exposure of user information
-@login_required 
+#@login_required 
 def user_detail(request, user_id):
     
     # load User object
@@ -136,26 +161,36 @@ def user_update(request, user_id):
     
     # get user
     user = get_object_or_404(User, pk=user_id)
+    profile = get_object_or_404(UserProfile, user=user)
+    
+    # create URLs formset
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=3 )
     
     if (request.method=='GET'):
         
         # pre-populate form, including value of extra field 'confirm_password'
-        profile = get_object_or_404(UserProfile, user=user)
         form = UserForm(instance=user, initial={ 'confirm_password':user.password,
                                                  'institution':profile.institution, 
                                                  'city':profile.city, 
                                                  'state':profile.state,
                                                  'country':profile.country, 
                                                  'department':profile.department,
+                                                 'researchKeywords':profile.researchKeywords,
+                                                 'researchInterests':profile.researchInterests,
                                                  'subscribed':profile.subscribed,
-                                                 'private':profile.private })
+                                                 'private':profile.private,
+                                                 'image':profile.image })
+        
+        # retrieve existing URLs associated to this user
+        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile))
                 
-        return render_user_form(request, form, title='Update User Profile')
+        return render_user_form(request, form, formset, title='Update User Profile')
 
     else:
-        form = UserForm(request.POST, instance=user) # form with bounded data
+        form = UserForm(request.POST, request.FILES, instance=user) # form with bounded data
+        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile))   # formset with bounded data
         
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             
             # update user
             user = form.save()
@@ -168,9 +203,41 @@ def user_update(request, user_id):
             user_profile.state=form.cleaned_data['state']
             user_profile.country=form.cleaned_data['country']
             user_profile.department=form.cleaned_data['department']
+            user_profile.researchKeywords=form.cleaned_data['researchKeywords']
+            user_profile.researchInterests=form.cleaned_data['researchInterests']
             user_profile.subscribed=form.cleaned_data['subscribed']
             user_profile.private=form.cleaned_data['private']
+            
+            # image management
+            _generateThumbnail = False
+            if form.cleaned_data.get('delete_image')==True:
+                deleteImageAndThumbnail(user_profile)
+                
+            elif form.cleaned_data['image'] is not None:
+                # delete previous image
+                try:
+                   deleteImageAndThumbnail(user_profile) 
+                except ValueError:
+                    # image not existing, ignore
+                    pass
+                   
+                user_profile.image=form.cleaned_data['image']
+                _generateThumbnail = True
+                        
+            # persist changes
             user_profile.save()
+            
+            # must assign URL to this user
+            urls = formset.save(commit=False)
+            for url in urls:
+                print 'URL=%s name=%s' % (url.url, url.name)
+                url.profile = profile
+                url.save()
+
+            
+            # generate thumbnail - after picture has been saved
+            if _generateThumbnail:
+                generateThumbnail(user_profile.image.path, THUMBNAIL_SIZE_SMALL)
                         
             # subscribe/unsubscribe user is mailing list selection changed
             if oldSubscribed==True and form.cleaned_data['subscribed']==False:
@@ -182,9 +249,12 @@ def user_update(request, user_id):
             return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':user.id }))
              
         else: 
-            print "Form is invalid: %s" % form.errors
-            return render_user_form(request, form, title='Update User Profile')
-    
+            if not form.is_valid():
+                print "Form is invalid: %s" % form.errors
+            elif not formset.is_valid():
+                print "Formset is invalid: %s" % formset.errors
+            return render_user_form(request, form, formset, title='Update User Profile')
+            
 @login_required
 def password_update(request, user_id):
     
@@ -308,9 +378,9 @@ def password_reset(request):
             print "Form is invalid: %s" % form.errors
             return render_password_reset_form(request, form)
             
-def render_user_form(request, form, title=''):
+def render_user_form(request, form, formset, title=''):
     return render_to_response('cog/account/user_form.html', 
-                              {'form': form, 'mytitle' : title }, 
+                              {'form': form, 'formset':formset, 'mytitle' : title }, 
                               context_instance=RequestContext(request))
     
 def render_password_change_form(request, form):

@@ -30,8 +30,16 @@ class Project(models.Model):
     
     governanceOverview = models.TextField(blank=False, null=True, verbose_name='Governance Overview', \
                                           help_text='One or more paragraphs providing a general overview of the governance structure for the project.')
+    
     developmentOverview = models.TextField(blank=False, null=True, verbose_name='Development Overview', \
                                            help_text='One or more paragraphs providing a general overview of the development processes for the project.')
+
+    license = models.TextField(blank=True, null=True, verbose_name='License', help_text='Name of license used for the software, if any')
+    implementationLanguage = models.TextField(blank=True, null=True, verbose_name='Implementation Language', help_text='The implementation language(s) of the software code.')
+    bindingLanguage = models.TextField(blank=True, null=True, verbose_name='Binding Language', help_text='The binding language(s) of the software code.')
+    supportedPlatforms = models.TextField(blank=True, null=True, verbose_name='Supported Platforms', help_text='The Operating Systems the software can run on.')
+    externalDependencies = models.TextField(blank=True, null=True, verbose_name='External Dependencies', help_text='The major libraries and packages the software depends on.')
+    
     taskPrioritizationStrategy = models.TextField(blank=True, null=True, verbose_name='Task Prioritization Strategy', \
                                                   help_text='A paragraph describing how tasks are prioritized. This description may include who participates, how often they meet, how they meet, and whether the results are public.')
     requirementsIdentificationProcess = models.TextField(blank=True, null=True, verbose_name='Requirements Identification Process', \
@@ -108,7 +116,7 @@ class Project(models.Model):
     
     # Method to return the project users that are not private
     def getPublicUsers(self):
-        users = self.getUsers(exclude_superuser=True)
+        users = self.getUsers(exclude_superuser=False)
         pubUsers = []
         for user in users:
             if not user.get_profile().private:
@@ -369,3 +377,4 @@ def create_upload_directory(project):
     if not os.path.exists(fb_upload_dir):
         os.makedirs(fb_upload_dir)
         print 'Project Upload directory created: %s' % fb_upload_dir
+        

@@ -1,0 +1,56 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+{% load url from future %}
+
+{% load cog_utils %}
+
+{% block main %}
+
+	<form method="post" action="" enctype="multipart/form-data">
+		
+		{% csrf_token %}
+	    {{ formset.management_form }}
+	    
+	    <div class="mybox">
+		    <table>
+		    	<caption>{{ project.short_name }} Partners</caption>
+		    	<tr>
+		    		<td class="tophead" nowrap="nowrap">Name</td>
+		    		<td class="tophead" nowrap="nowrap">URL</td>
+		    		<td class="tophead" nowrap="nowrap">Logo</td>
+		    		<td nowrap="nowrap">(Maximum Size: 1MB)</td>
+		    		<td class="tophead" nowrap="nowrap">Delete ?</td>
+		    	</tr>
+		    {% for form in formset %}
+	        	{{ form.id }}
+		        <tr>
+		            <td>{{ form.name }} {{ form.name.errors }}</td>
+		            <td>{{ form.url }} {{ form.url.errors }}</td>
+		            <td>
+		            	<!-- always show picture on disk, not latest value from form -->
+		            	<img src="{{ form.instance|getImage }}" style="border: 1px solid #666666;" width="40px" />
+		            </td>
+		            <td>
+		            	<!-- show option to remove current picture -->
+		            	{% if not 'notfound' in form.instance|getImage and form.image.errors|length == 0 %}
+		            		<span style="margin-top:2px">
+		            			{{ form.delete_image }} Delete current logo ? 
+		            		</span>
+		            	{% endif %}
+			            <!-- image upload widget -->      					            	
+		            	{{ form.image }} &nbsp; {{ form.image.errors }}
+		            </td>
+		            <td>{{ form.DELETE }}</td>
+		        </tr>
+			{% endfor %}
+			</table>
+		</div>
+	    
+      <div style="text-align:right">
+	      <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name tab %}'"/>
+	      <input type="submit" value="Submit" />
+      </div>
+	    
+	</form>
+
+
+{% endblock %}

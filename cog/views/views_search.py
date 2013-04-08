@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from copy import copy, deepcopy
 from urllib2 import HTTPError
+from string import replace
 
 from cog.models.search import *
 from cog.services.search import TestSearchService, SolrSearchService
@@ -152,22 +153,94 @@ def metadata_display(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     config = getSearchConfig(request, project)
 
+    # retrieve result metadata
     params = [ ('type', type), ('id', id), ("format", "application/solr+json") ]
     if type == 'File':
         params.append( ('dataset_id', dataset_id) )
                 
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-    #print 'Solr search URL=%s' % url
+    print 'Solr search URL=%s' % url
     fh = urllib2.urlopen( url )
     response = fh.read().decode("UTF-8")
-    # FIXME
-    #print response
-    return HttpResponse(response, mimetype="application/json")
+    #return HttpResponse(response, mimetype="application/json")
 
+    # parse JSON response (containing only one matching 'doc)
+    json = simplejson.loads(response)
+    metadata = _processDoc( json["response"]["docs"][0] )
+
+    # retrieve parent metadata    
+    parentMetadata = {}
+    if type == 'File':
+        params = [ ('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json") ]
+        url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
+        #print 'Solr search URL=%s' % url
+        fh = urllib2.urlopen( url )
+        response = fh.read().decode("UTF-8")
+        json = simplejson.loads(response)
+        parentMetadata = _processDoc( json["response"]["docs"][0] )
     
-    #return render_to_response('cog/search/metadata_file.html', 
-    #                          {'title':'File Metadata', 'project' : project, 'dataset_id':dataset_id, 'file_id':'file_id'}, 
-    #                          context_instance=RequestContext(request))
+    return render_to_response('cog/search/metadata_display.html', 
+                              {'title':metadata.title, 'project' : project, 'metadata':metadata, 'parentMetadata':parentMetadata }, 
+                              context_instance=RequestContext(request))
+    
+class MetaDoc:
+    ''' Utility class containing display metadata extracted from a Solr result document.'''
+    
+    def __init__(self):
+        # special fields
+        self.id = ''
+        self.title = ''
+        self.description = ''
+        self.type = ''
+        self.subtype = ''
+        self.url = ''
+        self.mime_type = ''
+        self.thumbnail = ''
+        # container for all other metadata as (key, values[]) tuples ordered by key
+        self.fields = []
+    
+def _formatKey(key):
+    '''Utility method to format a metadata key before display.'''
+    key = key.capitalize()
+    return replace(key,'_',' ')
+    
+def _processDoc(doc): 
+    '''Utility method to process the JSON metadata object before display.'''
+    
+    metadoc = MetaDoc()
+    for key in sorted(doc.keys()):
+        value = doc[key]
+        
+        if key == 'id':
+            metadoc.id = value       
+        elif key == 'title':
+            metadoc.title = value
+        elif key == 'description':
+            metadoc.description = value[0]
+        elif key == 'type':
+            metadoc.type = value
+        elif key == 'subtype':
+            metadoc.subtype = value[0].capitalize()
+        elif key == 'url':
+            for val in value:
+                parts = val.split('|')
+                if parts[2] == 'Thumbnail':
+                    metadoc.thumbnail = parts[0]
+                else:
+                    metadoc.url = parts[0]
+                    metadoc.mime_type = parts[1]
+        else:
+            # fields NOT to be displayed
+            if (key != 'score' and key != 'index_node' and key != 'data_node' and key != 'dataset_id'
+                and key != 'replica' and key!= 'latest'):
+                # multiple values
+                if hasattr(value, '__iter__'):
+                    metadoc.fields.append( (_formatKey(key), value) )
+                # single value - transform into list for consistency
+                else:
+                    metadoc.fields.append( (_formatKey(key), [value]) )
+    
+    return metadoc
     
     
 def search_post(request, searchInput, facetProfile, searchService, extra={}):

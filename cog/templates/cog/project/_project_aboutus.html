@@ -1,6 +1,7 @@
 <!-- project details page -->
 
 {% load cog_utils %}
+{% load url from future %}
 
 <table>
 	{% if tab = "ABOUTUS"|tabs %}
@@ -48,54 +49,27 @@
 	{% endif %}
 	
 	{% if tab = "PARTNERS"|tabs %}
-		{% for organization in proj.organization_set.all %}
 		<tr>
-			<td nowrap="nowrap"><b>Organizational Partner</b></td>
-			<td class="long">{{organization.name}}</td>
-		</tr>    	
-		{% endfor %}
+			<td align="center">
+				{% include 'cog/project/_partners_display.html' %}
+			</td>
+		</tr>
 	{% endif %}
 	
 	{% if tab = "SPONSORS"|tabs %}
-		{% for fundingSource in proj.fundingsource_set.all %}
 		<tr>
-			<td nowrap="nowrap"><b>Funding Source</b></td>
-			<td class="long">{{fundingSource.name}}</td>
-		</tr>    	
-		{% endfor %}
+			<td align="center">
+				{% include 'cog/project/_sponsors_display.html' %}
+			</td>
+		</tr>
 	{% endif %}
 	
-	{% if tab = "PEOPLE"|tabs %}
-		{% load pagination_tags %}
-		{% with proj.getPublicUsers as users %}
-			{% autopaginate users 50 %}			
-			<tr>
-				<td class="long" colspan="2">
-					<div class="mybox">
-	        			<table>
-	        				<caption>{{ proj.short_name }} Users</caption>
-				            <tr>
-				                <td class="tophead">Last Name</td>
-				                <td class="tophead">First Name</td>
-				                <td class="tophead">User Name</td>				                
-				                <td class="tophead">Institution</td>
-				            </tr>
-				            {% for user in users %}
-                			<tr>
-                   				<td>{{ user.last_name }}</td>
-                   				<td>{{ user.first_name }}</td>
-                   				<td>{{ user.username }}</td>
-                   				<td>{{ user|getUserProfileAttribute:"institution" }}</td> 
-				            </tr>
-				            {% endfor %}
-				        </table>
-				    </div>
-		    	</td>
-		    </tr>
-		    
-		    {% paginate %}
-		      							
-		{% endwith %}
+	{% if tab = "PEOPLE"|tabs %}	
+		<tr>
+			<td align="center">
+				{% include 'cog/project/_people_display.html' %}
+			</td>
+		</tr>
 	{% endif %}
 	
 </table>

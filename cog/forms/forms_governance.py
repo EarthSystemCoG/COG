@@ -6,12 +6,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q
 from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect, \
-    ModelForm, Textarea, TextInput, Select
+    ModelForm, Textarea, TextInput, Select, BooleanField, FileInput
 from os.path import basename
 from tinymce.widgets import TinyMCE
 import re
 from django.db.models import Q
 from cog.models.constants import MANAGEMENT_BODY_CATEGORY_STRATEGIC, MANAGEMENT_BODY_CATEGORY_OPERATIONAL
+from os.path import exists
+from cog.forms.forms_image import ImageForm
 
         
 class ExternalUrlForm(ModelForm):

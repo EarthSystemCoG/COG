@@ -1,3 +1,47 @@
-{% if proj.developmentOverview %}
-	{{ proj.developmentOverview }}
-{% endif %}
+<table>
+
+
+	{% if proj.developmentOverview %}
+		<tr>
+			<td class="leftcolumn"><b>Overview</b></td>
+			<td class="long">{{ proj.developmentOverview }}</td>
+		</tr>
+	{% endif %}
+	
+	{% if proj.license %}
+		<tr>
+			<td class="leftcolumn"><b>License</b></td>
+			<td class="long">{{ proj.license }}</td>
+		</tr>
+	{% endif %}
+	
+	{% if proj.implementationLanguage %}
+		<tr>
+			<td class="leftcolumn"><b>Implementation Language</b></td>
+			<td class="long">{{ proj.implementationLanguage }}</td>
+		</tr>
+	{% endif %}
+	
+	{% if proj.bindingLanguage %}
+		<tr>
+			<td class="leftcolumn"><b>Binding Language</b></td>
+			<td class="long">{{ proj.bindingLanguage }}</td>
+		</tr>
+	{% endif %}
+	
+		{% if proj.supportedPlatforms %}
+		<tr>
+			<td class="leftcolumn"><b>Supported Platforms</b></td>
+			<td class="long">{{ proj.supportedPlatforms }}</td>
+		</tr>
+	{% endif %}
+	
+	{% if proj.externalDependencies %}
+		<tr>
+			<td class="leftcolumn"><b>External Dependencies</b></td>
+			<td class="long">{{ proj.externalDependencies }}</td>
+		</tr>
+	{% endif %}
+
+
+</table>

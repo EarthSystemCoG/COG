@@ -1,48 +1,14 @@
 {% extends "cog/common/layout_sidebar_center.html" %}
 {% load url from future %}
 
-{% block extrahead %}
-
-   <!-- dynamic formset JS libraries -->
-   {% include 'cog/common/django-dynamic-formset.html' %} 
-    
-   <!-- dynamic formset page specific code --> 
-   <script type="text/javascript">
-   		<!-- multiple formsets: must use formset prefix, and name a formset-specific css class -->
-         $(function() {
-             $('#organizationFormsetTable tbody tr').formset({
-                 prefix: '{{ organization_formset.prefix }}',
-                 formCssClass: 'organization_formset-css',
-                 addText: 'Add another',
-                 deleteText: 'Delete',
-                 addCssClass: 'addlink',
-                 deleteCssClass: 'deletelink'
-             });
-             $('#fundingSourceFormsetTable tbody tr').formset({
-                 prefix: '{{ fundingsource_formset.prefix }}',
-                 formCssClass: 'fundingsource_formset-css',
-                 addText: 'Add another',
-                 deleteText: 'Delete',
-                 addCssClass: 'addlink',
-                 deleteCssClass: 'deletelink'
-
-             });
-         })
-   </script>
-    
-{% endblock %}
-
 {% block main %}
 
 	{% load cog_utils %}
 		
-	 <form action="" method="post">
+	 <form action="" method="post" enctype="multipart/form-data">
 	         
 	     {% csrf_token %}
-	     {{ organization_formset.management_form }}
-	     {{ fundingsource_formset.management_form }}		     
-	     
-	     
+	          
 		 {% if tab = "ABOUTUS"|tabs %}	
 		 <div class="mybox">
 		 	<table>	     
@@ -79,7 +45,7 @@
 		         </tr>	     
 		      </table>
 		 </div>		
-		{% endif %}	
+		 {% endif %}	
 					     
          {% if tab = "MISSION"|tabs %}
          <div class="mybox">
@@ -120,70 +86,7 @@
 		 </div>
 		 {% endif %}
 			           
-	     {% if tab = "PARTNERS"|tabs %}
-	     <div class="mybox">
-		     <table>
-		         <tr>
-		         	<td class="long">
-		         		Projects or organizations that collaborate on this project.
-		         	</td>
-		         </tr>
-		         <tr>
-		         	<td>
-		         		<table id="organizationFormsetTable">
-		         		 <tbody>
-					     {% for oform in organization_formset.forms %}
-					     	{{ oform.id }}	
-					     	<tr>					 			 	            		
-			           			<td class="long">
-			           			{{ oform.name }} {{ oform.name.errors }}
-			           			</td>
-				           		{% if oform.instance.id %}
-				         			<td nowrap="nowrap">{{ oform.DELETE }}</td>
-					           	{% else %}
-					           		<td></td>
-						        {% endif %}	            		
-			          	    </tr>	
-						 {% endfor %}
-						 </tbody>
-				 		</table>
-				 	</td>
-				 </tr>
-			 </table>
-		 </div>
-		 {% endif %}
-		 
-		 {% if tab = "SPONSORS"|tabs %}
-		 <div class="mybox">
-			 <table>
-				 <tr>
-		         	<td class="long">
-		         		The organizations or agencies that financially support the project.
-		         	</td>
-		        </tr>
-		        <tr>
-		        	<td>
-		         		<table id="fundingSourceFormsetTable"><tbody>
-					     {% for fsform in fundingsource_formset.forms %}
-					     	{{ fsform.id }}	
-					     	<tr>					 			 	            		
-			           			<td class="long">
-			           			{{ fsform.name }} {{ fsform.name.errors }}
-			           			</td>
-				           		{% if fsform.instance.id %}
-				         			<td nowrap="nowrap">{{ fsform.DELETE }}</td>
-					           	{% else %}
-					           		<td></td>
-						        {% endif %}	            		
-			          	    </tr>	
-						 {% endfor %}
-				 		</tbody></table>
-				 	</td>
-				 </tr>
-				 </table>
-		 </div>
-     	 {% endif %}	     
-								 
+						 
 		 <!-- IF NOT DISPLAYED, MUST RESUBMIT ALL FIELDS AS HIDDEN -->				 
 		 {% if tab != 'ABOUTUS'|tabs %}
 			{{ form.long_name.as_hidden }}
@@ -204,20 +107,6 @@
 		 	{{ form.values.as_hidden }}
 		 {% endif %}				 
 		 				
-		{% if tab != 'PARTNERS'|tabs %}	 
-			 {% for oform in organization_formset.forms %}
-				{{ oform.id }}	
-		        {{ oform.name.as_hidden }}
-			 {% endfor %}
-		 {% endif %}
-		 
-		 {% if tab != 'SPONSORS'|tabs %}
-	 		 {% for fsform in fundingsource_formset.forms %}
-		    	{{ fsform.id }}	
-				{{ fsform.name.as_hidden }}
-			 {% endfor %}	
-		 {% endif %}
-
 	     <div style="text-align:right">
 	        <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower tab %}'"/>
 	        <input type="submit" value="Submit" />

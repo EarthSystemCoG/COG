@@ -3,13 +3,14 @@ from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, Select
+from django.forms import ModelForm, Textarea, TextInput, Select, FileInput
 from django.core.exceptions import ObjectDoesNotExist
 from tinymce.widgets import TinyMCE
 from os.path import basename
 import re
 from cog.utils import *
 from django.db.models import Q
+from cog.forms.forms_image import ImageForm
 
 
 class ProjectForm(ModelForm):
@@ -55,21 +56,6 @@ class ProjectForm(ModelForm):
         model = Project
         # Note: must exclude the many2many field mapped through an intermediary table
         exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess','governanceOverview','developmentOverview')
-
-    
-class AboutusForm(ModelForm):
-    
-    class Meta:
-        model = Project
-        exclude = ('short_name','parent','peers','author','active','private','logo','logo_url',
-                   'topics','taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview')
-        widgets = {
-                   'description': Textarea(attrs={'rows':6}),
-                   'mission':     Textarea(attrs={'rows':6}),
-                   'vision':      Textarea(attrs={'rows':6}),
-                   'values':      Textarea(attrs={'rows':6}),
-                   'history':     Textarea(attrs={'rows':6}),
-                   }
         
 class ContactusForm(ModelForm):
     
@@ -95,6 +81,12 @@ class GetInvolvedForm(ModelForm):
 class DevelopmentOverviewForm(ModelForm):
     
     class Meta:
-        model = Project
-        widgets = { 'developmentOverview': Textarea(attrs={'rows':10}), }
-        fields = ( 'developmentOverview', )
+        model = Project        
+        widgets = {'developmentOverview': Textarea(attrs={'rows':6}),
+                   'license': TextInput(),
+                   'implementationLanguage': TextInput(),
+                   'bindingLanguage': TextInput(),
+                   'supportedPlatforms': TextInput(),
+                   'externalDependencies': Textarea(attrs={'rows':4}), }                                     
+        fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
+                   'supportedPlatforms', 'externalDependencies')

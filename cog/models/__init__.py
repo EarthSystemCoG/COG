@@ -1,6 +1,8 @@
 # Users, Groups
 from user_profile import UserProfile
+from user_url import UserUrl
 from membership import MembershipRequest
+from collaborator import Collaborator
 
 # Projects
 from topic import Topic

@@ -1,13 +1,35 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField
+from django.forms import Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, ImageField, FileInput, Textarea
 from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
 from django.contrib.auth.models import check_password
+from os.path import exists
+from cog.models.constants import UPLOAD_DIR_PHOTOS
+from cog.forms.forms_image import ImageForm
+from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 
 # list of invalid characters in text fields
-INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s]"
+#INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
+INVALID_CHARS = "[<>&#%{}\[\]\$]"
+
+class UserUrlForm(ModelForm):
+    
+    url = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
+    name = CharField(required=True, widget=TextInput(attrs={'size':'15'}))
+    
+    # validate data against bad characters
+    def clean(self):
+        
+        url = self.cleaned_data.get('url')
+        validate_field(self, 'url', url)
+        
+        name = self.cleaned_data.get('name')
+        validate_field(self, 'name', name)
+        
+        return self.cleaned_data
+
 
 class PasswordResetForm(Form):
     
@@ -62,7 +84,7 @@ class PasswordChangeForm(Form):
         
         return self.cleaned_data
 
-class UserForm(ModelForm):
+class UserForm(ImageForm):
     
     # override User form fields to make them required
     first_name = CharField(required=True)
@@ -80,17 +102,33 @@ class UserForm(ModelForm):
     country = CharField(required=True)
     subscribed = BooleanField(required=False)
     private = BooleanField(required=False)
+    researchInterests = CharField(required=False, widget=Textarea(attrs={'rows': 6}), max_length=RESEARCH_INTERESTS_MAX_CHARS)
+    researchKeywords = CharField(required=False, max_length=RESEARCH_KEYWORDS_MAX_CHARS)
+    
+    # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
+    image = ImageField(required=False, widget=FileInput) 
+    
+    # extra field not present in model, used for deletion of previously uploaded image
+    # inherited from ImageForm
+    #delete_image = BooleanField(required=False)
+
     
     class Meta:
         # note: use User model, not UserProfile
         model = User
         # define fields to be used, so to exclude last_login and date_joined
-        fields = ('first_name', 'last_name', 'username', 'password', 'email','institution','city','state','country','department','subscribed','private')
-        
+        fields = ('first_name', 'last_name', 'username', 'password', 'email',
+                  'institution','city','state','country','department',
+                  'subscribed','private',
+                  'image', 'delete_image', 'researchInterests', 'researchKeywords')
+                
     # override form clean() method to execute custom validation on fields, 
     # including combined validation on multiple fields
     def clean(self):
         
+        # invoke superclass cleaning method
+        super(UserForm, self).clean()
+       
         # flags an existing user
         user_id = self.instance.id
         
@@ -102,9 +140,10 @@ class UserForm(ModelForm):
         
         # validate 'username' field
         validate_username(self, user_id)
-        
+                
         # validate all other fields against injection attacks
-        for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country']:
+        for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country', 
+                      'researchInterests', 'researchKeywords']:
             try:
                 validate_field(self, field, cleaned_data[field])
             except KeyError: # field not set (validation occurs later)

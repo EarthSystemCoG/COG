@@ -1,5 +1,5 @@
 from cog.models import *
-from cog.models.utils import site_index
+from cog.models.utils import site_index, listPeople
 from cog.views import encodeMembershipPar, NEW_MEMBERSHIP, OLD_MEMBERSHIP, NO_MEMBERSHIP
 from cog.views import userCanPost, userCanView
 from django import template
@@ -13,6 +13,9 @@ from cog.models.utils import get_project_communication_means
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 from cog.models.constants import NAVMAP, INVNAVMAP, TABS
+from cog.models.constants import DEFAULT_IMAGES
+from cog.util.thumbnails import getThumbnailPath
+from django.contrib.auth.models import AnonymousUser
 
 register = template.Library()
 
@@ -511,9 +514,16 @@ def roles(user, project):
     return roles
 
 @register.filter
-def getUserProfileAttribute(user, attribute):
-    profile = UserProfile.objects.get(user=user)
-    return getattr(profile, attribute)
+def getUserAttribute(user, attribute):
+    '''
+    Utility to look for a named attribute in the User/Collaborator object first,
+    or in the UserProfile object if not found.
+    '''
+    try:
+        return getattr(user, attribute)
+    except AttributeError:
+        profile = UserProfile.objects.get(user=user)
+        return getattr(profile, attribute)
 
 @register.filter
 def tabs(label):
@@ -527,6 +537,58 @@ def getCommunicationMeans(project, internal):
     return get_project_communication_means(project, parseBoolString(internal))
 
 @register.filter
+def getPeople(project):
+    return listPeople(project)
+
+@register.filter
+def getImage(obj):
+    
+    try:
+        # AnonymousUser
+        if isinstance(obj, AnonymousUser):
+            return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['User']
+            
+        # User
+        elif isinstance(obj, User):
+            profile = UserProfile.objects.get(user=obj)
+            return profile.image.url
+        
+        # Collaborator        
+        elif isinstance(obj, Collaborator):
+            return obj.image.url
+        
+        elif isinstance(obj, Organization) or isinstance(obj, FundingSource):
+            return obj.image.url
+        
+    except ValueError:
+        # if the image field has no associated file -> return default (no image found)
+        return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['%s' % obj.__class__.__name__]
+
+
+@register.filter
+def getThumbnailById(id, type):
+    
+    if id is not None:
+        if type == 'Collaborator':
+            obj = Collaborator.objects.get(pk=id)
+        elif type == 'Organization':
+            obj = Organization.objects.get(pk=id)
+        elif type == 'FundingSource':
+            obj = FundingSource.objects.get(pk=id)
+        return getThumbnail(obj)
+    
+    else: 
+        imagepath = getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES[type]
+        return getThumbnailPath(imagepath)
+ 
+@register.filter   
+def getThumbnail(user):
+    
+    imagePath = getImage(user)
+    thumbnailPath = getThumbnailPath(imagePath)
+    return thumbnailPath
+
+@register.filter 
 def doc_redirect(doc):
     
     if len(doc.post_set.all()) > 0:
@@ -536,3 +598,12 @@ def doc_redirect(doc):
         redirect = reverse('project_home', kwargs={'project_short_name': doc.project.short_name.lower() })
     return redirect
     
+@register.filter 
+def partners(project):
+    organizations = list( project.organization_set.all() )
+    return sorted(organizations, key=lambda org: org.name)
+
+@register.filter 
+def sponsors(project):
+    fundingsources = list( project.fundingsource_set.all() )
+    return sorted(fundingsources, key=lambda fs: fs.name)

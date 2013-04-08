@@ -1,0 +1,62 @@
+{% extends "cog/common/layout_center.html" %}
+{% load url from future %}
+
+{% load cog_utils %}
+
+{% block main %}
+
+	Use this form to update the project external collaborators. Project members are automatically listed.
+	
+	<p/>
+	<form method="post" action="" enctype="multipart/form-data">
+		
+		{% csrf_token %}
+	    {{ formset.management_form }}
+	    
+	    <div class="mybox">
+		    <table>
+		    	<caption>{{ project.short_name }} External Collaborators</caption>
+		    	<tr>
+		    		<td class="tophead" nowrap="nowrap">First Name</td>
+		    		<td class="tophead" nowrap="nowrap">Last Name</td>
+		    		<td class="tophead" nowrap="nowrap">Institution</td>
+		    		<td nowrap="nowrap"><b>Interests</b> (max 60 chars)</td>
+		    		<td class="tophead" nowrap="nowrap">Picture</td>
+		    		<td nowrap="nowrap">(maximum size: 1MB)</td>
+		    		<td class="tophead" nowrap="nowrap">Delete ?</td>
+		    	</tr>
+		    {% for form in formset %}
+	        	{{ form.id }}
+		        <tr>
+		            <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
+		            <td>{{ form.last_name }} {{ form.last_name.errors }}</td>
+		            <td>{{ form.institution }} {{ form.institution.errors }}</td>
+		            <td>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
+		            <td>
+		            	<!-- always show image on disk, not latest value from form -->
+		            	<img src="{{ form.instance.id|getThumbnailById:'Collaborator' }}" style="border: 1px solid #666666;" />
+		            </td>
+		            <td>
+		            	<!-- show option to remove current picture -->
+		            	{% if not 'unknown' in form.instance|getImage and form.image.errors|length == 0 %}		
+		            		<span style="margin-top:2px">	
+			                	{{ form.delete_image }} Delete current picture ? 		
+			                </span>	  						                            		
+			            {% endif %} 
+			            <!-- image upload widget -->      					            	
+		            	{{ form.image }} &nbsp; {{ form.image.errors }}
+		            </td>
+		            <td>{{ form.DELETE }}</td>
+		        </tr>
+			{% endfor %}
+			</table>
+		</div>
+	    
+      <div style="text-align:right">
+	      <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name tab %}'"/>
+	      <input type="submit" value="Submit" />
+      </div>
+	    
+	</form>
+	
+{% endblock %}

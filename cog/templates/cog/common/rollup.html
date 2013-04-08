@@ -24,14 +24,14 @@
  	{% if children %}
 		<p/>
 		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;Child Project {{ template_title}}</a>
+		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;Child Project {{ template_title}} ({{ children|length }})</a>
 		</div>
 		<div id="children_rollup" style="display:none">	   	    
 		    {% for child in children %}
 	    		{% with child as proj %}
 	    			<br/>
 	    			<div class="mybox" style="padding:2px;">
-	    				<div class="box-blue">
+	    				<div class="header-gray">
 	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}}</div>
 	    				</div>
 						{% include template_page %}
@@ -45,17 +45,19 @@
  	{% if peers %}
 		<p/>
 		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;Peer Project {{ template_title}}</a>
+		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;Peer Project {{ template_title}} ({{ peers|length }})</a>
 		</div>
 		<div id="peer_rollup" style="display:none">	   	    
 		    {% for peer in peers %}
 	    		{% with peer as proj %}
 	    			<br/>
-	    			<div class="mybox" style="padding:2px;">
-	    				<div class="box-blue">
+	    			<div class="mybox" style="padding:0px;">
+	    				<div class="header-gray">
 	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}} </div>
 	    				</div>
-						{% include template_page %}
+	    				<div style="padding:4px;">
+							{% include template_page %}
+						</div>
 					</div>
 				{% endwith %}
 		    {% endfor %}		

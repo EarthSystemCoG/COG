@@ -1,0 +1,22 @@
+
+{% load cog_utils %}
+{% load url from future %}
+
+<table>
+	<!-- loop over partners -->
+	{% for organization in proj|partners %}
+		<tr>
+			<td>
+				<img src="{{ organization|getImage }}" width="60px" />
+			</td>
+			<td class="long_middle" nowrap="nowrap">
+				{% if organization.url %}				
+					<a href="{{ organization.url }}">{{organization.name}}</a>
+				{% else %}
+					{{organization.name}}
+				{% endif %}	
+				</div>
+			</td>			
+		</tr>    	
+	{% endfor %}
+</table>

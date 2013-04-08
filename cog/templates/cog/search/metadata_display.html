@@ -2,8 +2,74 @@
 
 {% block main %}   
 
+{% load url from future %}
 
-FILE METADATA
+<script language="javascript">
+	// function to replace the image source with a thumbnail in case of error due to lack of authorization
+	function imgError(image) {
+		html = '<a href="{{ metadata.url}}" target="imgwin"><img src="{{ metadata.thumbnail }}"/></a>';
+		document.getElementById("image").innerHTML = html;
+	    return true;
+	}
+</script>
+
+<!-- display image -->
+<p/>
+<div style="text-align:center">
+	<div id="image" style="text-align:center">
+		<a href="{{ metadata.url}}" target="imgwin"><img src="{{ metadata.url}}" width="400px" onerror="imgError(this);"/></a>
+	</div>
+	{% if metadata.description %}
+	<br/>{{ metadata.description }}
+	{% endif %}
+	<br/>Click on the image to enlarge it. This may take you to a login page. 
+	<br/>Refresh this page after first login to see a larger image.
+	<br/>
+	<a href="{% url 'search' project.short_name|lower %}?search_data=True">Back to Search Results</a>
+</div>
+
+<!-- image metadata table -->
+{% if metadata.fields|length > 0 %}
+	<p/>
+	<div class="mybox">
+		<table>
+			<caption>{{ metadata.subtype }} Metadata</caption>
+			{% for tuple in metadata.fields %}
+			<tr>
+				<td class="head" nowrap="nowrap">{{ tuple.0 }}</td>
+				<td class="long">
+					{% for val in tuple.1 %}
+						{% if forloop.counter > 1 %}, &nbsp; {% endif %}
+						{{ val }}
+					{% endfor %}
+				</td>	
+			</tr>
+			{% endfor %}
+		</table>	
+	</div>
+{% endif %}
+	
+<!-- dataset metadata table -->
+{% if parentMetadata.fields|length > 0 %}
+	<p/>
+	<div class="mybox">
+		<table>
+			<caption>Dataset Metadata</caption>
+			{% for tuple in parentMetadata.fields %}
+			<tr>
+				<td class="head" nowrap="nowrap">{{ tuple.0 }}</td>
+				<td class="long">
+					{% for val in tuple.1 %}
+						{% if forloop.counter > 1 %}, &nbsp; {% endif %}
+						{{ val }}
+					{% endfor %}
+				</td>	
+			</tr>
+			{% endfor %}
+		</table>	
+	</div>
+{% endif %}
+
 
 {% endblock %}
 

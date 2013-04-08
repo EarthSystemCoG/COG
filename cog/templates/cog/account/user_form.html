@@ -2,6 +2,8 @@
 {% extends "cog/common/layout_center.html" %}
 {% load url from future %}
 
+{% load cog_utils %}
+
 {% block head %}
 
 	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
@@ -56,9 +58,10 @@
     <div class="yui-skin-sam">        
 	    <div class="mybox" id="userDiv">
 	    	    
-	        <form action="" method="post">
+	        <form action="" method="post" enctype="multipart/form-data">
 	        
 	            {% csrf_token %}
+	            {{ formset.management_form }}
 	            
 	            <table>
 	                <tr>
@@ -72,7 +75,7 @@
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
 	                    <td>{{ form.username }}
-	                        [ <i>Must be at least 5 characters</i> ] 
+	                        <i>[ Must be at least 5 characters ]</i>
 	                        {{ form.username.errors }}</td>
 	                </tr>
 	                <tr>
@@ -89,13 +92,13 @@
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
 		                    <td>{{ form.password }} 
-		                       [ <i>At least 6 characters, all characters are allowed</i> ] 
+		                       <i>[ At least 6 characters, all characters are allowed ]</i>
 		                       {{ form.password.errors }}</td>
 		                </tr>
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
 		                    <td>{{ form.confirm_password }} 
-		                        [ <i>At least 6 characters, all characters are allowed</i> ]
+		                        <i>[ At least 6 characters, all characters are allowed ]</i>
 		                        {{ form.confirm_password.errors }}</td>
 		                </tr>
 	                {% endif %}
@@ -126,15 +129,70 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="head" nowrap="nowrap">Subscribe to COG Email List ?</td>
-                        <td class="long">{{ form.subscribed }} [ <i>'cog_info', low traffic list</i> ] {{ form.subscribed.errors }}</td>
+                        <td class="optional" nowrap="nowrap">Interest Keywords</td>
+                        <td class="long"> 
+                        A short list of science fields you are involved with (60 characters maximum).
+                        <br/>Example: Software Engineering, Grid Computing, Climate Change.
+                        <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
+                    </tr>
+                    <tr>
+                        <td class="optional" nowrap="nowrap">Interest Statement</td>
+                        <td class="long">
+                        A short paragraph describing your professional interests (1000 characters maximum).
+                        <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
                     </tr>                    
                     <tr>
-                        <td class="head" nowrap="nowrap">Do not list me among project members</td>
+                        <td class="optional" nowrap="nowrap">Subscribe to COG Email List ?</td>
+                        <td class="long">{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
+                    </tr>                    
+                    <tr>
+                        <td class="optional" nowrap="nowrap">Do not list me among project members</td>
                         <td class="long">{{ form.private }} {{ form.private.errors }}</td>
                     </tr>                    
-                    
- 	            </table>
+                    <tr>
+                        <td class="optional" nowrap="nowrap">Picture (Maximum Size: 1MB)</td>
+                        <td class="long"> 
+                        	<table>
+                        		<tr>
+                        			<td>
+                        				<img src="{{ request.user|getImage }}" {% if not 'unknown' in request.user|getImage %} class="myimage" {% endif %}/>
+                        			</td>
+                        			<td align="left">
+			                        	<div style="margin-top:2px">
+			                        		{% if not 'unknown' in request.user|getImage %}
+			                        			{{ form.delete_image }} Delete current picture ? 			                        		
+			                        		{% endif %}     
+			                        		<br/>                 	                    		
+			                        		{{ form.image }} 
+			                        		&nbsp;{{ form.image.errors }}
+			                        	</div>
+                        			</td>
+                        		</tr>
+                        	</table>
+                        </td>
+                    </tr>        
+              </table>
+              
+              <!-- URLs -->
+              <table>            
+                    {% for urlform in formset %}
+		       			{{ urlform.id }}
+			        	<tr>
+			        		<td class="optional" nowrap="nowrap" valign="top">
+			        			Web Site:
+			        		</td>
+			        		<td>
+			        			<b>URL</b> {{ urlform.url }} {{ urlform.url.errors }}
+			        		</td>
+			        		<td>
+			        			<b>Title</b>{{ urlform.name }} ('Home Page', 'My Blog', ...) {{ urlform.name.errors }}
+			        		</td>
+			        		<td>
+			        			&nbsp; {{ urlform.DELETE }} Delete ?
+			        		</td>
+				        </tr>
+		    		{% endfor %}                                                                               
+  	            </table> 	            
 	            
 	            <div style="text-align:center">
 	                <hr/>
@@ -145,7 +203,7 @@
 	                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' request.user.id %}'"/>
 	                {% endif %}
 	                &nbsp; &nbsp;
-	                Except when noted, please use only letters, numbers and the special characters: _ - + @ .
+	                The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
 	                &nbsp; &nbsp;
 	                <input type="submit" value="Submit" />
 	            </div>   
