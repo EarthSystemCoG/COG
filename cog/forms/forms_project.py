@@ -91,3 +91,28 @@ class DevelopmentOverviewForm(ModelForm):
                    'externalDependencies': Textarea(attrs={'rows':4}), }                                     
         fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
                    'supportedPlatforms', 'externalDependencies')
+        
+class ProjectTagForm(ModelForm):
+    
+    # extra field not present in model, used for project association
+    this_project = forms.BooleanField(required=False)        
+    
+    def clean(self):
+        name = self.cleaned_data['name']
+        
+        try:
+            tag = ProjectTag.objects.get(name__iexact=name)
+            # check tag with same name (independently of case) does not exist already
+            if tag is not None and tag.id != self.instance.id: # not this tag
+                self._errors["name"] = self.error_class(["Tag with this name already exist: %s" % tag.name])
+        except ObjectDoesNotExist :  
+            # capitalize the tag name
+            self.cleaned_data['name'] = self.cleaned_data['name'].capitalize()
+            # only allow letters, numbers, '-' and '_'
+            if re.search("[^a-zA-Z0-9_\-\s]", name):
+                self._errors["name"] = self.error_class(["Tag name contains invalid characters"])
+        
+        return self.cleaned_data
+    
+    class Meta:
+        model = ProjectTag    

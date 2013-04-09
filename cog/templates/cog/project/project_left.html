@@ -69,6 +69,8 @@
         	<!-- <li><a href="/admin/filebrowser/browse?project={{project.short_name}}" class="listlink">&nbsp;Browse Project Uploads</a></li> -->
         	
             <li><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project</a></li>
+            <li><a href="{% url 'tags_update' project.short_name.lower %}" class="changelink">&nbsp;Tag Project</a></li>
+            
             <!-- <li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li> -->
             <li><a href="{% url 'search_profile_config' project.short_name.lower %}" class="changelink">&nbsp;Configure Search</a></li>
             <!-- <li><a href="{% url 'project_add' %}?parent={{ project.short_name.lower }}" class="addlink">&nbsp;Add Child Project</a></li> -->

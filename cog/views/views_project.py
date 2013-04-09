@@ -7,6 +7,7 @@ from django.forms.models import modelformset_factory, inlineformset_factory
 import string
 import os
 from django.conf import settings
+from django.utils.functional import curry
 
 from cog.models import *
 from cog.forms import *
@@ -506,6 +507,84 @@ def development_display(request, project_short_name):
     template_title = "Development"
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
+@login_required
+def tags_update(request, project_short_name):
+            
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    formset_factory =  modelformset_factory(ProjectTag, form=ProjectTagForm, extra=3, can_delete=False)   
+    # select only tags for this project using 'related_name' field of ProjectTag 
+    #queryset = ProjectTag.objects.filter(projects=project) 
+    # select all available tags
+    queryset = ProjectTag.objects.all()                         
+    
+    # GET request
+    if request.method=='GET':
+                
+        formset = formset_factory(queryset=queryset)
+        
+        # initialize form extra field with initial value
+        for form in formset.forms:
+            if form.instance in project.tags.all():
+                form.initial['this_project'] = True
+            else:
+                form.initial['this_project'] = False
+        
+        return render_tags_formset(request, project, formset)
+        
+    else:
+        
+        # create formset from POST data
+        formset = formset_factory(request.POST, queryset=queryset)
+        
+        # validate formset
+        if formset.is_valid():
+                                    
+            project.tags = [] # empty list of project tags
+            # loop over form data and manually assign the tag to the project
+            for form in formset.forms:   
+                tag = form.instance
+                if tag.name: # tag is not empty
+                    
+                    # if new tag, assign to project automatically
+                    if tag.id is None: 
+                        form.cleaned_data['this_project'] = True
+                    
+                    # save each tag
+                    tag.save()
+                    
+                    # add tag to project
+                    if form.cleaned_data['this_project'] is True:
+                        project.tags.add(tag)
+                        
+                    # delete tag if not associated with any other project
+                    else:
+                        if len(tag.projects.all()) == 0:
+                            tag.delete()
+            
+            # save new list of project tags
+            project.save()   
+            
+            # redirect to project home (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
+            
+        else:
+            print 'Formset is invalid  %s' % formset.errors
+            return render_tags_formset(request, project, formset)
+
+def render_tags_formset(request, project, formset):
+    
+    return render_to_response('cog/project/project_tags_form.html', 
+                             {'formset': formset,
+                              'title': 'Update Tags for Project: %s' % project.short_name,
+                              'project': project }, 
+                              context_instance=RequestContext(request))
 
 
 @login_required

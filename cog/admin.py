@@ -45,3 +45,5 @@ admin.site.register(SearchProfile, admin.ModelAdmin)
 admin.site.register(Folder, admin.ModelAdmin)
 
 admin.site.register(Lock, admin.ModelAdmin)
+
+admin.site.register(ProjectTag, admin.ModelAdmin)

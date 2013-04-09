@@ -76,7 +76,7 @@ class Project(models.Model):
     topics =  models.ManyToManyField(Topic, blank=True, null=True, through='ProjectTopic')
     
     # list of project tags
-    tags = models.ManyToManyField(ProjectTag, blank=True, null=True)
+    tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='projects')
         
     class Meta:
         app_label= APPLICATION_LABEL
