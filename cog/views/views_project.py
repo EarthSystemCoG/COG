@@ -588,34 +588,43 @@ def project_browser(request, project_short_name, tab):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     #print 'Project Browser project=%s tab=%s tag=%s user=%s' % (project.short_name, tab, tag, request.user)
 
-    html = ''
+    html = ''    
     if tab == 'this':
-        html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', True)
-        html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', False)
-        html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', False)
+        display = DisplayStatus(True) # object that keeps track of successfull invocations, if necessary
+        html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
+        html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
+        html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)
     elif tab == 'all':
-        html += makeProjectBrowser(project, tab, tag, request.user, None, 'all_projects', True)
+        html += makeProjectBrowser(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':
-        html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', True)
+        html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
     
     return HttpResponse(html, mimetype="text/html")
+
+# utility class to track the status of the browser widgets
+class DisplayStatus:
+    def __init__(self, open):
+        self.open = open
+
     
 # Utility method to create the HTML for the browse widget
-def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, open):
+def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus):
        
     # retrieve tag, if requested
+    tag = None
+    tagError = None # keeps track of error in retrieving tag
     if tagName is not None:
         try:
             tag = ProjectTag.objects.get(name__iexact=tagName)
         except ObjectDoesNotExist:
-            # if tab does not exist, return empty list
-            return '<div id="'+widgetId+'" style="display:block"><i>Tag does not exist.</i></div>'
-    # no tag filter requested
-    else:
-        tag = None
+            # store error associated with non-existing tag
+            tagError = "Tag does not exist"
     
     # list projects to include in widget
-    projects = listBrowsableProjects(project, tab, tag, user, widgetName)
+    if tagError is None:
+        projects = listBrowsableProjects(project, tab, tag, user, widgetName)
+    else:
+        projects = Project.objects.none()
         
     # build accordion header
     html = ""
@@ -626,18 +635,26 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, open):
         html += '<a href="" onclick="javascript:toggle_visibility(\''+widgetId+'\'); return false;" class="listlink">'
         html += '&nbsp;'+widgetName+' ('+str(len(projects))+')</a>'
         html += '</div>'
-    if len(projects)>0 and open:
-        display = 'block'
-        #open = False # close the following widgets
-    else:
-        display = 'none'
+    
+    # determine widget status (depending on previous invocations)
+    display = 'block'
+    if displayStatus is not None:
+        if displayStatus.open and len(projects)>0:
+            display = 'block'
+            displayStatus.open = False # close all following widgets
+        else:
+            display = 'none'
+
     html += '<div id="'+widgetId+'" style="display:'+display+'">';  
     if len(projects)==0:
-        # special case: cannot retrieve list of projects for guest user
-        if tab=='my' and not user.is_authenticated():
-            html += "<i>Please login to display your projects.</i>"
+        if tagError is not None:
+            html += "<i>"+tagError+"</i>"
         else:
-            html += "<i>No projects found.</i>"
+            # special case: cannot retrieve list of projects for guest user
+            if tab=='my' and not user.is_authenticated():
+                html += "<i>Please login to display your projects.</i>"
+            else:
+                html += "<i>No projects found.</i>"
     else:     
         # loop over projects sorted by name
         for prj in sorted(projects, key=lambda prj: prj.short_name):
