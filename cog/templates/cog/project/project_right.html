@@ -231,7 +231,7 @@
      <div class="project_widget">
      
        <div id="project_views" class="yui-navset">  
-          <div class="tabs_caption">Project Views</div>  
+          <div class="tabs_caption">Project Browser</div>  
           <ul class="yui-nav">
               <li class="selected">&nbsp;&nbsp;<a href="#tab1"><em>This</em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="#tab2"><em>All</em></a>&nbsp;&nbsp;</li>
@@ -248,8 +248,14 @@
 	   <div id="project_browser_controls">
 	       <table>
 	       	<tr>
-		       <td class="long"><input type="text" id="projectBrowserText" onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" /></td>
-		       <td><input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')" /></td>
+		       <td class="long">
+		       		<input type="text" id="projectBrowserText" 
+		       			   placeholder="Enter Tag"
+		                   onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" />
+		       </td>
+		       <td>
+		       		<input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')" />
+		       </td>
 	       	</tr>
 	       </table>   
        </div>
