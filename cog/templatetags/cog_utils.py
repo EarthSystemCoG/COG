@@ -39,6 +39,7 @@ def get_escape_function(autoescape):
     return esc
 
 # filter that builds the hierarchy tree for the current project
+# FIXME: OBSOLETE
 @register.filter
 def tree_this_project(user, project, autoescape=None):
     
@@ -49,47 +50,8 @@ def tree_this_project(user, project, autoescape=None):
 
 tree_this_project.needs_autoescape = True
 
-@register.filter
-def tree_this_project2(user, project, autoescape=None):
-    
-    html = ''
-    
-    html += '<div class="header_bar">'
-    html += '<a href="" onclick="javascript:toggle_visibility(\'parent_projects\'); return false;" class="listlink">'
-    html += '&nbsp;Parent Projects (4)</a>'
-    html += '</div>'
-    html += '<div id="parent_projects" style="display:block">';    
-    html += '<br/>one'  
-    html += '<br/>two' 
-    html += '<br/>three'     
-    html += '</div>'
-    
-    html += '<div class="header_bar">'
-    html += '<a href="" onclick="javascript:toggle_visibility(\'peer_projects\'); return false;" class="listlink">'
-    html += '&nbsp;Peer Projects (4)</a>'
-    html += '</div>'
-    html += '<div id="peer_projects" style="display:none">';    
-    html += '<br/>one'  
-    html += '<br/>two' 
-    html += '<br/>three'     
-    html += '</div>'
-    
-    html += '<div class="header_bar">'
-    html += '<a href="" onclick="javascript:toggle_visibility(\'child_projects\'); return false;" class="listlink">'
-    html += '&nbsp;Peer Projects (4)</a>'
-    html += '</div>'
-    html += '<div id="child_projects" style="display:none">';    
-    html += '<br/>one'  
-    html += '<br/>two' 
-    html += '<br/>three'     
-    html += '</div>'
-            
-    # mark the result as safe from further escaping
-    return mark_safe(html)
-
-tree_this_project2.needs_autoescape = True
-
 # filter that builds a flat list of all projects
+# FIXME: OBSOLETE
 @register.filter
 def tree_all_projects(user, autoescape=None):
       
@@ -101,6 +63,7 @@ def tree_all_projects(user, autoescape=None):
 tree_all_projects.needs_autoescape = True
 
 # filter that builds a flat list of projects the user is member of
+# FIXME: OBSOLETE
 @register.filter
 def tree_my_projects(user, autoescape=None):
             
@@ -120,6 +83,7 @@ def tree_my_projects(user, autoescape=None):
 tree_my_projects.needs_autoescape = True
 
 # function to build the HTML for a flat list of projects
+# FIXME: OBSOLETE
 def projects_tree(user, projects, autoescape, treeId):
 
     if len(projects) > 0:    
@@ -150,6 +114,7 @@ def projects_tree(user, projects, autoescape, treeId):
     return mark_safe(html)
 
 # function to build the hierarchy tree for any given project
+# FIXME: OBSOLETE
 def project_tree(user, project, autoescape, i):
     
     esc = get_escape_function(autoescape)

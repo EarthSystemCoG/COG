@@ -104,10 +104,10 @@
 .yui-skin-sam .yui-navset .yui-navset-top .yui-content {
 	background:#FFFFFF; /* content background color */
     border: 0px;
-    padding:0.25em 0.5em;
+    padding:0px; /*0.25em 0.5em; */
     border-top: 1px solid #666666;
     height:200px; 
-    overflow-y: scroll;
+    overflow-y: auto;
     /* overflow-y: scroll; */
     overflow-x: hidden;
 }

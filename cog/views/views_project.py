@@ -8,7 +8,7 @@ from django.http import HttpResponse
 import string
 import os
 from django.conf import settings
-from django.utils.functional import curry
+from django.contrib.auth.models import User, AnonymousUser
 
 from cog.models import *
 from cog.forms import *
@@ -581,50 +581,108 @@ def tags_update(request, project_short_name):
         
 def project_browser(request, project_short_name, tab):
     
+    # optional tag filter
     tag = request.GET.get('tag', None)
-    
+            
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    print 'invoking project_browser project=%s tab=%s tag=%s' % (project.short_name, tab, tag)
+    #print 'Project Browser project=%s tab=%s tag=%s user=%s' % (project.short_name, tab, tag, request.user)
 
     html = ''
     if tab == 'this':
-        html += makeProjectWidget(project, tab, tag, 'Parent projects', 'parent_projects', 'block')
-        html += makeProjectWidget(project, tab, tag, 'Peer projects', 'peer_projects', 'none')
-        html += makeProjectWidget(project, tab, tag, 'Child projects', 'child_projects', 'none')
+        html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', True)
+        html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', False)
+        html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', False)
     elif tab == 'all':
-        html += makeProjectWidget(project, tab, tag, None, 'all_projects', 'block')
+        html += makeProjectBrowser(project, tab, tag, request.user, None, 'all_projects', True)
     elif tab == 'my':
-        html += makeProjectWidget(project, tab, tag, None, 'my_projects', 'block')
+        html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', True)
     
-    return HttpResponse(html, mimetype="text/plain")
-
-# Utility method to list the projects for the browse widget
-def listProjects(project, tab, tag):
-    
-    # FIXME
-    return Project.objects.all().order_by('short_name')
+    return HttpResponse(html, mimetype="text/html")
     
 # Utility method to create the HTML for the browse widget
-def makeProjectWidget(project, tab, tag, widgetName, widgetId, widgetDisplay):
+def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, open):
+       
+    # retrieve tag, if requested
+    if tagName is not None:
+        try:
+            tag = ProjectTag.objects.get(name__iexact=tagName)
+        except ObjectDoesNotExist:
+            # if tab does not exist, return empty list
+            return '<div id="'+widgetId+'" style="display:block"><i>Tag does not exist.</i></div>'
+    # no tag filter requested
+    else:
+        tag = None
     
     # list projects to include in widget
-    projects = listProjects(project, tab, tag)
-    
-    html = ''
+    projects = listBrowsableProjects(project, tab, tag, user, widgetName)
+        
     # build accordion header
+    html = ""
+    #if len(projects)>0:
+    #    widgetDisplay = 'block'
     if widgetName is not None:
-        html += '<div class="header_bar">'
+        html += '<div class="project_browser_bar">'
         html += '<a href="" onclick="javascript:toggle_visibility(\''+widgetId+'\'); return false;" class="listlink">'
         html += '&nbsp;'+widgetName+' ('+str(len(projects))+')</a>'
         html += '</div>'
-    html += '<div id="'+widgetId+'" style="display:'+widgetDisplay+'">';    
-    for project in projects:
-        html += '<br/><a href="">'+project.short_name+'</a> (tab=%s tag=%s)' % (tab, tag)  
+    if len(projects)>0 and open:
+        display = 'block'
+        #open = False # close the following widgets
+    else:
+        display = 'none'
+    html += '<div id="'+widgetId+'" style="display:'+display+'">';  
+    if len(projects)==0:
+        # special case: cannot retrieve list of projects for guest user
+        if tab=='my' and not user.is_authenticated():
+            html += "<i>Please login to display your projects.</i>"
+        else:
+            html += "<i>No projects found.</i>"
+    else:     
+        # loop over projects sorted by name
+        for prj in sorted(projects, key=lambda prj: prj.short_name):
+            html += '<a href="'+ reverse('project_home', args=[prj.short_name.lower()]) +'">'+prj.short_name+'</a><br/>'
     html += '</div>'
 
+    # return both the HTML and the 'open' status of the following widget
     return html
 
+# Utility method to list the projects for the browse widget
+def listBrowsableProjects(project, tab, tag, user, widgetName):
+            
+    if tab=='this':
+        if widgetName=='Parent projects':
+            projects = project.parents.all()
+        elif widgetName=='Peer projects':
+            projects = project.peers.all()
+        elif widgetName=='Child projects':
+            projects = project.children()
+    elif tab=='all':
+        projects = Project.objects.filter(active=True)
+    elif tab=='my':
+        if not user.is_authenticated():
+            projects = Project.objects.none()
+        else:
+            # retrieve all active projects for this user
+            projects = getProjectsForUser(user, False) # includePending==False
+
+    # filter projects
+    _projects = [] # empty list
+    for prj in projects:
+        prjtags = list(prj.tags.all())
+        if not prj.active:
+            # do not add
+            pass
+        elif prj.isNotVisible(user):
+            # do not add
+            pass
+        elif tag is not None and tag not in prjtags:
+            # do not add
+            pass
+        else:
+            _projects.append(prj)
+    
+    return _projects
 
 def render_tags_formset(request, project, formset):
     

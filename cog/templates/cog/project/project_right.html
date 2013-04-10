@@ -2,15 +2,16 @@
 {% block right %}
     
     <script>
-           
+               
        // function to reload the project widget by ajax call
        function loadProjectBrowser(project_short_name) {
     	   
-    	   // loop over YUI tab ids, execute separate ajax requests
+    	   // loop over YUI tab identifiers, execute separate ajax requests
     	   var tabs = ['this', 'all', 'my']
     	   for (var i=0; i<tabs.length; i++) {
     		   
 	    	   // build request URL
+	    	   // example: /projects/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
 	    	   var url = "/projects/"+project_short_name+"/browse/"+tabs[i]+"/";
 	    	   var tag = document.getElementById('projectBrowserText').value;
 	    	   if (tag != null && tag!="") url += "?tag="+tag;
@@ -55,6 +56,7 @@
    
    <script>
    
+    // FIXME: OBSOLETE
     function add_news() {
     	
     	// FIXME
@@ -93,8 +95,8 @@
     }
    
    </script>
-  
-   <!--  FIXME -->
+   
+   <!--  FIXME OBSOLETE -->
    <!-- CSS classes to display node type icons 
    <style type="text/css"> 
       .this { height: 16px; padding-left: 18px; margin: 4px; background: transparent url({{MEDIA_URL}}cog/img/tick.png) 0 0px no-repeat; font-weight: bold; } 
@@ -109,6 +111,7 @@
       .child { height: 16px; padding-left: 2px; margin:4px; font-size: 8pt; } 
    </style>  
    
+     
    <style type="text/css">
    
     .projects_footer {
@@ -127,16 +130,55 @@
 	    display: block;
 	}
 	
+	/* NOTE: scrollbar controlled by "overflow-y: auto;" in tabview.css */
 	.project_widget {
 	    margin: 0px;
 	    padding: 0px;
 	    font-size: 8pt;
 	    text-align: left;
-	    font-weight: bold;
+	    /* font-weight: bold; */
 	    background-color: #FFFFFF;
 	    border: 1px solid #666666;
 	    color: #666;
 	    display: block;
+	}
+	
+	.project_browser_bar {
+		margin-bottom: 2px;
+		margin-top: 2px;
+		padding: 2px 5px 3px 5px;
+		font-size: 9pt;
+		text-align: left;
+		font-weight: bold;
+		background-color: #FCE79F;
+		color: #666;
+		display: block;
+		border-top: 1px solid #666;
+		border-bottom: 1px solid #666;
+	}
+	
+	.project_browser_bar a:link,
+	.project_browser_bar a:visited {
+		color: #666;
+		text-decoration: none;
+	}
+	
+	#project_browser_controls {
+		border-top: 1px solid #666;
+		background-color: #FCE79F;
+		padding: 0px;
+		margin: 0px;
+	}
+	
+	#parent_projects, #peer_projects, #child_projects {
+		overflow-y: scroll;
+		margin-left: 0.3em;
+		margin-right: 0.3em;
+	}
+	
+	#all_projects, #my_projects {
+		overflow-y: auto;
+		margin: 0.3em;
 	}
 	
 	.tabs_caption {
@@ -203,10 +245,14 @@
        </div>       
        
        <!-- project widget controls -->
-       <div>
-	       <input type="text" id="projectBrowserText" onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" />
-	       <input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')" />
-       </div>    
+	   <div id="project_browser_controls">
+	       <table>
+	       	<tr>
+		       <td class="long"><input type="text" id="projectBrowserText" onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" /></td>
+		       <td><input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')" /></td>
+	       	</tr>
+	       </table>   
+       </div>
       
 	   <!-- News submission form -->
 	   {% if user|hasUserPermission:project %}
