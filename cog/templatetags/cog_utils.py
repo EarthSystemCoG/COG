@@ -49,6 +49,46 @@ def tree_this_project(user, project, autoescape=None):
 
 tree_this_project.needs_autoescape = True
 
+@register.filter
+def tree_this_project2(user, project, autoescape=None):
+    
+    html = ''
+    
+    html += '<div class="header_bar">'
+    html += '<a href="" onclick="javascript:toggle_visibility(\'parent_projects\'); return false;" class="listlink">'
+    html += '&nbsp;Parent Projects (4)</a>'
+    html += '</div>'
+    html += '<div id="parent_projects" style="display:block">';    
+    html += '<br/>one'  
+    html += '<br/>two' 
+    html += '<br/>three'     
+    html += '</div>'
+    
+    html += '<div class="header_bar">'
+    html += '<a href="" onclick="javascript:toggle_visibility(\'peer_projects\'); return false;" class="listlink">'
+    html += '&nbsp;Peer Projects (4)</a>'
+    html += '</div>'
+    html += '<div id="peer_projects" style="display:none">';    
+    html += '<br/>one'  
+    html += '<br/>two' 
+    html += '<br/>three'     
+    html += '</div>'
+    
+    html += '<div class="header_bar">'
+    html += '<a href="" onclick="javascript:toggle_visibility(\'child_projects\'); return false;" class="listlink">'
+    html += '&nbsp;Peer Projects (4)</a>'
+    html += '</div>'
+    html += '<div id="child_projects" style="display:none">';    
+    html += '<br/>one'  
+    html += '<br/>two' 
+    html += '<br/>three'     
+    html += '</div>'
+            
+    # mark the result as safe from further escaping
+    return mark_safe(html)
+
+tree_this_project2.needs_autoescape = True
+
 # filter that builds a flat list of all projects
 @register.filter
 def tree_all_projects(user, autoescape=None):

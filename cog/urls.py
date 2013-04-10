@@ -52,11 +52,7 @@ urlpatterns = patterns('',
     url(r'^post/list/(?P<project_short_name>.+)/$', 'cog.views.post_list', name='post_list'),
     url(r'^post/delete/(?P<post_id>\d+)/$', 'cog.views.post_delete', name='post_delete'),
     url(r'^post/cancel/(?P<post_id>\d+)/$', 'cog.views.post_cancel', name='post_cancel'),
-    
-    # pages
-    #url(r'^page/add/(?P<project_short_name>.+)/$', 'cog.views.page_add', name='page_add'),
-    #url(r'^page/(?P<project_short_name>[^/]+)/.+/$', 'cog.views.page_detail', name='page_detail'),
-    
+        
     # documents
     url(r'^doc/add/(?P<project_short_name>.+)/$', 'cog.views.doc_add', name='doc_add'),
     url(r'^doc/detail/(?P<doc_id>\d+)/$', 'cog.views.doc_detail', name='doc_detail'),
@@ -99,6 +95,9 @@ urlpatterns = patterns('',
     # project tags
     url(r'^projects/(?P<project_short_name>[^/]+)/tags/update/$', 'cog.views.tags_update', name='tags_update'),
 
+    # project browser
+    url(r'^projects/(?P<project_short_name>[^/]+)/browse/(?P<tab>[^/]+)/$', 'cog.views.project_browser', name='project_browser'),
+    
     # "Development" pages: development, code and trackers    
     url(r'^projects/(?P<project_short_name>[^/]+)/development/update/$', 'cog.views.development_update', name='development_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/development/$', 'cog.views.development_display', name='development_display'),

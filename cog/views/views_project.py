@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from django.forms.models import modelformset_factory, inlineformset_factory
+from django.http import HttpResponse
 import string
 import os
 from django.conf import settings
@@ -577,6 +578,53 @@ def tags_update(request, project_short_name):
         else:
             print 'Formset is invalid  %s' % formset.errors
             return render_tags_formset(request, project, formset)
+        
+def project_browser(request, project_short_name, tab):
+    
+    tag = request.GET.get('tag', None)
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    print 'invoking project_browser project=%s tab=%s tag=%s' % (project.short_name, tab, tag)
+
+    html = ''
+    if tab == 'this':
+        html += makeProjectWidget(project, tab, tag, 'Parent projects', 'parent_projects', 'block')
+        html += makeProjectWidget(project, tab, tag, 'Peer projects', 'peer_projects', 'none')
+        html += makeProjectWidget(project, tab, tag, 'Child projects', 'child_projects', 'none')
+    elif tab == 'all':
+        html += makeProjectWidget(project, tab, tag, None, 'all_projects', 'block')
+    elif tab == 'my':
+        html += makeProjectWidget(project, tab, tag, None, 'my_projects', 'block')
+    
+    return HttpResponse(html, mimetype="text/plain")
+
+# Utility method to list the projects for the browse widget
+def listProjects(project, tab, tag):
+    
+    # FIXME
+    return Project.objects.all().order_by('short_name')
+    
+# Utility method to create the HTML for the browse widget
+def makeProjectWidget(project, tab, tag, widgetName, widgetId, widgetDisplay):
+    
+    # list projects to include in widget
+    projects = listProjects(project, tab, tag)
+    
+    html = ''
+    # build accordion header
+    if widgetName is not None:
+        html += '<div class="header_bar">'
+        html += '<a href="" onclick="javascript:toggle_visibility(\''+widgetId+'\'); return false;" class="listlink">'
+        html += '&nbsp;'+widgetName+' ('+str(len(projects))+')</a>'
+        html += '</div>'
+    html += '<div id="'+widgetId+'" style="display:'+widgetDisplay+'">';    
+    for project in projects:
+        html += '<br/><a href="">'+project.short_name+'</a> (tab=%s tag=%s)' % (tab, tag)  
+    html += '</div>'
+
+    return html
+
 
 def render_tags_formset(request, project, formset):
     

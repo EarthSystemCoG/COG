@@ -1,36 +1,63 @@
 
 {% block right %}
     
-    <!-- create and display tree -->
     <script>
-    
-       // map of (tree identifier, tree object) pairs
-       var trees = {};
-      
-       // function to initialize a single tree object
-       function treeInit() {
-    	   treeId = this.id
-	       tree = new YAHOO.widget.TreeView(document.getElementById(treeId));
-	       tree.subscribe('clickEvent',tree.onEventToggleHighlight);  
-	       //tree.setNodesProperty('propagateHighlightUp',true); 
-	       tree.setNodesProperty('propagateHighlightDown',true); 
-	       //tree.singleNodeHighlight = true; 
-	       tree.render();
-	       trees[treeId] = tree
+           
+       // function to reload the project widget by ajax call
+       function loadProjectBrowser(project_short_name) {
+    	   
+    	   // loop over YUI tab ids, execute separate ajax requests
+    	   var tabs = ['this', 'all', 'my']
+    	   for (var i=0; i<tabs.length; i++) {
+    		   
+	    	   // build request URL
+	    	   var url = "/projects/"+project_short_name+"/browse/"+tabs[i]+"/";
+	    	   var tag = document.getElementById('projectBrowserText').value;
+	    	   if (tag != null && tag!="") url += "?tag="+tag;
+	    	   
+	    	   // define the callback function dynamically
+	    	   // so to pass in the target tab identifier as extra argument
+	    	   var callback = {
+	 				  success:handleSuccess,
+	 				  failure: handleFailure,
+	 				  cache:false,
+	 				  timeout:5000,
+	 				  argument: [],
+	    	   }
+			   // pass in target tab identifier as extra argument to ajax callback
+			   callback.argument[0] = tabs[i]+"ProjectsBrowser";
+	
+			   // execute asynchronous GET request
+			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+			
+    	   }
+    	   
        }
-       
-       // render tree when the page loads
-       //YAHOO.util.Event.addListener(window, "load", treeInit); 
-       // render tree as soon as the enclosing element is available, to reduce flicker
-       //YAHOO.util.Event.onContentReady("treeDiv1", treeInit, this);
-       //YAHOO.util.Event.onContentReady("treeDiv2", treeInit, this);
-       
+       	   
+		// function called if Ajax request failed
+		var handleFailure = function(o) {
+			showMessage("An Error Occurred",
+					    "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
+		}
+		
+		// function called if Ajax request succeded
+		var handleSuccess = function(o) {
+			
+			// retrieve target tab id from callback extra argument
+			tabId = o.argument[0]
+			
+			// replace browser window with new content
+			document.getElementById(tabId).innerHTML = o.responseText;
+			
+		}
+		       
    </script>
    
    <script>
    
     function add_news() {
     	
+    	// FIXME
         // news submission form (one per page, for all projects)    	
     	form = document.getElementById("treeForm");
         
@@ -169,11 +196,17 @@
               <li>&nbsp;&nbsp;<a href="#tab3"><em>My</em></a>&nbsp;&nbsp;</li>
           </ul>  
           <div class="yui-content">
-              <div>{{ request.user|tree_this_project:project }}</div>
-              <div>{{ request.user|tree_all_projects }}</div>
-              <div>{{ request.user|tree_my_projects }}</div>
+              <div id="thisProjectsBrowser">&nbsp;</div>
+              <div id="allProjectsBrowser">&nbsp;</div>
+              <div id="myProjectsBrowser">&nbsp;</div>
           </div>
-       </div>                
+       </div>       
+       
+       <!-- project widget controls -->
+       <div>
+	       <input type="text" id="projectBrowserText" onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" />
+	       <input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')" />
+       </div>    
       
 	   <!-- News submission form -->
 	   {% if user|hasUserPermission:project %}
@@ -185,10 +218,14 @@
 	     	</div>
 	   {% endif %}
      
-      </div>
-    </div>       
+      </div>  
+    </div>   
 
+	<!-- render YUI tabs -->
     <script>var myTabs = new YAHOO.widget.TabView("project_views");</script>
+    
+    <!-- populate project browser -->
+    <script>loadProjectBrowser('{{ project.short_name }}')</script>
    
     <p/>
    
