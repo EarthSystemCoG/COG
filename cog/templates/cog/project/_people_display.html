@@ -2,7 +2,7 @@
 {% load url from future %}
 
 {% load pagination_tags %}
-{% with project|getPeople as users %}
+{% with proj|getPeople as users %}
 
 	{% autopaginate users 50 %}	
 			
