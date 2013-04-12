@@ -9,6 +9,7 @@ from os.path import exists
 from cog.models.constants import UPLOAD_DIR_PHOTOS
 from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
+import os.path
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
@@ -140,6 +141,9 @@ class UserForm(ImageForm):
         
         # validate 'username' field
         validate_username(self, user_id)
+        
+        # additional validation on 'image' field
+        validate_image(self)
                 
         # validate all other fields against injection attacks
         for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country', 
@@ -150,6 +154,17 @@ class UserForm(ImageForm):
                 pass
         
         return cleaned_data
+    
+def validate_image(form):
+    
+    cleaned_data = form.cleaned_data
+    image = cleaned_data.get("image", None)
+    if image is not None:
+        print 'image name=%s' % image.name
+        extension = (os.path.splitext(image.name)[1]).lower()
+        if extension != '.jpg' and extension != '.png' and extension != '.gif':
+            form._errors["image"] = form.error_class(["Invalid image format: %s"%extension])
+        
     
 # method to validate the fields 'password" and 'confirm_password'
 def validate_password(form):
