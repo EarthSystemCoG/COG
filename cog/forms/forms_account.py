@@ -162,7 +162,7 @@ def validate_image(form):
     if image is not None:
         print 'image name=%s' % image.name
         extension = (os.path.splitext(image.name)[1]).lower()
-        if extension != '.jpg' and extension != '.png' and extension != '.gif':
+        if extension != '.jpg' and extension != '.png' and extension != '.gif' and extension != '.jpeg' :
             form._errors["image"] = form.error_class(["Invalid image format: %s"%extension])
         
     
