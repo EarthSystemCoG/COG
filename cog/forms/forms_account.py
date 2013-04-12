@@ -14,6 +14,7 @@ import os.path
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
+INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
 
 class UserUrlForm(ModelForm):
     
@@ -188,6 +189,10 @@ def validate_username(form, user_id):
         if username:
             if len(username) < 5:
                 form._errors["username"] = form.error_class(["'Username' must contain at least 5 characters."])
+            elif len(username) >30:
+                form._errors["username"] = form.error_class(["'Username' must not exceed 30 characters."])
+            elif re.search(INVALID_USERNAME_CHARS, username):
+                form._errors["username"] = form.error_class(["'Username' can only contain letters, digits and @/./+/-/_"])
             try:
                 # perform case-insensitive lookup of username, compare with id from form instance
                 user =  User.objects.all().get(username__iexact=username)

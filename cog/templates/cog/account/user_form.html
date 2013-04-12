@@ -4,8 +4,15 @@
 
 {% load cog_utils %}
 
-{% block extrahead %}
+{% block head %}
 
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js"></script>
+       
     <!-- note: must style the autocomplete containers otherwise it expands to fit the whole window-->
     <style type="text/css">
         #countryAutoComplete {
@@ -25,14 +32,12 @@
        function init() {
     	   // country
            var countryDataSource = new YAHOO.util.LocalDataSource(countryArray);
-    	   // 'id_coutry' = id of {{ form.country }} div element
            var countryAutoComp = new YAHOO.widget.AutoComplete("id_country", "countryContainer", countryDataSource);
            countryAutoComp.prehighlightClassName = "yui-ac-prehighlight";
            countryAutoComp.useShadow = true;    	
            countryAutoComp.allowBrowserAutocomplete = false;
            // state
            var stateDataSource = new YAHOO.util.LocalDataSource(stateArray);
-           // 'id_state' = id of {{ form.state }} div element
            var stateAutoComp = new YAHOO.widget.AutoComplete("id_state", "stateContainer", stateDataSource);
            stateAutoComp.prehighlightClassName = "yui-ac-prehighlight";
            stateAutoComp.useShadow = true;    	
@@ -70,7 +75,7 @@
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
 	                    <td>{{ form.username }}
-	                        <i>[ Must be at least 5 characters ]</i>
+	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
 	                        {{ form.username.errors }}</td>
 	                </tr>
 	                <tr>
@@ -113,16 +118,14 @@
                         <td class="optional" nowrap="nowrap">State</td>
                         <td class="long">
                             <div id="stateAutoComplete">
-                            	{{ form.state }} <div id="stateContainer"></div>
-                            </div><br/> {{ form.state.errors }}              
+                            {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}              
                         </td>
                     </tr>
                     <tr>
                         <td class="head required" nowrap="nowrap"><b>Country</b></td>
                         <td class="long">
                             <div id="countryAutoComplete">
-                            	{{ form.country }} <div id="countryContainer"></div>
-                            </div><br/> {{ form.country.errors }}              
+                            {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}              
                         </td>
                     </tr>
                     <tr>
