@@ -619,3 +619,13 @@ def partners(project):
 def sponsors(project):
     fundingsources = list( project.fundingsource_set.all() )
     return sorted(fundingsources, key=lambda fs: fs.name)
+
+@register.filter 
+# filter that builds the content for the Javascript projectTags array
+def projectTags(project):
+    
+    tags = ProjectTag.objects.all()
+    tagstring = ''
+    for tag in tags:
+        tagstring += '\"'+tag.name+'\",'
+    return mark_safe( tagstring[0:-1] ) # important: no escaping!

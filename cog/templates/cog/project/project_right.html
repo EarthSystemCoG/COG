@@ -1,9 +1,12 @@
-
 {% block right %}
-    
+
+    <!-- COG custom filters --> 
+    {% load cog_utils %}
+    {% load url from future %}
+
     <script>
-               
-       // function to reload the project widget by ajax call
+                   
+       // function to populate the project widget via ajax call
        function loadProjectBrowser(project_short_name) {
     	   
     	   // loop over YUI tab identifiers, execute separate ajax requests
@@ -35,13 +38,13 @@
     	   
        }
        	   
-		// function called if Ajax request failed
+		// function called if the ajax request failed
 		var handleFailure = function(o) {
 			showMessage("An Error Occurred",
 					    "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
 		}
 		
-		// function called if Ajax request succeded
+		// function called if the ajax request succeded
 		var handleSuccess = function(o) {
 			
 			// retrieve target tab id from callback extra argument
@@ -53,64 +56,29 @@
 		}
 		       
    </script>
-   
+      
    <script>
    
-    // FIXME: OBSOLETE
-    function add_news() {
-    	
-    	// FIXME
-        // news submission form (one per page, for all projects)    	
-    	form = document.getElementById("treeForm");
-        
-        // keep track of all projects notified, to avoid double entries
-        projects = {"{{ project.short_name }}":1}
-    	
-    	// loop over all project trees
-    	for (var key in trees) {
-    	
-    		var _projects = trees[key].getNodesByProperty('highlightState',1); 
-	    	if (!YAHOO.lang.isNull(_projects)) {  
-	    	  // loop over selected projects
-	    	  for (var i=0; i<_projects.length; i++) {
-	    		 // extract the content of the <a>...</a> tag
-	    		 var text = _projects[i].html.match(/<a .*>(.*)<\/a>/);
-	    		 var projectName = RegExp.$1;
-	    		 // insert project if not done already
-	    		 if (projects[projectName]==null) {
-	    			    var el=document.createElement('input');
-	    			    el.type="hidden";
-	    			    el.name = "other_projects";
-	    			    el.value = projectName;
-	    			    form.appendChild(el);
-	    			    projects[projectName] = 1;
-	    		 }
-	    	  } 
-	    	}
-    	
-        }
-    	
-    	// submit form
-    	form.submit();
-    }
-   
+   	   var projectTags = [
+   	   	  {{ project|projectTags }}
+        ];
+
+       function initTags() {
+           var dataSource = new YAHOO.util.LocalDataSource(projectTags);
+           var autoComp = new YAHOO.widget.AutoComplete("projectBrowserText", "tagContainer", dataSource);
+           autoComp.prehighlightClassName = "yui-ac-prehighlight";
+           autoComp.useShadow = true;    	
+           autoComp.allowBrowserAutocomplete = false;
+           autoComp.animSpeed = 0.2;
+           autoComp.maxResultsDisplayed = 10;
+           autoComp.minQueryLength = 0;
+           autoComp.typeHead = True;
+           //autoComp.alwaysShowContainer = true;
+       }
+       YAHOO.util.Event.onContentReady("project_widget", initTags);
+       
    </script>
-   
-   <!--  FIXME OBSOLETE -->
-   <!-- CSS classes to display node type icons 
-   <style type="text/css"> 
-      .this { height: 16px; padding-left: 18px; margin: 4px; background: transparent url({{MEDIA_URL}}cog/img/tick.png) 0 0px no-repeat; font-weight: bold; } 
-      .parent { height: 16px; padding-left: 18px; margin: 4px; background: transparent url({{MEDIA_URL}}cog/img/up_left2.png) 0 0px no-repeat; } 
-      .peer { height: 16px; padding-left: 18px; margin: 4px; background: transparent url({{MEDIA_URL}}cog/img/right1.png) 0 0px no-repeat; } 
-      .child { height: 16px; padding-left: 18px; margin:4px; background: transparent url({{MEDIA_URL}}cog/img/down_right2.png) 0 0px no-repeat; } 
-   </style> -->
-   <style type="text/css"> 
-      .this { height: 16px; padding-left: 2px; margin: 4px; font-weight: bold; font-size: 8pt; } 
-      .parent { height: 16px; padding-left: 2px; margin: 4px; font-size: 8pt;  } 
-      .peer { height: 16px; padding-left: 2px; margin: 4px; font-size: 8pt;  } 
-      .child { height: 16px; padding-left: 2px; margin:4px; font-size: 8pt; } 
-   </style>  
-   
+
      
    <style type="text/css">
    
@@ -197,14 +165,16 @@
 		vertical-align: middle;
 	}
 	
+	/* autocomplete widget must be styled otherwise it will expand to tale all available room */
+	#tagAutoComplete {
+       width: 130px; 
+       padding-bottom: 20px;
+    }
+	
    </style>
    
    <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/yui/tabview.css" />     
-   
-  <!-- COG custom filters --> 
-  {% load cog_utils %}
-  {% load url from future %}
-    
+       
   <!-- text search form -->
   <div class="search-box">
        <div class="search_header">Data Search</div>
@@ -226,7 +196,7 @@
   </div>
   <p/>
   
-   <!-- Project Connections -->
+   <!-- Project Browser -->
    <div class="yui-skin-sam">     
      <div class="project_widget">
      
@@ -248,16 +218,19 @@
 	   <div id="project_browser_controls">
 	       <table>
 	       	<tr>
-		       <td class="long">
-		       		<input type="text" id="projectBrowserText" 
-		       			   placeholder="Enter Tag"
-		                   onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" />
+		       <td class="long">		       	
+		       		<div id="tagAutoComplete">
+		       			<input type="text" id="projectBrowserText" placeholder="Enter Tag" />
+		                       <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" --> 
+		                <div id="tagContainer"></div>
+		            </div>
 		       </td>
 		       <td>
 		       		<input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')" />
 		       </td>
 	       	</tr>
 	       </table>   
+	       <div style="text-align:center; font-style: italic;">Start typing, or use the 'Delete' key to show all available tags.</div>
        </div>
       
 	   <!-- News submission form -->
@@ -278,6 +251,9 @@
     
     <!-- populate project browser -->
     <script>loadProjectBrowser('{{ project.short_name }}')</script>
+    
+    <!-- initialize tags autocompletion -->
+    <script>initTags()</script>
    
     <p/>
    
