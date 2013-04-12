@@ -109,7 +109,10 @@ def user_add(request):
                 
             # generate thumbnail image
             if userp.image is not None:
-                generateThumbnail(userp.image.path, THUMBNAIL_SIZE_SMALL)
+                try:
+                    generateThumbnail(userp.image.path, THUMBNAIL_SIZE_SMALL)
+                except ValueError:
+                    pass # image does not exist, ignore
             
             # notify site administrators
             notifyAdminsOfUserRegistration(user)
