@@ -140,13 +140,15 @@
 	}
 	
 	#parent_projects, #peer_projects, #child_projects {
-		/* overflow-y: scroll; */
+		overflow-y: auto; /* NOTE: scrollbar on containing div is controlled by tabview.css:yui-content */
 		margin-left: 0.3em;
 		margin-right: 0.3em;
+		max-height:100px;
 	}
 	
 	#all_projects, #my_projects {
 		overflow-y: auto;
+		max-height: 240px;
 		margin: 0.3em;
 	}
 	
