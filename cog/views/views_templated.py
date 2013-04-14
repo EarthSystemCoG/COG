@@ -35,8 +35,8 @@ def _hasTemplatedInfo(project, tab):
         return True
     elif tab==TABS["DEVELOPMENT"] and project.developmentOverview is not None and len(project.developmentOverview)>0:
         return True
-    elif tab==TABS["GOVERNANCE"] and project.governanceOverview is not None and len(project.governanceOverview) > 0:     
-        return True
+    elif tab==TABS["GOVERNANCE"] and project.governanceOverview is not None and len(project.governanceOverview.strip()) > 0:     
+         return True
     elif tab==TABS["BODIES"] and len(project.managementbody_set.all()) > 0:
          return True
     elif tab == TABS["ROLES"]:
