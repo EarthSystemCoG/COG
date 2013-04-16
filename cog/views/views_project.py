@@ -631,7 +631,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     #if len(projects)>0:
     #    widgetDisplay = 'block'
     if widgetName is not None:
-        html += '<div class="project_browser_bar">'
+        html += '<div class="project_browser_bar" id="%s_bar">' % widgetId
         html += '<a href="" onclick="javascript:toggle_visibility(\''+widgetId+'\'); return false;" class="listlink">'
         html += '&nbsp;'+widgetName+' ('+str(len(projects))+')</a>'
         html += '</div>'
