@@ -20,7 +20,7 @@
 					<!-- User -->
 					<td>
 						<a href="{% url 'user_detail' user.id %}">
-							<img src="{{ user|getThumbnail }}" style="border: 1px solid #666666;" />
+							<img src="{{ user|getThumbnail }}" style="border: 0px solid #666666;" />
 						</a>
 					</td>
 					<td>
@@ -46,7 +46,7 @@
 				{% else %}
 					<!-- Collaborator -->
 					<td>
-						<img src="{{ user|getThumbnail }}" style="border: 1px solid #666666;"/>
+						<img src="{{ user|getThumbnail }}" style="border: 0px solid #666666;"/>
 					</td>
 					<td>
 						<div class="middle">
