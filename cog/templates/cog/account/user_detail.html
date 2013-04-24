@@ -22,11 +22,11 @@
 	   	   <div class="span-17 last">
 	   	   		{% include 'cog/account/_user_research.html' %} 
 	   	   			   	   				        
-		        {% if request.user.id = user_profile.user.id %}
+		        {% if request.user.id = user_profile.user.id or request.user.is_staff %}
 		            <div style="text-align:center">
-		                <a href="{% url 'user_update' request.user.id %}">Update my profile</a>
+		                <a href="{% url 'user_update' user_profile.user.id %}">Update my profile</a>
 		                &nbsp; &nbsp;
-		                <a href="{% url 'password_update' request.user.id %}">Change my password</a>
+		                <a href="{% url 'password_update' user_profile.user.id %}">Change my password</a>
 		            </div>
 		        {% endif %}
 	   	   </div>

@@ -16,6 +16,7 @@ from cog.models.constants import NAVMAP, INVNAVMAP, TABS
 from cog.models.constants import DEFAULT_IMAGES
 from cog.util.thumbnails import getThumbnailPath
 from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import ObjectDoesNotExist
 
 register = template.Library()
 
@@ -459,10 +460,9 @@ def getImage(obj):
         elif isinstance(obj, Organization) or isinstance(obj, FundingSource):
             return obj.image.url
         
-    except ValueError:
+    except (ValueError, ObjectDoesNotExist) as e:
         # if the image field has no associated file -> return default (no image found)
         return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['%s' % obj.__class__.__name__]
-
 
 @register.filter
 def getThumbnailById(id, type):
