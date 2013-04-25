@@ -39,18 +39,32 @@ def news_update(request, news_id):
 
     # GET method pre-populates the form with the news properties    
     if (request.method=='GET'):
-                            
+                                    
         # create form from instance
-        form = NewsForm(news.project, instance=news)
+        form = NewsForm(news.project, request.user, instance=news)
         return render_news_form(request, request.GET, form, news.project)
     
     # POST method saves the modified instance    
     elif (request.method=='POST'):
         
         # update existing database model with form data
-        form = NewsForm(news.project, request.POST, instance=news)
+        form = NewsForm(news.project, request.user, request.POST, instance=news)
         if (form.is_valid()):
+            
+            # save data from web
             news = form.save()
+                        
+            # assign related projects
+            news.other_projects = []
+            for proj in (  list(form.cleaned_data['parent_projects'])
+                         + list(form.cleaned_data['peer_projects'])
+                         + list(form.cleaned_data['child_projects']) ):
+                if proj not in news.other_projects.all():
+                    news.other_projects.add(proj)
+            
+            # save new m2m relations
+            news.save()
+
             
             # redirect to project home (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('project_home', args=[news.project.short_name.lower()]))
@@ -81,7 +95,7 @@ def news_add(request, project_short_name):
         news.project = project
                     
         # create form from (unsaved) instance
-        form = NewsForm(project, instance=news)
+        form = NewsForm(project, request.user, instance=news)
         
         return render_news_form(request, request.GET, form, news.project)
         
@@ -89,7 +103,7 @@ def news_add(request, project_short_name):
     else:
         
         # create form object from form data
-        form = NewsForm(project, request.POST)
+        form = NewsForm(project, request.user, request.POST)
                 
         if form.is_valid():
             

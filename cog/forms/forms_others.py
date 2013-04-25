@@ -11,6 +11,7 @@ import re
 from cog.utils import *
 from django.db.models import Q
 from cog.models.constants import MAX_UPLOADES_BYTES
+import operator
 
 # list of invalid characters in uploaded documents filenames
 INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/]"
@@ -23,20 +24,27 @@ class NewsForm(ModelForm):
     child_projects = ModelMultipleChoiceField(queryset=Project.objects.all(), required=False, widget=CheckboxSelectMultiple)
     
     # override __init__ method to customize the list of choices for the parent/peer/child projects
-    def __init__(self, project, *args, **kwargs):
+    def __init__(self, project, user, *args, **kwargs):
         
-        super(NewsForm, self).__init__(*args,**kwargs)
-        
-        self.fields['parent_projects'].queryset = project.parents.all()
-        self.fields['peer_projects'].queryset = project.peers.all()
-        self.fields['child_projects'].queryset = project.children()
+        super(NewsForm, self).__init__(*args,**kwargs)     
+         
+        self.fields['parent_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.parents.all(), user))
+        self.fields['peer_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.peers.all(), user))
+        self.fields['child_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.children(), user))
         
         # on update only: pre-populate extra fields with current selection
         if self.instance.id:
             self.fields['parent_projects'].initial=self.instance.other_projects.all()
             self.fields['peer_projects'].initial=self.instance.other_projects.all()
             self.fields['child_projects'].initial=self.instance.other_projects.all()
-
+     
+    # method to build a query set that contains only the projects the user has access to
+    def _buildQuerySet(self, projects, user):  
+        qs = Q(pk=0) # start wuth an empty query set - does not match any project
+        for p in projects:
+            if userHasUserPermission(user, p):
+                qs = qs | Q(pk=p.id)
+        return qs
         
     class Meta:
         model = News
