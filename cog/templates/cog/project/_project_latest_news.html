@@ -1,14 +1,14 @@
 <!-- Project Latest News --> 
 
-{% if project.news %}
-
-    <!-- COG custom filters --> 
-    {% load cog_utils %}
+<!-- COG custom filters --> 
+{% load cog_utils %}
+    
+{% if project|projectNews %}
     
     <div class="news_box">
          <table>
              <caption class="news_header">Project News</caption>
-             {% for news in project.news|slice:":5" %}
+             {% for news in project|projectNews|slice:":5" %}
                  <tr>
                      <td>
                         <b>{{news.project.short_name}}: {{ news.title|truncatewords:10 }}</b>

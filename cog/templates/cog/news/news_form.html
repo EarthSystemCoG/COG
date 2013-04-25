@@ -1,5 +1,28 @@
 {% extends "cog/common/layout_sidebar_center.html" %}
 
+{% block extrahead %}
+
+	<script language="javascript">
+	
+		// function to toggle the state of a set of checkboxes
+		// according to a master checkbox
+		function toggle_projects(cb) {			
+			var name = cb.name;
+			var checked = cb.checked;			
+			var inputs = document.getElementsByTagName("input");
+			for (var i = 0; i < inputs.length; i++) {
+				if (inputs[i].type == "checkbox") { 
+					if (inputs[i].name.indexOf(name)>=0) {
+						inputs[i].checked = checked;
+					}
+				}
+			}			
+		}
+		
+	</script>
+
+{% endblock %}
+
 {% block main %} 
 
     {% load cog_utils %}
@@ -29,16 +52,25 @@
                  <tr>
                     <td class="tophead"><b>Publish to</b></td>
                     <td>
+                    	<!-- this project -->
                         {{ form.instance.project }}
                         <input type="hidden" name="project" value="{{form.instance.project.id}}"/>
-                        {% for other_project in other_projects %} 
-                            <br/>
-                            {% if user|hasUserPermission:other_project %}
-                                <input type="checkbox" name="other_projects" value="{{other_project.id}}" checked="checked"/> {{ other_project }}                 
-                            {% else %}
-                                <span style="color:red"> {{ other_project }} (Warning: Must be a member of this project to send news. News will not be delivered.) </span>
-                            {% endif %}                                             
-                        {% endfor %}
+                             
+                        <!-- parent projects -->          
+                        <br/><input type="checkbox" name="parent_project" onclick="toggle_projects(this)">&nbsp;<b>Parent Projects</b>
+                        {{ form.parent_projects }}     
+                        
+                        <!-- peer projects -->          
+                        <input type="checkbox" name="peer_project" onclick="toggle_projects(this)">&nbsp;<b>Peer Projects</b>
+                        {{ form.peer_projects }}        
+                        
+                        <!-- child projects -->          
+                        <input type="checkbox" name="child_project" onclick="toggle_projects(this)">&nbsp;<b>Child Projects</b>
+                        {{ form.child_projects }}                     
+                                     
+                        
+                        <br/>    
+
                     </td>
                 </tr>             
             </table>

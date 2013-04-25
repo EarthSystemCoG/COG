@@ -52,6 +52,7 @@
        {% if user|hasUserPermission:project %}
        <h3>{{ project.short_name }} Members</h3>
        <ul>
+       		<li><a href="{% url 'news_add' project.short_name.lower %}" class="addlink">&nbsp;Publish News</a></li>
             <li><a href="{% url 'post_add' project.short_name.lower %}?type=page" class="addlink">&nbsp;Add Page</a></li>
             <!-- <li><a href="{% url 'post_add' project.short_name.lower %}?type=blog" class="addlink">&nbsp;Add Blog</a></li> -->
             <li><a href="{% url 'doc_add' project.short_name.lower %}" class="addlink">&nbsp;Add File</a></li>
@@ -62,8 +63,7 @@
        <!-- access restricted to project admins -->
        {% if user|hasAdminPermission:project %}
        <h3>{{ project.short_name }} Administrators</h3>
-       <ul>           
-            
+       <ul>                       
             <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
             <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
         	<!-- <li><a href="/admin/filebrowser/browse?project={{project.short_name}}" class="listlink">&nbsp;Browse Project Uploads</a></li> -->
@@ -74,8 +74,7 @@
             <!-- <li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li> -->
             <li><a href="{% url 'search_profile_config' project.short_name.lower %}" class="changelink">&nbsp;Configure Search</a></li>
             <!-- <li><a href="{% url 'project_add' %}?parent={{ project.short_name.lower }}" class="addlink">&nbsp;Add Child Project</a></li> -->
-            <li><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">&nbsp;Delete Project</a></li>
-             
+            <li><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">&nbsp;Delete Project</a></li>             
        </ul>
        {% endif %}  
        

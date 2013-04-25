@@ -516,3 +516,7 @@ def projectTags(project):
     for tag in tags:
         tagstring += '\"'+tag.name+'\",'
     return mark_safe( tagstring[0:-1] ) # important: no escaping!
+
+@register.filter 
+def projectNews(project):
+    return news(project)

@@ -8,6 +8,13 @@ from post import Post
 from constants import PROJECT_PAGES
 from django.conf import settings
 from django.utils.timezone import now
+from news import News
+from django.db.models import Q
+
+# method to retrieve all news for a given project, ordered by date
+def news(project):
+    qset = Q(project=project) | Q(other_projects=project)
+    return News.objects.filter(qset).distinct().order_by('-update_date')
 
 # method to return a list of project pages, organized by topic, and ordered by topic order first, page order second
 def site_index(project):

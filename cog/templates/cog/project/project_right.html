@@ -235,17 +235,7 @@
 	       </table>   
 	       <div style="text-align:center; font-style: italic;">Start typing, or use the 'Delete' key to show all available tags.</div>
        </div>
-      
-	   <!-- News submission form -->
-	   {% if user|hasUserPermission:project %}
-	     	<!-- news submission form - one per page, for all project trees -->
-		    <form name="treeForm" id="treeForm" method="GET" action="{% url 'news_add' project.short_name %}" />
-	     
-	     	<div class="projects_footer">
-	           &nbsp;<a href="javascript:add_news()" class="addlink"> <span style="font-size:7pt">Publish {{ project.short_name }} News &raquo;</span></a>
-	     	</div>
-	   {% endif %}
-     
+           
       </div>  
     </div>   
 

@@ -5,7 +5,7 @@
     <!-- COG custom filters --> 
     {% load cog_utils %}
     
-    {% if project.news|length == 0 %} 
+    {% if project|projectNews|length == 0 %} 
     
     	<p>This project has no news.</p>
     

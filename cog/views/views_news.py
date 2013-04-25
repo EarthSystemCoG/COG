@@ -11,11 +11,11 @@ from constants import PERMISSION_DENIED_MESSAGE
 def news_list(request, project_short_name):
     
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-   
+       
     return render_to_response('cog/news/news_list.html', 
                               {'project': project, 
                                'title': '%s News' % project.short_name,
-                               'project_news': project.news() }, 
+                               'project_news': news(project) }, 
                                context_instance=RequestContext(request))
     
 def news_detail(request, news_id):
@@ -32,7 +32,7 @@ def news_detail(request, news_id):
 def news_update(request, news_id):
     
     news = get_object_or_404(News, pk=news_id)
-    
+        
     # check permission
     if not userHasUserPermission(request.user, news.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
@@ -41,14 +41,14 @@ def news_update(request, news_id):
     if (request.method=='GET'):
                             
         # create form from instance
-        form = NewsForm(instance=news)
+        form = NewsForm(news.project, instance=news)
         return render_news_form(request, request.GET, form, news.project)
     
     # POST method saves the modified instance    
     elif (request.method=='POST'):
         
         # update existing database model with form data
-        form = NewsForm(request.POST, instance=news)
+        form = NewsForm(news.project, request.POST, instance=news)
         if (form.is_valid()):
             news = form.save()
             
@@ -81,25 +81,38 @@ def news_add(request, project_short_name):
         news.project = project
                     
         # create form from (unsaved) instance
-        form = NewsForm(instance=news)
+        form = NewsForm(project, instance=news)
+        
         return render_news_form(request, request.GET, form, news.project)
         
     # POST method validates the form data and saves instance to database
     else:
         
         # create form object from form data
-        form = NewsForm(request.POST)
+        form = NewsForm(project, request.POST)
                 
         if form.is_valid():
+            
+            # save object to the database
+            news = form.save()       
 
-            # save object to the database - including the m2m relations to other projects
-            news = form.save()
+            # assign related projects
+            for proj in form.cleaned_data['parent_projects']:
+                news.other_projects.add(proj)
+            for proj in form.cleaned_data['peer_projects']:
+                news.other_projects.add(proj)
+            for proj in form.cleaned_data['child_projects']:
+                news.other_projects.add(proj)
+
+            # save m2m relationships
+            news.save()
+                                    
             # redirect to project home (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('project_home', args=[news.project.short_name.lower()]))
         
         # invalid data
         else:
-            #print "Form is invalid: %s" % form.errors
+            print "Form is invalid: %s" % form.errors
             news = form.instance
             return render_news_form(request, request.POST, form, news.project)
         

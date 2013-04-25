@@ -175,13 +175,7 @@ class Project(models.Model):
     
     def full_name(self):
         return '%s : %s' % (self.short_name, self.long_name)
-    
-    # method to retrieve all news for this project, ordered by date
-    def news(self):
-        qset = Q(project=self) | Q(other_projects=self)
-        #return News.objects.filter(qset).distinct().order_by('-update_date')
-        return self.news_set.filter(qset).distinct().order_by('-update_date')
-    
+        
     # utility class to build the project index
     class IndexItem:
         def __init__(self, topic, order, pages):

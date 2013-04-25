@@ -3,7 +3,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, Select
+from django.forms import ModelForm, Textarea, TextInput, Select, CheckboxSelectMultiple
 from django.core.exceptions import ObjectDoesNotExist
 from tinymce.widgets import TinyMCE
 from os.path import basename
@@ -16,6 +16,28 @@ from cog.models.constants import MAX_UPLOADES_BYTES
 INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/]"
 
 class NewsForm(ModelForm):
+    
+    # extra fields not present in model
+    peer_projects = ModelMultipleChoiceField(queryset=Project.objects.all(), required=False, widget=CheckboxSelectMultiple)
+    parent_projects = ModelMultipleChoiceField(queryset=Project.objects.all(), required=False, widget=CheckboxSelectMultiple)
+    child_projects = ModelMultipleChoiceField(queryset=Project.objects.all(), required=False, widget=CheckboxSelectMultiple)
+    
+    # override __init__ method to customize the list of choices for the parent/peer/child projects
+    def __init__(self, project, *args, **kwargs):
+        
+        super(NewsForm, self).__init__(*args,**kwargs)
+        
+        self.fields['parent_projects'].queryset = project.parents.all()
+        self.fields['peer_projects'].queryset = project.peers.all()
+        self.fields['child_projects'].queryset = project.children()
+        
+        # on update only: pre-populate extra fields with current selection
+        if self.instance.id:
+            self.fields['parent_projects'].initial=self.instance.other_projects.all()
+            self.fields['peer_projects'].initial=self.instance.other_projects.all()
+            self.fields['child_projects'].initial=self.instance.other_projects.all()
+
+        
     class Meta:
         model = News
         
