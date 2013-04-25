@@ -28,9 +28,9 @@ class NewsForm(ModelForm):
         
         super(NewsForm, self).__init__(*args,**kwargs)     
          
-        self.fields['parent_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.parents.all(), user))
-        self.fields['peer_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.peers.all(), user))
-        self.fields['child_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.children(), user))
+        self.fields['parent_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.parents.all(), user)).distinct().order_by('short_name')
+        self.fields['peer_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.peers.all(), user)).distinct().order_by('short_name')
+        self.fields['child_projects'].queryset = Project.objects.filter(self._buildQuerySet(project.children(), user)).distinct().order_by('short_name')
         
         # on update only: pre-populate extra fields with current selection
         if self.instance.id:
