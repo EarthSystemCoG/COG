@@ -20,6 +20,17 @@
 		}
 		
 	</script>
+	
+	<style type="text/css">
+   
+	    #parent_projects ul, #peer_projects ul, #child_projects ul {
+		    margin: 0px;
+		    padding: 0px;
+		    padding-left: 10px; /* indent checkbox */
+		    list-style-type: none;
+		}
+	
+	</style>
 
 {% endblock %}
 
@@ -58,15 +69,15 @@
                              
                         <!-- parent projects -->          
                         <br/><input type="checkbox" name="parent_project" onclick="toggle_projects(this)">&nbsp;<b>Parent Projects</b>
-                        {{ form.parent_projects }}     
+                        <div id="parent_projects">{{ form.parent_projects }}</div> 
                         
                         <!-- peer projects -->          
                         <input type="checkbox" name="peer_project" onclick="toggle_projects(this)">&nbsp;<b>Peer Projects</b>
-                        {{ form.peer_projects }}        
+                        <div id="peer_projects">{{ form.peer_projects }}</div>
                         
                         <!-- child projects -->          
                         <input type="checkbox" name="child_project" onclick="toggle_projects(this)">&nbsp;<b>Child Projects</b>
-                        {{ form.child_projects }}                     
+                        <div id="child_projects">{{ form.child_projects }}</div>                     
                                      
                         
                         <br/>    
