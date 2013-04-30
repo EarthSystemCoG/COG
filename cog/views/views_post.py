@@ -40,14 +40,14 @@ def post_delete(request, post_id):
     # retrieve post
     post = get_object_or_404(Post, pk=post_id)
     project = post.project
-    
-    # check permission
-    if not userHasAdminPermission(request.user, project):
-        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-        
+            
     # check post is not one of the critical project pages
     if post.is_predefined():
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    else:
+        # check permission: only project members can delete non-predefined project pages
+        if not userHasUserPermission(request.user, project):
+            return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method=='GET':
         return render_to_response('cog/post/post_delete.html', 
