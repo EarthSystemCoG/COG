@@ -657,7 +657,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
                 html += "<i>No projects found.</i>"
     else:     
         # loop over projects sorted by name
-        for prj in sorted(projects, key=lambda prj: prj.short_name):
+        for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):
             html += '<a href="'+ reverse('project_home', args=[prj.short_name.lower()]) +'">'+prj.short_name+'</a><br/>'
     html += '</div>'
 
