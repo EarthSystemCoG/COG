@@ -290,21 +290,24 @@ def getTopNav(project, request):
     # .....
     for ptablist in ptabs:
         tablist = []
-        selected = False
+        selected = False        
         for idx, ptab in enumerate(ptablist):
+            label = ptab.label
             # top-tab
-            if idx == 0:        
+            if idx == 0:   
+                if label == 'Bookmarks': # change label name
+                    label = 'Resources'     
                 if ptab.active:
                     if str(ptab.url) == taburl:
                         selected = True
-                    tablist.append((ptab.label, ptab.url, selected))
+                    tablist.append((label, ptab.url, selected))
             # sub-tab
             else:
                 if selected and ptab.active:
                     _selected = False
                     if request.path == ptab.url:
                         _selected = True
-                    tablist.append((ptab.label, ptab.url, _selected))
+                    tablist.append((label, ptab.url, _selected))
                 
         tabs.append(tablist)
     return tabs
