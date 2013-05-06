@@ -25,7 +25,7 @@ def news_detail(request, news_id):
     return render_to_response('cog/news/news_detail.html', 
                               {'project': news.project, 
                                'news': news,
-                               'title': '%s News' % news.title },
+                               'title': news.title },
                                context_instance=RequestContext(request))
     
 @login_required
