@@ -505,7 +505,7 @@ def development_display(request, project_short_name):
     tab = TABS["DEVELOPMENT"] 
     template_page = 'cog/project/_project_development.html'
     template_form_pages = { reverse('development_update', args=[project_short_name]) : "Development" }
-    template_title = "Development"
+    template_title = "Development Overview"
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
