@@ -94,9 +94,9 @@ class DevelopmentOverviewForm(ModelForm):
         
 class ProjectTagForm(ModelForm):
     
-    # extra field not present in model, used for project association
-    this_project = forms.BooleanField(required=False)        
-    
+    # additional field to select existing tags
+    tags = ModelMultipleChoiceField(queryset=ProjectTag.objects.all(), required=False)
+     
     def clean(self):
         name = self.cleaned_data['name']
         
@@ -111,6 +111,9 @@ class ProjectTagForm(ModelForm):
             # only allow letters, numbers, '-' and '_'
             if re.search("[^a-zA-Z0-9_\-\s]", name):
                 self._errors["name"] = self.error_class(["Tag name contains invalid characters"])
+            # impose maximum length
+            if len(name)>40:
+                self._errors["name"] = self.error_class(["Tag name must contain at most 40 characters"])
         
         return self.cleaned_data
     

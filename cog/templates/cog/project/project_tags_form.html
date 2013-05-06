@@ -8,7 +8,7 @@
 	
 	<p/>          
 	Select existing tags to use for this project, 
-	or create new tags using only letters, numbers, '_' or '-'.	 
+	or create new tags using only letters, numbers, '_' or '-' (maximum of 40 characters per tag).	 
 	Tags not associated with any project are automatically deleted.   
 	<br/>
 	
@@ -19,26 +19,15 @@
     	{{ formset.management_form }}
 	 			
 		<div class="mybox">	 
-			<table>	 			
-				{% for form in formset %}
-					{{ form.id }}
-					<tr>
-						<td class="required" nowrap="nowrap"><div style="margin-top:4px">Tag Name:</div></td>
-	        		<td class="long">
-	        			{% if form.instance.id == None %}
-	        				{{ form.name }} {{ form.name.errors }}
-	        			{% else %}
-	        				<div style="margin-top:4px">{{ form.instance.name }}</div>
-	        				{{ form.name.as_hidden }}
-	        			{% endif %}
-	        		</td>
-	        		<td nowrap="nowrap">
-	        			{% if form.instance.id %}
-	        				<div style="margin-top:2px">&nbsp;{{ form.this_project }} Use for this project ?</div>
-	        			{% endif %}
-	        		</td>
-					</tr>	 				
-				{% endfor %} 				 			
+			<table>	 
+				<tr>
+					<td nowrap="nowrap" class="righttop">Choose one or more existing tags:</td>
+					<td> {{ form.tags }} {{ form.tags.errors }}</td>
+				</tr>		
+				<tr>
+					<td nowrap="nowrap" class="right">Or enter a new tag:</td>
+					<td class="long">{{ form.name }} {{ form.name.errors }}</td>
+				</tr>				 			
 			</table>
 		</div>
 	

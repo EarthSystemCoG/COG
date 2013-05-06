@@ -518,66 +518,48 @@ def tags_update(request, project_short_name):
     # check permission
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
-    formset_factory =  modelformset_factory(ProjectTag, form=ProjectTagForm, extra=3, can_delete=False)   
-    # select only tags for this project using 'related_name' field of ProjectTag 
-    #queryset = ProjectTag.objects.filter(projects=project) 
-    # select all available tags
-    queryset = ProjectTag.objects.all()                         
-    
+            
     # GET request
     if request.method=='GET':
-                
-        formset = formset_factory(queryset=queryset)
         
-        # initialize form extra field with initial value
-        for form in formset.forms:
-            if form.instance in project.tags.all():
-                form.initial['this_project'] = True
-            else:
-                form.initial['this_project'] = False
-        
-        return render_tags_formset(request, project, formset)
+        form = ProjectTagForm(initial={'tags':project.tags.all()})
+                        
+        return render_tags_form(request, project, form)
         
     else:
         
-        # create formset from POST data
-        formset = formset_factory(request.POST, queryset=queryset)
+        # create form from POST data
+        form = ProjectTagForm(request.POST)
         
         # validate formset
-        if formset.is_valid():
-                                    
-            project.tags = [] # empty list of project tags
-            # loop over form data and manually assign the tag to the project
-            for form in formset.forms:   
-                tag = form.instance
-                if tag.name: # tag is not empty
-                    
-                    # if new tag, assign to project automatically
-                    if tag.id is None: 
-                        form.cleaned_data['this_project'] = True
-                    
-                    # save each tag
-                    tag.save()
-                    
-                    # add tag to project
-                    if form.cleaned_data['this_project'] is True:
-                        project.tags.add(tag)
+        if form.is_valid():
+                            
+            # empty list of project tags                  
+            project.tags = [] 
                         
-                    # delete tag if not associated with any other project
-                    else:
-                        if len(tag.projects.all()) == 0:
-                            tag.delete()
-            
+            # reassign selected tags
+            for tag in form.cleaned_data['tags']:
+                project.tags.add(tag)            
+                       
+            # associate new tag to project, save
+            if len(form.cleaned_data['name'].strip()) > 0:
+                tag = form.save()
+                project.tags.add(tag)
+
             # save new list of project tags
             project.save()   
+            
+            # remove unused tags
+            for tag in ProjectTag.objects.all():
+                if len(tag.projects.all()) == 0:
+                    tag.delete()
             
             # redirect to project home (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
             
         else:
-            print 'Formset is invalid  %s' % formset.errors
-            return render_tags_formset(request, project, formset)
+            print 'Form is invalid  %s' % form.errors
+            return render_tags_form(request, project, form)
         
 def project_browser(request, project_short_name, tab):
     
@@ -701,10 +683,10 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
     
     return _projects
 
-def render_tags_formset(request, project, formset):
+def render_tags_form(request, project, form):
     
     return render_to_response('cog/project/project_tags_form.html', 
-                             {'formset': formset,
+                             {'form': form,
                               'title': 'Update Tags for Project: %s' % project.short_name,
                               'project': project }, 
                               context_instance=RequestContext(request))
