@@ -10,6 +10,10 @@ from cog.models.utils import get_project_communication_means
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 
 
+def hasText(str):
+    '''Utility function to establish whether a string has any non-empty characters.'''
+    return str is not None and len(str.strip()) > 0
+
 def _hasTemplatedInfo(project, tab):
     '''Utility function to determine whether a project has been populated 
        with the requested templated metadata, depending on type.'''
@@ -17,15 +21,15 @@ def _hasTemplatedInfo(project, tab):
     if tab==TABS["ABOUTUS"]:
         # 'About Us' always populated with long_name, description
         return True
-    elif tab==TABS["MISSION"] and project.mission is not None and len(project.mission.strip()) > 0:
+    elif tab==TABS["MISSION"] and hasText(project.mission) > 0:
         return True
-    elif tab==TABS["VISION"] and project.vision is not None and len(project.vision.strip()) > 0:
+    elif tab==TABS["VISION"] and hasText(project.vision) > 0:
         return True
-    elif tab==TABS["VALUES"] and project.values is not None and len(project.values.strip()) > 0:
+    elif tab==TABS["VALUES"] and hasText(project.values) > 0:
         return True
-    elif tab==TABS["PARTNERS"] and project.values is not None and len(project.organization_set.all()) > 0:
+    elif tab==TABS["PARTNERS"] and hasText(project.values) > 0:
         return True
-    elif tab==TABS["SPONSORS"] and project.values is not None and len(project.fundingsource_set.all()) > 0:
+    elif tab==TABS["SPONSORS"] and hasText(project.values) > 0:
         return True   
     elif tab==TABS["PEOPLE"]:
         # "People" always populated with project users
@@ -33,9 +37,9 @@ def _hasTemplatedInfo(project, tab):
     elif tab==TABS["CONTACTUS"] or tab==TABS["SUPPORT"]:
         # 'contactus' and 'support' always populated
         return True
-    elif tab==TABS["DEVELOPMENT"] and project.developmentOverview is not None and len(project.developmentOverview)>0:
+    elif tab==TABS["DEVELOPMENT"] and hasText(project.developmentOverview):
         return True
-    elif tab==TABS["GOVERNANCE"] and project.governanceOverview is not None and len(project.governanceOverview.strip()) > 0:     
+    elif tab==TABS["GOVERNANCE"] and hasText(project.governanceOverview) > 0:     
          return True
     elif tab==TABS["BODIES"] and len(project.managementbody_set.all()) > 0:
          return True
@@ -46,7 +50,7 @@ def _hasTemplatedInfo(project, tab):
         if len( get_project_communication_means(project, True) ) > 0:
             return True
     elif tab == TABS["PROCESSES"]:
-        if project.taskPrioritizationStrategy is not None or project.requirementsIdentificationProcess is not None:
+        if hasText(project.taskPrioritizationStrategy) or hasText(project.requirementsIdentificationProcess):
             return True
     elif tab == TABS["POLICIES"]:
         if len(project.policies()) > 0:

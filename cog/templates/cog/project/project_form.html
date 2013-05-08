@@ -144,7 +144,11 @@
 															<input name="tab_{{tab.label}}"  
 															       {% if tab.active %} checked="checked" {% endif %}							       
 															       type="checkbox" onclick="trigger(this)">
-															       {{tab.label}}										
+															       {% if tab.label == 'Bookmarks' %}
+															       		Resources					
+															       {% else %}
+															       		{{tab.label}}
+															       {% endif %}					
 														</td>
 													</tr>
 												{% endfor %}
