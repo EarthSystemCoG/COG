@@ -73,7 +73,7 @@
            autoComp.animSpeed = 0.2;
            autoComp.maxResultsDisplayed = 10;
            autoComp.minQueryLength = 0;
-           autoComp.typeHead = True;
+           autoComp.typeHead = true;
            //autoComp.alwaysShowContainer = true;
        }
        YAHOO.util.Event.onContentReady("project_widget", initTags);
@@ -99,7 +99,8 @@
 	    display: block;
 	}
 	
-	/* NOTE: scrollbar controlled by "overflow-y: auto;" in tabview.css */
+	/* NOTE: scrollbar controlled by "overflow-y: auto;" in tabview.css
+	   NOTE: overall widget height also controlled by .yui-content in tabview.css */
 	.project_widget {
 	    margin: 0px;
 	    padding: 0px;
@@ -110,7 +111,6 @@
 	    border: 1px solid #666666;
 	    color: #666;
 	    display: block;
-	    /* height:500px; */
 	}
 	
 	.project_browser_bar {
@@ -149,7 +149,7 @@
 	
 	#all_projects, #my_projects {
 		overflow-y: auto;
-		max-height: 240px;
+		max-height: 295px; /* must be less than overall widget height set in tabview.css */
 		margin: 0.3em;
 	}
 	
