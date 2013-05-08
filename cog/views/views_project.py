@@ -627,7 +627,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
         else:
             display = 'none'
 
-    html += '<div id="'+widgetId+'" style="display:'+display+'">';  
+    html += '<div id="'+widgetId+'" style="display:'+display+'">';  # height of individual project widgets
     if len(projects)==0:
         if tagError is not None:
             html += "<i>"+tagError+"</i>"
