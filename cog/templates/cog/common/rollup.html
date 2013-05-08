@@ -32,11 +32,13 @@
 		    {% for child in children %}
 	    		{% with child as proj %}
 	    			<br/>
-	    			<div class="mybox" style="padding:2px;">
+	    			<div class="mybox" style="padding:0px;">
 	    				<div class="header-gray">
 	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}}</div>
 	    				</div>
-						{% include template_page %}
+						<div style="padding:4px;">
+							{% include template_page %}
+						</div>
 					</div>
 				{% endwith %}
 		    {% endfor %}		
