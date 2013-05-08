@@ -65,7 +65,7 @@
         ];
 
        function initTags() {
-           var dataSource = new YAHOO.util.LocalDataSource(projectTags);
+           var dataSource = new YAHOO.util.LocalDataSource(projectTags.sort()); // sort tags alphabetically
            var autoComp = new YAHOO.widget.AutoComplete("projectBrowserText", "tagContainer", dataSource);
            autoComp.prehighlightClassName = "yui-ac-prehighlight";
            autoComp.useShadow = true;    	
