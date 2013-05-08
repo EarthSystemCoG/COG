@@ -572,7 +572,7 @@ def project_browser(request, project_short_name, tab):
 
     html = ''    
     if tab == 'this':
-        display = DisplayStatus(True) # object that keeps track of successfull invocations, if necessary
+        display = DisplayStatus(True) # object that keeps track of successful invocations, if necessary
         html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
         html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
         html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)
@@ -623,7 +623,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     if displayStatus is not None:
         if displayStatus.open and len(projects)>0:
             display = 'block'
-            displayStatus.open = False # close all following widgets
+            #displayStatus.open = False # close all following widgets
         else:
             display = 'none'
 
