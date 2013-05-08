@@ -173,6 +173,14 @@
        width: 138px; 
        padding-bottom: 20px;
     }
+    
+    /* enable vertical scrollbar if large number of items needs to be displayed
+       (in conjunction with large autoComp.maxResultsDisplayed) */
+    .yui-skin-sam .yui-ac-content { /* set scrolling */ 
+	    max-height:10em;
+	    overflow:auto; overflow-x:hidden; /* set scrolling */ 
+	    _height:10em; /* ie6 */ 
+	} 
 	
    </style>
    
