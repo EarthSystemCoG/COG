@@ -672,6 +672,7 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         if not prj.active:
             # do not add
             pass
+        # only display projects that are visible to the user ?
         elif prj.isNotVisible(user):
             # do not add
             pass
