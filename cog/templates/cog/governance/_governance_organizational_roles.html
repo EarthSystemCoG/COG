@@ -7,11 +7,6 @@
 	<!-- header -->
 	<hr/>
 	<b>{{category}} Organizational Roles</b>
-	{% if user|hasAdminPermission:proj %}
-	    <div style="float:right">
-	    	<a href="{% url organizational_role_update proj.short_name.lower %}" class="changelink">&nbsp;Update</a>
-	 	</div>
-	{% endif %}
 
 	<!-- content -->
 	{% if organizational_roles %}
