@@ -27,9 +27,9 @@ def _hasTemplatedInfo(project, tab):
         return True
     elif tab==TABS["VALUES"] and hasText(project.values) > 0:
         return True
-    elif tab==TABS["PARTNERS"] and hasText(project.values) > 0:
+    elif tab==TABS["PARTNERS"] and len(project.organization_set.all()) > 0:
         return True
-    elif tab==TABS["SPONSORS"] and hasText(project.values) > 0:
+    elif tab==TABS["SPONSORS"] and len(project.fundingsource_set.all()) > 0:
         return True   
     elif tab==TABS["PEOPLE"]:
         # "People" always populated with project users
