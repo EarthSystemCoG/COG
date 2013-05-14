@@ -258,6 +258,12 @@ strong {
 	background: url(/static/admin/img/icon_deletelink.gif) 0 .25em no-repeat;
 }
 
+.arrowrightlink {
+	padding-left: 8px;
+	padding-top: 2px;
+	background: url(/static/cog/img/icon_arrowrightlink.png) 0 .25em no-repeat;
+}
+
 /* VERTICAL MENU */
 .vertical_menu table {
 	margin: 0px;
