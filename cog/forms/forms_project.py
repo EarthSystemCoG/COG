@@ -112,8 +112,8 @@ class ProjectTagForm(ModelForm):
             if re.search("[^a-zA-Z0-9_\-\s]", name):
                 self._errors["name"] = self.error_class(["Tag name contains invalid characters"])
             # impose maximum length
-            if len(name)>40:
-                self._errors["name"] = self.error_class(["Tag name must contain at most 40 characters"])
+            if len(name)>MAX_PROJECT_TAG_LENGTH:
+                self._errors["name"] = self.error_class(["Tag name must contain at most %s characters" % MAX_PROJECT_TAG_LENGTH])
         
         return self.cleaned_data
     

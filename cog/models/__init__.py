@@ -10,7 +10,7 @@ from project import *
 from project_topic import ProjectTopic
 from project_tab import *
 from news import News
-from project_tag import ProjectTag
+from project_tag import ProjectTag, MAX_PROJECT_TAG_LENGTH
 
 # Posts
 from doc import Doc
