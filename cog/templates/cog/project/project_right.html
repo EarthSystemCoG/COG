@@ -139,7 +139,12 @@
 		padding: 0px;
 		margin: 0px;
 	}
-	
+
+        #projectBrowserButton {
+                padding-right: 2px;
+                padding-left: 2px;
+        }
+
 	#parent_projects, #peer_projects, #child_projects {
 		overflow-y: auto; /* NOTE: scrollbar on containing div is controlled by tabview.css:yui-content */
 		margin-left: 0.3em;
@@ -239,7 +244,7 @@
 		            </div>
 		       </td>
 		       <td>
-		       		<input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')" />
+                           <input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
 		       </td>
 	       	</tr>
 	       </table>   
