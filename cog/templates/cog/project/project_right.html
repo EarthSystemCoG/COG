@@ -140,11 +140,7 @@
 		margin: 0px;
 	}
 
-        #projectBrowserButton {
-                padding-right: 2px;
-                padding-left: 2px;
-        }
-
+        
 	#parent_projects, #peer_projects, #child_projects {
 		overflow-y: auto; /* NOTE: scrollbar on containing div is controlled by tabview.css:yui-content */
 		margin-left: 0.3em;
@@ -212,14 +208,14 @@
        </div>
   </div>
   <p/>
-  
-   <!-- Project Browser -->
+
    
    <div class="yui-skin-sam">     
      <div class="project_widget">
      
        <div id="project_views" class="yui-navset">  
-          <div class="tabs_caption">Project Browser</div>  
+          <div class="tabs_caption">Project Browser</div>
+
           <ul class="yui-nav">
               <li class="selected">&nbsp;&nbsp;<a href="#tab1"><em>This</em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="#tab2"><em>All</em></a>&nbsp;&nbsp;</li>
@@ -233,17 +229,19 @@
        </div>       
        
        <!-- project widget controls -->
+       
 	   <div id="project_browser_controls">
-	       <table>
+
+	       <table style="margin-top: 4px;">
 	       	<tr>
-		       <td class="long">		       	
+                    <td class="long">
 		       		<div id="tagAutoComplete">
 		       			<input type="text" id="projectBrowserText" placeholder="Enter Tag" />
 		                       <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" --> 
 		                <div id="tagContainer"></div>
 		            </div>
 		       </td>
-		       <td>
+		       <td style="padding: 2px; margin-right: 2px;">
                            <input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
 		       </td>
 	       	</tr>
