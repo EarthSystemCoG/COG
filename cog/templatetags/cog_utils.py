@@ -295,8 +295,11 @@ def getTopNav(project, request):
             label = ptab.label
             # top-tab
             if idx == 0:   
-                if label == 'Bookmarks': # change label name
+                # change label name
+                if label == 'Bookmarks': # change 'Bookmarks' to 'Resources'
                     label = 'Resources'     
+                #elif 'Home' in label:    # remove project short name from 'Home' tab 
+                #    label = 'Home'
                 if ptab.active:
                     if str(ptab.url) == taburl:
                         selected = True
