@@ -15,6 +15,7 @@ from constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from django.utils.timezone import now
+from cog.models.utils import delete_comments
  
 # view to render a generic post
 def post_detail(request, post_id):
@@ -60,6 +61,9 @@ def post_delete(request, post_id):
                 
         # send post update signal
         post.send_signal(SIGNAL_OBJECT_DELETED)
+        
+        # delete associated comments
+        delete_comments(post)
         
         # delete the post
         post.delete()
