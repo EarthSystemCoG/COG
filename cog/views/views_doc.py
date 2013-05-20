@@ -15,6 +15,7 @@ from django.views.static import serve
 from cog.models.project import userHasUserPermission
 from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
+from cog.models.utils import delete_comments
 import os
 
 @csrf_exempt
@@ -175,6 +176,9 @@ def doc_remove(request, doc_id):
     # check permission
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # delete associated comments
+    delete_comments(doc)
 
     # delete document from database
     doc.delete()

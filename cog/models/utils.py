@@ -10,6 +10,8 @@ from django.conf import settings
 from django.utils.timezone import now
 from news import News
 from django.db.models import Q
+from django.contrib.comments import Comment
+from django.contrib.contenttypes.models import ContentType
 
 # method to retrieve all news for a given project, ordered by date
 def news(project):
@@ -151,3 +153,11 @@ def listPeople(project):
     people = pubUsers + collaborators
     return sorted(people, key=lambda user: user.last_name)
     
+def delete_comments(object):
+    '''Function to delete comments associated with a generic object.'''
+    
+    object_type = ContentType.objects.get_for_model(object)
+    comments =  Comment.objects.filter(object_pk=object.id).filter(content_type=object_type)
+    for comment in comments:
+        print 'Deleting associated comment=%s' % comment.comment
+        comment.delete()
