@@ -497,7 +497,7 @@ def search_facet_delete(request, facet_id):
 def search_files(request, dataset_id, index_node):
     """View that searches for all files of a given dataset, and returns the response as JSON"""
     
-    params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json") ]
+    params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json"), ("distrib", "false") ]
  
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
     #print 'Solr search URL=%s' % url
