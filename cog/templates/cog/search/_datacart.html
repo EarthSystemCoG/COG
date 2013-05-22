@@ -97,12 +97,12 @@
 							
 							// images: create hyperlink with graphic
 							if (urlArray[1].indexOf("image")>=0) {
-								html += "<a href='"+urlArray[0]+"'><img src='IMAGE_URL' width='50px'/></a>"; // 'IMAGE_URL'
+								html += "<a href='"+urlArray[0]+"'><img src='IMAGE_URL' width='50px'/></a>&nbsp;"; // 'IMAGE_URL'
 								imageUrl = urlArray[0]; // always store reference to image URL
 								
 							// non-images: create hyperlink with text
 							} else {
-								html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>";
+								html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>&nbsp;";
 							}
 						}						
 					} // loop over URLs
