@@ -572,7 +572,8 @@ def project_browser(request, project_short_name, tab):
 
     html = ''    
     if tab == 'this':
-        display = DisplayStatus(True) # object that keeps track of successful invocations, if necessary
+        # object that keeps track of successful invocations, if necessary
+        display = DisplayStatus(True) # open all sub-widgets by default
         html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
         html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
         html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)

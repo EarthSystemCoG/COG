@@ -108,7 +108,7 @@
     border-top: 1px solid #666666;
     height:320px; /* PROJECT BROWSER HEIGHT: overall height of project browser */
     overflow-y: hidden; /* no scrollbar */
-    /* overflow-y: auto; */
+    overflow-y: auto;  /* PROJECT BROWSER: external scrollbar */
     overflow-x: hidden;
 }
 
