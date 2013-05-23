@@ -20,10 +20,10 @@
 		<a href="{{ metadata.url}}" target="imgwin"><img src="{{ metadata.url}}" width="400px" onerror="imgError(this);"/></a>
 	</div>
 	{% if metadata.description %}
-	<br/>{{ metadata.description }}
+		<br/>{{ metadata.description }}
 	{% endif %}
-	<br/>Click on the image to enlarge it. This may take you to a login page. 
-	<br/>Refresh this page after first login to see a larger image.
+	<!-- <br/>Click on the image to enlarge it. This may take you to a login page. 
+	<br/>Refresh this page after first login to see a larger image. -->
 	<br/>
 	<a href="{% url 'search' project.short_name|lower %}?search_data=True">Back to Search Results</a>
 </div>
