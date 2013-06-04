@@ -54,7 +54,8 @@
 				var doc = docs[i];
 				html += "<tr><td><b>"+doc.title+"</b>";
 				
-				// display additional file-level metadata
+				// display additional file-level metadata 
+				var keys = []
 				for (var field in doc) {
 					if (field != 'data_node' && field != 'index_node' && field != 'type' 
 						&& field != 'id' && field != 'dataset_id' && field != 'score' 
@@ -63,8 +64,14 @@
 						&& field != 'instance_id' && field != 'master_id'
 						&& field != 'metadata_format' && field != 'timestamp'
 						&& field != 'latest' && field != 'replica') {
-						html += "<br/><span style='text-transform:capitalize;'>"+field +"</span>: "+doc[field];	
+						keys[keys.length] = field;
 					}
+				}
+				// loop over metadata keys in alphabetical order
+				keys = keys.sort();
+				for (var j=0; j<keys.length; j++) {
+					key = keys[j];
+					html += "<br/><span style='text-transform:capitalize;'>"+key +"</span>: "+doc[key];
 				}
 				
 				if (doc.subtype == 'image') {
