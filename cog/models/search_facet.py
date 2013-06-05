@@ -7,7 +7,7 @@ class SearchFacet(models.Model):
     
     profile = models.ForeignKey(SearchProfile, blank=False, null=False)
     
-    key =  models.CharField(max_length=20, blank=False)
+    key =  models.CharField(max_length=40, blank=False)
     label =  models.CharField(max_length=40, blank=False)
     order = models.IntegerField(blank=True, default=0)
     
