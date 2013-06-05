@@ -127,7 +127,7 @@ def search_get(request, searchInput, facetProfile, searchService, extra={}):
             
             data[SEARCH_INPUT] = searchInput
             data[SEARCH_OUTPUT] = searchOutput
-            data[FACET_PROFILE] = facetProfile.getKeys()
+            data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
             data['title'] = 'Search'
             
             # save data in session
@@ -259,7 +259,7 @@ def search_post(request, searchInput, facetProfile, searchService, extra={}):
             data = extra
             data[SEARCH_INPUT] = searchInput
             data[SEARCH_OUTPUT] = searchOutput
-            data[FACET_PROFILE] = facetProfile.getKeys()  
+            data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
             
         except HTTPError:
             print "HTTP Request Error"
