@@ -65,12 +65,12 @@
 										<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
 									{% endif %}
 									<!-- display more record information -->
-		                            {% for key, values in record.fields.items %}
-		                                {% if key in search_output.facets.keys %}
-		                                {% if key != 'url' and key != 'description' and key != 'title' %}
-		                                    <br/><span style="text-decoration:underline">{{ key }}</span> = 
-		                                        {% for value in values %} 
-		                                          {{ value }}{% if forloop.counter != values|length %}, {% endif %} 
+		                            {% for keyvalues in record.fields|sortdict %}
+		                                {% if keyvalues.0 in search_output.facets.keys %}
+		                                {% if keyvalues.0 != 'url' and keyvalues.0 != 'description' and keyvalues.0 != 'title' %}
+		                                    <br/><span style="text-decoration:underline">{{ keyvalues.0 }}</span> = 
+		                                        {% for value in keyvalues.1 %} 
+		                                          {{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %} 
 		                                        {% endfor %}
 		                                {% endif %}
 		                                {% endif %}

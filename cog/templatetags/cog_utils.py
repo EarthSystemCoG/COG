@@ -25,6 +25,15 @@ def concat(astring, bstring):
     return str(astring) + str(bstring)
 
 @register.filter
+def sortdict(the_dict):
+    tuples = []
+    for key, value in the_dict.iteritems():
+        print key, value
+        tuples.append( (key,value) )
+    return sorted(tuples, key=lambda tuple: tuple[0])
+        
+
+@register.filter
 def dictKeyLookup(the_dict, key):
    # Try to fetch from the dict, and if it's not found return an empty string.
    return the_dict.get(key, '')
