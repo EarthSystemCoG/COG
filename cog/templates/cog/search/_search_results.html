@@ -1,4 +1,5 @@
 {% load cog_utils %}
+{% load search_utils %}
 
 {% if request.GET.search_data %}
 
@@ -66,13 +67,13 @@
 									{% endif %}
 									<!-- display more record information -->
 		                            {% for keyvalues in record.fields|sortdict %}
-		                                {% if keyvalues.0 in search_output.facets.keys %}
-		                                {% if keyvalues.0 != 'url' and keyvalues.0 != 'description' and keyvalues.0 != 'title' %}
-		                                    <br/><span style="text-decoration:underline">{{ keyvalues.0 }}</span> = 
+		                                {% if keyvalues.0|displayMetadataKey %}
+		                                  {% if keyvalues.0 != 'url' and keyvalues.0 != 'description' and keyvalues.0 != 'title' and keyvalues.0 != 'type' %}
+		                                    <br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> = 
 		                                        {% for value in keyvalues.1 %} 
 		                                          {{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %} 
 		                                        {% endfor %}
-		                                {% endif %}
+		                                  {% endif %}
 		                                {% endif %}
 		                            {% endfor %}							
 								</div>

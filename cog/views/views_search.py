@@ -15,11 +15,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from copy import copy, deepcopy
 from urllib2 import HTTPError
-from string import replace
 
 from cog.models.search import *
 from cog.services.search import TestSearchService, SolrSearchService
 from cog.services.SolrSerializer import deserialize
+
+from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 
 
 SEARCH_INPUT = "search_input"
@@ -198,12 +199,7 @@ class MetaDoc:
         self.thumbnail = ''
         # container for all other metadata as (key, values[]) tuples ordered by key
         self.fields = []
-    
-def _formatKey(key):
-    '''Utility method to format a metadata key before display.'''
-    key = key.capitalize()
-    return replace(key,'_',' ')
-    
+        
 def _processDoc(doc): 
     '''Utility method to process the JSON metadata object before display.'''
     
@@ -221,6 +217,8 @@ def _processDoc(doc):
             metadoc.type = value
         elif key == 'subtype':
             metadoc.subtype = value[0].capitalize()
+        elif key == 'number_of_files':
+            pass # ignore
         elif key == 'url':
             for val in value:
                 parts = val.split('|')
@@ -231,14 +229,13 @@ def _processDoc(doc):
                     metadoc.mime_type = parts[1]
         else:
             # fields NOT to be displayed
-            if (key != 'score' and key != 'index_node' and key != 'data_node' and key != 'dataset_id'
-                and key != 'replica' and key!= 'latest'):
+            if displayMetadataKey(key):
                 # multiple values
                 if hasattr(value, '__iter__'):
-                    metadoc.fields.append( (_formatKey(key), value) )
+                    metadoc.fields.append( (formatMetadataKey(key), value) )
                 # single value - transform into list for consistency
                 else:
-                    metadoc.fields.append( (_formatKey(key), [value]) )
+                    metadoc.fields.append( (formatMetadataKey(key), [value]) )
     
     return metadoc
     

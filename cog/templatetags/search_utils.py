@@ -1,6 +1,6 @@
 from django import template
 from cog.models.search import searchMappings
-
+from string import replace
 
 register = template.Library()
 
@@ -23,3 +23,15 @@ def getFacetOptionLabel(facet_key, facet_value):
        or the facet_value itself if a mapping is not found."""
     label = searchMappings.getFacetOptionLabel(facet_key, facet_value)
     return label.replace("_"," ")
+
+@register.filter 
+def displayMetadataKey(key):
+    """ Utility function to determine when a metadata field needs to be displayed """
+    return (key != 'score' and key != 'index_node' and key != 'data_node' \
+            and key != 'dataset_id' and key != 'replica' and key!= 'latest')
+ 
+@register.filter    
+def formatMetadataKey(key):
+    '''Utility method to format a metadata key before display.'''
+    key = key.capitalize()
+    return replace(key,'_',' ').title()
