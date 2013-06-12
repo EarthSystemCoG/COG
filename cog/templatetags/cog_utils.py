@@ -307,8 +307,8 @@ def getTopNav(project, request):
                 # change label name
                 if label == 'Bookmarks': # change 'Bookmarks' to 'Resources'
                     label = 'Resources'     
-                #elif 'Home' in label:    # remove project short name from 'Home' tab 
-                #    label = 'Home'
+                elif 'Home' in label:    # remove project short name from 'Home' tab 
+                    label = 'Home'
                 if ptab.active:
                     if str(ptab.url) == taburl:
                         selected = True
