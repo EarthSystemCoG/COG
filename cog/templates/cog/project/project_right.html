@@ -158,7 +158,7 @@
 	.tabs_caption {
 	    margin: 0px;
 	    padding: 2px 5px 3px 5px;
-	    font-size: 8pt;
+	    font-size: 9pt;
 	    text-align: left;
 	    font-weight: bold;
 	    background-color: #FCE79F;
@@ -198,7 +198,9 @@
 	            <!-- <input type="hidden" name="offset" value="0" /> -->
 	            <!-- <input type="hidden" name="limit" value="10" /> -->
 	            <input type="hidden" name="type" value="Dataset" />	                
-                <input type="text" name="text" size="24" value="" style="width:75%" placeholder=" Enter Text"/>&nbsp;<input type="submit" value="Go"/>
+                <input type="text" name="text" size="24" value="" style="width:75%; font-size:8.5pt;" 
+                        placeholder=" Enter Text"/>&nbsp;
+                <input type="submit" value="Go" style="font-size:8.5pt;"/>
                 <!--  <select name="type">
                     <option value="Dataset">Data</option>
                     <option value="Model">Models</option>
@@ -215,7 +217,7 @@
      <div class="project_widget">
      
        <div id="project_views" class="yui-navset">  
-          <div class="tabs_caption">Brose Projects</div>
+          <div class="tabs_caption">Browse Projects</div>
 
           <ul class="yui-nav">
               <li class="selected">&nbsp;&nbsp;<a href="#tab1"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
@@ -237,13 +239,14 @@
 	       	<tr>
                     <td class="long">
 		       		<div id="tagAutoComplete">
-		       			<input type="text" id="projectBrowserText" placeholder=" Enter Tag" />
+		       			<input type="text" id="projectBrowserText" placeholder=" Enter Tag" style="font-size:8.5pt;"/>
 		                       <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" --> 
 		                <div id="tagContainer"></div>
 		            </div>
 		       </td>
 		       <td style="padding: 2px; margin-right: 2px;">
-                           <input type="button" id="projectBrowserButton" value="Go" onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
+                           <input type="button" id="projectBrowserButton" value="Go" style="font-size:8.5pt;"
+                                  onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
 		       </td>
 	       	</tr>
 	       </table>   
