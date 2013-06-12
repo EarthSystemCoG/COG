@@ -9,7 +9,7 @@
 	    
 	    	<!-- topic bar -->
 	    	{% if index_item.topic == None %}
-	    		<h3>{{ project.short_name }} Site Index</h3>
+	    		<h3>Site Index</h3>
 	    	{% else %}
 	    		<h3>{{ index_item.topic.name }}</h3>
 	    	{% endif %}
@@ -41,7 +41,7 @@
     <div class="vertical_menu">
     
        <!-- open access -->
-       <h3>{{ project.short_name }} Visitors</h3>
+       <h3>Visitors</h3>
        <ul>
             <!-- <li><a href="{% url 'post_list' project.short_name.lower %}?type=blog" class="listlink">&nbsp;List All Blogs</a></li> -->
             <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li>
@@ -50,7 +50,7 @@
  
        <!-- access restricted to project members -->
        {% if user|hasUserPermission:project %}
-       <h3>{{ project.short_name }} Members</h3>
+       <h3>Members</h3>
        <ul>
        		<li><a href="{% url 'news_add' project.short_name.lower %}" class="addlink">&nbsp;Publish News</a></li>
             <li><a href="{% url 'post_add' project.short_name.lower %}?type=page" class="addlink">&nbsp;Add Page</a></li>
@@ -62,7 +62,7 @@
     
        <!-- access restricted to project admins -->
        {% if user|hasAdminPermission:project %}
-       <h3>{{ project.short_name }} Administrators</h3>
+       <h3>Administrators</h3>
        <ul>                       
             <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
             <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
