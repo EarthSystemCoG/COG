@@ -119,7 +119,8 @@
 		padding: 2px 5px 3px 5px;
 		font-size: 8pt;
 		text-align: left;
-		font-weight: bold;
+		/* COG STYLE: PROJECT BROWSER BAR */
+		font-weight: normal;
 		background-color: #FDF3CF;
 		color: #666;
 		display: block;
@@ -197,7 +198,7 @@
 	            <!-- <input type="hidden" name="offset" value="0" /> -->
 	            <!-- <input type="hidden" name="limit" value="10" /> -->
 	            <input type="hidden" name="type" value="Dataset" />	                
-                <input type="text" name="text" size="24" value="" style="width:75%"/>&nbsp;<input type="submit" value="Go"/>
+                <input type="text" name="text" size="24" value="" style="width:75%" placeholder=" Enter Text"/>&nbsp;<input type="submit" value="Go"/>
                 <!--  <select name="type">
                     <option value="Dataset">Data</option>
                     <option value="Model">Models</option>
@@ -214,12 +215,12 @@
      <div class="project_widget">
      
        <div id="project_views" class="yui-navset">  
-          <div class="tabs_caption">Project Browser</div>
+          <div class="tabs_caption">Brose Projects</div>
 
           <ul class="yui-nav">
-              <li class="selected">&nbsp;&nbsp;<a href="#tab1"><em>This</em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="#tab2"><em>All</em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="#tab3"><em>My</em></a>&nbsp;&nbsp;</li>
+              <li class="selected">&nbsp;&nbsp;<a href="#tab1"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="#tab2"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="#tab3"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
           </ul>  
           <div class="yui-content">
               <div id="thisProjectsBrowser">&nbsp;</div>
@@ -236,7 +237,7 @@
 	       	<tr>
                     <td class="long">
 		       		<div id="tagAutoComplete">
-		       			<input type="text" id="projectBrowserText" placeholder="Enter Tag" />
+		       			<input type="text" id="projectBrowserText" placeholder=" Enter Tag" />
 		                       <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" --> 
 		                <div id="tagContainer"></div>
 		            </div>

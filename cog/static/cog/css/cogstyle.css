@@ -293,7 +293,7 @@ strong {
 .vertical_menu h3 {
 	margin: 0;
 	padding: 2px 5px 3px 5px;
-	font-size: 8pt; /* COG STYLE: LEFT MENUS HEADER SIZE */
+	font-size: 9pt; /* COG STYLE: LEFT MENUS HEADER SIZE */
 	text-align: left;
 	font-weight: bold;
 	/* COG STYLE: LEFT BAR MENU HEADERS BACKGROUND COLOR */
@@ -349,7 +349,10 @@ strong {
 	background: #EEEEEE;
 	float: center;
 	text-align: left;
-	font-size: 9pt;
+	/* COG STYLE: COLOR OF ROLLUP HEADER TEXT */
+	color: #666666;
+	/* COG STYLE: SIZE OF ROLLUP HEADER TEXT */
+	font-size: 8pt;
 }
 
 .news_box { /* COG STYLE: NEWS WIDGET */
@@ -494,16 +497,18 @@ strong {
 .header_bar {
 	margin: 0px;
 	padding: 2px 5px 3px 5px;
-	font-size: 9pt;
+	/* COG STYLE: ACCORDION TEXT SIZE */
+	font-size: 8pt;
 	text-align: left;
 	font-weight: bold;
 	/* COG STYLE: HEADER BAR BACKGROUND COLOR */
 	background-color: #B9E0E3;
 	/* background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x; */
+	/* COG STYLE: HEADER BAR TEXT COLOR */
 	color: #666;
 	display: block;
 	/* COG STYLE: HEADER BAR BORDER COLOR */
-	border: 1px solid #358C92;
+	border: 1px solid #666666;
 }
 
 /* FOOTER */
