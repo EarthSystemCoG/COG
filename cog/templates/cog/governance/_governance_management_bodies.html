@@ -28,7 +28,7 @@
 							{% if mb.termsOfReference %}
 							<tr>
 								<td class="leftcolumn">Terms Of Reference</td>
-								<td>{{mb.termsOfReference|linebreaksbr}}</td>
+								<td>{{mb.termsOfReference|linebreaks|urlize}}</td>
 							</tr>
 							{% endif %}	
 							{% if mb.members.all %}

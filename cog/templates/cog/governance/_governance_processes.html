@@ -11,13 +11,13 @@
 			{% if proj.taskPrioritizationStrategy %}
 				<tr>
 					<td class="leftcolumn"><b>Task Prioritization Strategy</b></td>
-					<td>{{proj.taskPrioritizationStrategy|linebreaksbr}}</td>
+					<td>{{proj.taskPrioritizationStrategy|linebreaks|urlize}}</td>
 				</tr>
 			{% endif %}
 			{% if proj.requirementsIdentificationProcess %}
 				<tr>
 					<td class="leftcolumn"><b>Requirements Identification Process</b></td>
-					<td>{{proj.requirementsIdentificationProcess|linebreaksbr}}</td>
+					<td>{{proj.requirementsIdentificationProcess|linebreaks|urlize}}</td>
 				</tr>
 			{% endif %}
 		</table>

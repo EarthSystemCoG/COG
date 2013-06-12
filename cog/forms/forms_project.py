@@ -84,10 +84,10 @@ class DevelopmentOverviewForm(ModelForm):
     class Meta:
         model = Project        
         widgets = {'developmentOverview': Textarea(attrs={'rows':6}),
-                   'license': TextInput(),
+                   'license': Textarea(attrs={'rows':4}),
                    'implementationLanguage': TextInput(),
                    'bindingLanguage': TextInput(),
-                   'supportedPlatforms': TextInput(),
+                   'supportedPlatforms': Textarea(attrs={'rows':4}),
                    'externalDependencies': Textarea(attrs={'rows':4}), }                                     
         fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
                    'supportedPlatforms', 'externalDependencies')

@@ -12,7 +12,7 @@
 		{% if proj.description %}
 		<tr>
 			<td nowrap="nowrap"><b>Description</b></td>
-			<td class="long">{{proj.description|linebreaksbr}}</td>
+			<td class="long">{{proj.description|linebreaks|urlize}}</td>
 		</tr>
 		{% endif %}
 		{% if proj.external_homepage %}

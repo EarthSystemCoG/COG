@@ -46,7 +46,7 @@
 						{% if obj.participationDetails %}
 						<tr>
 							<td class="leftcolumn">Participation Details</td>
-							<td>{{obj.participationDetails|linebreaksbr}}</td>
+							<td>{{obj.participationDetails|linebreaks|urlize}}</td>
 						</tr>							
 						{% endif %}						
 					</table>
