@@ -1,6 +1,6 @@
 <!-- overview statement, if available -->
 {% if proj.developmentOverview %}
-	{{ proj.developmentOverview|linebreaks|urlize }}
+	{{ proj.developmentOverview|urlize|linebreaks }}
 {% endif %}
 
 <!-- table with details -->
@@ -11,7 +11,7 @@
 		{% if proj.license %}
 			<tr>
 				<td class="leftcolumn"><b>License</b></td>
-				<td class="long">{{ proj.license|linebreaks|urlize }}</td>
+				<td class="long">{{ proj.license|urlize|linebreaks }}</td>
 			</tr>
 		{% endif %}
 		
@@ -32,14 +32,14 @@
 		{% if proj.supportedPlatforms %}
 			<tr>
 				<td class="leftcolumn"><b>Supported Platforms</b></td>
-				<td class="long">{{ proj.supportedPlatforms|linebreaks|urlize }}</td>
+				<td class="long">{{ proj.supportedPlatforms|urlize|linebreaks }}</td>
 			</tr>
 		{% endif %}
 		
 		{% if proj.externalDependencies %}
 			<tr>
 				<td class="leftcolumn"><b>External Dependencies</b></td>
-				<td class="long">{{ proj.externalDependencies|linebreaks|urlize }}</td>
+				<td class="long">{{ proj.externalDependencies|urlize|linebreaks }}</td>
 			</tr>
 		{% endif %}
 		

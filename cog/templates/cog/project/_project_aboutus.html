@@ -24,7 +24,7 @@
 		{% if proj.history %}
 		<tr>
 			<td nowrap="nowrap"><b>History</b></td>
-			<td class="long">{{proj.history|linebreaksbr|urlize}}</td>
+			<td class="long">{{proj.history|urlize|linebreaks}}</td>
 		</tr>
 		{% endif %}
 	
@@ -32,19 +32,19 @@
 	
 	{% if tab = "MISSION"|tabs and proj.mission %}
 		<tr>
-			<td class="long" colspan="2">{{proj.mission|linebreaksbr}}</td>
+			<td class="long" colspan="2">{{proj.mission|urlize|linebreaks}}</td>
 		</tr>
 	{% endif %}
 	
 	{% if tab = "VISION"|tabs and proj.vision %}
 		<tr>
-			<td class="long" colspan="2">{{proj.vision|linebreaksbr}}</td>
+			<td class="long" colspan="2">{{proj.vision|urlize|linebreaks}}</td>
 		</tr>
 	{% endif %}
 		
 	{% if tab = "VALUES"|tabs and proj.values %}
 	<tr>
-		<td class="long" class="long" colspan="2">{{proj.values|linebreaksbr}}</td>
+		<td class="long" class="long" colspan="2">{{proj.values|urlize|linebreaks}}</td>
 	</tr>
 	{% endif %}
 	

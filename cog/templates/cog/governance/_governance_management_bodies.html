@@ -16,7 +16,7 @@
 						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
 							<tr>
 								<td class="leftcolumn"><b>{{mb.title}}</b></td>
-								<td>{{mb.description|linebreaksbr}}</td>
+								<td>{{mb.description|urlize|linebreaks}}</td>
 							</tr>
 							<tr>
 								<td class="leftcolumn">Purpose(s)</td>
@@ -28,7 +28,7 @@
 							{% if mb.termsOfReference %}
 							<tr>
 								<td class="leftcolumn">Terms Of Reference</td>
-								<td>{{mb.termsOfReference|linebreaks|urlize}}</td>
+								<td>{{mb.termsOfReference|urlize|linebreaks}}</td>
 							</tr>
 							{% endif %}	
 							{% if mb.members.all %}

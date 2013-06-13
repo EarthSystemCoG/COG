@@ -10,7 +10,7 @@
 	{% if proj.description %}
 	<tr>
 		<td nowrap="nowrap"><b>Mission</b></td>
-		<td class="long">{{proj.mission|linebreaksbr}}</td>
+		<td class="long">{{proj.mission|urlize|linebreaks}}</td>
 	</tr>
 	{% endif %}
 </table>
