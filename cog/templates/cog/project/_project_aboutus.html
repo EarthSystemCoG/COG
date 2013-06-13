@@ -24,7 +24,7 @@
 		{% if proj.history %}
 		<tr>
 			<td nowrap="nowrap"><b>History</b></td>
-			<td class="long">{{proj.history|linebreaksbr}}</td>
+			<td class="long">{{proj.history|linebreaksbr|urlize}}</td>
 		</tr>
 		{% endif %}
 	
