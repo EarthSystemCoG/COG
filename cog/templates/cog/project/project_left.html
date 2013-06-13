@@ -9,7 +9,7 @@
 	    
 	    	<!-- topic bar -->
 	    	{% if index_item.topic == None %}
-	    		<h3>Site Index</h3>
+	    		<h3>{{ project.short_name }} Site Index</h3>
 	    	{% else %}
 	    		<h3>{{ index_item.topic.name }}</h3>
 	    	{% endif %}
