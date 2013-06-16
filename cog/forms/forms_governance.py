@@ -30,6 +30,7 @@ class ManagementBodyForm(ModelForm):
         exclude = ('category')
         widgets = {
                    'description': Textarea(attrs={'rows':4}),
+                   'other': Textarea(attrs={'rows':4}),
                    'termsOfReference': Textarea(attrs={'rows':2})
                    }
         
