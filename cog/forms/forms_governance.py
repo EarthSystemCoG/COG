@@ -60,7 +60,8 @@ class CommunicationMeansForm(ModelForm):
         
     class Meta:
         model = CommunicationMeans  
-        widgets = { 'participationDetails': Textarea(attrs={'rows':4}), }      
+        widgets = { 'frequency': Textarea(attrs={'rows':4}),
+                    'participationDetails': Textarea(attrs={'rows':4}), }      
         #widgets = { 'membership' : NullBooleanSelect() }
         
 class GovernanceProcessesForm(ModelForm):
