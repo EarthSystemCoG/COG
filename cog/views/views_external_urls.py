@@ -140,7 +140,9 @@ def external_urls_update(request, project_short_name, type, redirect):
     # exclude fields 'project', 'type' so they don't get validated
     # allow for instances to be deleted
     nextras = 1
-    ExternalUrlFormSet = modelformset_factory(ExternalUrl, extra=nextras, exclude=('project','type'), can_delete=True)
+    ExternalUrlFormSet = modelformset_factory(ExternalUrl, extra=nextras, exclude=('project','type'), can_delete=True,
+                                              #widgets={'description': Textarea(attrs={'rows': 4})} ) # not working
+                                              formfield_callback=custom_field_callback)
     
     # GET
     if request.method=='GET':
@@ -172,6 +174,13 @@ def external_urls_update(request, project_short_name, type, redirect):
         else:
             print formset.errors
             return render_external_urls_form(request, project, formset, type, redirect)
+
+# function to customize the widget used by specific formset fields
+def custom_field_callback(field):
+    if field.name == 'description':
+        return field.formfield(widget=Textarea(attrs={'rows': 4}))
+    else:
+        return field.formfield()
      
 def render_external_urls_form(request, project, formset, type, redirect):
      return render_to_response('cog/project/external_urls_form.html', 

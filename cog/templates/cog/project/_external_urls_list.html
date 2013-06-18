@@ -23,7 +23,7 @@
 				<td nowrap="nowrap" width="100px">{{exturl.title}}</td>
 				<!-- truncate URLs to max length -->
 				<td nowrap="nowrap" width="300px"><a href="{{exturl.url}}">{{ exturl.url|urlizetrunc:60 }}</a></td>
-				<td valign="top">{{exturl.description}}</td>
+				<td valign="top">{{exturl.description|urlize|linebreaksbr}}</td>
 			</tr>
 		{% endfor %}	
 	</table>
