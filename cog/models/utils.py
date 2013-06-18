@@ -125,6 +125,7 @@ def create_project_page(url, project):
                                                    template="cog/post/page_template_sidebar_center.html",
                                                    title='%s %s' % (project.short_name, _page[0]),
                                                    is_home=False,
+                                                   update_date=now(),
                                                    parent=home_page,
                                                    #topic='Home Page',
                                                    project=project,
