@@ -53,4 +53,7 @@ urlpatterns = patterns('',
     (r'^metadata/', include('django_cim_forms.urls')),
     (r'', include('dycore.urls')),
 
+    # dcf
+    (r'^dcf/', include('dcf.urls')),
+
 )
