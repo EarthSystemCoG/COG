@@ -17,3 +17,6 @@ site_media/
 
 # database directory
 database/
+
+# CDF
+dcf/
