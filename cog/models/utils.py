@@ -152,7 +152,7 @@ def listPeople(project):
     collaborators = list( Collaborator.objects.filter(project=project) )
     
     people = pubUsers + collaborators
-    return sorted(people, key=lambda user: user.last_name)
+    return sorted(people, key=lambda user: (user.last_name, user.first_name))
     
 def delete_comments(object):
     '''Function to delete comments associated with a generic object.'''
