@@ -6,13 +6,17 @@
 	       <caption>User Affiliations</caption>
 	       <tr>
 	           <th class="tophead">Project</th>
+	           {% comment %}
 	           <th class="tophead">Status/Role</th>
+	           {% endcomment %}
 	           <th class="tophead"></th>
 	       </tr>
 	       {% for project in projects %}
+	         {% if not project.private %}
 	           <tr>
-	               <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
-	               <td nowrap="nowrap">
+	             <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
+	             {% comment %}       
+	             <td nowrap="nowrap">
 	                   {% if user_profile.user|hasAdminPermission:project %}
 	                       Administrator
 	                   {% else %}
@@ -22,13 +26,15 @@
 	                           Pending Approval
 	                       {% endif %}
 	                   {% endif %}
-	               </td>
-	               <td nowrap="nowrap">
-	                   {% if request.user.id = user_profile.user.id %}
-	                       <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a>
-	                   {% endif %}
-	               </td>
+	             </td>
+	             {% endcomment %}
+	             <td nowrap="nowrap">
+	               {% if request.user.id = user_profile.user.id %}
+	                 <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a>
+	               {% endif %}
+	             </td>
 	           </tr>
+	         {% endif %}	     
 	       {% endfor %}
 	    </table>
     </div>
