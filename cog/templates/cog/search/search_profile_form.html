@@ -29,6 +29,15 @@
                     <td><i>Optional fixed constraints as: name1=value1, name2=value2, ...</i></td>
                 </tr>
                 <tr>
+                    <td class="righthead" nowrap="nowrap">Model Metadata Flag</td>
+                    <td class="long">{{ form.modelMetadataFlag }}{{ form.modelMetadataFlag.errors }}
+               </tr>
+               <tr>
+                    <td>&nbsp;</td>
+                    <td><i>Check to enable model metadata links for search results</i></td>
+                </tr>
+                
+                <tr>
                     <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
                 </tr>
             </table>

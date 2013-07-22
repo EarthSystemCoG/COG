@@ -16,6 +16,9 @@ class SearchProfile(models.Model):
     # string of the form name=value, name=value....
     constraints = models.CharField(max_length=200, blank=True, null=True, default='')
     
+    # flag to enable model metadata link
+    modelMetadataFlag = models.BooleanField(default=False, blank=False, null=False)
+    
     def facets(self):
         return self.searchfacet_set.all().order_by('order')
     

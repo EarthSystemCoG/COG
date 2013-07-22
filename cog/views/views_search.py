@@ -401,7 +401,7 @@ def search_profile_config(request, project_short_name):
             
             # save profile to the database
             profile = form.save()
-            
+                        
             # redirect to project home (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
             

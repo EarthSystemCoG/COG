@@ -54,7 +54,9 @@
 	                            {% endfor %}    	          
 	                            
 	                            <!-- display CIM viewer link -->   
-  								&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.master_id.0}}')"><b>Model Metadata</b> </a> ]	                            
+	                            {% if project.searchprofile.modelMetadataFlag  %}
+  									&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.master_id.0}}')"><b>Model Metadata</b> </a> ]	                            
+	                            {% endif %}
 	                            
 	                            <!-- dataset metadata container -->
 								<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
