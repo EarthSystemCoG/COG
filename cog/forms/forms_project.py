@@ -37,9 +37,12 @@ class ProjectForm(ModelForm):
             # exclude children from parents
             #for child in instance.children():
             #    parentQueryset = parentQueryset & ~Q(id=child.id)
-            self.fields['parents'].queryset =  Project.objects.filter( parentQueryset ).distinct().order_by('short_name')
+            # make the ordering case=independent (NOTE: the generated SQL is database-dependent!)
+            #self.fields['parents'].queryset =  Project.objects.filter( parentQueryset ).distinct().order_by('short_name')
+            self.fields['parents'].queryset =  Project.objects.filter( parentQueryset ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
             # peer query-set options: exclude the project itself
-            self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().order_by('short_name')
+            #self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().order_by('short_name')
+            self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
 
     
     # overridden validation method for project short name 
