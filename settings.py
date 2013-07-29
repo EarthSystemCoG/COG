@@ -169,7 +169,7 @@ DSTGRID_DIR = '/export/shared/grids'
 WEIGHTS_DIR = '/tmp'
 
 # default search configuration
-DEFAULT_SEARCH_URL = 'http://hydra.fsl.noaa.gov/esg-search/search/?distrib=false'
+DEFAULT_SEARCH_URL = 'http://hydra.fsl.noaa.gov/esg-search/search/'
 #DEFAULT_SEARCH_URL = 'http://esg-datanode.jpl.nasa.gov/esg-search/search/'
 DEFAULT_SEARCH_FACETS = { 'project':'Project',
                           'realm':'Realm',
