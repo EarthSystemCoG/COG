@@ -3,7 +3,7 @@
 	colors:
 	light gray: #EEEEEE;
 	light teal: #B9E0E3;
-	dark teal: 358C92;
+	dark teal: #358C92;
 	yellow: #FCE79F;
 */
 
@@ -674,3 +674,18 @@ body div {
 #project_views .yui-content td { background-color: #ffffff !important; }
 
 textarea.ckeditor { resize: vertical; }
+
+.fieldset_box {
+	border: 1px solid #358C92;	 
+	padding: 5px;
+	/* width: 300px; */
+	text-align:center;
+	margin:auto;
+}
+
+.fieldset_legend {
+	color: #000000;
+	text-align: left;
+	font-weight: bold;
+	padding: 1px;
+}

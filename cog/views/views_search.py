@@ -69,11 +69,12 @@ def search_config(request, searchConfig, extra={}):
     
     # populate input with search constraints from HTTP request
     input = SearchInput()
-    for key in searchConfig.facetProfile.getKeys():
-        if (request.REQUEST.get(key, None)):
-            for value in request.REQUEST.getlist(key):
-                if value:
-                    input.addConstraint(key, value)
+    for facetGroup in searchConfig.facetProfile.facetGroups:
+        for key in facetGroup.getKeys():
+            if (request.REQUEST.get(key, None)):
+                for value in request.REQUEST.getlist(key):
+                    if value:
+                        input.addConstraint(key, value)
     
     # add fixed constraints - override previous values
     for key, values in searchConfig.fixedConstraints.items():
@@ -115,7 +116,7 @@ def search_get(request, searchInput, facetProfile, searchService, extra={}):
     else:
         
         # set retrieval of all facets in profile
-        searchInput.facets = facetProfile.getKeys()
+        searchInput.facets = facetProfile.getAllKeys()
         
         # execute query for facets
         #searchOutput = searchService.search(searchInput, False, True)
@@ -127,7 +128,8 @@ def search_get(request, searchInput, facetProfile, searchService, extra={}):
             
             data[SEARCH_INPUT] = searchInput
             data[SEARCH_OUTPUT] = searchOutput
-            data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
+            data[FACET_PROFILE] = facetProfile
+            #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
             data['title'] = 'Search'
             
             # save data in session
@@ -246,7 +248,7 @@ def search_post(request, searchInput, facetProfile, searchService, extra={}):
     if (searchInput.isValid()):
         
         # set retrieval of all facets in profile
-        searchInput.facets = facetProfile.getKeys()
+        searchInput.facets = facetProfile.getAllKeys()
     
         # execute query for results, facets
         #searchOutput = searchService.search(searchInput, True, True)
@@ -259,7 +261,8 @@ def search_post(request, searchInput, facetProfile, searchService, extra={}):
             data = extra
             data[SEARCH_INPUT] = searchInput
             data[SEARCH_OUTPUT] = searchOutput
-            data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
+            data[FACET_PROFILE] = facetProfile
+            #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
             
         except HTTPError:
             print "HTTP Request Error"
@@ -324,10 +327,13 @@ def getSearchConfig(request, project):
     # configure URL of back-end search service
     searchService = SolrSearchService(profile.url, profile.facets())
     
-    # configure facets
+    # configure facet profile
     facets = []
     for facet in project.searchprofile.facets():    
         facets.append((facet.key,facet.label))
+    # FIXME
+    facetGroup = FacetGroup(facets,'My Facets')
+    facetProfile = FacetProfile([facetGroup])
     
     # configure fixed search constraints
     # fixedConstraints = { 'project': ['dycore_2009'], } 
@@ -347,7 +353,7 @@ def getSearchConfig(request, project):
     #for key, facet in searchService.myfacets.items():
     #    facets.append((facet.key,facet.label))
 
-    return SearchConfig(FacetProfile(facets), fixedConstraints, searchService)
+    return SearchConfig(facetProfile, fixedConstraints, searchService)
                 
 def search(request, project_short_name):
     """

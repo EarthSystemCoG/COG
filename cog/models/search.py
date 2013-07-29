@@ -102,12 +102,41 @@ class Record:
             print "\tField name=%s values=%s" % (name, values)
             
 class FacetProfile:
+    
     """
     Class representing an ordered list of facet keys and labels to be used in the faceted search interface.
-    An instance is initialized with a list of tuples of the form: [ (facet1_key, facet1_label),...(facetN_key, facetN_label)]
+    An instance is initialized with a list of facet groups, 
+    where each facet group is a list of tuples of the form: [ (facet1_key, facet1_label),...(facetN_key, facetN_label)]
     """
-    def __init__(self, facets):
+    def __init__(self, facetGroups):
+        
+        self.facetGroups = facetGroups
+        
+        # merge all dictionaries, keys
+        self.keys = []
+        self.map = {}
+        for group in self.facetGroups:
+            self.keys = self.keys + group.keys
+            self.map = dict( self.map.items() + group.map.items() )
+                        
+    def getAllKeys(self):
+        """Returns a list of keys over all its facet groups."""
+        return self.keys
+    
+    # this method will raise a KeyError if the key is not found
+    def getLabel(self, key):
+        return self.map[key]
+    
+class FacetGroup:
+    """
+    Class representing an ordered list of facet keys and labels to be used in the faceted search interface.
+    An instance is initialized with a list of tuples of the form: [ (facet1_key, facet1_label),...(facetN_key, facetN_label)],
+    and an optional name representing the group.
+    """
+    
+    def __init__(self, facets, name=None):
         self.facets = facets
+        self.name = name
         
         # build dictionary for quick lookup of facet label by facet key
         self.map = {}
@@ -124,7 +153,8 @@ class FacetProfile:
     # this method will raise a KeyError if the key is not found
     def getLabel(self, key):
         return self.map[key]
-    
+
+        
 class SearchConfig:
     """
     Class containing parameters to configure a search service.
@@ -144,8 +174,10 @@ class SearchConfig:
     def printme(self):
         print 'Search Configuration Service:%s' % self.searchService
         print 'Search Configuration Facets:'
-        for key in self.facetProfile.getKeys():
-            print "\tFacet key=%s, label=%s" % (key, self.facetProfile.getLabel(key))
+        for facetGroup in self.facetProfile.facetGroups:
+            print "\tFacet Group=%s" % facetGroup.name
+            for key in facetGroup.getKeys():
+                print "\t\tFacet key=%s, label=%s" % (key, facetGroup.getLabel(key))
         print 'Search Configuration Fixed Constraints=%s' % self.fixedConstraints
     
 class SearchMappings(object):
