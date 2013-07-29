@@ -328,12 +328,19 @@ def getSearchConfig(request, project):
     searchService = SolrSearchService(profile.url, profile.facets())
     
     # configure facet profile
-    facets = []
-    for facet in project.searchprofile.facets():    
-        facets.append((facet.key,facet.label))
+    facet_groups = []
+    for search_group in profile.groups.all():
+        facets = []
+        for facet in search_group.facets.all():
+            facets.append( (facet.key, facet.label) )
+        facet_groups.append( FacetGroup(facets, search_group.name ) )
+    #facets = []
+    #for facet in project.searchprofile.facets():    
+    #    facets.append((facet.key,facet.label))
     # FIXME
-    facetGroup = FacetGroup(facets,'My Facets')
-    facetProfile = FacetProfile([facetGroup])
+    #facetGroup = FacetGroup(facets,'My Facets')
+    facetProfile = FacetProfile(facet_groups)
+    #facetProfile = FacetProfile( list(profile.searchgroup_set.all()) )
     
     # configure fixed search constraints
     # fixedConstraints = { 'project': ['dycore_2009'], } 

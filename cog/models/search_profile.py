@@ -20,7 +20,12 @@ class SearchProfile(models.Model):
     modelMetadataFlag = models.BooleanField(default=False, blank=False, null=False)
     
     def facets(self):
-        return self.searchfacet_set.all().order_by('order')
+        """ Method to return a list of facets, across all groups."""
+        
+        facets = []
+        for group in self.groups.all():
+            facets = facets + list( group.facets.all() )
+        return facets
     
     def __unicode__(self):
         return "%s Search Profile" % self.project.short_name

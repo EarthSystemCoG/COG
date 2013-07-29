@@ -23,6 +23,7 @@ from bookmark import Bookmark
 
 # Search
 from search_profile import SearchProfile
+from search_group import SearchGroup
 from search_facet import SearchFacet
 
 # Governance
