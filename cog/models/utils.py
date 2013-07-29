@@ -4,6 +4,7 @@ from project_topic import ProjectTopic
 from search_profile import SearchProfile
 from communication_means import CommunicationMeans
 from search_facet import SearchFacet
+from search_group import SearchGroup
 from post import Post
 from constants import PROJECT_PAGES
 from django.conf import settings
@@ -82,10 +83,13 @@ def create_project_search_profile(project):
         url = getattr(settings, "DEFAULT_SEARCH_URL", "")
         profile = SearchProfile(project=project, url=url)
         profile.save()
+        # create default search group, assign facets to it
+        group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=0)
+        group.save()
         # assign default facets
         facets = getattr(settings, "DEFAULT_SEARCH_FACETS", {})
         for key, label in facets.items():
-            facet = SearchFacet(key=key, label=label, profile=profile)
+            facet = SearchFacet(key=key, label=label, group=group)
             facet.save()
         project.searchprofile = profile
         project.save()
