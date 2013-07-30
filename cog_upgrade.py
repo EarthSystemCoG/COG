@@ -8,6 +8,7 @@ from cog.models import Project, create_upload_directory, Doc, CommunicationMeans
 from cog.models.logged_event import log_instance_event
 from django.db.models.signals import post_save
 from cog.models import SearchFacet, SearchProfile, SearchGroup
+from cog.config.search import config_project_search
 
 print 'Upgrading COG'
 
@@ -48,43 +49,4 @@ configs = { 'NCPP': 'cog/config/search/ncpp.cfg',
             'DCMIP-2012': 'cog/config/search/dcmip-2012.cfg' }
 
 for key in configs:
-    
-    # load project search profile
-    project = Project.objects.get(short_name=key)
-    search_profile = project.searchprofile
-    
-    # remove existing groups of facets
-    for group in search_profile.groups.all():
-        print 'Deleting search group=%s' % group
-        group.delete()
-    
-    # read project configuration
-    projConfig = ConfigParser.RawConfigParser()
-    # must set following line explicitely to preserve the case of configuration keys
-    projConfig.optionxform = str 
-    try:
-        projConfig.read( os.path.expanduser(configs[key]) )
-    except Exception as e:
-        print "Configuration file %s not found" % CONFIG_FILEPATH
-        raise e
-    
-    # loop over groups
-    for section in projConfig.sections():
-        
-        # create search group
-        parts = section.split("=")
-        group_order = parts[0]
-        group_name=parts[1]
-        searchGroup = SearchGroup(name=group_name, order=int(group_order), profile=search_profile)
-        searchGroup.save()
-
-        for option in projConfig.options(section):
-            value = projConfig.get(section, option)
-            #print section, option, value
-            parts = value.split("|")
-            facet_order = int(option)
-            facet_key = parts[0]
-            facet_label = parts[1]
-            searchFacet = SearchFacet(group=searchGroup, key=facet_key, order=facet_order, label=facet_label)
-            searchFacet.save()
-            print "%s" % searchFacet
+    config_project_search(key, configs[key])
