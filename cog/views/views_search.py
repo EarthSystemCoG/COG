@@ -131,7 +131,7 @@ def search_get(request, searchInput, facetProfile, searchService, extra={}):
             data[SEARCH_OUTPUT] = searchOutput
             data[FACET_PROFILE] = facetProfile
             #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
-            data['title'] = 'Search'
+            data['title'] = 'Advanced Data Search'
             
             # save data in session
             request.session[SEARCH_DATA] = data
@@ -283,7 +283,7 @@ def search_post(request, searchInput, facetProfile, searchService, extra={}):
         data[ERROR_MESSAGE] = "Error: search text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
          
     # store data in session 
-    data['title'] = 'Search'
+    data['title'] = 'Advanced Data Search'
     request.session[SEARCH_DATA] = data
     
     # use POST-REDIRECT-GET pattern with additional parameter "?search_data"
