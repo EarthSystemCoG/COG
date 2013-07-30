@@ -490,19 +490,23 @@ def search_facet_delete(request, facet_id):
     # retrieve facet from database
     facet = get_object_or_404(SearchFacet, pk=facet_id)
     
+    # facet group
+    group = facet.group
+    
     # retrieve associated project
-    project = facet.profile.project
+    project = group.profile.project
     
     # security check
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
+        
     # delete facet
     facet.delete()
     
-    # re-order all profile facets
+    # re-order all group facets
+    facets = SearchFacet.objects.filter(group=group).order_by('order')
     count = 0
-    for facet in project.searchprofile.facets():
+    for facet in facets:
         facet.order = count
         facet.save()
         count += 1
