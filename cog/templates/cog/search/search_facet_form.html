@@ -34,10 +34,8 @@
 	    
 	    <!-- fields not editable by the user -->
 	    {{ form.order.as_hidden }}
-	    
-	    <!-- send project search profile as hidden field, so it can be used in validation -->
-	    <input type="hidden" name="profile" value="{{project.searchprofile.id}}" />
-	    
+	    {{ form.group.as_hidden }}
+	    	    
 	    <div style="text-align:right">
 	        <input type="button" value="Cancel" onclick="window.location='{% url 'search_profile_config' project.short_name|lower %}'"/>
 	        <input type="submit" value="Submit" />

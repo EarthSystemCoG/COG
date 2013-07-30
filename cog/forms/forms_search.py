@@ -21,30 +21,22 @@ class SearchFacetForm(ModelForm):
         model = SearchFacet
     
     # execute combined validation on form id and key
-    # for each project, the search facet key must be unique
+    # for each project, the search facet key and label must be unique
     def clean(self):
         
         cleaned_data = self.cleaned_data
         key = cleaned_data.get("key", None)
         label = cleaned_data.get("label", None)
-        profile = cleaned_data.get("profile", None)
+        group = cleaned_data.get("group", None)
         
-        # check key is unique        
-        facets = SearchFacet.objects.filter(key=key).filter(profile__id=profile.id)
-        for facet in facets:
+        # check key, label are unique among this project search profile   
+        for facet in group.profile.facets():
             if self.instance is None or facet.id != self.instance.id:
-                self._errors["key"] = self.error_class(["Facet with this key already exists in project"])
-                if cleaned_data.get("key",None):
-                    del cleaned_data["key"]
-                
-        # check label is unique
-        facets = SearchFacet.objects.filter(label=label).filter(profile__id=profile.id)
-        for facet in facets:
-            if self.instance is None or facet.id != self.instance.id:
-                self._errors["label"] = self.error_class(["Facet with this label already exists in project"])
-                if cleaned_data.get("label",None):
-                    del cleaned_data["label"]
-        
+                if facet.key == key:
+                    self._errors["key"] = self.error_class(["Facet with this key already exists in project"])
+                if facet.label == label:
+                    self._errors["label"] = self.error_class(["Facet with this label already exists in project"])
+                        
         return cleaned_data
         
     def clean_key(self):

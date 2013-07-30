@@ -11,6 +11,10 @@ class SearchGroup(models.Model):
     name =  models.CharField(max_length=40, null=False, blank=False, default=DEFAULT_NAME)
     order = models.IntegerField(blank=True, default=0)
     
+    def size(self):
+        """Returns the number of facets in the group."""
+        return len(list(self.facets.all()))
+    
     def __unicode__(self):
         return "Search Group name='%s', order='%s'" % (self.name, self.order)
     

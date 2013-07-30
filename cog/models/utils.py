@@ -166,3 +166,14 @@ def delete_comments(object):
     for comment in comments:
         print 'Deleting associated comment=%s' % comment.comment
         comment.delete()
+
+def get_or_create_default_search_group(project):
+    
+    profile = project.searchprofile
+    try:
+        group = SearchGroup.objects.filter(profile=profile).filter(name=SearchGroup.DEFAULT_NAME)[0]
+    except IndexError:
+        print 'Creating default search group for project=%s' % project.short_name
+        group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=len(list(profile.groups.all())) )
+        group.save()
+    return group

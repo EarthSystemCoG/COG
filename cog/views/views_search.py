@@ -21,6 +21,7 @@ from cog.services.search import TestSearchService, SolrSearchService
 from cog.services.SolrSerializer import deserialize
 
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
+from cog.models.utils import get_or_create_default_search_group
 
 
 SEARCH_INPUT = "search_input"
@@ -435,10 +436,15 @@ def search_facet_add(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method=='GET': 
-        # assign order to new facet
-        order = len(project.searchprofile.facets())
-        facet = SearchFacet(order=order)
+        
+        # create default search group, if not existing already
+        group = get_or_create_default_search_group(project)
+        
+        # assign facet to default search group
+        order = group.size()
+        facet = SearchFacet(order=order, group=group)
         form = SearchFacetForm(instance=facet)    
+        
         return render_search_facet_form(request, project, form)
         
     else:
