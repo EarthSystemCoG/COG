@@ -18,9 +18,11 @@
 	
 	  <!-- loop over facets returned -->
       {% for facet_group in facet_profile.facetGroups %}
+      
+        {% if forloop.counter != 1 %}<br/>{% endif %}
+        
         <!-- facets grouping -->
         {% if facet_group.name and facet_group.name != 'default' %}
-          {% if forloop.counter != 1 %}<br/>{% endif %}
           <fieldset class="fieldset_box">
 	        <legend class="fieldset_legend">{{ facet_group.name }}</legend>	
 	    {% endif %}
