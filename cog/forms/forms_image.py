@@ -1,4 +1,5 @@
 from django.forms import ModelForm, BooleanField
+import os
 
 MAX_IMAGE_SIZE = 1048576 # 1MB
 
@@ -17,7 +18,12 @@ class ImageForm(ModelForm):
         # check image size on upload    
         image = self.cleaned_data.get("image")
         delete_image = self.cleaned_data.get("delete_image")
-        if image is not None and delete_image is False and image.size > MAX_IMAGE_SIZE:
-            self._errors["image"] = self.error_class(["Image size exceeds the maximum allowed."])
+        print 'IMAGE=%s' % image
+        try:
+            if image is not None and delete_image is False and image.size > MAX_IMAGE_SIZE:
+                self._errors["image"] = self.error_class(["Image size exceeds the maximum allowed."])
+        except OSError as e:
+            # image not existing on disk
+            print e
         
         return self.cleaned_data
