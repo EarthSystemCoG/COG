@@ -18,9 +18,7 @@
 	
 	  <!-- loop over facets returned -->
       {% for facet_group in facet_profile.facetGroups %}
-      
-        {% if forloop.counter != 1 %}<br/>{% endif %}
-        
+             
         <!-- facets grouping -->
         {% if facet_group.name and facet_group.name != 'default' %}
           <fieldset class="fieldset_box">

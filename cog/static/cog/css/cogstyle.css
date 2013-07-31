@@ -680,7 +680,9 @@ textarea.ckeditor { resize: vertical; }
 	padding: 5px;
 	/* width: 300px; */
 	text-align:center;
-	margin:auto;
+	/* margin:auto; */
+	margin-top:-10px;
+	margin-bottom: 15px;
 }
 
 .fieldset_legend {
