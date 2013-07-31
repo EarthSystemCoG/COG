@@ -9,6 +9,9 @@ from cog.models.logged_event import log_instance_event
 from django.db.models.signals import post_save
 from cog.models import SearchFacet, SearchProfile, SearchGroup
 from cog.config.search import config_project_search
+from django.conf import settings
+from cog.models.utils import create_project_search_profile, get_or_create_default_search_group
+from django.core.exceptions import ObjectDoesNotExist
 
 print 'Upgrading COG'
 
@@ -40,9 +43,27 @@ print 'Upgrading COG'
 # 1.6 release
 # delete existing facets
 for f in SearchFacet.objects.all():
-    print f
     f.delete()
     
+# create default facets, group for all projects
+for project in Project.objects.all():
+    print 'PROJECT=%s' % project.short_name
+    try:
+         # profile exists, create default facets
+        profile = project.searchprofile
+        group = get_or_create_default_search_group(project)
+        # assign default facets
+        facets = getattr(settings, "DEFAULT_SEARCH_FACETS", {})
+        order = 0
+        for key, label in facets.items():
+            facet = SearchFacet(key=key, label=label, group=group, order=order)
+            facet.save()
+            order = order+1
+    except ObjectDoesNotExist:
+        print 'Object Does Not Exist'
+        # create full profile and facets
+        create_project_search_profile(project)
+   
 # read search configurations
 configs = { 'NCPP': 'cog/config/search/ncpp.cfg',
             'Downscaling-2013': 'cog/config/search/ncpp.cfg',

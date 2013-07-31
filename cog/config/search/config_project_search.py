@@ -3,6 +3,8 @@ from cog.models import Project, SearchGroup, SearchFacet
 
 def config_project_search(project_short_name, config_file_path):
     
+    print 'Configuring search for project=%s' % project_short_name
+    
     # load project search profile
     project = Project.objects.get(short_name=project_short_name)
     search_profile = project.searchprofile
