@@ -11,7 +11,7 @@ class SearchProfile(models.Model):
     #name = models.CharField(max_length=50, blank=False, unique=True, default='')
     
     # The URL of the back-end search service - don't verify its existence because it might take longer than allowed
-    url = models.URLField(blank=False, verify_exists=False)
+    url = models.URLField(blank=False)
         
     # string of the form name=value, name=value....
     constraints = models.CharField(max_length=200, blank=True, null=True, default='')
