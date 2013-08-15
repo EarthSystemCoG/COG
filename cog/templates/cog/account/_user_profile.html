@@ -18,7 +18,7 @@
         {% if not request.user.is_anonymous %}
         <tr>
             <td class="head" nowrap="nowrap"><b>Email</b></td>
-            <td class="long">{{ user_profile.user.email }}</td>
+            <td class="long">{{ user_profile.user.email|truncatechars:50 }}</td>
         </tr>
         {% endif %}
         <tr>
