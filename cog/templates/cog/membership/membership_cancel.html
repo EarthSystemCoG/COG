@@ -19,7 +19,7 @@
 	            
 	            <form action="" method="post">
 	                {% csrf_token %}
-	                <input type="reset" value="No, I Changed My Mind" onclick="self.location='{% url project_home project.short_name.lower %}'"/>
+	                <input type="reset" value="No, I Changed My Mind" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/>
 	                &nbsp;
 	                <input type="submit" value="Yes, Cancel My Membership"/>
 	            </form>

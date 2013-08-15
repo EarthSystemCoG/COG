@@ -18,12 +18,11 @@
 		</style>
 	</head>
 	<body>
-		{% load url from future %}
 		<div align="center">
 			<div class="message-box">
 				<b>The {{ project.short_name }} site has moved.</b>
 				<br/>
-				Please access the site at the new URL: <a href="http://www.earthsystemcog.org{% url 'project_home' project.short_name.lower %}">http://www.earthsystemcog.org{% url project_home project.short_name.lower %}</a>
+				Please access the site at the new URL: <a href="http://www.earthsystemcog.org{% url 'project_home' project.short_name.lower %}">http://www.earthsystemcog.org{% url 'project_home' project.short_name.lower %}</a>
 			</div>
 		</div>
 	</body>

@@ -63,9 +63,9 @@
             
             <div style="text-align:right">          
                 {% if form.instance.id %}
-                    <input type="reset" value="Cancel" onclick="self.location='{% url post_cancel form.instance.id %}'"/>
+                    <input type="reset" value="Cancel" onclick="self.location='{% url 'post_cancel' form.instance.id %}'"/>
                 {% else %}
-                    <input type="reset" value="Cancel" onclick="self.location='{% url project_home project.short_name.lower %}'"/>
+                    <input type="reset" value="Cancel" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/>
                 {% endif %}
                 &nbsp; <input type="submit" value="Submit" />
             </div>

@@ -29,9 +29,9 @@
     {% if request.user|hasUserPermission:project %}
         <div style="text-align:right">
             <hr/>
-            <a href="{% url doc_update doc.id %}" class="changelink">Update</a>
+            <a href="{% url 'doc_update' doc.id %}" class="changelink">Update</a>
             &nbsp;
-            <a href="{% url doc_remove doc.id %}?redirect={{ doc|doc_redirect }}" class="deletelink"
+            <a href="{% url 'doc_remove' doc.id %}?redirect={{ doc|doc_redirect }}" class="deletelink"
                onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document ?',this)">Delete</a>       
         </div>
         <div id="myDialog" class="yui-skin-sam"></div>
@@ -39,7 +39,7 @@
 
     <!-- Comments -->
     {% with doc as object %}
-        {% url doc_detail object.id as next_view %}
+        {% url 'doc_detail' object.id as next_view %}
         {% include 'cog/common/_comments.html' %}
     {% endwith %}        
 

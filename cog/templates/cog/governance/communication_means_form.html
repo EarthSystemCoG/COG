@@ -68,7 +68,7 @@
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
 		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
-		            			&nbsp;<a href="{% url communication_means_members form.instance.id %}" class="changelink" style="float:right">Update Members</a>
+		            			&nbsp;<a href="{% url 'communication_means_members' form.instance.id %}" class="changelink" style="float:right">Update Members</a>
 		            		</td>
 		            	</tr>
 	            	{% endif %}
@@ -83,9 +83,9 @@
     
     	 <div style="text-align:right">
     	 	{% if 'internal' in request.path %}
-	        	<input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower 'communication' %}'"/>
+	        	<input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'communication' %}'"/>
 	        {% else %}
-	        	<input type="button" value="Cancel" onclick="window.location='{% url getinvolved_display project.short_name|lower %}'"/>
+	        	<input type="button" value="Cancel" onclick="window.location='{% url 'getinvolved_display' project.short_name|lower %}'"/>
 	        {% endif %}
 	        <input type="submit" value="Submit" />
          </div>

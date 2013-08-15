@@ -44,7 +44,7 @@
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
 		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
-		            			&nbsp;<a href="{% url organizational_role_members form.instance.id %}" class="changelink" style="float:right">Update Members</a>
+		            			&nbsp;<a href="{% url 'organizational_role_members' form.instance.id %}" class="changelink" style="float:right">Update Members</a>
 		            	</tr>
 	            	{% endif %}
 	            	
@@ -54,7 +54,7 @@
 	     {% endfor %}
     
     	 <div style="text-align:right">
-	         <input type="button" value="Cancel" onclick="window.location='{% url governance_display project.short_name|lower 'roles' %}'"/>
+	         <input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'roles' %}'"/>
 	         <input type="submit" value="Submit" />
          </div>    
     
