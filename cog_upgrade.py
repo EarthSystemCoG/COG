@@ -67,8 +67,8 @@ for project in Project.objects.all():
         """
    
 # read search configurations
-configs = { 'NCPP': 'cog/config/search/ncpp.cfg',
-            'Downscaling-2013': 'cog/config/search/ncpp.cfg',
+configs = { #'NCPP': 'cog/config/search/ncpp.cfg',
+            #'Downscaling-2013': 'cog/config/search/ncpp.cfg',
             #'DCMIP-2012': 'cog/config/search/dcmip-2012.cfg' 
             }
 
