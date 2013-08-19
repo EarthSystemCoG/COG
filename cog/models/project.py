@@ -199,9 +199,6 @@ class Project(models.Model):
     def roadmap(self):
         return self.get_external_urls(TYPE_ROADMAP)
     
-    def download(self):
-        return self.get_external_urls(TYPE_DOWNLOAD)
-    
     def code(self):
         return self.get_external_urls(TYPE_CODE)
     

@@ -53,6 +53,14 @@ def download_display(request, project_short_name):
     template_form_pages = { reverse('download_update', args=[project_short_name]) : template_name }
     return external_urls_display(request, project_short_name, TYPE_DOWNLOAD, template_page, template_name, template_form_pages)
 
+# View to display the administrator's guide page.
+def admin_guide_display(request, project_short_name):
+     
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Administrator\'s Guide'
+    template_form_pages = { reverse('admin_guide_update', args=[project_short_name]) : template_name }
+    return external_urls_display(request, project_short_name, TYPE_ADMIN_GUIDE, template_page, template_name, template_form_pages)
+
     
 # Generic view to display a given type of external URLs.
 # This view sub-selects the project peer and children that external URLs of that type, 
@@ -106,6 +114,15 @@ def usecases_update(request, project_short_name):
     type = TYPE_USECASE
     redirect = reverse('usecases_display', args=[project_short_name])
     return external_urls_update(request, project_short_name, type, redirect)
+
+# View to update the project software administrator's guide
+@login_required
+def admin_guide_update(request, project_short_name):
+    
+    type = TYPE_ADMIN_GUIDE
+    redirect = reverse('admin_guide_display', args=[project_short_name])
+    return external_urls_update(request, project_short_name, type, redirect)
+
 
 # View to update the project code
 @login_required
