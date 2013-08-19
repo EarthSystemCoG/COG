@@ -10,7 +10,7 @@
 	{% if proj.description %}
 	<tr>
 		<td nowrap="nowrap"><b>Description</b></td>
-		<td class="long">{{proj.description|urlize|linebreaksbr}}</td>
+		<td class="long">{{proj.description|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% endif %}
 </table>

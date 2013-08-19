@@ -1,5 +1,5 @@
 {% if proj.governanceOverview %}
 
-	{{ proj.governanceOverview|urlize|linebreaksbr }}
+	{{ proj.governanceOverview|urlizetrunc:50|linebreaksbr }}
 	
 {% endif %}

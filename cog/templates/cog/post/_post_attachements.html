@@ -24,7 +24,7 @@
                        {% endif %}
                        {% if doc.description %}
                           <br/>
-                          <i>{{ doc.description|urlize|linebreaksbr }}</i>
+                          <i>{{ doc.description|urlizetrunc:50|linebreaksbr }}</i>
                        {% endif %}              
                    </td>
                 </tr>
