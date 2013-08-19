@@ -1,8 +1,9 @@
 APPLICATION_LABEL = 'cog'
 
-TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"values",
+# dictionary containing (page key, page url)
+TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"values", "PARTNERS":"partners", "SPONSORS":"sponsors", "PEOPLE":"people",
          "SOFTWARE":"software", "DOWNLOAD":"download", "ADMIN_GUIDE":"admin_guide",
-         "PARTNERS":"partners", "SPONSORS":"sponsors", "PEOPLE":"people",
+         "USERS":"users",
          "BOOKMARKS":"bookmarks",
          "DEVELOPMENT":"development", "CODE":"code", "TRACKERS":"trackers", "USECASES":"usecases",
          "ROADMAP":"roadmap",
@@ -23,6 +24,7 @@ PROJECT_PAGES = (
          [("About Us", "%s/" % TABS["ABOUTUS"]), ("Mission", "%s/" % TABS["MISSION"]), ("Vision", "%s/" % TABS["VISION"]), ("Values", "%s/" % TABS["VALUES"]),
           ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])],   
          [("Software", "%s/" % TABS["SOFTWARE"]), ("Download / Releases", "%s/" % TABS["DOWNLOAD"]), ("Installer's / Administrator's Guide", "%s/" % TABS["ADMIN_GUIDE"])],
+         [("Users", "%s/" % TABS["USERS"])],
          [("Development", "%s/" % TABS["DEVELOPMENT"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
          [("Roadmap", "%s/" % TABS["ROADMAP"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), 

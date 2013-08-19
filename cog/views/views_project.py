@@ -518,6 +518,15 @@ def software_display(request, project_short_name):
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
+def users_display(request, project_short_name):
+   
+    tab = TABS["USERS"] 
+    template_page = 'cog/project/_project_users.html'
+    template_form_pages = { reverse('users_update', args=[project_short_name]) : "Getting Started" }
+    template_title = "Getting Started"
+   
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
 @login_required
 def tags_update(request, project_short_name):
             
@@ -749,6 +758,15 @@ def software_update(request, project_short_name):
     form_template = 'cog/project/software_form.html'
     form_template_title = 'Software Overview Update'
     display_view = 'software_display'
+    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
+
+@login_required
+def users_update(request, project_short_name):
+    
+    formClass = UsersForm
+    form_template = 'cog/project/users_form.html'
+    form_template_title = 'Getting Started Update'
+    display_view = 'users_display'
     return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
 
 

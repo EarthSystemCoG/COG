@@ -115,6 +115,10 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/download/update/$', 'cog.views.download_update', name='download_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/admin_guide/$', 'cog.views.admin_guide_display', name='admin_guide_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/admin_guide/update/$', 'cog.views.admin_guide_update', name='admin_guide_update'),   
+    
+    # Users
+    url(r'^projects/(?P<project_short_name>[^/]+)/users/$', 'cog.views.users_display', name='users_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/users/update/$', 'cog.views.users_update', name='users_update'),
 
     # folders and bookmarks
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/$', 'cog.views.bookmark_list', name='bookmark_list'),
