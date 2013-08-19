@@ -1,0 +1,27 @@
+<!-- table with details -->
+{% if proj.software_features or proj.software_system_requirements or proj.software_supported_platforms %}
+	<table>
+	
+		{% if proj.software_features %}
+			<tr>
+				<td class="leftcolumn" nowrap="nowrap"><b>Software Features</b></td>
+				<td class="long">{{ proj.software_features|urlize|linebreaksbr }}</td>
+			</tr>
+		{% endif %}
+		
+		{% if proj.software_system_requirements %}
+			<tr>
+				<td class="leftcolumn" nowrap="nowrap"><b>System Requirements</b></td>
+				<td class="long">{{ proj.software_system_requirements|urlize|linebreaksbr }}</td>
+			</tr>
+		{% endif %}
+		
+		{% if proj.software_supported_platforms %}
+			<tr>
+				<td class="leftcolumn" nowrap="nowrap"><b>Supported Platforms</b></td>
+				<td class="long">{{ proj.software_supported_platforms|urlize|linebreaksbr }}</td>
+			</tr>
+		{% endif %}
+		
+	</table>	
+{% endif %}

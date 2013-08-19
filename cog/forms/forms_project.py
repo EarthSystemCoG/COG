@@ -59,7 +59,9 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         # Note: must exclude the many2many field mapped through an intermediary table
-        exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess','governanceOverview','developmentOverview')
+        exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess','governanceOverview',
+                   'developmentOverview',
+                   'software_features', 'software_system_requirements', 'software_supported_platforms')
         
 class ContactusForm(ModelForm):
     
@@ -94,6 +96,16 @@ class DevelopmentOverviewForm(ModelForm):
                    'externalDependencies': Textarea(attrs={'rows':4}), }                                     
         fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
                    'supportedPlatforms', 'externalDependencies')
+        
+class SoftwareForm(ModelForm):
+    
+    class Meta:
+        model = Project        
+        widgets = {'software_features': Textarea(attrs={'rows':6}),
+                   'software_system_requirements': Textarea(attrs={'rows':4}),
+                   'software_supported_platforms': Textarea(attrs={'rows':4}),
+                   }
+        fields = ( 'software_features', 'software_system_requirements', 'software_supported_platforms')
         
 class ProjectTagForm(ModelForm):
     

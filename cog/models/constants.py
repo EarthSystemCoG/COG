@@ -1,6 +1,7 @@
 APPLICATION_LABEL = 'cog'
 
 TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"values",
+         "SOFTWARE":"software", "DOWNLOAD":"download", "ADMIN_GUIDE":"admin_guide",
          "PARTNERS":"partners", "SPONSORS":"sponsors", "PEOPLE":"people",
          "BOOKMARKS":"bookmarks",
          "DEVELOPMENT":"development", "CODE":"code", "TRACKERS":"trackers", "USECASES":"usecases",
@@ -15,12 +16,13 @@ TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"
 # o tab and subtab URLs must be of the form: 'projects/<project_short_name_lower>/<tab_label>/' whwre tab_label is unique
 # o the selected sub-tab is found by matching the request path to the PROJECT_PAGES urls
 # o the selected tab will be the one in position '0' in the list containing the selected sub-tab
-# o everything after the third '/' is disregarded in computing the high-lihghted tab and sub-tab
+# o everything after the third '/' is disregarded in computing the high-lighted tab and sub-tab
 # o the tab/sub-tab URLs can be arbitrary except containing a '/'
 PROJECT_PAGES = (
          [("Home", "")],
          [("About Us", "%s/" % TABS["ABOUTUS"]), ("Mission", "%s/" % TABS["MISSION"]), ("Vision", "%s/" % TABS["VISION"]), ("Values", "%s/" % TABS["VALUES"]),
-          ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])],        
+          ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])],   
+         [("Software", "%s/" % TABS["SOFTWARE"]), ("Download / Releases", "%s/" % TABS["DOWNLOAD"]), ("Installer's / Administrator's Guide", "%s/" % TABS["ADMIN_GUIDE"])],
          [("Development", "%s/" % TABS["DEVELOPMENT"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
          [("Roadmap", "%s/" % TABS["ROADMAP"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), 

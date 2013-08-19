@@ -509,6 +509,15 @@ def development_display(request, project_short_name):
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
+def software_display(request, project_short_name):
+   
+    tab = TABS["SOFTWARE"] 
+    template_page = 'cog/project/_project_software.html'
+    template_form_pages = { reverse('software_update', args=[project_short_name]) : "Software" }
+    template_title = "Software Overview"
+   
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
 @login_required
 def tags_update(request, project_short_name):
             
@@ -732,6 +741,62 @@ def development_update(request, project_short_name):
         else:
             print 'Form is invalid %s' % form.errors
             return render_development_form(request, project, form)
+        
+@login_required
+def software_update(request, project_short_name):
+    
+    formClass = SoftwareForm
+    form_template = 'cog/project/software_form.html'
+    form_template_title = 'Software Overview Update'
+    display_view = 'software_display'
+    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
+
+
+@login_required
+def _project_page_update(request, project_short_name, 
+                         formClass, form_template, form_template_title, display_view):
+    """Generic view for updating some project fields."""
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if request.method=='GET':
+                
+        # create form object from model
+        form = formClass(instance=project)
+
+        # render form    
+        return render_to_response(form_template,
+                                  {'title' : form_template_title, 'project': project, 'form':form },
+                                  context_instance=RequestContext(request))
+    
+    # POST request
+    else:
+        
+        # update object from form data
+        form = formClass(request.POST, instance=project)
+        
+        # validate form data
+        if form.is_valid():
+            
+            # persist changes
+            project = form.save()
+            
+            # redirect to development overview (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse(display_view, args=[project.short_name.lower()]))            
+            
+        # return to form
+        else:
+            print 'Form is invalid %s' % form.errors
+            return render_to_response(form_template,
+                                      {'title' : form_template_title, 'project': project, 'form':form },
+                                      context_instance=RequestContext(request))
+
         
 def render_development_form(request, project, form):
     return render_to_response('cog/project/development_form.html',

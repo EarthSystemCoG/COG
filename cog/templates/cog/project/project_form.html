@@ -17,6 +17,10 @@
 					document.getElementsByName("tab_About Us")[0].checked = true; 
 				}
 				
+				else if (   checkbox.name == "tab_Download / Releases"  || checkbox.name == "tab_Installer's / Administrator's Guide") {
+					document.getElementsByName("tab_Software")[0].checked = true; 
+				}
+				
 				else if (   checkbox.name == "tab_Code"  || checkbox.name == "tab_Trackers"   || checkbox.name == "tab_Use Cases") {
 					document.getElementsByName("tab_Development")[0].checked = true; 
 				}
@@ -37,6 +41,11 @@
 					document.getElementsByName("tab_Partners")[0].checked = false;
 					document.getElementsByName("tab_Sponsors")[0].checked = false;
 					document.getElementsByName("tab_People")[0].checked = false;
+				}
+				
+				else if (checkbox.name == "tab_Software") {
+					document.getElementsByName("tab_Download / Releases")[0].checked = false;
+					document.getElementsByName("tab_Installer's / Administrator's Guide")[0].checked = false;
 				}
 				
 				else if (checkbox.name == "tab_Development") {

@@ -107,6 +107,11 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/code/$', 'cog.views.code_display', name='code_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/usecases/update/$', 'cog.views.usecases_update', name='usecases_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/usecases/$', 'cog.views.usecases_display', name='usecases_display'),
+    
+    # Software
+    url(r'^projects/(?P<project_short_name>[^/]+)/software/$', 'cog.views.software_display', name='software_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/software/update/$', 'cog.views.software_update', name='software_update'),
+    
 
 
     # folders and bookmarks
