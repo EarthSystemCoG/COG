@@ -1,7 +1,6 @@
 
 from cog.utils import smart_truncate
-from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_USECASE, \
-    TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
+from constants import *
 from django.conf import settings
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType
@@ -199,6 +198,9 @@ class Project(models.Model):
     
     def roadmap(self):
         return self.get_external_urls(TYPE_ROADMAP)
+    
+    def download(self):
+        return self.get_external_urls(TYPE_DOWNLOAD)
     
     def code(self):
         return self.get_external_urls(TYPE_CODE)

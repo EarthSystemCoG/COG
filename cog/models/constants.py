@@ -178,6 +178,7 @@ TYPE_TRACKER = 'tracker'
 TYPE_USECASE = 'usecase'
 TYPE_POLICY = 'policy'
 TYPE_ROADMAP = 'roadmap'
+TYPE_DOWNLOAD = 'download'
 
 EXTERNAL_URL_TYPES = (       
     (TYPE_BLOG,'Blog'),
@@ -187,7 +188,8 @@ EXTERNAL_URL_TYPES = (
     (TYPE_TRACKER, 'Tracker'),   
     (TYPE_USECASE, 'Use Case'),
     (TYPE_POLICY, 'Policy'),
-    (TYPE_ROADMAP, 'Roadmap'),      
+    (TYPE_ROADMAP, 'Roadmap'), 
+    (TYPE_DOWNLOAD,'Download'),    
 )
 
 EXTERNAL_URL_DICT = {}

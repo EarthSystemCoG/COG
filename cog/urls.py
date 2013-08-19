@@ -111,8 +111,8 @@ urlpatterns = patterns('',
     # Software
     url(r'^projects/(?P<project_short_name>[^/]+)/software/$', 'cog.views.software_display', name='software_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/software/update/$', 'cog.views.software_update', name='software_update'),
-    
-
+    url(r'^projects/(?P<project_short_name>[^/]+)/download/$', 'cog.views.download_display', name='download_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/download/update/$', 'cog.views.download_update', name='download_update'),   
 
     # folders and bookmarks
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/$', 'cog.views.bookmark_list', name='bookmark_list'),

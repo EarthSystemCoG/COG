@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse  
 from django.forms.models import modelformset_factory
 from constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, TYPE_USECASE, EXTERNAL_URL_DICT
+from cog.models.constants import *
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.constants import TABS
 
@@ -18,7 +18,7 @@ def trackers_display(request, project_short_name):
     
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Trackers'
-    template_form_pages = { reverse('trackers_update', args=[project_short_name]) : 'Trackers' }
+    template_form_pages = { reverse('trackers_update', args=[project_short_name]) : template_name }
     return external_urls_display(request, project_short_name, TYPE_TRACKER, template_page, template_name, template_form_pages)
 
 # View to display the project use cases.
@@ -26,7 +26,7 @@ def usecases_display(request, project_short_name):
     
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Use Cases'
-    template_form_pages = { reverse('usecases_update', args=[project_short_name]) : 'Use Cases' }
+    template_form_pages = { reverse('usecases_update', args=[project_short_name]) : template_name }
     return external_urls_display(request, project_short_name, TYPE_USECASE, template_page, template_name, template_form_pages)
 
 # View to display the project code URLs.
@@ -34,7 +34,7 @@ def code_display(request, project_short_name):
         
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Code Repositories'
-    template_form_pages = { reverse('code_update', args=[project_short_name]) : 'Code' }
+    template_form_pages = { reverse('code_update', args=[project_short_name]) : template_name }
     return external_urls_display(request, project_short_name, TYPE_CODE, template_page, template_name, template_form_pages)
 
 # View to display the project roadmap.
@@ -42,8 +42,16 @@ def roadmap_display(request, project_short_name):
      
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Roadmap'
-    template_form_pages = { reverse('roadmap_update', args=[project_short_name]) : 'Roadmap' }
+    template_form_pages = { reverse('roadmap_update', args=[project_short_name]) : template_name }
     return external_urls_display(request, project_short_name, TYPE_ROADMAP, template_page, template_name, template_form_pages)
+
+# View to display the project download page.
+def download_display(request, project_short_name):
+     
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Download / Releases'
+    template_form_pages = { reverse('download_update', args=[project_short_name]) : template_name }
+    return external_urls_display(request, project_short_name, TYPE_DOWNLOAD, template_page, template_name, template_form_pages)
 
     
 # Generic view to display a given type of external URLs.
@@ -113,6 +121,14 @@ def roadmap_update(request, project_short_name):
     
     type = TYPE_ROADMAP
     redirect = reverse('roadmap_display', args=[project_short_name])
+    return external_urls_update(request, project_short_name, type, redirect)
+
+# View to update the project download page
+@login_required
+def download_update(request, project_short_name):
+    
+    type = TYPE_DOWNLOAD
+    redirect = reverse('download_display', args=[project_short_name])
     return external_urls_update(request, project_short_name, type, redirect)
 
 # View to update the project policies
