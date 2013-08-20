@@ -159,6 +159,7 @@ AUTH_PROFILE_MODULE = "cog.UserProfile"
 # makes 'request' object available in templates
 TEMPLATE_CONTEXT_PROCESSORS += (
      'django.core.context_processors.request',
+     'cog.context_processors.cog_settings'
 ) 
 
 #CONTACT_EMAIL = 'Luca.Cinquini@jpl.nasa.gov'
@@ -189,3 +190,7 @@ COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
 
 # ATOM feed information
 ATOM_FEED_DIR = '/esg/content/atom_feed_home'
+
+# Facebook application ID (must register application with Facebook)
+FACEBOOK_APPLICATION_ID = 211703205620453 # CoG
+#FACEBOOK_APPLICATION_ID = 266117840180042 # CoG-dev
