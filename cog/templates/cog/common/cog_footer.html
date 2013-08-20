@@ -1,33 +1,5 @@
 {% load cog_utils %}
 <p/>
-		<!-- Facebook -->
-		
-<div id="fb-root"></div>
-<script>
-  window.fbAsyncInit = function() {
-    // init the FB JS SDK
-    FB.init({
-      appId      : 'YOUR_APP_ID',                        // App ID from the app dashboard
-      channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel file for x-domain comms
-      status     : true,                                 // Check Facebook Login status
-      xfbml      : true                                  // Look for social plugins on the page
-    });
-
-    // Additional initialization code such as adding Event Listeners goes here
-  };
-
-  // Load the SDK asynchronously
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/all.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
-
-<div class="fb-send" data-href="{{ request.get_full_path }}"></div>
-
 
 <hr/>
 <div class="span-3">
@@ -48,6 +20,35 @@
 	</div>
 	<!-- social media buttons -->
 	<div class="span-17 last" style="text-align:center; padding-top: 4px; padding-bottom:8px;">
+	
+			<!-- Facebook -->
+		
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    // init the FB JS SDK
+    FB.init({
+      appId      : '266117840180042',                        // App ID from the app dashboard
+      channelUrl : '//dev-hydra-httpd.esrl.svc/channel.html', // Channel file for x-domain comms
+      status     : true,                                 // Check Facebook Login status
+      xfbml      : true                                  // Look for social plugins on the page
+    });
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-send" data-href="{{ request.get_full_path }}"></div>
+	
 	
 	
 		<!-- Google+ -->
