@@ -23,6 +23,31 @@
 	<!-- social media buttons -->
 	<div class="span-17 last" style="text-align:center; padding-top: 4px; padding-bottom:8px;">
 		
+		<!-- Facebook -->
+		<div id="fb-root"></div>
+		<script>
+		  window.fbAsyncInit = function() {
+		    // init the FB JS SDK
+		    FB.init({
+		      appId      : '266117840180042',                         // App ID from the app dashboard
+		      channelUrl : '//dev-hydra-httpd.esrl.svc/channel.html', // Channel file for x-domain comms
+		      status     : true,                                      // Check Facebook Login status
+		      xfbml      : true                                       // Look for social plugins on the page
+		    });		
+		  };		
+		  // Load the SDK asynchronously
+		  (function(d, s, id){
+		     var js, fjs = d.getElementsByTagName(s)[0];
+		     if (d.getElementById(id)) {return;}
+		     js = d.createElement(s); js.id = id;
+		     js.src = "//connect.facebook.net/en_US/all.js";
+		     fjs.parentNode.insertBefore(js, fjs);
+		   }(document, 'script', 'facebook-jssdk'));
+		</script>
+		
+		<div class="fb-send" data-href="{{ request.get_full_path }}"></div>
+		&nbsp;
+		
 		<!-- Google+ -->
 		<!-- Place this tag where you want the share button to render. -->
 		<div class="g-plus" data-action="share" data-annotation="none" data-href="{{ request.get_full_path }}"></div>
@@ -40,8 +65,6 @@
 		<a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{ request.get_full_path }}">Tweet</a>
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 		
-		<!-- Facebook -->
-		<div class="fb-send" data-href="{{ request.get_full_path }}"></div>
 		
 	</div>	
 </div>
