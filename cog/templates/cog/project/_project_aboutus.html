@@ -17,7 +17,7 @@
 		{% if proj.external_homepage %}
 		<tr>
 			<td nowrap="nowrap"><b>Home Page</b></td>
-			<td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage}}</a></td>
+			<td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage|urlizetrunc:50}}</a></td>
 		</tr>
 		{% endif %}
 		{% if proj.history %}
