@@ -1,32 +1,5 @@
 <!-- social media buttons for CoG -->
 
-<!-- Facebook -->
-<!-- note: does NOT work for localhost -->
-{% if not 'localhost' in request.get_host %}
-	<div id="fb-root"></div>
-	<script>
-	 window.fbAsyncInit = function() {
-	   // init the FB JS SDK
-	   FB.init({
-	     appId      : '{{ FACEBOOK_APPLICATION_ID }}',            // App ID from the Facebook application dashboard
-	     channelUrl : '//{{ request.get_host }}/channel.html',  // Channel file for x-domain comms
-	     status     : true,                                      // Check Facebook Login status
-	     xfbml      : true                                       // Look for social plugins on the page
-	   });		
-	 };		
-	 // Load the SDK asynchronously
-	 (function(d, s, id){
-	    var js, fjs = d.getElementsByTagName(s)[0];
-	    if (d.getElementById(id)) {return;}
-	    js = d.createElement(s); js.id = id;
-	    js.src = "//connect.facebook.net/en_US/all.js";
-	    fjs.parentNode.insertBefore(js, fjs);
-	  }(document, 'script', 'facebook-jssdk'));
-	</script>
-	<div class="fb-send" data-href="{{ request.build_absolute_uri|urlencode }}"></div>
-	&nbsp;
-{% endif %}
-
 <!-- Google+ -->
 <!-- Place this tag where you want the share button to render. -->
 <div class="g-plus" data-action="share" data-annotation="none" data-href="{{ request.build_absolute_uri|urlencode }}"></div>
@@ -38,6 +11,18 @@
    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
  })();
 </script>
+&nbsp;
+
+<!-- Facebook -->
+<a href="#" 
+  onclick="
+    window.open(
+      'https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}', 
+      'facebook-share-dialog', 
+      'width=626,height=436'); 
+    return false;">
+    <img src="{{STATIC_URL}}/cog/img/facebook.jpg" height="20px" />
+</a>
 &nbsp;
 
 <!-- Twitter -->
