@@ -13,7 +13,7 @@
 				<td class="leftcolumn">
 					<a href="{{policy.url}}">{{policy.title}}</a>
 				</td>
-				<td>{{ policy.description|urlize|linebreaksbr }}</td>
+				<td>{{ policy.description|urlizetrunc:50|linebreaksbr }}</td>
 			</tr>
 		{% endfor %}
 	</table>

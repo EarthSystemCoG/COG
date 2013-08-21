@@ -26,7 +26,7 @@
    
    {% paginate %}
     
-   <form name="membershipForm" action="{% url membership_process project.short_name|lower %}" method="post"> 
+   <form name="membershipForm" action="{% url 'membership_process' project.short_name|lower %}" method="post"> 
        {% csrf_token %}
        
        <!-- pass through the current view name for eventual redirection -->
@@ -47,9 +47,9 @@
 	            </tr>
 	            {% for user in users %}
 	                <tr>
-	                    <td><a href="{% url user_detail user.id %}">{{ user.last_name }}</a></td>
-	                    <td><a href="{% url user_detail user.id %}">{{ user.first_name }}</a></td>
-	                    <td><a href="{% url user_detail user.id %}">{{ user.username }}</a></td>
+	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a></td>
+	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
+	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
 	                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
 	                    <!-- encode HTTP parameters for new and old membership in users group -->
 	                    <td style="text-align:center">
@@ -73,7 +73,7 @@
                         </td>
                         <td style="text-align:center">
                             <a class="deletelink" 
-                               href="{% url membership_process project.short_name|lower %}?{{project.getUserGroup|noMembership:user}}=on&{{ project.getAdminGroup|noMembership:user}}=on&view_name={{view_name}}"
+                               href="{% url 'membership_process' project.short_name|lower %}?{{project.getUserGroup|noMembership:user}}=on&{{ project.getAdminGroup|noMembership:user}}=on&view_name={{view_name}}"
                                onclick="return urlConfirmationDialog('Cancel Membership Confirmation','Are you sure you want to remove this user from the group ?',this)">Cancel</a>
                         </td>
 	                </tr>
@@ -81,7 +81,7 @@
 	            
 	        </table>
 	   </div>
-	   <div style="float:left"><input type="reset" value="Cancel" onclick="self.location='{% url project_home project.short_name.lower %}'"/></div>
+	   <div style="float:left"><input type="reset" value="Cancel" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/></div>
 	   <div style="float:right"><input type="submit" value="Submit"/></div>
 	   <div id="myDialog" class="yui-skin-sam"></div>
    </form>   

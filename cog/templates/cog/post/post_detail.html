@@ -20,13 +20,18 @@
 <!-- include action links -->
 {% include 'cog/post/_post_actions.html' %}
 
+<!-- social media buttons -->
+<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
+	 {% include 'cog/common/cog_social_media.html' %} 
+</div>	
+
 <!-- Attachments --> 
 {% with post as post %}
    {% include 'cog/post/_post_attachements.html' %}
 {% endwith %}
 
 <!-- Comments -->
-{% url post_detail post.id as next_view %}
+{% url 'post_detail' post.id as next_view %}
 {% with post as object %}
     {% include 'cog/common/_comments.html' %}
 {% endwith %}

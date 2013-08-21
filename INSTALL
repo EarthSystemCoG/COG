@@ -9,7 +9,6 @@ cd COG
 o Initialize the database
 manage.py syncdb (initializes tables for all applications NOT managed by 'south')
 manage.py migrate cog (initializes tables for applications managed by 'south')
-manage.py migrate remap
 manage.py migrate accounts
 
 o gather the static media files from the different applications into a single directory

@@ -23,7 +23,7 @@
 							{% if role.description %}
 							<tr>
 								<td class="leftcolumn">Description</td>
-								<td>{{role.description|urlize|linebreaksbr}}</td>
+								<td>{{role.description|urlizetrunc:50|linebreaksbr}}</td>
 							</tr>
 							{% endif %}
 							{% if role.members.all %}

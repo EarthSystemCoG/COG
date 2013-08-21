@@ -12,7 +12,7 @@
 		
 		     <form method="post" action="">
 		        {% csrf_token %}
-		        <input type="button" value="Cancel" onclick="self.location='{% url project_home project.short_name.lower %}'"/>
+		        <input type="button" value="Cancel" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/>
 		        <input type="submit" value="Delete"/>
 		     </form>
 		     

@@ -126,7 +126,7 @@ def create_project_page(url, project):
                         page = Post.objects.create(type=Post.TYPE_PAGE, 
                                                    author=home_page.author, # same author as home page
                                                    url= url,
-                                                   template="cog/post/page_template_sidebar_center.html",
+                                                   template="cog/post/page_template_sidebar_center_right.html",
                                                    title='%s %s' % (project.short_name, _page[0]),
                                                    is_home=False,
                                                    update_date=now(),

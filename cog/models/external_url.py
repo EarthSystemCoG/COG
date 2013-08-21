@@ -7,7 +7,7 @@ class ExternalUrl(models.Model):
         
     title = models.CharField(max_length=200, verbose_name='Title', blank=False)
     description = models.CharField(max_length=1000, blank=True)
-    url = models.URLField('URL', blank=False, verify_exists=False, max_length=1000)
+    url = models.URLField('URL', blank=False, max_length=1000)
     type = models.CharField(max_length=20, verbose_name='URL Type', blank=False, choices=EXTERNAL_URL_TYPES)
     project = models.ForeignKey(Project)
     

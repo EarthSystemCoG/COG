@@ -465,7 +465,7 @@ def search_facet_update(request, facet_id):
     facet = get_object_or_404(SearchFacet, pk=facet_id)
        
     # security check
-    project = facet.profile.project
+    project = facet.group.profile.project
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     

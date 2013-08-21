@@ -1,5 +1,4 @@
 {% load cog_utils %}
-{% load url from future %}
 
 <div class="mybox">
 	 <table>
@@ -10,7 +9,7 @@
 		 </tr>
 		 <tr>
 		 		<td nowrap="nowrap"><b>Interest Statement</b></td>
-		 		<td class="long">{{ user_profile.researchInterests|urlize|linebreaksbr }}</td>
+		 		<td class="long">{{ user_profile.researchInterests|urlizetrunc:50|linebreaksbr }}</td>
 		 </tr>		   
 	 </table>
 </div>

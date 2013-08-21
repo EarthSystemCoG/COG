@@ -19,7 +19,7 @@
 						{% if obj.frequency %}
 						<tr>
 							<td class="leftcolumn">Frequency</td>
-							<td>{{obj.frequency|urlize|linebreaksbr}}</td>
+							<td>{{obj.frequency|urlizetrunc:50|linebreaksbr}}</td>
 						</tr>
 						{% endif %}
 						{% if obj.purpose %}
@@ -46,7 +46,7 @@
 						{% if obj.participationDetails %}
 						<tr>
 							<td class="leftcolumn">Participation Details</td>
-							<td>{{obj.participationDetails|urlize|linebreaksbr}}</td>
+							<td>{{obj.participationDetails|urlizetrunc:50|linebreaksbr}}</td>
 						</tr>							
 						{% endif %}						
 					</table>
