@@ -1,28 +1,26 @@
 {% extends "layouts/layout_sidebar_center_right.html" %}
 
-{% load cog_utils %}
-
 {% block head %}
-    {% include 'cog/common/metatags.html' %}
-	
-    {% include 'cog/common/yui.html' %} 
-    {% include 'cog/common/yui_panels.html' %}    
+	{% include 'cog/common/metatags.html' %}
 
-    {% include 'cog/common/cog_js.html' %} 
-    {% include 'cog/common/mystyle.html' %} 
+    {% include 'cog/common/yui.html' %}
+    {% include 'cog/common/yui_panels.html' %}
+
+    {% include 'cog/common/cog_js.html' %}
+    {% include 'cog/common/mystyle.html' %}
 
     {% include 'cog/common/cim.html' %}
-    
-    {% include 'cog/common/wiki.html' %}   
-    
+
+    {% include 'cog/common/wiki.html' %}
+
 {% endblock %}
 
 {% block header %}
-    {% include 'cog/common/cog_header.html' %} 
+    {% include 'cog/common/cog_header.html' %}
 {% endblock %}
 
 {% block left %}
-    {% include 'cog/project/project_left.html' %} 
+    {% include 'cog/project/project_left.html' %}
 {% endblock %}
 
 {% block main %}
@@ -30,9 +28,9 @@
 {% endblock %}
 
 {% block right %}
-    {% include 'cog/project/project_right.html' %} 
+    {% include 'cog/project/project_right.html' %}
 {% endblock %}
 
 {% block footer %}
-    {% include 'cog/common/cog_footer.html' %} 
+    {% include 'cog/common/cog_footer.html' %}
 {% endblock %}
