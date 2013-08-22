@@ -17,8 +17,8 @@
 		          	<!-- links to update, delete the news -->
                     {% if user|hasUserPermission:news.project %}
                   		<div style="float:right">
-                    	     &nbsp;<a href="{% url news_update news.id %}" class="changelink">Update</a>
-                    	     &nbsp;<a href="{% url news_delete news.id %}" class="deletelink">Delete</a>
+                    	     &nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>
+                    	     &nbsp;<a href="{% url 'news_delete' news.id %}" class="deletelink">Delete</a>
                     	</div>
                     {% endif %}		          
 		          </td>
@@ -27,6 +27,6 @@
 	    </div>
   
         <p/>
-        <a href="{% url news_list project.short_name.lower %}">More Project News &raquo;</a>    
+        <a href="{% url 'news_list' project.short_name.lower %}">More Project News &raquo;</a>    
 
 {% endblock %}
