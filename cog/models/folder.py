@@ -21,7 +21,7 @@ class Folder(models.Model):
 # function to return the top bookmark folder for a project
 def getTopFolder(project):
     
-    name = "%s Bookmarks" % project.short_name
+    name = "%s Resources" % project.short_name
     # get or create top-level folder
     folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project)
     return folder

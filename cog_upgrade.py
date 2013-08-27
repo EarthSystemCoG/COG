@@ -7,7 +7,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from cog.models import Project, create_upload_directory, Doc, CommunicationMeans
 from cog.models.logged_event import log_instance_event
 from django.db.models.signals import post_save
-from cog.models import SearchFacet, SearchProfile, SearchGroup
+from cog.models import SearchFacet, SearchProfile, SearchGroup, Folder
 from cog.config.search import config_project_search
 from django.conf import settings
 from cog.models.utils import create_project_search_profile, get_or_create_default_search_group
@@ -67,10 +67,28 @@ for project in Project.objects.all():
         """
    
 # read search configurations
-configs = { #'NCPP': 'cog/config/search/ncpp.cfg',
-            #'Downscaling-2013': 'cog/config/search/ncpp.cfg',
-            #'DCMIP-2012': 'cog/config/search/dcmip-2012.cfg' 
-            }
+#configs = { #'NCPP': 'cog/config/search/ncpp.cfg',
+#            #'Downscaling-2013': 'cog/config/search/ncpp.cfg',
+#            #'DCMIP-2012': 'cog/config/search/dcmip-2012.cfg' 
+#            }
 
-for key in configs:
-    config_project_search(key, configs[key])
+#for key in configs:
+#    config_project_search(key, configs[key])
+
+# 1.7 release
+# Rename top-level folder from "<project> Bookmarks" to "<project> Resources"
+for project in Project.objects.all():
+    
+    old_name = "%s Bookmarks" % project.short_name
+    new_name = "%s Resources" % project.short_name
+
+    try:
+        folder = Folder.objects.get(name=old_name, parent=None, project=project)
+        if folder is not None:
+            folder.name = new_name
+            folder.save()
+            print "Renamed %s to %s" % (old_name, new_name)
+    except ObjectDoesNotExist:
+        print "Folder %s not found" % old_name
+    
+
