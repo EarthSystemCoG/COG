@@ -20,13 +20,6 @@
 			<td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage|urlizetrunc:50}}</a></td>
 		</tr>
 		{% endif %}
-		{% if proj.history %}
-		<tr>
-			<td nowrap="nowrap"><b>History</b></td>
-			<td class="long">{{proj.history|urlizetrunc:50|linebreaksbr}}</td>
-		</tr>
-		{% endif %}
-	
 	{% endif %}
 	
 	{% if tab = "MISSION"|tabs and proj.mission %}
@@ -45,6 +38,15 @@
 	<tr>
 		<td class="long" class="long" colspan="2">{{proj.values|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
+	{% endif %}
+	
+	{% if tab = "HISTORY"|tabs %}
+		{% if proj.history %}
+			<tr>
+				<td nowrap="nowrap"><b>History</b></td>
+				<td class="long">{{proj.history|urlizetrunc:50|linebreaksbr}}</td>
+			</tr>
+		{% endif %}
 	{% endif %}
 	
 	{% if tab = "PARTNERS"|tabs %}

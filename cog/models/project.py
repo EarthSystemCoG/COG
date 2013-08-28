@@ -47,12 +47,12 @@ class Project(models.Model):
                                                   help_text='A paragraph describing how requirements are identified. This description may include who participates, what system is used to track requirements, and whether the results are public.')
 
     # Software
-    software_features = models.TextField(blank=False, null=True, verbose_name='Software Features', help_text=None)
+    software_features = models.TextField(blank=True, null=True, verbose_name='Software Features', help_text=None)
     software_system_requirements = models.TextField(blank=True, null=True, verbose_name='Software System Requirements', help_text=None)
     software_supported_platforms = models.TextField(blank=True, null=True, verbose_name='Software Supported Platforms', help_text=None)
     
     # Users
-    getting_started = models.TextField(blank=False, null=True, verbose_name='Getting Started', help_text='Describe how users can get started with this project.')
+    getting_started = models.TextField(blank=True, null=True, verbose_name='Getting Started', help_text='Describe how users can get started with this project.')
     
     # A project may have many parents. The relationship is not symmetrical.
     # The attribute parents_set contains the inverse relationship

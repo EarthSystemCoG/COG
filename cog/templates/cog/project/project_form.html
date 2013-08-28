@@ -13,7 +13,7 @@
 			if (checkbox.checked==true) {
 				
 				if (   checkbox.name == "tab_Mission"  || checkbox.name == "tab_Vision"   || checkbox.name == "tab_Values"
-					|| checkbox.name == "tab_Partners" || checkbox.name == "tab_Sponsors" || checkbox.name == "tab_People"	) {
+					|| checkbox.name == "tab_History" || checkbox.name == "tab_Partners" || checkbox.name == "tab_Sponsors" || checkbox.name == "tab_People"	) {
 					document.getElementsByName("tab_About Us")[0].checked = true; 
 				}
 				
@@ -38,6 +38,7 @@
 					document.getElementsByName("tab_Mission")[0].checked = false;
 					document.getElementsByName("tab_Vision")[0].checked = false;
 					document.getElementsByName("tab_Values")[0].checked = false;
+					document.getElementsByName("tab_History")[0].checked = false;
 					document.getElementsByName("tab_Partners")[0].checked = false;
 					document.getElementsByName("tab_Sponsors")[0].checked = false;
 					document.getElementsByName("tab_People")[0].checked = false;
