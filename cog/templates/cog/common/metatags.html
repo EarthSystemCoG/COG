@@ -9,5 +9,13 @@
 	
 	<meta name="keywords" content="{{ project.short_name }}: {{ project.long_name}}" />
 	<meta name="description" content="{{ project.description }}" />
+	
+{% else %}
+
+	{% if post.body %}
+		<!-- note: must process the text to remove undesired characters, tags  -->
+		<meta name="description" content="{{ post.body|truncatewords:50|safe|striptags|cut:'&nbsp;' }}" />
+	
+	{% endif %}
 
 {% endif %}

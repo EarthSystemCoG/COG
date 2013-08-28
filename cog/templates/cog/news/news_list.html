@@ -27,8 +27,8 @@
 			          	<i>{{news.update_date|date:"SHORT_DATETIME_FORMAT"}} by {{ news.author }}</i>
 			          	{% if user|hasUserPermission:news.project %}
 	                  		<div style="float:right">
-	                    	     &nbsp;<a href="{% url news_update news.id %}" class="changelink">Update</a>
-	                    	     &nbsp;<a href="{% url news_delete news.id %}" class="deletelink">Delete</a>
+	                    	     &nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>
+	                    	     &nbsp;<a href="{% url 'news_delete' news.id %}" class="deletelink">Delete</a>
 	                    	</div>
 	                    {% endif %}
 			          </td>

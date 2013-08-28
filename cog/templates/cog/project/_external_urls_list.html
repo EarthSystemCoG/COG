@@ -20,10 +20,10 @@
 		{% endif %}
 		{% for exturl in external_urls %}
 			<tr>
-				<td nowrap="nowrap" width="100px">{{exturl.title}}</td>
+				<td width="100px">{{exturl.title}}</td>
 				<!-- truncate URLs to max length -->
-				<td nowrap="nowrap" width="200px"><a href="{{exturl.url}}">{{ exturl.url|urlizetrunc:40 }}</a></td>
-				<td valign="top">{{exturl.description|urlizetrunc:50|linebreaksbr}}</td>
+				<td width="220px"><a href="{{exturl.url}}">{{ exturl.url|urlizetrunc:40 }}</a></td>
+				<td valign="top">{{exturl.description|urlizetrunc:40|linebreaksbr}}</td>
 			</tr>
 		{% endfor %}	
 	</table>

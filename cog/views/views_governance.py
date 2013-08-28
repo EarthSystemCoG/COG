@@ -234,7 +234,7 @@ def communication_means_members(request, object_id):
     communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
     
     # delegate to generic view with specific object types
-    tab = TABS["PROCESSES"]
+    tab = TABS["COMMUNICATION"]
     if commnicationMeans.internal:
         redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
     else:

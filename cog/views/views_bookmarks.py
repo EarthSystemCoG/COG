@@ -300,12 +300,12 @@ def delete_folder(folder):
 
 def render_folder_form(request, project, form):
     return render_to_response('cog/bookmarks/folder_form.html', 
-                               {'project':project, 'form':form, 'title':'Bookmark Folder Form' },
+                               {'project':project, 'form':form, 'title':'Resource Folder Form' },
                                context_instance=RequestContext(request))
     
 def render_bookmark_form(request, project, form):
     return render_to_response('cog/bookmarks/bookmark_form.html', 
-                              {'project':project, 'form':form, 'title':'Bookmark Form' },
+                              {'project':project, 'form':form, 'title':'Resource Form' },
                               context_instance=RequestContext(request))     
     
 @login_required
