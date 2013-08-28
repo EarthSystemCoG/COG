@@ -75,8 +75,8 @@ for project in Project.objects.all():
 #for key in configs:
 #    config_project_search(key, configs[key])
 
-# 1.7 release
 # Rename top-level folder from "<project> Bookmarks" to "<project> Resources"
+'''
 for project in Project.objects.all():
     
     old_name = "%s Bookmarks" % project.short_name
@@ -89,6 +89,5 @@ for project in Project.objects.all():
             folder.save()
             print "Renamed %s to %s" % (old_name, new_name)
     except ObjectDoesNotExist:
-        print "Folder %s not found" % old_name
-    
-
+        print "Folder %s not found" % old_name 
+'''
