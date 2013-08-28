@@ -46,7 +46,6 @@ for f in SearchFacet.objects.all():
     f.delete()
     
 # create default facets, group for all projects
-"""
 for project in Project.objects.all():
     print 'PROJECT=%s' % project.short_name
     try:
@@ -64,13 +63,12 @@ for project in Project.objects.all():
         print 'Object Does Not Exist'
         # create full profile and facets
         create_project_search_profile(project)
-        """
    
 # read search configurations
-#configs = { #'NCPP': 'cog/config/search/ncpp.cfg',
-#            #'Downscaling-2013': 'cog/config/search/ncpp.cfg',
-#            #'DCMIP-2012': 'cog/config/search/dcmip-2012.cfg' 
-#            }
+configs = { 'NCPP': 'cog/config/search/ncpp.cfg',
+            'Downscaling-2013': 'cog/config/search/ncpp.cfg',
+            'DCMIP-2012': 'cog/config/search/dcmip-2012.cfg' 
+            }
 
 #for key in configs:
 #    config_project_search(key, configs[key])
