@@ -39,7 +39,7 @@ def _hasTemplatedInfo(project, tab):
     elif tab==TABS["CONTACTUS"] or tab==TABS["SUPPORT"]:
         # 'contactus' and 'support' always populated
         return True
-    elif tab==TABS["DEVELOPMENT"] and hasText(project.developmentOverview):
+    elif tab==TABS["DEVELOPERS"] and hasText(project.developmentOverview):
         return True
     elif tab==TABS["SOFTWARE"] and hasText(project.software_features):
         return True

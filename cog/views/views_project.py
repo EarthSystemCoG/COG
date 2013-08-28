@@ -502,8 +502,8 @@ def getProjectNotVisibleRedirect(request, project):
         
 def development_display(request, project_short_name):
    
-    tab = TABS["DEVELOPMENT"] 
-    template_page = 'cog/project/_project_development.html'
+    tab = TABS["DEVELOPERS"] 
+    template_page = 'cog/project/_project_developers.html'
     template_form_pages = { reverse('development_update', args=[project_short_name]) : "Development" }
     template_title = "Development Overview"
    
