@@ -24,7 +24,15 @@ def aboutus_display(request, project_short_name, tab):
     ''' View to display an project tab page. '''
         
     template_page = 'cog/project/_project_aboutus.html'
-    if tab == TABS["PARTNERS"]:
+    if tab == TABS["MISSION"]:
+        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Mission' }
+    elif tab == TABS["VISION"]:
+        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Vision' }
+    elif tab == TABS["VALUES"]:
+        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Values' }
+    elif tab == TABS["HISTORY"]:
+        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'History' }        
+    elif tab == TABS["PARTNERS"]:
         template_form_pages = { reverse('partners_update', args=[project_short_name, tab]) : 'Partners' }
     elif tab == TABS["SPONSORS"]:
         template_form_pages = { reverse('sponsors_update', args=[project_short_name, tab]) : 'Sponsors' }  
