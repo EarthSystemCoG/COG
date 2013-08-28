@@ -140,10 +140,43 @@
                     </td>
                 </tr>
                 <tr>
-                	<td nowrap="nowrap">Tabs</td>
-                	<td>
-                	    <div style="text-align: center">
-                	    	<b>IMPORTANT: &nbsp; if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content</b>.
+                    <td nowrap="nowrap"><div style="margin-top:2px">Project Logo</div></td>
+                    <td> <span style="margin-top:2px">
+                    	 	{{ form.logo }} 
+                         	{{ form.logo.errors }} &nbsp; 
+                         	[ optional project logo, will be displayed with height=70px ]
+                    	 	<br>&nbsp;</br>
+                    	 	{{ form.logo_url }} &nbsp; [ optional URL to hyperlink logo, defaults to project home]
+                    	</span>
+                    </td>
+                </tr>                                         
+                <!-- only allow site administrators to change the active state of a project  -->
+                {% if request.user.is_staff and action == 'update' %}
+	                <tr>
+	                    <td nowrap="nowrap">Is Active ?</td>
+	                    <td>
+	                        {{ form.active }} 
+	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
+	                        {{ form.active.errors }}
+	                    </td>
+	                </tr>
+                {% else %}
+                   {{ form.active.as_hidden }}
+                {% endif %}
+                <tr>
+	            	<td nowrap="nowrap">Is Private ?</td>
+	                <td>
+	                    {{ form.private }} 
+	                    [ A private project is only visible to project members - users and administrators. ]
+	                    {{ form.private.errors }}
+	                </td>
+	            </tr>
+	            <tr>
+                	<td colspan="2">
+                	    <div style="text-align: left">
+                	    	<b>Upper Menu Bar</b>
+                	    	&nbsp; 
+                	    	[ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
                 		</div>
                 		<!-- Note: home tab checkbox is disabled because it must always be present -->
                 		<table>
@@ -179,38 +212,6 @@
 						</table>
                 	</td>
                 </tr>
-                <tr>
-                    <td nowrap="nowrap"><div style="margin-top:2px">Project Logo</div></td>
-                    <td> <span style="margin-top:2px">
-                    	 	{{ form.logo }} 
-                         	{{ form.logo.errors }} &nbsp; 
-                         	[ optional project logo, will be displayed with height=70px ]
-                    	 	<br>&nbsp;</br>
-                    	 	{{ form.logo_url }} &nbsp; [ optional URL to hyperlink logo, defaults to project home]
-                    	</span>
-                    </td>
-                </tr>                                         
-                <!-- only allow site administrators to change the active state of a project  -->
-                {% if request.user.is_staff and action == 'update' %}
-	                <tr>
-	                    <td nowrap="nowrap">Is Active ?</td>
-	                    <td>
-	                        {{ form.active }} 
-	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
-	                        {{ form.active.errors }}
-	                    </td>
-	                </tr>
-                {% else %}
-                   {{ form.active.as_hidden }}
-                {% endif %}
-                <tr>
-	            	<td nowrap="nowrap">Is Private ?</td>
-	                <td>
-	                    {{ form.private }} 
-	                    [ A private project is only visible to project members - users and administrators. ]
-	                    {{ form.private.errors }}
-	                </td>
-	            </tr>
            </table>           
                  
           <div style="text-align:right">
