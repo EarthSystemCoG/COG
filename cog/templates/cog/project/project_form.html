@@ -21,6 +21,11 @@
 					document.getElementsByName("tab_Software")[0].checked = true; 
 				}
 				
+				else if (checkbox.name == "tab_FAQ"  || checkbox.name == "tab_User's Guide" || checkbox.name == "tab_Code Examples") {
+					document.getElementsByName("tab_Users")[0].checked = true; 
+				}
+
+				
 				else if (   checkbox.name == "tab_Code"  || checkbox.name == "tab_Trackers"   || checkbox.name == "tab_Use Cases") {
 					document.getElementsByName("tab_Development")[0].checked = true; 
 				}
@@ -47,6 +52,12 @@
 				else if (checkbox.name == "tab_Software") {
 					document.getElementsByName("tab_Download / Releases")[0].checked = false;
 					document.getElementsByName("tab_Installer's / Administrator's Guide")[0].checked = false;
+				}
+				
+				else if (checkbox.name == "tab_Users") {
+					document.getElementsByName("tab_FAQ")[0].checked = false;
+					document.getElementsByName("tab_User's Guide")[0].checked = false;
+					document.getElementsByName("tab_Code Examples")[0].checked = false;
 				}
 				
 				else if (checkbox.name == "tab_Development") {

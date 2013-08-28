@@ -121,6 +121,13 @@ urlpatterns = patterns('',
     # Users
     url(r'^projects/(?P<project_short_name>[^/]+)/users/$', 'cog.views.users_display', name='users_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/users/update/$', 'cog.views.users_update', name='users_update'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/faq/update/$', 'cog.views.faq_update', name='faq_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/faq/$', 'cog.views.faq_display', name='faq_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/user_guide/update/$', 'cog.views.user_guide_update', name='user_guide_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/user_guide/$', 'cog.views.user_guide_display', name='user_guide_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/code_examples/update/$', 'cog.views.code_examples_update', name='code_examples_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/code_examples/$', 'cog.views.code_examples_display', name='code_examples_display'),
+
 
     # folders and bookmarks
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/$', 'cog.views.bookmark_list', name='bookmark_list'),

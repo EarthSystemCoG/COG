@@ -3,7 +3,7 @@ APPLICATION_LABEL = 'cog'
 # dictionary containing (page key, page url)
 TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"values", "HISTORY":"history", "PARTNERS":"partners", "SPONSORS":"sponsors", "PEOPLE":"people",
          "SOFTWARE":"software", "DOWNLOAD":"download", "ADMIN_GUIDE":"admin_guide",
-         "USERS":"users",
+         "USERS":"users", "FAQ":"faq", "USER_GUIDE":"user_guide", "CODE_EXAMPLES":"code_examples",
          "BOOKMARKS":"bookmarks",
          "DEVELOPMENT":"development", "CODE":"code", "TRACKERS":"trackers", "USECASES":"usecases",
          "ROADMAP":"roadmap",
@@ -24,7 +24,7 @@ PROJECT_PAGES = (
          [("About Us", "%s/" % TABS["ABOUTUS"]), ("Mission", "%s/" % TABS["MISSION"]), ("Vision", "%s/" % TABS["VISION"]), ("Values", "%s/" % TABS["VALUES"]),
           ("History", "%s/" % TABS["HISTORY"]), ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])],   
          [("Software", "%s/" % TABS["SOFTWARE"]), ("Download / Releases", "%s/" % TABS["DOWNLOAD"]), ("Installer's / Administrator's Guide", "%s/" % TABS["ADMIN_GUIDE"])],
-         [("Users", "%s/" % TABS["USERS"])],
+         [("Users", "%s/" % TABS["USERS"]), ("FAQ", "%s/" % TABS["FAQ"]), ("User's Guide", "%s/" % TABS["USER_GUIDE"]), ("Code Examples", "%s/" % TABS["CODE_EXAMPLES"]),],
          [("Development", "%s/" % TABS["DEVELOPMENT"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
          [("Roadmap", "%s/" % TABS["ROADMAP"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), 
@@ -182,6 +182,9 @@ TYPE_POLICY = 'policy'
 TYPE_ROADMAP = 'roadmap'
 TYPE_DOWNLOAD = 'download'
 TYPE_ADMIN_GUIDE = 'admin_guide'
+TYPE_USER_GUIDE = 'user_guide'
+TYPE_FAQ = 'faq'
+TYPE_CODE_EXAMPLES = 'code_examples'
 
 EXTERNAL_URL_TYPES = (       
     (TYPE_BLOG,'Blog'),
@@ -194,6 +197,9 @@ EXTERNAL_URL_TYPES = (
     (TYPE_ROADMAP, 'Roadmap'), 
     (TYPE_DOWNLOAD,'Download'),
     (TYPE_ADMIN_GUIDE,'Administrator\'s Guide'),    
+    (TYPE_USER_GUIDE,'User\'s Guide'), 
+    (TYPE_FAQ,'FAQ'), 
+    (TYPE_CODE_EXAMPLES,'Code Examples'), 
 )
 
 EXTERNAL_URL_DICT = {}
