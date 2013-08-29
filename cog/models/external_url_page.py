@@ -23,12 +23,17 @@ EXTERNAL_URL_PAGES = {
     'URL_TYPE_ADMIN_GUIDE': ExternalUrlPage('admin_guide','Administrator\'s Guide','admin_guide'),    
     'URL_TYPE_USER_GUIDE': ExternalUrlPage('user_guide','User\'s Guide','user_guide'), 
     'URL_TYPE_FAQ': ExternalUrlPage('faq','FAQ','faq'), 
-    'URL_TYPE_CODE_EXAMPLE': ExternalUrlPage('code_examples','Code Examples','code_examples'),
+    'URL_TYPE_CODE_EXAMPLE': ExternalUrlPage('code_examples','Code Examples','code_example'),
     'URL_TYPE_DEVELOPER_GUIDE': ExternalUrlPage('developer_guide','Developer\'s Guide','developer_guide'),
     'URL_TYPE_DESIGN_DOC': ExternalUrlPage('design_docs','Design Documents','design_document'),
     'URL_TYPE_TESTING': ExternalUrlPage('testing','Testing','testing'),
     'URL_TYPE_CHECKLIST': ExternalUrlPage('checklist','Checklist','checkclist'), 
 }
+
+# map frm suburl -> ExternalUrlPage instance
+EXTERNAL_URL_MAP = {}
+for key, obj in EXTERNAL_URL_PAGES.items():
+    EXTERNAL_URL_MAP[obj.suburl] = obj
 
 def external_url_choices():
     '''Provides valid options when building ExternalUrl choices.'''
