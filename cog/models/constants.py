@@ -5,7 +5,7 @@ TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"
          "SOFTWARE":"software", "DOWNLOAD":"download", "ADMIN_GUIDE":"admin_guide",
          "USERS":"users", "FAQ":"faq", "USER_GUIDE":"user_guide", "CODE_EXAMPLES":"code_examples",
          "BOOKMARKS":"bookmarks",
-         "DEVELOPERS":"developers", "CODE":"code", "TRACKERS":"trackers", "USECASES":"usecases",
+         "DEVELOPERS":"developers", "REPOSITORIES":"repositories", "TRACKERS":"trackers", "USECASES":"usecases",
          "ROADMAP":"roadmap",
          "GOVERNANCE":"governance","BODIES":"bodies","ROLES":"roles", "COMMUNICATION":"communication", "PROCESSES":"processes", "POLICIES":"policies",
          "GETINVOLVED":"getinvolved", 
@@ -25,7 +25,7 @@ PROJECT_PAGES = (
           ("History", "%s/" % TABS["HISTORY"]), ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])],   
          [("Software", "%s/" % TABS["SOFTWARE"]), ("Download / Releases", "%s/" % TABS["DOWNLOAD"]), ("Installer's / Administrator's Guide", "%s/" % TABS["ADMIN_GUIDE"])],
          [("Users", "%s/" % TABS["USERS"]), ("FAQ", "%s/" % TABS["FAQ"]), ("User's Guide", "%s/" % TABS["USER_GUIDE"]), ("Code Examples", "%s/" % TABS["CODE_EXAMPLES"]),],
-         [("Developers", "%s/" % TABS["DEVELOPERS"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
+         [("Developers", "%s/" % TABS["DEVELOPERS"]), ("Repositories", "%s/" % TABS["REPOSITORIES"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
          [("Roadmap", "%s/" % TABS["ROADMAP"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), 
                                                       ("Communication", "%s/" % TABS["COMMUNICATION"]),  ("Processes", "%s/" % TABS["PROCESSES"]), 
@@ -173,7 +173,7 @@ MEMBERSHIP_TYPES = ('Open','Closed','By Invitation')
 MEMBERSHIP_CV = [ (x,x) for x in MEMBERSHIP_TYPES ]
 
 TYPE_BLOG = 'blog'
-TYPE_CODE = 'code'
+TYPE_REPOSITORY = 'repository'
 TYPE_HOMEPAGE = 'homepage'
 TYPE_REFERENCE = 'reference'
 TYPE_TRACKER = 'tracker'
@@ -188,7 +188,7 @@ TYPE_CODE_EXAMPLES = 'code_examples'
 
 EXTERNAL_URL_TYPES = (       
     (TYPE_BLOG,'Blog'),
-    (TYPE_CODE, 'Code'),
+    (TYPE_REPOSITORY, 'Repositories'),
     (TYPE_HOMEPAGE,'Home Page'),
     (TYPE_REFERENCE,'Reference'),
     (TYPE_TRACKER, 'Tracker'),   

@@ -30,12 +30,12 @@ def usecases_display(request, project_short_name):
     return external_urls_display(request, project_short_name, TYPE_USECASE, template_page, template_name, template_form_pages)
 
 # View to display the project code URLs.
-def code_display(request, project_short_name):
+def repositories_display(request, project_short_name):
         
     template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Code Repositories'
-    template_form_pages = { reverse('code_update', args=[project_short_name]) : template_name }
-    return external_urls_display(request, project_short_name, TYPE_CODE, template_page, template_name, template_form_pages)
+    template_name = 'Repositories'
+    template_form_pages = { reverse('repositories_update', args=[project_short_name]) : template_name }
+    return external_urls_display(request, project_short_name, TYPE_REPOSITORY, template_page, template_name, template_form_pages)
 
 # View to display the project roadmap.
 def roadmap_display(request, project_short_name):
@@ -150,10 +150,10 @@ def admin_guide_update(request, project_short_name):
 
 # View to update the project code
 @login_required
-def code_update(request, project_short_name):
+def repositories_update(request, project_short_name):
     
-    type = TYPE_CODE
-    redirect = reverse('code_display', args=[project_short_name])
+    type = TYPE_REPOSITORY
+    redirect = reverse('repositories_display', args=[project_short_name])
     return external_urls_update(request, project_short_name, type, redirect)
 
 # View to update the project roadmap
