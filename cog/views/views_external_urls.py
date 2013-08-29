@@ -14,58 +14,6 @@ from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedir
 from cog.models.navbar import TABS
 from cog.models.external_url_page import EXTERNAL_URL_PAGES, EXTERNAL_URL_PAGE_MAP
 
-# View to display the project trackers.
-def trackers_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Trackers'
-    template_form_pages = { reverse('trackers_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_TRACKER", template_page, template_name, template_form_pages)
-
-# View to display the project use cases.
-def usecases_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Use Cases'
-    template_form_pages = { reverse('usecases_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_USECASE", template_page, template_name, template_form_pages)
-
-def developer_guide_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Developer\'s Guide'
-    template_form_pages = { reverse('developer_guide_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_DEVELOPER_GUIDE", template_page, template_name, template_form_pages)
-
-def design_docs_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Design Documents'
-    template_form_pages = { reverse('design_docs_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_DESIGN_DOC", template_page, template_name, template_form_pages)
-
-def testing_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Testing'
-    template_form_pages = { reverse('testing_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_TESTING", template_page, template_name, template_form_pages)
-
-def checklist_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Checklist'
-    template_form_pages = { reverse('checklist_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_CHECKLIST", template_page, template_name, template_form_pages)
-
-# View to display the project code URLs.
-def repositories_display(request, project_short_name):
-        
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Repositories'
-    template_form_pages = { reverse('repositories_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_REPOSITORY", template_page, template_name, template_form_pages)
-
 # View to display the project roadmap.
 def roadmap_display(request, project_short_name):
      
@@ -153,58 +101,6 @@ def _external_urls_display(request, project_short_name, external_url_type,
                                'children':children, 'peers':peers,
                                'external_url_type':external_url_type },
                               context_instance=RequestContext(request))
-    
-# View to update the project trackers
-@login_required
-def trackers_update(request, project_short_name):
-    
-    type = "URL_TYPE_TRACKER"
-    redirect = reverse('trackers_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project use cases
-@login_required
-def usecases_update(request, project_short_name):
-    
-    type = "URL_TYPE_USECASE"
-    redirect = reverse('usecases_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project code
-@login_required
-def repositories_update(request, project_short_name):
-    
-    type = "URL_TYPE_REPOSITORY"
-    redirect = reverse('repositories_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-@login_required
-def developer_guide_update(request, project_short_name):
-    
-    type = "URL_TYPE_DEVELOPER_GUIDE"
-    redirect = reverse('developer_guide_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-@login_required
-def design_docs_update(request, project_short_name):
-    
-    type = "URL_TYPE_DESIGN_DOC"
-    redirect = reverse('design_docs_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-@login_required
-def testing_update(request, project_short_name):
-    
-    type = "URL_TYPE_TESTING"
-    redirect = reverse('testing_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-@login_required
-def checklist_update(request, project_short_name):
-    
-    type = "URL_TYPE_CHECKLIST"
-    redirect = reverse('checklist_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
 
 # View to update the project roadmap
 @login_required
