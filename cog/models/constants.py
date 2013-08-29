@@ -214,7 +214,8 @@ DOCUMENT_TYPES = {
 # use a location outside of "logos/" so that the default logo can
 #DEFAULT_LOGO = "img/admin/logo_1109_cog.JPG"
 DEFAULT_LOGO = "cog/img/cog_web_beta.png"
-FOOTER_LOGO = "cog/img/logo_nsf_and_noaa.bmp"
+FOOTER_LOGO = "cog/img/cog_footer_w_doe.png"
+
 
 UPLOAD_DIR_PHOTOS = "photos/"
 UPLOAD_DIR_LOGOS = "logos/"
