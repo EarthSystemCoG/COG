@@ -33,8 +33,6 @@ def governance_display(request, project_short_name, tab):
         template_form_pages = { reverse( "governance_processes_update", args=[project_short_name] ) : 'Processes' }
     elif tab == TABS["COMMUNICATION"]:
         template_form_pages = { reverse( "communication_means_update", args=[project_short_name, 'internal'] ) : 'Communication' }
-    elif tab == TABS["POLICIES"]:
-        template_form_pages = { reverse( "policies_update", args=[project_short_name] ) : 'Policies' }
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 
