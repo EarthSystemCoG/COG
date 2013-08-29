@@ -1,3 +1,7 @@
+'''
+Module containing configuration for ExternalUrl objects.
+'''
+
 class ExternalUrlPage(object):
     '''Simple class for holding configuration information about External URL pages.'''
     
@@ -27,5 +31,5 @@ EXTERNAL_URL_PAGES = {
 }
 
 def external_url_choices():
-    '''Provides valid options for ExternalUrl choices.'''
+    '''Provides valid options when building ExternalUrl choices.'''
     return [(obj.type, obj.label) for (key,obj) in EXTERNAL_URL_PAGES.items()]
