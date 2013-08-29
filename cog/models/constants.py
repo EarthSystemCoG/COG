@@ -5,7 +5,8 @@ TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"
          "SOFTWARE":"software", "DOWNLOAD":"download", "ADMIN_GUIDE":"admin_guide",
          "USERS":"users", "FAQ":"faq", "USER_GUIDE":"user_guide", "CODE_EXAMPLES":"code_examples",
          "BOOKMARKS":"bookmarks",
-         "DEVELOPERS":"developers", "REPOSITORIES":"repositories", "TRACKERS":"trackers", "USECASES":"usecases",
+         "DEVELOPERS":"developers", "REPOSITORIES":"repositories", "TRACKERS":"trackers", "DEVELOPER_GUIDE":"developer_guide", "DESIGN_DOCS":"design_docs", 
+                                    "TESTING":"testing", "USECASES":"usecases", "CHECKLIST":"checklist",
          "ROADMAP":"roadmap",
          "GOVERNANCE":"governance","BODIES":"bodies","ROLES":"roles", "COMMUNICATION":"communication", "PROCESSES":"processes", "POLICIES":"policies",
          "GETINVOLVED":"getinvolved", 
@@ -25,7 +26,9 @@ PROJECT_PAGES = (
           ("History", "%s/" % TABS["HISTORY"]), ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])],   
          [("Software", "%s/" % TABS["SOFTWARE"]), ("Download / Releases", "%s/" % TABS["DOWNLOAD"]), ("Installer's / Administrator's Guide", "%s/" % TABS["ADMIN_GUIDE"])],
          [("Users", "%s/" % TABS["USERS"]), ("FAQ", "%s/" % TABS["FAQ"]), ("User's Guide", "%s/" % TABS["USER_GUIDE"]), ("Code Examples", "%s/" % TABS["CODE_EXAMPLES"]),],
-         [("Developers", "%s/" % TABS["DEVELOPERS"]), ("Repositories", "%s/" % TABS["REPOSITORIES"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
+         [("Developers", "%s/" % TABS["DEVELOPERS"]), ("Repositories", "%s/" % TABS["REPOSITORIES"]), ("Trackers", "%s/" % TABS["TRACKERS"]), 
+                                                      ("Developer\'s Guide", "%s/" % TABS["DEVELOPER_GUIDE"]), ("Design Documents", "%s/" % TABS["DESIGN_DOCS"]), 
+                                                      ("Testing", "%s/" % TABS["TESTING"]), ("Use Cases", "%s/" % TABS["USECASES"]), ("Checklist", "%s/" % TABS["CHECKLIST"]), ],
          [("Roadmap", "%s/" % TABS["ROADMAP"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), 
                                                       ("Communication", "%s/" % TABS["COMMUNICATION"]),  ("Processes", "%s/" % TABS["PROCESSES"]), 
@@ -184,7 +187,11 @@ TYPE_DOWNLOAD = 'download'
 TYPE_ADMIN_GUIDE = 'admin_guide'
 TYPE_USER_GUIDE = 'user_guide'
 TYPE_FAQ = 'faq'
-TYPE_CODE_EXAMPLES = 'code_examples'
+TYPE_CODE_EXAMPLE = 'code_examples'
+TYPE_DEVELOPER_GUIDE = 'developer_guide'
+TYPE_DESIGN_DOC = 'design_document'
+TYPE_TESTING = 'testing'
+TYPE_CHECKLIST = 'checkclist'
 
 EXTERNAL_URL_TYPES = (       
     (TYPE_BLOG,'Blog'),
@@ -199,7 +206,12 @@ EXTERNAL_URL_TYPES = (
     (TYPE_ADMIN_GUIDE,'Administrator\'s Guide'),    
     (TYPE_USER_GUIDE,'User\'s Guide'), 
     (TYPE_FAQ,'FAQ'), 
-    (TYPE_CODE_EXAMPLES,'Code Examples'), 
+    (TYPE_CODE_EXAMPLE,'Code Examples'),
+    (TYPE_DEVELOPER_GUIDE,'Developer\'s Guide'),
+    (TYPE_DESIGN_DOC,'Design Documents'),
+    (TYPE_TESTING,'Testing'),
+    (TYPE_CHECKLIST,'Checklist'), 
+    
 )
 
 EXTERNAL_URL_DICT = {}

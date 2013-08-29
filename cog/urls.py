@@ -100,17 +100,25 @@ urlpatterns = patterns('',
     # project browser
     url(r'^projects/(?P<project_short_name>[^/]+)/browse/(?P<tab>[^/]+)/$', 'cog.views.project_browser', name='project_browser'),
     
-    # "Development" pages: development, code and trackers    
+    # NAVBAR: "DEVELOPERS"   
     url(r'^projects/(?P<project_short_name>[^/]+)/developers/update/$', 'cog.views.development_update', name='development_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/developers/$', 'cog.views.development_display', name='development_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/update/$', 'cog.views.trackers_update', name='trackers_update'),   
-    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/$', 'cog.views.trackers_display', name='trackers_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/repositories/update/$', 'cog.views.repositories_update', name='repositories_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/repositories/$', 'cog.views.repositories_display', name='repositories_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/update/$', 'cog.views.trackers_update', name='trackers_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/trackers/$', 'cog.views.trackers_display', name='trackers_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/developer_guide/update/$', 'cog.views.developer_guide_update', name='developer_guide_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/developer_guide/$', 'cog.views.developer_guide_display', name='developer_guide_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/design_docs/update/$', 'cog.views.design_docs_update', name='design_docs_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/design_docs/$', 'cog.views.design_docs_display', name='design_docs_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/testing/update/$', 'cog.views.testing_update', name='testing_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/testing/$', 'cog.views.testing_display', name='testing_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/usecases/update/$', 'cog.views.usecases_update', name='usecases_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/usecases/$', 'cog.views.usecases_display', name='usecases_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/checklist/update/$', 'cog.views.checklist_update', name='checklist_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/checklist/$', 'cog.views.checklist_display', name='checklist_display'),
     
-    # Software
+    # NAVBAR: "SOFTWARE"
     url(r'^projects/(?P<project_short_name>[^/]+)/software/$', 'cog.views.software_display', name='software_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/software/update/$', 'cog.views.software_update', name='software_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/download/$', 'cog.views.download_display', name='download_display'),

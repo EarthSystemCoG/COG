@@ -29,6 +29,34 @@ def usecases_display(request, project_short_name):
     template_form_pages = { reverse('usecases_update', args=[project_short_name]) : template_name }
     return external_urls_display(request, project_short_name, TYPE_USECASE, template_page, template_name, template_form_pages)
 
+def developer_guide_display(request, project_short_name):
+    
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Developer\'s Guide'
+    template_form_pages = { reverse('developer_guide_update', args=[project_short_name]) : template_name }
+    return external_urls_display(request, project_short_name, TYPE_DEVELOPER_GUIDE, template_page, template_name, template_form_pages)
+
+def design_docs_display(request, project_short_name):
+    
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Design Documents'
+    template_form_pages = { reverse('design_docs_update', args=[project_short_name]) : template_name }
+    return external_urls_display(request, project_short_name, TYPE_DESIGN_DOC, template_page, template_name, template_form_pages)
+
+def testing_display(request, project_short_name):
+    
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Testing'
+    template_form_pages = { reverse('testing_update', args=[project_short_name]) : template_name }
+    return external_urls_display(request, project_short_name, TYPE_TESTING, template_page, template_name, template_form_pages)
+
+def checklist_display(request, project_short_name):
+    
+    template_page = 'cog/project/_external_urls_list.html'
+    template_name = 'Checklist'
+    template_form_pages = { reverse('checklist_update', args=[project_short_name]) : template_name }
+    return external_urls_display(request, project_short_name, TYPE_CHECKLIST, template_page, template_name, template_form_pages)
+
 # View to display the project code URLs.
 def repositories_display(request, project_short_name):
         
@@ -83,7 +111,7 @@ def code_examples_display(request, project_short_name):
     template_page = 'cog/project/_external_urls_list.html'
     template_name = 'Code Examples'
     template_form_pages = { reverse('code_examples_update', args=[project_short_name]) : template_name }
-    return external_urls_display(request, project_short_name, TYPE_CODE_EXAMPLES, template_page, template_name, template_form_pages)
+    return external_urls_display(request, project_short_name, TYPE_CODE_EXAMPLE, template_page, template_name, template_form_pages)
 
     
 # Generic view to display a given type of external URLs.
@@ -147,13 +175,40 @@ def admin_guide_update(request, project_short_name):
     redirect = reverse('admin_guide_display', args=[project_short_name])
     return external_urls_update(request, project_short_name, type, redirect)
 
-
 # View to update the project code
 @login_required
 def repositories_update(request, project_short_name):
     
     type = TYPE_REPOSITORY
     redirect = reverse('repositories_display', args=[project_short_name])
+    return external_urls_update(request, project_short_name, type, redirect)
+
+@login_required
+def developer_guide_update(request, project_short_name):
+    
+    type = TYPE_DEVELOPER_GUIDE
+    redirect = reverse('developer_guide_display', args=[project_short_name])
+    return external_urls_update(request, project_short_name, type, redirect)
+
+@login_required
+def design_docs_update(request, project_short_name):
+    
+    type = TYPE_DESIGN_DOC
+    redirect = reverse('design_docs_display', args=[project_short_name])
+    return external_urls_update(request, project_short_name, type, redirect)
+
+@login_required
+def testing_update(request, project_short_name):
+    
+    type = TYPE_TESTING
+    redirect = reverse('testing_display', args=[project_short_name])
+    return external_urls_update(request, project_short_name, type, redirect)
+
+@login_required
+def checklist_update(request, project_short_name):
+    
+    type = TYPE_CHECKLIST
+    redirect = reverse('checklist_display', args=[project_short_name])
     return external_urls_update(request, project_short_name, type, redirect)
 
 # View to update the project roadmap
@@ -203,7 +258,7 @@ def user_guide_update(request, project_short_name):
 @login_required
 def code_examples_update(request, project_short_name):
     
-    type = TYPE_CODE_EXAMPLES
+    type = TYPE_CODE_EXAMPLE
     tab = TABS["CODE_EXAMPLES"]
     redirect = reverse('code_examples_display', args=[project_short_name])
     return external_urls_update(request, project_short_name, type, redirect)
