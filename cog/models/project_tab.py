@@ -1,5 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL, PROJECT_PAGES
+from constants import APPLICATION_LABEL
+from navbar import PROJECT_PAGES
 from project import Project
 from django.core.urlresolvers import reverse
 

@@ -12,7 +12,7 @@ from cog.utils import smart_truncate, INVALID_CHARS
 from cog.models.utils import get_project_communication_means
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
-from cog.models.constants import NAVMAP, INVNAVMAP, TABS
+from cog.models.navbar import NAVMAP, INVNAVMAP, TABS
 from cog.models.constants import DEFAULT_IMAGES
 from cog.util.thumbnails import getThumbnailPath
 from django.contrib.auth.models import AnonymousUser

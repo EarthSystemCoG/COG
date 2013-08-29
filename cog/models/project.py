@@ -1,6 +1,7 @@
 
 from cog.utils import smart_truncate
 from constants import *
+from navbar import *
 from django.conf import settings
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType

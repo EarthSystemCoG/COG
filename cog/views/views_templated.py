@@ -5,7 +5,7 @@ Module containing functionality for rendering templated pages.
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from cog.models import Project, getLeadOrganizationalRoles, getMemberOrganizationalRoles
-from cog.models.constants import TABS
+from cog.models.navbar import TABS
 from cog.models.utils import get_project_communication_means
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 

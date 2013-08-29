@@ -19,7 +19,7 @@ from cog.models.utils import *
 
 from cog.views.views_templated import templated_page_display
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import TABS, TAB_LABELS
+from cog.models.navbar import TABS, TAB_LABELS
 
 # method to add a new project, with optional parent project
 @login_required

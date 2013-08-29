@@ -9,7 +9,8 @@ import os
 from django.conf import settings
 
 from cog.models import *
-from cog.models.constants import TABS, TAB_LABELS, UPLOAD_DIR_LOGOS, UPLOAD_DIR_PHOTOS
+from cog.models.navbar import TABS, TAB_LABELS
+from cog.models.constants import UPLOAD_DIR_LOGOS, UPLOAD_DIR_PHOTOS
 from cog.forms import *
 from cog.utils import *
 from cog.notification import notify
