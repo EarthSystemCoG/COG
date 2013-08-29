@@ -97,49 +97,6 @@ MEMBERSHIP_TYPES = ('Open','Closed','By Invitation')
 
 MEMBERSHIP_CV = [ (x,x) for x in MEMBERSHIP_TYPES ]
 
-TYPE_BLOG = 'blog'
-TYPE_REPOSITORY = 'repository'
-TYPE_HOMEPAGE = 'homepage'
-TYPE_REFERENCE = 'reference'
-TYPE_TRACKER = 'tracker'
-TYPE_USECASE = 'usecase'
-TYPE_POLICY = 'policy'
-TYPE_ROADMAP = 'roadmap'
-TYPE_DOWNLOAD = 'download'
-TYPE_ADMIN_GUIDE = 'admin_guide'
-TYPE_USER_GUIDE = 'user_guide'
-TYPE_FAQ = 'faq'
-TYPE_CODE_EXAMPLE = 'code_examples'
-TYPE_DEVELOPER_GUIDE = 'developer_guide'
-TYPE_DESIGN_DOC = 'design_document'
-TYPE_TESTING = 'testing'
-TYPE_CHECKLIST = 'checkclist'
-
-EXTERNAL_URL_TYPES = (       
-    (TYPE_BLOG,'Blog'),
-    (TYPE_REPOSITORY, 'Repositories'),
-    (TYPE_HOMEPAGE,'Home Page'),
-    (TYPE_REFERENCE,'Reference'),
-    (TYPE_TRACKER, 'Tracker'),   
-    (TYPE_USECASE, 'Use Case'),
-    (TYPE_POLICY, 'Policy'),
-    (TYPE_ROADMAP, 'Roadmap'), 
-    (TYPE_DOWNLOAD,'Download'),
-    (TYPE_ADMIN_GUIDE,'Administrator\'s Guide'),    
-    (TYPE_USER_GUIDE,'User\'s Guide'), 
-    (TYPE_FAQ,'FAQ'), 
-    (TYPE_CODE_EXAMPLE,'Code Examples'),
-    (TYPE_DEVELOPER_GUIDE,'Developer\'s Guide'),
-    (TYPE_DESIGN_DOC,'Design Documents'),
-    (TYPE_TESTING,'Testing'),
-    (TYPE_CHECKLIST,'Checklist'), 
-    
-)
-
-EXTERNAL_URL_DICT = {}
-for tuple in EXTERNAL_URL_TYPES:
-    EXTERNAL_URL_DICT[tuple[0]] = tuple[1]
-
 ROLE_ADMIN = 'admin'
 ROLE_USER = 'user'
 ROLES = [ROLE_ADMIN, ROLE_USER]
