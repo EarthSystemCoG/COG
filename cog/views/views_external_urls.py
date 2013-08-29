@@ -74,46 +74,6 @@ def roadmap_display(request, project_short_name):
     template_form_pages = { reverse('roadmap_update', args=[project_short_name]) : template_name }
     return _external_urls_display(request, project_short_name, "URL_TYPE_ROADMAP", template_page, template_name, template_form_pages)
 
-# View to display the project download page.
-def download_display(request, project_short_name):
-     
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Download / Releases'
-    template_form_pages = { reverse('download_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_DOWNLOAD", template_page, template_name, template_form_pages)
-
-# View to display the Administrator's Guide page.
-def admin_guide_display(request, project_short_name):
-     
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Administrator\'s Guide'
-    template_form_pages = { reverse('admin_guide_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_ADMIN_GUIDE", template_page, template_name, template_form_pages)
-
-# View to display the user FAQ page.
-def faq_display(request, project_short_name):
-         
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'FAQ'
-    template_form_pages = { reverse('faq_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_FAQ", template_page, template_name, template_form_pages)
-
-# View to display the User's Guide page.
-def user_guide_display(request, project_short_name):
-     
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'User\'s Guide'
-    template_form_pages = { reverse('user_guide_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_USER_GUIDE", template_page, template_name, template_form_pages)
-
-# View to display the user Code Examples page.
-def code_examples_display(request, project_short_name, suburl):
-     
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Code Examples'
-    template_form_pages = { reverse('code_examples_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_CODE_EXAMPLE", template_page, template_name, template_form_pages)
-
 # Generic view to display a given type of external URLs.
 def external_urls_display(request, project_short_name, suburl):
                           #external_url_type, 
@@ -210,14 +170,6 @@ def usecases_update(request, project_short_name):
     redirect = reverse('usecases_display', args=[project_short_name])
     return _external_urls_update(request, project_short_name, type, redirect)
 
-# View to update the project software administrator's guide
-@login_required
-def admin_guide_update(request, project_short_name):
-    
-    type = "URL_TYPE_ADMIN_GUIDE"
-    redirect = reverse('admin_guide_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
 # View to update the project code
 @login_required
 def repositories_update(request, project_short_name):
@@ -262,14 +214,6 @@ def roadmap_update(request, project_short_name):
     redirect = reverse('roadmap_display', args=[project_short_name])
     return _external_urls_update(request, project_short_name, type, redirect)
 
-# View to update the project download page
-@login_required
-def download_update(request, project_short_name):
-    
-    type = "URL_TYPE_DOWNLOAD"
-    redirect = reverse('download_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
 # View to update the project policies
 @login_required
 def policies_update(request, project_short_name):
@@ -277,33 +221,6 @@ def policies_update(request, project_short_name):
     type = "URL_TYPE_POLICY"
     tab = TABS["POLICIES"]
     redirect = reverse('governance_display', args=[project_short_name, tab])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project User's FAQ
-@login_required
-def faq_update(request, project_short_name):
-        
-    type = "URL_TYPE_FAQ"
-    tab = TABS["FAQ"]
-    redirect = reverse('faq_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project User's Guide
-@login_required
-def user_guide_update(request, project_short_name):
-    
-    type = "URL_TYPE_USER_GUIDE"
-    tab = TABS["USER_GUIDE"]
-    redirect = reverse('user_guide_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project Code Examples
-@login_required
-def code_examples_update(request, project_short_name):
-    
-    type = "URL_TYPE_CODE_EXAMPLE"
-    tab = TABS["CODE_EXAMPLES"]
-    redirect = reverse('code_examples_display', args=[project_short_name])
     return _external_urls_update(request, project_short_name, type, redirect)
 
 # Generic view to update external URLs

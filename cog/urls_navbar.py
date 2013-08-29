@@ -28,19 +28,19 @@ urlpatterns = patterns('',
     # "SOFTWARE"
     url(r'^projects/(?P<project_short_name>[^/]+)/software/$', 'cog.views.software_display', name='software_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/software/update/$', 'cog.views.software_update', name='software_update'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/download/$', 'cog.views.download_display', name='download_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/download/update/$', 'cog.views.download_update', name='download_update'),   
-    url(r'^projects/(?P<project_short_name>[^/]+)/admin_guide/$', 'cog.views.admin_guide_display', name='admin_guide_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/admin_guide/update/$', 'cog.views.admin_guide_update', name='admin_guide_update'),  
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>download)/update/$', 'cog.views.external_urls_update', name='download_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>download)/$', 'cog.views.external_urls_display', name='download_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>admin_guide)/update/$', 'cog.views.external_urls_update', name='admin_guide_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>admin_guide)/$', 'cog.views.external_urls_display', name='admin_guide_display'),
     
     
     # "USERS"
     url(r'^projects/(?P<project_short_name>[^/]+)/users/$', 'cog.views.users_display', name='users_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/users/update/$', 'cog.views.users_update', name='users_update'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/faq/update/$', 'cog.views.faq_update', name='faq_update'),   
-    url(r'^projects/(?P<project_short_name>[^/]+)/faq/$', 'cog.views.faq_display', name='faq_display'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/user_guide/update/$', 'cog.views.user_guide_update', name='user_guide_update'),   
-    url(r'^projects/(?P<project_short_name>[^/]+)/user_guide/$', 'cog.views.user_guide_display', name='user_guide_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>faq)/update/$', 'cog.views.external_urls_update', name='faq_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>faq)/$', 'cog.views.external_urls_display', name='faq_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>user_guide)/update/$', 'cog.views.external_urls_update', name='user_guide_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>user_guide)/$', 'cog.views.external_urls_display', name='user_guide_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>code_examples)/update/$', 'cog.views.external_urls_update', name='code_examples_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>code_examples)/$', 'cog.views.external_urls_display', name='code_examples_display'),
 
