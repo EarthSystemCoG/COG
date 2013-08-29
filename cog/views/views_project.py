@@ -19,7 +19,7 @@ from cog.models.utils import *
 
 from cog.views.views_templated import templated_page_display
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.models.navbar import TABS, TAB_LABELS
+from cog.models.navbar import TABS, TAB_LABELS, NAVMAP, INVNAVMAP
 
 # method to add a new project, with optional parent project
 @login_required
@@ -200,7 +200,8 @@ def project_update(request, project_short_name):
         # create form object from model
         form = ProjectForm(instance=project)
         return render_to_response('cog/project/project_form.html', 
-                                  {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs }, 
+                                  {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs,
+                                   'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
                                   context_instance=RequestContext(request))
     
     else:
@@ -244,7 +245,8 @@ def project_update(request, project_short_name):
                 setActiveProjectTabs(tablist, request, save=False)
             
             return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs }, 
+                                      {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs,
+                                       'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
                                        context_instance=RequestContext(request))
             
 # method to update an existing project

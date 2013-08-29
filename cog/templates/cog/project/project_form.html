@@ -6,79 +6,32 @@
 	
 	<script language="javascript">
 	
+	
 		// function that selects/deselects tab/subtabs checkboxes to insure consistency
 		function trigger(checkbox) {
 			
 			// if subtab is checked, tab must be checked
 			if (checkbox.checked==true) {
 				
-				if (   checkbox.name == "tab_Mission"  || checkbox.name == "tab_Vision"   || checkbox.name == "tab_Values"
-					|| checkbox.name == "tab_History" || checkbox.name == "tab_Partners" || checkbox.name == "tab_Sponsors" || checkbox.name == "tab_People"	) {
-					document.getElementsByName("tab_About Us")[0].checked = true; 
-				}
+				// "download/"" -> "software/" 
+                // "partners/ -> "aboutus/"
+				{% for subtab, tab in INVNAVMAP.items %}
+					if (checkbox.name == "{{ subtab|getTabLabel|safe }}") {
+						document.getElementsByName( "{{ tab|getTabLabel }}" )[0].checked = true; 
+					}
+				{% endfor %}
 				
-				else if (   checkbox.name == "tab_Download / Releases"  || checkbox.name == "tab_Installer's / Administrator's Guide") {
-					document.getElementsByName("tab_Software")[0].checked = true; 
-				}
-				
-				else if (checkbox.name == "tab_FAQ"  || checkbox.name == "tab_User's Guide" || checkbox.name == "tab_Code Examples") {
-					document.getElementsByName("tab_Users")[0].checked = true; 
-				}
-
-				
-				else if (   checkbox.name == "tab_Repositories"  || checkbox.name == "tab_Trackers"   || checkbox.name == "tab_Developer's Guide"
-						 || checkbox.name == "tab_Design Documents" || checkbox.name == "tab_Testing" || checkbox.name == "tab_Use Cases" 
-						 || checkbox.name == "tab_Checklist") {
-					document.getElementsByName("tab_Developers")[0].checked = true; 
-				}
-				
-				else if (   checkbox.name == "tab_Bodies"  || checkbox.name == "tab_Roles"   || checkbox.name == "tab_Communication"
-						 || checkbox.name == "tab_Processes"  || checkbox.name == "tab_Policies") {
-					document.getElementsByName("tab_Governance")[0].checked = true; 
-				}
-
 				
 			// it tab is not checked, all subtabs must be not-checked
 			} else if (checkbox.checked==false) {
 				
-				if (checkbox.name == "tab_About Us") {
-					document.getElementsByName("tab_Mission")[0].checked = false;
-					document.getElementsByName("tab_Vision")[0].checked = false;
-					document.getElementsByName("tab_Values")[0].checked = false;
-					document.getElementsByName("tab_History")[0].checked = false;
-					document.getElementsByName("tab_Partners")[0].checked = false;
-					document.getElementsByName("tab_Sponsors")[0].checked = false;
-					document.getElementsByName("tab_People")[0].checked = false;
-				}
-				
-				else if (checkbox.name == "tab_Software") {
-					document.getElementsByName("tab_Download / Releases")[0].checked = false;
-					document.getElementsByName("tab_Installer's / Administrator's Guide")[0].checked = false;
-				}
-				
-				else if (checkbox.name == "tab_Users") {
-					document.getElementsByName("tab_FAQ")[0].checked = false;
-					document.getElementsByName("tab_User's Guide")[0].checked = false;
-					document.getElementsByName("tab_Code Examples")[0].checked = false;
-				}
-				
-				else if (checkbox.name == "tab_Developers") {
-					document.getElementsByName("tab_Repositories")[0].checked = false;
-					document.getElementsByName("tab_Trackers")[0].checked = false;
-					document.getElementsByName("tab_Developer's Guide")[0].checked = false;
-					document.getElementsByName("tab_Design Documents")[0].checked = false;
-					document.getElementsByName("tab_Testing")[0].checked = false;
-					document.getElementsByName("tab_Use Cases")[0].checked = false;
-					document.getElementsByName("tab_Checklist")[0].checked = false;
-				}
-				
-				else if (checkbox.name == "tab_Governance") {
-					document.getElementsByName("tab_Bodies")[0].checked = false;
-					document.getElementsByName("tab_Roles")[0].checked = false;
-					document.getElementsByName("tab_Communication")[0].checked = false;
-					document.getElementsByName("tab_Processes")[0].checked = false;
-					document.getElementsByName("tab_Policies")[0].checked = false;
-				}
+				{% for tab, subtabs in NAVMAP.items %}
+					if (checkbox.name == "{{ tab|getTabLabel }}") {						
+						{% for subtab in subtabs %}
+							document.getElementsByName( "{{ subtab|getTabLabel|safe }}" )[0].checked = false;
+						{% endfor %}
+					}				
+				{% endfor %}
 				
 			}
 			

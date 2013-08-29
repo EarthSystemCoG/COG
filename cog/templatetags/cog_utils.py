@@ -12,7 +12,7 @@ from cog.utils import smart_truncate, INVALID_CHARS
 from cog.models.utils import get_project_communication_means
 from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
-from cog.models.navbar import NAVMAP, INVNAVMAP, TABS
+from cog.models.navbar import NAVMAP, INVNAVMAP, TABS, TAB_LABELS
 from cog.models.constants import DEFAULT_IMAGES
 from cog.util.thumbnails import getThumbnailPath
 from django.contrib.auth.models import AnonymousUser
@@ -443,6 +443,12 @@ def getUserAttribute(user, attribute):
 @register.filter
 def tabs(label):
     return TABS[label]
+
+@register.filter
+def getTabLabel(tabkey):
+    '''Transforms "download/" into "tab_Download'''
+    tabkey = tabkey[0:-1]
+    return "tab_%s" % TAB_LABELS[tabkey]
 
 def parseBoolString(theString):
     return theString[0].upper()=='T'
