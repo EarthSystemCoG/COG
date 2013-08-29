@@ -30,6 +30,7 @@ EXTERNAL_URL_PAGES = [ ExternalUrlPage('blogs','Blog','blog'),
                        ExternalUrlPage('checklist','Checklist','checkclist'), 
                        ExternalUrlPage('minutes','Minutes','minute'),
                        ExternalUrlPage('metrics','Metrics','metric'),
+                       ExternalUrlPage('release_schedules','Release Schedules','release_schedule'),
 ]
 
 # map frm suburl -> ExternalUrlPage instance

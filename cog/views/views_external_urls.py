@@ -14,14 +14,6 @@ from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedir
 from cog.models.navbar import TABS
 from cog.models.external_url_page import EXTERNAL_URL_PAGES, EXTERNAL_URL_PAGE_MAP
 
-# View to display the project roadmap.
-def roadmap_display(request, project_short_name):
-     
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Roadmap'
-    template_form_pages = { reverse('roadmap_update', args=[project_short_name]) : template_name }
-    return _external_urls_display(request, project_short_name, "URL_TYPE_ROADMAP", template_page, template_name, template_form_pages)
-
 # Generic view to display a given type of external URLs.
 def external_urls_display(request, project_short_name, suburl):
                           #external_url_type, 
@@ -101,14 +93,6 @@ def _external_urls_display(request, project_short_name, external_url_type,
                                'children':children, 'peers':peers,
                                'external_url_type':external_url_type },
                               context_instance=RequestContext(request))
-
-# View to update the project roadmap
-@login_required
-def roadmap_update(request, project_short_name):
-    
-    type = "URL_TYPE_ROADMAP"
-    redirect = reverse('roadmap_display', args=[project_short_name])
-    return _external_urls_update(request, project_short_name, type, redirect)
 
 # View to update the project policies
 @login_required
