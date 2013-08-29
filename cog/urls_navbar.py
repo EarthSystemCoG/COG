@@ -85,6 +85,11 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/$', 'cog.views.processes_update', name='governance_processes_update'),    
     url(r'^projects/(?P<project_short_name>[^/]+)/roles/update/$', 'cog.views.organizational_role_update', name='organizational_role_update'),
     url(r'^organizational_role/(?P<object_id>[^/]+)/members/$', 'cog.views.organizational_role_members', name='organizational_role_members'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>minutes)/update/$', 'cog.views.external_urls_update', name='minutes_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>minutes)/$', 'cog.views.external_urls_display', name='minutes_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>metrics)/update/$', 'cog.views.external_urls_update', name='metrics_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>metrics)/$', 'cog.views.external_urls_display', name='metrics_display'),
+
 
     # "RESOURCES"
     # see Bookmarks URLs

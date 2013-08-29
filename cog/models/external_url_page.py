@@ -28,6 +28,8 @@ EXTERNAL_URL_PAGES = [ ExternalUrlPage('blogs','Blog','blog'),
                        ExternalUrlPage('design_docs','Design Documents','design_document'),
                        ExternalUrlPage('testing','Testing','testing'),
                        ExternalUrlPage('checklist','Checklist','checkclist'), 
+                       ExternalUrlPage('minutes','Minutes','minute'),
+                       ExternalUrlPage('metrics','Metrics','metric'),
 ]
 
 # map frm suburl -> ExternalUrlPage instance
