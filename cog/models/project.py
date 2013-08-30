@@ -1,7 +1,7 @@
 
 from cog.utils import smart_truncate
-from constants import APPLICATION_LABEL, TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_USECASE, \
-    TYPE_ROADMAP, PROJECT_PAGES, ROLE_USER, ROLE_ADMIN
+from constants import *
+from navbar import *
 from django.conf import settings
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType
@@ -47,6 +47,13 @@ class Project(models.Model):
     requirementsIdentificationProcess = models.TextField(blank=True, null=True, verbose_name='Requirements Identification Process', \
                                                   help_text='A paragraph describing how requirements are identified. This description may include who participates, what system is used to track requirements, and whether the results are public.')
 
+    # Software
+    software_features = models.TextField(blank=True, null=True, verbose_name='Software Features', help_text=None)
+    software_system_requirements = models.TextField(blank=True, null=True, verbose_name='Software System Requirements', help_text=None)
+    software_supported_platforms = models.TextField(blank=True, null=True, verbose_name='Software Supported Platforms', help_text=None)
+    
+    # Users
+    getting_started = models.TextField(blank=True, null=True, verbose_name='Getting Started', help_text='Describe how users can get started with this project.')
     
     # A project may have many parents. The relationship is not symmetrical.
     # The attribute parents_set contains the inverse relationship
@@ -185,22 +192,7 @@ class Project(models.Model):
             self.order = order
             # the pages for this topic, with their order
             self.pages = pages
-    
-    def trackers(self):
-        return self.get_external_urls(TYPE_TRACKER)
-    
-    def usecases(self):
-        return self.get_external_urls(TYPE_USECASE)
-    
-    def roadmap(self):
-        return self.get_external_urls(TYPE_ROADMAP)
-    
-    def code(self):
-        return self.get_external_urls(TYPE_CODE)
-    
-    def policies(self):
-        return self.get_external_urls(TYPE_POLICY)
-    
+        
     # generic method to return a list of the project's external URLs of a given type
     def get_external_urls(self, type):
         return self.externalurl_set.filter(project=self, type=type)

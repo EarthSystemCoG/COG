@@ -1,76 +1,5 @@
 APPLICATION_LABEL = 'cog'
 
-TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", "VISION":"vision", "VALUES":"values",
-         "PARTNERS":"partners", "SPONSORS":"sponsors", "PEOPLE":"people",
-         "BOOKMARKS":"bookmarks",
-         "DEVELOPMENT":"development", "CODE":"code", "TRACKERS":"trackers", "USECASES":"usecases",
-         "ROADMAP":"roadmap",
-         "GOVERNANCE":"governance","BODIES":"bodies","ROLES":"roles", "COMMUNICATION":"communication", "PROCESSES":"processes", "POLICIES":"policies",
-         "GETINVOLVED":"getinvolved", 
-         "SUPPORT":"support",
-         "CONTACTUS":"contactus"}
-
-#
-# RULES FOR TAB HIERARCHY
-# o tab and subtab URLs must be of the form: 'projects/<project_short_name_lower>/<tab_label>/' whwre tab_label is unique
-# o the selected sub-tab is found by matching the request path to the PROJECT_PAGES urls
-# o the selected tab will be the one in position '0' in the list containing the selected sub-tab
-# o everything after the third '/' is disregarded in computing the high-lihghted tab and sub-tab
-# o the tab/sub-tab URLs can be arbitrary except containing a '/'
-PROJECT_PAGES = (
-         [("Home", "")],
-         [("About Us", "%s/" % TABS["ABOUTUS"]), ("Mission", "%s/" % TABS["MISSION"]), ("Vision", "%s/" % TABS["VISION"]), ("Values", "%s/" % TABS["VALUES"]),
-          ("Partners", "%s/" % TABS["PARTNERS"]), ("Sponsors", "%s/" % TABS["SPONSORS"]), ("People", "%s/" % TABS["PEOPLE"])],        
-         [("Development", "%s/" % TABS["DEVELOPMENT"]), ("Code", "%s/" % TABS["CODE"]), ("Trackers", "%s/" % TABS["TRACKERS"]), ("Use Cases", "%s/" % TABS["USECASES"]), ],
-         [("Roadmap", "%s/" % TABS["ROADMAP"])],
-         [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), ("Roles", "%s/" % TABS["ROLES"]), 
-                                                      ("Communication", "%s/" % TABS["COMMUNICATION"]),  ("Processes", "%s/" % TABS["PROCESSES"]), 
-                                                      ("Policies", "%s/" % TABS["POLICIES"]) ],
-         [("Bookmarks", "%s/" % TABS["BOOKMARKS"])],
-         [("Get Involved", "%s/" % TABS["GETINVOLVED"])],
-         [("Support", "%s/" % TABS["SUPPORT"])],
-         [("Contact Us", "%s/" % TABS["CONTACTUS"])],            
-        )
-
-# "aboutus" --> "About Us"
-TAB_LABELS = {}
-for pages in PROJECT_PAGES:
-    for page in pages:
-        # remove trailing '/' from key
-        TAB_LABELS[page[1][0:len(page[1])-1]] = page[0]
-
-# Navigational map: tab --> [suntabs]
-# {
-#  '': [], 
-#  'support/': [], 
-#  'governance/': [], 
-# 'trackers/': [], 
-# 'bookmarks/list/<project>/': [], 
-# 'roadmap/': [], 
-# 'contactus/': [], 
-# 'aboutus/': ['aboutus/mission/', 'aboutus/vision/', 'aboutus/values/', 'aboutus/partners/', 'aboutus/sponsors/', 'aboutus/people/'], 
-#'code/': []
-# }
-NAVMAP = {}
-# Inverse navigational map: subtab --> tab
-# { 
-#   '': '', 
-#   'aboutus/people/': 'aboutus/', 
-#   'aboutus/vision/': 'aboutus/', 
-#   'aboutus/partners/': 'aboutus/', 'governance/': 'governance/', 'aboutus/mission/': 'aboutus/', 'bookmarks/list/<project>/': 'bookmarks/list/<project>/', 'contactus/': 'contactus/', 'trackers/': 'trackers/', 'aboutus/values/': 'aboutus/', 'aboutus/sponsors/': 'aboutus/', 'roadmap/': 'roadmap/', 'support/': 'support/', 'aboutus/': 'aboutus/', 
-#   'code/': 'code/'
-# }
-INVNAVMAP = {}
-for tabs in PROJECT_PAGES:  
-    taburl = tabs[0][1] 
-    NAVMAP[ taburl ] = []
-    INVNAVMAP[ taburl ] = taburl
-    if len(tabs)>1:
-        for ppage in tabs[1:]:
-            subtaburl = ppage[1]
-            NAVMAP[ taburl ].append( subtaburl )
-            INVNAVMAP[ subtaburl ] = taburl
-
 
 PURPOSE_TYPES = (
                  'Overall Project Coordination',
@@ -167,30 +96,6 @@ MANAGEMENT_BODY_DICT = dict( STRATEGIC_MANAGEMENT_BODY_DICT.items() + OPERATIONA
 MEMBERSHIP_TYPES = ('Open','Closed','By Invitation')
 
 MEMBERSHIP_CV = [ (x,x) for x in MEMBERSHIP_TYPES ]
-
-TYPE_BLOG = 'blog'
-TYPE_CODE = 'code'
-TYPE_HOMEPAGE = 'homepage'
-TYPE_REFERENCE = 'reference'
-TYPE_TRACKER = 'tracker'
-TYPE_USECASE = 'usecase'
-TYPE_POLICY = 'policy'
-TYPE_ROADMAP = 'roadmap'
-
-EXTERNAL_URL_TYPES = (       
-    (TYPE_BLOG,'Blog'),
-    (TYPE_CODE, 'Code'),
-    (TYPE_HOMEPAGE,'Home Page'),
-    (TYPE_REFERENCE,'Reference'),
-    (TYPE_TRACKER, 'Tracker'),   
-    (TYPE_USECASE, 'Use Case'),
-    (TYPE_POLICY, 'Policy'),
-    (TYPE_ROADMAP, 'Roadmap'),      
-)
-
-EXTERNAL_URL_DICT = {}
-for tuple in EXTERNAL_URL_TYPES:
-    EXTERNAL_URL_DICT[tuple[0]] = tuple[1]
 
 ROLE_ADMIN = 'admin'
 ROLE_USER = 'user'

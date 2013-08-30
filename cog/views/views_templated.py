@@ -5,7 +5,7 @@ Module containing functionality for rendering templated pages.
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
 from cog.models import Project, getLeadOrganizationalRoles, getMemberOrganizationalRoles
-from cog.models.constants import TABS
+from cog.models.navbar import TABS
 from cog.models.utils import get_project_communication_means
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 
@@ -27,6 +27,8 @@ def _hasTemplatedInfo(project, tab):
         return True
     elif tab==TABS["VALUES"] and hasText(project.values) > 0:
         return True
+    elif tab==TABS["HISTORY"] and hasText(project.history) > 0:
+        return True
     elif tab==TABS["PARTNERS"] and len(project.organization_set.all()) > 0:
         return True
     elif tab==TABS["SPONSORS"] and len(project.fundingsource_set.all()) > 0:
@@ -37,7 +39,9 @@ def _hasTemplatedInfo(project, tab):
     elif tab==TABS["CONTACTUS"] or tab==TABS["SUPPORT"]:
         # 'contactus' and 'support' always populated
         return True
-    elif tab==TABS["DEVELOPMENT"] and hasText(project.developmentOverview):
+    elif tab==TABS["DEVELOPERS"] and hasText(project.developmentOverview):
+        return True
+    elif tab==TABS["SOFTWARE"] and hasText(project.software_features):
         return True
     elif tab==TABS["GOVERNANCE"] and hasText(project.governanceOverview) > 0:     
          return True

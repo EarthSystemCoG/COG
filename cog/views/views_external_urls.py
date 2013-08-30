@@ -9,48 +9,15 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse  
 from django.forms.models import modelformset_factory
 from constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import TYPE_TRACKER, TYPE_CODE, TYPE_POLICY, TYPE_ROADMAP, TYPE_USECASE, EXTERNAL_URL_DICT
+from cog.models.constants import *
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
-from cog.models.constants import TABS
+from cog.models.navbar import TABS
+from cog.models.external_url_page import EXTERNAL_URL_PAGES, EXTERNAL_URL_PAGE_MAP
 
-# View to display the project trackers.
-def trackers_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Trackers'
-    template_form_pages = { reverse('trackers_update', args=[project_short_name]) : 'Trackers' }
-    return external_urls_display(request, project_short_name, TYPE_TRACKER, template_page, template_name, template_form_pages)
-
-# View to display the project use cases.
-def usecases_display(request, project_short_name):
-    
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Use Cases'
-    template_form_pages = { reverse('usecases_update', args=[project_short_name]) : 'Use Cases' }
-    return external_urls_display(request, project_short_name, TYPE_USECASE, template_page, template_name, template_form_pages)
-
-# View to display the project code URLs.
-def code_display(request, project_short_name):
-        
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Code Repositories'
-    template_form_pages = { reverse('code_update', args=[project_short_name]) : 'Code' }
-    return external_urls_display(request, project_short_name, TYPE_CODE, template_page, template_name, template_form_pages)
-
-# View to display the project roadmap.
-def roadmap_display(request, project_short_name):
-     
-    template_page = 'cog/project/_external_urls_list.html'
-    template_name = 'Roadmap'
-    template_form_pages = { reverse('roadmap_update', args=[project_short_name]) : 'Roadmap' }
-    return external_urls_display(request, project_short_name, TYPE_ROADMAP, template_page, template_name, template_form_pages)
-
-    
 # Generic view to display a given type of external URLs.
-# This view sub-selects the project peer and children that external URLs of that type, 
-# so that the page can render the widgets only if the URLs are found.
-def external_urls_display(request, project_short_name, external_url_type, 
-                          template_page, template_title, template_form_pages):
+def external_urls_display(request, project_short_name, suburl):
+                          #external_url_type, 
+                          #template_title, template_form_pages):
     
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
@@ -59,7 +26,16 @@ def external_urls_display(request, project_short_name, external_url_type,
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
-
+    
+    try:
+        externalUrlPage = EXTERNAL_URL_PAGE_MAP[suburl]
+    except KeyError:
+        raise Exception("URL: %s is not properly configured" % request.path)
+    
+    external_url_type = externalUrlPage.type
+    template_title = externalUrlPage.label
+    template_form_page = "%s_update" % suburl
+    template_form_pages = { reverse(template_form_page, args=[project_short_name, suburl]) : template_title }
     
     # build list of children with external urls of this type
     children = []
@@ -76,57 +52,17 @@ def external_urls_display(request, project_short_name, external_url_type,
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 
                                'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 
+                               'template_page': 'cog/project/_external_urls_list.html', 
                                'template_title': template_title, 
                                'template_form_pages':template_form_pages,
                                'children':children, 'peers':peers,
                                'external_url_type':external_url_type },
                               context_instance=RequestContext(request))
     
-# View to update the project trackers
-@login_required
-def trackers_update(request, project_short_name):
     
-    type = TYPE_TRACKER
-    redirect = reverse('trackers_display', args=[project_short_name])
-    return external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project use cases
-@login_required
-def usecases_update(request, project_short_name):
-    
-    type = TYPE_USECASE
-    redirect = reverse('usecases_display', args=[project_short_name])
-    return external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project code
-@login_required
-def code_update(request, project_short_name):
-    
-    type = TYPE_CODE
-    redirect = reverse('code_display', args=[project_short_name])
-    return external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project roadmap
-@login_required
-def roadmap_update(request, project_short_name):
-    
-    type = TYPE_ROADMAP
-    redirect = reverse('roadmap_display', args=[project_short_name])
-    return external_urls_update(request, project_short_name, type, redirect)
-
-# View to update the project policies
-@login_required
-def policies_update(request, project_short_name):
-    
-    type = TYPE_POLICY
-    tab = TABS["POLICIES"]
-    redirect = reverse('governance_display', args=[project_short_name, tab])
-    return external_urls_update(request, project_short_name, type, redirect)
-
 # Generic view to update external URLs
 @login_required
-def external_urls_update(request, project_short_name, type, redirect):
+def external_urls_update(request, project_short_name, suburl):
     
     # load user from session, project from HTTP request
     user = request.user
@@ -135,6 +71,13 @@ def external_urls_update(request, project_short_name, type, redirect):
     # check permission
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    try:
+        externalUrlPage = EXTERNAL_URL_PAGE_MAP[suburl]
+    except KeyError:
+        raise Exception("URL: %s is not properly configured" % request.path)
+    type = externalUrlPage.type
+    redirect = reverse('%s_display' % suburl, args=[project_short_name, suburl])
     
     # number of empty instances to be displayed
     # exclude fields 'project', 'type' so they don't get validated
@@ -155,7 +98,7 @@ def external_urls_update(request, project_short_name, type, redirect):
         #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)   
         formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type))
         
-        return render_external_urls_form(request, project, formset, type, redirect)
+        return render_external_urls_form(request, project, formset, externalUrlPage, redirect)
     
     # POST
     else:
@@ -173,7 +116,7 @@ def external_urls_update(request, project_short_name, type, redirect):
         
         else:
             print formset.errors
-            return render_external_urls_form(request, project, formset, type, redirect)
+            return render_external_urls_form(request, project, formset, externalUrlPage, redirect)
 
 # function to customize the widget used by specific formset fields
 def custom_field_callback(field):
@@ -182,7 +125,8 @@ def custom_field_callback(field):
     else:
         return field.formfield()
      
-def render_external_urls_form(request, project, formset, type, redirect):
-     return render_to_response('cog/project/external_urls_form.html', 
-                              {'project':project, 'formset':formset, 'title' : '%s Update' % EXTERNAL_URL_DICT[type], 'type' : type, 'redirect':redirect },
+def render_external_urls_form(request, project, formset, externalUrlPage, redirect):
+     return render_to_response('cog/project/external_urls_form.html',
+                              {'project':project, 'formset':formset, 'title' : '%s Update' % externalUrlPage.label, 
+                               'type' : externalUrlPage.type, 'redirect':redirect },
                                 context_instance=RequestContext(request))

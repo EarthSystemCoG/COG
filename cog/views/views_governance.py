@@ -11,7 +11,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.functional import curry
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
-from cog.models.constants import TABS, TAB_LABELS
+from cog.models.navbar import TABS, TAB_LABELS
 from cog.views.views_templated import templated_page_display
 
 # management_body_update proj.short_name.lower category
@@ -33,8 +33,6 @@ def governance_display(request, project_short_name, tab):
         template_form_pages = { reverse( "governance_processes_update", args=[project_short_name] ) : 'Processes' }
     elif tab == TABS["COMMUNICATION"]:
         template_form_pages = { reverse( "communication_means_update", args=[project_short_name, 'internal'] ) : 'Communication' }
-    elif tab == TABS["POLICIES"]:
-        template_form_pages = { reverse( "policies_update", args=[project_short_name] ) : 'Policies' }
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 

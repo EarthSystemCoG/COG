@@ -6,52 +6,32 @@
 	
 	<script language="javascript">
 	
+	
 		// function that selects/deselects tab/subtabs checkboxes to insure consistency
 		function trigger(checkbox) {
 			
 			// if subtab is checked, tab must be checked
 			if (checkbox.checked==true) {
 				
-				if (   checkbox.name == "tab_Mission"  || checkbox.name == "tab_Vision"   || checkbox.name == "tab_Values"
-					|| checkbox.name == "tab_Partners" || checkbox.name == "tab_Sponsors" || checkbox.name == "tab_People"	) {
-					document.getElementsByName("tab_About Us")[0].checked = true; 
-				}
+				// "download/"" -> "software/" 
+                // "partners/ -> "aboutus/"
+				{% for subtab, tab in INVNAVMAP.items %}
+					if (checkbox.name == "{{ subtab|getTabLabel|safe }}") {
+						document.getElementsByName( "{{ tab|getTabLabel }}" )[0].checked = true; 
+					}
+				{% endfor %}
 				
-				else if (   checkbox.name == "tab_Code"  || checkbox.name == "tab_Trackers"   || checkbox.name == "tab_Use Cases") {
-					document.getElementsByName("tab_Development")[0].checked = true; 
-				}
-				
-				else if (   checkbox.name == "tab_Bodies"  || checkbox.name == "tab_Roles"   || checkbox.name == "tab_Communication"
-						 || checkbox.name == "tab_Processes"  || checkbox.name == "tab_Policies") {
-					document.getElementsByName("tab_Governance")[0].checked = true; 
-				}
-
 				
 			// it tab is not checked, all subtabs must be not-checked
 			} else if (checkbox.checked==false) {
 				
-				if (checkbox.name == "tab_About Us") {
-					document.getElementsByName("tab_Mission")[0].checked = false;
-					document.getElementsByName("tab_Vision")[0].checked = false;
-					document.getElementsByName("tab_Values")[0].checked = false;
-					document.getElementsByName("tab_Partners")[0].checked = false;
-					document.getElementsByName("tab_Sponsors")[0].checked = false;
-					document.getElementsByName("tab_People")[0].checked = false;
-				}
-				
-				else if (checkbox.name == "tab_Development") {
-					document.getElementsByName("tab_Code")[0].checked = false;
-					document.getElementsByName("tab_Trackers")[0].checked = false;
-					document.getElementsByName("tab_Use Cases")[0].checked = false;
-				}
-				
-				else if (checkbox.name == "tab_Governance") {
-					document.getElementsByName("tab_Bodies")[0].checked = false;
-					document.getElementsByName("tab_Roles")[0].checked = false;
-					document.getElementsByName("tab_Communication")[0].checked = false;
-					document.getElementsByName("tab_Processes")[0].checked = false;
-					document.getElementsByName("tab_Policies")[0].checked = false;
-				}
+				{% for tab, subtabs in NAVMAP.items %}
+					if (checkbox.name == "{{ tab|getTabLabel }}") {						
+						{% for subtab in subtabs %}
+							document.getElementsByName( "{{ subtab|getTabLabel|safe }}" )[0].checked = false;
+						{% endfor %}
+					}				
+				{% endfor %}
 				
 			}
 			
@@ -119,46 +99,6 @@
                     </td>
                 </tr>
                 <tr>
-                	<td nowrap="nowrap">Tabs</td>
-                	<td>
-                	    <div style="text-align: center">
-                	    	<b>IMPORTANT: &nbsp; if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content</b>.
-                		</div>
-                		<!-- Note: home tab checkbox is disabled because it must always be present -->
-                		<table>
-                			<tr>
-								{% for tablist in tabs %}
-									<!-- Home tab - always selected -->
-									{% if forloop.counter == 1 %}
-										<input name="tab_{{tablist.0.label}}" type="hidden"/>
-									{% else %}
-										<td>
-											<table>
-												{% for tab in tablist %}
-													<tr>
-														<td nowrap="nowrap">
-															{% if forloop.counter == 1 %}
-															{% endif %}
-															<input name="tab_{{tab.label}}"  
-															       {% if tab.active %} checked="checked" {% endif %}							       
-															       type="checkbox" onclick="trigger(this)">
-															       {% if tab.label == 'Bookmarks' %}
-															       		Resources					
-															       {% else %}
-															       		{{tab.label}}
-															       {% endif %}					
-														</td>
-													</tr>
-												{% endfor %}
-											</table>
-										</td>
-									{% endif %}
-								{% endfor %}
-							</tr>
-						</table>
-                	</td>
-                </tr>
-                <tr>
                     <td nowrap="nowrap"><div style="margin-top:2px">Project Logo</div></td>
                     <td> <span style="margin-top:2px">
                     	 	{{ form.logo }} 
@@ -190,6 +130,47 @@
 	                    {{ form.private.errors }}
 	                </td>
 	            </tr>
+	            <tr>
+                	<td colspan="2">
+                	    <div style="text-align: left">
+                	    	<b>Upper Menu Bar</b>
+                	    	&nbsp; 
+                	    	[ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
+                		</div>
+                		<!-- Note: home tab checkbox is disabled because it must always be present -->
+                		<table>
+                			<tr>
+								{% for tablist in tabs %}
+									<!-- Home tab - always selected -->
+									{% if forloop.counter == 1 %}
+										<input name="tab_{{tablist.0.label}}" type="hidden"/>
+									{% else %}
+										<td>
+											<table>
+												{% for tab in tablist %}
+													<tr>
+														<td>
+															{% if forloop.counter == 1 %}
+															{% endif %}
+															<input name="tab_{{tab.label}}"  
+															       {% if tab.active %} checked="checked" {% endif %}							       
+															       type="checkbox" onclick="trigger(this)">
+															       {% if tab.label == 'Bookmarks' %}
+															       		Resources					
+															       {% else %}
+															       		{{tab.label}}
+															       {% endif %}					
+														</td>
+													</tr>
+												{% endfor %}
+											</table>
+										</td>
+									{% endif %}
+								{% endfor %}
+							</tr>
+						</table>
+                	</td>
+                </tr>
            </table>           
                  
           <div style="text-align:right">

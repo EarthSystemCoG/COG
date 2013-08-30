@@ -6,7 +6,7 @@ from communication_means import CommunicationMeans
 from search_facet import SearchFacet
 from search_group import SearchGroup
 from post import Post
-from constants import PROJECT_PAGES
+from navbar import PROJECT_PAGES
 from django.conf import settings
 from django.utils.timezone import now
 from news import News

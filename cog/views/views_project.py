@@ -19,7 +19,7 @@ from cog.models.utils import *
 
 from cog.views.views_templated import templated_page_display
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import TABS, TAB_LABELS
+from cog.models.navbar import TABS, TAB_LABELS, NAVMAP, INVNAVMAP
 
 # method to add a new project, with optional parent project
 @login_required
@@ -200,7 +200,8 @@ def project_update(request, project_short_name):
         # create form object from model
         form = ProjectForm(instance=project)
         return render_to_response('cog/project/project_form.html', 
-                                  {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs }, 
+                                  {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs,
+                                   'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
                                   context_instance=RequestContext(request))
     
     else:
@@ -244,7 +245,8 @@ def project_update(request, project_short_name):
                 setActiveProjectTabs(tablist, request, save=False)
             
             return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs }, 
+                                      {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs,
+                                       'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
                                        context_instance=RequestContext(request))
             
 # method to update an existing project
@@ -502,10 +504,28 @@ def getProjectNotVisibleRedirect(request, project):
         
 def development_display(request, project_short_name):
    
-    tab = TABS["DEVELOPMENT"] 
-    template_page = 'cog/project/_project_development.html'
+    tab = TABS["DEVELOPERS"] 
+    template_page = 'cog/project/_project_developers.html'
     template_form_pages = { reverse('development_update', args=[project_short_name]) : "Development" }
     template_title = "Development Overview"
+   
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
+def software_display(request, project_short_name):
+   
+    tab = TABS["SOFTWARE"] 
+    template_page = 'cog/project/_project_software.html'
+    template_form_pages = { reverse('software_update', args=[project_short_name]) : "Software" }
+    template_title = "Software Overview"
+   
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
+def users_display(request, project_short_name):
+   
+    tab = TABS["USERS"] 
+    template_page = 'cog/project/_project_users.html'
+    template_form_pages = { reverse('users_update', args=[project_short_name]) : "Getting Started" }
+    template_title = "Getting Started"
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
@@ -732,6 +752,71 @@ def development_update(request, project_short_name):
         else:
             print 'Form is invalid %s' % form.errors
             return render_development_form(request, project, form)
+        
+@login_required
+def software_update(request, project_short_name):
+    
+    formClass = SoftwareForm
+    form_template = 'cog/project/software_form.html'
+    form_template_title = 'Software Overview Update'
+    display_view = 'software_display'
+    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
+
+@login_required
+def users_update(request, project_short_name):
+    
+    formClass = UsersForm
+    form_template = 'cog/project/users_form.html'
+    form_template_title = 'Getting Started Update'
+    display_view = 'users_display'
+    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
+
+
+@login_required
+def _project_page_update(request, project_short_name, 
+                         formClass, form_template, form_template_title, display_view):
+    """Generic view for updating some project fields."""
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # GET request
+    if request.method=='GET':
+                
+        # create form object from model
+        form = formClass(instance=project)
+
+        # render form    
+        return render_to_response(form_template,
+                                  {'title' : form_template_title, 'project': project, 'form':form },
+                                  context_instance=RequestContext(request))
+    
+    # POST request
+    else:
+        
+        # update object from form data
+        form = formClass(request.POST, instance=project)
+        
+        # validate form data
+        if form.is_valid():
+            
+            # persist changes
+            project = form.save()
+            
+            # redirect to development overview (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse(display_view, args=[project.short_name.lower()]))            
+            
+        # return to form
+        else:
+            print 'Form is invalid %s' % form.errors
+            return render_to_response(form_template,
+                                      {'title' : form_template_title, 'project': project, 'form':form },
+                                      context_instance=RequestContext(request))
+
         
 def render_development_form(request, project, form):
     return render_to_response('cog/project/development_form.html',
