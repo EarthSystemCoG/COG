@@ -12,7 +12,7 @@ from constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import *
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS
-from cog.models.external_url_conf import EXTERNAL_URL_PAGES, EXTERNAL_URL_SUBURL_MAP
+from cog.models.external_url_conf import externalUrlManager
 
 # Generic view to display a given type of external URLs.
 def external_urls_display(request, project_short_name, suburl):
@@ -28,7 +28,7 @@ def external_urls_display(request, project_short_name, suburl):
         return getProjectNotVisibleRedirect(request, project)
     
     try:
-        externalUrlConf = EXTERNAL_URL_SUBURL_MAP[suburl]
+        externalUrlConf = externalUrlManager.getConf(suburl=suburl)
     except KeyError:
         raise Exception("URL: %s is not properly configured" % request.path)
     
@@ -73,7 +73,7 @@ def external_urls_update(request, project_short_name, suburl):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     try:
-        externalUrlConf = EXTERNAL_URL_SUBURL_MAP[suburl]
+        externalUrlConf = externalUrlManager.getConf(suburl=suburl)
     except KeyError:
         raise Exception("URL: %s is not properly configured" % request.path)
     type = externalUrlConf.type
