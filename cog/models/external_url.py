@@ -1,6 +1,6 @@
 from django.db import models
 from constants import APPLICATION_LABEL
-from external_url_page import external_url_choices
+from external_url_conf import external_url_choices
 from project import Project
 
 # A reference to an external URL

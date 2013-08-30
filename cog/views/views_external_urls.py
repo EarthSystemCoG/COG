@@ -12,7 +12,7 @@ from constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import *
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS
-from cog.models.external_url_page import EXTERNAL_URL_PAGES, EXTERNAL_URL_PAGE_MAP
+from cog.models.external_url_conf import EXTERNAL_URL_PAGES, EXTERNAL_URL_PAGE_MAP
 
 # Generic view to display a given type of external URLs.
 def external_urls_display(request, project_short_name, suburl):
@@ -28,12 +28,12 @@ def external_urls_display(request, project_short_name, suburl):
         return getProjectNotVisibleRedirect(request, project)
     
     try:
-        externalUrlPage = EXTERNAL_URL_PAGE_MAP[suburl]
+        externalUrlConf = EXTERNAL_URL_PAGE_MAP[suburl]
     except KeyError:
         raise Exception("URL: %s is not properly configured" % request.path)
     
-    external_url_type = externalUrlPage.type
-    template_title = externalUrlPage.label
+    external_url_type = externalUrlConf.type
+    template_title = externalUrlConf.label
     template_form_page = "%s_update" % suburl
     template_form_pages = { reverse(template_form_page, args=[project_short_name, suburl]) : template_title }
     
@@ -73,10 +73,10 @@ def external_urls_update(request, project_short_name, suburl):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     try:
-        externalUrlPage = EXTERNAL_URL_PAGE_MAP[suburl]
+        externalUrlConf = EXTERNAL_URL_PAGE_MAP[suburl]
     except KeyError:
         raise Exception("URL: %s is not properly configured" % request.path)
-    type = externalUrlPage.type
+    type = externalUrlConf.type
     redirect = reverse('%s_display' % suburl, args=[project_short_name, suburl])
     
     # number of empty instances to be displayed
@@ -98,7 +98,7 @@ def external_urls_update(request, project_short_name, suburl):
         #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)   
         formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type))
         
-        return render_external_urls_form(request, project, formset, externalUrlPage, redirect)
+        return render_external_urls_form(request, project, formset, externalUrlConf, redirect)
     
     # POST
     else:
@@ -116,7 +116,7 @@ def external_urls_update(request, project_short_name, suburl):
         
         else:
             print formset.errors
-            return render_external_urls_form(request, project, formset, externalUrlPage, redirect)
+            return render_external_urls_form(request, project, formset, externalUrlConf, redirect)
 
 # function to customize the widget used by specific formset fields
 def custom_field_callback(field):
@@ -125,8 +125,8 @@ def custom_field_callback(field):
     else:
         return field.formfield()
      
-def render_external_urls_form(request, project, formset, externalUrlPage, redirect):
+def render_external_urls_form(request, project, formset, externalUrlConf, redirect):
      return render_to_response('cog/project/external_urls_form.html',
-                              {'project':project, 'formset':formset, 'title' : '%s Update' % externalUrlPage.label, 
-                               'type' : externalUrlPage.type, 'redirect':redirect },
+                              {'project':project, 'formset':formset, 'title' : '%s Update' % externalUrlConf.label, 
+                               'type' : externalUrlConf.type, 'redirect':redirect },
                                 context_instance=RequestContext(request))

@@ -3,7 +3,7 @@ Module containing configuration for upper navigation bar,
 i.e. for the project pre-defined pages.
 '''
 
-from external_url_page import EXTERNAL_URL_PAGE_MAP
+from external_url_conf import EXTERNAL_URL_PAGE_MAP
 
 # dictionary containing (page key, page URL)
 TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", 
