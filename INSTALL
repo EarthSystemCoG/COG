@@ -11,14 +11,21 @@ The system must have the following Python packages installed:
 o Python 2.7.2+
 
 o Django 1.5.2+
+  easy_install --upgrade django
 
-o Grappelli
+o Django Grappelli
+  easy_install --upgrade django-grappelli
 
-o Django File Browser
-
-o Pagination
+o Django pagination:
+  easy_install --upgrade django-pagination
 
 o South
+  easy_install --upgrade south
+
+o Python Image Library
+  easy_install --upgrade pil
+  
+Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
 
 DOWNLOAD
 
@@ -78,7 +85,8 @@ o Start experimenting with creating new projects and registering new users.
 
 FURTHER CONFIGURATION
 
-o By default, the wiki pages (including any project home page) are editable through a simple text area widget. 
+o CKEDITOR
+By default, the wiki pages (including any project home page) are editable through a simple text area widget. 
 CoG can be easily configured to allow editing via the third-party CKEditor, which includes a WYSIWYG interface:
 
 Download the CKEditor version 3.6.4 and expand it to:
@@ -87,14 +95,7 @@ Download the CKEditor version 3.6.4 and expand it to:
 (NOTE: when running with an Apache httpd server, the CKEditor code must be located under: <installation directory>/COG/static/cog/ckeditor
 
 
---------------------
-
-o Create symbolic links to site_media
-cd COG/site_media
-ln -s ../filebrowser/media/filebrowser filebrowser
-ln -s ../cog/media/cog cog
-
-o Enable email notification
+o EMAIL notifiication
 To enable email notification for project membership, create a file in the home directory of the user running the server
 with name ~/.cog.cfg and the following content:
 
@@ -102,6 +103,18 @@ with name ~/.cog.cfg and the following content:
 email.server=<your email server hostname>
 email.username=<email server username>
 email.password=<email server password>
+
+For example, on the NOAA server:
+
+[apache@hydra ~]$ cat ~apache/.cog.cfg
+[email]
+email.server=dmzmail.fsl.noaa.gov
+# leave port blank if default
+email.port=
+email.sender=earthsystemcog@noaa.gov
+email.username=
+email.password=
+email.security=
 
 
 
