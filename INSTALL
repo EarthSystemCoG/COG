@@ -74,8 +74,8 @@ http://localhost:8000/projects/test/
 
 o Login as the site administrator by clicking the 'Login' hyperlink in the upper right of the page, and login with the following username/password:
 
-Username: changeme_user
-Password: change_password
+Username: changeme
+Password: changeme
 
 IMPORTANT: immediately change the administrator username and password by clicking on the upper right link 'Django Admin', 
 which will show the Django Administrator web interface. Further click on 'Users', then 'changeme_user', 
