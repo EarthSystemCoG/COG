@@ -1,3 +1,16 @@
+#== LOCAL SETTINGS - CHANGE AS APPROPRIATE FOR EACH INSTALLATION ========
+
+# default search configuration
+DEFAULT_SEARCH_URL = 'http://hydra.fsl.noaa.gov/esg-search/search/'
+DEFAULT_SEARCH_FACETS = { 'project':'Project',
+                          'realm':'Realm',
+                          'variable':'Variable',
+                          'cf_variable':'CF Variable'  }
+
+COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
+
+#=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
+
 # Django settings for COG project.
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 import os
@@ -142,8 +155,8 @@ INSTALLED_APPS = (
     'south',
     'layouts',
     'cog',
-    'django_cim_forms', 'django_cim_forms.cim_1_5', 'dycore',
-    'dcf', 'dcf.cim_1_8_1',
+    #'django_cim_forms', 'django_cim_forms.cim_1_5', 'dycore',
+    #'dcf', 'dcf.cim_1_8_1',
 )
 
 
@@ -162,23 +175,6 @@ TEMPLATE_CONTEXT_PROCESSORS += (
      'cog.context_processors.cog_settings'
 ) 
 
-#CONTACT_EMAIL = 'Luca.Cinquini@jpl.nasa.gov'
-
-# site-specific settings for grid directories
-SRCGRID_DIR = '/export/shared/grids'
-DSTGRID_DIR = '/export/shared/grids'
-WEIGHTS_DIR = '/tmp'
-
-# default search configuration
-DEFAULT_SEARCH_URL = 'http://hydra.fsl.noaa.gov/esg-search/search/'
-#DEFAULT_SEARCH_URL = 'http://esg-datanode.jpl.nasa.gov/esg-search/search/'
-DEFAULT_SEARCH_FACETS = { 'project':'Project',
-                          'realm':'Realm',
-                          'variable':'Variable',
-                          'cf_variable':'CF Variable'  }
-
-COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
-
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"
 #COLOR_LIGHT_TEAL = "#B9E0E3"
@@ -187,10 +183,3 @@ COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
 #COLOR_LIGHT_YELLOW = "#FCE79F";
 
 #COLOR_DARK_GRAY = "#666666";
-
-# ATOM feed information
-ATOM_FEED_DIR = '/esg/content/atom_feed_home'
-
-# Facebook application ID (must register application with Facebook)
-FACEBOOK_APPLICATION_ID = 211703205620453 # CoG
-#FACEBOOK_APPLICATION_ID = 266117840180042 # CoG-dev

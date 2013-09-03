@@ -50,10 +50,10 @@ urlpatterns = patterns('',
 
     
     # CIM-forms
-    (r'^metadata/', include('django_cim_forms.urls')),
-    (r'', include('dycore.urls')),
+    #(r'^metadata/', include('django_cim_forms.urls')),
+    #(r'', include('dycore.urls')),
 
     # dcf
-    (r'^dcf/', include('dcf.urls')),
+    #(r'^dcf/', include('dcf.urls')),
 
 )
