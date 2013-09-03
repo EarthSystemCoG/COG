@@ -1,19 +1,93 @@
-COG PROJECT INSTALLATION INSTRUCTIONS
+COG WEB PORTAL INSTALLATION INSTRUCTIONS
 
-o Download the software from the SVN repository:
+The following instructions describe how to quickly install the CoG environment on a Unix-type server (Cent-OS, Linux, Mac-OSX)
+for the purpose of starting to use and test the web application. In a production environment, the CoG should really be front-ended
+by a separately installed Apache httpd server (not covered here).
+
+PRE-REQUISITES
+
+The system must have the following Python packages installed:
+
+o Python 2.7.2+
+
+o Django 1.5.2+
+
+o Grappelli
+
+o Django File Browser
+
+o Pagination
+
+o South
+
+DOWNLOAD
+
+Download the software from the SVN repository:
 
 cd <install directory>
-svn co https://ncpp.svn.sourceforge.net/svnroot/ncpp/COG
+git clone git@github.com:EarthSystemCoG/COG.git
 cd COG
 
-o Initialize the database
-manage.py syncdb (initializes tables for all applications NOT managed by 'south')
-manage.py migrate cog (initializes tables for applications managed by 'south')
-manage.py migrate accounts
+CONFIGURATION
+
+o Review the top-level file settings.py, optionally change the values of the first few variables:
+	- DEFAULT_SEARCH_URL: URL of default ESGF node to target in a data query
+	- COG_MAILING_LIST
+
+INITIALIZATION
+
+o python manage.py syncdb (initializes tables for all applications except 'CoG')
+
+o python manage.py migrate cog (initializes and migrates tables for 'CoG' application)
 
 o gather the static media files from the different applications into a single directory
+
 mkdir static
 python manage.py collectstatic
+
+
+STARTUP
+
+o Start the CoG application within the embedded Django development server:
+python manage.py runserver
+
+By default, the Django server is available on port 8000
+
+
+USAGE AND TESTING
+
+o Access the application home page at:
+http://localhost:8000/
+
+Please note that none of the project links contained in the right column will work because those projects do NOT exist in the local database.
+
+o By default, the CoG database is configured with one single project called 'Test'. Access the 'Test' project home page by visiting the following URL:
+
+http://localhost:8000/projects/test/
+
+o Login as the site administrator by clicking the 'Login' hyperlink in the upper right of the page, and login with the following username/password:
+
+Username: changeme_user
+Password: change_password
+
+IMPORTANT: immediately change the administrator username and password by clicking on the upper right link 'Django Admin', 
+which will show the Django Administrator web interface. Further click on 'Users', then 'changeme_user', 
+then start changing the administraror's profile.
+
+o Start experimenting with creating new projects and registering new users.
+
+FURTHER CONFIGURATION
+
+o By default, the wiki pages (including any project home page) are editable through a simple text area widget. 
+CoG can be easily configured to allow editing via the third-party CKEditor, which includes a WYSIWYG interface:
+
+Download the CKEditor version 3.6.4 and expand it to:
+<installation directory>/COG/cog/static/cog/ckeditor
+
+(NOTE: when running with an Apache httpd server, the CKEditor code must be located under: <installation directory>/COG/static/cog/ckeditor
+
+
+--------------------
 
 o Create symbolic links to site_media
 cd COG/site_media
