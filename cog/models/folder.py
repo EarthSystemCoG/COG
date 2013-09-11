@@ -1,6 +1,7 @@
 from django.db import models
 from constants import APPLICATION_LABEL
 from project import Project
+from folder_conf import folderManager
 
 class Folder(models.Model):
     
@@ -18,10 +19,26 @@ class Folder(models.Model):
     class Meta:
         app_label= APPLICATION_LABEL
     
-# function to return the top bookmark folder for a project
-def getTopFolder(project):
+# function to return the requested top bookmark folder for a project,
+# creating it if not existing
+def getTopFolder(project, name='Bookmark Folder'): # CHANGEME ?
     
-    name = "%s Bookmarks" % project.short_name
     # get or create top-level folder
     folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project)
+    if created:
+        print 'Project=%s: reated top-level folder=%s' % (project.short_name, folder.name)
     return folder
+
+# function to return all top-level folders for a project,
+# creating them if not existing
+def getTopFolders(project):
+    
+    folders = []
+    for name in folderManager.getNames():
+        # get or create top-level folder
+        folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project)
+        folders.append(folder)
+        if created:
+            print 'Project=%s: reated top-level folder=%s' % (project.short_name, folder.name)
+
+    return folders

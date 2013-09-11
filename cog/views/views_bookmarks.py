@@ -21,7 +21,11 @@ def _hasBookmarks(project):
         return False
     
 # view to list the project bookmarks
+# OBSOLETE
 def bookmark_list(request, project_short_name):
+    return bookmark_listnew(request, project_short_name, 'resources')
+
+def bookmark_listnew(request, project_short_name, folder_suburl):
     
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -32,8 +36,19 @@ def bookmark_list(request, project_short_name):
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
+    try:
+        folder_name = folderManager.getName(folder_suburl)
+    except KeyError:
+        messages = ['Bookmark folder %s does not exist for project %s.' % (folder_suburl, project.short_name)] 
+        return render_to_response('cog/common/message.html', 
+                                  {'mytitle':'Invalid Bookmark Folder', 
+                                   'project':project,
+                                   'messages':messages }, 
+                                   context_instance=RequestContext(request))
+
+    
     # get or create top-level folder
-    folder = getTopFolder(project)
+    folder = getTopFolder(project, folder_name)
     
     # build list of children with bookmarks that are visible to user
     children = []
@@ -49,7 +64,7 @@ def bookmark_list(request, project_short_name):
                       
     # return to view    
     template_page = 'cog/bookmarks/_bookmarks.html'
-    template_title = 'Resources'
+    template_title = folder_name
     template_form_name = None
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 

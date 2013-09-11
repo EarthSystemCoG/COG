@@ -84,20 +84,7 @@ urlpatterns = patterns('',
     
     # NAVBAR URLs
     (r'', include('cog.urls_navbar')),
-        
-    # folders and bookmarks
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add/$', 'cog.views.bookmark_add', name='bookmark_add'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add2/$', 'cog.views.bookmark_add2', name='bookmark_add2'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/update/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_update', name='bookmark_update'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/delete/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_delete', name='bookmark_delete'),
-    
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/folders/add/$', 'cog.views.folder_add', name='folder_add'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/folders/update/(?P<folder_id>[^/]+)/$', 'cog.views.folder_update', name='folder_update'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/folders/delete/(?P<folder_id>[^/]+)/$', 'cog.views.folder_delete', name='folder_delete'),
-    
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add_notes/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_add_notes', name='bookmark_add_notes'),   
-  
+          
     # project generic pages
     # Note: these URLs must come last because the last URL matches everything within the project!
     url(r'^projects/$', 'cog.views.index', name='unspecified_project'),
