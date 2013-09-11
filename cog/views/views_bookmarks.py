@@ -12,7 +12,7 @@ from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedir
 from views_post import post_add
 
 def _hasBookmarks(project, folderName):
-    """Function to determine whether a project has associated bookmarks."""
+    """Function to determine whether a project has associated bookmarks, for a given top-level folder."""
     
     bookmarks = Bookmark.objects.filter(folder__project=project).filter(folder__name=folderName)
     if len(bookmarks.all())>0:
@@ -20,12 +20,7 @@ def _hasBookmarks(project, folderName):
     else:
         return False
     
-# view to list the project bookmarks
-# OBSOLETE
-def bookmark_list(request, project_short_name):
-    return bookmark_listnew(request, project_short_name, 'resources')
-
-def bookmark_listnew(request, project_short_name, suburl):
+def bookmark_list(request, project_short_name, suburl):
     
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
