@@ -57,12 +57,14 @@ def bookmark_listnew(request, project_short_name, suburl):
     template_page = 'cog/bookmarks/_bookmarks.html'
     template_title = folder_name
     template_form_name = None
+    userAndFolderName = (request.user, folder.name) # combination of user and folder objects, to be passed as second argument to the custom filter 
+                                            # (because custom filters can have at most two arguments, and the first one is the project)
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
                                'children':children, 'peers':peers,
-                               'folder':folder },
-                              context_instance=RequestContext(request))
+                               'userAndFolderName':userAndFolderName },
+                               context_instance=RequestContext(request))
 
     
 # View to add a bookmark via a standard web form
