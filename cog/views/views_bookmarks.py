@@ -11,10 +11,10 @@ from constants import PERMISSION_DENIED_MESSAGE, BAD_REQUEST
 from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from views_post import post_add
 
-def _hasBookmarks(project):
+def _hasBookmarks(project, folderName):
     """Function to determine whether a project has associated bookmarks."""
     
-    bookmarks = Bookmark.objects.filter(folder__project=project)
+    bookmarks = Bookmark.objects.filter(folder__project=project).filter(folder__name=folderName)
     if len(bookmarks.all())>0:
         return True
     else:
@@ -36,28 +36,28 @@ def bookmark_listnew(request, project_short_name, suburl):
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
-    folder_name = folderManager.getFolderNameFromSubUrl(suburl)
+    folderName = folderManager.getFolderNameFromSubUrl(suburl)
     
     # get or create top-level folder
-    folder = getTopFolder(project, folder_name)
+    folder = getTopFolder(project, folderName)
     
     # build list of children with bookmarks that are visible to user
     children = []
     for child in project.children():
-        if _hasBookmarks(child) and child.isVisible(request.user):
+        if _hasBookmarks(child, folderName) and child.isVisible(request.user):
             children.append(child)
     
     # build list of peers with bookmarks that are visible to user
     peers = []
     for peer in project.peers.all():
-        if _hasBookmarks(peer) and peer.isVisible(request.user):
+        if _hasBookmarks(peer, folderName) and peer.isVisible(request.user):
             peers.append(peer)
                       
     # return to view    
     template_page = 'cog/bookmarks/_bookmarks.html'
-    template_title = folder_name
+    template_title = folderName
     template_form_name = None
-    userAndFolderName = (request.user, folder.name) # combination of user and folder objects, to be passed as second argument to the custom filter 
+    userAndFolderName = (request.user, folderName) # combination of user and folder objects, to be passed as second argument to the custom filter 
                                             # (because custom filters can have at most two arguments, and the first one is the project)
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
