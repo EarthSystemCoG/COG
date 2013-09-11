@@ -4,6 +4,7 @@ i.e. for the project pre-defined pages.
 '''
 
 from external_url_conf import EXTERNAL_URL_TYPES, externalUrlManager
+from folder_conf import folderManager
 
 # dictionary containing (page key, page URL)
 TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", 
@@ -18,7 +19,13 @@ TABS = { "ABOUTUS":"aboutus", "MISSION":"mission",
          "USERS":"users", "FAQ": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["FAQ"]).suburl,
                           "USER_GUIDE": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["USER_GUIDE"]).suburl,
                           "CODE_EXAMPLES": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["CODE_EXAMPLE"]).suburl,
-         "BOOKMARKS":"bookmarks",
+         "RESOURCES": folderManager.getFolderSubUrl('RESOURCES'), 'PUBLICATIONS': folderManager.getFolderSubUrl('PUBLICATIONS'),
+                                                                  'PRESENTATIONS': folderManager.getFolderSubUrl('PRESENTATIONS'),
+                                                                  'NEWSLETTERS': folderManager.getFolderSubUrl('NEWSLETTERS'),
+                                                                  'PROPOSALS': folderManager.getFolderSubUrl('PROPOSALS'),
+                                                                  'FIGURES': folderManager.getFolderSubUrl('FIGURES'),
+                                                                  'TESTCASES': folderManager.getFolderSubUrl('TESTCASES'),
+                                                                  'EVALUATIONS': folderManager.getFolderSubUrl('EVALUATIONS'),
          "DEVELOPERS":"developers", "REPOSITORIES": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["REPOSITORY"]).suburl,
                                     "TRACKERS": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["TRACKER"]).suburl,
                                     "DEVELOPER_GUIDE": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["DEVELOPER_GUIDE"]).suburl,
@@ -41,7 +48,7 @@ TABS = { "ABOUTUS":"aboutus", "MISSION":"mission",
 
 # list of pre-defined project pages
 # RULES FOR TAB HIERARCHY
-# o tab and subtab URLs must be of the form: 'projects/<project_short_name_lower>/<tab_label>/' whwre tab_label is unique
+# o tab and subtab URLs must be of the form: 'projects/<project_short_name_lower>/<tab_label>/' where tab_label is unique
 # o the selected sub-tab is found by matching the request path to the PROJECT_PAGES urls
 # o the selected tab will be the one in position '0' in the list containing the selected sub-tab
 # o everything after the third '/' is disregarded in computing the high-lighted tab and sub-tab
@@ -76,7 +83,14 @@ PROJECT_PAGES = (
                                                       ("Policies", "%s/" % TABS["POLICIES"]),
                                                       ("Minutes", "%s/" % TABS["MINUTES"]),
                                                       ("Metrics", "%s/" % TABS["METRICS"]), ],
-         [("Bookmarks", "%s/" % TABS["BOOKMARKS"])],
+         # Note: the tab names do not necessarily match the resource names
+         [('Resources', "%s/" % TABS["RESOURCES"]), ('Publications', "%s/" % TABS["PUBLICATIONS"]),
+                                                    ('Presentations', "%s/" % TABS["PRESENTATIONS"]),
+                                                    ('Newsletters', "%s/" % TABS["NEWSLETTERS"]),
+                                                    ('Proposals', "%s/" % TABS["PROPOSALS"]),
+                                                    ('Figures', "%s/" % TABS["FIGURES"]),
+                                                    ('Test Cases', "%s/" % TABS["TESTCASES"]),
+                                                    ('Evaluations', "%s/" % TABS["EVALUATIONS"])],
          [("Get Involved", "%s/" % TABS["GETINVOLVED"])],
          [("Support", "%s/" % TABS["SUPPORT"])],
          [("Contact Us", "%s/" % TABS["CONTACTUS"])],            

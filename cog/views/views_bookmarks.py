@@ -25,7 +25,7 @@ def _hasBookmarks(project):
 def bookmark_list(request, project_short_name):
     return bookmark_listnew(request, project_short_name, 'resources')
 
-def bookmark_listnew(request, project_short_name, folder_suburl):
+def bookmark_listnew(request, project_short_name, suburl):
     
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -36,16 +36,7 @@ def bookmark_listnew(request, project_short_name, folder_suburl):
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
-    try:
-        folder_name = folderManager.getName(folder_suburl)
-    except KeyError:
-        messages = ['Bookmark folder %s does not exist for project %s.' % (folder_suburl, project.short_name)] 
-        return render_to_response('cog/common/message.html', 
-                                  {'mytitle':'Invalid Bookmark Folder', 
-                                   'project':project,
-                                   'messages':messages }, 
-                                   context_instance=RequestContext(request))
-
+    folder_name = folderManager.getFolderNameFromSubUrl(suburl)
     
     # get or create top-level folder
     folder = getTopFolder(project, folder_name)

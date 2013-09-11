@@ -1,38 +1,45 @@
-# dictionary that associates each top-level folder name to its suburl
+# dictionary that associates each key with a tuple of the form (folder_name, folder_suburl)
 TOP_FOLDERS = { 
-               'Bookmark Folder':'resources',
-               'Presentations':'presentations', 
-               'Publications':'publications', 
-               'Newsletters':'newsletters', 
-               'Proposals':'proposals', 
-               'Figures':'figures', 
-               'Test Cases':'testcases', 
-               'Evaluations':'evaluations',
+               'RESOURCES': ('Bookmark Folder','resources'),
+               'PRESENTATIONS': ('Presentations','presentations'), 
+               'PUBLICATIONS': ('Publications','publications'),
+               'NEWSLETTERS': ('Newsletters','newsletters'),
+               'PROPOSALS': ('Proposals','proposals'),
+               'FIGURES': ('Figures','figures'),
+               'TESTCASES': ("Test Cases",'testcases'),
+               'EVALUATIONS': ('Evaluations','evaluations'),
               }
 
 class FolderManager(object):
     
     def __init__(self):
         
-        # map: folder name --> folder suburl
-        self._map = TOP_FOLDERS
-        
+        # map: folder key --> folder name
+        self._key2name = {}
+        # map folder key --> folder suburl
+        self._key2suburl = {}
         # map folder suburl --> folder name
-        self._invmap = {}
-        for key, value in self._map.items():
-            self._invmap[value] = key
-            
-    def getNames(self):
+        self._suburl2name = {}
+        for key, tuple in TOP_FOLDERS.items():
+            self._key2name[key] = tuple[0]
+            self._key2suburl[key] = tuple[1]
+            self._suburl2name[tuple[1]] = tuple[0]
+                    
+    def getFolderNames(self):
         '''Returns the names of all top-level folders'''
-        return self._map.keys()
+        return self._key2name.values()
     
-    def getName(self, suburl):
-        '''Returns the name of the folder with a given suburl'''
-        return self._invmap[suburl]
+    def getFolderName(self, key):
+        '''Returns the folder name for a given key'''
+        return self._key2name[key]
     
-    def getSubUrl(self, name):
-        '''Returns the suburl of the folder with a given name'''
-        return self._map[name]
+    def getFolderSubUrl(self, key):
+        '''Returns the folder suburl for a given key'''
+        return self._key2suburl[key]
+    
+    def getFolderNameFromSubUrl(self, suburl):
+        '''Returns the folder name for a given suburl.'''
+        return self._suburl2name[suburl]
         
 # singleton managing folders for the whole application
 folderManager = FolderManager()

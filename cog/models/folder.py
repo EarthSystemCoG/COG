@@ -26,7 +26,7 @@ def getTopFolder(project, name='Bookmark Folder'): # CHANGEME ?
     # get or create top-level folder
     folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project)
     if created:
-        print 'Project=%s: reated top-level folder=%s' % (project.short_name, folder.name)
+        print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
     return folder
 
 # function to return all top-level folders for a project,
@@ -34,11 +34,11 @@ def getTopFolder(project, name='Bookmark Folder'): # CHANGEME ?
 def getTopFolders(project):
     
     folders = []
-    for name in folderManager.getNames():
+    for name in folderManager.getFolderNames():
         # get or create top-level folder
         folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project)
         folders.append(folder)
         if created:
-            print 'Project=%s: reated top-level folder=%s' % (project.short_name, folder.name)
+            print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
 
     return folders
