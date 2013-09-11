@@ -459,10 +459,8 @@ def initProject(project):
     # create project index
     init_site_index(project)
     
-    # create top-level bookmarks folders
-    # CHANGEME TO ONLY DEFAULT TOP FOLDER
-    #folder = getTopFolder(project)
-    folder = getTopFolders(project)
+    # create top-level bookmark folder, needed to add any bookmark
+    folder = getTopFolder(project, folderManager.getFolderName('RESOURCES'))
     
     # create images upload directory
     create_upload_directory(project)

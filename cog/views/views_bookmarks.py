@@ -60,7 +60,8 @@ def bookmark_listnew(request, project_short_name, suburl):
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers },
+                               'children':children, 'peers':peers,
+                               'folder':folder },
                               context_instance=RequestContext(request))
 
     

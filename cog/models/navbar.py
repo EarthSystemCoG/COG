@@ -96,13 +96,16 @@ PROJECT_PAGES = (
          [("Contact Us", "%s/" % TABS["CONTACTUS"])],            
         )
 
-# dictionary that maps tab key to tab label
+# dictionary that maps tab suburls to tab labels
 # "aboutus" --> "About Us"
 TAB_LABELS = {}
 for pages in PROJECT_PAGES:
     for page in pages:
         # remove trailing '/' from key
         TAB_LABELS[page[1][0:len(page[1])-1]] = page[0]
+        
+# labels of tabs that are enabled by default (i.e. at project creation)
+DEFAULT_TABS = [ "Home", TAB_LABELS["aboutus"], TAB_LABELS["resources"], TAB_LABELS["contactus"] ]
 
 # Navigational map: tab --> [suntabs]
 # {

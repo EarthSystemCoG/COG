@@ -1,6 +1,6 @@
 from django.db import models
 from constants import APPLICATION_LABEL
-from navbar import PROJECT_PAGES
+from navbar import PROJECT_PAGES, DEFAULT_TABS
 from project import Project
 from django.core.urlresolvers import reverse
 
@@ -39,16 +39,16 @@ def get_or_create_project_tabs(project, save=True):
             if page[0]=="Home":
                 # NESII Home
                 label = "%s Home" % project.short_name                
-            if page[0]=="Bookmarks" and len(project.short_name)>0:
+            #if page[0]=="Bookmarks" and len(project.short_name)>0:
                 # use reverse lookup to obtain bookmarks/list/nesii/
-                url = reverse('bookmark_list', args=[project.short_name.lower()])
+                #url = reverse('bookmark_list', args=[project.short_name.lower()])
             try:
                 # try loading the project tab by its unique URL
                 tab = ProjectTab.objects.get(url=url)
             except ProjectTab.DoesNotExist:
                 # create the project tab if not existing already. 
                 # select initial active state of tabs
-                if page[0]=='Home' or page[0]=='About Us' or page[0]=='Contact Us':
+                if page[0] in DEFAULT_TABS:
                     active = True
                 else:
                     active = False
