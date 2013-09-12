@@ -4,7 +4,7 @@ import sys, os, ConfigParser
 sys.path.append( os.path.abspath(os.path.dirname('.')) )
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
-from cog.models import Project, create_upload_directory, Doc, CommunicationMeans
+from cog.models import *
 from cog.models.logged_event import log_instance_event
 from django.db.models.signals import post_save
 from cog.models import SearchFacet, SearchProfile, SearchGroup, Folder
@@ -21,8 +21,8 @@ def renameFolder(folder, newName):
     folder.name = newName
     folder.save()
     
-# loop over projects, folders
 
+# loop over projects, folders
 for project in Project.objects.all():
     
     folders = Folder.objects.filter(project=project)
@@ -35,5 +35,17 @@ for project in Project.objects.all():
             folder.name = newName
             folder.save()
         else:
-            if project.short_name=='CoG' and folder.name=='Presentations':
-                renameFolder(folder, 'Presentations')
+            pass
+            #if project.short_name=='CoG' and folder.name=='Presentations':
+            #    renameFolder(folder, 'Presentations')
+                
+# remove obsolete pages
+oldpages = ['getinvolved','code','support']
+for project in Project.objects.all():
+    posts = Post.objects.filter(project=project)
+    for post in posts:
+        for oldpage in oldpages:
+            url = "/projects/%s/%s/" % (project.short_name.lower(), oldpage)
+            if post.url==url or post.url == url[0:-1]:
+                print 'Deleting page: %s' % post.url
+                post.delete()
