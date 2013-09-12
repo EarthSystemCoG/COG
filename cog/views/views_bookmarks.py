@@ -144,6 +144,7 @@ def bookmark_add2(request, project_short_name):
 def bookmark_delete(request, project_short_name, bookmark_id):
     
     bookmark = get_object_or_404(Bookmark, pk=bookmark_id)
+    folder = bookmark.folder
     project = bookmark.folder.project
     
     # security check
@@ -157,8 +158,9 @@ def bookmark_delete(request, project_short_name, bookmark_id):
     # delete bookmark
     bookmark.delete()
     
-    # redirect to bookmark listing
-    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
+    # redirect to bookmark's folder view
+    suburl = folderManager.getFolderSubUrlFromName( folder.topParent().name )
+    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl]))
 
 # View to update a bookmark
 @login_required
