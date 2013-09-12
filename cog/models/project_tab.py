@@ -39,9 +39,6 @@ def get_or_create_project_tabs(project, save=True):
             if page[0]=="Home":
                 # NESII Home
                 label = "%s Home" % project.short_name                
-            #if page[0]=="Bookmarks" and len(project.short_name)>0:
-                # use reverse lookup to obtain bookmarks/list/nesii/
-                #url = reverse('bookmark_list', args=[project.short_name.lower()])
             try:
                 # try loading the project tab by its unique URL
                 tab = ProjectTab.objects.get(url=url)

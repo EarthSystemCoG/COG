@@ -21,10 +21,10 @@ def _hasBookmarks(project, folderName):
         return False
     
 def bookmark_list(request, project_short_name, suburl):
-    
+        
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
+        
     # check project is active
     if project.active==False:
         return getProjectNotActiveRedirect(request, project)
@@ -92,7 +92,7 @@ def bookmark_add(request, project_short_name):
             bookmark = form.save()
             
             # redirect to bookmarks listing
-            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
+            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), 'resources']))
                           
         else:
             print 'Form is invalid: %s' % form.errors

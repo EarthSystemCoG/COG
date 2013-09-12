@@ -96,7 +96,6 @@ urlpatterns = patterns('',
 
 
     # "RESOURCES" (aka bookmarks and folders)
-    url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/$', 'cog.views.bookmark_list', name='bookmark_list'), # OBSOLETE
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>resources)/$', 'cog.views.bookmark_list', name='bookmark_list'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>publications)/$', 'cog.views.bookmark_list', name='bookmark_list'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>presentations)/$', 'cog.views.bookmark_list', name='bookmark_list'),
