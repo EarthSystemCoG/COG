@@ -1,7 +1,6 @@
 from django.db import models
 from constants import APPLICATION_LABEL
 from project import Project
-from project_tab import ProjectTab
 from folder_conf import folderManager
 
 class Folder(models.Model):
@@ -51,26 +50,3 @@ def getTopFolders(project):
             print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
 
     return folders
-
-def getActiveFolders(project):
-    '''Returns a list of active folders for this project (both top-level and nested) .'''
-    
-    # list of existing folders for this project
-    folders = Folder.objects.filter(project=project)
-        
-    # list of active project tabs
-    tabs = ProjectTab.objects.filter(project=project, active=True)
-    
-    # select active folders
-    activeFolders = []
-    for folder in folders:
-        # use the top-level parent
-        topFolder = folder.topParent()
-        suburl = folderManager.getFolderSubUrlFromName(topFolder.name)
-        for tab in tabs:
-            # example: 'resources' in '/projects/abc123/resources/'
-            if suburl in tab.url: 
-                activeFolders.append(folder)
-                break
-            
-    return activeFolders

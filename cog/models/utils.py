@@ -6,13 +6,16 @@ from communication_means import CommunicationMeans
 from search_facet import SearchFacet
 from search_group import SearchGroup
 from post import Post
-from navbar import PROJECT_PAGES
+from navbar import PROJECT_PAGES, DEFAULT_TABS
 from django.conf import settings
 from django.utils.timezone import now
 from news import News
 from django.db.models import Q
 from django.contrib.comments import Comment
 from django.contrib.contenttypes.models import ContentType
+from folder_conf import folderManager
+from folder import Folder, getTopFolder
+from project_tab import ProjectTab
 
 # method to retrieve all news for a given project, ordered by date
 def news(project):
@@ -177,3 +180,92 @@ def get_or_create_default_search_group(project):
         group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=len(list(profile.groups.all())) )
         group.save()
     return group
+
+# Function to retrieve the project tabs in the order to be displayed.
+# The tabs can be optionally created if not existing already.
+# Each item in the list is itself a list, containing the top-level tab, 
+# followed by all sub-tabs.
+def get_or_create_project_tabs(project, save=True):
+            
+    tabs = []
+    for pagelist in PROJECT_PAGES:
+        tablist = []
+        for i, page in enumerate(pagelist):
+            # default values for label, url
+            label = page[0]
+            url = project.home_page_url() + page[1]
+            if page[0]=="Home":
+                # NESII Home
+                label = "%s Home" % project.short_name                
+            try:
+                # try loading the project tab by its unique URL
+                tab = ProjectTab.objects.get(url=url)
+            except ProjectTab.DoesNotExist:
+                # create the project tab if not existing already. 
+                # select initial active state of tabs
+                if page[0] in DEFAULT_TABS:
+                    active = True
+                else:
+                    active = False
+                tab = ProjectTab(project=project, label=label, url=url, active=active)
+                if save:
+                    print "Creating tab= %s" % tab
+                    tab.save() 
+                    # assign parent tab
+                    if i>0:
+                        tab.parent = tablist[0]
+                        tab.save()
+                        print "Assigned parent tab=%s to child tab=%s" % (tablist[0], tab)
+
+            tablist.append(tab)
+        tabs.append(tablist)
+    return tabs           
+
+# method to set the state of the project tabs from the HTTP request parameters
+# note: tabs is a list of tabs (not a list of lists of tabs)
+def setActiveProjectTabs(tabs, request, save=False):
+    
+    topFolderLabels = folderManager.getTopFolderLabels()
+    
+    for tab in tabs:
+        # Home tab MUST always be active
+        if tab.label.endswith("Home"):
+            tab.active = True
+        elif "tab_%s" % tab.label in request.POST.keys():
+            tab.active = True
+        else:
+            tab.active = False
+            
+        # persist latest state
+        if save:
+            # persist tab to database
+            tab.save()
+            print "Saved project tab=%s to database" % tab
+            
+            # folder tabs: if tab is active, create the folder if not existing already
+            if tab.label in topFolderLabels and tab.active:
+                name = folderManager.getFolderNamefromLabel(tab.label)
+                folder = getTopFolder(tab.project, name)                            
+            
+    return tabs
+
+def getActiveFolders(project):
+    '''Returns a list of active folders for this project (both top-level and nested) .'''
+    
+    # list of existing folders for this project
+    folders = Folder.objects.filter(project=project)
+        
+    # list of active project tabs
+    tabs = ProjectTab.objects.filter(project=project, active=True)
+    activeLabels = [tab.label for tab in tabs]
+    
+    # select active folders
+    activeFolders = []
+    for folder in folders:
+        # use the top-level parent
+        topFolder = folder.topParent()
+        label = folderManager.getFolderLabelFromName(topFolder.name)
+        if label in activeLabels:
+            activeFolders.append(folder)
+            
+    return activeFolders

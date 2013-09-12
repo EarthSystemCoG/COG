@@ -19,7 +19,7 @@ from external_url import ExternalUrl
 
 # Bookmarks
 from folder_conf import folderManager
-from folder import Folder, getTopFolder, getTopFolders, getActiveFolders
+from folder import Folder, getTopFolder, getTopFolders
 from bookmark import Bookmark
 
 # Search

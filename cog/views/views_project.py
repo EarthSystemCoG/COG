@@ -465,23 +465,6 @@ def initProject(project):
     # create images upload directory
     create_upload_directory(project)
     
-# method to set the state of the project tabs from the HTTP request parameters
-# note: tabs is a list of tabs (not a list of lists of tabs)
-def setActiveProjectTabs(tabs, request, save=False):
-    
-    for tab in tabs:
-        print 'LABEL=%s URL=%s' % (tab.label, tab.url)
-        # Home tab MUST always be active
-        if tab.label.endswith("Home"):
-            tab.active = True
-        elif "tab_%s" % tab.label in request.POST.keys():
-            tab.active = True
-        else:
-            tab.active = False
-        if save:
-            tab.save()
-    return tabs
-
 # function to return an error message if a project is not active
 def getProjectNotActiveRedirect(request, project):
         messages = ['Access to all pages of project %s is currently forbidden.' % project.short_name,
