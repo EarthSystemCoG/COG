@@ -91,8 +91,9 @@ def bookmark_add(request, project_short_name):
         if form.is_valid():
             bookmark = form.save()
             
-            # redirect to bookmarks listing
-            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), 'resources']))
+            # redirect to this bookmark's folder view
+            suburl = folderManager.getFolderSubUrlFromName( bookmark.folder.topParent().name )
+            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl]))
                           
         else:
             print 'Form is invalid: %s' % form.errors
@@ -188,8 +189,9 @@ def bookmark_update(request, project_short_name, bookmark_id):
             
             bookmark = form.save()
             
-            # redirect to bookmark listing
-            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()] ))
+            # redirect to this bookmark's listing
+            suburl = folderManager.getFolderSubUrlFromName( bookmark.folder.topParent().name )
+            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl] ))
             
         else:
             print "Form is invalid: %s" % form.errors
@@ -263,7 +265,8 @@ def folder_update(request, project_short_name, folder_id):
             folder = form.save()
             
             # redirect to bookmark listing
-            return HttpResponseRedirect(reverse('bookmark_list', args=[folder.project.short_name.lower()]))
+            suburl = folderManager.getFolderSubUrlFromName( folder.topParent().name )
+            return HttpResponseRedirect(reverse('bookmark_list', args=[folder.project.short_name.lower(), suburl]))
             
         else:
             # return to view
@@ -276,16 +279,21 @@ def folder_delete(request, project_short_name, folder_id):
     # retrieve folder from request
     folder = get_object_or_404(Folder, pk=folder_id)
     project = folder.project
+    parentFolder = folder.topParent()
     
     # security check
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    if folder.parent==None:
+        return HttpResponseForbidden("Top-level folders cannot be deleted")
         
     # delete folder and all of its content
     delete_folder(folder)
     
-    # redirect to bookmark listing
-    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()] ))
+    # redirect to parent folder view
+    suburl = folderManager.getFolderSubUrlFromName( parentFolder.name )
+    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl] ))
 
 # utility function to recursively delete each folder
 # together with its content
