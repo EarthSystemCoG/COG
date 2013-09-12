@@ -25,6 +25,7 @@ class Folder(models.Model):
             return self.parent.topParent() # recursion
 
     class Meta:
+        unique_together = (("project", "name"),)
         app_label= APPLICATION_LABEL
     
 # function to return the requested top bookmark folder for a project,
