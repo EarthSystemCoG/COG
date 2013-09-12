@@ -459,7 +459,7 @@ def initProject(project):
     # create project index
     init_site_index(project)
     
-    # create top-level bookmark folder, needed to add any bookmark
+    # create top-level bookmarks folder, needed to add a resource from any page
     folder = getTopFolder(project, folderManager.getFolderName('RESOURCES'))
     
     # create images upload directory
@@ -470,6 +470,7 @@ def initProject(project):
 def setActiveProjectTabs(tabs, request, save=False):
     
     for tab in tabs:
+        print 'LABEL=%s URL=%s' % (tab.label, tab.url)
         # Home tab MUST always be active
         if tab.label.endswith("Home"):
             tab.active = True
