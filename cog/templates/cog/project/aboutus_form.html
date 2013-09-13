@@ -93,7 +93,7 @@
 		 {% endif %}
 			           
 						 
-		 <!-- IF NOT DISPLAYED, MUST RESUBMIT ALL FIELDS AS HIDDEN -->				 
+		 <!-- IF NOT DISPLAYED, MUST RESUBMIT ALL FIELDS AS HIDDEN -->				 		 
 		 {% if tab != 'ABOUTUS'|tabs %}
 			{{ form.long_name.as_hidden }}
 			{{ form.description.as_hidden }}
@@ -114,7 +114,15 @@
 		 
 		 {% if tab != 'HISTORY'|tabs %}
 		 	{{ form.history.as_hidden }}
+		 {% endif %}			
+		 
+		 {% if tab != 'CONTACTUS'|tabs %}
+		 	{{ form.projectContacts.as_hidden }}
+		 	{{ form.technicalSupport.as_hidden }}
+		 	{{ form.meetingSupport.as_hidden }}
+		 	{{ form.getInvolved.as_hidden }}
 		 {% endif %}				 
+		 	 
 		 				
 	     <div style="text-align:right">
 	        <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name|lower tab %}'"/>

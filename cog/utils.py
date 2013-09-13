@@ -7,6 +7,10 @@ INVALID_CHARS = "[!@#$%^&*\[\]/{}|\"<>\\\]"
 # shorter list specific to URL since the following characters are allowed for URLs: /#&
 URL_INVALID_CHARS = "[!@$%^*\[\]\'{}|\"<>\\\]"
 
+def hasText(str):
+    '''Utility function to establish whether a string has any non-empty characters.'''
+    return str is not None and len(str.strip()) > 0
+
 # method to check a form field for invalid characters
 def clean_field(form, field, invalid_characters):
     data = form.cleaned_data[field]

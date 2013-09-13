@@ -8,11 +8,8 @@ from cog.models import Project, getLeadOrganizationalRoles, getMemberOrganizatio
 from cog.models.navbar import TABS
 from cog.models.utils import get_project_communication_means
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
+from cog.utils import hasText
 
-
-def hasText(str):
-    '''Utility function to establish whether a string has any non-empty characters.'''
-    return str is not None and len(str.strip()) > 0
 
 def _hasTemplatedInfo(project, tab):
     '''Utility function to determine whether a project has been populated 

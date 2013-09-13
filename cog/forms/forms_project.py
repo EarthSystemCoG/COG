@@ -11,6 +11,7 @@ import re
 from cog.utils import *
 from django.db.models import Q
 from cog.forms.forms_image import ImageForm
+from cog.utils import hasText
 
 
 class ProjectForm(ModelForm):
@@ -67,6 +68,13 @@ class ProjectForm(ModelForm):
         
         
 class ContactusForm(ModelForm):
+    
+    # overridden validation method for project short name 
+    def clean_projectContacts(self):
+        value = self.cleaned_data['projectContacts']
+        if not hasText(value):
+            raise forms.ValidationError("Project Contacts cannot be empty")
+        return value
     
     class Meta:
         model = Project

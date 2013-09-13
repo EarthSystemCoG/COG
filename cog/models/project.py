@@ -56,7 +56,7 @@ class Project(models.Model):
     getting_started = models.TextField(blank=True, null=True, verbose_name='Getting Started', help_text='Describe how users can get started with this project.')
     
     # Contact Us
-    projectContacts = models.TextField(blank=True, null=True, verbose_name='Project Contacts', help_text='Describe how to contact the project')
+    projectContacts = models.TextField(blank=True, null=True, verbose_name='Project Contacts', default="", help_text='Describe how to contact the project')
     technicalSupport = models.TextField(blank=True, null=True, verbose_name='Technical Support', help_text='Email address for technical questions')
     meetingSupport = models.TextField(blank=True, null=True, verbose_name='Meeting Support', help_text='Describe how to setup meetings')
     getInvolved = models.TextField(blank=True, null=True, verbose_name='Get Involved', help_text='Describe how to participate in the project')
