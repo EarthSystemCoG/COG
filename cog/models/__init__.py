@@ -11,6 +11,7 @@ from project_topic import ProjectTopic
 from project_tab import *
 from news import News
 from project_tag import ProjectTag, MAX_PROJECT_TAG_LENGTH
+from project_impact import ProjectImpact
 
 # Posts
 from doc import Doc

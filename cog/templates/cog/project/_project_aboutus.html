@@ -49,6 +49,15 @@
 		{% endif %}
 	{% endif %}
 	
+	{% if tab = "IMPACTS"|tabs %}
+		{% for impact in proj.projectimpact_set.all %}
+			<tr>
+				<td nowrap="nowrap"><b>Impact</b></td>
+				<td class="long">{{impact.description|urlizetrunc:50|linebreaksbr}}</td>
+			</tr>
+		{% endfor %}
+	{% endif %}
+	
 	{% if tab = "PARTNERS"|tabs %}
 		<tr>
 			<td align="center">

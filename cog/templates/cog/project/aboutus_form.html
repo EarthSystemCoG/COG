@@ -77,13 +77,41 @@
 		 </div>
 		 {% endif %}
 		 
+		 {% if tab = "IMPACTS"|tabs %}		 
+		 	{{ formset.management_form }}
+		    {% for form in formset.forms %}
+		    	{{ form.id }}
+		
+				 <div class="mybox">
+			        <table>		 
+				         <tr>
+					        <td nowrap="nowrap">Impact</td>
+					        <td class="long" colspan="2">
+					        	{{ form.description.help_text }}
+					        	{{ form.description }} 
+					        	{{ form.description.errors }}
+					        </td>
+				         </tr>	 
+				         {% if form.instance.id %}
+			            	<tr>
+			            		<td valign="top" nowrap="nowrap">Delete ?</td>
+			            		<td class="long">{{ form.DELETE }}</td>
+			            	</tr>
+		            	{% endif %}
+				 	</table>
+				 </div>    
+					
+		 	{% endfor %}	 
+		 {% endif %}
+		 
+		 
 		 {% if tab = "HISTORY"|tabs %}
 		 <div class="mybox">
 	        <table>		 
 		         <tr>
 			        <td nowrap="nowrap">History</td>
 			        <td class="long" colspan="2">
-			        	{{form.history.help_text}}.
+			        	{{ form.history.help_text }}
 			        	{{ form.history }} 
 			        	{{ form.history.errors }}
 			        </td>

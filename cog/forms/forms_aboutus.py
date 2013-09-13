@@ -2,6 +2,7 @@ from django.forms import ModelForm, BooleanField, Textarea, FileInput, TextInput
 from cog.models import *
 from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS
+from django.forms.models import BaseModelFormSet
 
 class AboutusForm(ModelForm):
     
@@ -51,3 +52,10 @@ class CollaboratorForm(ImageForm):
             'researchKeywords' : TextInput(attrs={'size':20}),
             'image': FileInput(),
             }
+        
+class ProjectImpactFormSet(BaseModelFormSet):
+    
+    def __init__(self, *args, **kwargs):
+        super(ProjectImpactFormSet, self).__init__(*args, **kwargs)
+    
+    

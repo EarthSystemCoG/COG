@@ -31,6 +31,8 @@ def aboutus_display(request, project_short_name, tab):
         template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Vision' }
     elif tab == TABS["VALUES"]:
         template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Values' }
+    elif tab == TABS["IMPACTS"]:
+        template_form_pages = { reverse('impacts_update', args=[project_short_name, tab]) : 'Impacts' }    
     elif tab == TABS["HISTORY"]:
         template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'History' }        
     elif tab == TABS["PARTNERS"]:
@@ -43,8 +45,7 @@ def aboutus_display(request, project_short_name, tab):
         template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'About Us' }
     template_title = TAB_LABELS[tab]
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
-    
-
+        
 @login_required
 def aboutus_update(request, project_short_name, tab):
     '''View to update the project "About Us" metadata.'''
@@ -89,6 +90,72 @@ def render_aboutus_form(request, project, tab, form):
                            'project': project }, 
                           context_instance=RequestContext(request))
     
+@login_required
+def impacts_update(request, project_short_name, tab):
+    
+    # load user from session, project from HTTP request
+    user = request.user
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check permission
+    if not userHasUserPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+        
+    # number of empty instances to be displayed
+    # exclude fields 'project', so it doesn't get validated
+    # allow for instances to be deleted
+    nextras = 1
+    ProjectImpactFormSet = modelformset_factory(ProjectImpact, extra=nextras, exclude=('project'), can_delete=True,
+                                                formfield_callback=custom_field_callback)
+    queryset = ProjectImpact.objects.filter(project=project)
+    
+    # GET
+    if request.method=='GET':
+        
+        # create formset instance backed by current saved instances
+        # must provide the initial data to all the extra instances, 
+        # which come in the list after the database instances
+        #queryset = ExternalUrl.objects.filter(project=project, type=type)
+        #initial_data = [ {'project':project, 'type':type } for count in xrange(len(queryset)+nextras)]
+        #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)   
+        formset = ProjectImpactFormSet(queryset=queryset)
+        
+        return render_impacts_form(request, project, formset, tab)
+    
+    # POST
+    else:
+        
+        formset = ProjectImpactFormSet(request.POST)
+        
+        if formset.is_valid():
+            # select instances that have changed, don't save to database yet
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.project = project
+                instance.order = 1
+                instance.save()
+            
+            redirect = reverse('aboutus_display', args=[project_short_name, tab])
+            return HttpResponseRedirect(redirect)
+        
+        else:
+            print formset.errors
+            return render_impacts_form(request, project, formset, tab)
+            
+def render_impacts_form(request, project, formset, tab):
+    return render_to_response('cog/project/aboutus_form.html', 
+                              {'formset': formset, 'tab':tab,
+                               'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
+                               'project': project }, 
+                                context_instance=RequestContext(request))
+        
+# function to customize the widget used by specific formset fields
+def custom_field_callback(field):
+    if field.name == 'description':
+        return field.formfield(widget=Textarea(attrs={'rows': 4}))
+    else:
+        return field.formfield()
+
 @login_required
 def people_update(request, project_short_name, tab):
     
