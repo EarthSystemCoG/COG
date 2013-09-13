@@ -42,9 +42,6 @@ TABS = { "ABOUTUS":"aboutus", "MISSION":"mission",
                                     "POLICIES": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["POLICY"]).suburl,
                                     "MINUTES": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["MINUTE"]).suburl,
                                     "METRICS": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["METRIC"]).suburl,
-         # CHANGEMENOW
-         "GETINVOLVED":"getinvolved", 
-         "SUPPORT":"support",
          "CONTACTUS":"contactus"}
 
 # list of pre-defined project pages
@@ -92,8 +89,6 @@ PROJECT_PAGES = (
                                                     ('Figures', "%s/" % TABS["FIGURES"]),
                                                     ('Test Cases', "%s/" % TABS["TESTCASES"]),
                                                     ('Evaluations', "%s/" % TABS["EVALUATIONS"])],
-         [("Get Involved", "%s/" % TABS["GETINVOLVED"])],
-         [("Support", "%s/" % TABS["SUPPORT"])],
          [("Contact Us", "%s/" % TABS["CONTACTUS"])],            
         )
 

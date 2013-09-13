@@ -81,8 +81,7 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/governance/update/$', 'cog.views.governance_overview_update', name='governance_overview_update'),           
     url(r'^projects/(?P<project_short_name>[^/]+)/bodies/update/(?P<category>[^/]+)/$', 'cog.views.management_body_update', name='management_body_update'),
     url(r'^projects/(?P<project_short_name>[^/]+)/bodies/update/members/(?P<object_id>[^/]+)/$', 'cog.views.management_body_members', name='management_body_members'),
-    #url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/communication_means/(?P<internal>[^/]+)/$', 'cog.views.communication_means_update', name='communication_means_update'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/communication/update/(?P<internal>[^/]+)/$', 'cog.views.communication_means_update', name='communication_means_update'),    
+    url(r'^projects/(?P<project_short_name>[^/]+)/communication/update/$', 'cog.views.communication_means_update', name='communication_means_update'),    
     url(r'^communication_means/(?P<object_id>[^/]+)/members/$', 'cog.views.communication_means_members', name='communication_means_members'),
     url(r'^projects/(?P<project_short_name>[^/]+)/processes/update/$', 'cog.views.processes_update', name='governance_processes_update'),    
     url(r'^projects/(?P<project_short_name>[^/]+)/roles/update/$', 'cog.views.organizational_role_update', name='organizational_role_update'),
@@ -119,12 +118,5 @@ urlpatterns = patterns('',
     # "CONTACT US"
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/update/$', 'cog.views.contactus_update', name='contactus_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
-    
-    # THE FOLLOWING URL PATTERNS ARE OBSOLETE
-    url(r'^projects/(?P<project_short_name>[^/]+)/support/update/$', 'cog.views.support_update', name='support_update'),     
-    
-    # project 'get involved'
-    url(r'^projects/(?P<project_short_name>[^/]+)/getinvolved/update/$', 'cog.views.getinvolved_update', name='getinvolved_update'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/getinvolved/$', 'cog.views.getinvolved_display', name='getinvolved_display'),
-         
+             
 )

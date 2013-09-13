@@ -82,11 +82,7 @@
 	     {% endfor %}
     
     	 <div style="text-align:right">
-    	 	{% if 'internal' in request.path %}
-	        	<input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'communication' %}'"/>
-	        {% else %}
-	        	<input type="button" value="Cancel" onclick="window.location='{% url 'getinvolved_display' project.short_name|lower %}'"/>
-	        {% endif %}
+	        <input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'communication' %}'"/>
 	        <input type="submit" value="Submit" />
          </div>
     

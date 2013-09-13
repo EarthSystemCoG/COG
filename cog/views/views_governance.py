@@ -32,7 +32,7 @@ def governance_display(request, project_short_name, tab):
     elif tab == TABS["PROCESSES"]:
         template_form_pages = { reverse( "governance_processes_update", args=[project_short_name] ) : 'Processes' }
     elif tab == TABS["COMMUNICATION"]:
-        template_form_pages = { reverse( "communication_means_update", args=[project_short_name, 'internal'] ) : 'Communication' }
+        template_form_pages = { reverse( "communication_means_update", args=[project_short_name] ) : 'Communication' }
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 
@@ -61,27 +61,16 @@ def management_body_update(request, project_short_name, category):
 
 # view to update the project Communication Means objects
 @login_required
-def communication_means_update(request, project_short_name, internal):
+def communication_means_update(request, project_short_name):
     
     tab = TABS["COMMUNICATION"]
-    if internal=='internal':
-        formsetType = InternalCommunicationMeansInlineFormset
-        redirect = HttpResponseRedirect(reverse('governance_display', args=[project_short_name.lower(), tab]))
-    else:
-        formsetType = ExternalCommunicationMeansInlineFormset
-        redirect = HttpResponseRedirect(reverse('getinvolved_display', args=[project_short_name]))
+    formsetType = InternalCommunicationMeansInlineFormset
+    redirect = HttpResponseRedirect(reverse('governance_display', args=[project_short_name.lower(), tab]))
+
     # delegate to view for generic governance object
     return governance_object_update(request, project_short_name, tab, 
                                     CommunicationMeans, CommunicationMeansForm, formsetType,
                                    'Communication and Coordination Update', 'cog/governance/communication_means_form.html', redirect)
-
-
-# note: view located here instead of cog.views.views_project to avoid circular imports
-@login_required
-def getinvolved_update(request, project_short_name):      
-
-    # delegate to governance views
-    return communication_means_update(request, project_short_name, 'external')
 
     
 @login_required
@@ -145,10 +134,6 @@ class InternalCommunicationMeansInlineFormset(BaseInlineFormSet):
     def get_queryset(self):
         return super(InternalCommunicationMeansInlineFormset, self).get_queryset().filter(internal=True)
     
-class ExternalCommunicationMeansInlineFormset(BaseInlineFormSet):
-    
-    def get_queryset(self):
-        return super(ExternalCommunicationMeansInlineFormset, self).get_queryset().filter(internal=False)
         
 # Generic view for updating a governance object.
 #
@@ -190,8 +175,6 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
                 dict = {}
                 if formsetType == InternalCommunicationMeansInlineFormset:
                     dict['internal'] = True
-                elif formsetType == ExternalCommunicationMeansInlineFormset:
-                    dict['internal'] = False
                 instance.set_category(dict=dict)
                 instance.save()
                        
@@ -233,10 +216,7 @@ def communication_means_members(request, object_id):
     
     # delegate to generic view with specific object types
     tab = TABS["COMMUNICATION"]
-    if commnicationMeans.internal:
-        redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
-    else:
-        redirect = reverse('getinvolved_display', args=[commnicationMeans.project.short_name.lower()])
+    redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
     return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm, redirect)
 
 # view to update an Organizational Role object members  

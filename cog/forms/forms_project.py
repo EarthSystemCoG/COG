@@ -83,22 +83,7 @@ class ContactusForm(ModelForm):
                     'technicalSupport': Textarea(attrs={'rows':6}),
                     'meetingSupport': Textarea(attrs={'rows':6}),
                     'getInvolved': Textarea(attrs={'rows':6}), }
-        
-        
-class SupportForm(ModelForm):
-    
-    class Meta:
-        model = Project
-        fields = ('long_name', 'mission')
-        widgets = { 'mission': Textarea(attrs={'rows':6}), }
-        
-class GetInvolvedForm(ModelForm):
-    
-    class Meta:
-        model = Project
-        fields = ('long_name', 'mission')
-        widgets = { 'mission': Textarea(attrs={'rows':6}), }
-        
+                
 class DevelopmentOverviewForm(ModelForm):
     
     class Meta:

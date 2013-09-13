@@ -55,9 +55,6 @@ def _hasTemplatedInfo(project, tab):
     elif tab == TABS["POLICIES"]:
         if len(project.policies()) > 0:
             return True
-    elif tab == TABS["GETINVOLVED"]:
-        if len( get_project_communication_means(project, False) ) > 0:
-            return True
     else:
         return False
 
