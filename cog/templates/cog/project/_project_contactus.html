@@ -4,13 +4,25 @@
    
 <table>
     <tr>
-		<td nowrap="nowrap"><b>Long Name</b></td>
-		<td class="long">{{proj.long_name}}</td>
+		<td nowrap="nowrap"><b>Project Contacts</b></td>
+		<td class="long">{{proj.projectContacts}}</td>
 	</tr>
-	{% if proj.description %}
+	{% if proj.technicalSupport %}
 	<tr>
-		<td nowrap="nowrap"><b>Description</b></td>
-		<td class="long">{{proj.description|urlizetrunc:50|linebreaksbr}}</td>
+		<td nowrap="nowrap"><b>Technical Support</b></td>
+		<td class="long">{{proj.technicalSupport|urlizetrunc:50|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	{% if proj.meetingSupport %}
+	<tr>
+		<td nowrap="nowrap"><b>Meeting Support</b></td>
+		<td class="long">{{proj.meetingSupport|urlizetrunc:50|linebreaksbr}}</td>
+	</tr>
+	{% endif %}
+	{% if proj.getInvolved %}
+	<tr>
+		<td nowrap="nowrap"><b>Get Involved</b></td>
+		<td class="long">{{proj.getInvolved|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% endif %}
 </table>

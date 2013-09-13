@@ -115,12 +115,10 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/folders/delete/(?P<folder_id>[^/]+)/$', 'cog.views.folder_delete', name='folder_delete'),
     
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add_notes/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_add_notes', name='bookmark_add_notes'),   
-
     
     # "CONTACT US"
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/update/$', 'cog.views.contactus_update', name='contactus_update'),   
-    # FIXME: uncomment when object model is available
-    #url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
     
     # THE FOLLOWING URL PATTERNS ARE OBSOLETE
     url(r'^projects/(?P<project_short_name>[^/]+)/support/update/$', 'cog.views.support_update', name='support_update'),     

@@ -11,18 +11,35 @@
 		     
 		     <table>
 		     	 <tr>
-			        <td nowrap="nowrap"><b>Project Long Name</b></td>
-			        <td class="long" colspan="2">
-			            {{ form.long_name }} 
-			            {{ form.long_name.errors }}
+			        <td nowrap="nowrap"><b>Project Contacts</b></td>
+			        <td class="long">
+			            {{ form.projectContacts.help_text }}
+			            {{ form.projectContacts }} 
+			            {{ form.projectContacts.errors }}
 			         </td>
 		         </tr>	     
 			     <tr>
-			        <td nowrap="nowrap"><b>Description</b></td>
-			        <td class="long" colspan="2">
-			        	{{form.description.help_text}}.
-			            {{ form.description }} 
-			            {{ form.description.errors }}
+			        <td nowrap="nowrap"><b>Technical Support</b></td>
+			        <td class="long">
+			        	{{ form.technicalSupport.help_text }}
+			            {{ form.technicalSupport }} 
+			            {{ form.technicalSupport.errors }}
+			         </td>
+		         </tr>
+		         <tr>
+			        <td nowrap="nowrap"><b>Meeting Support</b></td>
+			        <td class="long">
+			        	{{ form.meetingSupport.help_text }}
+			            {{ form.meetingSupport }} 
+			            {{ form.meetingSupport.errors }}
+			         </td>
+		         </tr>
+		         <tr>
+			        <td nowrap="nowrap"><b>Get Involved</b></td>
+			        <td class="long">
+			        	{{ form.getInvolved.help_text }}
+			            {{ form.getInvolved }} 
+			            {{ form.getInvolved.errors }}
 			         </td>
 		         </tr>
 			 </table>

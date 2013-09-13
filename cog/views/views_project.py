@@ -342,8 +342,8 @@ def contactus_update(request, project_short_name):
 
 def render_contactus_form(request, project, form):
     return render_to_response('cog/project/contactus_form.html', 
-                          {'form': form, 'title': 'Update Project Contact Us', 'project': project }, 
-                          context_instance=RequestContext(request))
+                              {'form': form, 'title': 'Update Project Contact Us', 'project': project }, 
+                              context_instance=RequestContext(request))
 
 @login_required
 def support_update(request, project_short_name):

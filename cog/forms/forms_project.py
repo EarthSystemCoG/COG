@@ -62,14 +62,20 @@ class ProjectForm(ModelForm):
         exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy','requirementsIdentificationProcess','governanceOverview',
                    'developmentOverview',
                    'software_features', 'software_system_requirements', 'software_supported_platforms',
-                   'getting_started')
+                   'getting_started',
+                   'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved')
+        
         
 class ContactusForm(ModelForm):
     
     class Meta:
         model = Project
-        fields = ('long_name', 'description')
-        widgets = { 'description': Textarea(attrs={'rows':6}), }
+        fields = ('projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved')
+        widgets = { 'projectContacts': Textarea(attrs={'rows':6}), 
+                    'technicalSupport': Textarea(attrs={'rows':6}),
+                    'meetingSupport': Textarea(attrs={'rows':6}),
+                    'getInvolved': Textarea(attrs={'rows':6}), }
+        
         
 class SupportForm(ModelForm):
     
