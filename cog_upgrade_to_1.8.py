@@ -23,6 +23,7 @@ def renameFolder(folder, newName):
     
 
 # loop over projects, folders
+'''
 for project in Project.objects.all():
     
     folders = Folder.objects.filter(project=project)
@@ -38,6 +39,15 @@ for project in Project.objects.all():
             pass
             #if project.short_name=='CoG' and folder.name=='Presentations':
             #    renameFolder(folder, 'Presentations')
+'''
+
+# rename tabs
+for project in Project.objects.all():
+    for tab in ProjectTab.objects.filter(project=project):
+        if tab.label == 'Communication':
+            print 'Renamed tab %s to: Communications' % tab
+            tab.label = 'Communications'
+            tab.save()
                 
 # remove obsolete pages
 oldpages = ['getinvolved','code','support']
