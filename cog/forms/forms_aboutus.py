@@ -53,9 +53,3 @@ class CollaboratorForm(ImageForm):
             'image': FileInput(),
             }
         
-class ProjectImpactFormSet(BaseModelFormSet):
-    
-    def __init__(self, *args, **kwargs):
-        super(ProjectImpactFormSet, self).__init__(*args, **kwargs)
-    
-    
