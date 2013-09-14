@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.forms.models import modelformset_factory
 from constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import *
-from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS
 from cog.models.external_url_conf import externalUrlManager
 

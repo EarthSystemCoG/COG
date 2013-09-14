@@ -13,7 +13,7 @@ from urllib import quote, unquote
 import copy
 from constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
-from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from django.utils.timezone import now
 from cog.models.utils import delete_comments
  

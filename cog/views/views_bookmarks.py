@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.utils import simplejson  
 from django.http import HttpResponse  
 from constants import PERMISSION_DENIED_MESSAGE, BAD_REQUEST
-from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from views_post import post_add
 
 def _hasBookmarks(project, folderName):

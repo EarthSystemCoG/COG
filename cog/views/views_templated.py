@@ -9,6 +9,7 @@ from cog.models.navbar import TABS
 from cog.models.utils import get_project_communication_means
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.utils import hasText
+from cog.views.utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 
 
 def _hasTemplatedInfo(project, tab):

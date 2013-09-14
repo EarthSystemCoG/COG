@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.utils.functional import curry
-from views_project import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS, TAB_LABELS
 from cog.views.views_templated import templated_page_display
 
