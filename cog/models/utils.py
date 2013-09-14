@@ -240,7 +240,7 @@ def setActiveProjectTabs(tabs, request, save=False):
         if save:
             # persist tab to database
             tab.save()
-            print "Saved project tab=%s to database" % tab
+            #print "Saved project tab=%s to database" % tab
             
             # folder tabs: if tab is active, create the folder if not existing already
             if tab.label in topFolderLabels and tab.active:
