@@ -78,7 +78,7 @@ PROJECT_PAGES = (
                                             ("Release Schedules", "%s/" % TABS["RELEASE_SCHEDULES"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), 
                                                       ("Roles", "%s/" % TABS["ROLES"]), 
-                                                      ("Communication", "%s/" % TABS["COMMUNICATION"]),  
+                                                      ("Communications", "%s/" % TABS["COMMUNICATION"]),  
                                                       ("Processes", "%s/" % TABS["PROCESSES"]), 
                                                       ("Policies", "%s/" % TABS["POLICIES"]),
                                                       ("Minutes", "%s/" % TABS["MINUTES"]),
