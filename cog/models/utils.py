@@ -137,6 +137,10 @@ def create_project_page(url, project):
                                                    #topic='Home Page',
                                                    project=project,
                                                    body='')
+                        # SPECIAL CASE
+                        if _page[0]=='Logistics':
+                            page.title = '%s Agenda' % project.short_name
+                            page.save()
                         print "Created project page: %s" % url
                         return page
     return None
