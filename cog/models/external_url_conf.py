@@ -51,7 +51,7 @@ class ExternalUrlManager(object):
                                     ExternalUrlConf('plans', 'Plans', EXTERNAL_URL_TYPES["PLANS"]), 
                                     ExternalUrlConf('roadmap', 'Roadmaps', EXTERNAL_URL_TYPES["ROADMAPS"]), 
                                     ExternalUrlConf('download', 'Download / Releases', EXTERNAL_URL_TYPES["DOWNLOAD"]),
-                                    ExternalUrlConf('admin_guide', 'Installer / Admin Guide', EXTERNAL_URL_TYPES["ADMIN_GUIDE"]),    
+                                    ExternalUrlConf('admin_guide', 'Admin Guide', EXTERNAL_URL_TYPES["ADMIN_GUIDE"]),    
                                     ExternalUrlConf('user_guide', 'User Guide', EXTERNAL_URL_TYPES["USER_GUIDE"]), 
                                     ExternalUrlConf('faq', 'FAQ', EXTERNAL_URL_TYPES["FAQ"]), 
                                     ExternalUrlConf('code_examples', 'Code Examples', EXTERNAL_URL_TYPES["CODE_EXAMPLE"]),

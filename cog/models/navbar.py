@@ -74,7 +74,7 @@ PROJECT_PAGES = (
                                                    ("Transportation", "%s/" % TABS["TRANSPORTATION"]), 
                                                    ("Computing", "%s/" % TABS["COMPUTING"]), ],
          [("Software", "%s/" % TABS["SOFTWARE"]), ("Download / Releases", "%s/" % TABS["DOWNLOAD"]), 
-                                                  ("Installer / Admin Guide", "%s/" % TABS["ADMIN_GUIDE"])],
+                                                  ("Admin Guide", "%s/" % TABS["ADMIN_GUIDE"])],
          [("Users", "%s/" % TABS["USERS"]), ("FAQ", "%s/" % TABS["FAQ"]), 
                                             ("User Guide", "%s/" % TABS["USER_GUIDE"]), 
                                             ("Code Examples", "%s/" % TABS["CODE_EXAMPLES"]),],
