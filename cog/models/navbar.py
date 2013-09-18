@@ -67,7 +67,7 @@ PROJECT_PAGES = (
                                                  ("Partners", "%s/" % TABS["PARTNERS"]), 
                                                  ("Sponsors", "%s/" % TABS["SPONSORS"]), 
                                                  ("People", "%s/" % TABS["PEOPLE"])],   
-        [("Logistics", "%s/" % TABS["LOGISTICS"]), ("Registration", "%s/" % TABS["REGISTRATION"]), 
+        [("Agenda / Logistics", "%s/" % TABS["LOGISTICS"]), ("Registration", "%s/" % TABS["REGISTRATION"]), 
                                                    ("Location", "%s/" % TABS["LOCATION"]), 
                                                    ("Lodging", "%s/" % TABS["LODGING"]),
                                                    ("Transportation", "%s/" % TABS["TRANSPORTATION"]), 
