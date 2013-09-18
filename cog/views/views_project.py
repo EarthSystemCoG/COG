@@ -413,7 +413,7 @@ def software_display(request, project_short_name):
     tab = TABS["SOFTWARE"] 
     template_page = 'cog/project/_project_software.html'
     template_form_pages = { reverse('software_update', args=[project_short_name]) : "Software" }
-    template_title = "Software Overview"
+    template_title = "Software"
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
@@ -655,7 +655,7 @@ def software_update(request, project_short_name):
     
     formClass = SoftwareForm
     form_template = 'cog/project/software_form.html'
-    form_template_title = 'Software Overview Update'
+    form_template_title = 'Software Update'
     display_view = 'software_display'
     return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
 
