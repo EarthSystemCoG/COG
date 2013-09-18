@@ -131,43 +131,33 @@
 	                </td>
 	            </tr>
 	            <tr>
-                	<td colspan="2">
-                	    <div style="text-align: left">
-                	    	<b>Upper Menu Bar</b>
-                	    	&nbsp; 
-                	    	[ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
+                	<td nowrap="nowrap">Upper Menu Bar</td>
+                	<td>
+                		<div style="text-align:center">
+                			[ ]IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
                 		</div>
-                		<!-- Note: home tab checkbox is disabled because it must always be present -->
                 		<table>
-                			<tr>
-								{% for tablist in tabs %}
-									<!-- Home tab - always selected -->
-									{% if forloop.counter == 1 %}
-										<input name="tab_{{tablist.0.label}}" type="hidden"/>
-									{% else %}
-										<td>
-											<table>
-												{% for tab in tablist %}
-													<tr>
-														<td>
-															{% if forloop.counter == 1 %}
-															{% endif %}
-															<input name="tab_{{tab.label}}"  
-															       {% if tab.active %} checked="checked" {% endif %}							       
-															       type="checkbox" onclick="trigger(this)">
-															       {% if tab.label == 'Bookmarks' %}
-															       		Resources					
-															       {% else %}
-															       		{{tab.label}}
-															       {% endif %}					
-														</td>
-													</tr>
-												{% endfor %}
-											</table>
+                			{% for tablist in tabs %}
+                				{% if forloop.counter == 1 %}
+                					<!--  Home page must be always selected, do not display -->
+									<input name="tab_{{tablist.0.label}}" type="hidden"/>
+								{% else %}
+                					<tr>
+                						<td>
+											{% for tab in tablist %}
+												<input name="tab_{{tab.label}}"  
+											       		{% if tab.active %} checked="checked" {% endif %}							       
+											       		type="checkbox" onclick="trigger(this)"> 
+											       		{% if forloop.counter == 1 %}
+											       			<b>{{tab.label}}</b>				
+											       		{% else %}
+											       			{{tab.label}}
+											       		{% endif %}
+											{% endfor %}
 										</td>
-									{% endif %}
-								{% endfor %}
-							</tr>
+									</tr>	
+								{% endif %}									
+							{% endfor %}
 						</table>
                 	</td>
                 </tr>
