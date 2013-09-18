@@ -64,6 +64,7 @@ class ProjectForm(ModelForm):
                    'developmentOverview',
                    'software_features', 'software_system_requirements', 'software_supported_platforms',
                    'getting_started',
+                   'future_work',
                    'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved')
         
         
@@ -106,6 +107,19 @@ class SoftwareForm(ModelForm):
                    'software_supported_platforms': Textarea(attrs={'rows':4}),
                    }
         fields = ( 'software_features', 'software_system_requirements', 'software_supported_platforms')
+        
+class FutureWorkForm(ModelForm):
+    
+    def clean_future_work(self):
+        value = self.cleaned_data['future_work']
+        if not hasText(value):
+            raise forms.ValidationError("Future Work cannot be empty")
+        return value
+    
+    class Meta:
+        model = Project        
+        widgets = {'future_work': Textarea(attrs={'rows':20}), }
+        fields = ( 'future_work', )
         
 class UsersForm(ModelForm):
     

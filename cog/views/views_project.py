@@ -417,6 +417,15 @@ def software_display(request, project_short_name):
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
+def future_work_display(request, project_short_name):
+   
+    tab = TABS["FUTURE_WORK"] 
+    template_page = 'cog/project/_project_future_work.html'
+    template_form_pages = { reverse('future_work_update', args=[project_short_name]) : "Future Work" }
+    template_title = "Future Work"
+   
+    return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
 def users_display(request, project_short_name):
    
     tab = TABS["USERS"] 
@@ -657,6 +666,15 @@ def software_update(request, project_short_name):
     form_template = 'cog/project/software_form.html'
     form_template_title = 'Software Update'
     display_view = 'software_display'
+    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
+
+@login_required
+def future_work_update(request, project_short_name):
+    
+    formClass = FutureWorkForm
+    form_template = 'cog/project/future_work_form.html'
+    form_template_title = 'Future Work Update'
+    display_view = 'future_work_display'
     return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
 
 @login_required

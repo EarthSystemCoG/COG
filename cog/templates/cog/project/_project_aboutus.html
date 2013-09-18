@@ -52,7 +52,7 @@
 	{% if tab = "IMPACTS"|tabs %}
 		{% for impact in proj.projectimpact_set.all %}
 			<tr>
-				<td class="long" colspan="2">
+				<td class="long">
 					<b>{{impact.title}}</b>
 					<p/>{{impact.description|urlizetrunc:50|linebreaksbr}}
 				</td>

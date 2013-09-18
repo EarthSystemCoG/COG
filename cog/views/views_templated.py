@@ -34,6 +34,8 @@ def _hasTemplatedInfo(project, tab):
     elif tab==TABS["PEOPLE"]:
         # "People" always populated with project users
         return True
+    elif tab==TABS["FUTURE_WORK"] and hasText(project.future_work):
+        return True
     elif tab==TABS["CONTACTUS"] and hasText(project.projectContacts):
         return True
     elif tab==TABS["DEVELOPERS"] and hasText(project.developmentOverview):
