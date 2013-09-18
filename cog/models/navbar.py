@@ -83,7 +83,7 @@ PROJECT_PAGES = (
                                                       ("Design", "%s/" % TABS["DESIGN_DOCS"]), 
                                                       ("Testing", "%s/" % TABS["TESTING"]), 
                                                       ("Use Cases", "%s/" % TABS["USECASES"]), 
-                                                      ("Checklist", "%s/" % TABS["CHECKLIST"]), ],
+                                                      ("Checklists", "%s/" % TABS["CHECKLIST"]), ],
          [("Plans", "%s/" % TABS["PLANS"]), ("Roadmaps", "%s/" % TABS["ROADMAPS"]), 
                                             ("Release Schedules", "%s/" % TABS["RELEASE_SCHEDULES"])],
          [("Governance", "%s/" % TABS["GOVERNANCE"]), ("Bodies", "%s/" % TABS["BODIES"]), 

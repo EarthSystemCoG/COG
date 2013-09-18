@@ -56,7 +56,7 @@ class ExternalUrlManager(object):
                                     ExternalUrlConf('developer_guide', 'Dev Guide', EXTERNAL_URL_TYPES["DEVELOPER_GUIDE"]), 
                                     ExternalUrlConf('design_docs', 'Design', EXTERNAL_URL_TYPES["DESIGN_DOCUMENT"]),
                                     ExternalUrlConf('testing', 'Testing', EXTERNAL_URL_TYPES["TESTING"]),
-                                    ExternalUrlConf('checklist', 'Checklist', EXTERNAL_URL_TYPES["CHECKLIST"]), 
+                                    ExternalUrlConf('checklist', 'Checklists', EXTERNAL_URL_TYPES["CHECKLIST"]), 
                                     ExternalUrlConf('minutes', 'Minutes', EXTERNAL_URL_TYPES["MINUTE"]),
                                     ExternalUrlConf('metrics', 'Metrics', EXTERNAL_URL_TYPES["METRIC"]),
                                     ExternalUrlConf('release_schedules', 'Release Schedules', EXTERNAL_URL_TYPES["RELEASE_SCHEDULE"]),
