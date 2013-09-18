@@ -47,7 +47,7 @@ class ExternalUrlManager(object):
                                     ExternalUrlConf('trackers', 'Tracker', EXTERNAL_URL_TYPES["TRACKER"]),   
                                     ExternalUrlConf('usecases', 'Use Case', EXTERNAL_URL_TYPES["USECASE"]),
                                     ExternalUrlConf('policies',' Policies', EXTERNAL_URL_TYPES["POLICY"]), 
-                                    ExternalUrlConf('roadmaps', 'Roadmaps', EXTERNAL_URL_TYPES["ROADMAPS"]), 
+                                    ExternalUrlConf('roadmap', 'Roadmaps', EXTERNAL_URL_TYPES["ROADMAPS"]), 
                                     ExternalUrlConf('download', 'Download / Releases', EXTERNAL_URL_TYPES["DOWNLOAD"]),
                                     ExternalUrlConf('admin_guide', 'Installer / Admin Guide', EXTERNAL_URL_TYPES["ADMIN_GUIDE"]),    
                                     ExternalUrlConf('user_guide', 'User Guide', EXTERNAL_URL_TYPES["USER_GUIDE"]), 
