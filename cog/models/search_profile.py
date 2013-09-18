@@ -19,6 +19,9 @@ class SearchProfile(models.Model):
     # flag to enable model metadata link
     modelMetadataFlag = models.BooleanField(default=False, blank=False, null=False)
     
+    # help text to describe this project's search capabilities
+    description = models.TextField(blank=True, null=True, verbose_name='Search Help', help_text='Optional description of this project search capabilities.')
+    
     def facets(self):
         """ Method to return a list of facets, across all groups."""
         

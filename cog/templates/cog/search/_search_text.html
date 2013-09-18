@@ -1,3 +1,11 @@
+<!-- Search Help -->
+{% if project.searchprofile.description %}
+	<div>
+		{{ project.searchprofile.description|urlize|linebreaksbr }}
+	</div>
+	<br/>
+{% endif %}
+
 <!-- Search Text widget-->
 <div class="box-colored" style="padding: 5px">
 	<div style="text-align: center">

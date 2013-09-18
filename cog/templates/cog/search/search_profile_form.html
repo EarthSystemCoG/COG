@@ -17,7 +17,7 @@
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td><i>Must the URL of a compliant RESTful search service</i></td>
+                    <td><i>Must be the URL of a compliant RESTful search service</i></td>
                 </tr>
                 <tr>
                     <td class="righthead" nowrap="nowrap">Constraints</td>
@@ -26,6 +26,17 @@
                <tr>
                     <td>&nbsp;</td>
                     <td><i>Optional fixed constraints as: name1=value1, name2=value2, ...</i></td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>                   	
+                    	   {{ form.description }}
+                    	   {{ form.description.errors }}
+                    </td>
+                </tr>
+                <tr>
+                	<td>&nbsp;</td>
+                	<td><i>{{form.description.help_text}}</i></td>
                 </tr>
                 <tr>
                     <td class="righthead" nowrap="nowrap">Model Metadata Flag</td>
