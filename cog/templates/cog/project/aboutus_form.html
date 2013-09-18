@@ -83,9 +83,17 @@
 		    	{{ form.id }}
 		
 				 <div class="mybox">
-			        <table>		 
+			        <table>
+			        	 <tr>
+					        <td nowrap="nowrap"><b>Title</b></td>
+					        <td class="long" colspan="2">
+					        	{{ form.title.help_text }}
+					        	{{ form.title }} 
+					        	{{ form.title.errors }}
+					        </td>
+				         </tr>	 	 
 				         <tr>
-					        <td nowrap="nowrap">Impact</td>
+					        <td nowrap="nowrap"><b>Description</b></td>
 					        <td class="long" colspan="2">
 					        	{{ form.description.help_text }}
 					        	{{ form.description }} 
