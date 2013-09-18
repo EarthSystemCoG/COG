@@ -48,7 +48,7 @@ class ExternalUrlManager(object):
                                     ExternalUrlConf('usecases', 'Use Case', EXTERNAL_URL_TYPES["USECASE"]),
                                     ExternalUrlConf('policies',' Policies', EXTERNAL_URL_TYPES["POLICY"]), 
                                     ExternalUrlConf('roadmaps', 'Roadmaps', EXTERNAL_URL_TYPES["ROADMAPS"]), 
-                                    ExternalUrlConf('download', 'Download', EXTERNAL_URL_TYPES["DOWNLOAD"]),
+                                    ExternalUrlConf('download', 'Download / Releases', EXTERNAL_URL_TYPES["DOWNLOAD"]),
                                     ExternalUrlConf('admin_guide', 'Administrator\'s Guide', EXTERNAL_URL_TYPES["ADMIN_GUIDE"]),    
                                     ExternalUrlConf('user_guide', 'User\'s Guide', EXTERNAL_URL_TYPES["USER_GUIDE"]), 
                                     ExternalUrlConf('faq', 'FAQ', EXTERNAL_URL_TYPES["FAQ"]), 
