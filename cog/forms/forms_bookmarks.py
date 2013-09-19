@@ -46,7 +46,7 @@ class FolderForm(ModelForm):
         super(FolderForm, self ).__init__(*args,**kwargs)
                 
         # filter parent posts by project and type
-        self.fields['parent'].queryset = Folder.objects.filter(project=project).exclude(id=self.instance.id).distinct().order_by('order')
+        self.fields['parent'].queryset = Folder.objects.filter(project=project, active=True).exclude(id=self.instance.id).distinct().order_by('order')
         # exclude the option for no parent - all folders created after the first must have parent
         self.fields['parent'].empty_label = None
         

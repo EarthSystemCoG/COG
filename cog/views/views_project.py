@@ -46,9 +46,15 @@ def project_add(request):
         # create list of unsaved project tabs
         tabs = get_or_create_project_tabs(project, save=False)
         
+        # create list of unsaved project folders
+        folders = []
+        for key, value in TOP_SUB_FOLDERS.items():
+            folders.append( Folder(name=value, active=False) )
+        
         form = ProjectForm(instance=project)
         return render_to_response('cog/project/project_form.html',
-                                  { 'form': form, 'title' : 'Register New Project', 'project': parent, 'action':'add', 'tabs':tabs },
+                                  { 'form': form, 'title' : 'Register New Project', 'project': parent, 
+                                    'action':'add', 'tabs':tabs, 'folders':folders },
                                   context_instance=RequestContext(request))
         
     else:
@@ -66,6 +72,9 @@ def project_add(request):
             # set active state of project tabs from HTTP parameters 
             for tablist in tabs:
                 setActiveProjectTabs(tablist, request, save=True)
+                
+            # create folders with appropriate state
+            setActiveFolders(project, request)
             
             # notify site administrator
             notifySiteAdminsOfProjectRequest(project, request)
@@ -197,10 +206,13 @@ def project_update(request, project_short_name):
         # (because new tabs were added after the project was initialized)
         tabs = get_or_create_project_tabs(project) # save=True
         
+        # retrieve top-level subfolders
+        folders = getTopSubFolders(project)
+        
         # create form object from model
         form = ProjectForm(instance=project)
         return render_to_response('cog/project/project_form.html', 
-                                  {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs,
+                                  {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs, 'folders':folders,
                                    'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
                                   context_instance=RequestContext(request))
     
@@ -227,6 +239,9 @@ def project_update(request, project_short_name):
                             
             # update project tabs, persist state
             setActiveProjectTabs(project.tabs.all(), request, save=True)
+            
+            # create folders with appropriate state
+            setActiveFolders(project, request)
             
             # notify creator when the project is enabled (i.e. is switched from inactive to active)
             if not _active and project.active:                            
@@ -394,7 +409,7 @@ def initProject(project):
     init_site_index(project)
     
     # create top-level bookmarks folder, needed to add a resource from any page
-    folder = getTopFolder(project, folderManager.getFolderName('RESOURCES'))
+    folder = getTopFolder(project)
     
     # create images upload directory
     create_upload_directory(project)        

@@ -4,15 +4,17 @@ from project import Project
 from folder_conf import folderManager
 from collections import OrderedDict
 
+# name of project top-folder
+TOP_FOLDER = "Resources"
+
 # dictionary of pre-defined (folder key, folder name)
-TOP_FOLDERS = OrderedDict([ ('RESOURCES', 'Bookmarks'), # overall parent
-                            ('PRESENTATIONS', 'Presentations'), 
-                            ('PUBLICATIONS', 'Publications'),
-                            ('NEWSLETTERS', 'Newsletters'),
-                            ('PROPOSALS', 'Proposals'),
-                            ('FIGURES', 'Figures'),
-                            ('TESTCASES', 'Test Cases'),
-                            ('EVALUATIONS', 'Evaluations') ])
+TOP_SUB_FOLDERS = OrderedDict([ ('PRESENTATIONS', 'Presentations'), 
+                                ('PUBLICATIONS', 'Publications'),
+                                ('NEWSLETTERS', 'Newsletters'),
+                                ('PROPOSALS', 'Proposals'),
+                                ('FIGURES', 'Figures'),
+                                ('TESTCASES', 'Test Cases'),
+                                ('EVALUATIONS', 'Evaluations') ])
 
 class Folder(models.Model):
     
@@ -26,7 +28,8 @@ class Folder(models.Model):
         return self.name
    
     def children(self):
-        return Folder.objects.filter(parent=self).order_by('order')
+        '''NOTE: returns ONLY to active children.'''
+        return Folder.objects.filter(parent=self, active=True).order_by('order')
     
     def topParent(self):
         '''Returns the top-level parent of this folder.'''
@@ -44,22 +47,25 @@ def getTopFolder(project):
     ''' Function to return the top bookmarks folder for a project, creating it if not existing.'''
     
     # get or create top-level folder
-    name = "%s %s" % (project.short_name, TOP_FOLDERS['RESOURCES'])
-    folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project)
+    name = "%s %s" % (project.short_name, TOP_FOLDER)
+    folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project, active=True)
     if created:
         print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
     return folder
 
-# function to return all top-level folders for a project,
-# creating them if not existing
-def getTopFolders(project):
-    
-    folders = []
-    for name in folderManager.getFolderNames():
-        # get or create top-level folder
-        folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project)
-        folders.append(folder)
-        if created:
-            print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
 
-    return folders
+def getTopSubFolders(project):
+    '''Function to return the pre-defined level-1 sub-folders for a project.'''
+    
+    # get or create level-0 folder
+    topFolder = getTopFolder(project)
+    
+    # get all direct child folders
+    folders = Folder.objects.filter(parent=topFolder)
+    _folders = []
+    # select pre-defined folders
+    for folder in folders:
+        if folder.name in TOP_SUB_FOLDERS.values():
+            _folders.append(folder)
+    
+    return _folders

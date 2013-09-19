@@ -3,7 +3,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, Select, FileInput
+from django.forms import ModelForm, Textarea, TextInput, Select, FileInput, CheckboxSelectMultiple
 from django.core.exceptions import ObjectDoesNotExist
 from tinymce.widgets import TinyMCE
 from os.path import basename
@@ -24,7 +24,9 @@ class ProjectForm(ModelForm):
     delete_logo = forms.BooleanField(required=False)
     # specify size of logo_url text field
     logo_url = forms.CharField(required=False, widget=TextInput(attrs={'size':'80'}))
-    
+    # extra fields to manage folder state
+    #folders = ModelMultipleChoiceField(queryset=Folder.objects.all(), required=False, widget=CheckboxSelectMultiple)
+
     # override __init__ method to change the querysets for 'parent' and 'peers'
     def __init__(self, *args, **kwargs):
         
@@ -44,7 +46,9 @@ class ProjectForm(ModelForm):
             # peer query-set options: exclude the project itself
             #self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().order_by('short_name')
             self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
-
+            
+            #self.fields['folders'].queryset = Folder.objects.filter(project=instance)
+            #self.fields['folders'].queryset = instance.folder_set
     
     # overridden validation method for project short name 
     def clean_short_name(self):

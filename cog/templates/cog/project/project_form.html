@@ -161,6 +161,16 @@
 						</table>
                 	</td>
                 </tr>
+                <tr>
+                	<td nowrap="nowrap">Resource Folders</td>
+                	<td>
+                		{% for folder in folders %}
+							<input name="folder_{{folder.name}}" type="checkbox"
+							       {% if folder.active %} checked="checked" {% endif %} >
+							       {{ folder.name }}		
+                		{% endfor %}
+                	</td>
+                </tr>
            </table>           
                  
           <div style="text-align:right">

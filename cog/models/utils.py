@@ -14,7 +14,7 @@ from django.db.models import Q
 from django.contrib.comments import Comment
 from django.contrib.contenttypes.models import ContentType
 from folder_conf import folderManager
-from folder import Folder, getTopFolder
+from folder import Folder, getTopFolder, TOP_SUB_FOLDERS
 from project_tab import ProjectTab
 
 # method to retrieve all news for a given project, ordered by date
@@ -183,7 +183,7 @@ def get_or_create_default_search_group(project):
         print 'Creating default search group for project=%s' % project.short_name
         group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=len(list(profile.groups.all())) )
         group.save()
-    return group
+    return group    
 
 # Function to retrieve the project tabs in the order to be displayed.
 # The tabs can be optionally created if not existing already.
@@ -245,13 +245,23 @@ def setActiveProjectTabs(tabs, request, save=False):
             # persist tab to database
             tab.save()
             #print "Saved project tab=%s to database" % tab
-            
-            # folder tabs: if tab is active, create the folder if not existing already
-            if tab.label in topFolderLabels and tab.active:
-                name = folderManager.getFolderNamefromLabel(tab.label)
-                folder = getTopFolder(tab.project, name)                            
-            
+                        
     return tabs
+
+def setActiveFolders(project, request):
+    '''Function to set the state of the to-subfolders, creatin them if necessary.'''
+    
+    topFolder = getTopFolder(project)
+    
+    for name in TOP_SUB_FOLDERS.values():
+        folder, created = Folder.objects.get_or_create(name=name, parent=topFolder, project=project)
+        if created:
+            print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
+        if ("folder_%s" % folder.name) in request.POST.keys():
+            folder.active = True
+        else:
+            folder.active = False
+        folder.save()
 
 def getActiveFolders(project):
     '''Returns a list of active folders for this project (both top-level and nested) .'''
