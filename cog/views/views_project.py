@@ -47,9 +47,7 @@ def project_add(request):
         tabs = get_or_create_project_tabs(project, save=False)
         
         # create list of unsaved project folders
-        folders = []
-        for key, value in TOP_SUB_FOLDERS.items():
-            folders.append( Folder(name=value, active=False) )
+        folders = getUnsavedProjectSubFolders(project, request)
         
         form = ProjectForm(instance=project)
         return render_to_response('cog/project/project_form.html',
@@ -74,7 +72,7 @@ def project_add(request):
                 setActiveProjectTabs(tablist, request, save=True)
                 
             # create folders with appropriate state
-            setActiveFolders(project, request)
+            createOrUpdateProjectSubFolders(project, request)
             
             # notify site administrator
             notifySiteAdminsOfProjectRequest(project, request)
@@ -90,14 +88,20 @@ def project_add(request):
                     
         # invalid data
         else:
+            
             print "Form is invalid: %s" % form.errors           
             project = form.instance
+            
             # create and set state of project tabs, do not persist
             tabs = get_or_create_project_tabs(project=project, save=False)
             for tablist in tabs:
                 setActiveProjectTabs(tablist, request, save=False)
+                
+            # rebuild list of unsaved project folders
+            folders = getUnsavedProjectSubFolders(project, request)
+
             return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Register New Project', 'action':'add', 'tabs':tabs },
+                                      {'form': form, 'title': 'Register New Project', 'action':'add', 'tabs':tabs, "folders":folders },
                                       context_instance=RequestContext(request))
             
 # method to reorganize the project index menu 
@@ -241,7 +245,7 @@ def project_update(request, project_short_name):
             setActiveProjectTabs(project.tabs.all(), request, save=True)
             
             # create folders with appropriate state
-            setActiveFolders(project, request)
+            createOrUpdateProjectSubFolders(project, request)
             
             # notify creator when the project is enabled (i.e. is switched from inactive to active)
             if not _active and project.active:                            
@@ -258,9 +262,11 @@ def project_update(request, project_short_name):
             # set active state of project tabs from HTTP parameters 
             for tablist in tabs:
                 setActiveProjectTabs(tablist, request, save=False)
+                
+            folders = getTopSubFolders(project)
             
             return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs,
+                                      {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs, "folders":folders,
                                        'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
                                        context_instance=RequestContext(request))
             

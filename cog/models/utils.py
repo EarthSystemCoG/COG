@@ -13,7 +13,6 @@ from news import News
 from django.db.models import Q
 from django.contrib.comments import Comment
 from django.contrib.contenttypes.models import ContentType
-from folder_conf import folderManager
 from folder import Folder, getTopFolder, TOP_SUB_FOLDERS
 from project_tab import ProjectTab
 
@@ -228,9 +227,7 @@ def get_or_create_project_tabs(project, save=True):
 # method to set the state of the project tabs from the HTTP request parameters
 # note: tabs is a list of tabs (not a list of lists of tabs)
 def setActiveProjectTabs(tabs, request, save=False):
-    
-    topFolderLabels = folderManager.getTopFolderLabels()
-    
+        
     for tab in tabs:
         # Home tab MUST always be active
         if tab.label.endswith("Home"):
@@ -248,8 +245,21 @@ def setActiveProjectTabs(tabs, request, save=False):
                         
     return tabs
 
-def setActiveFolders(project, request):
-    '''Function to set the state of the to-subfolders, creatin them if necessary.'''
+def getUnsavedProjectSubFolders(project, request):
+    '''Function to create the project top-level sub-folders, in the appropriate state,
+       WITHOUT PERSISTING THEM TO THE DATABASE.'''
+    
+    folders = []
+    for key, value in TOP_SUB_FOLDERS.items():
+        folder = Folder(name=value, project=project, active=False)
+        if request is not None and ("folder_%s" % value) in request.REQUEST.keys():
+            folder.active = True
+        folders.append( folder )
+    return folders
+
+
+def createOrUpdateProjectSubFolders(project, request):
+    '''Function to set the state of the top sub-folders, creating them if necessary.'''
     
     topFolder = getTopFolder(project)
     
@@ -262,24 +272,3 @@ def setActiveFolders(project, request):
         else:
             folder.active = False
         folder.save()
-
-def getActiveFolders(project):
-    '''Returns a list of active folders for this project (both top-level and nested) .'''
-    
-    # list of existing folders for this project
-    folders = Folder.objects.filter(project=project)
-        
-    # list of active project tabs
-    tabs = ProjectTab.objects.filter(project=project, active=True)
-    activeLabels = [tab.label for tab in tabs]
-    
-    # select active folders
-    activeFolders = []
-    for folder in folders:
-        # use the top-level parent
-        topFolder = folder.topParent()
-        label = folderManager.getFolderLabelFromName(topFolder.name)
-        if label in activeLabels:
-            activeFolders.append(folder)
-            
-    return activeFolders

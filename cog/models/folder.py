@@ -1,11 +1,10 @@
 from django.db import models
 from constants import APPLICATION_LABEL
 from project import Project
-from folder_conf import folderManager
 from collections import OrderedDict
 
 # name of project top-folder
-TOP_FOLDER = "Resources"
+TOP_FOLDER = "Bookmarks"
 
 # dictionary of pre-defined (folder key, folder name)
 TOP_SUB_FOLDERS = OrderedDict([ ('PRESENTATIONS', 'Presentations'), 

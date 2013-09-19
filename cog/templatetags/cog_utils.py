@@ -535,19 +535,3 @@ def projectTags(project):
 @register.filter 
 def projectNews(project):
     return news(project)
-
-@register.filter
-def hasActiveFolders(project, request):
-    
-    # retrieve list of active project tabs
-    tabLists = getTopNav(project, request)
-    
-    # list of folder tab labels
-    folderLabels = folderManager.getTopFolderLabels()
-    for tabs in tabLists:
-        # example: tabs=[('Home', u'/projects/nesii/', False)]
-        if len(tabs)>0:
-            # if tabs[0][] == 'Resources': # default folder
-            if tabs[0][0] in folderLabels:
-                return True
-    return False

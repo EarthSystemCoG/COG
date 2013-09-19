@@ -19,7 +19,6 @@ from post import Post
 from external_url import ExternalUrl
 
 # Bookmarks
-from folder_conf import folderManager
 from folder import Folder, getTopFolder, getTopSubFolders, TOP_FOLDER, TOP_SUB_FOLDERS
 from bookmark import Bookmark
 

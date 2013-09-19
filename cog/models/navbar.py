@@ -4,7 +4,6 @@ i.e. for the project pre-defined pages.
 '''
 
 from external_url_conf import EXTERNAL_URL_TYPES, externalUrlManager
-from folder_conf import folderManager
 
 # dictionary containing (page key, page URL)
 TABS = { "ABOUTUS":"aboutus", "MISSION":"mission", 
