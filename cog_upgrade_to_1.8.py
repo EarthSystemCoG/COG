@@ -15,31 +15,24 @@ from django.core.exceptions import ObjectDoesNotExist
 
 print 'Upgrading COG to version 1.7'
 
-def renameFolder(folder, newName):
-    print "Renaming folder: %s to: %s" % (folder.name, newName)
-    folder.parent = None
-    folder.name = newName
-    folder.save()
-    
-
 # loop over projects, folders
-'''
 for project in Project.objects.all():
     
     folders = Folder.objects.filter(project=project)
     
+    # set all current folder state to active=True
     for folder in folders:
-        # old top-level folder
-        if folder.name.endswith("Bookmarks"):
-            newName = "Bookmark Folder"
-            print 'Renaming folder: %s to: %s' % (folder.name, newName)
-            folder.name = newName
+        folder.active = True
+        folder.save()
+        
+    # create other pre-defined folders with active=False
+    topFolder = getTopFolder(project)
+    for key, value in TOP_SUB_FOLDERS.items():
+        folder, created = Folder.objects.get_or_create(name=value, parent=topFolder, project=project)
+        if created:
+            folder.active=False
             folder.save()
-        else:
-            pass
-            #if project.short_name=='CoG' and folder.name=='Presentations':
-            #    renameFolder(folder, 'Presentations')
-'''
+            print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
 
 # rename tabs
 for project in Project.objects.all():
