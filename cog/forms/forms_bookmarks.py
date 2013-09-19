@@ -13,14 +13,15 @@ class BookmarkForm(ModelForm):
         
         super(BookmarkForm, self ).__init__(*args,**kwargs)
         
-        # filter folders by project
-        #self.fields['folder'].queryset = Folder.objects.filter(project=project).distinct().order_by('order')
+        # filter folders by project and active state
+        self.fields['folder'].queryset = Folder.objects.filter(project=project).filter(active=True).distinct().order_by('order')
         
         # only use active project folders - issue a query for specific ids
-        folders = getActiveFolders(project)
+        #folders = getActiveFolders(project)
         # retrieve ids to limit the queryset
-        ids = [folder.id for folder in folders]
-        self.fields['folder'].queryset = Folder.objects.filter(pk__in=ids).order_by('name')
+        #ids = [folder.id for folder in folders]
+        #self.fields['folder'].queryset = Folder.objects.filter(pk__in=ids).order_by('name')
+        #self.fields['folder'].queryset = Folder.objects.filter(project)
         
         # remove the empty option
         self.fields['folder'].empty_label = None

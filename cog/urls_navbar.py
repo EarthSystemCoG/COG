@@ -101,15 +101,8 @@ urlpatterns = patterns('',
 
 
     # "RESOURCES" (aka bookmarks and folders)
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>resources)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>publications)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>presentations)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>newsletters)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>proposals)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>figures)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>testcases)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>evaluations)/$', 'cog.views.bookmark_list', name='bookmark_list'),
-    
+    url(r'^projects/(?P<project_short_name>[^/]+)/resources/$', 'cog.views.bookmark_list', name='bookmark_list'),
+        
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add/$', 'cog.views.bookmark_add', name='bookmark_add'),
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/add2/$', 'cog.views.bookmark_add2', name='bookmark_add2'),
     url(r'^projects/(?P<project_short_name>[^/]+)/bookmarks/update/(?P<bookmark_id>[^/]+)/$', 'cog.views.bookmark_update', name='bookmark_update'),

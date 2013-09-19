@@ -11,16 +11,16 @@ from constants import PERMISSION_DENIED_MESSAGE, BAD_REQUEST
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from views_post import post_add
 
-def _hasBookmarks(project, folderName):
-    """Function to determine whether a project has associated bookmarks, for a given top-level folder."""
+def _hasBookmarks(project):
+    """Function to determine whether a project has associated bookmarks."""
     
-    bookmarks = Bookmark.objects.filter(folder__project=project).filter(folder__name=folderName)
+    bookmarks = Bookmark.objects.filter(folder__project=project)
     if len(bookmarks.all())>0:
         return True
     else:
         return False
     
-def bookmark_list(request, project_short_name, suburl):
+def bookmark_list(request, project_short_name):
         
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -30,35 +30,31 @@ def bookmark_list(request, project_short_name, suburl):
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
-    
-    folderName = folderManager.getFolderNameFromSubUrl(suburl)
-    
+        
     # get or create top-level folder
-    folder = getTopFolder(project, folderName)
+    folder = getTopFolder(project)
     
     # build list of children with bookmarks that are visible to user
     children = []
     for child in project.children():
-        if _hasBookmarks(child, folderName) and child.isVisible(request.user):
+        if _hasBookmarks(child) and child.isVisible(request.user):
             children.append(child)
     
     # build list of peers with bookmarks that are visible to user
     peers = []
     for peer in project.peers.all():
-        if _hasBookmarks(peer, folderName) and peer.isVisible(request.user):
+        if _hasBookmarks(peer) and peer.isVisible(request.user):
             peers.append(peer)
                       
     # return to view    
     template_page = 'cog/bookmarks/_bookmarks.html'
-    template_title = folderName
+    template_title = "%s Resources" % project.short_name
     template_form_name = None
-    userAndFolderName = (request.user, folderName) # combination of user and folder objects, to be passed as second argument to the custom filter 
-                                            # (because custom filters can have at most two arguments, and the first one is the project)
+
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers,
-                               'userAndFolderName':userAndFolderName },
+                               'children':children, 'peers':peers },
                                context_instance=RequestContext(request))
 
     
@@ -91,9 +87,8 @@ def bookmark_add(request, project_short_name):
         if form.is_valid():
             bookmark = form.save()
             
-            # redirect to this bookmark's folder view
-            suburl = folderManager.getFolderSubUrlFromName( bookmark.folder.topParent().name )
-            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl]))
+            # redirect to the project bookmarks
+            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
                           
         else:
             print 'Form is invalid: %s' % form.errors
@@ -159,9 +154,8 @@ def bookmark_delete(request, project_short_name, bookmark_id):
     # delete bookmark
     bookmark.delete()
     
-    # redirect to bookmark's folder view
-    suburl = folderManager.getFolderSubUrlFromName( folder.topParent().name )
-    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl]))
+    # redirect to bookmarks view
+    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
 
 # View to update a bookmark
 @login_required
@@ -189,9 +183,8 @@ def bookmark_update(request, project_short_name, bookmark_id):
             
             bookmark = form.save()
             
-            # redirect to this bookmark's listing
-            suburl = folderManager.getFolderSubUrlFromName( bookmark.folder.topParent().name )
-            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl] ))
+            # redirect to bookmarks listing
+            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()] ))
             
         else:
             print "Form is invalid: %s" % form.errors
@@ -232,7 +225,10 @@ def folder_add(request, project_short_name):
         
         if form.is_valid():
             
-            folder = form.save()
+            folder = form.save(commit=False)
+            # enable new folders by default
+            folder.active = True
+            folder.save()
             
             # redirect to bookmark add page
             return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()] ))
@@ -264,9 +260,8 @@ def folder_update(request, project_short_name, folder_id):
             
             folder = form.save()
             
-            # redirect to bookmark listing
-            suburl = folderManager.getFolderSubUrlFromName( folder.topParent().name )
-            return HttpResponseRedirect(reverse('bookmark_list', args=[folder.project.short_name.lower(), suburl]))
+            # redirect to bookmarks listing
+            return HttpResponseRedirect(reverse('bookmark_list', args=[folder.project.short_name.lower()]))
             
         else:
             # return to view
@@ -291,9 +286,8 @@ def folder_delete(request, project_short_name, folder_id):
     # delete folder and all of its content
     delete_folder(folder)
     
-    # redirect to parent folder view
-    suburl = folderManager.getFolderSubUrlFromName( parentFolder.name )
-    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower(), suburl] ))
+    # redirect to project folder
+    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()] ))
 
 # utility function to recursively delete each folder
 # together with its content

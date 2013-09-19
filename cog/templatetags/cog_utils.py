@@ -54,14 +54,12 @@ def index(project):
     
 # filter to list the bookmarks folders for a user, project combination
 @register.filter
-def list_bookmarks(project, userAndFolderName, autoescape=None):
-    
-    user = userAndFolderName[0]
-    folderName = userAndFolderName[1]
-    folder = getTopFolder(project, folderName)
+def list_bookmarks(project, user, autoescape=None):
+
+    folder = getTopFolder(project)
     
     esc = get_escape_function(autoescape)
-    treeId = project.short_name + "_" + folderName + "_folderTree"
+    treeId = project.short_name + "_folderTree"
     
     html = "<div id='folder_tree' class='yui-skin-sam'>" 
     html += "<div id='%s'>" % treeId

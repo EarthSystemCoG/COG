@@ -36,5 +36,5 @@
     <div id="myDialog" class="yui-skin-sam"></div>
        
     <!-- This project bookmarks -->
-    {{ proj|list_bookmarks:userAndFolderName }}
+    {{ proj|list_bookmarks:request.user }}
     
