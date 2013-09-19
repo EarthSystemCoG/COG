@@ -48,7 +48,7 @@ def bookmark_list(request, project_short_name):
                       
     # return to view    
     template_page = 'cog/bookmarks/_bookmarks.html'
-    template_title = "%s Resources" % project.short_name
+    template_title = "Resources"
     template_form_name = None
 
     return render_to_response('cog/common/rollup.html', 
