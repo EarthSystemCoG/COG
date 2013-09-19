@@ -259,6 +259,9 @@ def folder_update(request, project_short_name, folder_id):
         if form.is_valid():
             
             folder = form.save()
+            # always set active=True upon updating
+            folder.active = True
+            folder.save()
             
             # redirect to bookmarks listing
             return HttpResponseRedirect(reverse('bookmark_list', args=[folder.project.short_name.lower()]))

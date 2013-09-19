@@ -37,6 +37,9 @@ class Folder(models.Model):
             return self
         else:
             return self.parent.topParent() # recursion
+        
+    def isPredefined(self):
+        return self.parent==None or self.name in TOP_SUB_FOLDERS.values()
 
     class Meta:
         unique_together = (("project", "name"),)

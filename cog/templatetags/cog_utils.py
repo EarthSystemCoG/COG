@@ -93,8 +93,8 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         html = "<li>"
     html += "<span class='%s'>%s" % (icon, folder.name)
     
-    # add edit/delete links, but not to top level folder
-    if folder.parent:
+    # add edit/delete links, but not for pre-defined folders
+    if not folder.isPredefined():
         deleteurl = reverse('folder_delete', args=[folder.project.short_name.lower(), folder.id])
         updateurl = reverse('folder_update', args=[folder.project.short_name.lower(), folder.id])
         if hasUserPermission(user, folder.project):
