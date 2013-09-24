@@ -44,6 +44,8 @@ def _hasTemplatedInfo(project, tab):
         return True
     elif tab==TABS["SOFTWARE"] and hasText(project.software_features):
         return True
+    elif tab==TABS["USERS"] and hasText(project.getting_started):
+        return True
     elif tab==TABS["GOVERNANCE"] and hasText(project.governanceOverview) > 0:     
          return True
     elif tab==TABS["BODIES"] and len(project.managementbody_set.all()) > 0:
