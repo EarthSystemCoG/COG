@@ -21,26 +21,40 @@ for project in Project.objects.all():
     folders = Folder.objects.filter(project=project)
     
     # set all current folder state to active=True
+    # rename top-level folder
     for folder in folders:
         folder.active = True
+        if folder.name == '%s %s' % (project.short_name, TOP_FOLDER):
+            folder.name = TOP_FOLDER 
         folder.save()
         
-    # create other pre-defined folders with active=False
+    # create all other pre-defined folders, in the proper order
     topFolder = getTopFolder(project)
+    order = 0
     for key, value in TOP_SUB_FOLDERS.items():
-        folder, created = Folder.objects.get_or_create(name=value, parent=topFolder, project=project)
-        if created:
-            folder.active=False
-            folder.save()
+        order += 1
+        folder, created = Folder.objects.get_or_create(name=value, project=project)
+        folder.parent = topFolder
+        folder.order = order
+        if created:  
             print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
+            folder.active=False
+        else:
+            folder.active = True
+        folder.save()
+            
 
 # rename tabs
 for project in Project.objects.all():
     for tab in ProjectTab.objects.filter(project=project):
         if tab.label == 'Communication':
-            print 'Renamed tab %s to: Communications' % tab
             tab.label = 'Communications'
             tab.save()
+            print 'Renamed tab %s to: Communications' % tab
+        elif tab.label == 'Roadmap':
+            tab.label = 'Roadmaps'
+            tab.save()
+            print 'Renamed tab %s to: Roadmaps' % tab
                 
 # remove obsolete pages
 oldpages = ['getinvolved','code','support']

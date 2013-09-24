@@ -9,6 +9,7 @@ TOP_FOLDER = "Bookmarks"
 # dictionary of pre-defined (folder key, folder name)
 TOP_SUB_FOLDERS = OrderedDict([ ('PRESENTATIONS', 'Presentations'), 
                                 ('PUBLICATIONS', 'Publications'),
+                                ('MINUTES', 'Minutes'),
                                 ('NEWSLETTERS', 'Newsletters'),
                                 ('PROPOSALS', 'Proposals'),
                                 ('FIGURES', 'Figures'),
@@ -49,8 +50,8 @@ def getTopFolder(project):
     ''' Function to return the top bookmarks folder for a project, creating it if not existing.'''
     
     # get or create top-level folder
-    name = "%s %s" % (project.short_name, TOP_FOLDER)
-    folder, created = Folder.objects.get_or_create(name=name, parent=None, project=project, active=True)
+    #name = "%s %s" % (project.short_name, TOP_FOLDER)
+    folder, created = Folder.objects.get_or_create(name=TOP_FOLDER, parent=None, project=project, active=True)
     if created:
         print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
     return folder
