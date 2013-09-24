@@ -5,7 +5,7 @@
 <table>
     <tr>
 		<td nowrap="nowrap"><b>Project Contacts</b></td>
-		<td class="long">{{proj.projectContacts}}</td>
+		<td class="long">{{proj.projectContacts|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% if proj.technicalSupport %}
 	<tr>
