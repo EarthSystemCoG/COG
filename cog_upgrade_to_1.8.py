@@ -26,6 +26,8 @@ for project in Project.objects.all():
         folder.active = True
         if folder.name == '%s %s' % (project.short_name, TOP_FOLDER):
             folder.name = TOP_FOLDER 
+        if project.short_name=='MCT' and folder.name == 'References':
+            folder.name = 'Presentations'
         folder.save()
         
     # create all other pre-defined folders, in the proper order
