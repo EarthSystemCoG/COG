@@ -38,7 +38,6 @@ TABS = { "ABOUTUS":"aboutus", "MISSION":"mission",
                                     "COMMUNICATION":"communication", 
                                     "PROCESSES":"processes", 
                                     "POLICIES": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["POLICY"]).suburl,
-                                    "MINUTES": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["MINUTE"]).suburl,
                                     "METRICS": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["METRIC"]).suburl,
          "CONTACTUS":"contactus"}
 
@@ -82,7 +81,6 @@ PROJECT_PAGES = (
                                                       ("Communications", "%s/" % TABS["COMMUNICATION"]),  
                                                       ("Processes", "%s/" % TABS["PROCESSES"]), 
                                                       ("Policies", "%s/" % TABS["POLICIES"]),
-                                                      ("Minutes", "%s/" % TABS["MINUTES"]),
                                                       ("Metrics", "%s/" % TABS["METRICS"]), ],
          # Note: the tab names do not necessarily match the resource names
          [('Resources', "%s/" % TABS["RESOURCES"]),],
