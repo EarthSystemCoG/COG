@@ -50,7 +50,7 @@
 	{% endif %}
 	
 	{% if tab = "IMPACTS"|tabs %}
-		{% for impact in proj.projectimpact_set.all %}
+		{% for impact in proj.impacts.all %}
 			<tr>
 				<td class="long">
 					<b>{{impact.title}}</b>
