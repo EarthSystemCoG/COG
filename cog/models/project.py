@@ -21,7 +21,7 @@ import re
 class Project(models.Model):
     
     short_name = models.CharField(max_length=20, unique=True, help_text="Short project acronym, 20 characters maximum, use only letters, numbers and '_', '-', no spaces" )
-    long_name = models.CharField(max_length=200, unique=True, help_text='Fully spelled project name')
+    long_name = models.CharField(max_length=60, unique=True, help_text='Fully spelled project name')
     description = models.TextField(blank=False, null=False, help_text='A short paragraph that describes the project')
     
     mission = models.TextField(blank=True, help_text='Succinctly describes why the project exists and what it does')
