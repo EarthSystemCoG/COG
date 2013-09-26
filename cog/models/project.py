@@ -20,14 +20,14 @@ import re
 # Project
 class Project(models.Model):
     
-    short_name = models.CharField(max_length=20, unique=True, help_text="Short project acronym, 20 characters maximum, use only letters, numbers and '_', '-', no spaces" )
-    long_name = models.CharField(max_length=60, unique=True, help_text='Fully spelled project name')
-    description = models.TextField(blank=False, null=False, help_text='A short paragraph that describes the project')
+    short_name = models.CharField(max_length=20, unique=True, help_text="Short project acronym, 20 characters maximum, use only letters, numbers and '_', '-', no spaces." )
+    long_name = models.CharField(max_length=60, unique=True, help_text='Fully spelled project name.')
+    description = models.TextField(blank=False, null=False, help_text='A short paragraph that describes the project.')
     
-    mission = models.TextField(blank=True, help_text='Succinctly describes why the project exists and what it does')
-    vision  = models.TextField(blank=True, help_text='Outlines what a project wants to be, or how it wants the world in which it operates to be. It is a long-term view')
-    values  = models.TextField(blank=True, help_text='Beliefs that are shared among the members of a project. Values influence culture and priorities and provide a framework for informing decisions')
-    history = models.TextField(blank=True, help_text='A narrative describing the origination and evolution of the project')
+    mission = models.TextField(blank=True, help_text='Succinctly describes why the project exists and what it does.')
+    vision  = models.TextField(blank=True, help_text='Outlines what a project wants to be, or how it wants the world in which it operates to be. It is a long-term view.')
+    values  = models.TextField(blank=True, help_text='Beliefs that are shared among the members of a project. Values influence culture and priorities and provide a framework for informing decisions.')
+    history = models.TextField(blank=True, help_text='A narrative describing the origination and evolution of the project.')
     external_homepage = models.URLField(max_length=200, blank=True, null=True, help_text='External Home Page')
     
     governanceOverview = models.TextField(blank=False, null=True, verbose_name='Governance Overview', \
@@ -36,13 +36,13 @@ class Project(models.Model):
     developmentOverview = models.TextField(blank=False, null=True, verbose_name='Development Overview', \
                                            help_text='One or more paragraphs providing a general overview of the development processes for the project.')
 
-    license = models.TextField(blank=True, null=True, verbose_name='License', help_text='Name of license used for the software, if any')
+    license = models.TextField(blank=True, null=True, verbose_name='License', help_text='Name of license used for the software, if any.')
     implementationLanguage = models.TextField(blank=True, null=True, verbose_name='Implementation Language', help_text='The implementation language(s) of the software code.')
     bindingLanguage = models.TextField(blank=True, null=True, verbose_name='Binding Language', help_text='The binding language(s) of the software code.')
     supportedPlatforms = models.TextField(blank=True, null=True, verbose_name='Supported Platforms', help_text='The Operating Systems the software can run on.')
     externalDependencies = models.TextField(blank=True, null=True, verbose_name='External Dependencies', help_text='The major libraries and packages the software depends on.')
     
-    taskPrioritizationStrategy = models.TextField(blank=True, null=True, verbose_name='Task Prioritization Strategy', \
+    taskPrioritizationStrategy = models.TextField(blank=True, null=True, verbose_name='Task Prioritization Strategy.', \
                                                   help_text='A paragraph describing how tasks are prioritized. This description may include who participates, how often they meet, how they meet, and whether the results are public.')
     requirementsIdentificationProcess = models.TextField(blank=True, null=True, verbose_name='Requirements Identification Process', \
                                                   help_text='A paragraph describing how requirements are identified. This description may include who participates, what system is used to track requirements, and whether the results are public.')
@@ -56,10 +56,10 @@ class Project(models.Model):
     getting_started = models.TextField(blank=True, null=True, verbose_name='Getting Started', help_text='Describe how users can get started with this project.')
     
     # Contact Us
-    projectContacts = models.TextField(blank=True, null=True, verbose_name='Project Contacts', default="", help_text='Describe how to contact the project')
-    technicalSupport = models.TextField(blank=True, null=True, verbose_name='Technical Support', help_text='Email address for technical questions')
-    meetingSupport = models.TextField(blank=True, null=True, verbose_name='Meeting Support', help_text='Describe how to setup meetings')
-    getInvolved = models.TextField(blank=True, null=True, verbose_name='Get Involved', help_text='Describe how to participate in the project')
+    projectContacts = models.TextField(blank=True, null=True, verbose_name='Project Contacts', default="", help_text='Describe how to contact the project.')
+    technicalSupport = models.TextField(blank=True, null=True, verbose_name='Technical Support', help_text='Email address for technical questions.')
+    meetingSupport = models.TextField(blank=True, null=True, verbose_name='Meeting Support', help_text='Describe how to setup meetings.')
+    getInvolved = models.TextField(blank=True, null=True, verbose_name='Get Involved', help_text='Describe how to participate in the project.')
     
     # A project may have many parents. The relationship is not symmetrical.
     # The attribute parents_set contains the inverse relationship
@@ -83,7 +83,7 @@ class Project(models.Model):
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     
     # optional hyperlink for custom logo
-    logo_url = models.CharField(max_length=200, blank=True, null=True, help_text='Optionl logo hyperlink URL')
+    logo_url = models.CharField(max_length=200, blank=True, null=True, help_text='Optionl logo hyperlink URL.')
     
     # list of available topics for this project
     topics =  models.ManyToManyField(Topic, blank=True, null=True, through='ProjectTopic')
