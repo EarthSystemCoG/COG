@@ -1,5 +1,5 @@
 <!-- table with details -->
-{% if proj.software_features or proj.system_requirements %}
+{% if proj.software_features or proj.system_requirements or proj.license or proj.implementationLanguage or proj.bindingLanguage or proj.supportedPlatforms or proj.externalDependencies %}
 	<table>
 	
 		{% if proj.software_features %}
@@ -13,6 +13,41 @@
 			<tr>
 				<td class="leftcolumn" nowrap="nowrap"><b>System Requirements</b></td>
 				<td class="long">{{ proj.system_requirements|urlize|linebreaksbr }}</td>
+			</tr>
+		{% endif %}
+		
+		{% if proj.license %}
+			<tr>
+				<td class="leftcolumn"><b>License</b></td>
+				<td class="long">{{ proj.license|urlizetrunc:50|linebreaksbr }}</td>
+			</tr>
+		{% endif %}
+		
+		{% if proj.implementationLanguage %}
+			<tr>
+				<td class="leftcolumn"><b>Implementation Language</b></td>
+				<td class="long">{{ proj.implementationLanguage }}</td>
+			</tr>
+		{% endif %}
+		
+		{% if proj.bindingLanguage %}
+			<tr>
+				<td class="leftcolumn"><b>Binding Language</b></td>
+				<td class="long">{{ proj.bindingLanguage }}</td>
+			</tr>
+		{% endif %}
+		
+		{% if proj.supportedPlatforms %}
+			<tr>
+				<td class="leftcolumn"><b>Supported Platforms</b></td>
+				<td class="long">{{ proj.supportedPlatforms|urlizetrunc:50|linebreaksbr }}</td>
+			</tr>
+		{% endif %}
+		
+		{% if proj.externalDependencies %}
+			<tr>
+				<td class="leftcolumn"><b>External Dependencies</b></td>
+				<td class="long">{{ proj.externalDependencies|urlizetrunc:50|linebreaksbr }}</td>
 			</tr>
 		{% endif %}
 				

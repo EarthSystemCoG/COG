@@ -92,14 +92,8 @@ class DevelopmentOverviewForm(ModelForm):
     
     class Meta:
         model = Project        
-        widgets = {'developmentOverview': Textarea(attrs={'rows':6}),
-                   'license': Textarea(attrs={'rows':4}),
-                   'implementationLanguage': TextInput(),
-                   'bindingLanguage': TextInput(),
-                   'supportedPlatforms': Textarea(attrs={'rows':4}),
-                   'externalDependencies': Textarea(attrs={'rows':4}), }                                     
-        fields = ( 'developmentOverview', 'license', 'implementationLanguage', 'bindingLanguage', 
-                   'supportedPlatforms', 'externalDependencies')
+        widgets = {'developmentOverview': Textarea(attrs={'rows':6})}                                     
+        fields = ('developmentOverview',)
         
 class SoftwareForm(ModelForm):
     
@@ -107,8 +101,23 @@ class SoftwareForm(ModelForm):
         model = Project        
         widgets = {'software_features': Textarea(attrs={'rows':6}),
                    'system_requirements': Textarea(attrs={'rows':4}),
+                   'license': Textarea(attrs={'rows':4}),
+                   'implementationLanguage': TextInput(),
+                   'bindingLanguage': TextInput(),
+                   'supportedPlatforms': Textarea(attrs={'rows':4}),
+                   'externalDependencies': Textarea(attrs={'rows':4}),
                    }
-        fields = ( 'software_features', 'system_requirements')
+        fields = ( 'software_features', 'system_requirements', 'license', 
+                   'implementationLanguage', 'bindingLanguage','supportedPlatforms', 'externalDependencies')
+        
+    def clean(self):
+        features = self.cleaned_data.get('software_features')
+        if not hasText(features):
+            self._errors["software_features"] = self.error_class(["'SoftwareFeatures' must not be empty."])
+            print 'error'
+        return self.cleaned_data
+            
+
     
         
 class UsersForm(ModelForm):

@@ -35,12 +35,6 @@ class Project(models.Model):
     
     developmentOverview = models.TextField(blank=False, null=True, verbose_name='Development Overview', \
                                            help_text='One or more paragraphs providing a general overview of the development processes for the project.')
-
-    license = models.TextField(blank=True, null=True, verbose_name='License', help_text='Name of license used for the software, if any.')
-    implementationLanguage = models.TextField(blank=True, null=True, verbose_name='Implementation Language', help_text='The implementation language(s) of the software code.')
-    bindingLanguage = models.TextField(blank=True, null=True, verbose_name='Binding Language', help_text='The binding language(s) of the software code.')
-    supportedPlatforms = models.TextField(blank=True, null=True, verbose_name='Supported Platforms', help_text='The Operating Systems the software can run on.')
-    externalDependencies = models.TextField(blank=True, null=True, verbose_name='External Dependencies', help_text='The major libraries and packages the software depends on.')
     
     taskPrioritizationStrategy = models.TextField(blank=True, null=True, verbose_name='Task Prioritization Strategy.', \
                                                   help_text='A paragraph describing how tasks are prioritized. This description may include who participates, how often they meet, how they meet, and whether the results are public.')
@@ -50,6 +44,12 @@ class Project(models.Model):
     # Software
     software_features = models.TextField(blank=True, null=True, verbose_name='Software Features', help_text=None)
     system_requirements = models.TextField(blank=True, null=True, verbose_name='Software System Requirements', help_text=None)
+    license = models.TextField(blank=True, null=True, verbose_name='License', help_text='Name of license used for the software, if any.')
+    implementationLanguage = models.TextField(blank=True, null=True, verbose_name='Implementation Language', help_text='The implementation language(s) of the software code.')
+    bindingLanguage = models.TextField(blank=True, null=True, verbose_name='Binding Language', help_text='The binding language(s) of the software code.')
+    supportedPlatforms = models.TextField(blank=True, null=True, verbose_name='Supported Platforms', help_text='The Operating Systems the software can run on.')
+    externalDependencies = models.TextField(blank=True, null=True, verbose_name='External Dependencies', help_text='The major libraries and packages the software depends on.')
+
     
     # Users
     getting_started = models.TextField(blank=True, null=True, verbose_name='Getting Started', help_text='Describe how users can get started with this project.')
