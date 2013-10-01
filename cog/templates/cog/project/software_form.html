@@ -21,19 +21,11 @@
 	            	<tr>
 	            		<td valign="top">System Requirements</td>
 	            		<td class="long">
-	            			{% if form.software_system_requirements.help_text %} {{ form.software_system_requirements.help_text }} {% endif %}
-	            			{{ form.software_system_requirements }} 
-	            			{{ form.software_system_requirements.errors }}
+	            			{% if form.system_requirements.help_text %} {{ form.system_requirements.help_text }} {% endif %}
+	            			{{ form.system_requirements }} 
+	            			{{ form.system_requirements.errors }}
 	            		</td>	            		
 	            	</tr>
-	            	<tr>
-	            		<td valign="top">Supported Platforms</td>
-	            		<td class="long">
-	            			{% if form.software_supported_platforms.help_text %} {{ form.software_supported_platforms.help_text }} {% endif %}
-	            			{{ form.software_supported_platforms }} 
-	            			{{ form.software_supported_platforms.errors }}
-	            		</td>	            		
-	            	</tr>	            	
 				</table>
 		</div>	
 

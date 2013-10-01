@@ -1,5 +1,5 @@
 <!-- table with details -->
-{% if proj.software_features or proj.software_system_requirements or proj.software_supported_platforms %}
+{% if proj.software_features or proj.system_requirements %}
 	<table>
 	
 		{% if proj.software_features %}
@@ -9,19 +9,12 @@
 			</tr>
 		{% endif %}
 		
-		{% if proj.software_system_requirements %}
+		{% if proj.system_requirements %}
 			<tr>
 				<td class="leftcolumn" nowrap="nowrap"><b>System Requirements</b></td>
-				<td class="long">{{ proj.software_system_requirements|urlize|linebreaksbr }}</td>
+				<td class="long">{{ proj.system_requirements|urlize|linebreaksbr }}</td>
 			</tr>
 		{% endif %}
-		
-		{% if proj.software_supported_platforms %}
-			<tr>
-				<td class="leftcolumn" nowrap="nowrap"><b>Supported Platforms</b></td>
-				<td class="long">{{ proj.software_supported_platforms|urlize|linebreaksbr }}</td>
-			</tr>
-		{% endif %}
-		
+				
 	</table>	
 {% endif %}

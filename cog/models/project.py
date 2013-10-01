@@ -49,8 +49,7 @@ class Project(models.Model):
 
     # Software
     software_features = models.TextField(blank=True, null=True, verbose_name='Software Features', help_text=None)
-    software_system_requirements = models.TextField(blank=True, null=True, verbose_name='Software System Requirements', help_text=None)
-    software_supported_platforms = models.TextField(blank=True, null=True, verbose_name='Software Supported Platforms', help_text=None)
+    system_requirements = models.TextField(blank=True, null=True, verbose_name='Software System Requirements', help_text=None)
     
     # Users
     getting_started = models.TextField(blank=True, null=True, verbose_name='Getting Started', help_text='Describe how users can get started with this project.')
