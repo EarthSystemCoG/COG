@@ -86,7 +86,7 @@ def deserialize(xml, facetProfile):
                                         # url = http://hydra.fsl.noaa.gov/thredds/esgcet/1/oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2.xml#oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/xml+thredds|Catalog
                                         # url = http://hydra.fsl.noaa.gov/las/getUI.do?catid=C08322CA3EF1E2FEA6B02184320B3A6F_ns_oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/las|LAS
                                         (url, mimeType, serviceName) = strEl.text.strip().split('|')          
-                                        print 'url=%s %s %s' % (url, mimeType, serviceName)
+                                        #print 'url=%s %s %s' % (url, mimeType, serviceName)
                                         # replace THREDDS XML URL with THREDDS HTML URL                           
                                         if mimeType=='application/xml+thredds':
                                             record.addField('url', (url.replace('xml','html'),  'application/html+thredds', serviceName) )

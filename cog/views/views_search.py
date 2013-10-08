@@ -81,6 +81,9 @@ def search_config(request, searchConfig, extra={}):
     for key, values in searchConfig.fixedConstraints.items():
             input.setConstraint(key, values)
     
+    # page
+    page = request.REQUEST.get('page',None)
+    print 'page=%s' % page
     # text
     if request.REQUEST.get('text', None):
         input.text = request.REQUEST['text']
