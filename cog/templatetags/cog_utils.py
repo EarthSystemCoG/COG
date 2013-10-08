@@ -28,7 +28,6 @@ def concat(astring, bstring):
 def sortdict(the_dict):
     tuples = []
     for key, value in the_dict.iteritems():
-        print key, value
         tuples.append( (key,value) )
     return sorted(tuples, key=lambda tuple: tuple[0])
         
