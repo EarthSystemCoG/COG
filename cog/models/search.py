@@ -4,6 +4,9 @@ import os
 
 INVALID_CHARACTERS = ['>','<','&','$','!','\\','\/','\'','\"']
 
+# maximum number of results per page
+LIMIT = 10
+
 class Facet:
     def __init__(self, key, label):
         self.key = key
@@ -36,7 +39,7 @@ class SearchInput:
     
     def __init__(self):
         self.offset = 0
-        self.limit = 100
+        self.limit = LIMIT
         self.constraints = {}
         self.text = ''
         self.type = 'Dataset' # default target type

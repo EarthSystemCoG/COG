@@ -29,6 +29,7 @@ SEARCH_OUTPUT = "search_output"
 FACET_PROFILE = "facet_profile"
 ERROR_MESSAGE = "error_message"
 SEARCH_DATA = "search_data"
+SEARCH_PAGES = "search_pages"
 
 # singleton instance - instantiated only once
 testSearchService = TestSearchService()
@@ -81,9 +82,6 @@ def search_config(request, searchConfig, extra={}):
     for key, values in searchConfig.fixedConstraints.items():
             input.setConstraint(key, values)
     
-    # page
-    page = request.REQUEST.get('page',None)
-    print 'page=%s' % page
     # text
     if request.REQUEST.get('text', None):
         input.text = request.REQUEST['text']
@@ -93,8 +91,10 @@ def search_config(request, searchConfig, extra={}):
     # offset, limit
     if request.REQUEST.get('offset', 0):
         input.offset = int(request.REQUEST['offset'])
+        print 'OFFSET=%s' % input.offset
     if request.REQUEST.get('limit', 0):
         input.limit = int(request.REQUEST['limit'])
+        print 'LIMIT=%s' % input.limit
         
     # GET/POST switch
     print "HTTP Request method=%s" % request.method
@@ -144,6 +144,28 @@ def search_get(request, searchInput, facetProfile, searchService, extra={}):
             data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
             data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
+            
+            
+    # build pagination links
+    offset = data[SEARCH_INPUT].offset
+    limit = data[SEARCH_INPUT].limit
+    currentPage = offset/limit + 1
+    numResults = len(data[SEARCH_OUTPUT].results)
+    totResults = data[SEARCH_OUTPUT].counts
+    data[SEARCH_PAGES] = []
+        
+    if offset > 0:
+        data[SEARCH_PAGES].append( ('<< Previous', offset-limit ) )
+            
+    for page in range(currentPage-5, currentPage+6):
+        pageOffset = (page-1)*limit
+        if page==currentPage:
+            data[SEARCH_PAGES].append( ('-%s-' % page, pageOffset) )
+        elif page > 0 and pageOffset < totResults:
+            data[SEARCH_PAGES].append( ('%s' % page, pageOffset) )
+        
+    if offset+limit < totResults:
+        data[SEARCH_PAGES].append( ('Next >>', offset+numResults ) )
         
     return render_to_response('cog/search/search.html', data, context_instance=RequestContext(request))    
 

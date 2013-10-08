@@ -11,18 +11,25 @@
   {% if not error_message %}
 
     {% with search_output.results as results %}
-        
-        {% load pagination_tags %}
-        {% autopaginate results 10 %}
-             
+                     
         {% if results|length == 0 %}
             <p/><div style="text-align:center; font-weight:bold">The search returned 0 results.</div>
         {% else %}
         
             <p/>
-            <div style="text-align:center">Number of Results: {{ search_output.counts }} </div>
-            {% paginate %} 
-                               
+            <div style="text-align:center">
+	            Total Number of Results: {{ search_output.counts }} 
+	            <br/>
+				{% for page in search_pages %}
+					{% if page.1 == search_input.offset %}
+						{{ page.0 }} <!-- current page, no hyperlink -->
+					{% else %}
+						<a href="{% url 'search' project.short_name.lower %}" onclick="javascript:searchit({{ page.1 }}); return false;">{{ page.0 }}</a>
+					{% endif %}
+				{% endfor %}
+			</div>
+			&nbsp;<br/>
+                                           
 	        <div class="mybox">
 	            
 	            <!-- Table of search results -->
@@ -30,7 +37,7 @@
 	            
 	                {% for record in results %}         
 	                    <tr>
-	                        <td class="tophead">{{ page_obj.start_index|add:forloop.counter|add:-1}}.</td>
+	                        <td class="tophead">{{ search_input.offset|add:forloop.counter }}.</td>
 	                        <td class="long">
 	                        	<!-- Result title -->
 	                        	<b>{{record.fields.title.0}}</b>
