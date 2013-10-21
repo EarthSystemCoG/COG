@@ -519,17 +519,6 @@ strong {
 	border: 1px solid #666666;
 }
 
-/* FOOTER */
-.footer {
-	width: 100%;
-	/* background-color: #358C92; */	
-	margin: 0 auto;
-	padding-top: 4px;
-	font-size: 8pt;
-	text-align: left;
-	color: #333;
-}
-
 /* PAGINATOR */
 .pagination {
 	text-align: center;
