@@ -42,10 +42,9 @@
 	
 	{% if tab = "HISTORY"|tabs %}
 		{% if proj.history %}
-			<tr>
-				<td nowrap="nowrap"><b>History</b></td>
-				<td class="long">{{proj.history|urlizetrunc:50|linebreaksbr}}</td>
-			</tr>
+		<tr>
+			<td class="long" colspan="2">{{proj.history|urlizetrunc:50|linebreaksbr}}</td>
+		</tr>
 		{% endif %}
 	{% endif %}
 	

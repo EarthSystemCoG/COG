@@ -115,17 +115,15 @@
 		 
 		 {% if tab = "HISTORY"|tabs %}
 		 <div class="mybox">
-	        <table>		 
+	         <table>
+	         	 <tr>
+	         	 	<td class="long">{{form.history.help_text}}</td>
+	         	 </tr>
 		         <tr>
-			        <td nowrap="nowrap">History</td>
-			        <td class="long" colspan="2">
-			        	{{ form.history.help_text }}
-			        	{{ form.history }} 
-			        	{{ form.history.errors }}
-			        </td>
-		         </tr>	 
-		 	</table>
-		 </div>    
+			        <td class="long">{{ form.history }} {{ form.history.errors }}</td>
+		         </tr>
+		     </table>
+		 </div>		 
 		 {% endif %}
 			           
 						 
