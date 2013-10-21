@@ -102,8 +102,8 @@ class SoftwareForm(ModelForm):
         widgets = {'software_features': Textarea(attrs={'rows':6}),
                    'system_requirements': Textarea(attrs={'rows':4}),
                    'license': Textarea(attrs={'rows':4}),
-                   'implementationLanguage': TextInput(),
-                   'bindingLanguage': TextInput(),
+                   'implementationLanguage': Textarea(attrs={'rows':4}),
+                   'bindingLanguage': Textarea(attrs={'rows':4}),
                    'supportedPlatforms': Textarea(attrs={'rows':4}),
                    'externalDependencies': Textarea(attrs={'rows':4}),
                    }
