@@ -6,20 +6,19 @@
     
 	<form action="" method="post">
 	         
-	     {% csrf_token %}
-	     
-	        <div class="mybox">
-				<table>
-					<tr>
-	            		<td valign="top"><b>Getting Started</b></td>
-	            		<td class="long">
-	            			{% if form.getting_started.help_text %} {{ form.getting_started.help_text }} {% endif %}
-	            			{{ form.getting_started }} 
-	            			{{ form.getting_started.errors }}
-	            		</td>
-	            	</tr>
-	            </table>
-		</div>	
+	    {% csrf_token %}
+	     		
+		<div class="mybox">
+	         <table>
+	         	 <tr>
+	         	 	<td class="long">{{ form.getting_started.help_text }}</td>
+	         	 </tr>
+		         <tr>
+			        <td class="long">{{ form.getting_started }} {{ form.getting_started.errors }}</td>
+		         </tr>
+		     </table>
+		 </div>
+		
 
 		{{ form.project.as_hidden }}
 	     
