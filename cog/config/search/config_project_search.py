@@ -44,3 +44,15 @@ def config_project_search(project_short_name, config_file_path):
             searchFacet = SearchFacet(group=searchGroup, key=facet_key, order=facet_order, label=facet_label)
             searchFacet.save()
             print "%s" % searchFacet
+            
+if __name__ == '__main__':
+    
+    #srcdir = '/Users/cinquini/Documents/workspace-cog/cog'
+    sys.path.append( os.path.abspath(os.path.dirname('.')) )
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+    
+    project_short_name = sys.argv[1]
+    config_file_path = sys.argv[2]
+    
+    config_project_search(project_short_name, config_file_path)
+    
