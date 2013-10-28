@@ -1,14 +1,15 @@
 <!-- Management Bodies -->
 {% load cog_utils %}
 
- <div id="{{category}}_management_bodies">
+{% if management_bodies %}
 
-	<!-- header -->
-	<hr/>
-	<b>{{category}} Management Bodies</b>
+	 <div id="{{category}}_management_bodies">
 	
-	<!-- content -->
-	{% if management_bodies %}
+		<!-- header -->
+		<hr/>
+		<b>{{category}} Management Bodies</b>
+		
+		<!-- content -->
 		<table>
 			{% for mb in management_bodies %}
 				<tr>
@@ -47,6 +48,7 @@
 			{% endfor %}
 		</table>
 		
-	{% endif %}
+	</div>
+		
+{% endif %}
 
- </div>
