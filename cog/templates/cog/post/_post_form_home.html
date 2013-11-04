@@ -16,13 +16,11 @@
         <td><b>Title</b></td>
         <td class="long">{{ form.title }} {{ form.title.errors }}</td>
     </tr>
-    {% if not form.instance.is_home %}
     <!-- allow changing of the template, except for the home page -->
     <tr>
          <td><b>Template</b></td>
          <td class="long">{{ form.template }} {{ form.template.errors }}</td>
-    </tr>   
-    {% endif %}   
+    </tr>    
     <tr>
         <td><b>Body</b></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>

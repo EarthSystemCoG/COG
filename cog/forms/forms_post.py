@@ -14,7 +14,7 @@ from django.db.models import Q
 POST_TEMPLATES = ( 
                    #("cog/post/page_template_center.html", "Full page"),
                    ("cog/post/page_template_sidebar_center.html", "Left Menu, Main Content"),
-                   ("cog/post/page_template_sidebar_center_right.html", "Left Menu, Central Content, Right Widgets"),
+                   ("cog/post/page_template_sidebar_center_right.html", "Left Menu, Main Content, Right Widgets"),
                  )
         
 class PostForm(ModelForm):
