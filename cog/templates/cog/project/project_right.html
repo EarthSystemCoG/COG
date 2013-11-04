@@ -189,7 +189,7 @@
    
    <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/yui/tabview.css" />     
        
-  <!-- text search form -->
+  <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
 	       <div class="search_header">Search Data</div>
@@ -213,8 +213,11 @@
 	  </div>
 	  <p/>
   {% endif %}
-
+  
+  <!-- News widget  -->
+  {% include 'cog/project/_project_latest_news.html' %}
    
+   <!-- Project Browser widget -->
    <div class="yui-skin-sam">     
      <div class="project_widget">
      
@@ -268,8 +271,5 @@
     <script>initTags()</script>
    
     <p/>
-   
-    <!-- include project latest news, if available -->
-    {% include 'cog/project/_project_latest_news.html' %}
-   
+      
 {% endblock %}
