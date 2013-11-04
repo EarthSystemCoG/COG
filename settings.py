@@ -155,8 +155,6 @@ INSTALLED_APPS = (
     'south',
     'layouts',
     'cog',
-    #'django_cim_forms', 'django_cim_forms.cim_1_5', 'dycore',
-    #'dcf', 'dcf.cim_1_8_1',
 )
 
 
