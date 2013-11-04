@@ -71,7 +71,9 @@
             <li><a href="{% url 'tags_update' project.short_name.lower %}" class="changelink">&nbsp;Tag Project</a></li>
             
             <!-- <li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li> -->
-            <li><a href="{% url 'search_profile_config' project.short_name.lower %}" class="changelink">&nbsp;Configure Search</a></li>
+            {% if project.dataSearchEnabled %}
+            	<li><a href="{% url 'search_profile_config' project.short_name.lower %}" class="changelink">&nbsp;Configure Search</a></li>
+            {% endif %}
             <!-- <li><a href="{% url 'project_add' %}?parent={{ project.short_name.lower }}" class="addlink">&nbsp;Add Child Project</a></li> -->
             <li><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">&nbsp;Delete Project</a></li>             
        </ul>

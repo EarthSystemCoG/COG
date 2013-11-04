@@ -168,8 +168,9 @@
                 	</td>
                 </tr>
                 <tr>
-                	<td nowrap="nowrap">Resource Folders</td>
+                	<td nowrap="nowrap"><span style="margin-top:2px">Resource Folders</span></td>
                 	<td>
+                		
                 		{% for folder in folders %}
 							<input name="folder_{{folder.name}}" type="checkbox"
 							       {% if folder.active %} checked="checked" {% endif %} >
@@ -177,6 +178,14 @@
                 		{% endfor %}
                 	</td>
                 </tr>
+                <tr>
+                    <td nowrap="nowrap"><span style="margin-top:2px">Enable Data Search ?</span></td>
+                    <td class="long">{{ form.dataSearchEnabled }} 
+                                     [ Check to display the Data Search among the right widgets. ]
+                                     {{ form.dataSearchEnabled.errors }}
+                    </td>
+                </tr>
+                
            </table>           
                  
           <div style="text-align:right">

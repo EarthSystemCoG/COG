@@ -190,27 +190,29 @@
    <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/yui/tabview.css" />     
        
   <!-- text search form -->
-  <div class="search-box">
-       <div class="search_header">Search Data</div>
-       <div style="width:100%; padding:4px;">
-	       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
-	            {% csrf_token %} 
-	            <!-- <input type="hidden" name="offset" value="0" /> -->
-	            <!-- <input type="hidden" name="limit" value="10" /> -->
-	            <input type="hidden" name="type" value="Dataset" />	                
-                <input type="text" name="text" size="24" value="" style="width:75%; font-size:8.5pt;" 
-                        placeholder=" Enter Text"/>&nbsp;
-                <input type="submit" value="Go" style="font-size:8.5pt;"/>
-                <!--  <select name="type">
-                    <option value="Dataset">Data</option>
-                    <option value="Model">Models</option>
-                    <option value="Document">Documents</option>
-                </select> -->		            
-	       </form>
-       <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
-       </div>
-  </div>
-  <p/>
+  {% if project.dataSearchEnabled %}
+	  <div class="search-box">
+	       <div class="search_header">Search Data</div>
+	       <div style="width:100%; padding:4px;">
+		       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
+		            {% csrf_token %} 
+		            <!-- <input type="hidden" name="offset" value="0" /> -->
+		            <!-- <input type="hidden" name="limit" value="10" /> -->
+		            <input type="hidden" name="type" value="Dataset" />	                
+	                <input type="text" name="text" size="24" value="" style="width:75%; font-size:8.5pt;" 
+	                        placeholder=" Enter Text"/>&nbsp;
+	                <input type="submit" value="Go" style="font-size:8.5pt;"/>
+	                <!--  <select name="type">
+	                    <option value="Dataset">Data</option>
+	                    <option value="Model">Models</option>
+	                    <option value="Document">Documents</option>
+	                </select> -->		            
+		       </form>
+	       <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
+	       </div>
+	  </div>
+	  <p/>
+  {% endif %}
 
    
    <div class="yui-skin-sam">     
