@@ -115,7 +115,9 @@
 	                    <td nowrap="nowrap">Is Active ?</td>
 	                    <td>
 	                        {{ form.active }} 
+	                        <span style="margin-top:2px">
 	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
+	                        </span>
 	                        {{ form.active.errors }}
 	                    </td>
 	                </tr>
@@ -126,7 +128,9 @@
 	            	<td nowrap="nowrap">Is Private ?</td>
 	                <td>
 	                    {{ form.private }} 
+	                    <span style="margin-top:2px">
 	                    [ A private project is only visible to project members - users and administrators. ]
+	                    </span>
 	                    {{ form.private.errors }}
 	                </td>
 	            </tr>
@@ -134,7 +138,7 @@
                 	<td nowrap="nowrap">Upper Menu Bar</td>
                 	<td>
                 		<div style="text-align:center">
-                			[ ]IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
+                			[ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
                 		</div>
                 		<table>
                 			{% for tablist in tabs %}
@@ -148,11 +152,13 @@
 												<input name="tab_{{tab.label}}"  
 											       		{% if tab.active %} checked="checked" {% endif %}							       
 											       		type="checkbox" onclick="trigger(this)"> 
-											       		{% if forloop.counter == 1 %}
-											       			<b>{{tab.label}}</b>				
-											       		{% else %}
-											       			{{tab.label}}
-											       		{% endif %}
+											       		<span style="margin-top:2px">
+												       		{% if forloop.counter == 1 %}
+												       			<b>{{tab.label}}</b>				
+												       		{% else %}
+												       			{{tab.label}}
+												       		{% endif %}
+											       		</span>
 											{% endfor %}
 										</td>
 									</tr>	
@@ -162,8 +168,9 @@
                 	</td>
                 </tr>
                 <tr>
-                	<td nowrap="nowrap">Resource Folders</td>
+                	<td nowrap="nowrap"><span style="margin-top:2px">Resource Folders</span></td>
                 	<td>
+                		
                 		{% for folder in folders %}
 							<input name="folder_{{folder.name}}" type="checkbox"
 							       {% if folder.active %} checked="checked" {% endif %} >
@@ -171,6 +178,14 @@
                 		{% endfor %}
                 	</td>
                 </tr>
+                <tr>
+                    <td nowrap="nowrap"><span style="margin-top:2px">Enable Data Search ?</span></td>
+                    <td class="long">{{ form.dataSearchEnabled }} 
+                                     [ Check to display the Data Search among the right widgets. ]
+                                     {{ form.dataSearchEnabled.errors }}
+                    </td>
+                </tr>
+                
            </table>           
                  
           <div style="text-align:right">

@@ -2,7 +2,6 @@
 
 <!-- immutable fields -->
 {{ form.url.as_hidden }}
-{{ form.template.as_hidden }}
 {{ form.topic.as_hidden }}
 {{ form.parent.as_hidden }}
 
@@ -19,7 +18,17 @@
     <!-- allow changing of the template, except for the home page -->
     <tr>
          <td><b>Template</b></td>
-         <td class="long">{{ form.template }} {{ form.template.errors }}</td>
+         <td class="long">
+         <select id="id_template" name="template">
+		 	<option value="cog/post/page_template_center_right.html" 
+		 	        {% if form.template.value == 'cog/post/page_template_center_right.html' %} selected="selected" {% endif %}>
+		 	        Main Content, Right Widgets</option>
+			<option value="cog/post/page_template_sidebar_center_right.html"
+			        {% if form.template.value == 'cog/post/page_template_sidebar_center_right.html' %} selected="selected" {% endif %}>
+			        Left Menu, Main Content, Right Widgets</option>
+		 </select>
+         {{ form.template.errors }}
+         </td>
     </tr>    
     <tr>
         <td><b>Body</b></td>
