@@ -115,11 +115,7 @@ table.no-color td {
 }
 
 td,th {
-	font-size: 9pt;
-	/*line-height: 13px;
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
-    */
+	font-size: 9pt !important;
 	padding: 5px;
 	/* font-family: "Lucida Grande", Verdana, Arial, sans-serif; */
 }
@@ -136,7 +132,7 @@ td,th {
 	vertical-align: middle;
 }
 
-th { /*text-align: right;*/
+th { 
 	font-weight: bold;
 	width: 100%;
 }
