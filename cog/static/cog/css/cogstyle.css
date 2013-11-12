@@ -288,7 +288,7 @@ strong {
 .vertical_menu { /* COG STYLE: LEFT BAR MENU BORDER */
 	border: 1px solid #358C92;
 	border-top: 0px;
-	margin-bottom: 0px;
+	margin-bottom: 12px;
 	margin-top: 0px;
 	background: white;
 }
@@ -361,7 +361,8 @@ strong {
 .news_box { /* COG STYLE: NEWS WIDGET */
 	/* border: 1px solid #ccc; */
 	border: 1px solid #666666;
-	margin-bottom: 5px;
+	margin-bottom: 12px;
+        margin-top: 0px;
 	background: #FFFFFF;
 	float: center;
 }
@@ -418,6 +419,8 @@ strong {
 	/* COG STYLE: SEARCH WIDGET BORDER COLOR */
 	border: 1px solid #666;
 	font-size: 8pt; /* COG STYLE: TEXT SIZE */
+        margin-bottom: 12px;
+        margin-top: 0px;
 }
 
 .box-colored { /* background: #B9E0E3; */
