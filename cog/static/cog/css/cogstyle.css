@@ -115,7 +115,7 @@ table.no-color td {
 }
 
 td,th {
-	font-size: 9pt !important;
+	font-size: 9pt;
 	padding: 5px;
 	/* font-family: "Lucida Grande", Verdana, Arial, sans-serif; */
 }
