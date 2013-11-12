@@ -7,26 +7,28 @@
     
     <div class="news_box">
          <table>
-             <caption class="news_header">Project News</caption>
-             {% for news in project|projectNews|slice:":5" %}
-                 <tr>
-                     <td>
-                        <b>{{news.project.short_name}}: {{ news.title|truncatewords:10 }}</b>
-                        <br/>
-                        {{ news.text|urlizetrunc:20|truncatewords:10 }} 
-                        &nbsp;<a href="{% url 'news_detail' news.id %}">More &raquo;</a>
-                        <br/>
-                        <i>{{news.author.username}} @ {{news.update_date|date:"SHORT_DATETIME_FORMAT"}}</i>
-                        
-                        <!-- links to update, delete the news -->
-                        {% if user|hasUserPermission:project %}
-                        	<br/>&nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>
-                        	     &nbsp;<a href="{% url 'news_delete' news.id %}" class="deletelink">Delete</a>
-                        {% endif %}
-                                        
-                    </td>
-                 </tr>
-             {% endfor %}
+             <caption class="news_header">Read News</caption>
+             <tr>
+             	<td>
+		             <div class="news_box_body">
+			             <table class="even-color">
+				             {% for news in project|projectNews|slice:":5" %}
+				                 <tr>
+				                     <td>
+				                     	<div class="news_text" style="padding: 4px">
+					                     	<a href="{% url 'news_detail' news.id %}" style="color:#666666">
+					                        <b>{{ news.title|truncatewords:8 }}</b>
+					                        </a>
+					                        <br/>
+					                        {{ news.text|urlizetrunc:20|truncatewords:8 }} 
+				                        </div>
+				                    </td>
+				                 </tr>
+			             {% endfor %}
+			             </table>
+		             </div>
+             </td>
+             </tr>
          </table>  
          {% if project_latest_news|length == 1 %}
          	<div class="news_footer">
