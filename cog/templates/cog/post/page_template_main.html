@@ -4,8 +4,10 @@
 <p/>
 {% autoescape off %}
 
-    {{ post.body }}
-        
+    <div id="cog_post_body">
+        {{ post.body }}
+    </div> <!-- /#cog_post_body -->
+    
     <!-- include action links -->
     {% include 'cog/post/_post_actions.html' %}
     

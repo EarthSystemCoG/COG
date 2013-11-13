@@ -180,6 +180,13 @@ caption {
 	color: #666;
 }
 
+/* make sure that table headers have the same font as the rest of the body */
+/* (when used w/in the body section of a cog post) */
+#cog_post_body th {
+    padding: 5px;
+    font-size: 9pt;
+}
+
 /* FORM FIELDS */
 textarea { /* COG STYLE: TEXT AREAS */
 	overflow: auto;
