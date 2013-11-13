@@ -283,7 +283,7 @@ strong {
 	font-size: 8pt; /* COG STYLE: LEFT MENUS TEXT SIZE */
 	text-align: left;
 	vertical-align: top;
-	padding: 1px;
+        padding: 1px 0px 0px 1px;
 	margin: 0px;
 	background-color: white;
 }
