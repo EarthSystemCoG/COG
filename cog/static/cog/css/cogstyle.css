@@ -187,6 +187,10 @@ caption {
     font-size: 9pt;
 }
 
+#cog_post_body table {
+    table-layout: fixed;
+}
+
 /* FORM FIELDS */
 textarea { /* COG STYLE: TEXT AREAS */
 	overflow: auto;
