@@ -369,7 +369,7 @@ strong {
 	/* border: 1px solid #ccc; */
 	border: 1px solid #666666;
 	margin-bottom: 12px;
-        margin-top: 0px;
+    margin-top: 0px;
 	background: #FFFFFF;
 	float: center;
 }
@@ -391,7 +391,7 @@ strong {
 }
 
 .news_box_body {
-	max-height: 100px;
+	max-height: 120px;
 	overflow-y: auto;
 }
 
