@@ -325,7 +325,7 @@ strong {
 }
 
 .vertical_menu li {
-	line-height: 14pt; #
+	line-height: 14pt; 
 	border-bottom: 1px dashed #358C92;
 	padding: 0px;        
 	margin: 0px;
@@ -370,7 +370,7 @@ strong {
 	/* border: 1px solid #ccc; */
 	border: 1px solid #666666;
 	margin-bottom: 12px;
-    margin-top: 0px;
+        margin-top: 0px;
 	background: #FFFFFF;
 	float: center;
 }
