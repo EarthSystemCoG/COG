@@ -1,21 +1,75 @@
-/* CSS for Django admin style */
-/*
-	colors:
-	light gray: #EEEEEE;
-	light teal: #B9E0E3;
-	dark teal: #358C92;
-	yellow: #FCE79F;
-*/
+/******************************
+* EarthSystemCog
+*
+* cogstyle.css
+*
+* this file specifies the CSS for _all_ HTML pages that are part of the CoG project
+* except where:
+* 1) internal CSS is encoded within Django Templates
+* 2) inline styles are used within Django Templates
+* 3) external plugins use their own CSS (ie: CKEditor, YUI)
+* 4) users explicitly write custom inline styles in CoG's wiki
+* 5) the CoG splash page has its own stylesheet (cog.css)
+*
+* sections (marked by BEGIN/END comments) define logical groupings of elements
+* each element is given a summary above it's definition; this includes the NAME, SCOPE, and - where apprpropriate - DESCRIPTION or PURPOSE
+* additional information may be added above individual attributes
+******************************/
 
-/* force browser vertical scrollbar to always display */
+/******************************
+* CSS used by Django admin
+* (for reference):
+*    light gray: #EEEEEE;
+*    light teal: #B9E0E3;
+*    dark teal: #358C92;
+*    yellow: #FCE79F;
+******************************/
+
+/******************************
+BEGIN MEDIA-SPECIFIC STYLES
+******************************/
+
+/* only display the central content when printing */
+@media print {
+	div.vertical_menu {
+		display: none !important;
+	}
+	div.project_widget {
+		display: none !important;
+	}
+	div.search-box {
+		display: none !important;
+	}
+	div#top_nav_right {
+		display: none !important;
+	}
+}
+
+/******************************
+END MEDIA-SPECIFIC STYLES
+******************************/
+
+
+/******************************
+BEGIN PAGE-LEVEL ELEMENTS
+******************************/
+
+/***************
+* NAME: html
+* SCOPE: the entire page
+* PURPOSE: force the browser's vertical scrollbar to always display
+***************/
 html {
     overflow: -moz-scrollbars-vertical;
     overflow-y: scroll;
 }
 
-/* page body */
+/***************
+* NAME: body
+* SCOPE: the page body content
+* DESCRIPTION: center the body, specify the font, font-color, and background color
+***************/
 body {
-
         margin-right: auto !important; margin-left: auto !important;
         margin-top: 0 !important; margin-bottom: 0 !important;
 	padding: 0;
@@ -26,38 +80,38 @@ body {
 	background: #FFFFFF;
 }
 
-/* text headers */
+
+/***************
+* NAME: headers
+* SCOPE: the page body content
+* DESCRIPTION: specifies the fonts used by successive headers in the CoG wiki
+***************/
 h1 {
 	color: #666;
 	font-size: 16pt;
 	font-weight: bold;
 }
-
 h2 {
 	color: #666;
 	font-size: 13.5pt;
 	font-weight: bold;
 }
-
 h3 {
 	color: #666;
 	font-size: 12pt;
 	font-weight: bold;
 }
-
 h4 {
 	color: #666;
 	font-size: 12pt;
 	font-weight: bold;
 	font-style: italic;
 }
-
 h5 {
 	color: #666;
 	font-size: 10pt;
 	font-weight: bold;
 }
-
 h6 {
 	color: #666;
 	font-size: 10pt;
@@ -65,60 +119,122 @@ h6 {
 	font-style: italic;
 }
 
+
+/***************
+* NAME: horizontal rule
+* SCOPE: the page body content
+***************/
 hr {
 	background-color: #CCC;
 	margin-bottom: 4px;
 	margin-top: 4px;
 }
 
-a:link,a:visited {
-	color: #5b80b2;
-	text-decoration: none;
-}
 
+/***************
+* NAME: links
+* SCOPE: the page body content
+* DESCRIPTION: center the body, specify the font, font-color, and background color
+***************/
+a:link, a:visited {
+        /* keep the same style for links regardless of whether they've been visited */
+	color: #5b80b2;	text-decoration: none;
+}
 a:hover {
+        /* only change the style of a link while a user is hovering over it */
 	color: #036;
 }
 
-/* TABLES */
+
+.white {
+	background-color: #FFFFFF;
+}
+
+.invisible {
+	display: none;
+}
+
+/******************************
+END PAGE-LEVEL ELEMENTS
+******************************/
+
+
+/******************************
+BEGIN TABLE ELEMENTS
+******************************/
+
+/***************
+* NAME: table
+* SCOPE: the page body content
+***************/
 table {
+        /* prevent nested cells' borders or spacing from accumulating */
 	border-collapse: collapse;
 	border-color: #ccc;
 	margin-bottom: 0px;
 	margin-left: 0px;
 }
 
-/* allow users to override default cog table row styles  */
-tbody tr:nth-child(even) td,tbody tr.even td {
-	/* COG STYLE: TABLES EVEN ROWS BACKGROUND COLOR */
+/* background color for cells in even rows */
+/* (no need to explicitly specify background of the other rows; they inherit from body) */
+tbody tr:nth-child(even) td, tbody tr.even td {
 	background: #B9E0E3;
 }
 
-table.even-color tbody tr:nth-child(even) td,tbody tr.even td {
+/* additional styles were added to support tables swap the order of alternating row colors; */
+/* either starting w/ the "even" color, "odd" color, or no color */
+/* TODO: double-check that these classes are still being used */
+
+/* style for cells in an even row */
+/* style for cells in an even row in an "even-first" colored table */
+table.even-color tbody tr:nth-child(even) td, tbody tr.even td {
 	background: #B9E0E3;
 }
 
-table.even-color tbody tr:nth-child(odd) td,tbody tr.odd td {
+/* style for cells in an odd row */
+/* style for cells in an odd row in an "even-first" colored table */
+table.even-color tbody tr:nth-child(odd) td, tbody tr.odd td {
 	background: #FFFFFF;
 }
 
-table.odd-color tbody tr:nth-child(odd) td,tbody tr.odd td {
+/* style for cells in an odd row */
+/* style for cells in an odd row in an "odd-first" colored table */
+table.odd-color tbody tr:nth-child(odd) td, tbody tr.odd td {
 	background: #B9E0E3;
 }
 
-table.odd-color tbody tr:nth-child(even) td,tbody tr.even td {
+/* style for cells in an even row */
+/* style for cells in an even row in an "odd-first" colored table */
+table.odd-color tbody tr:nth-child(even) td, tbody tr.even td {
 	background: #FFFFFF;
 }
 
+/* style for all cells in a non-colored (ie: no alternating color) table */
 table.no-color td {
 	background: #FFFFFF !important;
 }
 
+/***************
+* NAME: table cells (standard data and headers)
+* SCOPE: the current table
+***************/
+
+/* table data and table headers have the same size */
 td,th {
-	font-size: 9pt;
-	padding: 5px;
-	/* font-family: "Lucida Grande", Verdana, Arial, sans-serif; */
+    font-size: 9pt; padding: 5px;
 }
+
+th {
+    font-weight: bold;
+}
+
+/* other CSS can alter the table header's size; this more specific CSS sets it to the proper value */
+#cog_post_body th {
+    padding: 5px; font-size: 9pt;
+}
+
+
+/* the next classes are applied to adjust the spacing of tables in specific circumstances */
 
 .long {
 	width: 100%;
@@ -132,9 +248,6 @@ td,th {
 	vertical-align: middle;
 }
 
-th { 
-	font-weight: bold;
-}
 
 td.head {
 	text-align: left;
@@ -166,81 +279,110 @@ td.righttop {
 	vertical-align: middle;
 }
 
+/***************
+* NAME: caption
+* SCOPE: the caption of a table
+***************/
 caption {
 	margin: 0;
 	padding: 2px 5px 3px 5px;
 	font-size: 8pt;
 	text-align: left;
 	font-weight: bold;
-	/* COG STYLE: TABLES CAPTION */
-	/* background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x; */
 	background: #B9E0E3;
 	border-bottom: 1px solid #666666;
 	color: #666;
 }
 
-/* make sure that table headers have the same font as the rest of the body */
-/* (when used w/in the body section of a cog post) */
-#cog_post_body th {
-    padding: 5px;
-    font-size: 9pt;
-}
+/******************************
+END TABLE ELEMENTS
+******************************/
 
 
-/* FORM FIELDS */
-textarea { /* COG STYLE: TEXT AREAS */
+/******************************
+BEGIN FORM ELEMENTS
+******************************/
+
+/***************
+* NAME: textarea
+* SCOPE: the current form
+***************/
+textarea {
+        /* display scrollbars as needed */
 	overflow: auto;
 	border: 1px solid #417690;
 	margin: 1px;
+        /* TODO: why is this not 100%? */
 	width: 99%;
 }
 
-.button,input[type=submit],input[type=button],input[type=reset],input[type=file],.submit-row input
-	{
+
+/***************
+* NAME: all buttons
+* SCOPE: the current form
+* DESCRIPTION: forces a white background w/ black text and grey border
+***************/
+.button,input[type=submit],input[type=button],input[type=reset],input[type=file],.submit-row input {
+        /* force a white background by combining a color with a white image */
+        /* TODO: why is this forcing needed here, but not on other form elements? */
 	background: white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
 	padding: 3px 5px;
 	color: black;
 	border: 1px solid #bbb;
-	/* COG STYLE: BUTTONS BORDER COLOR */
 	border-color: #666666;
 }
 
-input[type=text] { /* COG STYLE: TEXT INPUT BORDER COLOR */
-	/* border: 1px solid #417690; */
+
+/***************
+* NAME: text input
+* SCOPE: the current form
+***************/
+input[type=text] { 
 	border: 1px solid #666666;
 	background: #FFFFFF;
-	/*text-transform: lowercase;*/
-	/*font: normal 9pt Arial, Helvetica, sans-serif;*/
 	color: #5D781D;
-	/*width:100%;*/
 }
 
+/* allow for text inputs that span their entire container */
 .long input[type=text] {
 	width: 100%;
 }
 
-/* TEXT STYLES */
+/******************************
+END FORM ELEMENTS
+******************************/
+
+
+/******************************
+BEGIN TEXT STYLES
+******************************/
+
 small {
 	font-size: 8pt;
 	font-style: italic;
-	/*color: #e5ecf9;*/
 }
 
 strong {
 	font-weight: bold;
-	/*color: #f4f379;*/
 }
 
 .required {
 	font-weight: bold;
-	/* text-decoration: underline; */
 }
 
 .optional {
 	font-weight: normal;
 }
 
-/* ACTION ICONS */
+/******************************
+END TEXT STYLES
+******************************/
+
+
+/******************************
+BEGIN SPECIFIC ACTIONS
+******************************/
+
 .addlink {
 	padding-left: 12px;
 	background: url(/static/admin/img/icon_addlink.gif) 0 .2em no-repeat;
@@ -248,7 +390,6 @@ strong {
 
 .listlink {
 	padding-left: 12px;
-	/*vertical-align:text-bottom;*/
 	background: url(/static/cog/img/icon_listlink.gif) 0 .0em no-repeat;
 }
 
@@ -274,25 +415,22 @@ strong {
 	background: url(/static/cog/img/icon_arrowrightlink.png) 0 .25em no-repeat;
 }
 
-/* VERTICAL MENU */
-.vertical_menu table {
-	margin: 0px;
-}
+/******************************
+END SPECIFIC ACTIONS
+******************************/
 
-.vertical_menu table td {
-	font-size: 8pt; /* COG STYLE: LEFT MENUS TEXT SIZE */
-	text-align: left;
-	vertical-align: top;
-        padding: 1px 0px 0px 1px;
-	margin: 0px;
-	background-color: white;
-}
+/******************************
+BEGIN COLUMN ELEMENTS & ROLLUPS
+******************************/
 
-.vertical_menu tbody tr:nth-child(even) td,tbody tr.even td {
-	background: white;
-}
+/* note: a significant portion of the left/right column styles is specified internally w/in Django Templates */
+/* the following styles do not provide all of the look-and-feel */
 
-.vertical_menu { /* COG STYLE: LEFT BAR MENU BORDER */
+/******************************
+BEGIN VERTICAL MENU (LEFT NAVBAR)
+******************************/
+
+.vertical_menu {
 	border: 1px solid #358C92;
 	border-top: 0px;
 	margin-bottom: 12px;
@@ -300,17 +438,32 @@ strong {
 	background: white;
 }
 
+.vertical_menu table {
+	margin: 0px;
+}
+
+.vertical_menu table td {
+	font-size: 8pt;
+	text-align: left;
+	vertical-align: top;
+        padding: 1px 0px 0px 1px;
+	margin: 0px;
+	background-color: white;
+}
+
+/* prevent alternating table row styles from affecting vertical_menu content */
+.vertical_menu tbody tr:nth-child(even) td,tbody tr.even td {
+	background: white;
+}
+
+/* prevent body heading styles from affecting vertical_menu content */
 .vertical_menu h3 {
 	margin: 0;
 	padding: 2px 5px 3px 5px;
-	font-size: 9pt; /* COG STYLE: LEFT MENUS HEADER SIZE */
+	font-size: 9pt;
 	text-align: left;
 	font-weight: bold;
-	/* COG STYLE: LEFT BAR MENU HEADERS BACKGROUND COLOR */
 	background-color: #B9E0E3;
-	/* background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x; */
-	/* background: #eee url(/static/admin/img/nav-bg.gif) bottom left repeat-x; */
-	/* COG STYLE: HEADER TEXT COLOR */
 	color: #666;
 	border-top: 1px solid #358C92;
 	border-bottom: 1px solid #358C92;
@@ -324,12 +477,12 @@ strong {
 }
 
 .vertical_menu li {
+        /* line-height tweaked to match project browser elements */
 	line-height: 14pt; 
-/*	border-bottom: 1px dashed #358C92;*/
 	padding: 0px;        
 	margin: 0px;
 	list-style: none;
-	font-size: 8pt; /* COG STYLE: LEFT MENUS TEXT SIZE */
+	font-size: 8pt;
 }
 
 .vertical_menu li li {
@@ -345,8 +498,12 @@ strong {
 	padding-bottom: 30px;
 }
 
-/* BOXES */
-.mybox { /* COG STYLE: ACCORDION BORDER COLOR */
+/******************************
+END VERTICAL MENU (LEFT NAVBAR)
+******************************/
+
+
+.mybox {
 	border: 1px solid #666666;
 	margin-bottom: 5px;
 	background: #FFFFFF;
@@ -359,14 +516,16 @@ strong {
 	background: #EEEEEE;
 	float: center;
 	text-align: left;
-	/* COG STYLE: COLOR OF ROLLUP HEADER TEXT */
 	color: #666666;
-	/* COG STYLE: SIZE OF ROLLUP HEADER TEXT */
 	font-size: 9pt;
 }
 
-.news_box { /* COG STYLE: NEWS WIDGET */
-	/* border: 1px solid #ccc; */
+
+/******************************
+BEGIN NEWS WIDGET
+******************************/
+
+.news_box {
 	border: 1px solid #666666;
 	margin-bottom: 12px;
         margin-top: 0px;
@@ -377,17 +536,7 @@ strong {
 .news_header {
 	background-color: #FCE79F;
 	color: #666;
-	font-size: 9pt; /* COG STYLE: NEWS HEADER TEXT SIZE */
-}
-
-.news_box table hd {
-	background-color: #FCE79F;
-}
-
-.news_box table td,th {
-	font-size: 8pt; /* COG STYLE: TEXT SIZE */
-	padding: 0px;
-	margin: 0px;
+	font-size: 9pt;
 }
 
 .news_box_body {
@@ -395,21 +544,25 @@ strong {
 	overflow-y: auto;
 }
 
-.news_box table.even-color tbody tr:nth-child(even) td,tbody tr.even td {
-	background: #FCF2CE; /* COG STYLE: LIGHTER YELLOW */
+.news_box table td,th {
+	font-size: 8pt;
+	padding: 0px;
+	margin: 0px;
 }
 
+.news_box table hd {
+	background-color: #FCE79F;
+}
+
+.news_box table.even-color tbody tr:nth-child(even) td,tbody tr.even td {
+	background: #FCF2CE;
+}
 
 .box-comment {
 	padding: 5px;
 	margin: 2px;
 	border: 0px solid #417690;
-	/* COG STYLE: COMMENTS BACKGROUND COLOR */
 	background: #FFFFFF;
-	/*font: normal 9pt Arial, Helvetica, sans-serif;*/
-	/*-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
-	border-radius: 8px; */
 }
 
 .box-comment .caption {
@@ -421,24 +574,44 @@ strong {
 	font-style: italic;
 }
 
-.search-box { /* COG STYLE: SEARCH WIDGET BACKGROUND COLOR */
+.news_footer {
+	margin: 0px;
+	padding: 2px 5px 3px 5px;
+	font-size: 8pt;
+	text-align: left;
+	font-weight: bold;
+	background-color: #FCE79F;
+	color: #666666;
+	border: 0px solid #666666;
+	border-top: 1px solid #666666;
+	display: block;
+}
+
+/******************************
+END NEWS WIDGET
+******************************/
+
+/******************************
+BEGIN SEARCH WIDGET
+******************************/
+
+.search-box {
 	background: #FFFFFF;
-	/* COG STYLE: SEARCH WIDGET BORDER COLOR */
 	border: 1px solid #666;
-	font-size: 8pt; /* COG STYLE: TEXT SIZE */
+	font-size: 8pt;
         margin-bottom: 12px;
         margin-top: 0px;
 }
 
-.box-colored { /* background: #B9E0E3; */
+/* TODO: where is this used? */
+.box-colored { 
 	background: #FCE79F;
 	border: 1px solid #666;
-	font-size: 8pt; /* COG STYLE: TEXT SIZE */
+	font-size: 8pt;
 }
 
 .instruction-box {
 	background: #e5ecf9;
-	/*background: #f4f379;*/
 	padding: 5px; #
 	margin: 5px;
 	border: 1px solid #417690;
@@ -446,7 +619,7 @@ strong {
 	text-align: center;
 }
 
-.message-box { /*background: #e5ecf9;*/
+.message-box { 
 	background: #f4f379;
 	padding: 5px; #
 	margin: 5px;
@@ -463,7 +636,8 @@ strong {
 	text-align: left;
 }
 
-.error-box { /*background: #e5ecf9;*/
+/* prevent error styles from affecting error content w/in search widget */
+.error-box { 
 	background: #f4f379;
 	padding: 5px; #
 	margin: 5px;
@@ -488,21 +662,10 @@ strong {
 	display: block;
 }
 
-.news_footer {
-	margin: 0px;
-	padding: 2px 5px 3px 5px;
-	font-size: 8pt; /* COG STYLE: TEXT SIZE */
-	text-align: left;
-	font-weight: bold;
-	/* COG STYLE: NEWS FOOTER BACKGROUND COLOR */
-	background-color: #FCE79F;
-	/* background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x; */
-	color: #666666;
-	/* COG STYLE: NEWS FOOTER BORDER COLOR */
-	border: 0px solid #666666;
-	border-top: 1px solid #666666;
-	display: block;
-}
+/******************************
+END SEARCH WIDGET
+******************************/
+
 
 .caption {
 	margin: 0px;
@@ -510,39 +673,59 @@ strong {
 	font-size: 9pt;
 	text-align: left;
 	font-weight: bold;
-	/* COG STYLE: RIGHT WIDGETS HEADER BACKGROUND COLOR */
-	/* FIXME */
-	/* background-color: #FFDD66; */
 	background-color: #000;
-	/* background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x; */
 	color: #666;
 	display: block;
 }
 
+/***************
+* NAME: header_bar
+* SCOPE: a box element
+* DESCRIPTION: header_bar does not specify the actual page header, but rather the headings w/in boxes
+***************/
 .header_bar {
 	margin: 0px;
 	padding: 2px 5px 3px 5px;
-	/* COG STYLE: ACCORDION HEADER TEXT SIZE */
 	font-size: 9pt;
 	text-align: left;
 	font-weight: bold;
-	/* COG STYLE: HEADER BAR BACKGROUND COLOR */
 	background-color: #B9E0E3;
-	/* background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x; */
-	/* COG STYLE: HEADER BAR TEXT COLOR */
 	color: #666;
 	display: block;
-	/* COG STYLE: HEADER BAR BORDER COLOR */
 	border: 1px solid #666666;
 }
 
-/* PAGINATOR */
+/******************************
+END COLUMN ELEMENTS & ROLLUPS
+******************************/
+
+/******************************
+BEGIN PAGINATOR
+******************************/
+
+/***************
+* NAME: pagination
+* SCOPE: the search page body content
+***************/
+
 .pagination {
-	text-align: center;
-	float: center;
+    /* center the paginator controls */
+    float: center; text-align: center;
 }
 
-/* MESSAGES & ERRORS */
+/******************************
+END PAGINATOR
+******************************/
+
+
+/******************************
+BEGIN MESSAGES & ERRORS
+******************************/
+
+/* django automatically validates form elements */
+/* this can generate messages, warnings, or errors */
+/* these are rendered as list elements within a div */
+
 ul.messagelist {
 	padding: 0 0 5px 0;
 	margin: 0;
@@ -596,12 +779,15 @@ ul.errorlist {
 	background: red url(/static/admin/img/icon_alert.gif) 5px .3em no-repeat;
 }
 
+/* ensure the styles apply to errors even when they are w/in tables */
 td ul.errorlist {
+        /* note the !important keyword to override the styles from the table section */
 	margin: 0 !important;
 	padding: 0 !important;
 }
 
 td ul.errorlist li {
+        /* note the !important keyword to override the styles from the table section */
 	margin: 0 !important;
 }
 
@@ -613,39 +799,23 @@ td ul.errorlist li {
 	border: 1px solid red;
 }
 
-.white {
-	background-color: #FFFFFF;
-}
-
-.invisible {
-	display: none;
-}
+/******************************
+END MESSAGES & ERRORS
+******************************/
 
 
-@media print {
-	div.vertical_menu {
-		display: none !important;
-	}
-	div.project_widget {
-		display: none !important;
-	}
-	div.search-box {
-		display: none !important;
-	}
-	div#top_nav_right {
-		display: none !important;
-	}
-}
+/******************************
+BEGIN SPECIFIC CSS FIXES
+******************************/
 
-
-/* THERE IS A KNOWN ("DROPPED FLOAT") ISSUE W/ IE WHERE THE LAST COLUMN CONTENTS APPEAR AT THE BOTTOM OF THE PAGE */
-/* BY APPLYING THE FOLLOWING STYLE TO THE LAST COLUMNS, THE CONTENTS ARE PREVENTED FROM OVERFLOWING ON THE RIGHT */
+/* there is a known ("dropped float") issue w/ IE where the last column contents appears at the bottom of the page */
+/* the following style prevents right overflows */
 div.last {
-  margin-right:-100px;
-  position:relative;
+  margin-right: -100px;
+  position: relative;
 }
 
-/* SOME OF THE SPACING NEEDS TO BE FINE-TUNED IN IE */
+/* fine tune some of the spacing in IE */
 div.last div#top_nav_right li a {
     padding-left: 3px;
     padding-right: 3px;
@@ -657,18 +827,18 @@ div.last ol {
     margin-left: 3px;
 }
 
-/* THESE ARE REQUIRED TO FORCE IE TO CENTER THE PAGE CONTENT */
+/* force IE to center the page content */
 body {
     text-align: center;
     margin-right: auto; margin-left: auto;
     margin-top: 0; margin-bottom: 0;
 }
 body div {
-    /* stop centering */
+    /* then stop automatically centering */
     text-align: left;
 }
 
-/* CSS class to limit the maximum width of an uploaded image. */
+/* limit the maximum width of an uploaded image. */
 .myimage {
   width: 100%;
   max-width: 200px;
@@ -678,19 +848,22 @@ body div {
   border: 1px solid #666666;
 }
 
-/* YUI treeview introduces a bug; when user is logged the background of the tree is teal
-   this forces it to be white
- */
+/* YUI treeview introduces a bug; */
+/* when user is logged the background of the tree is teal, */
+/* this forces it to remain white */
 #project_views .yui-content td { background-color: #ffffff !important; }
 
+/* prevent the wiki editor from resizing horizontally */
 textarea.ckeditor { resize: vertical; }
+
+/******************************
+END SPECIFIC CSS FIXES
+******************************/
 
 .fieldset_box {
 	border: 1px solid #358C92;	 
 	padding: 5px;
-	/* width: 300px; */
 	text-align:center;
-	/* margin:auto; */
 	margin-top:-10px;
 	margin-bottom: 15px;
 }
@@ -701,3 +874,4 @@ textarea.ckeditor { resize: vertical; }
 	font-weight: bold;
 	padding: 2px;
 }
+
