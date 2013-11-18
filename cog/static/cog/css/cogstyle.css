@@ -5,7 +5,9 @@
 *
 * this file specifies the CSS for _all_ HTML pages that are part of the CoG project
 * except where:
-* 1) internal CSS is encoded within Django Templates
+* 1) internal CSS is encoded within Django Templates, for example:
+*    - "/cog/templates/cog/project/project_right.html" specifies the project widget styles
+*    - "/cog/templates/cog/common/cog_header.html" specifies the CoG header styles
 * 2) inline styles are used within Django Templates
 * 3) external plugins use their own CSS (ie: CKEditor, YUI)
 * 4) users explicitly write custom inline styles in CoG's wiki
@@ -358,7 +360,7 @@ END FORM ELEMENTS
 
 
 /******************************
-BEGIN TEXT STYLES
+BEGIN TEXT STYLES (w/in the wiki)
 ******************************/
 
 small {
