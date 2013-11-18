@@ -17,12 +17,16 @@
 ******************************/
 
 /******************************
-* CSS used by Django admin
+* CSS used w/in CoG
 * (for reference):
-*    light gray: #EEEEEE;
-*    light teal: #B9E0E3;
-*    dark teal: #358C92;
-*    yellow: #FCE79F;
+* dark teal    = #358C92
+* light teal   = #B9E0E3
+* dark yellow  = #FAC24A
+* light yellow = #FCE79F
+* dark gray    = #666666
+* middle gray  = #666
+* light gray   = #333
+
 ******************************/
 
 /******************************
