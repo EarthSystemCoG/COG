@@ -17,7 +17,7 @@
      <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">&nbsp;Comments ({{ comment_count }})</a>
 </div>
 <!-- NOTE: open up comments when page is first loaded -->
-<div class="mybox" id="mycomments" style="display:block">
+<div class="mybox" id="mycomments" style="display:none">
 	{% for comment in comment_list %}
 	   <div id="comment_{{ comment.id }}" class="box-comment">
 	       <div class="caption">{{ comment.name|escape }}, on {{ comment.submit_date|date:"d M Y, H:m" }}</div>
