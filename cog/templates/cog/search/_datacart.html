@@ -64,6 +64,7 @@
 						&& field != 'instance_id' && field != 'master_id'
 						&& field != 'metadata_format' && field != 'timestamp'
 						&& field != 'title'
+						&& field != 'history'
 						&& field != 'latest' && field != 'replica') {
 						keys[keys.length] = field;
 					}
@@ -110,7 +111,7 @@
 								
 							// non-images: create hyperlink with text
 							} else {
-								html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a>&nbsp;";
+								html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a><br/>";
 							}
 						}						
 					} // loop over URLs
