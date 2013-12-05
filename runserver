@@ -1,0 +1,3 @@
+stunnel stunnel/stunnel.cfg &
+python manage.py runserver &
+HTTPS=1 python manage.py runserver 8001

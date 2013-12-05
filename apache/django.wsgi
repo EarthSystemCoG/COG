@@ -1,4 +1,4 @@
-import sys
+import sys, os
 
 sys.path.insert(0, '/usr/COG')
 
@@ -19,3 +19,7 @@ django.utils.translation.activate(django.conf.settings.LANGUAGE_CODE)
 import django.core.handlers.wsgi
 
 application = django.core.handlers.wsgi.WSGIHandler()
+
+# needed for HTTPS support 
+# (instructs Django to prepend 'https' to fully generated links)
+os.environ['HTTPS'] = "on"

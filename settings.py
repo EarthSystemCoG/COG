@@ -173,6 +173,11 @@ TEMPLATE_CONTEXT_PROCESSORS += (
      'cog.context_processors.cog_settings'
 ) 
 
+# HTTPS support: can only send cookies via SSL connections
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"
 #COLOR_LIGHT_TEAL = "#B9E0E3"
