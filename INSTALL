@@ -116,5 +116,27 @@ email.username=
 email.password=
 email.security=
 
+o SSL SUPPORT
 
+To run CoG with SSL encryption, the following actions must be taken:
 
+- procure an SSL certificate, possibly from a recognized CA
+- modify the Apache httpd configuration file to redirect all requests on port 80 to port 443. Example configuration follows:
+
+LoadModule ssl_module modules/mod_ssl.so
+
+<VirtualHost 172.24.254.127:80>
+  ServerName dev-hydra-httpd.esrl.svc
+  Redirect / https://dev-hydra-httpd.esrl.svc/
+</VirtualHost>
+
+<VirtualHost 172.24.254.127:443>
+  ServerName dev-hydra-httpd.esrl.svc
+
+  SLEngine on
+  SSLCertificateFile /etc/httpd/conf/httpd.cert
+  SSLCertificateKeyFile /etc/httpd/conf/httpd.key
+  SetEnv SERVER_TYPE PROD
+
+Note: the last instruction on SERVER_TYPE is used in settings.py to enable cookies only for secure requests:
+it will prevent logging in from a non-secure HTTP request.
