@@ -20,6 +20,9 @@ rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+# DEV/PROD switch
+server_type = os.environ.get("SERVER_TYPE", "DEV")
+
 # IMPORTANT: this setting must be set to True if using COG behind a proxy server,
 # otherwise redirects won't work properly
 USE_X_FORWARDED_HOST = True
@@ -174,9 +177,10 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 ) 
 
 # HTTPS support: can only send cookies via SSL connections
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+if server_type=='PROD':
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"
