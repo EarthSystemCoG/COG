@@ -4,12 +4,12 @@
 
 <div id="{{category}}_organizational_roles">
 
-	<!-- header -->
-	<hr/>
-	<b>{{category}} Organizational Roles</b>
-
 	<!-- content -->
 	{% if organizational_roles %}
+	
+		<!-- header -->
+		<hr/>
+		<b>{{category}} Organizational Roles</b>
 
 		<table>
 			{% for role in organizational_roles %}
