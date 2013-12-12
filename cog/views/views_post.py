@@ -121,8 +121,12 @@ def page_detail(request, project_short_name):
 # view to render project home, delegates to the home page URL
 def project_home(request, project_short_name):
     
-    return page_detail(request, project_short_name.lower())
-    #project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    if project_short_name == project_short_name.lower():
+        return page_detail(request, project_short_name)
+    # redirect mixed-case requests to use lower case project name
+    else:
+        return HttpResponseRedirect(reverse('project_home', args=[project_short_name.lower()]))
+    
     
 # Note: method=GET always
 def post_list(request, project_short_name):
