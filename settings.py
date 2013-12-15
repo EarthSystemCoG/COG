@@ -7,7 +7,7 @@ DEFAULT_SEARCH_FACETS = { 'project':'Project',
                           'variable':'Variable',
                           'cf_variable':'CF Variable'  }
 
-COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
+#COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
@@ -63,15 +63,13 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Denver'
+#TIME_ZONE = 'America/Denver'
 # use the system time zone, wherever the application is installed
 #TIME_ZONE = None
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
-
-SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -119,7 +117,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = rel('static/')
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
+#SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -200,3 +198,12 @@ if server_type=='PROD':
 #COLOR_LIGHT_YELLOW = "#FCE79F";
 
 #COLOR_DARK_GRAY = "#666666";
+
+#===== SITE SPECIFIC CONFIGURATION =================
+
+from site_manager import SiteManager
+siteManager = SiteManager()
+SITE_ID = siteManager.get('SITE_ID')
+TIME_ZONE = siteManager.get('TIME_ZONE')
+COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST')
+SECRET_KEY = siteManager.get('SECRET_KEY')
