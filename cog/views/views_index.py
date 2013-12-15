@@ -21,10 +21,12 @@ def thisprojecthasmoved(request, project_short_name):
                               context_instance=RequestContext(request))
     
 
+#FIXME: remove
 # temporary view to redirect from the old COG top-level URL
 def earthsystemcog(request):
     return HttpResponseRedirect('http://earthsystemcog.org/')
 
+#FIXME: remove
 # temporary view to redirect from an old COG URL project home
 def earthsystemcog_project(request, project_short_name):
     return HttpResponseRedirect('http://earthsystemcog.org/projects/%s' % project_short_name)
