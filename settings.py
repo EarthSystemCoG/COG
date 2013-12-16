@@ -7,7 +7,7 @@ DEFAULT_SEARCH_FACETS = { 'project':'Project',
                           'variable':'Variable',
                           'cf_variable':'CF Variable'  }
 
-#COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
+COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
@@ -34,24 +34,14 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    # SQLite database
-    #'default': {
-    #     #'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-    #     #'NAME': '',                      # Or path to database file if using sqlite3.
-    #    'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-    #    'NAME': rel('./database/django.data'),
-    #    'USER': '',                      # Not used with sqlite3.
-    #    'PASSWORD': '',                  # Not used with sqlite3.
-    #    'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-    #    'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    #} 
-    # Postgres        
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cogdb',
-        'USER': 'cogdbuser',                      # Not used with sqlite3.
-        'PASSWORD': 'c0gdbpwd',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+         #'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+         #'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': rel('./database/django.data'),
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -63,13 +53,15 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-#TIME_ZONE = 'America/Denver'
+TIME_ZONE = 'America/Denver'
 # use the system time zone, wherever the application is installed
 #TIME_ZONE = None
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
+
+SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -117,7 +109,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = rel('static/')
 
 # Make this unique, and don't share it with anybody.
-#SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
+SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -189,6 +181,16 @@ if server_type=='PROD':
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    
+#===== SITE SPECIFIC CONFIGURATION =================
+
+#from site_manager import SiteManager
+#siteManager = SiteManager()
+#SITE_ID = siteManager.get('SITE_ID')
+#TIME_ZONE = siteManager.get('TIME_ZONE')
+#COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST')
+#SECRET_KEY = siteManager.get('SECRET_KEY')
+
 
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"
@@ -198,12 +200,3 @@ if server_type=='PROD':
 #COLOR_LIGHT_YELLOW = "#FCE79F";
 
 #COLOR_DARK_GRAY = "#666666";
-
-#===== SITE SPECIFIC CONFIGURATION =================
-
-from site_manager import SiteManager
-siteManager = SiteManager()
-SITE_ID = siteManager.get('SITE_ID')
-TIME_ZONE = siteManager.get('TIME_ZONE')
-COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST')
-SECRET_KEY = siteManager.get('SECRET_KEY')
