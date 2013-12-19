@@ -27,11 +27,21 @@
 
                 var first_script = document.getElementsByTagName("script")[0]
                 if (callback_fn) {
-                    js_link.addEventListener("load",
-                        function() {
-                            callback_fn();
-                        },
-                        false);
+                    /* check to see which fns are supported (IE is often non-standard) */
+                    if (!js_link.addEventListener) {
+                        js_link.attachEvent("onload",
+                            function() {
+                                callback_fn();
+                            }
+                        );
+                    }
+                    else {                   
+                        js_link.addEventListener("load",
+                            function() {
+                                callback_fn();
+                            },
+                            false);
+                    }
                 }
                 first_script.parentNode.insertBefore(css_link,first_script);
                 first_script.parentNode.insertBefore(js_link,first_script);
