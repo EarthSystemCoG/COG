@@ -20,6 +20,7 @@ from cog.models.utils import *
 from cog.views.views_templated import templated_page_display
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.models.navbar import TABS, TAB_LABELS, NAVMAP, INVNAVMAP
+from django.contrib.sites.models import Site
 
 # method to add a new project, with optional parent project
 @login_required
@@ -27,7 +28,9 @@ def project_add(request):
     
     if (request.method=='GET'):
         
-        project = Project(active=False, author=request.user)
+        # associate project to current site
+        current_site = Site.objects.get_current()
+        project = Project(active=False, author=request.user, site=current_site)
         
         # optional parent project
         parent_short_name = request.GET.get('parent', None)

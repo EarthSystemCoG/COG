@@ -16,14 +16,20 @@ from urllib import quote, unquote
 import os
 import sys
 import re
+from django.contrib.sites.models import Site
+from django.conf import settings
 
 # Project
 class Project(models.Model):
     
+    # mandatory attributes
     short_name = models.CharField(max_length=20, unique=True, help_text="Short project acronym, 20 characters maximum, use only letters, numbers and '_', '-', no spaces." )
     long_name = models.CharField(max_length=120, unique=True, help_text='Fully spelled project name.')
     description = models.TextField(blank=False, null=False, help_text='A short paragraph that describes the project.')
     
+    site = models.ForeignKey(Site, default=settings.SITE_ID)
+    
+    # optional attributes
     mission = models.TextField(blank=True, help_text='Succinctly describes why the project exists and what it does.')
     vision  = models.TextField(blank=True, help_text='Outlines what a project wants to be, or how it wants the world in which it operates to be. It is a long-term view.')
     values  = models.TextField(blank=True, help_text='Beliefs that are shared among the members of a project. Values influence culture and priorities and provide a framework for informing decisions.')
