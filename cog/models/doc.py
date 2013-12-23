@@ -38,7 +38,7 @@ class Doc(models.Model):
     path = models.CharField(max_length=400, blank=True)
     description = models.TextField(blank=True)
     # upload path is obtained dynamically from the callable function
-    file = models.FileField(upload_to=get_upload_path, storage=ofs)
+    file = models.FileField(upload_to=get_upload_path, storage=ofs, max_length=400)
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
     project = models.ForeignKey(Project)

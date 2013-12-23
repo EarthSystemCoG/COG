@@ -18,7 +18,7 @@ class LoggedEvent(models.Model):
     description = models.CharField(max_length=200, blank=False)
     url = models.URLField(blank=True)
     update_date = models.DateTimeField('Date Time', auto_now_add=True)
-    sender = models.CharField(max_length=100, blank=True)
+    sender = models.CharField(max_length=200, blank=True)
     
     class Meta:
         app_label= APPLICATION_LABEL
