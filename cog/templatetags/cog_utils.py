@@ -375,14 +375,6 @@ def is_locked(post, request, autoescape=None):
     # mark the result as safe from further escaping
     return mark_safe(html)
 
-#@register.filter
-#def getDefaultLogo(request):
-#    return getattr(settings, "STATIC_URL", "") + DEFAULT_LOGO
-
-@register.filter
-def getFooterLogo(request):
-    return getattr(settings, "STATIC_URL", "") + FOOTER_LOGO
-
 @register.filter
 def get_form_global_errors(form):
     errors = dict(form.errors)
