@@ -53,13 +53,25 @@ class ProjectForm(ModelForm):
     # overridden validation method for project short name 
     def clean_short_name(self):
         short_name = self.cleaned_data['short_name']
+        
         # must not start with any of the URL matching patterns
         if short_name in ('admin', 'project', 'news', 'post', 'doc', 'signal'):
             raise forms.ValidationError("Sorry, '%s' is a reserved URL keyword - it cannot be used as project short name" % short_name)
+        
         # only allows letters, numbers, '-' and '_'
         if re.search("[^a-zA-Z0-9_\-]", short_name):
             raise forms.ValidationError("Project short name contains invalid characters")
+        
+        # do not allow new projects to have the same short name as existing ones, regardless to case
+        if self.instance.id is None: # new projects only
+            try:
+                p = Project.objects.get(short_name__iexact=short_name)
+                raise forms.ValidationError("The new project short name conflicts with an existing project: %s" % p.short_name)
+            except Project.DoesNotExist:
+                pass
+            
         return short_name
+    
     
     class Meta:
         model = Project
