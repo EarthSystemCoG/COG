@@ -184,7 +184,7 @@ if server_type=='PROD':
     
 #===== SITE SPECIFIC CONFIGURATION =================
 
-from site_manager import SiteManager
+from cog.site_manager import SiteManager
 siteManager = SiteManager()
 SITE_ID = siteManager.get('SITE_ID')
 TIME_ZONE = siteManager.get('TIME_ZONE')
