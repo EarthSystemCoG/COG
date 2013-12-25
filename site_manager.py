@@ -3,12 +3,14 @@ import ConfigParser
 
 class SiteManager(object):
     '''Class uses to load site-specific settings at COG startup.
+    
        Example configuration file:
        [default]
        SITE_ID=1
        TIME_ZONE=America/Denver
-       COG_MAILING_LIST = cog_info@list.woc.noaa.gov
-       SECRET_KEY = yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#
+       COG_MAILING_LIST=cog_info@list.woc.noaa.gov
+       SECRET_KEY=yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#
+       
     '''
     
     # location of site specific settigs configuration file

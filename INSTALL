@@ -37,9 +37,18 @@ cd COG
 
 CONFIGURATION
 
-o Review the top-level file settings.py, optionally change the values of the first few variables:
-	- DEFAULT_SEARCH_URL: URL of default ESGF node to target in a data query
-	- COG_MAILING_LIST
+o Create a file in the top-level directory of the user running the server - typically, the user
+running the Apache httpd process - called ~/.cog_settings.cfg 
+The file must have the following content, with values replaced by the installation specific settings:
+
+cat ~/.cog_settings.cfg
+
+SITE_ID=<the site specific id, an integre number. Must be coordinated with other federated CoG installations>
+TIME_ZONE=<"America/Denver by default". See list of Django values for time zones>
+COG_MAILING_LIST=<"cog_info@list.woc.noaa.gov" by default. Mailing list where users subscribe to>
+SECRET_KEY=<the site specific key: an arbitrary string with lots of strange characters>
+
+
 
 INITIALIZATION
 
