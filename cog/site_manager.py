@@ -21,7 +21,9 @@ class SiteManager(object):
                 'SITE_ID': 1,
                 'TIME_ZONE': 'America/Denver',
                 'COG_MAILING_LIST': 'cog_info@list.woc.noaa.gov',
-                'SECRET_KEY': 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#',
+                'SECRET_KEY': 'no default',
+                'DATABASE_USER':'no default',
+                'DATABASE_PASSWORD':'no default',
                }
     
     def __init__(self):

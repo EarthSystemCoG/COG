@@ -25,6 +25,9 @@ o South
 o Python Image Library
   easy_install --upgrade pil
   
+o Python posgres libraries
+  sudo pip install pyscopg2
+  
 Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
 
 DOWNLOAD
@@ -35,7 +38,27 @@ cd <install directory>
 git clone git@github.com:EarthSystemCoG/COG.git
 cd COG
 
-CONFIGURATION
+DATABASE CONFIGURATION
+
+o Install latest version of Postgres
+
+o To run with a postgres database back-end (default), create a database 'cogdb' and a username, password to be access that database:
+
+createdb -U postgres cogdb
+createuser -U postgres -P
+        - username: <your username>
+        - password: <your password>
+(answer "n" to all other questions)
+
+psql -U postgres --password
+password: <your postgres superuser password>
+
+postgres=#  GRANT ALL PRIVILEGES ON DATABASE cogdb TO cogdbadmin;
+GRANT
+postgres=# FLUSH
+postgres-# \q
+
+COG CONFIGURATION
 
 o Create a file in the top-level directory of the user running the server - typically, the user
 running the Apache httpd process - called ~/.cog_settings.cfg 
@@ -47,6 +70,8 @@ SITE_ID=<the site specific id, an integre number. Must be coordinated with other
 TIME_ZONE=<"America/Denver by default". See list of Django values for time zones>
 COG_MAILING_LIST=<"cog_info@list.woc.noaa.gov" by default. Mailing list where users subscribe to>
 SECRET_KEY=<the site specific key: an arbitrary string with lots of strange characters>
+DATABASE_USER=<username to access cogdb postgres database>
+DATABASE_PASSWORD=<password to access cogdb postgres database>
 
 
 

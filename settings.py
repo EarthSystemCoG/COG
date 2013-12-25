@@ -9,6 +9,17 @@ DEFAULT_SEARCH_FACETS = { 'project':'Project',
 
 #COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
 
+#===== SITE SPECIFIC CONFIGURATION =================
+
+from cog.site_manager import SiteManager
+siteManager = SiteManager()
+SITE_ID = siteManager.get('SITE_ID')
+TIME_ZONE = siteManager.get('TIME_ZONE')
+COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST')
+SECRET_KEY = siteManager.get('SECRET_KEY')
+DATABASE_USER = siteManager.get('DATABASE_USER')
+DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
+
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
 # Django settings for COG project.
@@ -34,14 +45,24 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
+    # SQLite database
+    #'default': {
+    #     #'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+    #     #'NAME': '',                      # Or path to database file if using sqlite3.
+    #    'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+    #    'NAME': rel('./database/django.data'),
+    #    'USER': '',                      # Not used with sqlite3.
+    #    'PASSWORD': '',                  # Not used with sqlite3.
+    #    'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+    #    'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    #} 
+    # Postgres        
     'default': {
-         #'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-         #'NAME': '',                      # Or path to database file if using sqlite3.
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': rel('./database/django.data'),
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'cogdb',
+        'USER': DATABASE_USER,                      # Not used with sqlite3.
+        'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -182,15 +203,6 @@ if server_type=='PROD':
     CSRF_COOKIE_SECURE = True
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
     
-#===== SITE SPECIFIC CONFIGURATION =================
-
-from cog.site_manager import SiteManager
-siteManager = SiteManager()
-SITE_ID = siteManager.get('SITE_ID')
-TIME_ZONE = siteManager.get('TIME_ZONE')
-COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST')
-SECRET_KEY = siteManager.get('SECRET_KEY')
-
 
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"
