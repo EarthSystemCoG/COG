@@ -8,7 +8,7 @@ from threading import Thread
 class EmailConfig:
     '''Class that reads and stores the email server connection properties from a local configuration file.
        
-       Example local configuration file ~/.cog.cfg:
+       Example local configuration file cog.cfg:
        
        [email]
        email.server=smtp.gmail.com
@@ -27,7 +27,7 @@ class EmailConfig:
         try:
             
             cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
-            CONFIGFILEPATH = os.path.join(cog_config_dir, '.cog.cfg')
+            CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog.cfg')
     
             config.read( CONFIGFILEPATH )
             self.server = config.get('email','email.server')

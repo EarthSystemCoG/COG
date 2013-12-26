@@ -18,7 +18,7 @@ class SiteManager(object):
     
     # location of site specific settigs configuration file
     cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
-    CONFIGFILEPATH = os.path.join(cog_config_dir, '.cog_settings.cfg')
+    CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog_settings.cfg')
 
     # dictionary containing default values for all site settings
     DEFAULTS = {
