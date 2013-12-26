@@ -196,7 +196,7 @@ class SearchMappings(object):
         self.mappings = {}
         config = ConfigParser.RawConfigParser()
         try:
-            config.read( os.path.expanduser(filepath) )
+            config.read( CONFIGFILEPATH )
             for facet_key in config.sections():
                 fmap = {}
                 for facet_option in config.options(facet_key):
