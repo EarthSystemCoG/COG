@@ -23,8 +23,13 @@ class EmailConfig:
     
     def __init__(self):
         config = ConfigParser.RawConfigParser()
+        
         try:
-            config.read( os.path.expanduser('~/.cog.cfg') )
+            
+            cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
+            CONFIGFILEPATH = os.path.join(cog_config_dir, '.cog.cfg')
+    
+            config.read( CONFIGFILEPATH )
             self.server = config.get('email','email.server')
             self.port = config.get('email','email.port')
             self.sender = config.get('email','email.sender')
