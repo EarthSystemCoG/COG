@@ -19,6 +19,7 @@ COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST')
 SECRET_KEY = siteManager.get('SECRET_KEY')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
+DATABASE_PORT = siteManager.get('DATABASE_PORT')
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
@@ -63,7 +64,7 @@ DATABASES = {
         'USER': DATABASE_USER,                      # Not used with sqlite3.
         'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
