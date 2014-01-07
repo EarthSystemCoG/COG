@@ -155,7 +155,11 @@
 		 	{{ form.technicalSupport.as_hidden }}
 		 	{{ form.meetingSupport.as_hidden }}
 		 	{{ form.getInvolved.as_hidden }}
-		 {% endif %}				 
+		 {% endif %}			
+		 
+		 <!-- ALWAYS resubmit the current site -->
+         {{ form.site.as_hidden }}   
+		 	 
 		 	 
 		 				
 	     <div style="text-align:right">
