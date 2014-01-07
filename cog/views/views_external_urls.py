@@ -36,19 +36,13 @@ def external_urls_display(request, project_short_name, suburl):
     template_title = externalUrlConf.label
     template_form_page = "%s_update" % suburl
     template_form_pages = { reverse(template_form_page, args=[project_short_name, suburl]) : template_title }
-    
+        
     # build list of children with external urls of this type
-    children = []
-    for child in project.children():
-        if len(child.get_external_urls(external_url_type)) > 0 and child.isVisible(request.user):
-            children.append(child)
+    children = _subSelectProjects(project.children(), externalUrlConf, request.user)
     
     # build list of peers with with external urls of this type
-    peers = []
-    for peer in project.peers.all():
-        if len(peer.get_external_urls(external_url_type)) > 0 and peer.isVisible(request.user):
-            peers.append(peer)
-            
+    peers = _subSelectProjects(project.peers.all(), externalUrlConf, request.user)
+             
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 
                                'title': '%s %s' % (project.short_name, template_title), 
@@ -59,6 +53,23 @@ def external_urls_display(request, project_short_name, suburl):
                                'external_url_type':external_url_type },
                               context_instance=RequestContext(request))
     
+# method to sub-select related projects to display in external URL rollup
+def _subSelectProjects(projects, externalUrlConf, user):
+    
+    _projects = []
+    for proj in projects:
+        if len(proj.get_external_urls(externalUrlConf.type)) > 0 and proj.isVisible(user):
+            # only display rollup if corresponding tab is active
+            projectTabsMap = proj.get_tabs_map()
+            # tab for project must be active
+            if externalUrlConf.label in projectTabsMap:
+                tab = projectTabsMap[externalUrlConf.label]
+                if tab.active:
+                    _projects.append(proj)
+            # no tab for project found
+            else:
+                _projects.append(proj)
+    return _projects    
     
 # Generic view to update external URLs
 @login_required
