@@ -246,12 +246,12 @@ class Project(models.Model):
         else:
             return False
         
-    # method to return a map of project tabs indexed by label
+    # method to return a map of project tabs indexed by suburl
     def get_tabs_map(self):
     
         map = {}
         for tab in self.tabs.all():
-            map[tab.label] = tab
+            map[tab.suburl()] = tab
         return map
              
     # method to retrieve all signals for this project, ordered by date

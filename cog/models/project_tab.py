@@ -20,5 +20,9 @@ class ProjectTab(models.Model):
     def __unicode__(self):
         return "Project Tab label='%s', url='%s', active=%s" % (self.label, self.url, self.active)
     
+    def suburl(self):
+        # returns the last part of the tab URL: url='/projects/climatetranslator/metrics/' --> 'metrics'
+        return self.url.split('/')[-2]
+    
     class Meta:
         app_label= APPLICATION_LABEL

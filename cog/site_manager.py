@@ -2,7 +2,7 @@ import os
 import ConfigParser 
 
 class SiteManager(object):
-    '''Class uses to load site-specific settings at COG startup.
+    '''Class used to load site-specific settings at COG startup.
     
        Example configuration file:
        [default]

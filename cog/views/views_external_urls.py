@@ -62,8 +62,8 @@ def _subSelectProjects(projects, externalUrlConf, user):
             # only display rollup if corresponding tab is active
             projectTabsMap = proj.get_tabs_map()
             # tab for project must be active
-            if externalUrlConf.label in projectTabsMap:
-                tab = projectTabsMap[externalUrlConf.label]
+            if externalUrlConf.suburl in projectTabsMap:
+                tab = projectTabsMap[externalUrlConf.suburl]
                 if tab.active:
                     _projects.append(proj)
             # no tab for project found
