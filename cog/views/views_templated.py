@@ -16,50 +16,58 @@ def _hasTemplatedInfo(project, tab):
     '''Utility function to determine whether a project has been populated 
        with the requested templated metadata, depending on type.'''
     
-    if tab==TABS["ABOUTUS"]:
-        # 'About Us' always populated with long_name, description
-        return True
-    elif tab==TABS["MISSION"] and hasText(project.mission) > 0:
-        return True
-    elif tab==TABS["VISION"] and hasText(project.vision) > 0:
-        return True
-    elif tab==TABS["VALUES"] and hasText(project.values) > 0:
-        return True
-    elif tab==TABS["IMPACTS"] and len(project.impacts.all()) >0:
-        return True
-    elif tab==TABS["HISTORY"] and hasText(project.history) > 0:
-        return True
-    elif tab==TABS["PARTNERS"] and len(project.organization_set.all()) > 0:
-        return True
-    elif tab==TABS["SPONSORS"] and len(project.fundingsource_set.all()) > 0:
-        return True   
-    elif tab==TABS["PEOPLE"]:
-        # "People" always populated with project users
-        return True
-    elif tab==TABS["CONTACTUS"] and hasText(project.projectContacts):
-        return True
-    elif tab==TABS["DEVELOPERS"] and hasText(project.developmentOverview):
-        return True
-    elif tab==TABS["SOFTWARE"] and hasText(project.software_features):
-        return True
-    elif tab==TABS["USERS"] and hasText(project.getting_started):
-        return True
-    elif tab==TABS["GOVERNANCE"] and hasText(project.governanceOverview) > 0:     
-         return True
-    elif tab==TABS["BODIES"] and len(project.managementbody_set.all()) > 0:
-         return True
-    elif tab == TABS["ROLES"]:
-        if len(getLeadOrganizationalRoles(project)) > 0 or len(getMemberOrganizationalRoles(project)) > 0:
+    # dictionary of project tabs indexed by suburl (last part of URL)
+    projectTabsMap = project.get_tabs_map()
+    
+    # check that tab exists and is active
+    if tab in projectTabsMap and projectTabsMap[tab].active:
+        
+        if tab==TABS["ABOUTUS"]:
+            # 'About Us' always populated with long_name, description
             return True
-    elif tab == TABS["COMMUNICATION"]:
-        if len( get_project_communication_means(project, True) ) > 0:
+        elif tab==TABS["MISSION"] and hasText(project.mission) > 0:
             return True
-    elif tab == TABS["PROCESSES"]:
-        if hasText(project.taskPrioritizationStrategy) or hasText(project.requirementsIdentificationProcess):
+        elif tab==TABS["VISION"] and hasText(project.vision) > 0:
             return True
-    elif tab == TABS["POLICIES"]:
-        if len(project.policies()) > 0:
+        elif tab==TABS["VALUES"] and hasText(project.values) > 0:
             return True
+        elif tab==TABS["IMPACTS"] and len(project.impacts.all()) >0:
+            return True
+        elif tab==TABS["HISTORY"] and hasText(project.history) > 0:
+            return True
+        elif tab==TABS["PARTNERS"] and len(project.organization_set.all()) > 0:
+            return True
+        elif tab==TABS["SPONSORS"] and len(project.fundingsource_set.all()) > 0:
+            return True   
+        elif tab==TABS["PEOPLE"]:
+            # "People" always populated with project users
+            return True
+        elif tab==TABS["CONTACTUS"] and hasText(project.projectContacts):
+            return True
+        elif tab==TABS["DEVELOPERS"] and hasText(project.developmentOverview):
+            return True
+        elif tab==TABS["SOFTWARE"] and hasText(project.software_features):
+            return True
+        elif tab==TABS["USERS"] and hasText(project.getting_started):
+            return True
+        elif tab==TABS["GOVERNANCE"] and hasText(project.governanceOverview) > 0:     
+             return True
+        elif tab==TABS["BODIES"] and len(project.managementbody_set.all()) > 0:
+             return True
+        elif tab == TABS["ROLES"]:
+            if len(getLeadOrganizationalRoles(project)) > 0 or len(getMemberOrganizationalRoles(project)) > 0:
+                return True
+        elif tab == TABS["COMMUNICATION"]:
+            if len( get_project_communication_means(project, True) ) > 0:
+                return True
+        elif tab == TABS["PROCESSES"]:
+            if hasText(project.taskPrioritizationStrategy) or hasText(project.requirementsIdentificationProcess):
+                return True
+        elif tab == TABS["POLICIES"]:
+            if len(project.policies()) > 0:
+                return True
+            
+    # non-active tab
     else:
         return False
 
