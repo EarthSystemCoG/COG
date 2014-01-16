@@ -82,28 +82,31 @@ list_bookmarks.needs_autoescape = True
 
 # recursive function to build the folder hierarchy tree
 def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
-    
+
+    html = ""
     static_url = getattr(settings, "STATIC_URL", "static/")
-   
-    # this folder 
-    if expanded:
-        html = "<li class='expanded'>"
-    else:
-        html = "<li>"
-    html += "<span class='%s'>%s" % (icon, folder.name)
     
-    # add edit/delete links, but not for pre-defined folders
-    if not folder.isPredefined():
-        deleteurl = reverse('folder_delete', args=[folder.project.short_name.lower(), folder.id])
-        updateurl = reverse('folder_update', args=[folder.project.short_name.lower(), folder.id])
-        if hasUserPermission(user, folder.project):
-            html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
-            html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
-                 + "'Are you sure you want to delete this folder (including all the bookmarks and folders it contains) ?', this)\">Delete</a> ]"
-    html += "</span> "
-   
-    # this folder's children
-    if folder.children() or folder.bookmark_set.all():
+    # do NOT show folder that are empty (no bookmarks or no-sub-folders)
+    if folder.children() or folder.bookmark_set.all():  
+           
+        # this folder 
+        if expanded:
+            html += "<li class='expanded'>"
+        else:
+            html += "<li>"
+        html += "<span class='%s'>%s" % (icon, folder.name)
+        
+        # add edit/delete links, but not for pre-defined folders
+        if not folder.isPredefined():
+            deleteurl = reverse('folder_delete', args=[folder.project.short_name.lower(), folder.id])
+            updateurl = reverse('folder_update', args=[folder.project.short_name.lower(), folder.id])
+            if hasUserPermission(user, folder.project):
+                html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
+                html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
+                     + "'Are you sure you want to delete this folder (including all the bookmarks and folders it contains) ?', this)\">Delete</a> ]"
+        html += "</span> "
+       
+        # this folder's children
         html += "<ul>"
                 
         # display bookmarks
@@ -126,13 +129,12 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
                         
         # display sub-folders
         for child in folder.children():
-            
             # recursion (do not expand children)
             html += _folder_tree(child, user, esc, expanded=True) # open by default all folders 
 
         html += "</ul>"
-    
-    html += "</li>"
+        
+        html += "</li>"
         
     return html
 
