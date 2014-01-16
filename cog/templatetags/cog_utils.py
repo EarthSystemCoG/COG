@@ -128,7 +128,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         for child in folder.children():
             
             # recursion (do not expand children)
-            html += _folder_tree(child, user, esc, expanded=False) 
+            html += _folder_tree(child, user, esc, expanded=True) # open by default all folders 
 
         html += "</ul>"
     
