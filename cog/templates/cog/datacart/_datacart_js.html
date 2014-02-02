@@ -1,0 +1,74 @@
+<script language="javascript">
+
+	// function to add an item to the user data cart
+	function addToCart(identifier, name, type) {
+				
+		// relative path to COG application
+		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
+		var url = "{% url 'datacart_add' site.id request.user.id %}?identifier="+identifier+"&name="+name+"&type="+type;
+		
+		// execute asynchronous GET request
+		var transaction = YAHOO.util.Connect.asyncRequest('GET', url, addCallback, null);
+	}
+	
+	function deleteFromCart(item_id) {
+				
+		// relative path to COG application
+		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
+		var url = "{% url 'datacart_delete' site.id request.user.id %}?item="+item_id;
+		
+		// execute asynchronous GET request
+		var transaction = YAHOO.util.Connect.asyncRequest('GET', url, deleteCallback, null);
+		
+	}
+	
+	// function called if Ajax request succeded
+	var handleAddSuccess = function(o) {
+		
+		// parse JSON response into object		
+		var jsonResponse = eval('(' + o.responseText + ')');
+		var size = jsonResponse['datacart_size'];
+		
+		element = document.getElementById("datacart_size");
+		element.innerHTML = ""+size;
+		
+	}
+	
+	// function called if Ajax request succeded
+	var handleDeleteSuccess = function(o) {
+		
+		// parse JSON response into object		
+		var jsonResponse = eval('(' + o.responseText + ')');
+		var size = jsonResponse['datacart_size'];
+		var item_id = jsonResponse['item_id'];
+		
+		element = document.getElementById("datacart_size");
+		element.innerHTML = ""+size;
+		
+		element = document.getElementById("item_"+item_id);
+		element.style.display = 'none' ;
+		
+	}
+	
+	// function called if Ajax request failed
+	var handleFailure = function(o) {		
+		showMessage("An Error Occurred", "HTTP Status Code: "+o.status+"<br/>Message: "+o.message);
+	}
+
+	var addCallback = {
+	  success:handleAddSuccess,
+	  failure: handleFailure,
+	  cache:false,
+	  timeout:5000,
+	  argument: [],
+	};
+	
+	var deleteCallback = {
+	  success:handleDeleteSuccess,
+	  failure: handleFailure,
+	  cache:false,
+	  timeout:5000,
+	  argument: [],
+	};
+	
+</script>

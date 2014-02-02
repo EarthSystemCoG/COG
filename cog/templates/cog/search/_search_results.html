@@ -90,19 +90,30 @@
 	                                                      
 	                            <!-- files place-holder -->
 								<div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>	                            
-	                           	                            	                               
-	                            {% if user|hasUserPermission:project %}
-	                               <br/>           	                        	
-		                        	<!-- loop over URls, use THREDDS catalog URL -->
-		                        	{% for url in record.fields.url %}
-		                        		{% if url.1 == 'application/html+thredds' %}	  	                               
-                                   			<a href="javascript:bookmarkit('{{url.0}}', '{{record.fields.title.0}}')">
-                                      			<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Save to Resources</img>
-                                   			</a>	  
-		                            	{% endif %} 
-		                            {% endfor %}    	          	                               
+	                           	               
+	                           	{% if request.user.is_authenticated %}
+	                           		<br/>
+	                           		
+	                           		<!-- link to Data Cart -->
+									<a href="javascript:addToCart('{{ record.id }}', '{{ record.fields.title.0 }}', '{{ record.fields.type.0 }}')">
+										<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Add to Data Cart</img>
+									</a>	    
+									                       	
+		                           	<!-- link to Resources -->             	                               
+		                            {% if user|hasUserPermission:project %}
+		                                          	                        	
+			                        	<!-- loop over URls, use THREDDS catalog URL -->
+			                        	{% for url in record.fields.url %}
+			                        		{% if url.1 == 'application/html+thredds' %}	  	                               
+	                                   			<a href="javascript:bookmarkit('{{url.0}}', '{{record.fields.title.0}}')">
+	                                      			<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Save to Resources</img>
+	                                   			</a>	  
+			                            	{% endif %} 
+			                            {% endfor %}    	          	                               
+	                                {% endif %}
+                                
                                 {% endif %}
-	                                                 	                            
+	                            	                            
 	                        </td>
 	                    </tr>       
 	                {% endfor %}

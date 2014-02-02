@@ -12,6 +12,20 @@ from django.forms.models import modelformset_factory
 from cog.notification import notify, sendEmail
 from django.conf import settings
 
+# view to display the data cart for a given site, user
+def datacart_display2(request, site_id, user_id):
+    
+    # load User object
+    user = get_object_or_404(User, pk=user_id)
+    
+    # TODO:: check site, redirect in case
+    datacart = DataCart.objects.get(user=user)
+    
+    return render_to_response('cog/account/datacart.html',
+                              { 'datacart': datacart },
+                              context_instance=RequestContext(request))
+
+
 def notifyAdminsOfUserRegistration(user):
     
     subject = 'New User Registration'
@@ -98,12 +112,14 @@ def user_add(request):
                                 private=form.cleaned_data['private'],
                                 image=form.cleaned_data['image'])
             userp.save()
-            print 'Created profile for user=%s' % user.get_full_name()
+            
+            # create user data cart
+            datacart = DataCart(user=user)
+            datacart.save()
             
             # must assign URL to this user
             urls = formset.save(commit=False)
             for url in urls:
-                print 'URL=%s name=%s' % (url.url, url.name)
                 url.profile = userp
                 url.save()
                 
