@@ -1,24 +1,29 @@
 <script language="javascript">
 
 	// function to add an item to the user data cart
-	function addToCart(identifier, name, type) {
+	function addToCart(id, name, type, metadata) {
 				
 		// relative path to COG application
 		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
-		var url = "{% url 'datacart_add' site.id request.user.id %}?identifier="+identifier+"&name="+name+"&type="+type;
+		var url = "{% url 'datacart_add' site.id request.user.id %}";
+		var data = "id="+encodeURIComponent(id)
+				 + "&name="+encodeURIComponent(name)
+				 + "&type="+encodeURIComponent(type)
+		         + "&metadata="+encodeURIComponent(metadata);
 		
-		// execute asynchronous GET request
-		var transaction = YAHOO.util.Connect.asyncRequest('GET', url, addCallback, null);
+		// execute asynchronous POST request
+		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, addCallback, data);
 	}
 	
 	function deleteFromCart(item_id) {
 				
 		// relative path to COG application
 		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
-		var url = "{% url 'datacart_delete' site.id request.user.id %}?item="+item_id;
+		var url = "{% url 'datacart_delete' site.id request.user.id %}"
+		var data = "item="+encodeURIComponent(item_id);
 		
 		// execute asynchronous GET request
-		var transaction = YAHOO.util.Connect.asyncRequest('GET', url, deleteCallback, null);
+		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, deleteCallback, data);
 		
 	}
 	
@@ -52,7 +57,7 @@
 	
 	// function called if Ajax request failed
 	var handleFailure = function(o) {		
-		showMessage("An Error Occurred", "HTTP Status Code: "+o.status+"<br/>Message: "+o.message);
+		showMessage("An Error Occurred", "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
 	}
 
 	var addCallback = {

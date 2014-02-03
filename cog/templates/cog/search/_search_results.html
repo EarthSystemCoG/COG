@@ -95,7 +95,7 @@
 	                           		<br/>
 	                           		
 	                           		<!-- link to Data Cart -->
-									<a href="javascript:addToCart('{{ record.id }}', '{{ record.fields.title.0 }}', '{{ record.fields.type.0 }}')">
+									<a href="javascript:addToCart('{{ record.id }}', '{{ record.fields.title.0 }}', '{{ record.fields.type.0 }}', '{{ record|toJson }}')">
 										<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Add to Data Cart</img>
 									</a>	    
 									                       	
@@ -113,6 +113,7 @@
 	                                {% endif %}
                                 
                                 {% endif %}
+                                <br/>
 	                            	                            
 	                        </td>
 	                    </tr>       

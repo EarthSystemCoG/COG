@@ -1,6 +1,7 @@
 from django import template
 from cog.models.search import searchMappings
 from string import replace
+from django.utils import simplejson 
 
 register = template.Library()
 
@@ -35,3 +36,10 @@ def formatMetadataKey(key):
     '''Utility method to format a metadata key before display.'''
     key = key.capitalize()
     return replace(key,'_',' ').title()
+
+@register.filter 
+def toJson(record):
+    '''Serializes the record metadata fields to JSON format.'''
+    
+    json = simplejson.dumps(record.fields)
+    return json

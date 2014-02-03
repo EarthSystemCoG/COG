@@ -5,7 +5,7 @@ from membership import MembershipRequest
 from collaborator import Collaborator
 
 # Data Cart
-from datacart import DataCart, DataCartItem
+from datacart import DataCart, DataCartItem, DataCartItemMetadataKey, DataCartItemMetadataValue
 
 # Projects
 from topic import Topic

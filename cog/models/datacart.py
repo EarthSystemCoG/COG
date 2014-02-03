@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 class DataCart(models.Model):
     
-    # user
     user = models.OneToOneField(User, related_name='datacart')
     
     class Meta:
@@ -17,5 +16,21 @@ class DataCartItem(models.Model):
     name =  models.CharField(max_length=200, blank=False, null=False)
     type =  models.CharField(max_length=50, blank=False, null=False)
     
+    class Meta:
+        app_label= APPLICATION_LABEL
+        
+class DataCartItemMetadataKey(models.Model):
+
+    item = models.ForeignKey(DataCartItem, blank=False, null=False)
+    key =  models.CharField(max_length=200, blank=False, null=False)
+    
+    class Meta:
+        app_label= APPLICATION_LABEL
+    
+class DataCartItemMetadataValue(models.Model):
+
+    key = models.ForeignKey(DataCartItemMetadataKey, blank=False, null=False)
+    value =  models.CharField(max_length=200, blank=True, null=True)
+
     class Meta:
         app_label= APPLICATION_LABEL
