@@ -15,6 +15,12 @@ User: {{ user }}
 
 <br/>
 
+<!-- POST link to completely empty the data cart -->
+<form name='emptyDataCartForm' action='{% url 'datacart_empty' site.id request.user.id%}' method='post'></form>
+<a href="javascript:document.forms['emptyDataCartForm'].submit();">Remove All</A> 
+
+<br/>
+
 Number Of Items: {{ datacart.items.all|length }}
 
 {% if datacart.items.all|length > 0 %}

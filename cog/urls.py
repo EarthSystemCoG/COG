@@ -36,6 +36,7 @@ urlpatterns = patterns('',
     url(r'^datacart/display/(?P<site_id>\d+)/(?P<user_id>\d+)/$', 'cog.views.datacart_display', name='datacart_display'),
     url(r'^datacart/add/(?P<site_id>\d+)/(?P<user_id>\d+)/$', 'cog.views.datacart_add', name='datacart_add'),
     url(r'^datacart/delete/(?P<site_id>\d+)/(?P<user_id>\d+)/$', 'cog.views.datacart_delete', name='datacart_delete'),
+    url(r'^datacart/empty/(?P<site_id>\d+)/(?P<user_id>\d+)/$', 'cog.views.datacart_empty', name='datacart_empty'),
 
     # projects
     url(r'^project/add/$', 'cog.views.project_add', name='project_add' ),
