@@ -32,10 +32,17 @@
 		
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
-		var size = jsonResponse['datacart_size'];
 		
+		// update data cart size
+		var size = jsonResponse['datacart_size'];
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
+		
+		// show messages
+		var message = jsonResponse['message'];
+		if (message) {
+			showMessage("Warning", message);
+		}
 		
 	}
 	

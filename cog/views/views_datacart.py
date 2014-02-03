@@ -42,7 +42,6 @@ def datacart_add(request, site_id, user_id):
     datacart = DataCart.objects.get(user=user)
     
     response_data = {}
-    response_data['error'] = {}
 
     # retrieve data item attributes from request
     id = request.POST['id']
@@ -50,22 +49,29 @@ def datacart_add(request, site_id, user_id):
     type = request.POST['type']
     metadata = request.POST['metadata']
     #print 'JSON METADATA=%s' % metadata
-                
-    # add item to the cart
-    item = DataCartItem(cart=datacart, identifier=id, name=name, type=type)
-    item.save()
     
-    # save additional metadata
-    if metadata is not None:
-        metadata = simplejson.loads(metadata)
+    # check item is not in cart already
+    items = DataCartItem.objects.filter(cart=datacart, identifier=id)
+    if len(items.all()) > 0:
+        response_data['message'] = 'This item is already in the Data Cart'
         
-        for key, values in metadata.items():
-            itemKey = DataCartItemMetadataKey(item=item, key=key)
-            itemKey.save()
-            for value in values:
-                itemValue = DataCartItemMetadataValue(key=itemKey, value=value)
-                itemValue.save()
-                #print ('saved key=%s value=%s' % (itemKey.key, itemValue.value))
+    else:
+                
+        # add item to the cart
+        item = DataCartItem(cart=datacart, identifier=id, name=name, type=type)
+        item.save()
+        
+        # save additional metadata
+        if metadata is not None:
+            metadata = simplejson.loads(metadata)
+            
+            for key, values in metadata.items():
+                itemKey = DataCartItemMetadataKey(item=item, key=key)
+                itemKey.save()
+                for value in values:
+                    itemValue = DataCartItemMetadataValue(key=itemKey, value=value)
+                    itemValue.save()
+                    #print ('saved key=%s value=%s' % (itemKey.key, itemValue.value))
 
     # return new number of items in cart
     response_data['datacart_size'] = len( datacart.items.all() )

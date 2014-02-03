@@ -12,7 +12,10 @@ class DataCart(models.Model):
 class DataCartItem(models.Model):
     
     cart = models.ForeignKey(DataCart, related_name="items", blank=False, null=False)
+    
+    # used to enforce uniqueness within a single user datacart
     identifier =  models.CharField(max_length=200, blank=False, null=False)
+    
     name =  models.CharField(max_length=200, blank=False, null=False)
     type =  models.CharField(max_length=50, blank=False, null=False)
     
