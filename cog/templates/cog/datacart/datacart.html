@@ -9,54 +9,50 @@
 
 {% block main %}
     
-DATA CART
-
-User: {{ user }}
-
-<br/>
-
-<!-- POST link to completely empty the data cart -->
-<form name='emptyDataCartForm' action='{% url 'datacart_empty' site.id request.user.id%}' method='post'></form>
-<a href="javascript:document.forms['emptyDataCartForm'].submit();">Remove All</A> 
-
-<br/>
-
-Number Of Items: {{ datacart.items.all|length }}
-
-{% if datacart.items.all|length > 0 %}
-	{% for item in datacart.items.all %}
-		<div id="item_{{ item.id }}">
-			<table>
-				<tr>
-					<td align='left' width="10px"> {{ forloop.counter }} </td>
-					<td align='left'> <b>name={{ item.name }}</b>
-						<br/>identifier={{ item.identifier }}
-						<br/>type={{ type }}
-					</td>
-					<td> 	
-						<a href="javascript:deleteFromCart({{ item.id }})">
-							<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Remove</img>
-						</a>			
-				</td>
-					
-				</tr>
-			
-			</table>
-		</div>
-	{% endfor %}
+	<div style="text-align:center; font-weight:bold">Number Of Items in Data Cart: {{ datacart.items.all|length }}</div>
 	
-{% endif %}
-
-
-<hr/>
-
-<br/>
-<a href="{% url 'datacart_add' site.id request.user.id %}?identifier=X&name=Y&type=Dataset">Add an Item</a>
-    
-<br/>
-
-<a href="javascript:addToCart('my.dataset.1', 'My dataset Number 1', 'Dataset')">
-	<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; ">Add to Data Cart</img>
-</a>	  
+	{% if datacart.items.all|length > 0 %}
+	  
+	  <!-- skeleton form to empty the data cart via POST -->
+	  <form name='emptyDataCartForm' action='{% url 'datacart_empty' site.id request.user.id %}' method='post'></form>
+	  
+	  <!-- data cart form -->
+	  <form name='dataCartForm'>
+		<table class="no-color">
+		
+			<!--  header -->
+			<tr>
+				<td align='left' width="10px"> Select </td>
+				<td align='left' width="200px"> Item </td>
+				<td align='left' width="20px"> 
+					<a href="javascript:document.forms['emptyDataCartForm'].submit();">Remove All</a> 			
+				</td>
+			</tr>
+			
+			<!-- items -->
+			{% for item in datacart.items.all %}
+				<tr id="item_{{ item.id }}_hr">
+					<td colspan="4"><hr style="margin-bottom: 0px; margin-top: 0px;"/></td>
+				</tr>
+				<tr id="item_{{ item.id }}">
+					<td align='center'>
+						<input type="checkbox" id="checkbox_{{ item.id }}"/>
+					</td>
+					<td align='left'>
+						<b>{{ item.name }}</b>
+						<br/>ID: {{ item.identifier }}
+						<br/>Type: {{ item.type }}
+					</td>
+					<td align='left'> 	
+						<a href="javascript:deleteFromCart({{ item.id }})">
+							<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Remove</img>
+						</a>			
+					</td>			
+				</tr>	
+			{% endfor %}
+	
+		</table>
+	  </form>
+	{% endif %}
 
 {% endblock %}
