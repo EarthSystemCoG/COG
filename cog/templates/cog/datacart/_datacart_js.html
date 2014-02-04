@@ -39,6 +39,11 @@
 		
 		var identifier = jsonResponse['item'];
 		
+		<!-- show 'delete' link -->
+		set_visibility("datacart-delete-"+identifier, true);
+		<!-- hide 'add' link -->
+		set_visibility("datacart-add-"+identifier, false);
+		
 		// show messages
 		var message = jsonResponse['message'];
 		if (message) {
@@ -53,15 +58,21 @@
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
 		var size = jsonResponse['datacart_size'];
-		var item_identifier = jsonResponse['item'];
+		var identifier = jsonResponse['item'];
 		
+		<!-- update datacart size -->
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
 		
-		element = document.getElementById("item_"+item_identifier);
-		element.style.display = 'none' ;
-		element = document.getElementById("item_"+item_identifier+"_hr");
-		element.style.display = 'none' ;
+		<!-- remove item from datacart -->
+		set_visibility("item_"+identifier, false);
+		set_visibility("item_"+identifier+"_hr", false);
+				
+		<!-- hide 'delete' link -->
+		set_visibility("datacart-delete-"+identifier, false);
+		<!-- show 'add' link -->
+		set_visibility("datacart-add-"+identifier, true);
+
 		
 	}
 	
@@ -85,24 +96,5 @@
 	  timeout:5000,
 	  argument: [],
 	};
-	
-	function setDataCartLink(identifier, metadata, status) {
-		
-		el = document.getElementById("datacartlink-"+identifier);
-		
-		// link to add datacart item
-		if (status=='add') {
-			el.innerHTML = "<a href=\"javascript:addToCart('"+identifier+"', '"+metadata+"')\">"
-			             + "<img src='{{STATIC_URL}}cog/img/datacart-add.png' height='20px' style='vertical-align:middle; padding-right:2px; padding-bottom:4px;'>Add to Data Cart</img>"
-			             + "</a>";
-			             
-		// link to delete datacart item
-		} else {
-			el.innerHTML = "<a href=\"javascript:deleteFromCart('"+identifier+"')\">"
-			             + "<img src='{{STATIC_URL}}cog/img/datacart-delete.png' height='20px' style='vertical-align:middle; padding-right:2px; padding-bottom:4px;'>Remove from Data Cart</img>"
-			             + "</a>";
-		}
-		
-	}
 	
 </script>

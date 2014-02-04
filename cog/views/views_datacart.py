@@ -44,21 +44,23 @@ def datacart_add(request, site_id, user_id):
     response_data = {}
 
     # retrieve data item attributes from request
-    id = request.POST['id']
+    identifier = request.POST['id']
     metadata = request.POST['metadata']
     #print 'JSON METADATA=%s' % metadata
     
     # check item is not in cart already
-    items = DataCartItem.objects.filter(cart=datacart, identifier=id)
+    items = DataCartItem.objects.filter(cart=datacart, identifier=identifier)
     if len(items.all()) > 0:
         response_data['message'] = 'This item is already in the Data Cart'
         
     else:
         # add item to the cart
-        item = DataCartItem.fromJson(datacart, id, metadata)
+        item = DataCartItem.fromJson(datacart, identifier, metadata)
 
     # return new number of items in cart
     response_data['datacart_size'] = len( datacart.items.all() )
+    # return identifier of newly added datcart item
+    response_data['item'] = identifier
     
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
     

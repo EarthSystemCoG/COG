@@ -2,13 +2,31 @@
 
 <script type="text/javascript">
 <!--
+
+	// function to switch the visibility of an HTML element
     function toggle_visibility(id) {
        var e = this.document.getElementById(id);
-       if (e.style.display == 'block')
-          e.style.display = 'none';
-       else
-          e.style.display = 'block';
+       if (e!=null) {
+	       if (e.style.display == 'block') {
+	          e.style.display = 'none';
+	       } else {
+	          e.style.display = 'block';
+	       }
+       }
     }
+    
+	// function to set the visibility of an HTML element
+	function set_visibility(id, bool) {
+	   var e = this.document.getElementById(id, bool);
+	   if (e!=null) {
+	       if (bool) {
+	          e.style.display = 'block';
+	       } else {
+	          e.style.display = 'none';
+	       }
+	   }
+	}
+    
 //-->
 </script>
 
