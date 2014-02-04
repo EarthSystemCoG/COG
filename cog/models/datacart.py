@@ -22,16 +22,13 @@ class DataCartItem(models.Model):
     
     # used to enforce uniqueness within a single user datacart
     identifier =  models.CharField(max_length=200, blank=False, null=False)
-    
-    name =  models.CharField(max_length=200, blank=False, null=False)
-    type =  models.CharField(max_length=50, blank=False, null=False)
-               
+                   
     @staticmethod 
-    def fromJson(datacart, id, name, type, metadata):
+    def fromJson(datacart, id, metadata):
         '''Factory method to create and persist a DataCartItem (and related objects) from JSON metadata.'''
         
         # add item to the cart
-        item = DataCartItem(cart=datacart, identifier=id, name=name, type=type)
+        item = DataCartItem(cart=datacart, identifier=id)
         item.save()
         
         # save additional metadata
