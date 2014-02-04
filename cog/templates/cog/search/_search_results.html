@@ -1,7 +1,6 @@
 {% load cog_utils %}
 {% load search_utils %}
 
-
 {% if request.GET.search_data %}
 
   <!-- anchor for dialogs -->
@@ -39,58 +38,12 @@
 	                    <tr>
 	                        <td class="tophead">{{ search_input.offset|add:forloop.counter }}.</td>
 	                        <td class="long">
-	                        	<!-- Result title -->
-	                        	<b>{{record.fields.title.0}}</b>
-	                        	
-	                        	<!-- Result description -->                         
-	                            {% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 }}{% endif %}
-	                        	
-	                        	<br/>
-	                        	[ <a href="javascript:toggle_visibility('dataset_{{ record.id }}'); "><b>Show Metadata</b></a> ]
-	                        	          
-	                        	[ <a href="javascript:toggle_visibility('files_{{ record.id }}'); javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{ project.short_name.lower }}');"><b>Show Files</b></a> ]
-	                        	
-	                        	<!-- display URL links -->
-	                        	{% for url in record.fields.url %}
-	                        		{% if url.1 == 'application/html+thredds' %}
-	                            		&nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]		  
-	                            	{% endif %} 
-	                            	{% if url.1 == 'application/las' %}
-	                            		&nbsp; [ <input type="checkbox" name="las_checkbox" value="{{url.0}}" onclick="javascript:setup_las(this)"/>
-	                            		<a href="#" onclick="javascript:start_las('{{url.0}}')"><b>LAS Visualization</b></a> ]		  
-	                            	{% endif %} 	                            	
-	                            {% endfor %}    	          
-	                            
-	                            <!-- display CIM viewer link -->   
-	                            {% if project.searchprofile.modelMetadataFlag  %}
-  									&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.master_id.0}}')"><b>Model Metadata</b> </a> ]	                            
-	                            {% endif %}
-	                            
-	                            <!-- dataset metadata container -->
-								<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
-									<b>Dataset Metadata</b>
-									{% if record.fields.master_id.0 %}
-										<br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
-									{% endif %}
-									{% if record.fields.version.0 %}
-										<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
-									{% endif %}
-									<!-- display more record information -->
-		                            {% for keyvalues in record.fields|sortdict %}
-		                                {% if keyvalues.0|displayMetadataKey %}
-		                                  {% if keyvalues.0 != 'url' and keyvalues.0 != 'description' and keyvalues.0 != 'title' and keyvalues.0 != 'type' %}
-		                                    <br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> = 
-		                                        {% for value in keyvalues.1 %} 
-		                                          {{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %} 
-		                                        {% endfor %}
-		                                  {% endif %}
-		                                {% endif %}
-		                            {% endfor %}							
-								</div>
-	                                                      
-	                            <!-- files place-holder -->
-								<div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>	                            
-	                           	               
+	                        
+	                        	<!-- dataset metadata container -->
+	                            {% with record as record %}
+									{% include 'cog/search/_record_display.html' %}	
+								{% endwith %}
+	                        		                           	               
 	                           	{% if request.user.is_authenticated %}
 	                           		<br/>
 	                           		

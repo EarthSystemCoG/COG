@@ -22,7 +22,7 @@ def datacart_display(request, site_id, user_id):
     user = get_object_or_404(User, pk=user_id)
     
     datacart = DataCart.objects.get(user=user)
-    
+        
     return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart }, context_instance=RequestContext(request))    
     
 # view to add an item to a user data cart
@@ -69,7 +69,13 @@ def datacart_add(request, site_id, user_id):
                 itemKey = DataCartItemMetadataKey(item=item, key=key)
                 itemKey.save()
                 for value in values:
-                    itemValue = DataCartItemMetadataValue(key=itemKey, value=value)
+                    # URL special case: 
+                    # example: "http://vesg.ipsl.polytechnique.fr/thredds/esgcet/1/obs4MIPs.IPSL.CALIOP.mon.v1.html#obs4MIPs.IPSL.CALIOP.mon.v1|application/html+thredds|Catalog"
+                    if key=='url':
+                        val = "|".join(value)
+                    else:
+                        val = value
+                    itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
                     itemValue.save()
                     #print ('saved key=%s value=%s' % (itemKey.key, itemValue.value))
 

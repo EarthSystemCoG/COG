@@ -4,6 +4,7 @@
 {% load cog_utils %}
 
 {% block extrahead %}
+	{% include 'cog/search/_datacart.html' %} 
 	{% include 'cog/datacart/_datacart_js.html' %} 
 {% endblock %}
 
@@ -39,9 +40,12 @@
 						<input type="checkbox" id="checkbox_{{ item.id }}"/>
 					</td>
 					<td align='left'>
-						<b>{{ item.name }}</b>
-						<br/>ID: {{ item.identifier }}
-						<br/>Type: {{ item.type }}
+						
+						<!-- datacart item display -->
+	                    {% with item.asRecord as record %}
+							{% include 'cog/search/_record_display.html' %}	
+						{% endwith %}
+																	
 					</td>
 					<td align='left'> 	
 						<a href="javascript:deleteFromCart({{ item.id }})">

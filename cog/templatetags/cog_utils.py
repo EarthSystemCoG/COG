@@ -528,3 +528,11 @@ def projectTags(project):
 @register.filter 
 def projectNews(project):
     return news(project)
+
+@register.filter 
+def dataCartItemValues(item, key):
+    return item.getValues(key)
+
+@register.filter 
+def dataCartItemValue(item, key):
+    return item.getValue(key)
