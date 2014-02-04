@@ -41,22 +41,28 @@
 	                        
 	                        	<!-- dataset metadata container -->
 	                            {% with record as record %}
-									{% include 'cog/search/_record_display.html' %}	
+									{% include 'cog/search/__record_display.html' %}	
 								{% endwith %}
 	                        		                           	               
 	                           	{% if request.user.is_authenticated %}
 	                           		<br/>
+	                           		<span id="datacartlink-{{record.id}}">hi</span>
 	                           		
 	                           		<!--  add or remove from Data Cart -->
-	                           		{% if  request.user|dataCartContains:record.id %}	                           		
+	                           		<span id="datacart-delete-{{record.id}}" style="visibility:hidden; text-align:left">                   		
 										<a href="javascript:deleteFromCart('{{ record.id }}')">
 											<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Remove from Data Cart</img>
-										</a>				                           			                           		
-	                           		{% else %}
-		                           		<!-- link to Data Cart -->
+										</a>		
+									</span> 		                          
+									<span id="datacart-add-{{record.id}}" style="visibility:hidden; text-align:left"> 
 										<a href="javascript:addToCart('{{ record.id }}', '{{ record.fields.title.0 }}', '{{ record.fields.type.0 }}', '{{ record|toJson }}')">
 											<img src="{{STATIC_URL}}cog/img/datacart-add.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Add to Data Cart</img>
 										</a>
+									</span> 			                           		     		
+	                           		{% if  request.user|dataCartContains:record.id %}	 
+	                           			<script language="javascript">setDataCartLink("{{record.id}}", "{{ record.fields.title.0 }}", "{{ record.fields.type.0 }}", "{{ record|toJson }}", "delete")</script>
+	                           		{% else %}
+	                           			<script language="javascript">setDataCartLink("{{record.id}}", "{{ record.fields.title.0 }}", "{{ record.fields.type.0 }}", "{{ record|toJson }}", "add")</script> 
 									{% endif %}   	    
 									&nbsp;     
 									 

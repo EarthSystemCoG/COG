@@ -1,0 +1,27 @@
+<!-- template snippet to display the record metadata -->
+
+{% load cog_utils %}
+{% load search_utils %}
+
+<div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
+	<b>Dataset Metadata</b>
+	
+	{% if record.fields.master_id.0 %}
+		<br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
+	{% endif %}
+	{% if record.fields.version.0 %}
+		<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
+	{% endif %}
+	
+	<!-- display more record information -->
+    {% for keyvalues in record.fields|sortdict %}
+        {% if keyvalues.0|displayMetadataKey %}
+          {% if keyvalues.0 != 'url' and keyvalues.0 != 'description' and keyvalues.0 != 'title' and keyvalues.0 != 'type' %}
+            <br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> = 
+                {% for value in keyvalues.1 %} 
+                  {{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %} 
+                {% endfor %}
+          {% endif %}
+        {% endif %}
+    {% endfor %}							
+</div>

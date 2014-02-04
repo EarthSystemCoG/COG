@@ -39,6 +39,8 @@
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
 		
+		var identifier = jsonResponse['item'];
+		
 		// show messages
 		var message = jsonResponse['message'];
 		if (message) {
@@ -85,5 +87,24 @@
 	  timeout:5000,
 	  argument: [],
 	};
+	
+	function setDataCartLink(identifier, title, type, metadata, status) {
+		
+		el = document.getElementById("datacartlink-"+identifier);
+		
+		// link to add datacart item
+		if (status=='add') {
+			el.innerHTML = "<a href=\"javascript:addToCart('"+identifier+"', '"+title+"', '"+type+"', '"+metadata+"')\">"
+			             + "<img src='{{STATIC_URL}}cog/img/datacart-add.png' height='20px' style='vertical-align:middle; padding-right:2px; padding-bottom:4px;'>Add to Data Cart</img>"
+			             + "</a>";
+			             
+		// link to delete datacart item
+		} else {
+			el.innerHTML = "<a href=\"javascript:deleteFromCart('"+identifier+"')\">"
+			             + "<img src='{{STATIC_URL}}cog/img/datacart-delete.png' height='20px' style='vertical-align:middle; padding-right:2px; padding-bottom:4px;'>Remove from Data Cart</img>"
+			             + "</a>";
+		}
+		
+	}
 	
 </script>
