@@ -230,8 +230,10 @@ td,th {
     font-size: 9pt; padding: 5px;
 }
 
+/* but table headers are bold with a cyan background */
 th {
     font-weight: bold;
+    background: none repeat scroll 0 0 #C3D9FF;
 }
 
 /* other CSS can alter the table header's size; this more specific CSS sets it to the proper value */

@@ -175,16 +175,18 @@
 	<!-- sidebar and center -->
 	<div class="span-17">
 		<div id="project_header">
-		
+                    
 	    	{% if project.logo %}
 	    		<!-- project logo -->
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
-	    				<img src="{{ project.logo.url }}" height="70px" />
+	    				<img src="{{ project.logo.url }}" height="70px"
+                                             alt="{{ project.long_name }} logo" />
 	    			</a>
 	    		{% else %}
 	    			<a href="{% url 'project_home' project.short_name|lower %}">
-	    				<img src="{{ project.logo.url }}" height="70px" />
+	    				<img src="{{ project.logo.url }}" height="70px"
+                                             alt="{{ project.long_name }} logo" />
 	    			</a>
 	    		{% endif %}
 	    	
@@ -204,7 +206,7 @@
 	<!-- right column -->
 	<div class="span-7 last">		
 		<div id="right_logo">
-	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="64px"/></a>
+	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="64px" alt="Earth System CoG logo"/></a>
 	    </div>
 	</div>
 	
