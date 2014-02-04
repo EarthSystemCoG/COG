@@ -55,14 +55,14 @@
 										</a>		
 									</span> 		                          
 									<span id="datacart-add-{{record.id}}" style="visibility:hidden; text-align:left"> 
-										<a href="javascript:addToCart('{{ record.id }}', '{{ record.fields.title.0 }}', '{{ record.fields.type.0 }}', '{{ record|toJson }}')">
+										<a href="javascript:addToCart('{{ record.id }}', '{{ record|toJson }}')">
 											<img src="{{STATIC_URL}}cog/img/datacart-add.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Add to Data Cart</img>
 										</a>
 									</span> 			                           		     		
 	                           		{% if  request.user|dataCartContains:record.id %}	 
-	                           			<script language="javascript">setDataCartLink("{{record.id}}", "{{ record.fields.title.0 }}", "{{ record.fields.type.0 }}", "{{ record|toJson }}", "delete")</script>
+	                           			<script language="javascript">setDataCartLink("{{record.id}}", "{{ record|toJson }}", "delete")</script>
 	                           		{% else %}
-	                           			<script language="javascript">setDataCartLink("{{record.id}}", "{{ record.fields.title.0 }}", "{{ record.fields.type.0 }}", "{{ record|toJson }}", "add")</script> 
+	                           			<script language="javascript">setDataCartLink("{{record.id}}", "{{ record|toJson }}", "add")</script> 
 									{% endif %}   	    
 									&nbsp;     
 									 

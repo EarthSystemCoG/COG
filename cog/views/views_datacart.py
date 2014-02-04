@@ -45,8 +45,6 @@ def datacart_add(request, site_id, user_id):
 
     # retrieve data item attributes from request
     id = request.POST['id']
-    name = request.POST['name']
-    type = request.POST['type']
     metadata = request.POST['metadata']
     #print 'JSON METADATA=%s' % metadata
     
@@ -57,7 +55,7 @@ def datacart_add(request, site_id, user_id):
         
     else:
         # add item to the cart
-        item = DataCartItem.fromJson(datacart, id, name, type, metadata)
+        item = DataCartItem.fromJson(datacart, id, metadata)
 
     # return new number of items in cart
     response_data['datacart_size'] = len( datacart.items.all() )
@@ -66,7 +64,6 @@ def datacart_add(request, site_id, user_id):
     
 # view to delete an item to a user data cart
 @login_required
-#@require_http_methods(["GET", "POST"])
 @require_POST
 @csrf_exempt
 def datacart_delete(request, site_id, user_id):

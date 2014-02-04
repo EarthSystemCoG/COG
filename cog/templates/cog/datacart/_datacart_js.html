@@ -1,15 +1,13 @@
 <script language="javascript">
 
 	// function to add an item to the user data cart
-	function addToCart(id, name, type, metadata) {
+	function addToCart(id, metadata) {
 				
 		// relative path to COG application
 		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 		// NOTE: the following URL requires the user to be logged in (otherwise request.user.id is None)
 		var url = "{% url 'datacart_add' site.id request.user.id %}";
 		var data = "id="+encodeURIComponent(id)
-				 + "&name="+encodeURIComponent(name)
-				 + "&type="+encodeURIComponent(type)
 		         + "&metadata="+encodeURIComponent(metadata);
 		
 		// execute asynchronous POST request
@@ -88,13 +86,13 @@
 	  argument: [],
 	};
 	
-	function setDataCartLink(identifier, title, type, metadata, status) {
+	function setDataCartLink(identifier, metadata, status) {
 		
 		el = document.getElementById("datacartlink-"+identifier);
 		
 		// link to add datacart item
 		if (status=='add') {
-			el.innerHTML = "<a href=\"javascript:addToCart('"+identifier+"', '"+title+"', '"+type+"', '"+metadata+"')\">"
+			el.innerHTML = "<a href=\"javascript:addToCart('"+identifier+"', '"+metadata+"')\">"
 			             + "<img src='{{STATIC_URL}}cog/img/datacart-add.png' height='20px' style='vertical-align:middle; padding-right:2px; padding-bottom:4px;'>Add to Data Cart</img>"
 			             + "</a>";
 			             
