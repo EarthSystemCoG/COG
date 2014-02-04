@@ -2,10 +2,16 @@ from django.db import models
 from constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
 from cog.models.search import Record
+from django.utils import simplejson
 
 class DataCart(models.Model):
     
     user = models.OneToOneField(User, related_name='datacart')
+    
+    def contains(self, item_identifier):
+        '''Checks whether the data cart contains an item with the given identifier.'''
+        
+        return self.items.filter(identifier=item_identifier).exists()
     
     class Meta:
         app_label= APPLICATION_LABEL
@@ -19,9 +25,33 @@ class DataCartItem(models.Model):
     
     name =  models.CharField(max_length=200, blank=False, null=False)
     type =  models.CharField(max_length=50, blank=False, null=False)
+               
+    @staticmethod 
+    def fromJson(datacart, id, name, type, metadata):
+        '''Factory method to create and persist a DataCartItem (and related objects) from JSON metadata.'''
         
-    class Meta:
-        app_label= APPLICATION_LABEL
+        # add item to the cart
+        item = DataCartItem(cart=datacart, identifier=id, name=name, type=type)
+        item.save()
+        
+        # save additional metadata
+        if metadata is not None:
+            metadata = simplejson.loads(metadata)
+            
+            for key, values in metadata.items():
+                itemKey = DataCartItemMetadataKey(item=item, key=key)
+                itemKey.save()
+                for value in values:
+                    # URL special case: 
+                    # example: "http://vesg.ipsl.polytechnique.fr/thredds/esgcet/1/obs4MIPs.IPSL.CALIOP.mon.v1.html#obs4MIPs.IPSL.CALIOP.mon.v1|application/html+thredds|Catalog"
+                    if key=='url':
+                        val = "|".join(value)
+                    else:
+                        val = value
+                    itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
+                    itemValue.save()
+                    
+        return item
         
     def asRecord(self):
         '''Returns this data cart item as a search record object.'''
@@ -36,25 +66,29 @@ class DataCartItem(models.Model):
                 else:
                     record.addField(keyobj.key, str(valueobj.value))
                 
-        return record
-            
-    def getValues(self, key):
-        
-        values = []
-        _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
-        if _key is not None:
-            for _value in  _key.values.all():
-                values.append(_value.value)
-        
-        return values
+        return record        
     
-    def getValue(self, key):
+    class Meta:
+        app_label= APPLICATION_LABEL
+
+            
+    #def getValues(self, key):
         
-        values = self.getValues(key)
-        if len(values) > 0:
-            return values[0]
-        else:
-            return None
+    #    values = []
+    #    _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
+    #    if _key is not None:
+    #        for _value in  _key.values.all():
+    #            values.append(_value.value)
+        
+    #    return values
+    
+    #def getValue(self, key):
+        
+    #    values = self.getValues(key)
+    #    if len(values) > 0:
+    #        return values[0]
+    #    else:
+    #        return None
 
         
 class DataCartItemMetadataKey(models.Model):

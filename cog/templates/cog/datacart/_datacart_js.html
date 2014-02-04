@@ -16,12 +16,12 @@
 		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, addCallback, data);
 	}
 	
-	function deleteFromCart(item_id) {
+	function deleteFromCart(item_identifier) {
 				
 		// relative path to COG application
 		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 		var url = "{% url 'datacart_delete' site.id request.user.id %}"
-		var data = "item="+encodeURIComponent(item_id);
+		var data = "item="+encodeURIComponent(item_identifier);
 		
 		// execute asynchronous GET request
 		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, deleteCallback, data);
@@ -53,14 +53,14 @@
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
 		var size = jsonResponse['datacart_size'];
-		var item_id = jsonResponse['item_id'];
+		var item_identifier = jsonResponse['item'];
 		
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
 		
-		element = document.getElementById("item_"+item_id);
+		element = document.getElementById("item_"+item_identifier);
 		element.style.display = 'none' ;
-		element = document.getElementById("item_"+item_id+"_hr");
+		element = document.getElementById("item_"+item_identifier+"_hr");
 		element.style.display = 'none' ;
 		
 	}

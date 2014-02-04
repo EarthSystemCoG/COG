@@ -32,12 +32,12 @@
 			
 			<!-- items -->
 			{% for item in datacart.items.all %}
-				<tr id="item_{{ item.id }}_hr">
+				<tr id="item_{{ item.identifier }}_hr">
 					<td colspan="4"><hr style="margin-bottom: 0px; margin-top: 0px;"/></td>
 				</tr>
-				<tr id="item_{{ item.id }}">
+				<tr id="item_{{ item.identifier }}">
 					<td align='center'>
-						<input type="checkbox" id="checkbox_{{ item.id }}"/>
+						<input type="checkbox" id="checkbox_{{ item.identifier }}"/>
 					</td>
 					<td align='left'>
 						
@@ -48,7 +48,7 @@
 																	
 					</td>
 					<td align='left'> 	
-						<a href="javascript:deleteFromCart({{ item.id }})">
+						<a href="javascript:deleteFromCart('{{ item.identifier }}')">
 							<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Remove</img>
 						</a>			
 					</td>			

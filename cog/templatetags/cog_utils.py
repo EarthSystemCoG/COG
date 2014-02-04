@@ -530,9 +530,15 @@ def projectNews(project):
     return news(project)
 
 @register.filter 
-def dataCartItemValues(item, key):
-    return item.getValues(key)
+def dataCartContains(user, item_identifier):
+    
+    return user.datacart.contains(item_identifier)
 
-@register.filter 
-def dataCartItemValue(item, key):
-    return item.getValue(key)
+
+#@register.filter 
+#def dataCartItemValues(item, key):
+#    return item.getValues(key)
+
+#@register.filter 
+#def dataCartItemValue(item, key):
+#    return item.getValue(key)
