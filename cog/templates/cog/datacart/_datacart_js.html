@@ -49,12 +49,19 @@
 			
 			// execute asynchronous GET request
 			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
+			
+			// show waiting panel
+			showWaitPanel();
+			
 		}
 		
 	}
 	
 	// function called if Ajax request succeded to create the files display widget
 	var handleFilesSuccess = function(o) {
+		
+		// hide waiting panel
+		hideWaitPanel();
 		
 		// retrieve project short name from callback extra argument
 		project = o.argument[0]
@@ -213,7 +220,13 @@
 	
 	// function called if Ajax request failed
 	var handleFailure = function(o) {		
+		
+		// hide waiting panel, in case it was displaying
+		hideWaitPanel();
+
+		// show error panel
 		showMessage("An Error Occurred", "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
+		
 	}
 
 	var addCallback = {

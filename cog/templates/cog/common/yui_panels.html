@@ -91,5 +91,32 @@
         return false;
 
     }
+    
+    /** Function to show a modal waiting panel */
+    function showWaitPanel() {
+    	 
+    	YAHOO.cog.waitPanel =  
+    		new YAHOO.widget.Panel("wait",   
+    		            { width:"240px",  
+    		              fixedcenter:true,  
+    		              close:false,  
+    		              draggable:false,  
+    		              zindex:4, 
+    		              modal:true, 
+    		              visible:false 
+    		            }  
+    		); 
+    		 
+    	YAHOO.cog.waitPanel.setHeader("Loading, please wait..."); 
+    	YAHOO.cog.waitPanel.setBody('<img src="http://l.yimg.com/a/i/us/per/gr/gp/rel_interstitial_loading.gif" />'); 
+    	YAHOO.cog.waitPanel.render("myDialog"); 
+    	YAHOO.cog.waitPanel.show();
+    	
+    }
+    
+    /** Function to hide the waiting panel */
+    function hideWaitPanel() {
+    	YAHOO.cog.waitPanel.hide();
+    }
 
 </script>
