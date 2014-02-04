@@ -264,7 +264,7 @@ def _processDoc(doc):
                 # single value - transform into list for consistency
                 else:
                     metadoc.fields.append( (formatMetadataKey(key), [value]) )
-    
+                        
     return metadoc
     
     

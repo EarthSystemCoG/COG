@@ -78,14 +78,13 @@ def deserialize(xml, facetProfile):
                         if name=='id':
                             record.id = subEl.text
                         else:
-                            if subEl.tag=='str':
-                                record.addField(name, subEl.text.strip()) 
-                            elif subEl.tag=='arr':
-                                for strEl in subEl.findall("str"):
+                            if subEl.tag=='arr':
+                                #for strEl in subEl.findall("str"):
+                                for child in list(subEl):
                                     if name=='url':                                       
                                         # url = http://hydra.fsl.noaa.gov/thredds/esgcet/1/oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2.xml#oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/xml+thredds|Catalog
                                         # url = http://hydra.fsl.noaa.gov/las/getUI.do?catid=C08322CA3EF1E2FEA6B02184320B3A6F_ns_oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/las|LAS
-                                        (url, mimeType, serviceName) = strEl.text.strip().split('|')          
+                                        (url, mimeType, serviceName) = child.text.strip().split('|')          
                                         #print 'url=%s %s %s' % (url, mimeType, serviceName)
                                         # replace THREDDS XML URL with THREDDS HTML URL                           
                                         if mimeType=='application/xml+thredds':
@@ -93,8 +92,11 @@ def deserialize(xml, facetProfile):
                                         else:
                                             record.addField(name, (url, mimeType, serviceName) ) # store full URL triple in list of values
                                     else:
-                                        if strEl.text is not None:
-                                            record.addField(name, strEl.text.strip())  
+                                        if child.text is not None:
+                                            record.addField(name, child.text.strip())  
+                            else:
+                                if subEl.text:
+                                    record.addField(name, subEl.text.strip()) 
                     output.results.append(record)
             
         # loop over facets

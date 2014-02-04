@@ -27,6 +27,9 @@ class DataCartItem(models.Model):
     def fromJson(datacart, id, metadata):
         '''Factory method to create and persist a DataCartItem (and related objects) from JSON metadata.'''
         
+        print 'METADATA'
+        print metadata
+        
         # add item to the cart
         item = DataCartItem(cart=datacart, identifier=id)
         item.save()
@@ -36,6 +39,8 @@ class DataCartItem(models.Model):
             metadata = simplejson.loads(metadata)
             
             for key, values in metadata.items():
+                if key == 'number_of_files':
+                    print "\nnumber_of_files !!"
                 itemKey = DataCartItemMetadataKey(item=item, key=key)
                 itemKey.save()
                 for value in values:
