@@ -66,9 +66,10 @@
 										<script>set_visibility("datacart-delete-{{record.id}}", false);</script>
 	                           			<script>set_visibility("datacart-add-{{record.id}}", true);</script>             
 									{% endif %}   	    
-									&nbsp;     
+									 
 									
-		                           	<!-- link to Resources -->             	                               
+									{% comment %}
+		                           	<!-- link to Resources -->          	                               
 		                            {% if user|hasUserPermission:project %}
 		                                          	                        	
 			                        	<!-- loop over URls, use THREDDS catalog URL -->
@@ -80,10 +81,10 @@
 			                            	{% endif %} 
 			                            {% endfor %}    	          	                               
 	                                {% endif %}
+	                                {% endcomment %}
                                 
                                 {% endif %}
-                                <br/>
-	                            	                            
+	                                           
 	                        </td>
 	                    </tr>       
 	                {% endfor %}

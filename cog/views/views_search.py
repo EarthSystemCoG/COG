@@ -545,7 +545,7 @@ def search_files(request, dataset_id, index_node):
     params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json"), ("distrib", "false") ]
  
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-    #print 'Solr search URL=%s' % url
+    print 'Searching for files: URL=%s' % url
     fh = urllib2.urlopen( url )
     response = fh.read().decode("UTF-8")
 

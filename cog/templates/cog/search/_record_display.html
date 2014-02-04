@@ -3,11 +3,11 @@
 {% load cog_utils %}
 {% load search_utils %}
 
-<!-- Record title -->
+<!-- Record core fields -->
 <b>{{record.fields.title.0}}</b>
-
-<!-- Record description -->
 {% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 }}{% endif %}
+{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }}{% endif %}
+{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
 
 <br/>
 
