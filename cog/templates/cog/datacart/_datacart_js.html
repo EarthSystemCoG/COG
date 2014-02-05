@@ -37,12 +37,15 @@
 	// function to retrieve the files belonging to a given dataset
 	function showFiles(dataset_id, index_node, limit, force, project) {
 		
-		if (limit==0) limit=DEFAULT_LIMIT;
-		
-		fdiv = getFilesDiv(dataset_id);
-			
+	  fdiv = getFilesDiv(dataset_id);
+	  
+	  // only execute request if files panel is showing
+	  if (fdiv.style.display=='block') {
+		  			
 		// only execute invocation for this dataset if not done already, or forced it
 		if (fdiv.innerHTML.length==0 || force) {
+			
+			if (limit==0) limit=DEFAULT_LIMIT;
 				
 			// relative path to COG application
 			// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
@@ -61,6 +64,8 @@
 			showWaitPanel();
 			
 		}
+		
+	  } // display='block' 
 		
 	}
 	
@@ -182,17 +187,18 @@
 		
 		// link to show more files
 		if (docs.length < numFound) {
-			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+numFound+"','true','"+project+"')";
+			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+numFound+"', true,'"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show All Files</a></style>";
 			
 		// link to show less files
 		} else if (docs.length > DEFAULT_LIMIT) {
-			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"','true','"+project+"')";
+			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"', true,'"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
 
 		}
 		
 		fdiv.innerHTML = html;
+		
 	}
 
 	

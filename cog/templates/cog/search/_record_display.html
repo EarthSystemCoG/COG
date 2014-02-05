@@ -16,7 +16,7 @@
 [ <a href="javascript:toggle_visibility('dataset_{{ record.id }}'); "><b>Show Metadata</b></a> ]
         
 <!-- Dataset files -->
-[ <a href="javascript:toggle_visibility('files_{{ record.id }}'); javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', 'false', '{{ project.short_name.lower }}');"><b>Show Files</b></a> ]
+[ <a href="javascript:toggle_visibility('files_{{ record.id }}'); javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', false, '{{ project.short_name.lower }}');"><b>Show Files</b></a> ]
 
 <!-- Record URL links -->
 {% for url in record.fields.url %}
