@@ -542,8 +542,11 @@ def search_facet_delete(request, facet_id):
 def search_files(request, dataset_id, index_node):
     """View that searches for all files of a given dataset, and returns the response as JSON"""
     
+    # maximum number of files to query for
+    limit = request.GET.get('limit', 20)
+    
     params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json"), ("distrib", "false"),
-               ('offset','0'), ('limit','20') ]
+               ('offset','0'), ('limit',limit) ]
  
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
     print 'Searching for files: URL=%s' % url

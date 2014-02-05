@@ -31,18 +31,23 @@
 		return document.getElementById(id);
 	}
 	
+	// default number of files to retrieve
+	var DEFAULT_LIMIT=10;
+	
 	// function to retrieve the files belonging to a given dataset
-	function showFiles(dataset_id, index_node, project) {
+	function showFiles(dataset_id, index_node, limit, force, project) {
+		
+		if (limit==0) limit=DEFAULT_LIMIT;
 		
 		fdiv = getFilesDiv(dataset_id);
 			
-		// only execute invocation for this dataset if not done laready
-		if (fdiv.innerHTML.length==0) {
+		// only execute invocation for this dataset if not done already, or forced it
+		if (fdiv.innerHTML.length==0 || force) {
 				
 			// relative path to COG application
 			// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 			// note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
-			var url = "/search_files/"+dataset_id+"/"+index_node+"/";
+			var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit;
 		
 			// pass in extra arguments to callback functions
 			filesCallback.argument[0] = project
@@ -69,8 +74,6 @@
 		project = o.argument[0]
 		index_node = o.argument[1]
 		dataset_id = o.argument[2]
-		alert(index_node);
-		alert(dataset_id);
 		
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
@@ -176,6 +179,19 @@
 			}
 			html += "</table>";
 		}
+		
+		// link to show more files
+		if (docs.length < numFound) {
+			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+numFound+"','true','"+project+"')";
+			html += "<div style='text-align:center'><a href=\""+url+"\">Show All Files</a></style>";
+			
+		// link to show less files
+		} else if (docs.length > DEFAULT_LIMIT) {
+			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"','true','"+project+"')";
+			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
+
+		}
+		
 		fdiv.innerHTML = html;
 	}
 
