@@ -13,10 +13,14 @@
 <br/>
 
 <!-- Record metadata -->
-[ <a href="javascript:toggle_visibility('dataset_{{ record.id }}'); "><b>Show Metadata</b></a> ]
+[ <a href="javascript:set_visibility('dataset_{{ record.id }}', true); "><b>Show Metadata</b></a> ]
         
 <!-- Dataset files -->
-[ <a href="javascript:toggle_visibility('files_{{ record.id }}'); javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', false, '{{ project.short_name.lower }}');"><b>Show Files</b></a> ]
+[ <a href="javascript:set_visibility('files_{{ record.id }}', true); javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', '{{ project.short_name.lower }}');"><b>Show Files</b></a> ]
+
+<!-- wget script -->
+<!-- FIXMW: relative wget URL is hard-wired to ESGF web endpoint -->
+[ <a href="http://{{ record.fields.index_node.0}}/esg-search/wget/?dataset_id={{ record.id }}&distrib=false"><b>wget script</b></a> ]
 
 <!-- Record URL links -->
 {% for url in record.fields.url %}

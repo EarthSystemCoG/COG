@@ -545,8 +545,13 @@ def search_files(request, dataset_id, index_node):
     # maximum number of files to query for
     limit = request.GET.get('limit', 20)
     
+    # optional query filter
+    query = request.GET.get('query', None)
+    
     params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json"), ("distrib", "false"),
                ('offset','0'), ('limit',limit) ]
+    if query is not None and len(query.strip())>0:
+        params.append( ('query', query) )
  
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
     print 'Searching for files: URL=%s' % url

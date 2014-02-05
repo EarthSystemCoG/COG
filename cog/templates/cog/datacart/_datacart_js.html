@@ -33,39 +33,34 @@
 	
 	// default number of files to retrieve
 	var DEFAULT_LIMIT=10;
-	
+		
 	// function to retrieve the files belonging to a given dataset
-	function showFiles(dataset_id, index_node, limit, force, project) {
+	function showFiles(dataset_id, index_node, limit, project) {
 		
 	  fdiv = getFilesDiv(dataset_id);
 	  
-	  // only execute request if files panel is showing
-	  if (fdiv.style.display=='block') {
-		  			
-		// only execute invocation for this dataset if not done already, or forced it
-		if (fdiv.innerHTML.length==0 || force) {
-			
-			if (limit==0) limit=DEFAULT_LIMIT;
-				
-			// relative path to COG application
-			// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
-			// note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
-			var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit;
+	  // optional query filter
+	  qdiv = document.getElementById("query-filter");
+	  var query = qdiv.value.trim();
+	  		  						
+	  if (limit==0) limit=DEFAULT_LIMIT;
 		
-			// pass in extra arguments to callback functions
-			filesCallback.argument[0] = project
-			filesCallback.argument[1] = index_node
-			filesCallback.argument[2] = dataset_id
-			
-			// execute asynchronous GET request
-			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
-			
-			// show waiting panel
-			showWaitPanel();
-			
-		}
+	  // relative path to COG application
+	  // note: cannot execute HTTP requests to other hosts because of javascript security restrictions
+	  // note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
+	  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit;
+	  if ( query.length > 0 ) url += "&query="+encodeURI(query);
+	
+	  // pass in extra arguments to callback functions
+	  filesCallback.argument[0] = project
+	  filesCallback.argument[1] = index_node
+	  filesCallback.argument[2] = dataset_id
 		
-	  } // display='block' 
+	  // execute asynchronous GET request
+	  var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
+		
+	  // show waiting panel
+	  showWaitPanel();	
 		
 	}
 	
@@ -94,7 +89,9 @@
 		
 		// populate files container
 		var fdiv = getFilesDiv(dataset_id);
-		var html = "<div style='text-align:center; font-weight:bold'>Total Number of Files: "+numFound+"</style>";
+		
+		var html = "<span style='float:right;'>[ <a href='javascript:set_visibility(\"files_"+dataset_id+"\",false)' class='deletelink'>Close</a> ]</span>";
+		html  += "<div style='text-align:center; font-weight:bold'>Total Number of Files: "+numFound+"</div>";
 		if (numFound>0) {
 			html += "<table>";
 			for (var i=0; i<docs.length; i++) {
@@ -187,22 +184,19 @@
 		
 		// link to show more files
 		if (docs.length < numFound) {
-			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+numFound+"', true,'"+project+"')";
+			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+numFound+"','"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show All Files</a></style>";
 			
 		// link to show less files
 		} else if (docs.length > DEFAULT_LIMIT) {
 			var url = "javascript:window.scrollTo(0,0); " // must resize the scrollbar
-				    + "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"', true,'"+project+"')";
+				    + "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"','"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
 
 		}
 		
 		fdiv.innerHTML = html;
-		
-		// always display files panel after successfull request
-		set_visibility('"+fdiv+"', true);
-		
+				
 	}
 
 	
