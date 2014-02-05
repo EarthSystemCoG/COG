@@ -53,10 +53,13 @@
 	// function to return the HTTP parameter string for "&query=..."
 	function getQueryFilter() {
 		
+		var q = "";
 		var qdiv = document.getElementById("query-filter");
-		var query = qdiv.value.trim();
-		if ( query.length > 0 ) return "&query="+encodeURI(query);
-		else return "";
+		if (qdiv!=null) {
+			var query = qdiv.value.trim();
+			if ( query.length > 0 ) q = "&query="+encodeURI(query);
+		}
+		return q;
 		
 	}
 	
