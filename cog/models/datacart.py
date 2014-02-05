@@ -39,8 +39,6 @@ class DataCartItem(models.Model):
             metadata = simplejson.loads(metadata)
             
             for key, values in metadata.items():
-                if key == 'number_of_files':
-                    print "\nnumber_of_files !!"
                 itemKey = DataCartItemMetadataKey(item=item, key=key)
                 itemKey.save()
                 for value in values:

@@ -44,8 +44,10 @@
 			// note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
 			var url = "/search_files/"+dataset_id+"/"+index_node+"/";
 		
-			// pass in project short name as extra argument to callback functions
+			// pass in extra arguments to callback functions
 			filesCallback.argument[0] = project
+			filesCallback.argument[1] = index_node
+			filesCallback.argument[2] = dataset_id
 			
 			// execute asynchronous GET request
 			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
@@ -63,8 +65,12 @@
 		// hide waiting panel
 		hideWaitPanel();
 		
-		// retrieve project short name from callback extra argument
+		// retrieve callback extra argument
 		project = o.argument[0]
+		index_node = o.argument[1]
+		dataset_id = o.argument[2]
+		alert(index_node);
+		alert(dataset_id);
 		
 		// parse JSON response into object		
 		var jsonResponse = eval('(' + o.responseText + ')');
@@ -85,20 +91,26 @@
 			html += "<table>";
 			for (var i=0; i<docs.length; i++) {
 				var doc = docs[i];
-				html += "<tr><td><b>"+doc.title+"</b>";
+				html += "<tr><td>"+(i+1)+"</td>"
+				     +  "<td><b>"+doc.title+"</b>";
 				
 				// display additional file-level metadata 
 				var keys = []
 				for (var field in doc) {
-					if (field != 'data_node' && field != 'index_node' && field != 'type' 
-						&& field != 'id' && field != 'dataset_id' && field != 'score' 
-						&& field != 'url' && field != 'subtype'
-						&& field != 'dataset_id_template_' 
-						&& field != 'instance_id' && field != 'master_id'
-						&& field != 'metadata_format' && field != 'timestamp'
-						&& field != 'title'
-						&& field != 'history'
-						&& field != 'latest' && field != 'replica') {
+					// display lots of file metadata
+					//if (field != 'data_node' && field != 'index_node' && field != 'type' 
+					//	&& field != 'id' && field != 'dataset_id' && field != 'score' 
+					//	&& field != 'url' && field != 'subtype'
+					//	&& field != 'dataset_id_template_' 
+					//	&& field != 'instance_id' && field != 'master_id'
+					//	&& field != 'metadata_format' && field != 'timestamp'
+					//	&& field != 'title'
+					//	&& field != 'history'
+					//	&& field != 'latest' && field != 'replica') {
+					//	keys[keys.length] = field;
+					//}
+					// display only some file metadata
+					if (field == 'checksum' || field == 'size' || field == 'tracking_id') {
 						keys[keys.length] = field;
 					}
 				}
