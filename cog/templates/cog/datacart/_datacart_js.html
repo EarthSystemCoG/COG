@@ -279,8 +279,8 @@
 		
 	}
 	
-	// function to execute a synchronous request for a wget script
-	function wget(index_node, dataset_id) {
+	// function to execute a synchronous request for a single dataset wget script
+	function wgetDataset(index_node, dataset_id) {
 		
 		// FIXME: relative wget URL is hard-wired to ESGF web service endpoint
 		var url = "http://"+index_node+"/esg-search/wget/?dataset_id="+dataset_id+"&distrib=false"
