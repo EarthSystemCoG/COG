@@ -31,6 +31,16 @@
 		return document.getElementById(id);
 	}
 	
+	// function to return the HTTP parameter string for "&query=..."
+	function getQueryFilter() {
+		
+		var qdiv = document.getElementById("query-filter");
+		var query = qdiv.value.trim();
+		if ( query.length > 0 ) return "&query="+encodeURI(query);
+		else return "";
+		
+	}
+	
 	// default number of files to retrieve
 	var DEFAULT_LIMIT=10;
 		
@@ -38,19 +48,16 @@
 	function showFiles(dataset_id, index_node, limit, project) {
 		
 	  fdiv = getFilesDiv(dataset_id);
-	  
-	  // optional query filter
-	  qdiv = document.getElementById("query-filter");
-	  var query = qdiv.value.trim();
 	  		  						
 	  if (limit==0) limit=DEFAULT_LIMIT;
 		
 	  // relative path to COG application
 	  // note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 	  // note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
-	  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit;
-	  if ( query.length > 0 ) url += "&query="+encodeURI(query);
-	
+	  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
+	          // add optional query filter
+			  + getQueryFilter();
+	  
 	  // pass in extra arguments to callback functions
 	  filesCallback.argument[0] = project
 	  filesCallback.argument[1] = index_node
