@@ -80,9 +80,9 @@
 		
 		// populate files container
 		var fdiv = getFilesDiv(dataset_id);
-		fdiv.innerHTML = "<b>Total Number of Files</b>:"+numFound;
+		var html = "<div style='text-align:center; font-weight:bold'>Total Number of Files: "+numFound+"</style>";
 		if (numFound>0) {
-			var html = "<table>";
+			html += "<table>";
 			for (var i=0; i<docs.length; i++) {
 				var doc = docs[i];
 				html += "<tr><td><b>"+doc.title+"</b>";
