@@ -1,5 +1,24 @@
 <script language="javascript">
 
+	// function to select/deselect all items in cart
+	function toggleAllDataCartItems() {
+		
+		// get status of 'master' datacart checkbox
+		var dcCheckbox = document.getElementById("datacart-checkbox");
+		var bool = dcCheckbox.checked;
+		
+		// set status of all dataitems checkboxes to be the same
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 0; i < inputs.length; i++) {
+		    if (inputs[i].type == "checkbox") {
+		    	if (inputs[i].id!=null && inputs[i].id.length>0 && inputs[i].id.indexOf("dataitem-checkbox")==0) {
+		        	inputs[i].checked = bool;
+		    	}
+		    }  
+		}
+		
+	}
+
 	// function to add an item to the user data cart
 	function addToCart(id, metadata) {
 				

@@ -27,7 +27,9 @@
 		
 			<!--  header -->
 			<tr>
-				<td align='left' width="10px"> Select </td>
+				<td align='left' width="10px"> 
+					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"></input>
+				</td>
 				<td align='left' width="200px"> Item </td>
 				<td align='left' width="20px"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();">Remove All</a> 			
@@ -41,7 +43,7 @@
 				</tr>
 				<tr id="item_{{ item.identifier }}">
 					<td align='center'>
-						<input type="checkbox" id="checkbox_{{ item.identifier }}"/>
+						<input type="checkbox" id="dataitem-checkbox_{{ item.identifier }}" name="dataitem-checkbox_{{ item.identifier }}"/>
 					</td>
 					<td align='left'>
 						
