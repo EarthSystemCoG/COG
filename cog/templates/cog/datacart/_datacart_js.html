@@ -192,12 +192,16 @@
 			
 		// link to show less files
 		} else if (docs.length > DEFAULT_LIMIT) {
-			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"', true,'"+project+"')";
+			var url = "javascript:window.scrollTo(0,0); " // must resize the scrollbar
+				    + "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"', true,'"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
 
 		}
 		
 		fdiv.innerHTML = html;
+		
+		// always display files panel after successfull request
+		set_visibility('"+fdiv+"', true);
 		
 	}
 
