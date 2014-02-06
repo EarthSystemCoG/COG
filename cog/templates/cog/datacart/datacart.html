@@ -23,9 +23,6 @@
 	  		Optional string to sub-select filenames: &nbsp;<input type="text" name="query-filter" id="query-filter"></input>
 	  	</div>
 	  	
-	  	<div style="text-align:center">
-	  		<a href="javascript:wgetDatasets()">WGET ALL SELECTED</a>
-	  	</div>
 		<!-- wget scripts place-holder -->
 		<div class="padded-box" id="wget-scripts" style="display:none"></div>	
 	  
@@ -36,7 +33,11 @@
 				<td align='left' width="10px"> 
 					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"></input>
 				</td>
-				<td align='left' width="200px">&nbsp;</td>
+				<td align='left' width="200px">
+					Available Services: 
+					&nbsp; [ <a href="javascript:wgetDatasets()">WGET All Selected Datasets</a> ]
+				
+				</td>
 				<td align='left' width="50px"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();">
 					<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">

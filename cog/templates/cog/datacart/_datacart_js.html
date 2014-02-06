@@ -325,13 +325,20 @@
 		
 		// loop over keys in JSON dictionary
 		var html = getCloseLink("wget-scripts");
+		
+		// description
+		html += "<div style='text-align:center'>For better performance, wget scripts are generated for each Index Node separately. "
+		      + "<br/>Click on each link below to retrieve the script for each Index Node.</div>";
+		
+		html += "<div style='text-align:center'>";
 		for (var index_node in jsonResponse) {
 			  if (jsonResponse.hasOwnProperty(index_node)) {
 				// NOTE: ids is an array but becomes a string when enclosed in ""
 			    var ids = jsonResponse[index_node];
-			    html += "<br/><a href='javascript:wgetScript(\""+index_node+"\",\""+ids+"\")'>download wget script</a>";
+			    html += "<br/><a href='javascript:wgetScript(\""+index_node+"\",\""+ids+"\")'>wget script for "+index_node+"</a>";
 			  }
 		}
+		html += "</div>";
 		
 		// display wget-script panel with new content
 		wgetPanel = document.getElementById("wget-scripts");
@@ -359,8 +366,12 @@
 		    }  
 		}
 		
-		// execute asynchronous POST request
-		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
+		if (postdata.length>0) {
+			// execute asynchronous POST request
+			var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
+		} else {
+			showMessage("Warning", "Please select one or more items in the Data Cart.");
+		}
 		
 	}
 	

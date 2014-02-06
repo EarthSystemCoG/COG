@@ -16,7 +16,7 @@
     function showMessage(title, message) {
 
         YAHOO.cog.myDialog = new YAHOO.widget.SimpleDialog("msgDialog", {
-            width: "300px", 
+            width: "400px", 
             fixedcenter: true, 
             constraintoviewport: true, 
             underlay: "shadow", 
@@ -28,7 +28,7 @@
         });
                     
         YAHOO.cog.myDialog.setHeader(title);
-        YAHOO.cog.myDialog.setBody(message);
+        YAHOO.cog.myDialog.setBody("<div style='text-align:center'>"+message+"</style>");
         YAHOO.cog.myDialog.cfg.setProperty("underlay","matte");
         
         YAHOO.cog.myDialog.render('myDialog');
