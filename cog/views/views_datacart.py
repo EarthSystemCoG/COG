@@ -14,6 +14,7 @@ INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
 # view to display the data cart for a given site, user
 @require_GET
+@login_required
 def datacart_display(request, site_id, user_id):
     
     # TODO:: check site, redirect in case
