@@ -65,8 +65,10 @@ def datacart_add(request, site_id, user_id):
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
 
 # view to generate wget URLS for all selected datacart items
+# can be invoked either through GET or POST requests
 # NOTE: no CSRF token required, but request must be authenticated
 @login_required
+@require_http_methods(["GET", "POST"])
 #@require_POST
 @csrf_exempt
 def datacart_wget(request, site_id, user_id):
@@ -78,9 +80,8 @@ def datacart_wget(request, site_id, user_id):
     if not request.user.id != user_id:
         raise Exception("User not authorized to use datacart")
     
-    # retrieve list of selected datasets
+    # retrieve list of selected dataset ids
     ids = request.REQUEST.getlist('id')
-    print "SELECTED IDS=%s" % ids
     
     # map of dataset ids grouped by index node 
     response_data = {}
@@ -88,7 +89,7 @@ def datacart_wget(request, site_id, user_id):
     # loop over datacart items
     datacart = DataCart.objects.get(user=user)
     for item in datacart.items.all():
-        print item.identifier
+        
         # filter selected datasets only
         if item.identifier in ids:
             
@@ -97,10 +98,17 @@ def datacart_wget(request, site_id, user_id):
             if index_node not in response_data:
                 response_data[index_node] = []
             response_data[index_node].append(item.identifier)
-            
-    # FIXME
-    print "responde_data=%s" % response_data
     
+    '''
+    Example response_data:
+    {
+       u'pcmdi9.llnl.gov':[
+          u'cmip5.output1.INM.inmcm4.1pctCO2.day.atmos.day.r1i1p1.v20110323|pcmdi9.llnl.gov',
+          u'cmip5.output1.INM.inmcm4.esmHistorical.fx.atmos.fx.r0i0p0.v20110927|pcmdi9.llnl.gov',
+          u'cmip5.output1.INM.inmcm4.1pctCO2.day.ocean.day.r1i1p1.v20110323|pcmdi9.llnl.gov'
+       ]
+    }
+    '''
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
     
 # view to delete an item to a user data cart
