@@ -93,6 +93,13 @@
 		
 	}
 	
+	// function to return the "[ Close ]" link for a widget panel
+	function getCloseLink(widget_id) {
+		return "<span style='float:right;'>[ <a href='javascript:set_visibility(\""
+			  + widget_id
+			  +"\",false)' class='deletelink'>Close</a> ]</span>";
+	}
+	
 	// function called if Ajax request succeded to create the files display widget
 	var handleFilesSuccess = function(o) {
 		
@@ -119,7 +126,7 @@
 		// populate files container
 		var fdiv = getFilesDiv(dataset_id);
 		
-		var html = "<span style='float:right;'>[ <a href='javascript:set_visibility(\"files_"+dataset_id+"\",false)' class='deletelink'>Close</a> ]</span>";
+		var html = getCloseLink("files_"+dataset_id);
 		html  += "<div style='text-align:center; font-weight:bold'>Total Number of Files: "+numFound+"</div>";
 		if (numFound>0) {
 			html += "<table>";
@@ -317,7 +324,7 @@
 		var jsonResponse = eval('(' + o.responseText + ')');
 		
 		// loop over keys in JSON dictionary
-		var html = "";
+		var html = getCloseLink("wget-scripts");
 		for (var index_node in jsonResponse) {
 			  if (jsonResponse.hasOwnProperty(index_node)) {
 				// NOTE: ids is an array but becomes a string when enclosed in ""
