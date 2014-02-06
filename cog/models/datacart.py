@@ -72,23 +72,23 @@ class DataCartItem(models.Model):
         app_label= APPLICATION_LABEL
 
             
-    #def getValues(self, key):
+    def getValues(self, key):
         
-    #    values = []
-    #    _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
-    #    if _key is not None:
-    #        for _value in  _key.values.all():
-    #            values.append(_value.value)
+        values = []
+        _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
+        if _key is not None:
+            for _value in  _key.values.all():
+                values.append(_value.value)
         
-    #    return values
+        return values
     
-    #def getValue(self, key):
+    def getValue(self, key):
         
-    #    values = self.getValues(key)
-    #    if len(values) > 0:
-    #        return values[0]
-    #    else:
-    #        return None
+        values = self.getValues(key)
+        if len(values) > 0:
+            return values[0]
+        else:
+            return None
 
         
 class DataCartItemMetadataKey(models.Model):

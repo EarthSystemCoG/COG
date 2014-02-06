@@ -279,6 +279,59 @@
 		
 	}
 	
+	function wgetDatasets2(index_node, ids) {
+		
+		// NOTE: must transform the "," separated string into array of dataset ids
+		ids = ids.split(",");
+		
+		// FIXME: relative wget URL is hard-wired to ESGF web service endpoint
+		var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
+                // add optional query filter
+		        + getQueryFilter();
+	
+		// add dataset ids
+		for (i=0; i<ids.length; i++) {
+			url += "&dataset_id="+encodeURIComponent(ids[i]);
+		}
+
+		// execute synchronous request for one wget script
+		alert(url);
+		window.location.href = url;
+		
+	}
+	
+	// function called if Ajax request to wget endpoint succeded
+	var handleWgetSuccess = function(o) {
+
+		// parse JSON response into object		
+		/** example JSON response:
+			{
+			   u'pcmdi9.llnl.gov':[
+			      u'cmip5.output1.INM.inmcm4.1pctCO2.day.atmos.day.r1i1p1.v20110323|pcmdi9.llnl.gov',
+			      u'cmip5.output1.INM.inmcm4.esmHistorical.fx.atmos.fx.r0i0p0.v20110927|pcmdi9.llnl.gov',
+			      u'cmip5.output1.INM.inmcm4.1pctCO2.day.ocean.day.r1i1p1.v20110323|pcmdi9.llnl.gov'
+			   ]
+			}
+		*/
+		var jsonResponse = eval('(' + o.responseText + ')');
+		
+		// loop over keys in JSON dictionary
+		var html = "";
+		for (var index_node in jsonResponse) {
+			  if (jsonResponse.hasOwnProperty(index_node)) {
+				// NOTE: ids is an array but becomes a string when enclosed in ""
+			    var ids = jsonResponse[index_node];
+			    html += "<br/><a href='javascript:wgetDatasets2(\""+index_node+"\",\""+ids+"\")'>download wget script</a>";
+			  }
+		}
+		
+		// display wget-script panel with new content
+		wgetPanel = document.getElementById("wget-scripts");
+		wgetPanel.innerHTML = html;
+		wgetPanel.style.display = 'block';
+
+	}
+	
 	// function to execute a synchronous request for a single dataset wget script
 	function wgetDataset(index_node, dataset_id) {
 		
@@ -288,6 +341,30 @@
 		        + getQueryFilter();
 
 		window.location.href = url;
+		
+	}
+	
+	// function to create wget scripts for all selected datasets
+	function wgetDatasets() {
+		
+		//  wget endpoint
+		var url = "{% url 'datacart_wget' site.id request.user.id %}";
+		
+		// loop over dataitem checkboxes to post id of selected datasets
+		var postdata = ""
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 0; i < inputs.length; i++) {
+		    if (inputs[i].type == "checkbox") {
+		    	if (inputs[i].id!=null && inputs[i].id.length>0 && inputs[i].id.indexOf("dataitem-checkbox")==0) {
+		        	if (inputs[i].checked) {
+		        		postdata += "&id="+inputs[i].name;
+		        	}
+		    	}
+		    }  
+		}
+		
+		// execute asynchronous POST request
+		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
 		
 	}
 	
@@ -323,6 +400,14 @@
 	  failure: handleFailure,
 	  cache:false,
 	  timeout: 20000, // longer timeout
+	  argument: [],
+	};
+	
+	var wgetCallback = {
+	  success:handleWgetSuccess,
+	  failure: handleFailure,
+	  cache:false,
+	  timeout:5000,
 	  argument: [],
 	};
 	

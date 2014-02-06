@@ -22,6 +22,12 @@
 	  	<div style="text-align:center">
 	  		Optional string to sub-select filenames: &nbsp;<input type="text" name="query-filter" id="query-filter"></input>
 	  	</div>
+	  	
+	  	<div style="text-align:center">
+	  		<a href="javascript:wgetDatasets()">WGET ALL SELECTED</a>
+	  	</div>
+		<!-- wget scripts place-holder -->
+		<div class="padded-box" id="wget-scripts" style="display:none"></div>	
 	  
 		<table class="no-color">
 		
@@ -46,7 +52,7 @@
 				</tr>
 				<tr id="item_{{ item.identifier }}">
 					<td align='center'>
-						<input type="checkbox" id="dataitem-checkbox_{{ item.identifier }}" name="dataitem-checkbox_{{ item.identifier }}"/>
+						<input type="checkbox" id="dataitem-checkbox_{{ item.identifier }}" name="{{ item.identifier }}"/>
 					</td>
 					<td align='left'>
 						
