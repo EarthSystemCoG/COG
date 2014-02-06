@@ -5,6 +5,12 @@
 
 {% block extrahead %}
 	{% include 'cog/datacart/_datacart_js.html' %} 
+	
+	<!-- custom spacing of datacart table -->
+	<style type="text/css">
+		#datacart-table td,th { padding-bottom: 0px; padding-top:2px; margin:0px; }
+	</style>
+	
 {% endblock %}
 
 {% block main %}
@@ -26,17 +32,16 @@
 		<!-- wget scripts place-holder -->
 		<div class="padded-box" id="wget-scripts" style="display:none"></div>	
 	  
-		<table class="no-color">
+		<table class="no-color" id="datacart-table">
 		
 			<!--  header -->
 			<tr>
 				<td align='left' width="10px"> 
 					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"></input>
 				</td>
-				<td align='left' width="200px">
+				<td align='left' width="200px" style="vertical-align: middle;">
 					<b>Available Services:</b>
 					&nbsp; [ <a href="javascript:wgetDatasets()">WGET All Selected Datasets</a> ]
-				
 				</td>
 				<td align='left' width="50px"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();">
@@ -49,7 +54,7 @@
 			<!-- items -->
 			{% for item in datacart.items.all %}
 				<tr id="item_{{ item.identifier }}_hr">
-					<td colspan="4"><hr style="margin-bottom: 0px; margin-top: 0px;"/></td>
+					<td colspan="4"><hr/></td>
 				</tr>
 				<tr id="item_{{ item.identifier }}">
 					<td align='center'>

@@ -22,6 +22,9 @@ class DataCartItem(models.Model):
     
     # used to enforce uniqueness within a single user datacart
     identifier =  models.CharField(max_length=200, blank=False, null=False)
+    
+    # date/time when the item was added
+    date = models.DateTimeField('Date Time', auto_now_add=True)
                    
     @staticmethod 
     def fromJson(datacart, id, metadata):
