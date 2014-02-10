@@ -177,6 +177,7 @@ def metadata_display(request, project_short_name):
     type = request.GET.get('type', None)
     subtype = request.GET.get('subtype', None)
     index_node = request.GET.get('index_node', None)
+    back = request.GET.get('back', None)
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -209,7 +210,7 @@ def metadata_display(request, project_short_name):
         parentMetadata = _processDoc( json["response"]["docs"][0] )
     
     return render_to_response('cog/search/metadata_display.html', 
-                              {'title':metadata.title, 'project' : project, 'metadata':metadata, 'parentMetadata':parentMetadata }, 
+                              {'title':metadata.title, 'project' : project, 'metadata':metadata, 'parentMetadata':parentMetadata, 'back': back }, 
                               context_instance=RequestContext(request))
     
 class MetaDoc:
