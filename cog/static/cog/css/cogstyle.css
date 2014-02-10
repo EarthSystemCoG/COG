@@ -883,3 +883,11 @@ END SPECIFIC CSS FIXES
 	padding: 2px;
 }
 
+/******************************
+BEGIN LUCA NEW CLASSES
+******************************/
+
+.title {
+	font-weight: bold;
+	text-align:center;
+

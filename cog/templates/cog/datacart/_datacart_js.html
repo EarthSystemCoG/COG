@@ -162,15 +162,15 @@
 					html += "<br/><span style='text-transform:capitalize;'>"+key +"</span>: "+doc[key];
 				}
 				
-				if (doc.subtype == 'image') {
-					html += "<br/><a href='/metadata_display/"+project
-					     +"?id="+doc.id
-					     +"&dataset_id="+doc.dataset_id
-					     +"&index_node="+doc.index_node
-					     +"&type="+doc.type
-					     +"&subtype="+doc.subtype
-					     +"'>Full Image Metadata</a>";
-				}
+				//if (doc.subtype == 'image') {
+				html += "<br/><a href='/metadata_display/"+project
+				     +"?id="+doc.id
+				     +"&dataset_id="+doc.dataset_id
+				     +"&index_node="+doc.index_node
+				     +"&type="+doc.type
+				     +"&subtype="+doc.subtype
+				     +"'>Full File Metadata</a>";
+				//}
 				
 				html += "</td><td>";
 				

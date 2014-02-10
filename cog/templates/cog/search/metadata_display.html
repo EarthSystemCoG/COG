@@ -14,15 +14,20 @@
 <!-- display image -->
 <p/>
 <div style="text-align:center">
+
+	<!-- optional image or thumbnail -->
+	{% if request.GET.subtype = 'image' %}
 	<div id="image" style="text-align:center">
 		<a href="{{ metadata.url}}" target="imgwin"><img src="{{ metadata.url}}" width="400px" onerror="imgError(this);"/></a>
 	</div>
+	{% endif %}
+	
+	<!-- description -->
 	{% if metadata.description %}
 		<br/>{{ metadata.description }}
 	{% endif %}
-	<!-- <br/>Click on the image to enlarge it. This may take you to a login page. 
-	<br/>Refresh this page after first login to see a larger image. -->
 	<br/>
+	<!-- link back to previous page -->
 	<a href="{% url 'search' project.short_name|lower %}?search_data=True">Back to Search Results</a>
 </div>
 
@@ -31,7 +36,7 @@
 	<p/>
 	<div class="mybox">
 		<table>
-			<caption>{{ metadata.subtype }} Metadata</caption>
+			<caption>File Metadata</caption>
 			{% for tuple in metadata.fields %}
 			<tr>
 				<td class="head" nowrap="nowrap">{{ tuple.0 }}</td>
