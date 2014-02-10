@@ -38,15 +38,12 @@
 {% endif %}
                      
                      
-<!-- files place-holder -->
-<div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>	
-
 <!-- Record metadata box -->
 <div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
 <b>Dataset Metadata</b>
 
 <!-- Close link -->
-<span style='float:right;'>[ <a href='javascript:set_visibility("dataset_{{ record.id }}",false)' class='deletelink'>Close</a> ]</span>;
+<span style='float:right;'>[ <a href='javascript:set_visibility("dataset_{{ record.id }}",false)' class='deletelink'>Close</a> ]</span>
 
 {% if record.fields.master_id.0 %}
 <br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
@@ -67,3 +64,6 @@
         {% endif %}
     {% endfor %}
 </div>
+
+<!-- files place-holder -->
+<div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>
