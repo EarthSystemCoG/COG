@@ -93,13 +93,6 @@
 		
 	}
 	
-	// function to return the "[ Close ]" link for a widget panel
-	function getCloseLink(widget_id) {
-		return "<span style='float:right;'>[ <a href='javascript:set_visibility(\""
-			  + widget_id
-			  +"\",false)' class='deletelink'>Close</a> ]</span>";
-	}
-	
 	// function called if Ajax request succeded to create the files display widget
 	var handleFilesSuccess = function(o) {
 		
@@ -126,7 +119,7 @@
 		// populate files container
 		var fdiv = getFilesDiv(dataset_id);
 		
-		var html = getCloseLink("files_"+dataset_id);
+		var html = "";
 		html  += "<div style='text-align:center; font-weight:bold'>Total Number of Files: "+numFound+"</div>";
 		if (numFound>0) {
 			html += "<table>";
@@ -188,7 +181,7 @@
 				} else {
 					// show link
 					html += "<br/><a href=''"
-					     +  " onclick='javascript:toggle_visibility2(\"file_{{record.id}}\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
+					     +  " onclick='javascript:openclose(\"file_{{record.id}}\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
 				}
 				
 				html2 += "</div>";
@@ -346,7 +339,7 @@
 		var jsonResponse = eval('(' + o.responseText + ')');
 		
 		// loop over keys in JSON dictionary
-		var html = getCloseLink("wget-scripts");
+		var html = "";
 		
 		// description
 		html += "<div style='text-align:center'>For better performance, wget scripts are generated for each Index Node separately. "
@@ -370,7 +363,9 @@
 	}
 	
 	// function to create wget scripts for all selected datasets
-	function wgetDatasets() {
+	function wgetDatasets(id, hlink, showText, hideText) {
+		
+	  if (document.getElementById(id).style.display=='none') {
 		
 		//  wget endpoint
 		var url = "{% url 'datacart_wget' site.id request.user.id %}";
@@ -389,11 +384,22 @@
 		}
 		
 		if (postdata.length>0) {
+			
+			// open wget panel
+			openclose(id, hlink, showText, hideText);
+			
 			// execute asynchronous POST request
 			var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
 		} else {
 			showMessage("Warning", "Please select one or more items in the Data Cart.");
 		}
+		
+	  } else {
+		  
+		  // close the wget panel
+		  openclose(id, hlink, showText, hideText);
+		  
+	  }
 		
 	}
 	
