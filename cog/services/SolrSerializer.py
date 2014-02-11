@@ -54,7 +54,7 @@ def serialize(input, output):
 def deserialize(xml, facetProfile):
     
     output = SearchOutput()
-    
+        
     try:
     
         # <response>
@@ -78,25 +78,13 @@ def deserialize(xml, facetProfile):
                         if name=='id':
                             record.id = subEl.text
                         else:
+                            # encode multiple values
                             if subEl.tag=='arr':
-                                #for strEl in subEl.findall("str"):
                                 for child in list(subEl):
-                                    if name=='url':                                       
-                                        # url = http://hydra.fsl.noaa.gov/thredds/esgcet/1/oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2.xml#oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/xml+thredds|Catalog
-                                        # url = http://hydra.fsl.noaa.gov/las/getUI.do?catid=C08322CA3EF1E2FEA6B02184320B3A6F_ns_oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/las|LAS
-                                        (url, mimeType, serviceName) = child.text.strip().split('|')          
-                                        #print 'url=%s %s %s' % (url, mimeType, serviceName)
-                                        # replace THREDDS XML URL with THREDDS HTML URL                           
-                                        if mimeType=='application/xml+thredds':
-                                            record.addField('url', (url.replace('xml','html'),  'application/html+thredds', serviceName) )
-                                        else:
-                                            record.addField(name, (url, mimeType, serviceName) ) # store full URL triple in list of values
-                                    else:
-                                        if child.text is not None:
-                                            record.addField(name, child.text.strip())  
+                                    _encode_field_value(record, name, child.text)
+                            # encode single value
                             else:
-                                if subEl.text:
-                                    record.addField(name, subEl.text.strip()) 
+                                _encode_field_value(record, name, subEl.text)
                     output.results.append(record)
             
         # loop over facets
@@ -129,3 +117,36 @@ def deserialize(xml, facetProfile):
     except (ValueError, LookupError) as err:
         print "Error: %s" % err    
     return output
+
+def _encode_field_value(record, name, value):
+    
+    if value is not None and len(value.strip())>0:
+                
+        parts = value.strip().split('|')
+        
+        # field encoded as URL triple: 'url'=(url, mimeType, serviceName) or 'xlink'=(url, text, 'summary')
+        # Examples:
+        # url = http://hydra.fsl.noaa.gov/thredds/esgcet/1/oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2.xml#oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/xml+thredds|Catalog
+        # url = http://hydra.fsl.noaa.gov/las/getUI.do?catid=C08322CA3EF1E2FEA6B02184320B3A6F_ns_oc_gis_downscaling.bccr_bcm2.sresa1b.Prcp.v2|application/las|LAS
+        # xlink = https://vesg.ipsl.polytechnique.fr/thredds/fileServer/obs4MIPs_dataroot/obs-CFMIP/TechnicalNotes/CFMIP_CALIPSO_GOCCP.pdf|CALISPO-GOCCP Technical Notes|summary
+        if len(parts)==3:
+            # special processing
+            if name=='url':
+                [url, mimeType, serviceName] = parts[:]
+                if mimeType=='application/xml+thredds':
+                    # replace THREDDS XML URL with THREDDS HTML URL        
+                    record.addField(name, (url.replace('xml','html'),  'application/html+thredds', serviceName) )
+                else:
+                    record.addField(name, (url, mimeType, serviceName))
+            elif name=='xlink':
+                # NOTE: 'xlink' metadata is renamed to 'url' metadata
+                record.addField('url', (parts[0], 'application/pdf', 'Tech Note'))
+            else:
+                # default triple encoding
+                record.addField(name, parts) # store full URL triple in list of values
+                
+        # field encoded as single string
+        else:
+            record.addField(name, value.strip())  
+
+    

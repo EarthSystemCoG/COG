@@ -26,15 +26,22 @@
 	[ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><b>wget script</b></a> ]
 {% endif %}
 
-<!-- Record URL links -->
+<!-- Display URL links -->
 {% for url in record.fields.url %}
-{% if url.1 == 'application/html+thredds' %}
-    &nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]
+	<!-- THREDDS -->
+	{% if url.1 == 'application/html+thredds' %}
+	    &nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]
+	{% else %}
+		<!-- LAS -->
+	    {% if url.1 == 'application/las' %}
+	    	&nbsp; [ <input type="checkbox" name="las_checkbox" value="{{url.0}}" onclick="javascript:setup_las(this)"/>
+	   	    <a href="#" onclick="javascript:start_las('{{url.0}}')"><b>LAS Visualization</b></a> ]
+	   	{% else %}
+	   		<!--  default case -->
+	   		&nbsp; [ <a href="{{url.0}}"><b>{{ url.2 }}</b></a> ]
+	    {% endif %}
     {% endif %}
-    {% if url.1 == 'application/las' %}
-    &nbsp; [ <input type="checkbox" name="las_checkbox" value="{{url.0}}" onclick="javascript:setup_las(this)"/>
-   <a href="#" onclick="javascript:start_las('{{url.0}}')"><b>LAS Visualization</b></a> ]
-   {% endif %}
+    
 {% endfor %}
   
 <!-- display CIM viewer link -->
@@ -45,16 +52,17 @@
                      
 <!-- Record metadata box -->
 <div class="padded-box" id="dataset_{{ record.id }}" style="display:none">
-<b>Dataset Metadata</b>
 
-{% if record.fields.master_id.0 %}
-<br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
-{% endif %}
-{% if record.fields.version.0 %}
-<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
-{% endif %}
+	<b>Dataset Metadata</b>
+	
+	{% if record.fields.master_id.0 %}
+	<br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
+	{% endif %}
+	{% if record.fields.version.0 %}
+	<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
+	{% endif %}
 
-<!-- display more record information -->
+	<!-- display more record information -->
     {% for keyvalues in record.fields|sortdict %}
         {% if keyvalues.0|displayMetadataKey %}
           {% if keyvalues.0 != 'url' and keyvalues.0 != 'description' and keyvalues.0 != 'title' and keyvalues.0 != 'type' %}
