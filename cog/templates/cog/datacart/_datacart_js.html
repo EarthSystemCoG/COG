@@ -162,16 +162,16 @@
 					html += "<br/><span style='text-transform:capitalize;'>"+key +"</span>: "+doc[key];
 				}
 				
-				//if (doc.subtype == 'image') {
-				html += "<br/><a href='/metadata_display/"+project
-				     +"?id="+doc.id
-				     +"&dataset_id="+doc.dataset_id
-				     +"&index_node="+doc.index_node
-				     +"&type="+doc.type
-				     +"&subtype="+doc.subtype
-				     +"&back={{request.get_full_path}}" // add current URL with query string to provide 'back' link
-				     +"'>Full File Metadata</a>";
-				//}
+				if (doc.subtype == 'image') {
+					html += "<br/><a href='/metadata_display/"+project
+					     +"?id="+doc.id
+					     +"&dataset_id="+doc.dataset_id
+					     +"&index_node="+doc.index_node
+					     +"&type="+doc.type
+					     +"&subtype="+doc.subtype
+					     +"&back={{request.get_full_path}}" // add current URL with query string to provide 'back' link
+					     +"'>Full Image Metadata</a>";
+				}
 				
 				html += "</td><td>";
 				
