@@ -28,8 +28,11 @@ def getFacetOptionLabel(facet_key, facet_value):
 @register.filter 
 def displayMetadataKey(key):
     """ Utility function to determine when a metadata field needs to be displayed """
-    return (key != 'score' and key != 'index_node' and key != 'data_node' \
-            and key != 'dataset_id' and key != 'replica' and key!= 'latest')
+    #return (key != 'score' and key != 'index_node' and key != 'data_node' \
+    #        and key != 'dataset_id' and key != 'replica' and key!= 'latest')
+    return (key != 'score' and key != 'description' and key != 'title' \
+            and key != 'url' and key != 'type' and key!= 'replica' and key != 'latest')
+
  
 @register.filter    
 def formatMetadataKey(key):

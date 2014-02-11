@@ -23,7 +23,7 @@
 <!-- wget script -->
 <!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
 {% if record.fields.project.0 != 'NCPP' %}
-	[ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><b>wget script</b></a> ]
+	[ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><b>Wget Script</b></a> ]
 {% endif %}
 
 <!-- Display URL links -->
@@ -65,12 +65,10 @@
 	<!-- display more record information -->
     {% for keyvalues in record.fields|sortdict %}
         {% if keyvalues.0|displayMetadataKey %}
-          {% if keyvalues.0 != 'url' and keyvalues.0 != 'description' and keyvalues.0 != 'title' and keyvalues.0 != 'type' %}
             <br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> =
-                {% for value in keyvalues.1 %}
-                  {{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %}
-                {% endfor %}
-          {% endif %}
+            {% for value in keyvalues.1 %}
+            	{{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %}
+            {% endfor %}
         {% endif %}
     {% endfor %}
 </div>
