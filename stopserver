@@ -1,0 +1,15 @@
+#!/bin/sh
+
+
+PORTS="8000 8001 8443"
+
+for PORT in $PORTS
+do
+  PID=`lsof -i :$PORT | tail -1 | awk '{print \$2}'`
+  if [ $PID ]; then
+    kill -9 $PID
+    echo "killed process listening to port $PORT"
+  else 
+    echo "no process listening to port $PORT"
+  fi
+done 
