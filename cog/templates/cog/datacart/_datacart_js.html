@@ -135,8 +135,11 @@
 				html += "<tr><td>"+(i+1)+"</td>"
 				     +  "<td><b>"+doc.title+"</b>";
 				
+				var html2 = "<div id='file_{{record.id}}' style='display:none'>";
+				
 				// display additional file-level metadata 
 				var keys = []
+				var keys2 = []
 				for (var field in doc) {
 					// display lots of file metadata
 					//if (field != 'data_node' && field != 'index_node' && field != 'type' 
@@ -153,15 +156,24 @@
 					// display only some file metadata
 					if (field == 'checksum' || field == 'size' || field == 'tracking_id') {
 						keys[keys.length] = field;
+					} else {
+						keys2[keys.length] = field;
 					}
 				}
 				// loop over metadata keys in alphabetical order
 				keys = keys.sort();
+				keys2 = keys2.sort();
 				for (var j=0; j<keys.length; j++) {
 					key = keys[j];
 					html += "<br/><span style='text-transform:capitalize;'>"+key +"</span>: "+doc[key];
 				}
-				
+				for (var j=0; j<keys2.length; j++) {
+					key = keys2[j];
+					if (j>0) html2 += "<br/>";
+					html2 += "<span style='text-transform:capitalize;'>"+key +"</span>: "+doc[key];
+				}
+
+				<!-- special case: image metadata display-->
 				if (doc.subtype == 'image') {
 					html += "<br/><a href='/metadata_display/"+project
 					     +"?id="+doc.id
@@ -171,7 +183,15 @@
 					     +"&subtype="+doc.subtype
 					     +"&back={{request.get_full_path}}" // add current URL with query string to provide 'back' link
 					     +"'>Full Image Metadata</a>";
+					     
+				<!-- general case: more file metadata -->
+				} else {
+					// show link
+					html += "<br/><a href='' onclick='javascript:toggle_visibility(\"file_{{record.id}}\"); return false;'>[ More File Metadata ]</a>";
 				}
+				
+				html2 += "</div>";
+				html += html2;
 				
 				html += "</td><td>";
 				
