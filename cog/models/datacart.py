@@ -29,10 +29,7 @@ class DataCartItem(models.Model):
     @staticmethod 
     def fromJson(datacart, id, metadata):
         '''Factory method to create and persist a DataCartItem (and related objects) from JSON metadata.'''
-        
-        print 'METADATA'
-        print metadata
-        
+                
         # add item to the cart
         item = DataCartItem(cart=datacart, identifier=id)
         item.save()

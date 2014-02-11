@@ -128,7 +128,7 @@
 				html += "<tr><td>"+(i+1)+"</td>"
 				     +  "<td><b>"+doc.title+"</b>";
 				
-				var html2 = "<div id='file_{{record.id}}' style='display:none'>";
+				var html2 = "<div id='file_"+doc.id+"' style='display:none'>";
 				
 				// display additional file-level metadata 
 				var keys = []
@@ -181,7 +181,7 @@
 				} else {
 					// show link
 					html += "<br/><a href=''"
-					     +  " onclick='javascript:openclose(\"file_{{record.id}}\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
+					     +  " onclick='javascript:openclose(\"file_"+doc.id+"\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
 				}
 				
 				html2 += "</div>";
@@ -189,13 +189,13 @@
 				
 				html += "</td><td>";
 				
-				// file access
+				// file 'url' metadata
 				if (doc.url) {
 					
 					var thumbnailUrl = null;
 					var imageUrl = null;
 					
-					// loop over file access URLs, inspect servie type, create hyperlinks
+					// loop over file access URLs, inspect service type, create hyperlinks
 					for (var j=0; j<doc.url.length; j++) {
 						var urlArray = doc.url[j].split('|');
 						
@@ -227,6 +227,18 @@
 					}
 
 				} // file access
+				
+				// file 'xlink' metadata, including Technical Notes
+				if (doc.xlink) {
+					for (var j=0; j<doc.xlink.length; j++) {
+						var parts = doc.xlink[j].split('|');
+						if ( parts[1].toLowerCase().indexOf('tech')>=0 && parts[1].toLowerCase().indexOf('note')>=0) {
+							html += "<a href='"+parts[0]+"'>Tech Note</a><br/>";
+						} else {
+							html += "<a href='"+parts[0]+"'>"+parts[1]+"</a><br/>";
+						}
+					}
+				}
 				 
 				html += "</td></tr>";
 			}

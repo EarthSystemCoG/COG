@@ -121,7 +121,7 @@ def deserialize(xml, facetProfile):
 def _encode_field_value(record, name, value):
     
     if value is not None and len(value.strip())>0:
-                
+                        
         parts = value.strip().split('|')
         
         # field encoded as URL triple: 'url'=(url, mimeType, serviceName) or 'xlink'=(url, text, 'summary')
