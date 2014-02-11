@@ -31,6 +31,10 @@
 		
 		// execute asynchronous POST request
 		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, addCallback, data);
+		
+		// show waiting panel
+		showWaitPanel();	
+
 	}
 	
 	function deleteFromCart(item_identifier) {
@@ -286,6 +290,9 @@
 		if (message) {
 			showMessage("Warning", message);
 		}
+		
+		// hide wait panel
+		hideWaitPanel();
 		
 	}
 	
