@@ -187,7 +187,8 @@
 				<!-- general case: more file metadata -->
 				} else {
 					// show link
-					html += "<br/><a href='' onclick='javascript:toggle_visibility(\"file_{{record.id}}\"); return false;'>[ More File Metadata ]</a>";
+					html += "<br/><a href=''"
+					     +  " onclick='javascript:toggle_visibility2(\"file_{{record.id}}\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
 				}
 				
 				html2 += "</div>";
