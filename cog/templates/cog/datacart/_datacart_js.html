@@ -74,26 +74,31 @@
 	function showFiles(dataset_id, index_node, limit, project) {
 		
 	  fdiv = getFilesDiv(dataset_id);
-	  		  						
-	  if (limit==0) limit=DEFAULT_LIMIT;
-		
-	  // relative path to COG application
-	  // note: cannot execute HTTP requests to other hosts because of javascript security restrictions
-	  // note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
-	  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
-	          // add optional query filter
-			  + getQueryFilter();
 	  
-	  // pass in extra arguments to callback functions
-	  filesCallback.argument[0] = project
-	  filesCallback.argument[1] = index_node
-	  filesCallback.argument[2] = dataset_id
-		
-	  // execute asynchronous GET request
-	  var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
-		
-	  // show waiting panel
-	  showWaitPanel();	
+	  // only conduct the search if the files panel has been opened already
+	  if (fdiv.style.display=='block') {
+	  		  						
+		  if (limit==0) limit=DEFAULT_LIMIT;
+			
+		  // relative path to COG application
+		  // note: cannot execute HTTP requests to other hosts because of javascript security restrictions
+		  // note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
+		  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
+		          // add optional query filter
+				  + getQueryFilter();
+		  
+		  // pass in extra arguments to callback functions
+		  filesCallback.argument[0] = project
+		  filesCallback.argument[1] = index_node
+		  filesCallback.argument[2] = dataset_id
+			
+		  // execute asynchronous GET request
+		  var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
+			
+		  // show waiting panel
+		  showWaitPanel();	
+	  
+	  }
 		
 	}
 	
@@ -154,7 +159,9 @@
 					if (field == 'checksum' || field == 'size' || field == 'tracking_id') {
 						keys[keys.length] = field;
 					} else {
-						keys2[keys.length] = field;
+						if (field != 'score') {
+							keys2[keys.length] = field;
+						}
 					}
 				}
 				// loop over metadata keys in alphabetical order
@@ -183,9 +190,11 @@
 					     
 				<!-- general case: more file metadata -->
 				} else {
-					// show link
-					html += "<br/><a href=''"
-					     +  " onclick='javascript:openclose(\"file_"+doc.id+"\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
+					if (keys.length>0) {
+						// insert link to show more metadata fields
+						html += "<br/><a href=''"
+					    	 +  " onclick='javascript:openclose(\"file_"+doc.id+"\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
+					}
 				}
 				
 				html2 += "</div>";
