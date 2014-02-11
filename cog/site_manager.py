@@ -32,13 +32,13 @@ class SiteManager(object):
                }
     
     def __init__(self):
-        '''Initialization methd reads the configuration file.'''
+        '''Initialization method reads the configuration file.'''
 
         self.config = ConfigParser.RawConfigParser(SiteManager.DEFAULTS)
         configFilePath = os.path.expanduser(SiteManager.CONFIGFILEPATH)
         try:
-            dataset = self.config.read( configFilePath )
-            if not dataset:
+            config = self.config.read( configFilePath )
+            if not config:
                 # if the configFilePath cannot be read (ie: doesn't exist), raise an error
                 raise ValueError
             
