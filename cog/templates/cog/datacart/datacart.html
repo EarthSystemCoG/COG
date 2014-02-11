@@ -30,23 +30,31 @@
 	  		&nbsp;<input type="text" name="query-filter" id="query-filter"/>
 	  		&nbsp;[ To apply: click on 'Show Files' or 'Wget' again ]
 	  	</div>
-	  		  
+	  	
+	  	<!-- data cart table -->	  
+	  	<p/>
 		<table class="no-color" id="datacart-table">
-		
-			<!--  header -->
+			
+			<!-- Header: services -->
+			<tr>
+				<td align='left' colspan="3" style="vertical-align: middle;"> 
+					<b>Available Services:</b>
+					&nbsp; [ <b><a href="" 
+					               onclick="javascript:wgetDatasets('wget-scripts', this, 'Wget All Selected Datasets', 'Hide Wget Scripts'); return false">
+					               Wget All Selected Datasets</a></b> ]
+					
+					<!-- wget scripts place-holder -->
+					<div class="padded-box" id="wget-scripts" style="display:none"></div>
+				</td>
+			</tr>
+			<tr id="item_{{ item.identifier }}_hr">
+				<td colspan="4"><hr/></td>
+			</tr>
 			<tr>
 				<td align='left' width="10px"> 
 					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"></input>
 				</td>
-				<td align='left' width="200px" style="vertical-align: middle;">
-					<b>Available Services:</b>
-					&nbsp; [ <b><a href="" 
-					               onclick="javascript:wgetDatasets('wget-scripts', this, 'Wget All Selected Datasets', 'Hide Wget Scripts'); return false">Wget All Selected Datasets</a></b> ]
-					
-					<!-- wget scripts place-holder -->
-					<div class="padded-box" id="wget-scripts" style="display:none"></div>
-					
-				</td>
+				<td align='left' width="200px" style="vertical-align: middle;">Select All</td>
 				<td align='left' width="60px" nowrap="nowrap"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();">
 					<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
@@ -54,6 +62,7 @@
 					</a> 			
 				</td>
 			</tr>
+			
 			
 			<!-- items -->
 			{% for item in datacart.items.all %}
