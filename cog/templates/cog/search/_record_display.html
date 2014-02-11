@@ -19,7 +19,10 @@
 [ <a href="javascript:set_visibility('files_{{ record.id }}', true); javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', '{{ project.short_name.lower }}');"><b>Show Files</b></a> ]
 
 <!-- wget script -->
-[ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><b>wget script</b></a> ]
+<!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
+{% if record.fields.project.0 != 'NCPP' %}
+	[ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><b>wget script</b></a> ]
+{% endif %}
 
 <!-- Record URL links -->
 {% for url in record.fields.url %}
