@@ -68,7 +68,7 @@
 }
 
 /* TOP NAV */
-#top_nav {
+.top_nav {
     width: 100%;
     height: 20px;
     margin: 0 auto;
@@ -85,7 +85,7 @@
     font-style: normal;
 }
 
-#top_nav_left {
+.top_nav_left {
 	padding-top: 2px;
 	padding-left: 6px;
 	width: 100%;
@@ -93,7 +93,7 @@
 	float:left;
 }
 
-#top_subnav_left {
+.top_subnav_left {
 	padding-top: 2px;
 	padding-left: 6px;
 	width: 100%;
@@ -101,12 +101,12 @@
 	float:left;
 }
 
-#top_subnav_left a:link, #top_subnav_left a:visited {
+.top_subnav_left a:link, .top_subnav_left a:visited {
     color: #666;
 }
 
 
-#top_nav_right {
+.top_nav_right {
 	width: 97%;
 	padding-top: 2px;
 	padding-left: 6px;
@@ -115,7 +115,7 @@
 	float: right;
 }
 
-#top_subnav_right {
+.top_subnav_right {
 	width: 97%;
 	padding-top: 2px;
 	padding-left: 6px;
@@ -124,19 +124,19 @@
 	float: right;
 }
 
-#top_nav ul {
+.top_nav ul {
     margin: 0;
     padding: 0px 0px 0px 0px;
     list-style: none;
     line-height: normal;
 }
 
-#top_nav li {
+.top_nav li {
     float: left;
     height: 20px;
 }
 
-#top_nav a {
+.top_nav a {
     display: block;
     margin-right: 3px;    
     /* COG STYLE: TOP NAV BAR TEXT */
@@ -148,12 +148,12 @@
     border: none;
 }
 
-#top_nav_right a {
+.top_nav_right a {
 	color: #000000;
 	/* font-weight: bold; */
 }
 
-#top_nav a:hover {
+.top_nav a:hover {
     /* background: #FFFFFF; */
     text-decoration: underline;
     /* color: 417690; */
@@ -213,9 +213,9 @@
 </div>
 	    
 <!-- top navigation bar -->
-<div id="top_nav">
+<div class="top_nav">
 	<div class="span-19">
-		<div id="top_nav_left">
+		<div class="top_nav_left">
 			{% if project %}
 			    <ul>
 					{% for tablist in project|getTopNav:request %}
@@ -231,7 +231,7 @@
 		</div>
 	</div>
 	<div class="span-5 last">
-		<div id="top_nav_right">
+		<div class="top_nav_right">
 			<ul>
 				<li><a href="{% url 'project_home' 'cog' %}">What is CoG?</a></li>
 				<li><a href="/projects/cog/contactus/">Site Support</a></li>
@@ -242,11 +242,11 @@
 
 <!-- top navigation sub-bar -->
 {% if project %}
-	<div id="top_nav">
+	<div class="top_nav">
 		{% for tablist in project|getTopNav:request %}
 			{% if tablist|length > 1 %}	
 					<div class="span-19">
-						<div id="top_subnav_left">					
+						<div class="top_subnav_left">
 							    <ul>							
 									{% for tab in tablist %}
 										<!-- sub-tabs only -->
@@ -260,7 +260,7 @@
 						</div>
 					</div>
 					<div class="span-5 last">
-						<div id="top_subnav_right">
+						<div class="top_subnav_right">
 						</div>
 					</div>			
 			{% endif %}

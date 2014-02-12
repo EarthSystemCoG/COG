@@ -18,9 +18,9 @@
 	                 {{ list_title }} 
 	                 <span style="float: right">Sort by:
 	                       {% if request.GET.sortby = 'date' %}
-	                           date | <a href="{{ url }}?type={{request.GET.type}}&sortby=title&query={{request.GET.query}}">title</a>	                           
+	                           date | <a href="{{ url }}?type={{request.GET.type}}&amp;sortby=title&amp;query={{request.GET.query}}">title</a>
 	                       {% else %}
-	                           <a href="{{ url }}?type={{request.GET.type}}&sortby=date&query={{request.GET.query}}">date</a> | title
+	                           <a href="{{ url }}?type={{request.GET.type}}&amp;sortby=date&amp;query={{request.GET.query}}">date</a> | title
 	                        {% endif %}
 	                 </span>
 	                 &nbsp;

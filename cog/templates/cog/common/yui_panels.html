@@ -1,7 +1,7 @@
 <!-- File containing functionality for creating overlay panels with YUI library -->
 
 <script type="text/javascript">
-
+//<![CDATA[
 	YAHOO.namespace("cog");
 
     var handleDismiss = function() { 
@@ -28,7 +28,7 @@
         });
                     
         YAHOO.cog.myDialog.setHeader(title);
-        YAHOO.cog.myDialog.setBody("<div style='text-align:center'>"+message+"</style>");
+        YAHOO.cog.myDialog.setBody("<div style='text-align:center'>"+message+"</div>");
         YAHOO.cog.myDialog.cfg.setProperty("underlay","matte");
         
         YAHOO.cog.myDialog.render('myDialog');
@@ -118,5 +118,5 @@
     function hideWaitPanel() {
     	YAHOO.cog.waitPanel.hide();
     }
-
+//]]>
 </script>
