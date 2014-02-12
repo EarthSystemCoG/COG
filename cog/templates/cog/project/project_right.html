@@ -3,7 +3,8 @@
     <!-- COG custom filters --> 
     {% load cog_utils %}
 
-    <script>
+    <script type="text/javascript">
+    //<![CDATA[
                    
        // function to populate the project widget via ajax call
        function loadProjectBrowser(project_short_name) {
@@ -54,11 +55,12 @@
 			document.getElementById(tabId).innerHTML = o.responseText;
 			
 		}
-		       
+    //]]>
    </script>
       
-   <script>
-   
+   <script type="text/javascript">
+   //<![CDATA[
+
    	   // populate project tags from django database query
    	   var projectTags = [
    	   	  {{ project|projectTags }}
@@ -77,7 +79,7 @@
            //autoComp.alwaysShowContainer = true;
        }
        YAHOO.util.Event.onContentReady("project_widget", initTags);
-       
+   //]]>
    </script>
 
      
@@ -265,12 +267,12 @@
     </div>   
 
 	<!-- render YUI tabs -->
-    <script>var myTabs = new YAHOO.widget.TabView("project_views");</script>
+    <script type="text/javascript">var myTabs = new YAHOO.widget.TabView("project_views");</script>
     
     <!-- populate project browser -->
-    <script>loadProjectBrowser('{{ project.short_name }}')</script>
+    <script type="text/javascript">loadProjectBrowser('{{ project.short_name }}')</script>
     
     <!-- initialize tags autocompletion -->
-    <script>initTags()</script>
+    <script type="text/javascript">initTags()</script>
       
 {% endblock %}

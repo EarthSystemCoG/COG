@@ -28,6 +28,8 @@
     {% include 'cog/account/_states.html' %}
        
     <script>
+    //<![CDATA[
+
        function init() {
     	   // country
            var countryDataSource = new YAHOO.util.LocalDataSource(countryArray);
@@ -43,7 +45,8 @@
            stateAutoComp.allowBrowserAutocomplete = false;
        }
        YAHOO.util.Event.onContentReady("userDiv", init);
-       
+
+    //]]>
     </script>
        
 {% endblock %}

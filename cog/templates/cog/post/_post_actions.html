@@ -9,7 +9,7 @@
 	        &nbsp;&nbsp;
 	        <a href="{% url 'doc_add' post.project.short_name.lower %}?redirect={% url 'post_add_doc' post.id %}" class="addlink">Add File</a>
             &nbsp;&nbsp;
-            <a href="{% url 'post_add' post.project.short_name.lower %}?type={{ post.type }}&parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }}</a>
+            <a href="{% url 'post_add' post.project.short_name.lower %}?type={{ post.type }}&amp;parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }}</a>
             {% if user|hasUserPermission:post.project %}
                 {% if not post.is_predefined %}
                     &nbsp;&nbsp;
