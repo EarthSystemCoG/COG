@@ -9,6 +9,7 @@ import re
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
+from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
@@ -64,6 +65,40 @@ def datacart_add(request, site_id, user_id):
     response_data['item'] = identifier
     
     return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
+
+# view to add ALL current search results (as displayed in the page) to the user data cart
+@login_required
+@require_GET
+def datacart_add_all(request, site_id, user_id):
+    
+    # load User object
+    user = get_object_or_404(User, pk=user_id)
+    datacart = DataCart.objects.get(user=user)
+    
+    # security check
+    if not request.user.id != user_id:
+        raise Exception("User not authorized to modify datacart")
+    
+    # retrieve results from session
+    data = request.session.get(SEARCH_DATA, None)
+    if data is not None:
+        searchOutput = data[SEARCH_OUTPUT]
+        
+        # loop over record
+        print "Adding %s results" % len(searchOutput.results)
+        for record in searchOutput.results:
+            
+            # check item is not in cart already
+            if DataCartItem.objects.filter(cart=datacart, identifier=record.id).exists():
+                print 'Item %s already in Data Cart' % record.id
+            else:
+                item = DataCartItem.fromRecord(datacart, record)
+                print 'Added item: %s' % record.id
+
+    # redirect to search results
+    back = request.GET.get('back','/')
+    return HttpResponseRedirect( back )
+
 
 # view to generate wget URLS for all selected datacart items
 # can be invoked either through GET or POST requests

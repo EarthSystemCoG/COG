@@ -29,30 +29,39 @@ class DataCartItem(models.Model):
     @staticmethod 
     def fromJson(datacart, id, metadata):
         '''Factory method to create and persist a DataCartItem (and related objects) from JSON metadata.'''
-                
+        
+        return DataCartItem.create(datacart, id, simplejson.loads(metadata))
+                    
+    @staticmethod 
+    def fromRecord(datacart, record):
+        '''Factory method to create and persist a DataCartItem (and related objects) from a search record.'''
+        
+        return DataCartItem.create(datacart, record.id, record.fields)
+    
+    @staticmethod 
+    def create(datacart, id, metadata):
+        '''Factory method to create and persist a DataCartItem (and related objects) from an identifier and a dictionary of metadata fields.'''
+
         # add item to the cart
         item = DataCartItem(cart=datacart, identifier=id)
         item.save()
         
-        # save additional metadata
-        if metadata is not None:
-            metadata = simplejson.loads(metadata)
-            
-            for key, values in metadata.items():
-                itemKey = DataCartItemMetadataKey(item=item, key=key)
-                itemKey.save()
-                for value in values:
-                    # URL special case: 
-                    # example: "http://vesg.ipsl.polytechnique.fr/thredds/esgcet/1/obs4MIPs.IPSL.CALIOP.mon.v1.html#obs4MIPs.IPSL.CALIOP.mon.v1|application/html+thredds|Catalog"
-                    if key=='url':
-                        val = "|".join(value)
-                    else:
-                        val = value
-                    itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
-                    itemValue.save()
+        # save additional metadata            
+        for key, values in metadata.items():
+            itemKey = DataCartItemMetadataKey(item=item, key=key)
+            itemKey.save()
+            for value in values:
+                # URL special case: 
+                # example: "http://vesg.ipsl.polytechnique.fr/thredds/esgcet/1/obs4MIPs.IPSL.CALIOP.mon.v1.html#obs4MIPs.IPSL.CALIOP.mon.v1|application/html+thredds|Catalog"
+                if key=='url':
+                    val = "|".join(value)
+                else:
+                    val = value
+                itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
+                itemValue.save()
                     
         return item
-        
+
     def asRecord(self):
         '''Returns this data cart item as a search record object.'''
         

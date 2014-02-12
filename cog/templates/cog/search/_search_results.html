@@ -26,6 +26,8 @@
 						<a href="{% url 'search' project.short_name.lower %}" onclick="javascript:searchit({{ page.1 }}); return false;">{{ page.0 }}</a>
 					{% endif %}
 				{% endfor %}
+				<br/>
+				<a href="{% url 'datacart_add_all' site.id request.user.id %}?back={{ request.get_full_path }}">Add all displayed results to Data Cart</a>
 			</div>
 			&nbsp;<br/>
                                            
