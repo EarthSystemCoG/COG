@@ -3,6 +3,7 @@ from constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
 from cog.models.search import Record
 from django.utils import simplejson
+from django.db import transaction
 
 class DataCart(models.Model):
     
@@ -39,8 +40,10 @@ class DataCartItem(models.Model):
         return DataCartItem.create(datacart, record.id, record.fields)
     
     @staticmethod 
+    @transaction.commit_manually
     def create(datacart, id, metadata):
-        '''Factory method to create and persist a DataCartItem (and related objects) from an identifier and a dictionary of metadata fields.'''
+        '''Factory method to create and persist a DataCartItem (and related objects) from an identifier and a dictionary of metadata fields.
+           Note that all related objects acre created in a single database transaction'''
 
         # add item to the cart
         item = DataCartItem(cart=datacart, identifier=id)
@@ -59,6 +62,8 @@ class DataCartItem(models.Model):
                     val = value
                 itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
                 itemValue.save()
+                
+        transaction.commit()
                     
         return item
 
