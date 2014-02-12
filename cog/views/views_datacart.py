@@ -12,6 +12,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 from django.core.exceptions import ObjectDoesNotExist
 
+
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
 # view to display the data cart for a given site, user
