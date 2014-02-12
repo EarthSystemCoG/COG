@@ -12,12 +12,13 @@
 		Enter text &nbsp; <input type="text" name="text" size="30" value="{{search_input.text}}"/> 
 		&nbsp; <input type="submit" value="Search"/>
 		&nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
+		&nbsp; Display
 		<select name="limit" id="limit">
 			<option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
 			<option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
 			<option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
 			<option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
-		</select>
+		</select> results per page
 	</div>
 </div>
 <!-- Form errors -->
