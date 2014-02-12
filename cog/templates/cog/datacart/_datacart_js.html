@@ -316,6 +316,8 @@
 		<!-- update datacart size -->
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
+		element = document.getElementById("datacart_size2");
+		if (element !=null) element.innerHTML = ""+size;
 		
 		<!-- remove item from datacart -->
 		set_visibility("item_"+identifier, false);

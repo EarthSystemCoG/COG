@@ -15,7 +15,7 @@
 
 {% block main %}
     
-	<div style="text-align:center; font-weight:bold">Number Of Items in Data Cart: {{ datacart.items.all|length }}</div>
+	<div style="text-align:center; font-weight:bold">Number Of Items in Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span></div>
 	
 	{% if datacart.items.all|length > 0 %}
 	  
@@ -56,13 +56,12 @@
 				</td>
 				<td align='left' width="200px" style="vertical-align: middle;">Select All</td>
 				<td align='left' width="60px" nowrap="nowrap"> 
-					<a href="javascript:document.forms['emptyDataCartForm'].submit();">
-					<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
-						Remove All
-					</a> 			
+					<a href="javascript:document.forms['emptyDataCartForm'].submit();"
+                       onclick="return urlConfirmationDialog('Empty Data Cart Confirmation','Are you sure you want to remove ALL items from the cart ?', this)">
+                       <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
+                       Remove All</a>			
 				</td>
 			</tr>
-			
 			
 			<!-- items -->
 			{% for item in datacart.items.all %}
@@ -73,17 +72,15 @@
 					<td align='center'>
 						<input type="checkbox" id="dataitem-checkbox_{{ item.identifier }}" name="{{ item.identifier }}"/>
 					</td>
-					<td align='left'>
-						
+					<td align='left'>		
 						<!-- datacart item display -->
 	                    {% with item.asRecord as record %}
 							{% include 'cog/search/_record_display.html' %}	
-						{% endwith %}
-																	
+						{% endwith %}								
 					</td>
 					<td align='left'> 	
 						<a href="javascript:deleteFromCart('{{ item.identifier }}')">
-							<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Remove</img>
+							<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;"/>Remove
 						</a>			
 					</td>			
 				</tr>	
