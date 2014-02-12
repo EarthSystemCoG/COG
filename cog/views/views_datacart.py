@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
+from django.core.exceptions import ObjectDoesNotExist
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
@@ -85,7 +86,7 @@ def datacart_add_all(request, site_id, user_id):
         searchOutput = data[SEARCH_OUTPUT]
         
         # loop over record
-        print "Adding %s results" % len(searchOutput.results)
+        print "Adding %s items" % len(searchOutput.results)
         for record in searchOutput.results:
             
             # check item is not in cart already
@@ -95,6 +96,39 @@ def datacart_add_all(request, site_id, user_id):
                 item = DataCartItem.fromRecord(datacart, record)
                 print 'Added item: %s' % record.id
 
+    # redirect to search results
+    back = request.GET.get('back','/')
+    return HttpResponseRedirect( back )
+
+# view to delete ALL current search results (as displayed in the page) from the user data cart
+@login_required
+@require_GET
+def datacart_delete_all(request, site_id, user_id):
+    
+    # load User object
+    user = get_object_or_404(User, pk=user_id)
+    datacart = DataCart.objects.get(user=user)
+    
+    # security check
+    if not request.user.id != user_id:
+        raise Exception("User not authorized to modify datacart")
+    
+    # retrieve results from session
+    data = request.session.get(SEARCH_DATA, None)
+    if data is not None:
+        searchOutput = data[SEARCH_OUTPUT]
+        
+        # loop over record
+        print "Deleting %s items" % len(searchOutput.results)
+        for record in searchOutput.results:
+            
+            try:
+                item = DataCartItem.objects.get(cart=datacart, identifier=record.id)
+                print 'Deleting item: %s' % item.id
+                item.delete()
+            except ObjectDoesNotExist:
+                pass
+            
     # redirect to search results
     back = request.GET.get('back','/')
     return HttpResponseRedirect( back )

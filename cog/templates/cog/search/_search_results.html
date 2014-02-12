@@ -28,6 +28,8 @@
 				{% endfor %}
 				<br/>
 				<a href="{% url 'datacart_add_all' site.id request.user.id %}?back={{ request.get_full_path }}">Add all displayed results to Data Cart</a>
+				&nbsp; &nbsp;
+				<a href="{% url 'datacart_delete_all' site.id request.user.id %}?back={{ request.get_full_path }}">Remove all displayed results from Data Cart</a>
 			</div>
 			&nbsp;<br/>
                                            
