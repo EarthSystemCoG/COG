@@ -64,7 +64,7 @@ def search_config(request, searchConfig, extra={}):
     View entry point for applications that need to provide their own
     per-request search configuration.
     """
-    
+        
     # print extra arguments
     for key, value in extra.items():
         print 'extra key=%s value=%s' % (key,value)
@@ -91,13 +91,11 @@ def search_config(request, searchConfig, extra={}):
     # offset, limit
     if request.REQUEST.get('offset', 0):
         input.offset = int(request.REQUEST['offset'])
-        print 'OFFSET=%s' % input.offset
     if request.REQUEST.get('limit', 0):
         input.limit = int(request.REQUEST['limit'])
-        print 'LIMIT=%s' % input.limit
         
     # GET/POST switch
-    print "HTTP Request method=%s" % request.method
+    print "search() view: HTTP Request method=%s search_data flag=%s" % (request.method, request.REQUEST.get(SEARCH_DATA, None))
     if (request.method=='GET'):
         return search_get(request, input, searchConfig.facetProfile, searchConfig.searchService, extra)
     else:
@@ -393,6 +391,7 @@ def search(request, project_short_name):
     """
     COG-specific search-view that configures the back-end search engine on a per-project basis.
     """
+    
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     config = getSearchConfig(request, project)
