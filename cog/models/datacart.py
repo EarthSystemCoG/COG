@@ -63,6 +63,7 @@ class DataCartItem(models.Model):
                 itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
                 itemValue.save()
                 
+        # save the full item
         transaction.commit()
                     
         return item
