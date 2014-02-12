@@ -120,7 +120,7 @@ def deserialize(xml, facetProfile):
 
 def _encode_field_value(record, name, value):
     
-    if value is not None and len(value.strip())>0:
+    if value is not None and len(value.strip())>0 and value.lower() != 'none':
                         
         parts = value.strip().split('|')
         

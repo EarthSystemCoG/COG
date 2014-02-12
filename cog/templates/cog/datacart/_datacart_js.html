@@ -102,6 +102,11 @@
 		
 	}
 	
+	// formats a metadata key for display
+	function formatString(key) {
+		return key.replace(/_/g," ").replace(/,/g,", ")
+	}
+	
 	// function called if Ajax request succeded to create the files display widget
 	var handleFilesSuccess = function(o) {
 		
@@ -136,31 +141,18 @@
 				var doc = docs[i];
 				html += "<tr><td>"+(i+1)+"</td>"
 				     +  "<td><b>"+doc.title+"</b>";
-				
 				var html2 = "<div id='file_"+doc.id+"' style='display:none'>";
 				
 				// display additional file-level metadata 
 				var keys = []
 				var keys2 = []
 				for (var field in doc) {
-					// display lots of file metadata
-					//if (field != 'data_node' && field != 'index_node' && field != 'type' 
-					//	&& field != 'id' && field != 'dataset_id' && field != 'score' 
-					//	&& field != 'url' && field != 'subtype'
-					//	&& field != 'dataset_id_template_' 
-					//	&& field != 'instance_id' && field != 'master_id'
-					//	&& field != 'metadata_format' && field != 'timestamp'
-					//	&& field != 'title'
-					//	&& field != 'history'
-					//	&& field != 'latest' && field != 'replica') {
-					//	keys[keys.length] = field;
-					//}
 					// display only some file metadata
 					if (field == 'checksum' || field == 'size' || field == 'tracking_id') {
 						keys[keys.length] = field;
 					} else {
 						if (field != 'score') {
-							keys2[keys.length] = field;
+							keys2[keys2.length] = field;
 						}
 					}
 				}
@@ -169,12 +161,12 @@
 				keys2 = keys2.sort();
 				for (var j=0; j<keys.length; j++) {
 					key = keys[j];
-					html += "<br/><span style='text-transform:capitalize;'>"+key +"</span>: "+doc[key];
+					html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
 				}
 				for (var j=0; j<keys2.length; j++) {
 					key = keys2[j];
 					if (j>0) html2 += "<br/>";
-					html2 += "<span style='text-transform:capitalize;'>"+key +"</span>: "+doc[key];
+					html2 += "<span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
 				}
 
 				<!-- special case: image metadata display-->
