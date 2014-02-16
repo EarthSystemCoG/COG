@@ -1,5 +1,9 @@
 <script language="javascript">
 
+	// service types
+	var THREDDS = 'application/html+thredds';
+	var LAS = 'application/las';
+
 	// class representing a service that is available for a data cart item
 	function Service(id, url, type, name) {
 		this.id = id;
@@ -10,13 +14,45 @@
 	
 	// class indexing the available services
 	function Services() {
-		this.items_wget = [];
-		this.items_las = [];
+		this.map = {}
 	}
 	
-	// add a service to the catalog
+	// adds a service to the catalog
 	Services.prototype.add = function(service) {
-	  this.items_wget.push( service );
+		
+	  if (this.map[service.type]==null) {
+		this.map[service.type] = [];
+	  }
+	  this.map[service.type].push( service );
+	  
+	};
+	
+	// removes an item from the services catalog
+	Services.prototype.delete = function(identifier) {
+		
+	    for (var key in this.map) {
+	        if (this.map.hasOwnProperty(key)) {
+	            for (i in this.map[key]) {
+	            	var id = this.map[key][i].id;
+	            	if (identifier==id) {
+	            		// remove this array element, redefine indexes
+	            		this.map[key].splice(i,1);
+	            	}
+	            }
+	        }
+	    }
+
+	};
+	
+	// counts the services of a given type
+	Services.prototype.count = function(mtype) {
+		
+	  if (this.map[mtype]) {
+		  return this.map[mtype].length;
+	  } else {
+		  return 0;
+	  }
+	  
 	};
 
 	// page scope catalog of services
@@ -24,13 +60,10 @@
 	
 	// FIXME
 	function count_wget() {
-		alert(services.items_wget.length);
-		//for (var i=0; i<services.items_wget.length; i++) {
-		//	alert(services.items_wget[i].id);
-		//}
+		alert( services.count(THREDDS) );
 	}
 	function count_las() {
-		alert(items_las.length);
+		alert( services.count(LAS) );
 	}
 
 	// function to select/deselect all items in cart
@@ -338,11 +371,14 @@
 		var size = jsonResponse['datacart_size'];
 		var identifier = jsonResponse['item'];
 		
+		// remove from available services
+		services.delete(identifier);
+		
 		<!-- update datacart size -->
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
 		element = document.getElementById("datacart_size2");
-		if (element !=null) element.innerHTML = ""+size;
+		if (element!=null) element.innerHTML = ""+size;
 		
 		<!-- remove item from datacart -->
 		set_visibility("item_"+identifier, false);
