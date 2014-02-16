@@ -28,9 +28,14 @@
 
 <!-- Display URL links -->
 {% for url in record.fields.url %}
+	
+	<!-- add this service to the catalog -->
+	<script language="javascript">services.add( new Service('{{record.id}}','{{url.0}}', '{{url.1}}','{{url.2}}' ) );</script>
+	
 	<!-- THREDDS -->
 	{% if url.1 == 'application/html+thredds' %}
 	    &nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]
+	    
 	{% else %}
 		<!-- LAS -->
 	    {% if url.1 == 'application/las' %}
