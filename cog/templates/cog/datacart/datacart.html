@@ -4,6 +4,7 @@
 {% load cog_utils %}
 
 {% block extrahead %}
+	{% include 'cog/datacart/_services.html' %} 
 	{% include 'cog/datacart/_datacart_js.html' %} 
 	{% include 'cog/search/_las_js.html' %}
 	
@@ -91,9 +92,4 @@
 	  </form>
 	{% endif %}
 	
-	<!-- FIXME -->
-	<a href="" onclick="javascript:count_wget(); return false;">Count wget</a>
-	&nbsp;
-	<a href="" onclick="javascript:count_las(); return false;">Count LAS</a>
-
 {% endblock %}

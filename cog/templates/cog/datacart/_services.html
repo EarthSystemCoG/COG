@@ -1,0 +1,79 @@
+<!-- Objects for managing data cart item services -->
+<script language="javascript">
+
+	// service types
+	var THREDDS = 'application/html+thredds';
+	var LAS = 'application/las';
+
+	// class representing a service that is available for a data cart item
+	function Service(id, url, type, name) {
+		this.id = id;
+		this.url = url;
+		this.type=type;
+		this.name = name;
+	}
+	
+	// class indexing the available services
+	function Services() {
+		this.map = {}
+	}
+	
+	// adds a service to the catalog
+	Services.prototype.add = function(service) {
+		
+	  if (this.map[service.type]==null) {
+		this.map[service.type] = [];
+	  }
+	  this.map[service.type].push( service );
+	  
+	};
+	
+	// removes an item from the services catalog
+	Services.prototype.delete = function(identifier) {
+		
+	    for (var key in this.map) {
+	        if (this.map.hasOwnProperty(key)) {
+	            for (i in this.map[key]) {
+	            	var id = this.map[key][i].id;
+	            	if (identifier==id) {
+	            		// remove this array element, redefine indexes
+	            		this.map[key].splice(i,1);
+	            	}
+	            }
+	        }
+	    }
+
+	};
+	
+	// counts the services of a given type
+	Services.prototype.count = function(mtype) {
+		
+	  if (this.map[mtype]) {
+		  return this.map[mtype].length;
+	  } else {
+		  return 0;
+	  }
+	  
+	};
+	
+	// checks if an item with given identifier is available for a specific service
+	Services.prototype.contains = function(identifier, mtype) {
+		
+		if (this.map[mtype]!=null) {
+			for (i in this.map[mtype]) {
+				var obj = this.map[mtype][i];
+				if (obj.id==identifier) {
+					return obj;
+				}
+			}
+		}
+		
+		// not found
+		return null;
+		
+	}
+
+	// page scope catalog of services
+	var services = new Services();
+	
+</script>

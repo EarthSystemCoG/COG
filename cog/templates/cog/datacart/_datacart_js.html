@@ -1,71 +1,5 @@
 <script language="javascript">
 
-	// service types
-	var THREDDS = 'application/html+thredds';
-	var LAS = 'application/las';
-
-	// class representing a service that is available for a data cart item
-	function Service(id, url, type, name) {
-		this.id = id;
-		this.url = url;
-		this.type=type;
-		this.name = name;
-	}
-	
-	// class indexing the available services
-	function Services() {
-		this.map = {}
-	}
-	
-	// adds a service to the catalog
-	Services.prototype.add = function(service) {
-		
-	  if (this.map[service.type]==null) {
-		this.map[service.type] = [];
-	  }
-	  this.map[service.type].push( service );
-	  
-	};
-	
-	// removes an item from the services catalog
-	Services.prototype.delete = function(identifier) {
-		
-	    for (var key in this.map) {
-	        if (this.map.hasOwnProperty(key)) {
-	            for (i in this.map[key]) {
-	            	var id = this.map[key][i].id;
-	            	if (identifier==id) {
-	            		// remove this array element, redefine indexes
-	            		this.map[key].splice(i,1);
-	            	}
-	            }
-	        }
-	    }
-
-	};
-	
-	// counts the services of a given type
-	Services.prototype.count = function(mtype) {
-		
-	  if (this.map[mtype]) {
-		  return this.map[mtype].length;
-	  } else {
-		  return 0;
-	  }
-	  
-	};
-
-	// page scope catalog of services
-	var services = new Services();
-	
-	// FIXME
-	function count_wget() {
-		alert( services.count(THREDDS) );
-	}
-	function count_las() {
-		alert( services.count(LAS) );
-	}
-
 	// function to select/deselect all items in cart
 	function toggleAllDataCartItems() {
 		
@@ -453,27 +387,49 @@
 
 	}
 	
-	// function to create wget scripts for all selected datasets
-	function wgetDatasets(id, hlink, showText, hideText) {
+	// returns the currently selected data cart items
+	// with a specific service type
+	function getSelectedItemsByServiceType(mtype) {
 		
-	  if (document.getElementById(id).style.display=='none') {
+		var objs = [];
 		
-		//  wget endpoint
-		var url = "{% url 'datacart_wget' site.id request.user.id %}";
-		
-		// loop over dataitem checkboxes to post id of selected datasets
-		var postdata = ""
+		// loop over selected checkboxes
 		var inputs = document.getElementsByTagName("input");
 		for (var i = 0; i < inputs.length; i++) {
 		    if (inputs[i].type == "checkbox") {
 		    	if (inputs[i].id!=null && inputs[i].id.length>0 && inputs[i].id.indexOf("dataitem-checkbox")==0) {
 		        	if (inputs[i].checked) {
-		        		postdata += "&id="+inputs[i].name;
+		        		// data cart item identifier
+		        		var identifier = inputs[i].id.substring( "dataitem-checkbox".length+1 );
+		        		var obj = services.contains(identifier, mtype);
+		        		if (obj!=null) {
+		        			objs.push(obj);
+		        		}
 		        	}
 		    	}
 		    }  
 		}
 		
+		return objs;
+		
+	}
+	
+	// function to create wget scripts for all selected datasets
+	function wgetDatasets(id, hlink, showText, hideText) {
+		
+	  // open the wget panel
+	  if (document.getElementById(id).style.display=='none') {
+		
+		//  wget endpoint
+		var url = "{% url 'datacart_wget' site.id request.user.id %}";
+		
+		// loop over selected data cart items with THREDDS endpoint
+		var postdata = "";
+		var objs = getSelectedItemsByServiceType(THREDDS);
+		for (var i in objs) {
+			postdata += "&id="+objs[i].id;
+		}
+				
 		if (postdata.length>0) {
 			
 			// open wget panel
@@ -481,6 +437,7 @@
 			
 			// execute asynchronous POST request
 			var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
+			
 		} else {
 			showMessage("Warning", "Please select one or more items in the Data Cart.");
 		}
