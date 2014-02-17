@@ -4,9 +4,10 @@
 {% load cog_utils %}
 
 {% block extrahead %}
-	{% include 'cog/datacart/_services.html' %} 
+	{% include 'cog/datacart/_services_js.html' %} 
 	{% include 'cog/datacart/_datacart_js.html' %} 
-	{% include 'cog/search/_las_js.html' %}
+	{% include 'cog/datacart/_wget_js.html' %} 
+	{% include 'cog/datacart/_las_js.html' %}
 	
 	<!-- custom spacing of datacart table -->
 	<style type="text/css">

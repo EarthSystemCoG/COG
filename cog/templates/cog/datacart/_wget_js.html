@@ -1,0 +1,112 @@
+<!-- Javascript controls for wget functionality -->
+<script language="javascript">
+  //<![CDATA[
+
+	// function to execute a request to a single index node
+	// for a wget script spanning one or more datasets
+	function wgetScript(index_node, ids) {
+		
+		// NOTE: must transform the "," separated string into array of dataset ids
+		ids = ids.split(",");
+		
+		// FIXME: relative wget URL is hard-wired to ESGF web service endpoint
+		var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
+                // add optional query filter
+		        + getQueryFilter();
+	
+		// add dataset ids
+		for (i=0; i<ids.length; i++) {
+			url += "&dataset_id="+encodeURIComponent(ids[i]);
+		}
+
+		// execute synchronous request for one wget script
+		window.location.href = url;
+		
+	}
+	
+	// function called if Ajax request to wget endpoint succeded
+	var handleWgetSuccess = function(o) {
+
+		// parse JSON response into object		
+		/** example JSON response:
+			{
+			   u'pcmdi9.llnl.gov':[
+			      u'cmip5.output1.INM.inmcm4.1pctCO2.day.atmos.day.r1i1p1.v20110323|pcmdi9.llnl.gov',
+			      u'cmip5.output1.INM.inmcm4.esmHistorical.fx.atmos.fx.r0i0p0.v20110927|pcmdi9.llnl.gov',
+			      u'cmip5.output1.INM.inmcm4.1pctCO2.day.ocean.day.r1i1p1.v20110323|pcmdi9.llnl.gov'
+			   ]
+			}
+		*/
+		var jsonResponse = eval('(' + o.responseText + ')');
+		
+		// loop over keys in JSON dictionary
+		var html = "";
+		
+		// description
+		html += "<div style='text-align:center'>For better performance, wget scripts are generated for each Index Node separately. "
+		      + "<br/>Click on each link below to retrieve the script for each Index Node.</div>";
+		
+		html += "<div style='text-align:center'>";
+		for (var index_node in jsonResponse) {
+			  if (jsonResponse.hasOwnProperty(index_node)) {
+				// NOTE: ids is an array but becomes a string when enclosed in ""
+			    var ids = jsonResponse[index_node];
+			    html += "<br/><a href='javascript:wgetScript(\""+index_node+"\",\""+ids+"\")'>wget script for "+index_node+"</a>";
+			  }
+		}
+		html += "</div>";
+		
+		// display wget-script panel with new content
+		wgetPanel = document.getElementById("wget-scripts");
+		wgetPanel.innerHTML = html;
+		wgetPanel.style.display = 'block';
+
+	}
+	
+	// function to create wget scripts for all selected datasets
+	function wgetDatasets(id, hlink, showText, hideText) {
+		
+	  // open the wget panel
+	  if (document.getElementById(id).style.display=='none') {
+		
+		//  wget endpoint
+		var url = "{% url 'datacart_wget' site.id request.user.id %}";
+		
+		// loop over selected data cart items with THREDDS endpoint
+		var postdata = "";
+		var objs = getSelectedItemsByServiceType(THREDDS);
+		for (var i in objs) {
+			postdata += "&id="+objs[i].id;
+		}
+				
+		if (postdata.length>0) {
+			
+			// open wget panel
+			openclose(id, hlink, showText, hideText);
+			
+			// execute asynchronous POST request
+			var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
+			
+		} else {
+			showMessage("Warning", "Please select one or more datasets in the Data Cart which are Wget-enabled.");
+		}
+		
+	  } else {
+		  
+		  // close the wget panel
+		  openclose(id, hlink, showText, hideText);
+		  
+	  }
+		
+	}
+	
+	var wgetCallback = {
+			  success:handleWgetSuccess,
+			  failure: handleFailure,
+			  cache:false,
+			  timeout:5000,
+			  argument: [],
+			};
+	
+  //]]>
+</script>
