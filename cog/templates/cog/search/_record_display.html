@@ -39,8 +39,7 @@
 	{% else %}
 		<!-- LAS -->
 	    {% if url.1 == 'application/las' %}
-	    	&nbsp; [ <input type="checkbox" name="las_checkbox" value="{{url.0}}" onclick="javascript:setup_las(this)"/>
-	   	    <a href="#" onclick="javascript:start_las('{{url.0}}')"><b>LAS Visualization</b></a> ]
+	    	&nbsp; [ <a href="{{url.0}}"><b>LAS Visualization</b></a> ]
 	   	{% else %}
 	   		<!--  default case -->
 	   		&nbsp; [ <a href="{{url.0}}"><b>{{ url.2 }}</b></a> ]
