@@ -8,7 +8,7 @@
     	 var objs = getSelectedItemsByServiceType(LAS);
     	 if (objs.length<=0) {
     		 showMessage("Warning", "Please select one or more datasets in the Data Cart that are LAS-enabled.");
-    	 } else if (objs.length>=4) {
+    	 } else if (objs.length>4) {
     		 showMessage("Warning", "Please select at most 4 datasets to visualize with LAS.");
     		 
     	 } else {
