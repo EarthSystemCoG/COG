@@ -175,7 +175,7 @@ def user_detail(request, user_id):
 def user_update(request, user_id):
     
     # security check
-    if request.user.id != user_id:
+    if str(request.user.id) != user_id:
         raise Exception("User not authorized to change profile data")
     
     # get user
@@ -278,7 +278,7 @@ def user_update(request, user_id):
 def password_update(request, user_id):
     
     # security check
-    if request.user.id != user_id:
+    if str(request.user.id) != user_id:
         raise Exception("User not authorized to change password")
     
     # load user object
