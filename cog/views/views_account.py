@@ -175,7 +175,7 @@ def user_detail(request, user_id):
 def user_update(request, user_id):
     
     # security check
-    if not request.user.id != user_id:
+    if request.user.id != user_id:
         raise Exception("User not authorized to change profile data")
     
     # get user
@@ -278,7 +278,7 @@ def user_update(request, user_id):
 def password_update(request, user_id):
     
     # security check
-    if not request.user.id != user_id:
+    if request.user.id != user_id:
         raise Exception("User not authorized to change password")
     
     # load user object
@@ -359,7 +359,7 @@ def password_reset(request):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             
-            # look for user with given username, password
+            # look for user with given username, email
             try:
                 # retrieve user for given username and email
                 user = User.objects.filter(username=username).get(email__iexact=email)
