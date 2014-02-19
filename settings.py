@@ -170,6 +170,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
+    'django_openid_auth',
     'grappelli',
     'filebrowser',
     'django.contrib.admin',
@@ -182,9 +183,21 @@ INSTALLED_APPS = (
     'cog',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+OPENID_CREATE_USERS = True
+
+OPENID_UPDATE_DETAILS_FROM_SREG = True
 
 # login page URL (default: '/accounts/login')
-LOGIN_URL = '/login'
+#LOGIN_URL = '/login'
+
+# OpenID login page
+LOGIN_URL = '/openid/login/'
+
 # page to redirect after successfull authentication, if 'next' parameter is not provided
 #LOGIN_REDIRECT_URL='/cog/' # COG projects index
 LOGIN_REDIRECT_URL='/' # welcome page
