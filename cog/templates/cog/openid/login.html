@@ -3,7 +3,7 @@
 {% block extrahead %}
 	<style type="text/css">
 	input.openid {
-	    background: url({% url openid-logo %}) no-repeat;
+	    background: url({% url 'openid-logo' %}) no-repeat;
 	    background-position: 0 50%;
 	    padding-left: 16px;
 	}
@@ -17,7 +17,7 @@
 		<h2>OpenID Login</h2>
 		
 		{% if form.errors %}
-			<p class="errors">{% trans "Please correct errors below:" %}<br />
+			<p class="errors">Please correct errors below:<br />
 			    {% if form.openid_identifier.errors %}
 			    <span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
 			    {% endif %}
@@ -30,17 +30,21 @@
 		<form name="fopenid" action="{{ action }}" method="post">
     		{% csrf_token %}
     		
-    		<table>
-    			<tr>
-    				<td>{{ form.openid_identifier }}</td>
-    			</tr>
-    			<tr>
-    				<td><input name="bsignin" type="submit" value="Login"></td>
-    			</tr>
-    		</table>
-			 {% if next %}
-			        <input type="hidden" name="next" value="{{ next }}" />
-			 {% endif %}
+    		<div class="mybox">
+	    		<table>
+	    			<caption>OpenID Login</caption>
+	    			<tr>
+	    				<td>{{ form.openid_identifier }}</td>
+	    			</tr>
+	    			<tr>
+	    				<td><input name="bsignin" type="submit" value="Login"></td>
+	    			</tr>
+	    		</table>
+    		</div>
+			{% if next %}
+				<input type="hidden" name="next" value="{{ next }}" />
+			{% endif %}
+			 
 		</form>			
 		
 	</div>
