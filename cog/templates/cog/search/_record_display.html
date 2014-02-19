@@ -20,14 +20,8 @@
                          javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', '{{ project.short_name.lower }}');
                          return false">Show Files</a></b> ]
 
-<!-- wget script -->
-<!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
-{% if record.fields.project.0 != 'NCPP' %}
-	[ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><b>Wget Script</b></a> ]
-{% endif %}
-
 <!-- Display URL links -->
-{% for url in record.fields.url %}
+{% for url in record|recordUrls %}
 	
 	<!-- add this service to the catalog -->
 	<script language="javascript">services.add( new Service('{{record.id}}','{{url.0}}', '{{url.1}}','{{url.2}}' ) );</script>
@@ -36,14 +30,21 @@
 	{% if url.1 == 'application/html+thredds' %}
 	    &nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]
 	    
+	<!-- LAS -->
+	{% elif url.1 == 'application/las' %}
+	    &nbsp; [ <a href="{{url.0}}"><b>LAS Visualization</b></a> ]
+	    
+	<!-- WGET -->
+	{% elif url.1 == 'application/wget' %}
+		<!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
+		{% if record.fields.project.0 != 'NCPP' %}
+			&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><b>WGET Script</b></a> ]
+		{% endif %}
+
+	<!--  all other services -->	
 	{% else %}
-		<!-- LAS -->
-	    {% if url.1 == 'application/las' %}
-	    	&nbsp; [ <a href="{{url.0}}"><b>LAS Visualization</b></a> ]
-	   	{% else %}
-	   		<!--  default case -->
-	   		&nbsp; [ <a href="{{url.0}}"><b>{{ url.2 }}</b></a> ]
-	    {% endif %}
+		&nbsp; [ <a href="{{url.0}}"><b>{{ url.2 }}</b></a> ]
+		
     {% endif %}
     
 {% endfor %}

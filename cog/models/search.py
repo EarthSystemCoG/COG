@@ -87,6 +87,7 @@ class SearchOutput:
         for record in self.results:
             record.printme()
         
+            
 class Record:
     
     def __init__(self, id):
@@ -103,7 +104,7 @@ class Record:
         print "Record id=%s" % self.id
         for name, values in self.fields.items():
             print "\tField name=%s values=%s" % (name, values)
-            
+                        
 class FacetProfile:
     
     """

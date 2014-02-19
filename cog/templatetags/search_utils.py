@@ -46,3 +46,31 @@ def toJson(record):
     
     json = simplejson.dumps(record.fields)
     return json
+
+# function to custom order the URLs
+def url_order(mtype):
+    if mtype=='application/html+thredds':
+        return 1
+    elif mtype=='application/wget':
+        return 2
+    elif mtype=='application/las':
+        return 3
+    else:
+        return 4
+    
+@register.filter
+def recordUrls(record):
+    '''Returns an ordered list of URL endpoints for this record.'''
+    
+    urls = []
+    
+    # add all existing URL endpoints
+    for value in record.fields['url']:
+        urls.append(value)
+        
+    # add special WGET endpoint
+    urls.append( ("javascript:wgetScript('%s','%s')" % (record.fields['index_node'][0], record.id) , 
+                  "application/wget", 
+                  "WGET Script") )
+        
+    return sorted(urls, key = lambda url: url_order(url[1]))
