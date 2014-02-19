@@ -27,20 +27,14 @@
 	  
 	  <!-- data cart form -->
 	  <form name='dataCartForm'>
-	  
-	  	<div style="text-align:center">
-	  		Optional string to sub-select filenames: 
-	  		&nbsp;<input type="text" name="query-filter" id="query-filter"/>
-	  		&nbsp;[ To apply: click on 'Show Files' or 'WGET' again ]
-	  	</div>
-	  	
+	  	  	
 	  	<!-- data cart table -->	  
 	  	<p/>
 		<table class="no-color" id="datacart-table">
 			
 			<!-- Header: services -->
 			<tr>
-				<td align='left' colspan="3" style="vertical-align: middle;"> 
+				<td align='left' colspan="4" style="vertical-align: middle;"> 
 					<b>Collective Services for All Selected Datasets:</b>
 					&nbsp; [ <b><a href="" 
 					               onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">
@@ -55,10 +49,15 @@
 				<td colspan="4"><hr/></td>
 			</tr>
 			<tr>
-				<td align='left' width="10px"> 
+				<td align='left' width="10px">
 					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"></input>
 				</td>
-				<td align='left' width="200px" style="vertical-align: middle;">Select All</td>
+				<td align='left' width="200px" style="vertical-align: middle;">
+					<b>Select All Datasets</b>
+					<br/>Optional string to sub-select filenames: 
+			  		&nbsp;<input type="text" name="query-filter" id="query-filter"/>
+	  				&nbsp;[ To apply: click on 'Show Files' or 'WGET' again ]					
+				</td>
 				<td align='left' width="60px" nowrap="nowrap"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();"
                        onclick="return urlConfirmationDialog('Empty Data Cart Confirmation','Are you sure you want to remove ALL items from the cart ?', this)">
