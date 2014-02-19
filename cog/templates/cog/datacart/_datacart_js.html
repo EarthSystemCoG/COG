@@ -1,6 +1,6 @@
 <script language="javascript">
   //<![CDATA[
-
+             
 	// function to select/deselect all items in cart
 	function toggleAllDataCartItems() {
 		
@@ -353,6 +353,24 @@
 		return objs;
 		
 	}
+	
+    // function to apply the query filter to the currently showing file listings
+    function applyQueryFilter() {
+    	
+    	{% for item in datacart.items.all %}
+    		var filesDiv = document.getElementById("files_{{ item.identifier }}");
+    		if (filesDiv.style.display == 'block') { // files panel is showing
+    			// retrieve hidden button element
+    			var hrefElement = document.getElementById("href_{{item.identifier}}");
+				// simulate 'hide' click    		
+    			hrefElement.click();
+				// simulate 'show' click
+    			hrefElement.click();
+
+    		}
+    	{% endfor %}
+    
+    }
 	
 	// function called if Ajax request failed
 	var handleFailure = function(o) {		
