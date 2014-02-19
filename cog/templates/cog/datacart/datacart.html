@@ -56,8 +56,8 @@
 					<b>Select All Datasets</b>
 					<br/>Optional string to sub-select filenames: 
 			  		&nbsp;<input type="text" name="query-filter" id="query-filter"/>
-	  				&nbsp;[ To apply: click on 'Show Files' or 'WGET' again ]		
-	  				&nbsp;<a href="javascript:applyQueryFilter();">Apply</a>			
+	  				&nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
+	  				&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>			
 				</td>
 				<td align='left' width="60px" nowrap="nowrap"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();"

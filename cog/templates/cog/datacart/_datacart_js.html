@@ -356,10 +356,10 @@
 	
     // function to apply the query filter to the currently showing file listings
     function applyQueryFilter() {
-    	
+
     	{% for item in datacart.items.all %}
     		var filesDiv = document.getElementById("files_{{ item.identifier }}");
-    		if (filesDiv.style.display == 'block') { // files panel is showing
+    		if (filesDiv!=null && filesDiv.style.display == 'block') { // files panel is showing
     			// retrieve hidden button element
     			var hrefElement = document.getElementById("href_{{item.identifier}}");
 				// simulate 'hide' click    		
