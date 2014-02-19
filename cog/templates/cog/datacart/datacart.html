@@ -52,14 +52,14 @@
 				<td align='left' width="10px">
 					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"></input>
 				</td>
-				<td align='left' width="200px" style="vertical-align: middle;">
+				<td align='left' width="90%" style="vertical-align: middle;">
 					<b>Select All Datasets</b>
 					<br/>Optional string to sub-select filenames: 
 			  		&nbsp;<input type="text" name="query-filter" id="query-filter"/>
 	  				&nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
 	  				&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>			
 				</td>
-				<td align='left' width="60px" nowrap="nowrap"> 
+				<td align='left' width="100px" nowrap="nowrap"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();"
                        onclick="return urlConfirmationDialog('Empty Data Cart Confirmation','Are you sure you want to remove ALL items from the cart ?', this)">
                        <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
