@@ -23,6 +23,11 @@ urlpatterns = patterns('',
     #url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     # use next=... to redirect to previous page after logout
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
+    
+    # include openid URLs
+    url(r'^openid/login/$', 'django_openid_auth.views.login_begin', {'template_name': 'cog/openid/login.html'}, name='openid-login'),
+    url(r'^openid/complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
+    url(r'^openid/logo.gif$', 'django_openid_auth.views.logo', name='openid-logo'),
 
     # user management
     url(r'^user/add/$', 'cog.views.user_add', name='user_add' ),

@@ -1,0 +1,47 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block extrahead %}
+	<style type="text/css">
+	input.openid {
+	    background: url({% url openid-logo %}) no-repeat;
+	    background-position: 0 50%;
+	    padding-left: 16px;
+	}
+	</style>
+{% endblock %}
+
+{% block main %}
+
+	<div class="prepend-7 span-10">
+	        
+		<h2>OpenID Login</h2>
+		
+		{% if form.errors %}
+			<p class="errors">{% trans "Please correct errors below:" %}<br />
+			    {% if form.openid_identifier.errors %}
+			    <span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
+			    {% endif %}
+			    {% if form.next.errors %}
+			    <span class="error">{{ form.next.errors|join:", " }}</span>
+			    {% endif %}
+			</p>
+		{% endif %}
+		
+		<form name="fopenid" action="{{ action }}" method="post">
+    		{% csrf_token %}
+    		
+    		<table>
+    			<tr>
+    				<td>{{ form.openid_identifier }}</td>
+    			</tr>
+    			<tr>
+    				<td><input name="bsignin" type="submit" value="Login"></td>
+    			</tr>
+    		</table>
+			 {% if next %}
+			        <input type="hidden" name="next" value="{{ next }}" />
+			 {% endif %}
+		</form>			
+		
+	</div>
+{% endblock %}
