@@ -119,9 +119,9 @@
 	width: 97%;
 	padding-top: 2px;
 	padding-left: 6px;
-	text-align: right;
-	/* background: #FCE79F; */
+	text-align: center;
 	float: right;
+	color: #666;
 }
 
 .top_nav ul {
@@ -157,6 +157,15 @@
     /* background: #FFFFFF; */
     text-decoration: underline;
     /* color: 417690; */
+}
+
+.top_subnav_right a {
+	color: #358C92;
+	display: inline;
+	margin: 0px; 
+	padding: 0px;
+	font-size: 9pt;
+	font-weight: normal;
 }
 
 </style>
@@ -241,12 +250,13 @@
 </div>
 
 <!-- top navigation sub-bar -->
-{% if project %}
-	<div class="top_nav">
-		{% for tablist in project|getTopNav:request %}
-			{% if tablist|length > 1 %}	
-					<div class="span-19">
-						<div class="top_subnav_left">
+
+<div class="top_nav">
+	<div class="span-19">
+		<div class="top_subnav_left">
+			{% if project %}
+				{% for tablist in project|getTopNav:request %}
+					{% if tablist|length > 1 %}		
 							    <ul>							
 									{% for tab in tablist %}
 										<!-- sub-tabs only -->
@@ -256,17 +266,22 @@
 												</a></li>
 										{% endif %}
 									{% endfor %}						
-							    </ul>				   
-						</div>
-					</div>
-					<div class="span-5 last">
-						<div class="top_subnav_right">
-						</div>
-					</div>			
-			{% endif %}
-		{% endfor %}
+							    </ul>		
+					{% endif %}
+				{% endfor %}
+			{% endif %}	    		   
+		</div>
 	</div>
-{% endif %}
+	<div class="span-5 last">
+		<div class="top_subnav_right">
+			<a href="{% url 'user_detail' request.user.id %}">My Profile</a> 
+			| <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle;" alt="datacart logo"/> 
+			<a href="{% url 'datacart_display' site.id request.user.id %}">My Data Cart: 
+			  	<span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>
+			</a>
+		</div>
+	</div>			
+</div>
 
 <!-- anchor for message dialogs -->
 <div id="myDialog" class="yui-skin-sam"></div>
