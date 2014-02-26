@@ -63,10 +63,11 @@ def recordUrls(record):
     '''Returns an ordered list of URL endpoints for this record.'''
     
     urls = []
-    
-    # add all existing URL endpoints
-    for value in record.fields['url']:
-        urls.append(value)
+        
+    # add all existing URL endpoints (THREDDS, LAS etc...)
+    if 'url' in record.fields:
+        for value in record.fields['url']:
+            urls.append(value)
         
     # add special WGET endpoint
     urls.append( ("javascript:wgetScript('%s','%s')" % (record.fields['index_node'][0], record.id) , 
