@@ -534,6 +534,24 @@ def dataCartContains(user, item_identifier):
     
     return user.datacart.contains(item_identifier)
 
+@register.filter 
+def showMessage(message):
+    '''Utility filter to translate message code into message strings.'''
+    
+    if message=='password_reset':
+        return 'A new password has been e-mailed to you. Please use the new password to login and change it as soon as possible.'
+    
+    elif message=='user_add':
+        return 'Thank you for creating an account. You can now login.'
+    
+    elif message=='password_update':
+        return 'Your password has been changed. Please login again.'
+    
+    elif message=='username_reminder':
+        return 'Your username has been emailed to the address you provided. Please check your email box.'
+        
+    else:
+        return message
 
 #@register.filter 
 #def dataCartItemValues(item, key):

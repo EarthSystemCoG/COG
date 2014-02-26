@@ -138,8 +138,7 @@ def user_add(request):
                 subscribeUserToMailingList(user, request)
             
             # redirect to login page with special message
-            message = 'Thank you for creating an account. You can now login.'
-            return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
+            return HttpResponseRedirect(reverse('login')+"?message=user_add")
              
         else: 
             if not form.is_valid():
@@ -301,8 +300,7 @@ def password_update(request, user_id):
             # logout user
             logout(request)
             # redirect to login page with special message
-            message = 'Your password has been changed. Please login again.'
-            return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
+            return HttpResponseRedirect(reverse('login')+"?message=password_update")
 
         else:
             print "Form is invalid: %s" % form.errors
@@ -333,8 +331,7 @@ def username_reminder(request):
                 notify(user, subject, message)
 
                 # redirect to login page with special message
-                message = 'Your username has been emailed to the address you provided. Please check your email box.'
-                return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
+                return HttpResponseRedirect(reverse('login')+"?message=username_reminder")
 
             # user not found
             else:            
@@ -386,8 +383,7 @@ def password_reset(request):
                 notify(user, subject, message)
 
                 # redirect to login page with special message
-                message = 'A new password has been e-mailed to you. Please use the new password to login and change it as soon as possible.'
-                return HttpResponseRedirect(reverse('login')+"?message=%s" % message)
+                return HttpResponseRedirect(reverse('login')+"?message=password_reset")
               
             # user not found
             except User.DoesNotExist:            
