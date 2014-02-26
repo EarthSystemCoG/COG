@@ -40,6 +40,10 @@
 					               onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">
 					               WGET Script</a></b> ]
 					&nbsp; [ <b><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></b> ]
+					<br/>When 'Show Files' is clicked, you may use an optiona string to sub-select the filenames: 
+			  		&nbsp;<input type="text" name="query-filter" id="query-filter"/>
+	  				&nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
+	  				&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>			
 					
 					<!-- wget scripts place-holder -->
 					<div class="padded-box" id="wget-scripts" style="display:none"></div>
@@ -54,10 +58,6 @@
 				</td>
 				<td align='left' width="90%" style="vertical-align: middle;">
 					<b>Select All Datasets</b>
-					<br/>Optional string to sub-select filenames: 
-			  		&nbsp;<input type="text" name="query-filter" id="query-filter"/>
-	  				&nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
-	  				&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>			
 				</td>
 				<td align='left' width="100px" nowrap="nowrap"> 
 					<a href="javascript:document.forms['emptyDataCartForm'].submit();"
