@@ -214,7 +214,7 @@
 	<!-- right column -->
 	<div class="span-7 last">		
 		<div id="right_logo">
-	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="48px"/></a>
+	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="53px"/></a>
 	    </div>
 	</div>
 	
@@ -249,7 +249,7 @@
 </div>
 
 <!-- top navigation sub-bar -->
-<div id="top_nav">
+<div id="top_subnav">
 	<div class="span-19">
 		{% if project %}
 			{% for tablist in project|getTopNav:request %}
