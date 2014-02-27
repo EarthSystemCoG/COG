@@ -167,7 +167,6 @@
 	padding: 0px;
 	margin: 0px;
 	text-align: center;
-	font-size: 9pt;
 }
 
 </style>
@@ -191,11 +190,11 @@
 	    		<!-- project logo -->
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
-	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.long_name }} logo" />
+	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo"/>
 	    			</a>
 	    		{% else %}
 	    			<a href="{% url 'project_home' project.short_name|lower %}">
-	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.long_name }} logo" />
+	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo" />
 	    			</a>
 	    		{% endif %}
 	    	
@@ -215,7 +214,7 @@
 	<!-- right column -->
 	<div class="span-7 last">		
 		<div id="right_logo">
-	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="53px" alt="Earth System CoG logo" /></a>
+	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="48px" alt="Earth System CoG logo"/></a>
 	    </div>
 	</div>
 	
@@ -250,7 +249,7 @@
 </div>
 
 <!-- top navigation sub-bar -->
-<div id="top_subnav">
+<div id="top_nav">
 	<div class="span-19">
 		{% if project %}
 			{% for tablist in project|getTopNav:request %}
