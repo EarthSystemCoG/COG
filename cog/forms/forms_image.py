@@ -18,7 +18,6 @@ class ImageForm(ModelForm):
         # check image size on upload    
         image = self.cleaned_data.get("image")
         delete_image = self.cleaned_data.get("delete_image")
-        print 'IMAGE=%s' % image
         try:
             if image is not None and delete_image is False and image.size > MAX_IMAGE_SIZE:
                 self._errors["image"] = self.error_class(["Image size exceeds the maximum allowed."])
