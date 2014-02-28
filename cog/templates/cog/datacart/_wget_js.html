@@ -5,23 +5,23 @@
 	// function to execute a request to a single index node
 	// for a wget script spanning one or more datasets
 	function wgetScript(index_node, ids) {
-	  {% if request.user.is_authenticated %}
-		// NOTE: must transform the "," separated string into array of dataset ids
-		ids = ids.split(",");
+
+	  // NOTE: must transform the "," separated string into array of dataset ids
+	  ids = ids.split(",");
 		
-		// FIXME: relative wget URL is hard-wired to ESGF web service endpoint
-		var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
+	  // FIXME: relative wget URL is hard-wired to ESGF web service endpoint
+	  var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
                 // add optional query filter
 		        + getQueryFilter();
 	
-		// add dataset ids
-		for (i=0; i<ids.length; i++) {
-			url += "&dataset_id="+encodeURIComponent(ids[i]);
-		}
+	  // add dataset ids
+	  for (i=0; i<ids.length; i++) {
+		url += "&dataset_id="+encodeURIComponent(ids[i]);
+	  }
+	
+	  // execute synchronous request for one wget script
+	  window.location.href = url;
 
-		// execute synchronous request for one wget script
-		window.location.href = url;
-	  {% endif %}
 	}
 	
 	// function called if Ajax request to wget endpoint succeded
