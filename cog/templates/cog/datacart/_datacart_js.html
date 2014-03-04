@@ -22,7 +22,7 @@
 
 	// function to add an item to the user data cart
 	function addToCart(id, metadata) {
-				
+	  {% if request.user.is_authenticated %}
 		// relative path to COG application
 		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 		// NOTE: the following URL requires the user to be logged in (otherwise request.user.id is None)
@@ -35,10 +35,11 @@
 		
 		// show waiting panel
 		showWaitPanel();	
-
+      {% endif %}
 	}
 	
 	function deleteFromCart(item_identifier) {
+	  {% if request.user.is_authenticated %}
 				
 		// relative path to COG application
 		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
@@ -47,8 +48,9 @@
 		
 		// execute asynchronous GET request
 		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, deleteCallback, data);
-		
+	  {% endif %}	
 	}
+	
 	// function to obtain the HTML id for the files container
 	function getFilesDiv(dataset_id) {
 		id = "files_"+dataset_id;

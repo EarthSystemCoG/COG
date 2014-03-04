@@ -5,23 +5,23 @@
 	// function to execute a request to a single index node
 	// for a wget script spanning one or more datasets
 	function wgetScript(index_node, ids) {
+
+	  // NOTE: must transform the "," separated string into array of dataset ids
+	  ids = ids.split(",");
 		
-		// NOTE: must transform the "," separated string into array of dataset ids
-		ids = ids.split(",");
-		
-		// FIXME: relative wget URL is hard-wired to ESGF web service endpoint
-		var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
+	  // FIXME: relative wget URL is hard-wired to ESGF web service endpoint
+	  var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
                 // add optional query filter
 		        + getQueryFilter();
 	
-		// add dataset ids
-		for (i=0; i<ids.length; i++) {
-			url += "&dataset_id="+encodeURIComponent(ids[i]);
-		}
+	  // add dataset ids
+	  for (i=0; i<ids.length; i++) {
+		url += "&dataset_id="+encodeURIComponent(ids[i]);
+	  }
+	
+	  // execute synchronous request for one wget script
+	  window.location.href = url;
 
-		// execute synchronous request for one wget script
-		window.location.href = url;
-		
 	}
 	
 	// function called if Ajax request to wget endpoint succeded
@@ -65,39 +65,41 @@
 	
 	// function to create wget scripts for all selected datasets
 	function wgetDatasets(id, hlink, showText, hideText) {
-		
-	  // open the wget panel
-	  if (document.getElementById(id).style.display=='none') {
-		
-		//  wget endpoint
-		var url = "{% url 'datacart_wget' site.id request.user.id %}";
-		
-		// loop over selected data cart items with THREDDS endpoint
-		var postdata = "";
-		var objs = getSelectedItemsByServiceType(THREDDS);
-		for (var i in objs) {
-			postdata += "&id="+objs[i].id;
-		}
+	  {% if request.user.is_authenticated %}
+	  
+		  // open the wget panel
+		  if (document.getElementById(id).style.display=='none') {
+			
+			//  wget endpoint
+			var url = "{% url 'datacart_wget' site.id request.user.id %}";
+			
+			// loop over selected data cart items with THREDDS endpoint
+			var postdata = "";
+			var objs = getSelectedItemsByServiceType(THREDDS);
+			for (var i in objs) {
+				postdata += "&id="+objs[i].id;
+			}
+					
+			if (postdata.length>0) {
 				
-		if (postdata.length>0) {
+				// open wget panel
+				openclose(id, hlink, showText, hideText);
+				
+				// execute asynchronous POST request
+				var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
+				
+			} else {
+				showMessage("Warning", "Please select one or more datasets in the Data Cart which are Wget-enabled.");
+			}
 			
-			// open wget panel
-			openclose(id, hlink, showText, hideText);
-			
-			// execute asynchronous POST request
-			var transaction = YAHOO.util.Connect.asyncRequest('POST', url, wgetCallback, postdata);
-			
-		} else {
-			showMessage("Warning", "Please select one or more datasets in the Data Cart which are Wget-enabled.");
-		}
-		
-	  } else {
+		  } else {
+			  
+			  // close the wget panel
+			  openclose(id, hlink, showText, hideText);
+			  
+		  }
 		  
-		  // close the wget panel
-		  openclose(id, hlink, showText, hideText);
-		  
-	  }
-		
+      {% endif %}
 	}
 	
 	var wgetCallback = {

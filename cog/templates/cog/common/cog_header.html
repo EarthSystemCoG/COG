@@ -50,7 +50,7 @@
     margin-top: 8px;
     height: 75px; 
     padding-bottom:5px; 
-    padding-top: 0px; 
+    padding-top: 14px; 
 }
 
 #right_sentence {
@@ -85,7 +85,7 @@
     font-style: normal;
 }
 
-.top_nav_left {
+#top_nav_left {
 	padding-top: 2px;
 	padding-left: 6px;
 	width: 100%;
@@ -93,7 +93,7 @@
 	float:left;
 }
 
-.top_subnav_left {
+#top_subnav_left {
 	padding-top: 2px;
 	padding-left: 6px;
 	width: 100%;
@@ -101,12 +101,12 @@
 	float:left;
 }
 
-.top_subnav_left a:link, .top_subnav_left a:visited {
+#top_subnav_left a:link, #top_subnav_left a:visited {
     color: #666;
 }
 
 
-.top_nav_right {
+#top_nav_right {
 	width: 97%;
 	padding-top: 2px;
 	padding-left: 6px;
@@ -115,13 +115,31 @@
 	float: right;
 }
 
-.top_subnav_right {
+#top_subnav {
+    width: 100%;
+    height: 20px;
+    margin: 0 auto;
+    padding: 0px;
+    /* padding-top: 2px; */
+    /* COG STYLE: TOP NAV BACKGROUND COLOR */
+    background: #FFFFFF;
+    /*background: #CC3300;*/
+    /*background: #84000;*/
+    color: #FFFFFF;
+    font-size: 9pt;
+ 	font-weight: bold;
+    /* font-family: Arial, Helvetica, sans-serif;  */
+    font-style: normal;
+}
+
+#top_subnav_right {
 	width: 97%;
 	padding-top: 2px;
 	padding-left: 6px;
-	text-align: right;
+	text-align: center;
 	/* background: #FCE79F; */
-	float: right;
+	float: center;
+	color: #666;
 }
 
 .top_nav ul {
@@ -148,7 +166,7 @@
     border: none;
 }
 
-.top_nav_right a {
+#top_nav_right a {
 	color: #000000;
 	/* font-weight: bold; */
 }
@@ -157,6 +175,16 @@
     /* background: #FFFFFF; */
     text-decoration: underline;
     /* color: 417690; */
+}
+
+#top_subnav_right a {
+	display: inline;
+	color: #358C92;
+	font-weight: normal;
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
+	font-size: 8.5pt;
 }
 
 </style>
@@ -175,18 +203,16 @@
 	<!-- sidebar and center -->
 	<div class="span-17">
 		<div id="project_header">
-                    
+		
 	    	{% if project.logo %}
 	    		<!-- project logo -->
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
-	    				<img src="{{ project.logo.url }}" height="70px"
-                                             alt="{{ project.long_name }} logo" />
+	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo"/>
 	    			</a>
 	    		{% else %}
 	    			<a href="{% url 'project_home' project.short_name|lower %}">
-	    				<img src="{{ project.logo.url }}" height="70px"
-                                             alt="{{ project.long_name }} logo" />
+	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo" />
 	    			</a>
 	    		{% endif %}
 	    	
@@ -206,7 +232,7 @@
 	<!-- right column -->
 	<div class="span-7 last">		
 		<div id="right_logo">
-	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="64px" alt="Earth System CoG logo"/></a>
+	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="48px" alt="Earth System CoG logo"/></a>
 	    </div>
 	</div>
 	
@@ -215,7 +241,7 @@
 <!-- top navigation bar -->
 <div class="top_nav">
 	<div class="span-19">
-		<div class="top_nav_left">
+		<div id="top_nav_left">
 			{% if project %}
 			    <ul>
 					{% for tablist in project|getTopNav:request %}
@@ -231,7 +257,7 @@
 		</div>
 	</div>
 	<div class="span-5 last">
-		<div class="top_nav_right">
+		<div id="top_nav_right">
 			<ul>
 				<li><a href="{% url 'project_home' 'cog' %}">What is CoG?</a></li>
 				<li><a href="/projects/cog/contactus/">Site Support</a></li>
@@ -241,32 +267,40 @@
 </div>
 
 <!-- top navigation sub-bar -->
-{% if project %}
-	<div class="top_nav">
-		{% for tablist in project|getTopNav:request %}
-			{% if tablist|length > 1 %}	
-					<div class="span-19">
-						<div class="top_subnav_left">
-							    <ul>							
-									{% for tab in tablist %}
-										<!-- sub-tabs only -->
-										{% if forloop.counter > 1 %}
-											<li><a href="{{ tab.1 }}" {{ tablist|getSubTabStyle:tab }}>
-												<span style="color: #666">{{ tab.0 }}</span>
-												</a></li>
-										{% endif %}
-									{% endfor %}						
-							    </ul>				   
-						</div>
+<div class="top_nav">
+	<div class="span-19">
+		{% if project %}
+			{% for tablist in project|getTopNav:request %}
+				{% if tablist|length > 1 %}						
+					<div id="top_subnav_left">					
+						    <ul>							
+								{% for tab in tablist %}
+									<!-- sub-tabs only -->
+									{% if forloop.counter > 1 %}
+										<li><a href="{{ tab.1 }}" {{ tablist|getSubTabStyle:tab }}>
+											<span style="color: #666">{{ tab.0 }}</span>
+											</a></li>
+									{% endif %}
+								{% endfor %}						
+						    </ul>				   
 					</div>
-					<div class="span-5 last">
-						<div class="top_subnav_right">
-						</div>
-					</div>			
-			{% endif %}
-		{% endfor %}
+				{% endif %}
+			{% endfor %}	
+		{% endif %}
+		&nbsp;
 	</div>
-{% endif %}
+	<div class="span-5 last">
+		<div id="top_subnav_right">
+	        {% if request.user.is_authenticated %}
+		        <a href="{% url 'user_detail' request.user.id %}">My Profile</a>
+		        | <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle;" alt="datacart logo"/>
+		        <a href="{% url 'datacart_display' site.id request.user.id %}">My Data Cart:
+		                <span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>
+		        </a>
+	        {% endif %}		
+		</div>
+	</div>						
+</div>
 
 <!-- anchor for message dialogs -->
 <div id="myDialog" class="yui-skin-sam"></div>

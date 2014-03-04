@@ -117,7 +117,7 @@ class DataCartItemMetadataKey(models.Model):
 class DataCartItemMetadataValue(models.Model):
 
     key = models.ForeignKey(DataCartItemMetadataKey, related_name='values', blank=False, null=False)
-    value =  models.CharField(max_length=200, blank=True, null=True)
+    value =  models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:
         app_label= APPLICATION_LABEL

@@ -2,14 +2,7 @@
 
     <div class="mybox">
 	    <table>
-	       <caption>User Affiliations</caption>
-	       <tr>
-	           <th class="tophead">Project</th>
-	           {% comment %}
-	           <th class="tophead">Status/Role</th>
-	           {% endcomment %}
-	           <th class="tophead"></th>
-	       </tr>
+	       <caption>Project Affiliations</caption>
 	       {% for project in projects %}
 	         {% if not project.private %}
 	           <tr>
