@@ -30,7 +30,7 @@ To run CoG with a Postgres database back-end:
 
 o Must have Postgres installed on server
 
-o Python posgres libraries
+o Python postgres libraries
   easy_install psycopg2
 
 Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
@@ -141,6 +141,11 @@ CoG can be easily configured to allow editing via the third-party CKEditor, whic
 
 Download the CKEditor version 3.6.4 and expand it to:
 <installation directory>/COG/cog/static/cog/ckeditor
+
+Then run again:
+
+python manage.py collectstatic
+
 
 (NOTE: when running with an Apache httpd server, the CKEditor code must be located under: <installation directory>/COG/static/cog/ckeditor
 
