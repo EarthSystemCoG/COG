@@ -5,28 +5,27 @@ from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
 from django.forms import ModelForm, Textarea, TextInput, Select
 from django.core.exceptions import ObjectDoesNotExist
-from tinymce.widgets import TinyMCE
 from os.path import basename
 import re
 from cog.utils import *
 from django.db.models import Q
 
-POST_TEMPLATES = ( 
+POST_TEMPLATES = (
                    #("cog/post/page_template_center.html", "Full page"),
                    ("cog/post/page_template_sidebar_center.html", "Left Menu, Main Content"),
                    ("cog/post/page_template_sidebar_center_right.html", "Left Menu, Main Content, Right Widgets"),
                  )
-        
+
 class PostForm(ModelForm):
-    
+
     # extra field not present in Post model
     newtopic = forms.CharField(max_length=200, required=False)
 
     # override __init__ method to provide extra arguments to customize the query set
     def __init__(self, type, project, *args,**kwargs):
-        
+
         super(PostForm, self ).__init__(*args,**kwargs) # populates the post
-        
+
         # filter parent posts by project and type
         queryset = Q(project=project) & Q(type=type)
         # include only top-level posts
@@ -34,24 +33,24 @@ class PostForm(ModelForm):
         if 'instance' in kwargs:
             instance = kwargs.get('instance')
             # exclude this post itself
-            queryset = queryset & ~Q(id=instance.id)        
+            queryset = queryset & ~Q(id=instance.id)
         self.fields['parent'].queryset =  Post.objects.filter( queryset )
         self.fields['parent'].empty_label = "Top Level Page (no parent)"
         # limit topic selection to current project and post type
         self.fields['topic'].queryset = Topic.objects.filter( Q(post__project=project) & Q(post__type=type) ).distinct().order_by('name')
-            
+
     # override form clean() method to execute combined validation on multiple fields
     def clean(self):
-        
+
         cleaned_data = self.cleaned_data
         topic = cleaned_data.get("topic")
         newtopic = cleaned_data.get("newtopic")
-        type  = cleaned_data.get("type") 
-        
+        type  = cleaned_data.get("type")
+
         # validate URL
         # must be null for home page, not null for other pages
         if type==Post.TYPE_PAGE:
-            
+
             url = cleaned_data.get("url")
             # only allows letters, numbers, '-', '_' and '/'
             if re.search("[^a-zA-Z0-9_\-/]", url):
@@ -73,14 +72,14 @@ class PostForm(ModelForm):
                             self._errors["url"] = self.error_class(["URL already used"])
                     except ObjectDoesNotExist:
                         pass
-           
+
         # validate "template"
         # must be not null for every page
-        if type==Post.TYPE_PAGE:   
+        if type==Post.TYPE_PAGE:
             template = cleaned_data.get("template")
             if template=='':
                 self._errors["template"] = self.error_class(["Invalid template"])
-        
+
         # validate "topic"
         # cannot set both 'topic' and 'newtopic'
         if topic and newtopic:
@@ -95,16 +94,16 @@ class PostForm(ModelForm):
                 topic = Topic.objects.get(name__iexact=newtopic)
             except ObjectDoesNotExist :
                 topic = Topic.objects.create(name=newtopic)
-                
+
             cleaned_data["topic"] = topic
-            
+
         # always return the full collection of cleaned data.
         return cleaned_data
-    
+
     class Meta:
         model = Post
         exclude = ('author','publication_date','update_date')
-        
+
         widgets = {
             'title': TextInput(attrs={'size':'80'}),
             'label': TextInput(attrs={'size':'22'}),
