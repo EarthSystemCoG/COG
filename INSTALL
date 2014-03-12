@@ -49,9 +49,10 @@ o Install latest version of Postgres
 
 o To run with a postgres database back-end (default), create a database 'cogdb' and a username, password to be access that database:
 
-createdb -U postgres cogdb
-createuser -U postgres -P
-        - username: <your username>
+createdb -U postgres cogdb cogdbadmin
+
+createuser -U postgres -P cogdbadmin
+        - username: cogdbadmin
         - password: <your password>
 (answer "n" to all other questions)
 
@@ -63,13 +64,17 @@ GRANT
 postgres=# FLUSH
 postgres-# \q
 
+o Test that you can connect to the database with the new username and password:
+
+psql -U cogdbadmin --password cogdb
+
 COG CONFIGURATION
 
-o Create a file called ~/.cog_settings.cfg in the directory /usr/local/cog, or in any other directory referenced by the env variable
+o Create a file called cog_settings.cfg in the directory /usr/local/cog, or in any other directory referenced by the env variable
 COG_CONFIG_DIR
 The file must have the following content, with values replaced by the installation specific settings:
 
-cat .cog_settings.cfg
+cat cog_settings.cfg
 
 SITE_ID=<the site specific id, an integre number. Must be coordinated with other federated CoG installations>
 TIME_ZONE=<"America/Denver by default". See list of Django values for time zones>
@@ -90,6 +95,12 @@ o gather the static media files from the different applications into a single di
 
 mkdir static
 python manage.py collectstatic
+
+RESTORE BACKUP
+
+To restore the database status from a SQL backup:
+
+psql -U postgres -p 5432 cogdb < cogdb_2014-03-12.sql
 
 
 STARTUP
