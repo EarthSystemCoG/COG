@@ -25,10 +25,14 @@ o South
 
 o Python Image Library
   easy_install --upgrade pil
-  
+
+To run CoG with a Postgres database back-end:
+
+o Must have Postgres installed on server
+
 o Python posgres libraries
-  sudo pip install pyscopg2
-  
+  easy_install psycopg2
+
 Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
 
 DOWNLOAD
@@ -112,8 +116,8 @@ o Login as the site administrator by clicking the 'Login' hyperlink in the upper
 Username: changeme
 Password: changeme
 
-IMPORTANT: immediately change the administrator username and password by clicking on the upper right link 'Django Admin', 
-which will show the Django Administrator web interface. Further click on 'Users', then 'changeme_user', 
+IMPORTANT: immediately change the administrator username and password by clicking on the upper right link 'Django Admin',
+which will show the Django Administrator web interface. Further click on 'Users', then 'changeme_user',
 then start changing the administraror's profile.
 
 o Start experimenting with creating new projects and registering new users.
@@ -121,7 +125,7 @@ o Start experimenting with creating new projects and registering new users.
 FURTHER CONFIGURATION
 
 o CKEDITOR
-By default, the wiki pages (including any project home page) are editable through a simple text area widget. 
+By default, the wiki pages (including any project home page) are editable through a simple text area widget.
 CoG can be easily configured to allow editing via the third-party CKEditor, which includes a WYSIWYG interface:
 
 Download the CKEditor version 3.6.4 and expand it to:
