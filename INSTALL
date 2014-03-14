@@ -33,6 +33,15 @@ o Must have Postgres installed on server
 o Python postgres libraries
   easy_install psycopg2
 
+To enable openid logins:
+
+o install JainRain openid python library:
+sudo pip install python-openid
+
+o install django openid_auth client library
+sudo pip install django_openid_auth
+
+
 Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
 
 DOWNLOAD
