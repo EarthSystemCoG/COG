@@ -4,12 +4,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from passlib.hash import md5_crypt
-import os
-import sys
+from uuid import uuid4
 
 from django.conf import settings
 
 OPENID_EXTENSIONS = [""] + [str(i) for i in range(1,100)]
+ESGF_OPENID_TEMPLATE="https://<ESGF_HOSTNAME>/esgf-idp/openid/<ESGF_USERNAME>"
 
 class ESGFDatabaseManager():
     '''Class that manages connections to the ESGF database.'''
@@ -18,7 +18,8 @@ class ESGFDatabaseManager():
         '''Constructor establishes a connection pool to the ESGF database,
         from the configuration parameters contained in cog_settings.cfg'''
 
-        if os.getenv('DJANGO_SETTINGS_MODULE', None):
+        #if os.getenv('DJANGO_SETTINGS_MODULE', None) and settings.ESGF_CONFIG:
+        if settings.ESGF_CONFIG:
 
             #siteManager = SiteManager()
             self._hostname = settings.ESGF_HOSTNAME
@@ -31,21 +32,22 @@ class ESGFDatabaseManager():
             # session factory
             self.Session = sessionmaker(bind=engine)
 
-    def insertUser(self, firstname, middlename, lastname, email, username, password):
+    def insertUser(self, firstname, middlename, lastname, email, username, password, organization, city, state, country):
 
         session = self.Session()
 
         # create openid
+        openid = ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", username)
         for ext in OPENID_EXTENSIONS:
 
-            openid = 'https://%s/esgf-idp/openid/%s%s' % (self._hostname, username, ext)
+            _openid = openid + ext
             try:
-                result = session.query(ESGFUser).filter(ESGFUser.openid==openid).one()
-                print 'User with openid=%s already exist, trying another one' % result.openid
+                result = session.query(ESGFUser).filter(ESGFUser.openid==_openid).one()
+                print 'User with openid=%s already exist, trying another one' % _openid
 
             except MultipleResultsFound:
 
-                print 'Warning: found multiple users with openid=%s' % openid
+                print 'Warning: found multiple users with openid=%s' % _openid
 
             except NoResultFound:
 
@@ -53,7 +55,10 @@ class ESGFDatabaseManager():
                 encPassword = md5_crypt.encrypt(password)
                 #test = md5_crypt.verify(password, encPassword)
 
-                esgfUser = ESGFUser(firstname=firstname, middlename=middlename, lastname=lastname, email=email, username=username, password=encPassword, openid=openid)
+                _username = _openid[ _openid.rfind('/')+1: ]
+                esgfUser = ESGFUser(firstname=firstname, middlename=middlename, lastname=lastname, email=email, username=_username, password=encPassword,
+                                    dn='', openid=_openid, organization=organization, organization_type='', city=city, state=state, country=country,
+                                    status_code=1, verification_token=str(uuid4()), notification_code=0)
                 session.add(esgfUser)
                 session.commit()
 
@@ -100,19 +105,3 @@ class ESGFUser(Base):
     notification_code = Column(Integer)
 
 esgfDatabaseManager = ESGFDatabaseManager()
-
-if __name__ == "__main__":
-
-    # must identify location of COG settings.py file
-    import cog
-    path = os.path.dirname(cog.__file__)
-    sys.path.append( path )
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-
-    # insert given user
-    esgfDatabaseManager = ESGFDatabaseManager()
-    esgfUser = esgfDatabaseManager.insertUser('Test', 'T', 'User', 'testuser@test.com', 'testuser', 'abc123')
-
-    # verify user was inserted
-    esgfUser2 = esgfDatabaseManager.getUserByOpenid( esgfUser.openid )
-    print "Retrieved user with openid=%s" % esgfUser2.openid
