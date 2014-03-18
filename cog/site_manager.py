@@ -1,10 +1,11 @@
 import os
-import ConfigParser 
+import ConfigParser
 
 class SiteManager(object):
     '''Class used to load site-specific settings at COG startup.
-    
+
        Example configuration file:
+
        [default]
        SITE_ID=1
        TIME_ZONE=America/Denver
@@ -13,9 +14,12 @@ class SiteManager(object):
        DATABASE_USER=database_user
        DATABASE_PORT=database_port
        DATABASE_PORT=5432
-       
+
+       [esgf]
+       ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
+       ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
     '''
-    
+
     # location of site specific settigs configuration file
     cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
     CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog_settings.cfg')
@@ -30,7 +34,7 @@ class SiteManager(object):
                 'DATABASE_PASSWORD':'no default',
                 'DATABASE_PORT':'5432',
                }
-    
+
     def __init__(self):
         '''Initialization method reads the configuration file.'''
 
@@ -41,11 +45,15 @@ class SiteManager(object):
             if not config:
                 # if the configFilePath cannot be read (ie: doesn't exist), raise an error
                 raise ValueError
-            
+
         except Exception as e:
             print "Error reading site settings configuration file: %s" % configFilePath
-        
-    def get(self, name):
-        '''Method that retrieves a settings value from the 'default' section of the configuration file.'''
-        return self.config.get('default', name)
-        
+
+    def get(self, name, section='default'):
+        '''Method that retrieves a settings value from a specified section of the configuration file.'''
+        return self.config.get(section, name)
+
+    def hasConfig(self, section):
+        '''Returns True if the configuration file contains the named section.'''
+
+        return self.config.has_section(section)

@@ -21,6 +21,13 @@ DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
 DATABASE_PORT = siteManager.get('DATABASE_PORT')
 
+# ESGF specific settings
+ESGF = 'esgf'
+ESGF_CONFIG = siteManager.hasConfig(ESGF)
+if ESGF_CONFIG:
+    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
+    ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
+
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
 # Django settings for COG project.
@@ -56,8 +63,8 @@ DATABASES = {
     #    'PASSWORD': '',                  # Not used with sqlite3.
     #    'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
     #    'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    #} 
-    # Postgres        
+    #}
+    # Postgres
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'cogdb',
@@ -108,7 +115,7 @@ FILEBROWSER_VERSIONS = {
     #'medium': {'verbose_name': 'Medium (4col )', 'width': 300, 'height': '', 'opts': ''},
     #'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': ''},
     #'large': {'verbose_name': 'Large (8 col)', 'width': 680, 'height': '', 'opts': ''},
-} 
+}
 
 # versions selectable through admin interface
 FILEBROWSER_ADMIN_VERSIONS = ['thumbnail']
@@ -209,14 +216,14 @@ AUTH_PROFILE_MODULE = "cog.UserProfile"
 TEMPLATE_CONTEXT_PROCESSORS += (
      'django.core.context_processors.request',
      'cog.context_processors.cog_settings'
-) 
+)
 
 # HTTPS support: can only send cookies via SSL connections
 if server_type=='PROD':
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-    
+
 
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"

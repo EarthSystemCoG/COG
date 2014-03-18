@@ -11,6 +11,8 @@ The system must have the following Python packages installed:
 
 o Python 2.7.2+
 
+o sqlalchemy 0.9.3+
+
 o Django 1.5.2+
   easy_install --upgrade django
 
@@ -41,7 +43,8 @@ sudo pip install python-openid
 o install django openid_auth client library
 sudo pip install django_openid_auth
 
-
+o install passlib to encrypt passwords with MD5_CRYPT algorithm
+sudo pip install passlib
 Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
 
 DOWNLOAD
