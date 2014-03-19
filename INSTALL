@@ -207,3 +207,24 @@ LoadModule ssl_module modules/mod_ssl.so
 
 Note: the last instruction on SERVER_TYPE is used in settings.py to enable cookies only for secure requests:
 it will prevent logging in from a non-secure HTTP request.
+
+o ESGF INTEGRATION
+
+To integrate the COG application with an existing ESGF Node, the file cog_settings.py must contain a section like the following:
+
+[esgf]
+ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
+ESGF_DBURL=postgresql://<ESGF_DATABASE_USERNAME>:<ESGF_DATABASE_PASSWORD>@localhost/esgcet
+
+where the database is either on the localhost, or it is on a remote host and it has been configured to allow read/write connections from the local COG instance.
+
+ESGF integration involves the following capability:
+
+1) A user with an existing ESGF account can log into COG with his/her openid.
+After the first login, a new COG account is created with that openid and a username that matches the openid.
+
+2) A user with an existing COG account can associate his/her account with one or more ESGF openids, and use those openids to log onto COG, if desired
+(as an alternative to their standard username and password).
+
+3) When a new COG account is created, a new ESGF account is created at the same time. The new ESGF openid is automatically associated with the COG account.
+
