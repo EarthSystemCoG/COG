@@ -5,6 +5,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from passlib.hash import md5_crypt
 from uuid import uuid4
+from django_openid_auth.models import UserOpenID
 
 from django.conf import settings
 
@@ -52,9 +53,10 @@ class ESGFDatabaseManager():
             except NoResultFound:
 
                 # encrypt password with MD5_CRYPT
-                encPassword = md5_crypt.encrypt(userProfile.user.password)
-                test = md5_crypt.verify(userProfile.user.password, encPassword)
-                print "password encryption test was succesfull: %s" % test
+                clearTextPassword = userProfile.clearTextPassword
+                encPassword = md5_crypt.encrypt(clearTextPassword)
+                #test = md5_crypt.verify(clearTextPassword, encPassword)
+                #print "password encryption test was succesfull: %s" % test
 
                 _username = _openid[ _openid.rfind('/')+1: ]
                 esgfUser = ESGFUser(firstname=userProfile.user.first_name, lastname=userProfile.user.last_name,
@@ -65,8 +67,12 @@ class ESGFDatabaseManager():
 
                 session.add(esgfUser)
                 session.commit()
+                print 'Inserted user with openid=%s into ESGF database' % _openid
 
-                print 'Inserted user with openid=%s' % openid
+                # add this openid to the COG database
+                userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
+                print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user)
+
                 return esgfUser
 
         session.close()

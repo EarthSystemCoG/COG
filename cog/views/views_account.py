@@ -10,8 +10,6 @@ from cog.util.thumbnails import *
 from django.forms.models import modelformset_factory
 
 from cog.notification import notify, sendEmail
-from django.conf import settings
-from cog.plugins.esgf.security import esgfDatabaseManager
 
 # view to display the data cart for a given site, user
 def datacart_display2(request, site_id, user_id):
@@ -97,6 +95,7 @@ def user_add(request):
             # must reset the password through the special method that encodes it correctly
             clearTextPassword = form.cleaned_data['password']
             user.set_password( clearTextPassword )
+
             # save user to database
             user.save()
             print 'Created user=%s' % user.get_full_name()
@@ -113,6 +112,8 @@ def user_add(request):
                                 subscribed=form.cleaned_data['subscribed'],
                                 private=form.cleaned_data['private'],
                                 image=form.cleaned_data['image'])
+
+            userp.clearTextPassword = clearTextPassword # NOTE: this field is NOT persisted
             userp.save()
 
             # create user data cart
@@ -138,12 +139,6 @@ def user_add(request):
             # subscribe to mailing list ?
             if userp.subscribed==True:
                 subscribeUserToMailingList(user, request)
-
-            # create ESGF user ?
-            if settings.ESGF_CONFIG:
-                print 'Inserting user into ESGF security database'
-                esgfDatabaseManager.insertUser(userp.user.first_name, '', userp.user.last_name,
-                                               userp.user.email, userp.user.username, clearTextPassword)
 
             # redirect to login page with special message
             return HttpResponseRedirect(reverse('login')+"?message=user_add")

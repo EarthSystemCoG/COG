@@ -1,6 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import Group, Permission, User, Group
+from django.contrib.auth.models import User
 from constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
+
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from django.conf import settings
+from cog.plugins.esgf.security import esgfDatabaseManager
 
 class UserProfile(models.Model):
 
@@ -29,8 +34,26 @@ class UserProfile(models.Model):
     researchInterests = models.CharField(max_length=RESEARCH_INTERESTS_MAX_CHARS, blank=True, null=True, default='')
     researchKeywords = models.CharField(max_length=RESEARCH_KEYWORDS_MAX_CHARS, blank=True, null=True, default='')
 
+    # clear text password - this field is NOT persisted to the database, but it is needed to execute MD5 encoding on the user-supplied password
+    clearTextPassword = ''
+
     class Meta:
         app_label= APPLICATION_LABEL
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
+
+# callback receiver function for UserProfile post_save events
+@receiver(post_save, sender=UserProfile, dispatch_uid="user_profile_post_save")
+def account_created_receiver(sender, **kwargs):
+
+    # retrieve arguments
+    userp = kwargs['instance']
+    created = kwargs['created']
+
+    print 'Signal received: UserProfile post_save: user=%s created=%s' % (userp.user.get_full_name(), created)
+
+    # create ESGF user - only when user profile is first created
+    if settings.ESGF_CONFIG and created:
+        print 'Inserting user into ESGF security database'
+        esgfDatabaseManager.insertUser(userp)
