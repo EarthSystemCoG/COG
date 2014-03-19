@@ -1,23 +1,27 @@
 '''
 Script to test insertion of a  user in the ESGF database.
 '''
+
+# first: must identify location of COG settings.py file
 import os
 import sys
 import cog
+path = os.path.dirname(cog.__file__)
+sys.path.append( path )
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
-if __name__ == "__main__":
+from django.contrib.auth.models import User
+from cog.models import UserProfile
 
-    # must identify location of COG settings.py file
+# insert given user
+from cog.plugins.esgf.security import ESGFDatabaseManager
+esgfDatabaseManager = ESGFDatabaseManager()
 
-    path = os.path.dirname(cog.__file__)
-    sys.path.append( path )
-    os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+user = User(first_name='Test', last_name='User', username='testuser', email='testuser@test.com', password='abc123')
+userProfile = UserProfile(user=user, institution='Institution', city='City', state='State', country='Country')
 
-    # insert given user
-    from cog.plugins.esgf.security import ESGFDatabaseManager
-    esgfDatabaseManager = ESGFDatabaseManager()
-    esgfUser = esgfDatabaseManager.insertUser('Test', 'T', 'User', 'testuser@test.com', 'testuser', 'abc123', 'Organization', 'City', 'State', 'Country')
+esgfUser = esgfDatabaseManager.insertUser(userProfile)
 
-    # verify user was inserted
-    esgfUser2 = esgfDatabaseManager.getUserByOpenid( esgfUser.openid )
-    print "Retrieved user with openid=%s" % esgfUser2.openid
+# verify user was inserted
+esgfUser2 = esgfDatabaseManager.getUserByOpenid( esgfUser.openid )
+print "Retrieved user with openid=%s" % esgfUser2.openid

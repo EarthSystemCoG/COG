@@ -32,12 +32,12 @@ class ESGFDatabaseManager():
             # session factory
             self.Session = sessionmaker(bind=engine)
 
-    def insertUser(self, firstname, middlename, lastname, email, username, password, organization, city, state, country):
+    def insertUser(self, userProfile):
 
         session = self.Session()
 
         # create openid
-        openid = ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", username)
+        openid = ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", userProfile.user.username)
         for ext in OPENID_EXTENSIONS:
 
             _openid = openid + ext
@@ -52,13 +52,17 @@ class ESGFDatabaseManager():
             except NoResultFound:
 
                 # encrypt password with MD5_CRYPT
-                encPassword = md5_crypt.encrypt(password)
-                #test = md5_crypt.verify(password, encPassword)
+                encPassword = md5_crypt.encrypt(userProfile.user.password)
+                test = md5_crypt.verify(userProfile.user.password, encPassword)
+                print "password encryption test was succesfull: %s" % test
 
                 _username = _openid[ _openid.rfind('/')+1: ]
-                esgfUser = ESGFUser(firstname=firstname, middlename=middlename, lastname=lastname, email=email, username=_username, password=encPassword,
-                                    dn='', openid=_openid, organization=organization, organization_type='', city=city, state=state, country=country,
+                esgfUser = ESGFUser(firstname=userProfile.user.first_name, lastname=userProfile.user.last_name,
+                                    email=userProfile.user.email, username=_username, password=encPassword,
+                                    dn='', openid=_openid, organization=userProfile.institution, organization_type='',
+                                    city=userProfile.city, state=userProfile.state, country=userProfile.country,
                                     status_code=1, verification_token=str(uuid4()), notification_code=0)
+
                 session.add(esgfUser)
                 session.commit()
 
