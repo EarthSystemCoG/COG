@@ -11,13 +11,13 @@ The system must have the following Python packages installed:
 
 o Python 2.7.2+
 
-o sqlalchemy 0.9.3+
-
-o Django 1.5.2+
-  easy_install --upgrade django
+o Django 1.5.2
+  pip install Django==1.5.2
+  (sqlalchemy 0.9.3+ comes with Django)
 
 o Django Grappelli
-  easy_install --upgrade django-grappelli
+  pip install django_grappelli==2.4.5
+
 
 o Django pagination:
   easy_install --upgrade django-pagination
