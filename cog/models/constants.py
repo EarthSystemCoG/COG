@@ -53,7 +53,7 @@ MEMBER_ORGANIZATIONAL_ROLES = (
                                ('Other', 7),
                               )
 
-ORGANIZATIONAL_ROLE_CV = [ (x[0]," %s (Lead Role)" % x[0]) for x in LEAD_ORGANIZATIONAL_ROLES ] + [ (x[0]," %s (Member Role)" % x[0]) for x in MEMBER_ORGANIZATIONAL_ROLES ]
+ORGANIZATIONAL_ROLE_CV = [ (x[0]," %s (Lead Role)" % x[0]) for x in LEAD_ORGANIZATIONAL_ROLES ] + [('','--------------')] + [ (x[0]," %s (Member Role)" % x[0]) for x in MEMBER_ORGANIZATIONAL_ROLES ]
 # create and merge a combined dictionary of organizational roles
 LEAD_ORGANIZATIONAL_ROLES_DICT = dict(LEAD_ORGANIZATIONAL_ROLES)
 MEMBER_ORGANIZATIONAL_ROLES_DICT = dict(MEMBER_ORGANIZATIONAL_ROLES)
