@@ -6,7 +6,7 @@
 
 	<!-- content -->
 	{% if organizational_roles %}
-	
+
 		<!-- header -->
 		<hr/>
 		<b>{{category}} Organizational Roles</b>
@@ -18,7 +18,12 @@
 						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
 							<tr>
 								<td class="leftcolumn"><b>{{role.type}}</b></td>
-								<td>{{role.title}}</td>
+								<td>
+									{% if role.title %} {{role.title}}: {% endif %}
+									{% if role.members.all %}
+										{% for member in role.members.all %}{% if forloop.counter > 1 %}, {% endif %}{{member.user.get_full_name}}{% endfor %}
+									{% endif %}
+								</td>
 							</tr>
 							{% if role.description %}
 							<tr>
@@ -26,22 +31,13 @@
 								<td>{{role.description|urlizetrunc:50|linebreaksbr}}</td>
 							</tr>
 							{% endif %}
-							{% if role.members.all %}
-							<tr>
-								<td class="leftcolumn">Name</td>
-								<td>
-									{% for member in role.members.all %}{% if forloop.counter > 1 %}, {% endif %}
-										{{member.user.get_full_name}}{% endfor %}	
-								</td>
-							</tr>
-							{% endif %}							
 						</table>
-						
+
 					</td>
 				</tr>
 			{% endfor %}
 		</table>
-		
+
 	{% endif %}
- 
+
 </div>
