@@ -37,7 +37,9 @@ LEAD_ORGANIZATIONAL_ROLES = (
                               ('Co-Investigator', 2),
                               ('Program Manager', 3),
                               ('Project Manager', 4),
-                              ('Software Architect', 5)
+                              ('Software Architect', 5),
+                              ('Lead', 6),
+                              ('Other', 7),
                             )
 
 # list of tuples containing (role value, role display order)
@@ -48,7 +50,7 @@ MEMBER_ORGANIZATIONAL_ROLES = (
                                ('Researcher', 4),
                                ('Software Developer', 5),
                                ('Webmaster', 6),
-                               ('Other', 7)
+                               ('Other', 7),
                               )
 
 ORGANIZATIONAL_ROLE_CV = [ (x[0]," %s (Lead Role)" % x[0]) for x in LEAD_ORGANIZATIONAL_ROLES ] + [ (x[0]," %s (Member Role)" % x[0]) for x in MEMBER_ORGANIZATIONAL_ROLES ]
@@ -107,9 +109,9 @@ DOCUMENT_TYPE_TEXT = 'Text'
 DOCUMENT_TYPE_PRESENTATION = 'Presentation'
 DOCUMENT_TYPE_PROGRAM = 'Program'
 
-DOCUMENT_TYPES = { 
+DOCUMENT_TYPES = {
                    DOCUMENT_TYPE_IMAGE: ['.gif', '.png', 'jpg,', '.jpeg'],
-                   DOCUMENT_TYPE_TEXT:  ['.txt', '.pdf', '.doc', '.docx'], 
+                   DOCUMENT_TYPE_TEXT:  ['.txt', '.pdf', '.doc', '.docx'],
                    DOCUMENT_TYPE_PRESENTATION: ['.ppt','.pptx','.key'],
                    DOCUMENT_TYPE_PROGRAM: ['.java', '.py', '.sh']
                  }
