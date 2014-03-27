@@ -39,14 +39,20 @@
 	            			{{ form.description.errors }}
 	            		</td>
 	            	</tr>
-	            	{% if form.instance.id %}
-		            	<tr>
+	            	<tr>
+	            		{% if form.instance.id %}
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
 		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
 		            			&nbsp;<a href="{% url 'organizational_role_members' form.instance.id %}" class="changelink" style="float:right">Update Members</a>
-		            	</tr>
+		            		</td>
+		            {% else %}
+		            	<td class="long" colspan="2">
+							You will be able to assign a project member to this role after it has been saved.
+							<br/>The link to assign the member will appear in place of this text when you edit the role again.
+		            	</td>
 	            	{% endif %}
+	            	</tr>
 
 	            </table>
             </div>
