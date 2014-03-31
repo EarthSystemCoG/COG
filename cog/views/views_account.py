@@ -75,21 +75,24 @@ def notifyAdminsOfUserSubscription(user, request, action):
 def user_add(request):
 
     # create URLs formset
-    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=3 )
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=2)
+    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2)
 
     if (request.method=='GET'):
 
         form = UserForm() # unbound form
-        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.none()) # empty formset
+        formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')         # empty formset
+        formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.none(), prefix='openid') # empty formset
 
-        return render_user_form(request, form, formset, title='Create User Profile')
+        return render_user_form(request, form, formset1, formset2, title='Create User Profile')
 
     else:
         form = UserForm(request.POST, request.FILES,) # form with bounded data
-        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.none())   # formset with bounded data
+        formset1 = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.none(), prefix='url')         # formset with bounded data
+        formset2 = UserOpenidFormsetFactory(request.POST, queryset=UserOpenID.objects.none(), prefix='openid') # formset with bounded data
 
 
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid() and formset1.is_valid() and formset2.is_valid():
 
             # create a user from the form but don't save it to the database yet because the password is not encoded yet
             user = form.save(commit=False)
@@ -122,10 +125,16 @@ def user_add(request):
             datacart.save()
 
             # must assign URL to this user
-            urls = formset.save(commit=False)
+            urls = formset1.save(commit=False)
             for url in urls:
                 url.profile = userp
                 url.save()
+
+            # must assign openids to this user
+            openids = formset2.save(commit=False)
+            for openid in openids:
+                openid.user = userp.user
+                openid.save()
 
             # generate thumbnail image
             if userp.image is not None:
@@ -147,9 +156,11 @@ def user_add(request):
         else:
             if not form.is_valid():
                 print "Form is invalid: %s" % form.errors
-            elif not formset.is_valid():
-                print "Formset is invalid: %s" % formset.errors
-            return render_user_form(request, form, formset, title='Create User Profile')
+            elif not formset1.is_valid():
+                print "URL formset is invalid: %s" % formset1.errors
+            elif not formset2.is_valid():
+                print "OpenID formset is invalid: %s" % formset1.errors
+            return render_user_form(request, form, formset1, formset2, title='Create User Profile')
 
 # view to display user data
 # require login to limit exposure of user information
@@ -187,8 +198,7 @@ def user_update(request, user_id):
 
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=2)
-    UserOpenidForsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm,
-                                                   can_delete=True, extra=2)
+    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2)
 
     if (request.method=='GET'):
 
@@ -207,14 +217,14 @@ def user_update(request, user_id):
 
         # retrieve existing URLs associated to this user
         formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')
-        formset2 = UserOpenidForsetFactory(queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
+        formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
 
         return render_user_form(request, form, formset1, formset2, title='Update User Profile')
 
     else:
         form = UserForm(request.POST, request.FILES, instance=user) # form with bounded data
         formset1 = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')   # formset with bounded data
-        formset2 = UserOpenidForsetFactory(request.POST, queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
+        formset2 = UserOpenidFormsetFactory(request.POST, queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
 
         if form.is_valid() and formset1.is_valid() and formset2.is_valid():
 
