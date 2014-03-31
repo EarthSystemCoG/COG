@@ -237,7 +237,7 @@ def user_update(request, user_id):
             elif form.cleaned_data['image'] is not None:
                 # delete previous image
                 try:
-                   deleteImageAndThumbnail(user_profile)
+                    deleteImageAndThumbnail(user_profile)
                 except ValueError:
                     # image not existing, ignore
                     pass
