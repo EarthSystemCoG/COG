@@ -6,7 +6,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
-from django_openid_auth.models import UserOpenID
 
 class UserProfile(models.Model):
 

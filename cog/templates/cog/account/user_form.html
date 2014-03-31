@@ -11,22 +11,22 @@
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js"></script>
-       
+
     <!-- note: must style the autocomplete containers otherwise it expands to fit the whole window-->
     <style type="text/css">
         #countryAutoComplete {
-            width:300px; 
+            width:300px;
             padding-bottom: 8px;
         }
         #stateAutoComplete {
-            width:300px; 
+            width:300px;
             padding-bottom: 8px;
         }
     </style>
-       
+
     {% include 'cog/account/_countries.html' %}
     {% include 'cog/account/_states.html' %}
-       
+
     <script>
     //<![CDATA[
 
@@ -35,36 +35,37 @@
            var countryDataSource = new YAHOO.util.LocalDataSource(countryArray);
            var countryAutoComp = new YAHOO.widget.AutoComplete("id_country", "countryContainer", countryDataSource);
            countryAutoComp.prehighlightClassName = "yui-ac-prehighlight";
-           countryAutoComp.useShadow = true;    	
+           countryAutoComp.useShadow = true;
            countryAutoComp.allowBrowserAutocomplete = false;
            // state
            var stateDataSource = new YAHOO.util.LocalDataSource(stateArray);
            var stateAutoComp = new YAHOO.widget.AutoComplete("id_state", "stateContainer", stateDataSource);
            stateAutoComp.prehighlightClassName = "yui-ac-prehighlight";
-           stateAutoComp.useShadow = true;    	
+           stateAutoComp.useShadow = true;
            stateAutoComp.allowBrowserAutocomplete = false;
        }
        YAHOO.util.Event.onContentReady("userDiv", init);
 
     //]]>
     </script>
-       
+
 {% endblock %}
 
 {% block main %}
-    
+
 <div class="prepend-3 span-18">
-    
+
     <h2>{{ mytitle }}</h2>
-        
-    <div class="yui-skin-sam">        
+
+    <div class="yui-skin-sam">
 	    <div class="mybox" id="userDiv">
-	    	    
+
 	        <form action="" method="post" enctype="multipart/form-data">
-	        
+
 	            {% csrf_token %}
 	            {{ formset.management_form }}
-	            
+	            {{ formset2.management_form }}
+
 	            <table>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap">First Name</td>
@@ -84,22 +85,22 @@
 	                    <td class="head required" nowrap="nowrap"><b>Email</b></td>
 	                    <td class="long">{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
-	                
-	                {% if form.instance.id %}	  
-		                   <!-- existing user: include encoded password, confirm_password as hidden fields -->  
+
+	                {% if form.instance.id %}
+		                   <!-- existing user: include encoded password, confirm_password as hidden fields -->
 	                       {{ form.password.as_hidden }}
-	                       {{ form.confirm_password.as_hidden }}	                   
+	                       {{ form.confirm_password.as_hidden }}
 	                {% else %}
-		                <!-- new user: only display password, confirm_password fields when creating new account -->              
+		                <!-- new user: only display password, confirm_password fields when creating new account -->
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
-		                    <td>{{ form.password }} 
+		                    <td>{{ form.password }}
 		                       <i>[ At least 6 characters, all characters are allowed ]</i>
 		                       {{ form.password.errors }}</td>
 		                </tr>
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
-		                    <td>{{ form.confirm_password }} 
+		                    <td>{{ form.confirm_password }}
 		                        <i>[ At least 6 characters, all characters are allowed ]</i>
 		                        {{ form.confirm_password.errors }}</td>
 		                </tr>
@@ -120,19 +121,19 @@
                         <td class="optional" nowrap="nowrap">State</td>
                         <td class="long">
                             <div id="stateAutoComplete">
-                            {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}              
+                            {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}
                         </td>
                     </tr>
                     <tr>
                         <td class="head required" nowrap="nowrap"><b>Country</b></td>
                         <td class="long">
                             <div id="countryAutoComplete">
-                            {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}              
+                            {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}
                         </td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Keywords</td>
-                        <td class="long"> 
+                        <td class="long">
                         A short list of science fields you are involved with (60 characters maximum).
                         <br/>Example: Software Engineering, Grid Computing, Climate Change.
                         <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
@@ -142,21 +143,21 @@
                         <td class="long">
                         A short paragraph describing your professional interests (1000 characters maximum).
                         <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
-                    </tr>                    
+                    </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Subscribe to COG Email List ?</td>
                         <td class="long">{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
-                    </tr>                    
+                    </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Do not list me among project members</td>
                         <td class="long">{{ form.private }} {{ form.private.errors }}</td>
-                    </tr>                    
+                    </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Picture
                         <br/>(Maximum Size: 1MB)
                         <br/>(Format: 'jpg', 'png', or 'gif')
                         </td>
-                        <td class="long"> 
+                        <td class="long">
                         	<table>
                         		<tr>
                         			<td>
@@ -165,40 +166,53 @@
                         			<td align="left">
 			                        	<div style="margin-top:2px">
 			                        		{% if not 'unknown' in form.instance|getImage %}
-			                        			{{ form.delete_image }} Delete current picture ? 			                        		
-			                        		{% endif %}     
-			                        		<br/>                 	                    		
-			                        		{{ form.image }} 
+			                        			{{ form.delete_image }} Delete current picture ?
+			                        		{% endif %}
+			                        		<br/>
+			                        		{{ form.image }}
 			                        		&nbsp;{{ form.image.errors }}
 			                        	</div>
                         			</td>
                         		</tr>
                         	</table>
                         </td>
-                    </tr>        
+                    </tr>
               </table>
-              
-              <!-- URLs -->
-              <table>            
+
+
+              <table>
+
+              		<!-- OpenIDs -->
+                    {% for openidform in formset2 %}
+		       			{{ openidform.id }}
+			        	<tr>
+			        		<td colspan="2" nowrap="nowrap">
+			        			<span>OpenID: &nbsp; <b>URL</b> {{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</span>
+			        		</td>
+			        		<td>
+			        			&nbsp; {{ openidform.DELETE }} Delete ?
+			        		</td>
+				        </tr>
+		    		{% endfor %}
+
+		    		<!-- URLs -->
                     {% for urlform in formset %}
 		       			{{ urlform.id }}
 			        	<tr>
-			        		<td class="optional" nowrap="nowrap" valign="top">
-			        			Web Site:
+			        		<td nowrap="nowrap">
+			        			<span>Web Site: <b>URL</b> {{ urlform.url }} {{ urlform.url.errors }}</span>
 			        		</td>
 			        		<td>
-			        			<b>URL</b> {{ urlform.url }} {{ urlform.url.errors }}
-			        		</td>
-			        		<td>
-			        			<b>Title</b>{{ urlform.name }} ('Home Page', 'My Blog', ...) {{ urlform.name.errors }}
+			        			<b>Title</b> {{ urlform.name }} ('Home Page', 'My Blog', ...) {{ urlform.name.errors }}
 			        		</td>
 			        		<td>
 			        			&nbsp; {{ urlform.DELETE }} Delete ?
 			        		</td>
 				        </tr>
-		    		{% endfor %}                                                                               
-  	            </table> 	            
-	            
+		    		{% endfor %}
+
+  	            </table>
+
 	            <div style="text-align:center">
 	                <hr/>
 	                Required fields are in <b>bold</b>.<br/>
@@ -211,12 +225,12 @@
 	                The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
 	                &nbsp; &nbsp;
 	                <input type="submit" value="Submit" />
-	            </div>   
-	            
+	            </div>
+
 	        </form>
-	    
+			&nbsp;
 	    </div>
     </div>
 </div>
-        
+
 {% endblock %}

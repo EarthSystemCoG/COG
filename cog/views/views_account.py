@@ -8,6 +8,7 @@ from django.contrib.auth import logout
 from cog.models import *
 from cog.util.thumbnails import *
 from django.forms.models import modelformset_factory
+from django_openid_auth.models import UserOpenID
 
 from cog.notification import notify, sendEmail
 
@@ -185,7 +186,9 @@ def user_update(request, user_id):
     profile = get_object_or_404(UserProfile, user=user)
 
     # create URLs formset
-    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=3 )
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=2)
+    UserOpenidForsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm,
+                                                   can_delete=True, extra=2)
 
     if (request.method=='GET'):
 
@@ -203,15 +206,17 @@ def user_update(request, user_id):
                                                  'image':profile.image })
 
         # retrieve existing URLs associated to this user
-        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile))
+        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')
+        formset2 = UserOpenidForsetFactory(queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
 
-        return render_user_form(request, form, formset, title='Update User Profile')
+        return render_user_form(request, form, formset, formset2, title='Update User Profile')
 
     else:
         form = UserForm(request.POST, request.FILES, instance=user) # form with bounded data
-        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile))   # formset with bounded data
+        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')   # formset with bounded data
+        formset2 = UserOpenidForsetFactory(request.POST, queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
 
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid() and formset.is_valid() and formset2.is_valid():
 
             # update user
             user = form.save()
@@ -255,6 +260,13 @@ def user_update(request, user_id):
                 url.profile = profile
                 url.save()
 
+            # must assign OpenIDs to this user
+            openids = formset2.save(commit=False)
+            for openid in openids:
+                print 'OpenID=%s' % openid.claimed_id
+                openid.user = profile.user
+                openid.save()
+
 
             # generate thumbnail - after picture has been saved
             if _generateThumbnail:
@@ -273,8 +285,11 @@ def user_update(request, user_id):
             if not form.is_valid():
                 print "Form is invalid: %s" % form.errors
             elif not formset.is_valid():
-                print "Formset is invalid: %s" % formset.errors
-            return render_user_form(request, form, formset, title='Update User Profile')
+                print "URL formset is invalid: %s" % formset.errors
+            elif not formset2.is_valid():
+                print "OpenID formset is invalid: %s" % formset.errors
+
+            return render_user_form(request, form, formset, formset2, title='Update User Profile')
 
 @login_required
 def password_update(request, user_id):
@@ -396,9 +411,9 @@ def password_reset(request):
             print "Form is invalid: %s" % form.errors
             return render_password_reset_form(request, form)
 
-def render_user_form(request, form, formset, title=''):
+def render_user_form(request, form, formset, formset2, title=''):
     return render_to_response('cog/account/user_form.html',
-                              {'form': form, 'formset':formset, 'mytitle' : title },
+                              {'form': form, 'formset':formset, 'formset2':formset2, 'mytitle' : title },
                               context_instance=RequestContext(request))
 
 def render_password_change_form(request, form):
