@@ -206,17 +206,17 @@ def user_update(request, user_id):
                                                  'image':profile.image })
 
         # retrieve existing URLs associated to this user
-        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')
+        formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')
         formset2 = UserOpenidForsetFactory(queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
 
-        return render_user_form(request, form, formset, formset2, title='Update User Profile')
+        return render_user_form(request, form, formset1, formset2, title='Update User Profile')
 
     else:
         form = UserForm(request.POST, request.FILES, instance=user) # form with bounded data
-        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')   # formset with bounded data
+        formset1 = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')   # formset with bounded data
         formset2 = UserOpenidForsetFactory(request.POST, queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
 
-        if form.is_valid() and formset.is_valid() and formset2.is_valid():
+        if form.is_valid() and formset1.is_valid() and formset2.is_valid():
 
             # update user
             user = form.save()
@@ -254,16 +254,14 @@ def user_update(request, user_id):
             user_profile.save()
 
             # must assign URL to this user
-            urls = formset.save(commit=False)
+            urls = formset1.save(commit=False)
             for url in urls:
-                print 'URL=%s name=%s' % (url.url, url.name)
                 url.profile = profile
                 url.save()
 
             # must assign OpenIDs to this user
             openids = formset2.save(commit=False)
             for openid in openids:
-                print 'OpenID=%s' % openid.claimed_id
                 openid.user = profile.user
                 openid.save()
 
@@ -284,12 +282,12 @@ def user_update(request, user_id):
         else:
             if not form.is_valid():
                 print "Form is invalid: %s" % form.errors
-            elif not formset.is_valid():
-                print "URL formset is invalid: %s" % formset.errors
+            elif not formset1.is_valid():
+                print "URL formset is invalid: %s" % formset1.errors
             elif not formset2.is_valid():
-                print "OpenID formset is invalid: %s" % formset.errors
+                print "OpenID formset is invalid: %s" % formset2.errors
 
-            return render_user_form(request, form, formset, formset2, title='Update User Profile')
+            return render_user_form(request, form, formset1, formset2, title='Update User Profile')
 
 @login_required
 def password_update(request, user_id):
@@ -411,9 +409,9 @@ def password_reset(request):
             print "Form is invalid: %s" % form.errors
             return render_password_reset_form(request, form)
 
-def render_user_form(request, form, formset, formset2, title=''):
+def render_user_form(request, form, formset1, formset2, title=''):
     return render_to_response('cog/account/user_form.html',
-                              {'form': form, 'formset':formset, 'formset2':formset2, 'mytitle' : title },
+                              {'form': form, 'formset1':formset1, 'formset2':formset2, 'mytitle' : title },
                               context_instance=RequestContext(request))
 
 def render_password_change_form(request, form):
