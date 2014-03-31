@@ -4,23 +4,26 @@
 {% load cog_utils %}
 
 {% block main %}
-    
+
     <div class="prepend-1 span-22">
-        
+
         <h2>User Profile</h2>
-        
+
         <div class="span-17">
-        
+
 		    <div class="span-10">
-		        {% include 'cog/account/_user_profile.html' %} 		        
-		   </div>    
+		        {% include 'cog/account/_user_profile.html' %}
+		   </div>
 		   <div class="span-7 last">
-		        {% include 'cog/account/_user_projects.html' %} 
+		        {% include 'cog/account/_user_projects.html' %}
 	   	   </div>
-	   	   
+
 	   	   <div class="span-17 last">
-	   	   		{% include 'cog/account/_user_research.html' %} 
-	   	   			   	   				        
+
+	   	   		{% include 'cog/account/_user_openids.html' %}
+
+	   	   		{% include 'cog/account/_user_research.html' %}
+
 		        {% if request.user.id = user_profile.user.id or request.user.is_staff %}
 		            <div style="text-align:center">
 		                <a href="{% url 'user_update' user_profile.user.id %}">Update my profile</a>
@@ -29,14 +32,14 @@
 		            </div>
 		        {% endif %}
 	   	   </div>
-	   
+
 	   </div>
-	   
-	   <div class="span-5 last">	   		
+
+	   <div class="span-5 last">
 	   		<img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" {% endif %}/>
 	   </div>
-   
+
    </div>
-        
-    
+
+
 {% endblock %}

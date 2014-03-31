@@ -1,0 +1,22 @@
+{% load cog_utils %}
+
+<!--do not show openids for anoter user -->
+{% if request.user.id = user_profile.user.id or request.user.is_staff %}
+	<div class="mybox">
+		 <table>
+		     <caption>My OpenIDs</caption>
+		     {% if user_profile.openids %}
+			     {% for openid in user_profile.openids %}
+		        	<tr>
+			            <td class="head" nowrap="nowrap"><b>OpenID</b></td>
+			            <td class="long">{{ openid }}</td>
+			        </tr>
+		        {% endfor %}
+	        {% else %}
+				<tr>
+					<td class="long"><i>No OpenIDs found</i></td>
+				</tr>
+	        {% endif %}
+		 </table>
+	</div>
+{% endif %}

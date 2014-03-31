@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
+from django_openid_auth.models import UserOpenID
 
 class UserProfile(models.Model):
 
@@ -39,6 +40,10 @@ class UserProfile(models.Model):
 
     class Meta:
         app_label= APPLICATION_LABEL
+
+    # utility method to return the user openids
+    def openids(self):
+        return [ x.claimed_id for x in self.user.useropenid_set.all() ]
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
