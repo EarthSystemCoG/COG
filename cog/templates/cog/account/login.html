@@ -5,26 +5,27 @@
 {% block main %}
 
 <div class="prepend-7 span-10">
-        
+
 	<h2>User Login</h2>
-	
+
 	<!-- display extra message if available -->
 	{% if request.GET.message %}
 	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
 	   <p/>
 	{% endif %}
-	
+
 	<!-- display authentication errors -->
 	{% if form.errors %}
 	<p class="errornote">Your username and password didn't match. Please try again.</p>
 	{% endif %}
-	
+
 	<!-- authentication form -->
 	<div style="font-style: italic; text-align:center;">
 		Please note that username and password are case-sensitive.
 	</div>
-	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-	   {% csrf_token %}	   	
+
+	<form method="post" action="{% url 'login' %}">
+	   {% csrf_token %}
 		<div class="mybox">
 			<table>
 				<caption>User Login</caption>
@@ -37,7 +38,8 @@
 				    <td>{{ form.password }}</td>
 				</tr>
 			</table>
-                </div>
+        </div>
+
 		<div style="position: relative;">
 			<span style="position: absolute; left: 0px;">
 			  <input type="submit" value="Login" />
@@ -51,7 +53,10 @@
             <br/>&nbsp;
 		</div>
 	</form>
-        
+
+	<div style="text-align:center; padding-top:10px">
+		Alternatively, you can login with an <a href="{% url 'openid-login' %}">ESGF OpenID</a>.
+	</div>
 
 </div>
 {% endblock %}

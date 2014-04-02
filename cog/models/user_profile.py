@@ -6,11 +6,13 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
+from cog.utils import hasText
+from django.core.exceptions import ObjectDoesNotExist
 
 class UserProfile(models.Model):
 
     # user
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='profile')
 
     # additional mandatory fields
     institution = models.CharField(max_length=100, blank=False, default='')
@@ -44,6 +46,29 @@ class UserProfile(models.Model):
     def openids(self):
         return [ x.claimed_id for x in self.user.useropenid_set.all() ]
 
+# method to check whether a user object is valid
+# (i.d. it has an associated profile, and its the mandatory fields are populated)
+def isUserValid(user):
+
+    try:
+
+        if not hasText(user.first_name) or not hasText(user.last_name) or not hasText(user.username) or not hasText(user.email):
+            return False
+
+        if not hasText(user.profile.institution) or not hasText(user.profile.city) or not hasText(user.profile.country):
+            return False
+
+        return True
+
+    except ObjectDoesNotExist:
+
+        # create a stab profile with blank mandatory fields
+        UserProfile.objects.create(user=user, institution='', city='', country='')
+
+        # still return not valid
+        return False
+
+
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
 
@@ -55,9 +80,10 @@ def account_created_receiver(sender, **kwargs):
     userp = kwargs['instance']
     created = kwargs['created']
 
-    print 'Signal received: UserProfile post_save: user=%s created=%s' % (userp.user.get_full_name(), created)
+    print 'Signal received: UserProfile post_save: user=%s created=%s openids=%s' % (userp.user.get_full_name(), created, userp.openids())
 
-    # create ESGF user - only when user profile is first created
-    if settings.ESGF_CONFIG and created:
+    # create ESGF user: only when user profile is first created
+    # from a COG registration, not as a result of an OpenID login
+    if settings.ESGF_CONFIG and created and len(userp.openids())==0:
         print 'Inserting user into ESGF security database'
         esgfDatabaseManager.insertUser(userp)

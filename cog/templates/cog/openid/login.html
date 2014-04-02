@@ -2,106 +2,67 @@
 
 {% block extrahead %}
 	<style type="text/css">
-	input.openid {
-	    background: url({% url 'openid-logo' %}) no-repeat;
-	    background-position: 0 50%;
-	    padding-left: 16px;
-	    width:420px;
-	}
+		input.openid {
+		    background: url({% url 'openid-logo' %}) no-repeat;
+		    background-position: 0 50%;
+		    padding-left: 16px;
+		    width:380px;
+		}
+
+		.th {
+			font-weight:bold;
+			vertical-align:middle;
+			text-align:right;
+		}
 	</style>
 {% endblock %}
 
 {% block main %}
 
-<div class="prepend-7 span-10">
-        
-	<h2>User Login</h2>
-	
+  <div class="prepend-4 span-14">
+
 	<!-- display extra message if available -->
 	{% if request.GET.message %}
 	   <div class="message-box"> {{ request.GET.message }}</div>
 	   <p/>
 	{% endif %}
-	
-	<!-- display authentication errors -->
+
+	<h2>OpenID Login</h2>
+
 	{% if form.errors %}
-	<p class="errornote">Your username and password didn't match. Please try again.</p>
+	    {% if form.openid_identifier.errors %}
+	    	<span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
+	    {% endif %}
+	    {% if form.next.errors %}
+	    	<span class="error">{{ form.next.errors|join:", " }}</span>
+	    {% endif %}
 	{% endif %}
-	
-	<!-- authentication form -->
-	<div style="font-style: italic; text-align:center;">
-		Please note that username and password are case-sensitive.
-	</div>
-	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-	   {% csrf_token %}	   	
-		<div class="mybox">
-			<table>
-				<caption>User Login</caption>
-				<tr>
-				    <th>Username</th>
-				    <td><input type="text" id="username" name="username" /></td>
-				</tr>
-				<tr>
-					<th>Password</th>
-				    <td><input type="password" id="password" name="password" /></td>
-				</tr>
-				<tr>
-				    <td>{{ form.password.label_tag }}</td>
-				    <td>{{ form.password }}</td>
-				</tr>
-			</table>
-                </div>
-		<div style="position: relative;">
-			<span style="position: absolute; left: 0px;">
-			  <input type="submit" value="Login" />
-			  <input type="hidden" name="next" value="{{ next }}" />
-			</span>
-			<span style="position: absolute; right: 0px;">
-			  <a href="{% url 'username_reminder' %}">Forgot Username?</a>
-			  &nbsp;
-			  <a href="{% url 'password_reset' %}">Forgot Password?</a>
-			</span>
-            <br/>&nbsp;
-		</div>
-	</form>
-        
 
-</div>
-
-	<div class="prepend-5 span-12">
-	        
-		<h2>OpenID Login</h2>
-		
-		{% if form.errors %}
-			<p class="errors">Please correct errors below:<br />
-			    {% if form.openid_identifier.errors %}
-			    <span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
-			    {% endif %}
-			    {% if form.next.errors %}
-			    <span class="error">{{ form.next.errors|join:", " }}</span>
-			    {% endif %}
-			</p>
-		{% endif %}
-		
 		<form name="fopenid" action="{{ action }}" method="post">
-    		{% csrf_token %}
-    		
-    		<div class="mybox">
+			{% csrf_token %}
+
+			<div class="mybox">
 	    		<table>
 	    			<caption>OpenID Login</caption>
 	    			<tr>
-	    				<td style="width:300px">{{ form.openid_identifier }}</td>
-	    			</tr>
-	    			<tr>
-	    				<td><input name="bsignin" type="submit" value="Login"></td>
+	    				<td class="th">OpenID</td>
+	    				<td>{{ form.openid_identifier }}
+	    					&nbsp;<input name="bsignin" type="submit" value="Login">
+	    				</td>
 	    			</tr>
 	    		</table>
-    		</div>
+			</div>
+
+			<!-- next page field -->
 			{% if next %}
 				<input type="hidden" name="next" value="{{ next }}" />
 			{% endif %}
-			 
-		</form>			
-		
+
+		</form>
+
+		<div style="text-align:center; padding-top:10px">
+			Alternatively, you can use the <a href="{% url 'login' %}">COG login</a> with username and password.
+		</div>
+
 	</div>
 {% endblock %}

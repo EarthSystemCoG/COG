@@ -11,6 +11,36 @@ from django.forms.models import modelformset_factory
 from django_openid_auth.models import UserOpenID
 
 from cog.notification import notify, sendEmail
+from django.contrib.auth.views import login
+from django_openid_auth.views import login_complete
+from django.contrib.auth.hashers import is_password_usable
+
+def custom_login(request, **kwargs):
+    '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
+
+    # authenticate user via standard login
+    response = login(request, **kwargs)
+    
+    # check if user is valid
+    return _custom_login(request, response)
+
+def custom_login_complete(request, **kwargs):
+
+    # authenticate user
+    response = login_complete(request, **kwargs)
+    
+    # check if user is valid
+    return _custom_login(request, response)
+
+def _custom_login(request, response):
+
+    # succesfull login, but missing information
+    if not request.user.is_anonymous():
+        if not isUserValid(request.user):
+            return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
+
+    return response
+
 
 # view to display the data cart for a given site, user
 def datacart_display2(request, site_id, user_id):
@@ -81,7 +111,8 @@ def user_add(request):
     if (request.method=='GET'):
 
         form = UserForm() # unbound form
-        formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')         # empty formset
+        formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')          # empty formset
+        # NOTE: currently openid formset is not really used when first creating COG users
         formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.none(), prefix='openid') # empty formset
 
         return render_user_form(request, form, formset1, formset2, title='Create User Profile')
@@ -215,7 +246,7 @@ def user_update(request, user_id):
                                                  'private':profile.private,
                                                  'image':profile.image })
 
-        # retrieve existing URLs associated to this user
+        # retrieve existing URLs and OpenIDs associated to this user
         formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')
         formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
 
@@ -223,8 +254,8 @@ def user_update(request, user_id):
 
     else:
         form = UserForm(request.POST, request.FILES, instance=user) # form with bounded data
-        formset1 = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')   # formset with bounded data
-        formset2 = UserOpenidFormsetFactory(request.POST, queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
+        formset1 = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')            # formset with bounded data
+        formset2 = UserOpenidFormsetFactory(request.POST, queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid') # formset with bounded data
 
         if form.is_valid() and formset1.is_valid() and formset2.is_valid():
 
@@ -243,6 +274,13 @@ def user_update(request, user_id):
             user_profile.researchInterests=form.cleaned_data['researchInterests']
             user_profile.subscribed=form.cleaned_data['subscribed']
             user_profile.private=form.cleaned_data['private']
+
+            # check if the password is encoded already
+            # if not, encode the password that the user provided in clear text
+            if not is_password_usable(user.password):
+                user.set_password( form.cleaned_data['password'] )
+                user.save()
+                print 'Reset password for user=%s' % user
 
             # image management
             _generateThumbnail = False

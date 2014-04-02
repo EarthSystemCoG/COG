@@ -8,7 +8,7 @@
 		    padding-left: 16px;
 		    width:380px;
 		}
-		
+
 		.th {
 			font-weight:bold;
 			vertical-align:middle;
@@ -26,27 +26,27 @@
 	   <div class="message-box"> {{ request.GET.message }}</div>
 	   <p/>
 	{% endif %}
-	
+
 
 <!-- 1) username+password login -->
-        
+
 	<h2>Standard Login</h2>
-	
+
 	<!-- display authentication errors -->
 	{% if form.errors %}
 		{% if form.username.errors or form.password.errors %}
 			<p class="errornote">Your username and password didn't match. Please try again.</p>
 		{% endif %}
 	{% endif %}
-	
-	
+
+
 	<!-- authentication form -->
 	<div style="font-style: italic; text-align:center;">
 		Please note that username and password are case-sensitive.
 	</div>
-	
-	<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-	   {% csrf_token %}	   	
+
+	<form method="post" action="{% url 'login' %}">
+	   {% csrf_token %}
 		<div class="mybox">
 			<table>
 				<caption>User Login</caption>
@@ -63,12 +63,12 @@
 				</tr>
 			</table>
          </div>
-         
+
          <!-- next page field -->
          {% if next %}
 		 	<input type="hidden" name="next" value="{{ next }}" />
 		 {% endif %}
-         
+
          <!-- reminder links -->
 		 <div style="position: relative;">
 			<span style="position: absolute; right: 0px;">
@@ -78,14 +78,14 @@
 			</span>
             <br/>&nbsp;
 		 </div>
-		
+
 	</form>
-        
+
 
 <!-- 2) OpenID login -->
-	        
+
 		<h2>OpenID Login</h2>
-		
+
 		{% if form.errors %}
 		    {% if form.openid_identifier.errors %}
 		    	<span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
@@ -94,10 +94,10 @@
 		    	<span class="error">{{ form.next.errors|join:", " }}</span>
 		    {% endif %}
 		{% endif %}
-		
+
 		<form name="fopenid" action="{{ action }}" method="post">
     		{% csrf_token %}
-    		
+
     		<div class="mybox">
 	    		<table>
 	    			<caption>OpenID Login</caption>
@@ -109,13 +109,13 @@
 	    			</tr>
 	    		</table>
     		</div>
-    		
+
     		<!-- next page field -->
 			{% if next %}
 				<input type="hidden" name="next" value="{{ next }}" />
 			{% endif %}
-			 
-		</form>			
-		
+
+		</form>
+
 	</div>
 {% endblock %}

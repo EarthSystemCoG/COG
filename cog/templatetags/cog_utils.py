@@ -30,7 +30,7 @@ def sortdict(the_dict):
     for key, value in the_dict.iteritems():
         tuples.append( (key,value) )
     return sorted(tuples, key=lambda tuple: tuple[0])
-        
+
 
 @register.filter
 def dictKeyLookup(the_dict, key):
@@ -50,19 +50,19 @@ def get_escape_function(autoescape):
 @register.filter
 def index(project):
     return site_index(project)
-    
+
 # filter to list the bookmarks folders for a user, project combination
 @register.filter
 def list_bookmarks(project, user, autoescape=None):
 
     folder = getTopFolder(project)
-    
+
     esc = get_escape_function(autoescape)
     treeId = project.short_name + "_folderTree"
-    
-    html = "<div id='folder_tree' class='yui-skin-sam'>" 
+
+    html = "<div id='folder_tree' class='yui-skin-sam'>"
     html += "<div id='%s'>" % treeId
-   
+
     # start recursion from this folder
     html += "<ul>"
     html += _folder_tree(folder, user, esc, expanded=True, icon='folder') # expand this folder and its children
@@ -70,10 +70,10 @@ def list_bookmarks(project, user, autoescape=None):
 
     html += "</div>"
     html += "</div>"
-    
+
     # fire java-script event to initialize the tree object
-    html += "<script>YAHOO.util.Event.onContentReady('%s', bookmarkTreeInit, this);</script>" % treeId    
-    
+    html += "<script>YAHOO.util.Event.onContentReady('%s', bookmarkTreeInit, this);</script>" % treeId
+
     # mark the result as safe from further escaping
     return mark_safe(html)
 
@@ -85,17 +85,17 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
 
     html = ""
     static_url = getattr(settings, "STATIC_URL", "static/")
-    
+
     # do NOT show folder that are empty (no bookmarks or no-sub-folders)
-    if folder.children() or folder.bookmark_set.all():  
-           
-        # this folder 
+    if folder.children() or folder.bookmark_set.all():
+
+        # this folder
         if expanded:
             html += "<li class='expanded'>"
         else:
             html += "<li>"
         html += "<span class='%s'>%s" % (icon, folder.name)
-        
+
         # add edit/delete links, but not for pre-defined folders
         if not folder.isPredefined():
             deleteurl = reverse('folder_delete', args=[folder.project.short_name.lower(), folder.id])
@@ -105,10 +105,10 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
                 html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
                      + "'Are you sure you want to delete this folder (including all the bookmarks and folders it contains) ?', this)\">Delete</a> ]"
         html += "</span> "
-       
+
         # this folder's children
         html += "<ul>"
-                
+
         # display bookmarks
         project = folder.project
         for bookmark in folder.bookmark_set.all():
@@ -126,16 +126,16 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             if bookmark.description:
                 html += "<br/>%s<br/>" % bookmark.description
             html += "</span></li>"
-                        
+
         # display sub-folders
         for child in folder.children():
             # recursion (do not expand children)
-            html += _folder_tree(child, user, esc, expanded=True) # open by default all folders 
+            html += _folder_tree(child, user, esc, expanded=True) # open by default all folders
 
         html += "</ul>"
-        
+
         html += "</li>"
-        
+
     return html
 
 # Filter to return a simple list of bookmark folders for a project, user combination
@@ -161,14 +161,14 @@ def _listSubfolders(folder, hierarchy_label, folders):
 @register.filter
 def getTopFolderForProject(project):
     return getTopFolder(project)
-    
+
 # recursive function to build the project hierarchy tree
 def _project_tree(user, project, esc, expanded=False, dopeers=False, dochildren=False, icon='child'):
-   
+
     if project.isNotVisible(user):
         return ""
-    
-    # this project 
+
+    # this project
     #if icon=='this':
     #     html = "<li class='expanded' yuiConfig='{\"checked\":\"yes\"}'>"
     if expanded:
@@ -176,21 +176,21 @@ def _project_tree(user, project, esc, expanded=False, dopeers=False, dochildren=
     else:
         html = "<li>"
     html += "<span class='%s'><a href='%s'>%s</a></span>" % (icon, reverse('project_home', args=[project.short_name.lower()]), esc(project.short_name))
-    
+
     # this project's children
     if project.children and dochildren:
         html += "<ul>"
         for child in project.children():
                 # recursion (do not expand children, do not retrieve their peers, do not retrieve their children)
-                html += _project_tree(user, child, esc) 
+                html += _project_tree(user, child, esc)
         html += "</ul>"
     html += "</li>"
-    
+
     # this project's peers
     if dopeers and project.peers.all():
         for peer in project.peers.all():
                 html += _project_tree(user, peer, esc, icon='peer')
-        
+
     return html
 
 # filter to determine whether a user is enrolled in a group
@@ -200,17 +200,17 @@ def isEnrolled(user, group):
         return True
     else:
         return False
-    
+
 # filter to determine whether a user belongs to a project
 @register.filter
 def hasUser(project, user):
     return project.hasUser(user)
-    
+
 # filter to determine whether a user is pending approval in a project
 @register.filter
 def hasUserPending(project, user):
-  return project.hasUserPending(user)  
-    
+  return project.hasUserPending(user)
+
 # filters to encode a membership HTTP parameter
 @register.filter
 def newMembership(group, user):
@@ -256,14 +256,14 @@ def numberOptions(lastNumber, selectedNumber):
     # mark the result as safe from further escaping
     return mark_safe(html)
 
-    
+
 def getTopTabUrl(project, request):
     ''' Returns the full URL of the top tab for the current request.
         Example: request.path = "/projects/cog/aboutus/mission/" --> "/projects/cog/aboutus/". '''
-        
+
     # "/projects/cog/"
     homeurl = project.home_page_url()
-    
+
     # requested URL start with project base URL
     if homeurl in request.path:
         # request.path = "/projects/cog/aboutus/mission/" or "/projects/cog/nav/aboutus/update/"
@@ -279,15 +279,15 @@ def getTopTabUrl(project, request):
             return taburl
     # default: no tab selected
     return None
-    
+
 # Utility method to return a list of ACTIVE project tabs (top-tabs and sub-tabs).
 # Returns a list of list: [ [(tab1,False)], [(tab2,False)], [(tab3,True), (sub-tab3a,False), (subtab3b,True), (subtab3c,False),...], [(tab4,True)], [(tab5,True)], ...]
 # where sub-tabs are returned only for the currently selected top-tab, and each 3-tuple has the form: (tab label, tab url, selected)
 @register.filter
 def getTopNav(project, request):
-    
+
     taburl = getTopTabUrl(project, request)
-    
+
     tabs = []
     ptabs = get_or_create_project_tabs(project, save=True)
     # project tabs have full URLs:
@@ -296,13 +296,13 @@ def getTopNav(project, request):
     # .....
     for ptablist in ptabs:
         tablist = []
-        selected = False        
+        selected = False
         for idx, ptab in enumerate(ptablist):
             label = ptab.label
             # top-tab
-            if idx == 0:   
+            if idx == 0:
                 # change label name
-                if 'Home' in label:    # remove project short name from 'Home' tab 
+                if 'Home' in label:    # remove project short name from 'Home' tab
                     label = 'Home'
                 if ptab.active:
                     if str(ptab.url) == taburl:
@@ -315,14 +315,14 @@ def getTopNav(project, request):
                     if request.path == ptab.url:
                         _selected = True
                     tablist.append((label, ptab.url, _selected))
-                
+
         tabs.append(tablist)
     return tabs
-        
+
 @register.filter
 def getTopTabStyle(tablist, selected):
     """Method to return the top-tab CSS style, depending on whether it is selected, and it has sub-tabs."""
-    
+
     if selected:
         if len(tablist) > 1:
             return mark_safe("style='color:#358C92; background-color: #B9E0E3'")
@@ -330,8 +330,8 @@ def getTopTabStyle(tablist, selected):
             return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
     else:
         return ""
- 
-@register.filter   
+
+@register.filter
 def getSubTabStyle(tablist, tab):
     """ Method to return the sub-tab CSS style depending on whether it is selected.
         tablist: full list of tuples (label, url, selected) for current top tab
@@ -350,30 +350,30 @@ def getSubTabStyle(tablist, tab):
             return mark_safe("style='color:#358C92;'")
     else:
         return ""
-    
+
 # Utility method to return the list of invalid characters
 @register.filter
 def getInvalidCharacters(project):
     return "!@#$%^&*[]/{}|\"\\<>"
     # remove leading [ and trailing \]
     #return INVALID_CHARS[1:len(INVALID_CHARS)-1]
-    
+
 # filter that inserts a lock icon if the user can not view the URL
 @register.filter
 def is_locked(post, request, autoescape=None):
-     
-    # show lock depending on user authentication status and permissions       
+
+    # show lock depending on user authentication status and permissions
     #if userCanView(request.user, post):
     #    html = ""
     #else:
     #    html = "&nbsp;<span class='privatelink'>&nbsp;</span>"
-    
+
     # show lock depending on page properties
     if post.is_private:
         html = "&nbsp;<span class='privatelink'>&nbsp;</span>"
     else:
         html = ""
-            
+
     # mark the result as safe from further escaping
     return mark_safe(html)
 
@@ -384,22 +384,22 @@ def get_form_global_errors(form):
 
 @register.filter
 def get_organizational_roles(project, category):
-        
+
     return getOrganizationalRoles(project, category)
 
 @register.filter
 def get_management_bodies(project, category):
-        
+
     return getManagementBodies(project, category)
 
 @register.filter
 def is_home_page(request, project):
-    
+
     if project.home_page_url() == request.path:
         return True
     else:
         return False
-    
+
 @register.filter
 def get_external_urls(project, external_url_type):
     return project.get_external_urls(external_url_type)
@@ -407,12 +407,12 @@ def get_external_urls(project, external_url_type):
 @register.filter
 def roles(user, project):
     '''Lists the roles of a user in a project. '''
-    
+
     roles = []
     for role in ROLES:
         if userHasProjectRole(user, project, role):
             roles.append(role)
-                        
+
     return roles
 
 @register.filter
@@ -450,31 +450,31 @@ def getPeople(project):
 
 @register.filter
 def getImage(obj):
-    
+
     try:
         # AnonymousUser
         if isinstance(obj, AnonymousUser):
             return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['User']
-            
+
         # User
         elif isinstance(obj, User):
             profile = UserProfile.objects.get(user=obj)
             return profile.image.url
-        
-        # Collaborator        
+
+        # Collaborator
         elif isinstance(obj, Collaborator):
             return obj.image.url
-        
+
         elif isinstance(obj, Organization) or isinstance(obj, FundingSource):
             return obj.image.url
-        
+
     except (ValueError, ObjectDoesNotExist) as e:
         # if the image field has no associated file -> return default (no image found)
         return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['%s' % obj.__class__.__name__]
 
 @register.filter
 def getThumbnailById(id, type):
-    
+
     if id is not None:
         if type == 'Collaborator':
             obj = Collaborator.objects.get(pk=id)
@@ -483,80 +483,87 @@ def getThumbnailById(id, type):
         elif type == 'FundingSource':
             obj = FundingSource.objects.get(pk=id)
         return getThumbnail(obj)
-    
-    else: 
+
+    else:
         imagepath = getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES[type]
         return getThumbnailPath(imagepath)
- 
-@register.filter   
+
+@register.filter
 def getThumbnail(user):
-    
+
     imagePath = getImage(user)
     thumbnailPath = getThumbnailPath(imagePath)
     return thumbnailPath
 
-@register.filter 
+@register.filter
 def doc_redirect(doc):
-    
+
     if len(doc.post_set.all()) > 0:
         for doc in doc.post_set.all():
             redirect = reverse('post_detail', kwargs={'post_id': doc.id })
     else:
         redirect = reverse('project_home', kwargs={'project_short_name': doc.project.short_name.lower() })
     return redirect
-    
-@register.filter 
+
+@register.filter
 def partners(project):
     organizations = list( project.organization_set.all() )
     return sorted(organizations, key=lambda org: org.name)
 
-@register.filter 
+@register.filter
 def sponsors(project):
     fundingsources = list( project.fundingsource_set.all() )
     return sorted(fundingsources, key=lambda fs: fs.name)
 
-@register.filter 
+@register.filter
 # filter that builds the content for the Javascript projectTags array
 def projectTags(project):
-    
+
     tags = ProjectTag.objects.all()
     tagstring = ''
     for tag in tags:
         tagstring += '\"'+tag.name+'\",'
     return mark_safe( tagstring[0:-1] ) # important: no escaping!
 
-@register.filter 
+@register.filter
 def projectNews(project):
     return news(project)
 
-@register.filter 
+@register.filter
 def dataCartContains(user, item_identifier):
-    
+
     return user.datacart.contains(item_identifier)
 
-@register.filter 
+@register.filter
 def showMessage(message):
     '''Utility filter to translate message code into message strings.'''
-    
+
     if message=='password_reset':
         return 'A new password has been e-mailed to you. Please use the new password to login and change it as soon as possible.'
-    
+
     elif message=='user_add':
         return 'Thank you for creating an account. You can now login.'
-    
+
     elif message=='password_update':
         return 'Your password has been changed. Please login again.'
-    
+
     elif message=='username_reminder':
         return 'Your username has been emailed to the address you provided. Please check your email box.'
-        
+
+    elif message=='incomplete_profile':
+        return 'Please update your profile to contain at least the mandatory information required by COG (the fields in bold).'
+
     else:
         return message
 
-#@register.filter 
+@register.filter
+def isValidUser(user):
+    return isUserValid(user)
+
+#@register.filter
 #def dataCartItemValues(item, key):
 #    return item.getValues(key)
 
-#@register.filter 
+#@register.filter
 #def dataCartItemValue(item, key):
 #    return item.getValue(key)

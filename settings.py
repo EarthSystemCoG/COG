@@ -200,10 +200,10 @@ OPENID_CREATE_USERS = True
 OPENID_UPDATE_DETAILS_FROM_SREG = True
 
 # login page URL (default: '/accounts/login')
-#LOGIN_URL = '/login'
+LOGIN_URL = '/login'
 
 # OpenID login page
-LOGIN_URL = '/openid/login/'
+#LOGIN_URL = '/openid/login/'
 
 # page to redirect after successfull authentication, if 'next' parameter is not provided
 #LOGIN_REDIRECT_URL='/cog/' # COG projects index

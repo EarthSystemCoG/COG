@@ -57,6 +57,13 @@
 
     <h2>{{ mytitle }}</h2>
 
+    <!-- display extra message if available -->
+	{% if request.GET.message %}
+	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
+	   <p/>
+	{% endif %}
+
+
     <div class="yui-skin-sam">
 	    <div class="mybox" id="userDiv">
 
@@ -76,33 +83,42 @@
 	                    <td class="long">{{ form.last_name }} {{ form.last_name.errors }}</td>
 	                </tr>
 	                <tr>
-	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
-	                    <td>{{ form.username }}
-	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
-	                        {{ form.username.errors }}</td>
-	                </tr>
-	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>Email</b></td>
 	                    <td class="long">{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
+	                <tr>
+	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
+	                    <td>{{ form.username }}
+	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
+							<br/><b>Username</b> to log to COG with username and password, NOT to an ESGF OpenID site.
+	                        <br />{{ form.username.errors }}
+	                    </td>
+	                    <td colspan="2">
 
-	                {% if form.instance.id %}
-		                   <!-- existing user: include encoded password, confirm_password as hidden fields -->
-	                       {{ form.password.as_hidden }}
-	                       {{ form.confirm_password.as_hidden }}
+	                    </td>
+	                </tr>
+	                <!-- for existing users with complete data, the encrypted passwords are resubmitted as hidden fields -->
+	                {% if form.instance.id and form.instance|isValidUser %}
+		            	<!-- existing user: include encoded password, confirm_password as hidden fields -->
+	                	{{ form.password.as_hidden }}
+	                    {{ form.confirm_password.as_hidden }}
 	                {% else %}
-		                <!-- new user: only display password, confirm_password fields when creating new account -->
+		                <!-- otherwise, the user must submit a password -->
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
 		                    <td>{{ form.password }}
 		                       <i>[ At least 6 characters, all characters are allowed ]</i>
-		                       {{ form.password.errors }}</td>
+		                       <br/><b>Password</b> to log to COG with username and password, NOT to an ESGF OpenID site.
+		                       <br/>{{ form.password.errors }}
+		                       </td>
 		                </tr>
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
 		                    <td>{{ form.confirm_password }}
 		                        <i>[ At least 6 characters, all characters are allowed ]</i>
-		                        {{ form.confirm_password.errors }}</td>
+		                        <br/><b>Password</b> to log to COG with username and password, NOT to an ESGF OpenID site.
+		                        <br/>{{ form.confirm_password.errors }}
+		                    </td>
 		                </tr>
 	                {% endif %}
 	                <tr>
@@ -184,6 +200,9 @@
 
               		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
               		{% if form.instance.id %}
+              			<tr>
+              				<td colspan="2">Optional ESGF OpenID(s) associated with this COG user account:</td>
+              			</tr>
 	                    {% for openidform in formset2 %}
 			       			{{ openidform.id }}
 				        	<tr>
@@ -198,6 +217,9 @@
 		    		{% endif %}
 
 		    		<!-- URLs -->
+		    		<tr>
+              			<td colspan="2">Optional web sites associated with this COG user account:</td>
+              		</tr>
                     {% for urlform in formset1 %}
 		       			{{ urlform.id }}
 			        	<tr>
@@ -221,7 +243,10 @@
 	                {% if request.user.is_anonymous %}
 	                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
 	                {% else %}
-	                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
+	                   <!-- prevent user with non-complete data to hit 'cancel' button -->
+	                   {% if request.user|isValidUser %}
+	                   		<input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
+	                   {% endif %}
 	                {% endif %}
 	                &nbsp; &nbsp;
 	                The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
