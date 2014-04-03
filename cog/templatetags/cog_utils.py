@@ -553,6 +553,13 @@ def showMessage(message):
     elif message=='incomplete_profile':
         return 'Please update your profile to contain at least the mandatory information required by COG (the fields in bold).'
 
+    elif message=='invalid_idp':
+        return 'Invalid Identity Provider (not trusted).'
+
+    elif message=='invalid_openid':
+        return "Invalid OpenID (does it start with 'https' ?)"
+
+
     else:
         return message
 

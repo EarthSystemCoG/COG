@@ -19,11 +19,13 @@
 
 {% block main %}
 
+  {% load cog_utils %}
+
   <div class="prepend-4 span-14">
 
 	<!-- display extra message if available -->
 	{% if request.GET.message %}
-	   <div class="message-box"> {{ request.GET.message }}</div>
+	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
 	   <p/>
 	{% endif %}
 

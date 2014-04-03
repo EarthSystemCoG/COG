@@ -1,5 +1,7 @@
 import re
 from django import forms
+import os
+import datetime
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9\.\s\?\&\=_\-\:\/\#,]"
@@ -10,6 +12,11 @@ URL_INVALID_CHARS = "[!@$%^*\[\]\'{}|\"<>\\\]"
 def hasText(str):
     '''Utility function to establish whether a string has any non-empty characters.'''
     return str is not None and len(str.strip()) > 0
+
+
+def file_modification_datetime(filename):
+    t = os.path.getmtime(filename)
+    return datetime.datetime.fromtimestamp(t)
 
 # method to check a form field for invalid characters
 def clean_field(form, field, invalid_characters):
@@ -39,7 +46,7 @@ def smart_truncate(s, width):
             return s[0:width];
         else:
             return s[0:width].rsplit(None, 1)[0] +" ..."
-        
+
 def create_resized_image(newimagepath, imagepath, xconstrain=200, yconstrain=200):
     """
     Function to create a resized image from an original image location.
@@ -48,11 +55,11 @@ def create_resized_image(newimagepath, imagepath, xconstrain=200, yconstrain=200
     import urllib
     import os
     from django.conf import settings
-    
+
         # delete previous image
     if os.path.exists(newimagepath):
         os.remove(newimagepath)
-    
+
     # create new image
     unsized_image = urllib.urlretrieve(str(imagepath)) # Fetch original image
     unsized_image = Image.open(unsized_image[0]) # Load the fetched image
