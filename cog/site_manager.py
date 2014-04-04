@@ -18,6 +18,7 @@ class SiteManager(object):
        [esgf]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
+       IDP_WHITELIST=/esg/config/esgf_idp_static.xml
     '''
 
     # location of site specific settigs configuration file

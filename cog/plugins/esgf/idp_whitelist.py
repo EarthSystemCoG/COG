@@ -4,13 +4,13 @@ Middleware that enforces an IdP white-list during openID authentication.
 
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from xml.etree.ElementTree import fromstring
 import re
 import abc
 from cog.utils import file_modification_datetime
 
 NS = "http://www.esgf.org/whitelist"
-FILEPATH = "/esg/config/esgf_idp_static.xml"
 
 class WhiteList(object):
 
@@ -43,7 +43,7 @@ class LocalWhiteList(WhiteList):
 
         if force or modtime > self.modtime:
 
-            print 'Loading IdP white list, last modification time=%s' % modtime
+            print 'Loading IdP white list: %s, last modified: %s' % (self.filepath, modtime)
             self.modtime = modtime
             idps = []
 
@@ -85,7 +85,7 @@ class IdpWhitelistMiddleware(object):
     def __init__(self):
 
         # initialize the white list service
-        self.whitelist = LocalWhiteList(FILEPATH)
+        self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
 
         # '/openid/complete/'
         self.url = reverse('openid-login')
