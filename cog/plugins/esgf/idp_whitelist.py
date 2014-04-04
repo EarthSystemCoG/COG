@@ -97,16 +97,16 @@ class IdpWhitelistMiddleware(object):
         if request.path == self.url:
 
             openid_identifier = request.REQUEST.get('openid_identifier', None)
-
+            next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
             if openid_identifier is not None:
 
                 # invalid OpenID
                 if not openid_identifier.lower().startswith('https'):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_openid")
+                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_openid&next=%s" % next)
 
                 # invalid IdP
                 if not self.whitelist.trust(openid_identifier):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_idp")
+                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_idp&next=%s" % next)
 
         # keep on processing this request
         return None
