@@ -27,6 +27,7 @@ ESGF_CONFIG = siteManager.hasConfig(ESGF)
 if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
+    IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 

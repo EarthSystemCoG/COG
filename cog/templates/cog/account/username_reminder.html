@@ -2,46 +2,46 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-    
+
     <div class="prepend-5 span-14">
-    
+
         <h2>{{ mytitle }}</h2>
-        
+
         {% if message %}
             <div class="message-box">
                 {{ message }}
             </div>
         {% else %}
 	        <div class="instruction-box">
-	            Please enter your email. Your username will be emailed to you.
+	            Please enter your email. Your username and OpenID(s) will be emailed to you.
 	        </div>
         {% endif %}
-        
+
         <p/>
         <div class="mybox">
-                
+
             <form action="" method="post">
-            
+
                 {% csrf_token %}
-                
+
                 <table>
                     <tr>
                         <td class="head" nowrap="nowrap"><b>Email</b></td>
-                        <td class="long">{{ form.email }} 
+                        <td class="long">{{ form.email }}
                             {{ form.email.errors }}</td>
                     </tr>
                 </table>
-                
+
                 <div style="text-align:center">
                     <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
                     &nbsp; &nbsp;
                     Please use only letters, numbers and the special characters: _ - + @
                     <input type="submit" value="Submit" />
-                </div>     
-                
+                </div>
+
             </form>
-        
+
         </div>
     </div>
-        
+
 {% endblock %}

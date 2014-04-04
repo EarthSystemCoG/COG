@@ -20,7 +20,7 @@ def custom_login(request, **kwargs):
 
     # authenticate user via standard login
     response = login(request, **kwargs)
-    
+
     # check if user is valid
     return _custom_login(request, response)
 
@@ -28,7 +28,7 @@ def custom_login_complete(request, **kwargs):
 
     # authenticate user
     response = login_complete(request, **kwargs)
-    
+
     # check if user is valid
     return _custom_login(request, response)
 
@@ -388,10 +388,14 @@ def username_reminder(request):
             if len(users)>0:
 
                 # send email with username(s) to user
-                subject = "Username Reminder"
+                subject = "Username/OpenID Reminder"
                 message = ""
                 for user in users:
                     message +=  "Your username is: %s\n"  % user.username
+
+                    for openid in user.profile.openids():
+                        message += "Your OpenID is: %s\n" % openid
+
                 notify(user, subject, message)
 
                 # redirect to login page with special message
