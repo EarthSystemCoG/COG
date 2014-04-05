@@ -7,7 +7,7 @@ import datetime
 #INVALID_CHARS = "[^a-zA-Z0-9\.\s\?\&\=_\-\:\/\#,]"
 INVALID_CHARS = "[@#$%^&*\[\]/{}|\"<>\\\]"
 # shorter list specific to URL since the following characters are allowed for URLs: /#&
-URL_INVALID_CHARS = "[!@$%^*\[\]\'{}|\"<>\\\]"
+URL_INVALID_CHARS = "[@$^*\[\]\'{}|\"<>\\\]"
 
 def hasText(str):
     '''Utility function to establish whether a string has any non-empty characters.'''
