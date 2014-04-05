@@ -12,75 +12,75 @@
 			<input type="hidden" name="{{key}}" value=""/>
 		{% endif %}
 	{% endfor %}
-			
+
 	<!-- display selectable facets -->
 	<div class="myAccordion">
-	
+
 	  <!-- loop over facets returned -->
       {% for facet_group in facet_profile.facetGroups %}
-             
+
         <!-- facets grouping -->
         {% if facet_group.name and facet_group.name != 'default' %}
           <fieldset class="fieldset_box">
-	        <legend class="fieldset_legend">{{ facet_group.name }}</legend>	
+	        <legend class="fieldset_legend">{{ facet_group.name }}</legend>
 	    {% endif %}
-	      
+
 			{% for key in facet_group.getKeys %}
 			  {% with search_output.facets|hash:key as facet %}
 			  {% if facet %}
-				<div class="yui-cms-accordion multiple fast fixIE">	
-					{% with search_input.constraints|getSelectedState:key as selected %}	
-						<!-- if facet has been selected > open the accordion -->	
+				<div class="yui-cms-accordion multiple fast fixIE">
+					{% with search_input.constraints|getSelectedState:key as selected %}
+						<!-- if facet has been selected > open the accordion -->
 						<div class="yui-cms-item yui-panel {{ selected }} ">
-				            <div class="hd">{{facet.label }}</div>
-				             
+				            <div class="hd"><span class="facet-category">{{facet.label }}</span></div>
+
 				            <!-- only show the +/- button if there are options available -->
-				            {% if facet.getValues %} 	            
+				            {% if facet.getValues %}
 					            <div class="bd">
 				              		<div class="fixed">
-				              		
+
 				              			{% if selected %}
 				              				<!-- facet has been selected > include selected option and backup link -->
 				              				<ul>
-												<li>&#171; <a href='javascript:resetFacet("{{key}}")'>Any <c:out value="{{facet.label}}"/></a></li>
+												<li class="facet-option">&#171; <a href='javascript:resetFacet("{{key}}")'>Any {{facet.label}}</a></li>
 												{% for value_counts in facet.getSortedValues %}
 												    <!-- only show the selected value, not other values that might be co-selected -->
-												    {% if value_counts.0 in search_input.constraints|hash:key %} 
-													    <li>= {{ key|getFacetOptionLabel:value_counts.0 }} ({{value_counts.1}})</li>
+												    {% if value_counts.0 in search_input.constraints|hash:key %}
+													    <li class="facet-option">= {{ key|getFacetOptionLabel:value_counts.0 }} ({{value_counts.1}})</li>
 													{% endif %}
 												{% endfor %}
-											</ul>							
-				              						              			
+											</ul>
+
 				              			{% else %}
 				              				<!-- facet not selected > include all options -->
 					              			<ul>
-						            			{% for value_counts in facet.getSortedValues %} 
-						            				{% if value_counts.1 > 0 %}           					
-						            					<li>&#187; <a href="javascript:setFacet('{{ key }}','{{ value_counts.0 }}')">{{ key|getFacetOptionLabel:value_counts.0 }}</a> ({{value_counts.1}})</li>	            					
+						            			{% for value_counts in facet.getSortedValues %}
+						            				{% if value_counts.1 > 0 %}
+						            					<li class="facet-option">&#187; <a href="javascript:setFacet('{{ key }}','{{ value_counts.0 }}')">{{ key|getFacetOptionLabel:value_counts.0 }}</a> ({{value_counts.1}})</li>
 						            				{% endif %}
-						            			{% endfor %}         				
-					              			</ul>			              			
+						            			{% endfor %}
+					              			</ul>
 				              			{% endif %}
 						      		</div>
 								</div>
 					            <div class="actions">
 							      <a href="#" class="accordionToggleItem">&nbsp;</a>
 							    </div>
-				            {% endif %}	 
-			            		                       
-			        	</div>			        
-			        {% endwith %}		
+				            {% endif %}
+
+			        	</div>
+			        {% endwith %}
 				</div>
 				{% endif %}
 			  {% endwith %}
 			{% endfor %}
-			
+
 	    {% if facet_group.name %}
 	      </fieldset>
 	    {% endif %}
-	    
+
 	  {% endfor %}
-	
+
 	</div>
 
 {% endif %}

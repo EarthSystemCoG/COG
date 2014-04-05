@@ -674,6 +674,22 @@ BEGIN SEARCH WIDGET
 END SEARCH WIDGET
 ******************************/
 
+/******************************
+BEGIN ADVANCED SEARCH PAGE
+******************************/
+
+.facet-category {
+	font-size: 9pt;
+}
+
+.facet-option {
+	font-size: 9pt;
+}
+
+/******************************
+END ADVANCED SEARCH PAGE
+******************************/
+
 
 .caption {
 	margin: 0px;
