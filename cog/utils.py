@@ -5,7 +5,7 @@ import datetime
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9\.\s\?\&\=_\-\:\/\#,]"
-INVALID_CHARS = "[!@#$%^&*\[\]/{}|\"<>\\\]"
+INVALID_CHARS = "[@#$%^&*\[\]/{}|\"<>\\\]"
 # shorter list specific to URL since the following characters are allowed for URLs: /#&
 URL_INVALID_CHARS = "[!@$%^*\[\]\'{}|\"<>\\\]"
 
