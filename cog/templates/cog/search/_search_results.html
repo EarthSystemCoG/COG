@@ -10,14 +10,14 @@
   {% if not error_message %}
 
     {% with search_output.results as results %}
-                     
+
         {% if results|length == 0 %}
             <p/><div style="text-align:center; font-weight:bold">The search returned 0 results.</div>
         {% else %}
-        
+
             <p/>
             <div style="text-align:center">
-	            Total Number of Results: {{ search_output.counts }} 
+	            Total Number of Results: {{ search_output.counts }}
 	            <br/>
 				{% for page in search_pages %}
 					{% if page.1 == search_input.offset %}
@@ -27,83 +27,88 @@
 					{% endif %}
 				{% endfor %}
 				<br/>
-				{% if request.user.is_authenticated and project.short_name.lower != 'downscaling-2013' %}
-					<a href="{% url 'datacart_add_all' site.id request.user.id %}?back={{ request.get_full_path }}">Add all displayed results to Data Cart</a>
-					&nbsp; &nbsp;
-					<a href="{% url 'datacart_delete_all' site.id request.user.id %}?back={{ request.get_full_path }}">Remove all displayed results from Data Cart</a>
+				{% if request.user.is_authenticated %}
+					{% if project.short_name.lower != 'downscaling-2013' %}
+						<a href="{% url 'datacart_add_all' site.id request.user.id %}?back={{ request.get_full_path }}">Add all displayed results to Data Cart</a>
+						&nbsp; &nbsp;
+						<a href="{% url 'datacart_delete_all' site.id request.user.id %}?back={{ request.get_full_path }}">Remove all displayed results from Data Cart</a>
+					{% endif %}
+
+				{% else %}
+					<i>Please login to add search results to your Data Cart</i>
 				{% endif %}
 			</div>
 			&nbsp;<br/>
-                                           
+
 	        <div class="mybox">
-	            
+
 	            <!-- Table of search results -->
 	            <table>
-	            
-	                {% for record in results %}         
+
+	                {% for record in results %}
 	                    <tr>
 	                        <td class="tophead">{{ search_input.offset|add:forloop.counter }}.</td>
 	                        <td class="long">
-	                        
+
 	                        	<!-- dataset metadata container -->
 	                            {% with record as record %}
-									{% include 'cog/search/_record_display.html' %}	
+									{% include 'cog/search/_record_display.html' %}
 								{% endwith %}
-	                        		                           	               
+
 	                           	{% if request.user.is_authenticated %}
-	                           		<br/>	
-	                           		
+	                           		<br/>
+
 	                           		<!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
 									{% if record.fields.project.0 != 'NCPP' %}
 		                           		<!--  add or remove from Data Cart -->
-		                           		<span id="datacart-delete-{{record.id}}" style="display:none">                   		
+		                           		<span id="datacart-delete-{{record.id}}" style="display:none">
 											<a href="javascript:deleteFromCart('{{ record.id }}')">
 												<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Remove from Data Cart</img>
-											</a>		
-										</span> 	
-										<span id="datacart-add-{{record.id}}" style="display:none"> 
+											</a>
+										</span>
+										<span id="datacart-add-{{record.id}}" style="display:none">
 											<a href="javascript:addToCart('{{ record.id }}', '{{ record|toJson }}')">
 												<img src="{{STATIC_URL}}cog/img/datacart-add.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Add to Data Cart</img>
 											</a>
-										</span> 	
-												                           		     		
+										</span>
+
 										<!-- display one link or the other -->
 		                           		{% if  request.user|dataCartContains:record.id %}
 		                           			<script>set_visibility("datacart-delete-{{record.id}}", true);</script>
 		                           			<script>set_visibility("datacart-add-{{record.id}}", false);</script>
-										{% else %}	         
+										{% else %}
 											<script>set_visibility("datacart-delete-{{record.id}}", false);</script>
-		                           			<script>set_visibility("datacart-add-{{record.id}}", true);</script>             
-										{% endif %}   	   
-									{% endif %} 
-									 								
+		                           			<script>set_visibility("datacart-add-{{record.id}}", true);</script>
+										{% endif %}
+									{% endif %}
+
 									{% comment %}
-		                           	<!-- link to Resources -->          	                               
+		                           	<!-- link to Resources -->
 		                            {% if user|hasUserPermission:project %}
-		                                          	                        	
+
 			                        	<!-- loop over URls, use THREDDS catalog URL -->
 			                        	{% for url in record.fields.url %}
-			                        		{% if url.1 == 'application/html+thredds' %}	  	                               
+			                        		{% if url.1 == 'application/html+thredds' %}
 	                                   			<a href="javascript:bookmarkit('{{url.0}}', '{{record.fields.title.0}}')">
 	                                      			<img src="{{STATIC_URL}}cog/img/bookmark_add2.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Save to Resources</img>
-	                                   			</a>	  
-			                            	{% endif %} 
-			                            {% endfor %}    	          	                               
+	                                   			</a>
+			                            	{% endif %}
+			                            {% endfor %}
 	                                {% endif %}
 	                                {% endcomment %}
-                                
+
                                 {% endif %}
-	                                           
+
 	                        </td>
-	                    </tr>       
+	                    </tr>
 	                {% endfor %}
-	            
+
 	            </table>
-	            
+
 	        </div>
         {% endif %}
-        
-        
+
+
     {% endwith %}
   {% endif %}
 

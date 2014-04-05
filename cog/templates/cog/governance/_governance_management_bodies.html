@@ -4,11 +4,11 @@
 {% if management_bodies %}
 
 	 <div id="{{category}}_management_bodies">
-	
+
 		<!-- header -->
 		<hr/>
 		<b>{{category}} Management Bodies</b>
-		
+
 		<!-- content -->
 		<table>
 			{% for mb in management_bodies %}
@@ -19,36 +19,38 @@
 								<td class="leftcolumn"><b>{{mb.title}}</b></td>
 								<td>{{mb.description|urlizetrunc:50|linebreaksbr}}</td>
 							</tr>
+							{% if mb.get_all_purposes %}
 							<tr>
 								<td class="leftcolumn">Purpose(s)</td>
 								<td>{% for purpose in mb.get_all_purposes %}
 										{% if not forloop.first %}, {% endif %}{{purpose|urlizetrunc:50|linebreaksbr}}
 									{% endfor %}
 								</td>
-							</tr>							
+							</tr>
+							{% endif %}
 							{% if mb.termsOfReference %}
 							<tr>
 								<td class="leftcolumn">Terms Of Reference</td>
 								<td>{{mb.termsOfReference|urlizetrunc:50|linebreaksbr}}</td>
 							</tr>
-							{% endif %}	
+							{% endif %}
 							{% if mb.members.all %}
 							<tr>
 								<td class="leftcolumn">Members</td>
 								<td>
 									{% for member in mb.members.all %}{% if forloop.counter > 1 %}, {% endif %}
-										{{member.user.get_full_name}}{% endfor %}	
+										{{member.user.get_full_name}}{% endfor %}
 								</td>
 							</tr>
-							{% endif %}								
+							{% endif %}
 						</table>
-						
+
 					</td>
 				</tr>
 			{% endfor %}
 		</table>
-		
+
 	</div>
-		
+
 {% endif %}
 
