@@ -87,7 +87,8 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
     static_url = getattr(settings, "STATIC_URL", "static/")
 
     # do NOT show folder that are empty (no bookmarks or no-sub-folders)
-    if folder.children() or folder.bookmark_set.all():
+    # always show the top-level folder
+    if folder.name == TOP_FOLDER or folder.children() or folder.bookmark_set.all():
 
         # this folder
         if expanded:
