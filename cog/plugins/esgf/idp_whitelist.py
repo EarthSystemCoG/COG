@@ -8,9 +8,17 @@ from django.conf import settings
 from xml.etree.ElementTree import fromstring
 import re
 import abc
+#import pycurl
+#import certifi
 from cog.utils import file_modification_datetime
 
 NS = "http://www.esgf.org/whitelist"
+
+#curl = pycurl.Curl()
+#curl.setopt(pycurl.CAINFO, certifi.where())
+#print '\nPYCURL'
+#curl.setopt(pycurl.URL, "https://esg-datanode.jpl.nasa.gov/esgf-idp/")
+#curl.perform()
 
 class WhiteList(object):
 
