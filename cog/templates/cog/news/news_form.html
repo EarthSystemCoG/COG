@@ -2,50 +2,50 @@
 
 {% block extrahead %}
 
-	<script language="text/javascript">
+	<script type="text/javascript">
 	//<![CDATA[
 
 		// function to toggle the state of a set of checkboxes
 		// according to a master checkbox
-		function toggle_projects(cb) {			
+		function toggle_projects(cb) {
 			var name = cb.name;
-			var checked = cb.checked;			
+			var checked = cb.checked;
 			var inputs = document.getElementsByTagName("input");
 			for (var i = 0; i < inputs.length; i++) {
-				if (inputs[i].type == "checkbox") { 
+				if (inputs[i].type == "checkbox") {
 					if (inputs[i].name.indexOf(name)>=0) {
 						inputs[i].checked = checked;
 					}
 				}
-			}			
+			}
 		}
 
 	//]]>
 	</script>
-	
+
 	<style type="text/css">
-   
+
 	    #parent_projects ul, #peer_projects ul, #child_projects ul {
 		    margin: 0px;
 		    padding: 0px;
 		    padding-left: 18px; /* indent checkbox */
 		    list-style-type: none;
 		}
-	
+
 	</style>
 
 {% endblock %}
 
-{% block main %} 
+{% block main %}
 
     {% load cog_utils %}
-    
+
     Please note: this form is to be used for ONE news item at a time.
     <br/>&nbsp;
-            
+
     <div class="mybox">
         <form action="" method="post">
-            
+
             {% csrf_token %}
             <table>
                 <tr>
@@ -56,11 +56,11 @@
                     <td class="head"><b>Text</b></td>
                     <td>{{ form.text }} {{ form.text.errors }}</td>
                 </tr>
-                
+
                 <tr>
                     <td class="head"><b>Author</b></td>
-                    <td>{{ request.user }} </td>            
-                    <input type="hidden" name="author" value="{{request.user.id}}"/>      
+                    <td>{{ request.user }} </td>
+                    <input type="hidden" name="author" value="{{request.user.id}}"/>
                 </tr>
                  <tr>
                     <td class="tophead"><b>Publish to</b></td>
@@ -68,31 +68,31 @@
                     	<!-- this project -->
                         {{ form.instance.project }}
                         <input type="hidden" name="project" value="{{form.instance.project.id}}"/>
-                             
-                        <!-- parent projects -->          
+
+                        <!-- parent projects -->
                         <br/><input type="checkbox" name="parent_project" onclick="toggle_projects(this)">&nbsp;<b>Parent Projects</b>
-                        <div id="parent_projects">{{ form.parent_projects }}</div> 
-                        
-                        <!-- peer projects -->          
+                        <div id="parent_projects">{{ form.parent_projects }}</div>
+
+                        <!-- peer projects -->
                         <input type="checkbox" name="peer_project" onclick="toggle_projects(this)">&nbsp;<b>Peer Projects</b>
                         <div id="peer_projects">{{ form.peer_projects }}</div>
-                        
-                        <!-- child projects -->          
+
+                        <!-- child projects -->
                         <input type="checkbox" name="child_project" onclick="toggle_projects(this)">&nbsp;<b>Child Projects</b>
-                        <div id="child_projects">{{ form.child_projects }}</div>                     
-                                     
-                        
-                        <br/>    
+                        <div id="child_projects">{{ form.child_projects }}</div>
+
+
+                        <br/>
 
                     </td>
-                </tr>             
+                </tr>
             </table>
             <div style="text-align:right">
                 <input type="button" value="Cancel" onclick="window.location='{% url 'project_home' project.short_name.lower %}'"/>
                 <input type="submit" value="Submit" />
             </div>
          </form>
-         
+
     </div>
 
 {% endblock %}
