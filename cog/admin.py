@@ -10,13 +10,13 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(Doc)
 
 class NewsAdmin(admin.ModelAdmin):
-    
+
     fields = ('title', 'text')
     readonly_fields = ('author', 'project', 'other_projects')
     date_hierarchy = 'update_date'
-    
+
     def save_model(self, request, obj, form, change):
-        
+
         if (change==False):
             project_short_name = request.GET['project']
             project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -30,7 +30,7 @@ class NewsAdmin(admin.ModelAdmin):
                 obj.save()
         else:
             obj.save()
-            
+
 admin.site.register(News, NewsAdmin)
 
 class PostAdmin(admin.ModelAdmin):
@@ -47,3 +47,5 @@ admin.site.register(Folder, admin.ModelAdmin)
 admin.site.register(Lock, admin.ModelAdmin)
 
 admin.site.register(ProjectTag, admin.ModelAdmin)
+
+admin.site.register(UserProfile, admin.ModelAdmin)

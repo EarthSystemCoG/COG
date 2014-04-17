@@ -7,7 +7,6 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.utils import hasText
-from django.core.exceptions import ObjectDoesNotExist
 
 class UserProfile(models.Model):
 
@@ -39,6 +38,21 @@ class UserProfile(models.Model):
     # clear text password - this field is NOT persisted to the database, but it is needed to execute MD5 encoding on the user-supplied password
     clearTextPassword = ''
 
+    # user (login) type: 1=COG, 2=ESGF
+    type = models.IntegerField(null=False, blank=False, default=1)
+
+    def isCogUser(self):
+        ''' Utility method to detect a user with CoG login type.'''
+        return self.type == 1
+
+    def isOpenidUser(self):
+        ''' Utility method to detect a user with OpenID login type.'''
+        return self.type == 2
+
+    def __unicode__(self):
+        return "%s" % self.user.get_full_name()
+
+
     class Meta:
         app_label= APPLICATION_LABEL
 
@@ -46,28 +60,17 @@ class UserProfile(models.Model):
     def openids(self):
         return [ x.claimed_id for x in self.user.useropenid_set.all() ]
 
-# method to check whether a user object is valid
+# Method to check whether a user object is valid
 # (i.d. it has an associated profile, and its the mandatory fields are populated)
 def isUserValid(user):
 
-    try:
-
-        if not hasText(user.first_name) or not hasText(user.last_name) or not hasText(user.username) or not hasText(user.email):
-            return False
-
-        if not hasText(user.profile.institution) or not hasText(user.profile.city) or not hasText(user.profile.country):
-            return False
-
-        return True
-
-    except ObjectDoesNotExist:
-
-        # create a stab profile with blank mandatory fields
-        UserProfile.objects.create(user=user, institution='', city='', country='')
-
-        # still return not valid
+    if not hasText(user.first_name) or not hasText(user.last_name) or not hasText(user.username) or not hasText(user.email):
         return False
 
+    if not hasText(user.profile.institution) or not hasText(user.profile.city) or not hasText(user.profile.country):
+        return False
+
+    return True
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name

@@ -8,12 +8,12 @@ from django.contrib.auth import logout
 from cog.models import *
 from cog.util.thumbnails import *
 from django.forms.models import modelformset_factory
-from django_openid_auth.models import UserOpenID
 
 from cog.notification import notify, sendEmail
 from django.contrib.auth.views import login
 from django_openid_auth.views import login_complete
 from django.contrib.auth.hashers import is_password_usable
+from django.core.exceptions import ObjectDoesNotExist
 
 def custom_login(request, **kwargs):
     '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
@@ -25,9 +25,17 @@ def custom_login(request, **kwargs):
     return _custom_login(request, response)
 
 def custom_login_complete(request, **kwargs):
+    '''Method invoked after successful OpenID login.'''
 
     # authenticate user
     response = login_complete(request, **kwargs)
+
+    # create a stab profile with blank mandatory fields
+    if not request.user.is_anonymous():
+        try:
+            request.user.profile
+        except ObjectDoesNotExist:
+            UserProfile.objects.create(user=request.user, institution='', city='', country='', type=2) # type=2: ESGF
 
     # check if user is valid
     return _custom_login(request, response)
@@ -244,7 +252,8 @@ def user_update(request, user_id):
                                                  'researchInterests':profile.researchInterests,
                                                  'subscribed':profile.subscribed,
                                                  'private':profile.private,
-                                                 'image':profile.image })
+                                                 'image':profile.image,
+                                                 'type':profile.type })
 
         # retrieve existing URLs and OpenIDs associated to this user
         formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')

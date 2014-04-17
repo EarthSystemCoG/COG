@@ -90,25 +90,29 @@
 	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
 	                    <td>{{ form.username }}
 	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
-							<br/><b>Username</b> to log to COG with username and password, NOT to an ESGF OpenID site.
 	                        <br />{{ form.username.errors }}
 	                    </td>
 	                    <td colspan="2">
 
 	                    </td>
 	                </tr>
-	                <!-- for existing users with complete data, the encrypted passwords are resubmitted as hidden fields -->
-	                {% if form.instance.id and form.instance|isValidUser %}
-		            	<!-- existing user: include encoded password, confirm_password as hidden fields -->
-	                	{{ form.password.as_hidden }}
-	                    {{ form.confirm_password.as_hidden }}
+
+	                <!-- existing COG users: the encrypted passwords are resubmitted as hidden fields -->
+	                {% if form.instance.id %}
+
+	                	{% if form.instance.profile.isCogUser %}
+			            	<!-- existing user: include encoded password, confirm_password as hidden fields -->
+		                	{{ form.password.as_hidden }}
+		                    {{ form.confirm_password.as_hidden }}
+	                    {% endif %}
+
+	                <!-- new users: must submit a password, confirm password -->
 	                {% else %}
 		                <!-- otherwise, the user must submit a password -->
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
 		                    <td>{{ form.password }}
 		                       <i>[ At least 6 characters, all characters are allowed ]</i>
-		                       <br/><b>Password</b> to log to COG with username and password, NOT to an ESGF OpenID site.
 		                       <br/>{{ form.password.errors }}
 		                       </td>
 		                </tr>
@@ -116,7 +120,6 @@
 		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
 		                    <td>{{ form.confirm_password }}
 		                        <i>[ At least 6 characters, all characters are allowed ]</i>
-		                        <br/><b>Password</b> to log to COG with username and password, NOT to an ESGF OpenID site.
 		                        <br/>{{ form.confirm_password.errors }}
 		                    </td>
 		                </tr>

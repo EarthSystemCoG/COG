@@ -101,10 +101,10 @@ class UserForm(ImageForm):
     last_name = CharField(required=True)
     username = CharField(required=True)
     email = CharField(required=True)
-    password = CharField(required=True, widget=PasswordInput())
+    password = CharField(required=False, widget=PasswordInput()) # not required for OpenID users
 
     # additional fields not in User
-    confirm_password = CharField(required=True, widget=PasswordInput())
+    confirm_password = CharField(required=False, widget=PasswordInput()) # not required for OpenID users
     institution = CharField(required=True)
     department = CharField(required=False)
     city = CharField(required=True)
@@ -126,7 +126,7 @@ class UserForm(ImageForm):
     class Meta:
         # note: use User model, not UserProfile
         model = User
-        # define fields to be used, so to exclude last_login and date_joined
+        # define fields to be used, so to exclude last_login and date_joined, and login type
         fields = ('first_name', 'last_name', 'username', 'password', 'email',
                   'institution','city','state','country','department',
                   'subscribed','private',
@@ -145,8 +145,10 @@ class UserForm(ImageForm):
         cleaned_data = self.cleaned_data
 
         # new user only: validate 'password', 'confirm_password' fields
-        #if not user_id:
-        validate_password(self)
+        print 'user_id=%s' % user_id
+        #print 'profile=%s' % self.instance.profile
+        if user_id is None:
+            validate_password(self)
 
         # validate 'username' field
         validate_username(self, user_id)
@@ -182,9 +184,20 @@ def validate_password(form):
 
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
-        if password:
+
+        if password is None:
+            form._errors["password"] = form.error_class(["'Password' is a required field."])
+        else:
             if len(password) < 6:
                 form._errors["password"] = form.error_class(["'Password' must contain at least 6 characters."])
+
+        if confirm_password is None:
+            form._errors["confirm_password"] = form.error_class(["'Confirm Password' is a required field."])
+        else:
+            if len(confirm_password) < 6:
+                form._errors["confirm_password"] = form.error_class(["'Confirm Password' must contain at least 6 characters."])
+
+        if password is not None and confirm_password is not None:
             if password != confirm_password:
                 form._errors["confirm_password"] = form.error_class(["'Password' and 'Confirm Password' must match."])
 
