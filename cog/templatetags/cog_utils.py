@@ -560,6 +560,9 @@ def showMessage(message):
     elif message=='invalid_openid':
         return "Invalid OpenID (does it start with 'https' ?)"
 
+    elif message=='openid_discovery_error':
+        return "OpenID Discovery Error: unrecognized by the Identity Provider."
+
 
     else:
         return message

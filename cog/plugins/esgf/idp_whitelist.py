@@ -100,9 +100,16 @@ class IdpWhitelistMiddleware(object):
 
 
     def process_request(self, request):
+        '''
+            Method called before the view.
+           Used to intercept the openid login request before it is sent to the remote IdP.
+        '''
 
         # intercept only these requests
         if request.path == self.url:
+
+            # DEBUG
+            #print 'OpenID login request: %s' % request
 
             openid_identifier = request.REQUEST.get('openid_identifier', None)
             next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
@@ -110,14 +117,37 @@ class IdpWhitelistMiddleware(object):
 
                 # invalid OpenID
                 if not openid_identifier.lower().startswith('https'):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_openid&next=%s" % next)
+                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_openid&next=%s&openid=%s" % (next, openid_identifier))
 
                 # invalid IdP
                 if not self.whitelist.trust(openid_identifier):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_idp&next=%s" % next)
+                    return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_idp&next=%s&openid=%s" % (next, openid_identifier) )
 
         # keep on processing this request
         return None
+
+    def process_response(self, request, response):
+        '''
+            Method called after the view.
+            Used to intercept the openid login response in case of errors.
+        '''
+
+        # intercept only these requests
+        if request.path == self.url:
+            openid_identifier = request.REQUEST.get('openid_identifier', None)
+
+            # DEBUG
+            #print "OpenID login response swtatus code=%s" % response.status_code
+            #print 'OpenID login request: %s' % request
+            #print 'OpenID login response: %s' % response
+
+            if response.status_code == 500:
+
+                if 'OpenID discovery error' in response.content:
+                    return HttpResponseRedirect(reverse('openid-login')+"?message=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
+
+        return response
+
 
 if __name__ == '__main__':
 
