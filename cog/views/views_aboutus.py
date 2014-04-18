@@ -273,7 +273,6 @@ def _imageformset_update(request, project, tab,
                 instance.save()
 
                 # generate image thumbnail, after the image has been saved to disk
-                print 'GENERATING THUMBNAIL FOR: %s' % instance.image.path
                 if instance.image is not None:
                     try:
                         generateThumbnail(instance.image.path, thumbnail_size)
