@@ -563,6 +563,8 @@ def showMessage(message):
     elif message=='openid_discovery_error':
         return "OpenID Discovery Error: unrecognized by the Identity Provider."
 
+    elif message=="login_failed":
+        return "Error entering username and/or password."
 
     else:
         return message

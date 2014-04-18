@@ -10,9 +10,9 @@
 		}
 
 		.th {
-			font-weight:bold;
-			vertical-align:middle;
-			text-align:right;
+			font-weight: bold;
+			vertical-align: middle;
+			text-align: right;
 		}
 	</style>
 {% endblock %}
@@ -25,14 +25,12 @@
 
 <!-- 1) username+password login -->
 
-	<h2>Standard Login</h2>
+	<h2>CoG Login</h2>
 
-	<!-- display authentication errors -->
-	{% if form.errors %}
-		ERRORS {{ form.errors }}
-		{% if form.username.errors or form.password.errors %}
-			<p class="errornote">Your username and password didn't match. Please try again.</p>
-		{% endif %}
+	<!-- display extra message if available -->
+	{% if request.GET.message1 %}
+	   <div class="message-box"> {{ request.GET.message1|showMessage }}</div>
+	   <p/>
 	{% endif %}
 
 
@@ -41,7 +39,7 @@
 		Please note that username and password are case-sensitive.
 	</div>
 
-	<form method="post" action="{% url 'login' %}">
+	<form method="post" action="{% url 'login' %}" method="post">
 	   {% csrf_token %}
 		<div class="mybox">
 			<table>
@@ -49,15 +47,13 @@
 				<tr>
 				    <td class="th">Username</td>
 				    <td>
-				    	<input type="text" id="username" name="username" />
-				    	<br/>{{ form.username.errors }}
+				    	<input type="text" id="username" name="username" value="{{ request.REQUEST.username }}" size="30" />
 				    </td>
 				</tr>
 				<tr>
 					<td class="th">Password</td>
 				    <td>
-				    	<input type="password" id="password" name="password" />
-				    	<br/>{{ form.password.errors }}
+				    	<input type="password" id="password" name="password" size="30"  />
 				    	&nbsp;<input type="submit" value="Login" />
 				    </td>
 				</tr>
@@ -84,15 +80,15 @@
 
 <!-- 2) OpenID login -->
 
-		<h2>OpenID Login</h2>
+		<h2>ESGF Login</h2>
 
 		<!-- display extra message if available -->
-		{% if request.GET.message %}
-		   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
+		{% if request.GET.message2 %}
+		   <div class="message-box"> {{ request.GET.message2|showMessage }}</div>
 		   <p/>
 		{% endif %}
 
-		<form name="fopenid" action="{{ action }}" method="post">
+		<form name="fopenid" action="{% url 'openid-login' %}" method="post">
     		{% csrf_token %}
 
     		<div class="mybox">
@@ -112,6 +108,14 @@
 			{% if next %}
 				<input type="hidden" name="next" value="{{ next }}" />
 			{% endif %}
+
+			<!-- reminder links -->
+			<div style="position: relative;">
+				<span style="position: absolute; right: 0px;">
+					<a href="{% url 'username_reminder' %}">Forgot OpenID?</a>
+				</span>
+	            <br/>&nbsp;
+			</div>
 
 		</form>
 

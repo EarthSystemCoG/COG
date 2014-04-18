@@ -39,8 +39,8 @@
 
 {% else %}
      Welcome, <strong>Guest</strong>.
-     | <a href="{% url 'login' %}?next={{ request.path }}">CoG Login</a>
-     | <a href="{% url 'openid-login' %}?next={{ request.path }}">OpenID Login</a>
+     | <a href="{% url 'login' %}?next={{ request.path }}"> Login</a>
+     <!-- | <a href="{% url 'openid-login' %}?next={{ request.path }}">OpenID Login</a> -->
      | <a href="{% url 'user_add' %}">Create Account</a>
 {% endif %}
 

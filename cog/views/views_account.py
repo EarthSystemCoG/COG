@@ -25,7 +25,9 @@ def custom_login(request, **kwargs):
     return _custom_login(request, response)
 
 def custom_login_complete(request, **kwargs):
-    '''Method invoked after successful OpenID login.'''
+    '''Method invoked after successful OpenID login.
+       Overridden to create user profile after first successful OpenID login.
+    '''
 
     # authenticate user
     response = login_complete(request, **kwargs)
