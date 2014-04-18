@@ -1,10 +1,7 @@
 '''
-Middleware that enforces an IdP white-list during openID authentication.
+Module containing API and implementation for OpenID white-listing.
 '''
 
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.conf import settings
 from xml.etree.ElementTree import fromstring
 import re
 import abc
@@ -85,76 +82,3 @@ class LocalWhiteList(WhiteList):
 
         # don't trust this openid
         return False
-
-
-
-class IdpWhitelistMiddleware(object):
-
-    def __init__(self):
-
-        # initialize the white list service
-        self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
-
-        # '/openid/complete/'
-        self.url = reverse('openid-login')
-
-
-    def process_request(self, request):
-        '''
-            Method called before the view.
-           Used to intercept the openid login request before it is sent to the remote IdP.
-        '''
-
-        # intercept only these requests
-        print request.path
-        if request.path == '/openid/login/':
-
-            # DEBUG
-            #print 'OpenID login request: %s' % request
-
-            openid_identifier = request.REQUEST.get('openid_identifier', None)
-            next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
-            if openid_identifier is not None:
-
-                # invalid OpenID
-                if not openid_identifier.lower().startswith('https'):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_openid&next=%s&openid=%s" % (next, openid_identifier))
-
-                # invalid IdP
-                if not self.whitelist.trust(openid_identifier):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_idp&next=%s&openid=%s" % (next, openid_identifier) )
-
-        # keep on processing this request
-        return None
-
-
-    def process_response(self, request, response):
-        '''
-            Method called after the view.
-            Used to intercept the login response in case of errors.
-        '''
-
-        # request parameters to include when redirecting
-        next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
-        openid_identifier = request.REQUEST.get('openid_identifier', None)
-        username = request.REQUEST.get('username', None)
-
-        # intercept only these requests
-        if request.path == '/openid/login/':
-
-            if response.status_code == 500:
-
-                if 'OpenID discovery error' in response.content:
-                    return HttpResponseRedirect(reverse('openid-login')+"?message2=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
-
-        elif request.path == '/login/':
-
-            if request.method=='POST' and not request.user.is_authenticated():
-                return HttpResponseRedirect(reverse('login')+"?message1=login_failed&next=%s&username=%s" % (next, username) )
-
-        return response
-
-
-if __name__ == '__main__':
-
-    IdpWhitelistMiddleware()

@@ -155,7 +155,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
-    'cog.plugins.esgf.idp_whitelist.IdpWhitelistMiddleware',
+    'cog.plugins.esgf.login_middleware.LoginMiddleware',
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
