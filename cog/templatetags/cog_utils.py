@@ -88,7 +88,9 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
 
     # do NOT show folders that are empty (no bookmarks or no-sub-folders)
     # always show the top-level folder
-    if folder.name == TOP_FOLDER or folder.children() or folder.bookmark_set.all():
+    #if folder.name == TOP_FOLDER or folder.children() or folder.bookmark_set.all():
+    # only show active folders, always show the top-level folder
+    if folder.name == TOP_FOLDER or folder.active:
 
         # this folder
         if expanded:
