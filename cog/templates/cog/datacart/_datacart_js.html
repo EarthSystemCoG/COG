@@ -1,13 +1,13 @@
 <script language="javascript">
   //<![CDATA[
-             
+
 	// function to select/deselect all items in cart
 	function toggleAllDataCartItems() {
-		
+
 		// get status of 'master' datacart checkbox
 		var dcCheckbox = document.getElementById("datacart-checkbox");
 		var bool = dcCheckbox.checked;
-		
+
 		// set status of all dataitems checkboxes to be the same
 		var inputs = document.getElementsByTagName("input");
 		for (var i = 0; i < inputs.length; i++) {
@@ -15,9 +15,9 @@
 		    	if (inputs[i].id!=null && inputs[i].id.length>0 && inputs[i].id.indexOf("dataitem-checkbox")==0) {
 		        	inputs[i].checked = bool;
 		    	}
-		    }  
+		    }
 		}
-		
+
 	}
 
 	// function to add an item to the user data cart
@@ -29,37 +29,37 @@
 		var url = "{% url 'datacart_add' site.id request.user.id %}";
 		var data = "id="+encodeURIComponent(id)
 		         + "&metadata="+encodeURIComponent(metadata);
-		
+
 		// execute asynchronous POST request
 		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, addCallback, data);
-		
+
 		// show waiting panel
-		showWaitPanel();	
+		showWaitPanel();
       {% endif %}
 	}
-	
+
 	function deleteFromCart(item_identifier) {
 	  {% if request.user.is_authenticated %}
-				
+
 		// relative path to COG application
 		// note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 		var url = "{% url 'datacart_delete' site.id request.user.id %}"
 		var data = "item="+encodeURIComponent(item_identifier);
-		
+
 		// execute asynchronous GET request
 		var transaction = YAHOO.util.Connect.asyncRequest('POST', url, deleteCallback, data);
-	  {% endif %}	
+	  {% endif %}
 	}
-	
+
 	// function to obtain the HTML id for the files container
 	function getFilesDiv(dataset_id) {
 		id = "files_"+dataset_id;
 		return document.getElementById(id);
 	}
-	
+
 	// function to return the HTTP parameter string for "&query=..."
 	function getQueryFilter() {
-		
+
 		var q = "";
 		var qdiv = document.getElementById("query-filter");
 		if (qdiv!=null) {
@@ -67,61 +67,61 @@
 			if ( query.length > 0 ) q = "&query="+encodeURI(query);
 		}
 		return q;
-		
+
 	}
-	
+
 	// default number of files to retrieve
 	var DEFAULT_LIMIT=10;
-		
+
 	// function to retrieve the files belonging to a given dataset
 	function showFiles(dataset_id, index_node, limit, project) {
-		
+
 	  fdiv = getFilesDiv(dataset_id);
-	  
+
 	  // only conduct the search if the files panel has been opened already
 	  if (fdiv.style.display=='block') {
-	  		  						
+
 		  if (limit==0) limit=DEFAULT_LIMIT;
-			
+
 		  // relative path to COG application
 		  // note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 		  // note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
 		  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
 		          // add optional query filter
 				  + getQueryFilter();
-		  
+
 		  // pass in extra arguments to callback functions
 		  filesCallback.argument[0] = project
 		  filesCallback.argument[1] = index_node
 		  filesCallback.argument[2] = dataset_id
-			
+
 		  // execute asynchronous GET request
 		  var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
-			
+
 		  // show waiting panel
-		  showWaitPanel();	
-	  
+		  showWaitPanel();
+
 	  }
-		
+
 	}
-	
+
 	// formats a metadata key for display
 	function formatString(key) {
 		return key.replace(/_/g," ").replace(/,/g,", ")
 	}
-	
+
 	// function called if Ajax request succeded to create the files display widget
 	var handleFilesSuccess = function(o) {
-		
+
 		// hide waiting panel
 		hideWaitPanel();
-		
+
 		// retrieve callback extra argument
 		project = o.argument[0]
 		index_node = o.argument[1]
 		dataset_id = o.argument[2]
-		
-		// parse JSON response into object		
+
+		// parse JSON response into object
 		var jsonResponse = eval('(' + o.responseText + ')');
 		var numFound = jsonResponse.response.numFound;
 		var docs = jsonResponse.response.docs;
@@ -130,12 +130,12 @@
 			var fqArray = jsonResponse.responseHeader.params.fq[k].split(":");
 			if (fqArray[0]=='dataset_id') {
 				dataset_id = fqArray[1].replace(/\"/g,'');
-			}	
+			}
 		}
-		
+
 		// populate files container
 		var fdiv = getFilesDiv(dataset_id);
-		
+
 		var html = "";
 		html  += "<div style='text-align:center; font-weight:bold'>Total Number of Files: "+numFound+"</div>";
 		if (numFound>0) {
@@ -145,8 +145,8 @@
 				html += "<tr><td>"+(i+1)+"</td>"
 				     +  "<td><b>"+doc.title+"</b>";
 				var html2 = "<div id='file_"+doc.id+"' style='display:none'>";
-				
-				// display additional file-level metadata 
+
+				// display additional file-level metadata
 				var keys = []
 				var keys2 = []
 				for (var field in doc) {
@@ -182,7 +182,7 @@
 					     +"&subtype="+doc.subtype
 					     +"&back={{request.get_full_path}}" // add current URL with query string to provide 'back' link
 					     +"'>Full Image Metadata</a>";
-					     
+
 				<!-- general case: more file metadata -->
 				} else {
 					if (keys.length>0) {
@@ -191,51 +191,53 @@
 					    	 +  " onclick='javascript:openclose(\"file_"+doc.id+"\",this,\"[ More File Metadata ]\",\"[ Less File Metadata ]\"); return false;'>[ More File Metadata ]</a>";
 					}
 				}
-				
+
 				html2 += "</div>";
 				html += html2;
-				
+
 				html += "</td><td>";
-				
+
 				// file 'url' metadata
 				if (doc.url) {
-					
+
 					var thumbnailUrl = null;
 					var imageUrl = null;
-					
+
 					// loop over file access URLs, inspect service type, create hyperlinks
 					for (var j=0; j<doc.url.length; j++) {
 						var urlArray = doc.url[j].split('|');
-						
+
 						// special case: 'Thumbnail' service
 						if (urlArray[2].toLowerCase() == 'thumbnail') {
 							thumbnailUrl = urlArray[0]; // store thumbnail URL for later replacement
-							
+
 						} else {
-							
+
 							// images: create hyperlink with graphic
 							if (urlArray[1].indexOf("image")>=0) {
 								html += "<a href='"+urlArray[0]+"'><img src='IMAGE_URL' width='50px'/></a>&nbsp;"; // 'IMAGE_URL'
 								imageUrl = urlArray[0]; // always store reference to image URL
-								
+
 							// non-images: create hyperlink with text
 							} else {
-								html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a><br/>";
+								if (urlArray[2].toLowerCase() != 'gridftp') {
+									html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a><br/>";
+								}
 							}
-						}						
+						}
 					} // loop over URLs
-					
+
 					// replace placeholder with thumbnail of full image
 					if (html.indexOf("IMAGE_URL")>0) {
 						if (thumbnailUrl!=null) {
-							html = html.replace("IMAGE_URL",thumbnailUrl);								
+							html = html.replace("IMAGE_URL",thumbnailUrl);
 						} else {
 							html = html.replace("IMAGE_URL",imageUrl);
 						}
 					}
 
 				} // file access
-				
+
 				// file 'xlink' metadata, including Technical Notes
 				if (doc.xlink) {
 					for (var j=0; j<doc.xlink.length; j++) {
@@ -247,17 +249,17 @@
 						}
 					}
 				}
-				 
+
 				html += "</td></tr>";
 			}
 			html += "</table>";
 		}
-		
+
 		// link to show more files
 		if (docs.length < numFound) {
 			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+numFound+"','"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show All Files</a></style>";
-			
+
 		// link to show less files
 		} else if (docs.length > DEFAULT_LIMIT) {
 			var url = "javascript:window.scrollTo(0,0); " // must resize the scrollbar
@@ -265,76 +267,76 @@
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
 
 		}
-		
+
 		fdiv.innerHTML = html;
-				
+
 	}
 
-	
+
 	// function called if Ajax request succeded
 	var handleAddSuccess = function(o) {
-		
-		// parse JSON response into object		
+
+		// parse JSON response into object
 		var jsonResponse = eval('(' + o.responseText + ')');
-		
+
 		// update data cart size
 		var size = jsonResponse['datacart_size'];
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
-		
+
 		var identifier = jsonResponse['item'];
-		
+
 		<!-- show 'delete' link -->
 		set_visibility("datacart-delete-"+identifier, true);
 		<!-- hide 'add' link -->
 		set_visibility("datacart-add-"+identifier, false);
-		
+
 		// show messages
 		var message = jsonResponse['message'];
 		if (message) {
 			showMessage("Warning", message);
 		}
-		
+
 		// hide wait panel
 		hideWaitPanel();
-		
+
 	}
-	
+
 	// function called if Ajax request succeded
 	var handleDeleteSuccess = function(o) {
-		
-		// parse JSON response into object		
+
+		// parse JSON response into object
 		var jsonResponse = eval('(' + o.responseText + ')');
 		var size = jsonResponse['datacart_size'];
 		var identifier = jsonResponse['item'];
-		
+
 		// remove from available services
 		services.delete(identifier);
-		
+
 		<!-- update datacart size -->
 		element = document.getElementById("datacart_size");
 		element.innerHTML = ""+size;
 		element = document.getElementById("datacart_size2");
 		if (element!=null) element.innerHTML = ""+size;
-		
+
 		<!-- remove item from datacart -->
 		set_visibility("item_"+identifier, false);
 		set_visibility("item_"+identifier+"_hr", false);
-				
+
 		<!-- hide 'delete' link -->
 		set_visibility("datacart-delete-"+identifier, false);
 		<!-- show 'add' link -->
 		set_visibility("datacart-add-"+identifier, true);
 
-		
+
 	}
-		
+
 	// returns the currently selected data cart items
 	// with a specific service type
 	function getSelectedItemsByServiceType(mtype) {
-		
+
 		var objs = [];
-		
+
 		// loop over selected checkboxes
 		var inputs = document.getElementsByTagName("input");
 		for (var i = 0; i < inputs.length; i++) {
@@ -349,13 +351,13 @@
 		        		}
 		        	}
 		    	}
-		    }  
+		    }
 		}
-		
+
 		return objs;
-		
+
 	}
-	
+
     // function to apply the query filter to the currently showing file listings
     function applyQueryFilter() {
 
@@ -364,25 +366,25 @@
     		if (filesDiv!=null && filesDiv.style.display == 'block') { // files panel is showing
     			// retrieve hidden button element
     			var hrefElement = document.getElementById("href_{{item.identifier}}");
-				// simulate 'hide' click    		
+				// simulate 'hide' click
     			hrefElement.click();
 				// simulate 'show' click
     			hrefElement.click();
 
     		}
     	{% endfor %}
-    
+
     }
-	
+
 	// function called if Ajax request failed
-	var handleFailure = function(o) {		
-		
+	var handleFailure = function(o) {
+
 		// hide waiting panel, in case it was displaying
 		hideWaitPanel();
 
 		// show error panel
 		showMessage("An Error Occurred", "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
-		
+
 	}
 
 	var addCallback = {
@@ -392,7 +394,7 @@
 	  timeout:5000,
 	  argument: [],
 	};
-	
+
 	var deleteCallback = {
 	  success:handleDeleteSuccess,
 	  failure: handleFailure,
@@ -400,7 +402,7 @@
 	  timeout:5000,
 	  argument: [],
 	};
-	
+
 	var filesCallback = {
 	  success:handleFilesSuccess,
 	  failure: handleFailure,
@@ -408,6 +410,6 @@
 	  timeout: 20000, // longer timeout
 	  argument: [],
 	};
-		
+
   //]]>
 </script>
