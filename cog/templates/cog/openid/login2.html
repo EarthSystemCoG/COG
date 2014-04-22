@@ -25,6 +25,7 @@
 
 <!-- 1) username+password login -->
 
+
 	<h2>CoG Login</h2>
 
 	<!-- display extra message if available -->
@@ -33,6 +34,11 @@
 	   <p/>
 	{% endif %}
 
+	<i>Use your CoG username and password if you have an existing CoG account.
+	Once you are logged in, you can optionally edit your CoG profile to insert one (or more) ESGF OpenIDs.
+	To download data from ESGF, you will have to login again with a valid ESGF OpenID.
+	</i>
+	<p/>
 
 	<!-- authentication form -->
 	<div style="font-style: italic; text-align:center;">
@@ -87,6 +93,13 @@
 		   <div class="message-box"> {{ request.GET.message2|showMessage }}</div>
 		   <p/>
 		{% endif %}
+
+		<i>You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time.
+		This method is recommended if you plan on downloading data from ESGF, since you will not be asked you enter your password again.
+		If this is the first time you use your ESGF OpenID on CoG, you will be asked to provide some additional information
+		to create a new CoG account.
+		</i>
+		<p/>
 
 		<form name="fopenid" action="{% url 'openid-login' %}" method="post">
     		{% csrf_token %}
