@@ -1,24 +1,24 @@
 {% block right %}
 
-    <!-- COG custom filters --> 
+    <!-- COG custom filters -->
     {% load cog_utils %}
 
     <script type="text/javascript">
     //<![CDATA[
-                   
+
        // function to populate the project widget via ajax call
        function loadProjectBrowser(project_short_name) {
-    	   
+
     	   // loop over YUI tab identifiers, execute separate ajax requests
     	   var tabs = ['this', 'all', 'my']
     	   for (var i=0; i<tabs.length; i++) {
-    		   
+
 	    	   // build request URL
 	    	   // example: /projects/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
 	    	   var url = "/projects/"+project_short_name+"/browse/"+tabs[i]+"/";
 	    	   var tag = document.getElementById('projectBrowserText').value;
 	    	   if (tag != null && tag!="") url += "?tag="+tag;
-	    	   
+
 	    	   // define the callback function dynamically
 	    	   // so to pass in the target tab identifier as extra argument
 	    	   var callback = {
@@ -30,34 +30,34 @@
 	    	   }
 			   // pass in target tab identifier as extra argument to ajax callback
 			   callback.argument[0] = tabs[i]+"ProjectsBrowser";
-	
+
 			   // execute asynchronous GET request
 			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
-			
+
     	   }
-    	   
+
        }
-       	   
+
 		// function called if the ajax request failed
 		var handleFailure = function(o) {
 			// do nothing
 			//showMessage("An Error Occurred",
 			//		    "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
 		}
-		
+
 		// function called if the ajax request succeded
 		var handleSuccess = function(o) {
-			
+
 			// retrieve target tab id from callback extra argument
 			tabId = o.argument[0]
-			
+
 			// replace browser window with new content
 			document.getElementById(tabId).innerHTML = o.responseText;
-			
+
 		}
     //]]>
    </script>
-      
+
    <script type="text/javascript">
    //<![CDATA[
 
@@ -70,7 +70,7 @@
            var dataSource = new YAHOO.util.LocalDataSource(projectTags.sort()); // sort tags alphabetically
            var autoComp = new YAHOO.widget.AutoComplete("projectBrowserText", "tagContainer", dataSource);
            autoComp.prehighlightClassName = "yui-ac-prehighlight";
-           autoComp.useShadow = true;    	
+           autoComp.useShadow = true;
            autoComp.allowBrowserAutocomplete = false;
            autoComp.animSpeed = 0.2;
            autoComp.maxResultsDisplayed = 10;
@@ -82,15 +82,15 @@
    //]]>
    </script>
 
-     
+
    <style type="text/css">
-   
+
     .projects_footer {
 	    margin: 0px;
 	    padding: 2px 5px 3px 5px;
 	    font-size: 8pt;
 	    text-align: left;
-	    font-weight: bold;    
+	    font-weight: bold;
 	    /* COG STYLE: PROJECTS FOOTER BACKGROUND COLOR */
 	    background-color: #FCE79F;
 	    /* background: #7CA0C7 url(../../img/admin/default-bg.gif) top left repeat-x; */
@@ -100,7 +100,7 @@
 	    border-top: 1px solid #666666;
 	    display: block;
 	}
-	
+
 	/* NOTE: scrollbar controlled by "overflow-y: auto;" in tabview.css
 	   NOTE: overall widget height also controlled by .yui-content in tabview.css */
 	.project_widget {
@@ -114,7 +114,7 @@
 	    color: #666;
 	    display: block;
 	}
-	
+
 	.project_browser_bar {
 		margin-bottom: 2px;
 		margin-top: 2px;
@@ -129,13 +129,13 @@
 		border-top: 0px solid #666;
 		border-bottom: 0px solid #666;
 	}
-	
+
 	.project_browser_bar a:link,
 	.project_browser_bar a:visited {
 		color: #666;
 		text-decoration: none;
 	}
-	
+
 	#project_browser_controls {
 		border-top: 1px solid #666;
 		background-color: #FCE79F;
@@ -143,14 +143,14 @@
 		margin: 0px;
 	}
 
-        
+
 	#parent_projects, #peer_projects, #child_projects {
 		overflow-y: auto; /* NOTE: scrollbar on containing div is controlled by tabview.css:yui-content */
 		margin-left: 0.3em;
 		margin-right: 0.3em;
 		/* max-height: 80px;*/ /* PROJECT BROWSER HEIGHT: height of individual widgets */
 	}
-	
+
 	#all_projects, #my_projects {
 		/* overflow-y: auto; */ /* PROJECT BROWSER: disable inner scrollbar on these two widgets */
 		max-height: 265px; /* PROJECT BROWSER HEIGHT: must be less than overall widget height set in tabview.css */
@@ -159,7 +159,7 @@
 
         #parent_projects a, #peer_projects a, #child_projects a, #all_projects a, #my_projects a {
             line-height: 1.3;
-        }       
+        }
 
 	.tabs_caption {
 	    margin: 0px;
@@ -171,78 +171,78 @@
 	    color: #666;
 	    display: block;
 	}
-	
+
 	.project_widget table td {
-	    /* important: must align project labels with middle of checkbox */ 
+	    /* important: must align project labels with middle of checkbox */
 		vertical-align: middle;
 	}
-	
+
 	/* autocomplete widget must be styled otherwise it will expand to tale all available room */
 	#tagAutoComplete {
-       width: 138px; 
+       width: 138px;
        padding-bottom: 20px;
     }
-    
+
     /* enable vertical scrollbar if large number of items needs to be displayed
        (in conjunction with large autoComp.maxResultsDisplayed) */
-    .yui-skin-sam .yui-ac-content { /* set scrolling */ 
+    .yui-skin-sam .yui-ac-content { /* set scrolling */
 	    max-height:10em;
-	    overflow:auto; overflow-x:hidden; /* set scrolling */ 
-	    _height:10em; /* ie6 */ 
-	} 
-	
+	    overflow:auto; overflow-x:hidden; /* set scrolling */
+	    _height:10em; /* ie6 */
+	}
+
    </style>
-   
-   <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/yui/tabview.css" />     
-       
+
+   <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/yui/tabview.css" />
+
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
-	       <div class="search_header">Search Data</div>
+	       <div class="search_header">Search &amp; Download Data</div>
 	       <div style="width:100%; padding:4px;">
 		       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
-		            {% csrf_token %} 
+		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
-		            <input type="hidden" name="type" value="Dataset" />	                
-	                <input type="text" name="text" size="24" value="" style="width:75%; font-size:8.5pt;" 
+		            <input type="hidden" name="type" value="Dataset" />
+	                <input type="text" name="text" size="24" value="" style="width:75%; font-size:8.5pt;"
 	                        placeholder=" Enter Text"/>&nbsp;
 	                <input type="submit" value="Go" style="font-size:8.5pt;"/>
 	                <!--  <select name="type">
 	                    <option value="Dataset">Data</option>
 	                    <option value="Model">Models</option>
 	                    <option value="Document">Documents</option>
-	                </select> -->		            
+	                </select> -->
 		       </form>
 	       <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
 	       </div>
 	  </div>
   {% endif %}
-  
+
   <!-- News widget  -->
   {% include 'cog/project/_project_latest_news.html' %}
-   
+
    <!-- Project Browser widget -->
-   <div class="yui-skin-sam">     
+   <div class="yui-skin-sam">
      <div class="project_widget">
-     
-       <div id="project_views" class="yui-navset">  
+
+       <div id="project_views" class="yui-navset">
           <div class="tabs_caption">Browse Projects</div>
 
           <ul class="yui-nav">
               <li class="selected">&nbsp;&nbsp;<a href="#tab1"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="#tab2"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="#tab3"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
-          </ul>  
+          </ul>
           <div class="yui-content">
               <div id="thisProjectsBrowser">&nbsp;</div>
               <div id="allProjectsBrowser">&nbsp;</div>
               <div id="myProjectsBrowser">&nbsp;</div>
           </div>
-       </div>       
-       
+       </div>
+
        <!-- project widget controls -->
-       
+
 	   <div id="project_browser_controls">
 
 	       <table style="margin-top: 4px;">
@@ -250,7 +250,7 @@
                     <td class="long">
 		       		<div id="tagAutoComplete">
 		       			<input type="text" id="projectBrowserText" placeholder=" Enter Tag" style="font-size:8.5pt;"/>
-		                       <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" --> 
+		                       <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
 		                <div id="tagContainer"></div>
 		            </div>
 		       </td>
@@ -259,20 +259,20 @@
                                   onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
 		       </td>
 	       	</tr>
-	       </table>   
+	       </table>
 	       <div style="text-align:center; font-style: italic;">Start typing, or use the 'Delete' key to show all available tags.</div>
        </div>
-           
-      </div>  
-    </div>   
+
+      </div>
+    </div>
 
 	<!-- render YUI tabs -->
     <script type="text/javascript">var myTabs = new YAHOO.widget.TabView("project_views");</script>
-    
+
     <!-- populate project browser -->
     <script type="text/javascript">loadProjectBrowser('{{ project.short_name }}')</script>
-    
+
     <!-- initialize tags autocompletion -->
     <script type="text/javascript">initTags()</script>
-      
+
 {% endblock %}
