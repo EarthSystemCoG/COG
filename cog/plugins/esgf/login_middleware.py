@@ -15,11 +15,17 @@ class LoginMiddleware(object):
     def __init__(self):
 
         # initialize the white list service
-        self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
-
-        # login URLs
-        self.url1 = "/login/"
-        self.url2 = "/openid/login/"
+        try:
+            self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
+    
+            # login URLs
+            self.url1 = "/login/"
+            self.url2 = "/openid/login/"
+            
+            self.init= True
+            
+        except AttributeError:
+            self.init = False
 
 
     def process_request(self, request):
@@ -28,23 +34,25 @@ class LoginMiddleware(object):
         Used to intercept the openid login request before it is sent to the remote IdP.
         '''
 
-        # intercept only these requests
-        if request.path == self.url2:
-
-            # DEBUG
-            #print 'OpenID login request: %s' % request
-
-            openid_identifier = request.REQUEST.get('openid_identifier', None)
-            next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
-            if openid_identifier is not None:
-
-                # invalid OpenID
-                if not openid_identifier.lower().startswith('https'):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_openid&next=%s&openid=%s" % (next, openid_identifier))
-
-                # invalid IdP
-                if not self.whitelist.trust(openid_identifier):
-                    return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_idp&next=%s&openid=%s" % (next, openid_identifier) )
+        if self.init:
+            
+            # intercept only these requests
+            if request.path == self.url2:
+    
+                # DEBUG
+                #print 'OpenID login request: %s' % request
+    
+                openid_identifier = request.REQUEST.get('openid_identifier', None)
+                next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
+                if openid_identifier is not None:
+    
+                    # invalid OpenID
+                    if not openid_identifier.lower().startswith('https'):
+                        return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_openid&next=%s&openid=%s" % (next, openid_identifier))
+    
+                    # invalid IdP
+                    if not self.whitelist.trust(openid_identifier):
+                        return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_idp&next=%s&openid=%s" % (next, openid_identifier) )
 
         # keep on processing this request
         return None
@@ -55,24 +63,26 @@ class LoginMiddleware(object):
         Method called after processing of the view.
         Used to intercept the login response in case of errors.
         '''
+        
+        if self.init:
 
-        # request parameters to include when redirecting
-        next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
-        openid_identifier = request.REQUEST.get('openid_identifier', None)
-        username = request.REQUEST.get('username', None)
-
-        # process errors from openid authentication
-        if request.path == self.url2:
-
-            if request.method=='POST' and not request.user.is_authenticated():
-                if response.status_code == 500:
-                    if 'OpenID discovery error' in response.content:
-                        return HttpResponseRedirect(reverse('openid-login')+"?message2=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
-
-        # process errors from standard authentication
-        elif request.path == self.url1:
-
-            if request.method=='POST' and not request.user.is_authenticated():
-                return HttpResponseRedirect(reverse('login')+"?message1=login_failed&next=%s&username=%s" % (next, username) )
+            # request parameters to include when redirecting
+            next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
+            openid_identifier = request.REQUEST.get('openid_identifier', None)
+            username = request.REQUEST.get('username', None)
+    
+            # process errors from openid authentication
+            if request.path == self.url2:
+    
+                if request.method=='POST' and not request.user.is_authenticated():
+                    if response.status_code == 500:
+                        if 'OpenID discovery error' in response.content:
+                            return HttpResponseRedirect(reverse('openid-login')+"?message2=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
+    
+            # process errors from standard authentication
+            elif request.path == self.url1:
+    
+                if request.method=='POST' and not request.user.is_authenticated():
+                    return HttpResponseRedirect(reverse('login')+"?message1=login_failed&next=%s&username=%s" % (next, username) )
 
         return response
