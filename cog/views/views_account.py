@@ -230,7 +230,7 @@ def user_detail(request, user_id):
 def user_update(request, user_id):
 
     # security check
-    if str(request.user.id) != user_id:
+    if str(request.user.id) != user_id and not request.user.is_staff:
         raise Exception("User not authorized to change profile data")
 
     # get user
