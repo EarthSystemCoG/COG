@@ -77,7 +77,10 @@ def datacart_add_all(request, site_id, user_id):
     
     # load User object
     user = get_object_or_404(User, pk=user_id)
-    datacart = DataCart.objects.get(user=user)
+    try:
+        datacart = DataCart.objects.get(user=user)
+    except DataCart.DoesNotExist:
+        datacart = None
     
     # security check
     if not request.user.id != user_id:
@@ -110,8 +113,12 @@ def datacart_delete_all(request, site_id, user_id):
     
     # load User object
     user = get_object_or_404(User, pk=user_id)
-    datacart = DataCart.objects.get(user=user)
-    
+
+    try:
+        datacart = DataCart.objects.get(user=user)
+    except DataCart.DoesNotExist:
+        datacart = None
+
     # security check
     if not request.user.id != user_id:
         raise Exception("User not authorized to modify datacart")
@@ -160,17 +167,22 @@ def datacart_wget(request, site_id, user_id):
     response_data = {}
     
     # loop over datacart items
-    datacart = DataCart.objects.get(user=user)
-    for item in datacart.items.all():
-        
-        # filter selected datasets only
-        if item.identifier in ids:
-            
-            # group selected dataset by index_node
-            index_node = item.getValue('index_node')
-            if index_node not in response_data:
-                response_data[index_node] = []
-            response_data[index_node].append(item.identifier)
+    try:
+        datacart = DataCart.objects.get(user=user)
+    except DataCart.DoesNotExist:
+        datacart = None
+
+    if datacart:
+        for item in datacart.items.all():
+
+            # filter selected datasets only
+            if item.identifier in ids:
+
+                # group selected dataset by index_node
+                index_node = item.getValue('index_node')
+                if index_node not in response_data:
+                    response_data[index_node] = []
+                response_data[index_node].append(item.identifier)
     
     '''
     Example response_data:
@@ -201,8 +213,11 @@ def datacart_delete(request, site_id, user_id):
     identifier = request.REQUEST['item']
     
     # NOTE: make sure this item belongs to the user's data cart
-    datacart = DataCart.objects.get(user=user)
-    
+    try:
+        datacart = DataCart.objects.get(user=user)
+    except DataCart.DoesNotExist:
+        datacart = None
+
     item = DataCartItem.objects.get(identifier=identifier, cart=datacart)
     item.delete()
     
@@ -230,7 +245,10 @@ def datacart_empty(request, site_id, user_id):
         raise Exception("User not authorized to modify datacart")
 
     # user data cart    
-    datacart = DataCart.objects.get(user=user)
+    try:
+        datacart = DataCart.objects.get(user=user)
+    except DataCart.DoesNotExist:
+        datacart = None
     
     # delete all items associated with user data cart
     DataCartItem.objects.filter(cart=datacart).delete()
