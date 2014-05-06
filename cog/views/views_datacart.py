@@ -24,8 +24,10 @@ def datacart_display(request, site_id, user_id):
     
     # load User object
     user = get_object_or_404(User, pk=user_id)
-    
-    datacart = DataCart.objects.get(user=user)
+    try:
+        datacart = DataCart.objects.get(user=user)
+    except DataCart.DoesNotExist:
+        datacart = None
         
     return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart }, context_instance=RequestContext(request))    
     
