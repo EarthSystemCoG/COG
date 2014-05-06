@@ -17,13 +17,13 @@ if (CKEDITOR) {
 	
 	// uncomment 'filebrowserUploadUrl' to enable direct upload of images to server
 	// NOTE: assumes project is available from request object
-	CKEDITOR.config.filebrowserImageUploadUrl = '/doc/upload/{{project.short_name}}/'
+	CKEDITOR.config.filebrowserImageUploadUrl = '/doc/upload/{{project.short_name}}/';
 	
 	// custom toolbar color
 	CKEDITOR.config.uiColor = "#B9E0E3";
 	
 	// custom color picker
-	CKEDITOR.config.extraPlugins = 'uicolor'
+	CKEDITOR.config.extraPlugins = 'uicolor';
 	
 	// toolbar configuration
 	CKEDITOR.config.toolbar_Full =
@@ -52,7 +52,7 @@ if (CKEDITOR) {
 		    { name: 'colors',      items : [ 'TextColor' ] },
 		    
 		    // add UIColor picker
-		    { name: 'tools',       items : [ 'Maximize', 'ShowBlocks','-','About', 'UIColor' ] },
+		    { name: 'tools',       items : [ 'Maximize', 'ShowBlocks','-','About', 'UIColor' ] }
 		    
 		];
 	CKEDITOR.config.toolbar = 'Full';
