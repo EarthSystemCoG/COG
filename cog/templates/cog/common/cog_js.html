@@ -3,6 +3,14 @@
 <script type="text/javascript">
 <!--
 
+    /* redefining javascript trim() fn,
+     * which doesn't exist in IE 8.*,
+     */
+
+     String.prototype.trim = function() {
+         return this.replace(/^\s+|\s+$/g,'');
+     };
+
 	// function to switch the visibility of an HTML element
     function toggle_visibility(id) {
        var e = this.document.getElementById(id);
