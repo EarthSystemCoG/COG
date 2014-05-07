@@ -23,8 +23,19 @@
 
   <div class="prepend-4 span-14">
 
-<!-- 1) username+password login -->
+	<i>Some CoG projects allow you to search and download data archived on 
+	<a href="http://www.esgf.org">
+	Earth System Grid Federation (ESGF)</a> data nodes.  In order to access this data,
+	you will need to have a valid ESGF OpenID.
+	
+	If you don't wish to access any data, and you have a CoG username and
+	password, use the CoG Login option below.</i>
 
+	<p/><i>To get a CoG login, see <a href="{% url 'user_add' %}">this page</a>.
+	New CoG accounts will generate ESGF OpenIDs.
+	If you would like to access ESGF data, the options are explained below.</i>
+
+	<!-- 1) username+password login -->
 
 	<h2>CoG Login</h2>
 
@@ -34,10 +45,11 @@
 	   <p/>
 	{% endif %}
 
-	<i>Use your CoG username and password if you have an existing CoG account.
-	Once you are logged in, you can optionally edit your CoG profile to insert one (or more) ESGF OpenIDs.
-	To download data from ESGF, you will have to login again with a valid ESGF OpenID.
-	</i>
+	<i>
+	You can download ESGF data using your existing CoG login.
+	Once you are logged in, edit your CoG profile to insert one (or more) ESGF OpenIDs.
+	To obtain an ESGF OpenID, see <a href="https://hydra.fsl.noaa.gov/esgf-web-fe/createAccount">this page</a>.
+	To download data from ESGF, you will have to login again with your ESGF OpenID.</i>
 	<p/>
 
 	<!-- authentication form -->
@@ -94,10 +106,12 @@
 		   <p/>
 		{% endif %}
 
-		<i>You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time.
-		This method is recommended if you plan on downloading data from ESGF, since you will not be asked to enter your password again.
-		If this is the first time you use your ESGF OpenID on CoG, you will be asked to provide some additional information
-		to create a new CoG account.
+		<i>
+		You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time.
+		This method is recommended if you plan on downloading data from ESGF, 
+		since you will not be asked to enter your password again.
+		If this is the first time you are using your ESGF OpenID on CoG, you will be asked to
+		provide some additional information to create a new CoG account.
 		</i>
 		<p/>
 
