@@ -200,26 +200,11 @@
 
 
               <table>
-					{% comment %}
-					FIXME: ESGF OPENID
-              		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
               		{% if form.instance.id %}
-              			<tr>
-              				<td colspan="2">Optional ESGF OpenID(s) associated with this COG user account:</td>
-              			</tr>
 	                    {% for openidform in formset2 %}
-			       			{{ openidform.id }}
-				        	<tr>
-				        		<td colspan="2" nowrap="nowrap">
-				        			<span>OpenID: &nbsp; <b>URL</b> {{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</span>
-				        		</td>
-				        		<td>
-				        			&nbsp; {{ openidform.DELETE }} Delete ?
-				        		</td>
-					        </tr>
+			       			{{ openidform.id.as_hidden }}
 			    		{% endfor %}
 		    		{% endif %}
-		    		{% endcomment %}
 
 		    		<!-- URLs -->
 		    		<tr>
