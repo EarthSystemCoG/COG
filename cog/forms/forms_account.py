@@ -35,7 +35,8 @@ class UserUrlForm(ModelForm):
 
 class UserOpenidForm(ModelForm):
 
-    claimed_id =  CharField(required=True, widget=TextInput(attrs={'size':'90'}))
+    # FIXME: ESGF OPENID
+    claimed_id =  CharField(required=False, widget=TextInput(attrs={'size':'90'}))
 
     class Meta:
         model = UserOpenID
