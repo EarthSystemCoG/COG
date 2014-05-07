@@ -200,7 +200,8 @@
 
 
               <table>
-
+					{% comment %}
+					FIXME: ESGF OPENID
               		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
               		{% if form.instance.id %}
               			<tr>
@@ -218,6 +219,7 @@
 					        </tr>
 			    		{% endfor %}
 		    		{% endif %}
+		    		{% endcomment %}
 
 		    		<!-- URLs -->
 		    		<tr>
