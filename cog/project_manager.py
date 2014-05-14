@@ -28,6 +28,18 @@ class ProjectManager(object):
         
         self._listRemoteProjects("http://localhost:8001/share/projects/")
         
+    def _associateProjects(self, objList, apDictList):
+        
+        # empty list of parents/peers/children
+        objList = []
+        for apdict in apDictList:
+            try:
+                aproject = Project.objects.get(short_name=apdict['short_name'], 
+                                               site__domain=apdict['site_domain'])
+                objList.append(aproject)
+            except Project.DoesNotExist: # correct short name, wrong site ?
+                pass 
+
         
     def _listRemoteProjects(self, url):
         
@@ -46,19 +58,66 @@ class ProjectManager(object):
                 else:
                     print 'Site %s already existing' % site
             
-            # create projects
-            for pdict in jobj["projects"]:
-                print "\nproject=%s" % pdict
+            # first loop to create ALL projects
+            for pdict in jobj["projects"]:                
                 short_name = pdict['short_name']
-                site_domain = pdict
+                long_name = pdict['long_name']
+                site_domain = pdict['site_domain']
                 
-                # create minimal project
-                proj = Project(short_name=pdict['short_name'], 
-                               long_name=pdict['long_name'],
-                               description='-')
+                if Project.objects.filter(short_name=short_name).exists(): # NOTE: check existence independent of site
+                    print 'Project=%s already exists in the local database' % short_name
+                    
+                else:
+                    
+                    try:
+                        site = Site.objects.get(domain=site_domain)
+                        Project.objects.create(short_name=short_name, long_name=long_name, description='-', site=site, active=True)
+                        print 'Created project=%s site=%s in local database' % (short_name, site)
+                        
+                    except Site.DoesNotExist:
+                        print 'Warning: project=%s has invalid site=%s, will not create' % (short_name, site_domain)
                 
-                # create projects if not existing already
-                proj = Project.objects.get_or_create(short_name=pdict['short_name'])
+            # second loop to update project attributes
+            for pdict in jobj["projects"]:
+                
+                short_name = pdict['short_name']
+                long_name = pdict['long_name']
+                site_domain = pdict['site_domain']
+                
+                try:
+                    project = Project.objects.get(short_name=short_name, site__domain=site_domain)
+                    print 'Loaded project=%s' % project
+                    
+                    # update project attributes
+                    project.long_name = long_name
+                    
+                    # update project tags
+                    project.tags = []
+                    for tagname in pdict['tags']:
+                        print 'loading tag=%s' % tagname
+                        ptag, created = ProjectTag.objects.get_or_create(name=tagname)
+                        print 'tag=%s' % ptag
+                        project.tags.add(ptag)
+                    
+                    # update project associations
+                    self._associateProjects(project.peers, pdict['peers'])
+                    print 'Updated project peers=%s' % project.peers.all()
+                    self._associateProjects(project.parents, pdict['parents'])
+                    print 'Updated project parents=%s' % project.parents.all()
+
+                        
+                    
+                    project.save()
+                    
+                except Project.DoesNotExist:
+                    pass # correct name, wrong site
+
+            # remove unused tags
+            for tag in ProjectTag.objects.all():
+                if len(tag.projects.all()) == 0:
+                    tag.delete()
+
+                
                 
                 # associate tags
                 #tags = []

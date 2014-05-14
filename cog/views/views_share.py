@@ -67,7 +67,7 @@ def share_projects(request):
             
         response_data["projects"] = projects   
         
-        return HttpResponse(json.dumps(response_data), content_type=JSON)
+        return HttpResponse(json.dumps(response_data, indent=4), content_type=JSON)
     else:
         return HttpResponseNotAllowed(['GET'])
     
