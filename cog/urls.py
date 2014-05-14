@@ -118,5 +118,8 @@ urlpatterns = patterns('',
     url(r'^site_media/projects/(?P<path>.*)$', 'cog.views.doc_download', name='doc_download'),
     # project data
     url(r'^site_media/data/(?P<path>.*)$', 'cog.views.data_download', name='data_download'),
+    
+    # information shared with other sites
+    url(r'^share/projects/$', 'cog.views.share_projects', name='share_projects'),
 
 )
