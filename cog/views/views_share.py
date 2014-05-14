@@ -33,17 +33,17 @@ def _serialize_associated_projects( projects ):
     plist = []
     for project in projects:
         plist.append( {'short_name': project.short_name,
-                       'site': project.site.id } )
+                       'site_domain': project.site.domain } )
     return plist
 
 def serialize_site(site):
     
-    sdict = { 'id': site.id, 
-              'domain': site.domain,
+    sdict = { 'domain': site.domain,
               'name': site.name }
     
     return sdict
 
+# real view
 def share_projects(request):
     
     if (request.method=='GET'):
@@ -68,3 +68,28 @@ def share_projects(request):
         return HttpResponse(json.dumps(response_data), content_type=JSON)
     else:
         return HttpResponseNotAllowed(['GET'])
+
+# fake view
+'''
+def share_projects(request):
+    
+    if (request.method=='GET'):
+        
+        response_data = {}
+        
+        # list sites
+        site = Site(domain="jpl.nasa.gov", name="http://jpl.nasa.gov/")
+        sites = [ serialize_site(site)  ]
+        response_data['sites'] = sites
+        
+        proj1 = Project(short_name='Proj1', long_name='Project #1', description='This is project #1')
+        proj2 = Project(short_name='Proj2', long_name='Project #2', description='This is project #2')
+        projects = [ serialize_project(proj1),
+                     serialize_project(proj2) ]
+                    
+        response_data["projects"] = projects   
+        
+        return HttpResponse(json.dumps(response_data), content_type=JSON)
+    else:
+        return HttpResponseNotAllowed(['GET'])
+'''

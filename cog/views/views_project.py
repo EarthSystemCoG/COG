@@ -22,6 +22,9 @@ from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.models.navbar import TABS, TAB_LABELS, NAVMAP, INVNAVMAP
 from django.contrib.sites.models import Site
 
+from cog.project_manager import projectManager
+
+
 # method to add a new project, with optional parent project
 @login_required
 def project_add(request):
@@ -592,13 +595,16 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
             
     if tab=='this':
         if widgetName=='Parent projects':
-            projects = project.parents.all()
+            projects = projectManager.listAssociatedProjects(project, 'parents')
         elif widgetName=='Peer projects':
-            projects = project.peers.all()
+            projects = projectManager.listAssociatedProjects(project, 'peers')
         elif widgetName=='Child projects':
-            projects = project.children()
+            projects = projectManager.listAssociatedProjects(project, 'children')
+            
     elif tab=='all':
-        projects = Project.objects.filter(active=True)
+        #projects = Project.objects.filter(active=True)
+        projects = projectManager.listAllProjects()
+        
     elif tab=='my':
         if not user.is_authenticated():
             projects = Project.objects.none()
