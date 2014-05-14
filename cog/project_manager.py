@@ -24,9 +24,9 @@ class ProjectManager(object):
             self._projects[site.domain][project.short_name] = project
     '''     
 
-    def _reload(self):
+    def reload(self):
         
-        self._listRemoteProjects("http://localhost:8000/share/projects/")
+        self._listRemoteProjects("http://localhost:8001/share/projects/")
         
         
     def _listRemoteProjects(self, url):
@@ -38,13 +38,27 @@ class ProjectManager(object):
             jdoc = response.read()
             jobj = json.loads(jdoc)
             
+            # create sites
+            for sdict in jobj['sites']:
+                site, created = Site.objects.get_or_create(domain=sdict['domain'], name=sdict['name'])
+                if created:
+                    print 'Created federated site: %s' % site
+                else:
+                    print 'Site %s already existing' % site
+            
+            # create projects
             for pdict in jobj["projects"]:
                 print "\nproject=%s" % pdict
+                short_name = pdict['short_name']
+                site_domain = pdict
                 
                 # create minimal project
                 proj = Project(short_name=pdict['short_name'], 
                                long_name=pdict['long_name'],
                                description='-')
+                
+                # create projects if not existing already
+                proj = Project.objects.get_or_create(short_name=pdict['short_name'])
                 
                 # associate tags
                 #tags = []
@@ -53,7 +67,7 @@ class ProjectManager(object):
                 
                 #print proj
                 #print proj.tags
-            
+    
         except Exception as e:
             print 'Error retrieving url=%s' % url
             print e

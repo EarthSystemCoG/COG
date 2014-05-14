@@ -121,5 +121,6 @@ urlpatterns = patterns('',
     
     # information shared with other sites
     url(r'^share/projects/$', 'cog.views.share_projects', name='share_projects'),
+    url(r'^share/reload/$', 'cog.views.share_reload', name='share_reload'),
 
 )

@@ -1,10 +1,12 @@
 '''
 Views for exchanging information with other sites.
 '''
-from django.http import HttpResponseNotAllowed, HttpResponse
+from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
 import json
 from cog.models import Project
 from django.contrib.sites.models import Site
+from cog.project_manager import projectManager
+from cog.views.constants import PERMISSION_DENIED_MESSAGE
 
 JSON = "application/json"
 
@@ -13,7 +15,7 @@ def serialize_project(project):
     # this project
     pdict = { 'short_name': project.short_name,
               'long_name': project.long_name,
-              'site': project.site.id }
+              'site_domain': project.site.domain }
     
     # associated projects
     pdict["parents"] = _serialize_associated_projects( project.parents.all() )
@@ -43,8 +45,8 @@ def serialize_site(site):
     
     return sdict
 
-# real view
 def share_projects(request):
+    '''Exposes the site's projects as a JSON-formatted list.'''
     
     if (request.method=='GET'):
         
@@ -68,28 +70,15 @@ def share_projects(request):
         return HttpResponse(json.dumps(response_data), content_type=JSON)
     else:
         return HttpResponseNotAllowed(['GET'])
-
-# fake view
-'''
-def share_projects(request):
     
-    if (request.method=='GET'):
-        
-        response_data = {}
-        
-        # list sites
-        site = Site(domain="jpl.nasa.gov", name="http://jpl.nasa.gov/")
-        sites = [ serialize_site(site)  ]
-        response_data['sites'] = sites
-        
-        proj1 = Project(short_name='Proj1', long_name='Project #1', description='This is project #1')
-        proj2 = Project(short_name='Proj2', long_name='Project #2', description='This is project #2')
-        projects = [ serialize_project(proj1),
-                     serialize_project(proj2) ]
-                    
-        response_data["projects"] = projects   
-        
-        return HttpResponse(json.dumps(response_data), content_type=JSON)
-    else:
-        return HttpResponseNotAllowed(['GET'])
-'''
+def share_reload(request):
+    '''Update the list of remote projects in current database.'''
+    
+    if not request.user.is_staff:
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    projectManager.reload()
+    
+    return HttpResponse(json.dumps({}), content_type=JSON)
+    
+    
