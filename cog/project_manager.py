@@ -31,15 +31,21 @@ class ProjectManager(object):
     def _associateProjects(self, objList, apDictList):
         
         # empty list of parents/peers/children
-        objList = []
+        objList.clear()
+        print apDictList
         for apdict in apDictList:
+            short_name=apdict['short_name']
+            site_domain=apdict['site_domain']
+            print 'Trying short_name=%s site_domain=%s' % (short_name, site_domain)
             try:
-                aproject = Project.objects.get(short_name=apdict['short_name'], 
-                                               site__domain=apdict['site_domain'])
-                objList.append(aproject)
+                aproject = Project.objects.get(short_name=short_name, 
+                                               site__domain=site_domain)
+                objList.add(aproject)
             except Project.DoesNotExist: # correct short name, wrong site ?
+                print 'does not exist %s %s' % (apdict['short_name'], apdict['site_domain'])
                 pass 
 
+        print objList.all()
         
     def _listRemoteProjects(self, url):
         
@@ -92,7 +98,7 @@ class ProjectManager(object):
                     project.long_name = long_name
                     
                     # update project tags
-                    project.tags = []
+                    project.tags.clear()
                     for tagname in pdict['tags']:
                         print 'loading tag=%s' % tagname
                         ptag, created = ProjectTag.objects.get_or_create(name=tagname)
@@ -104,6 +110,7 @@ class ProjectManager(object):
                     print 'Updated project peers=%s' % project.peers.all()
                     self._associateProjects(project.parents, pdict['parents'])
                     print 'Updated project parents=%s' % project.parents.all()
+                    print pdict['parents']
 
                         
                     

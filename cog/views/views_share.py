@@ -53,17 +53,15 @@ def share_projects(request):
         response_data = {}
         
         # list sites
-        sites = []
-        for site in Site.objects.all():
-            sites.append( serialize_site(site) )
-        response_data['sites'] = sites
+        current_site = Site.objects.get_current()
+        response_data['site'] = serialize_site(current_site)
         
         # list projects from this site
         current_site = Site.objects.get_current()
-        projects = []
+        projects = {}
         print 'Listing active, public projects for site=%s' % current_site
         for project in Project.objects.filter(active=True).filter(private=False).filter(site=current_site):
-            projects.append( serialize_project(project) )
+            projects[project.short_name] = serialize_project(project)
             
         response_data["projects"] = projects   
         
