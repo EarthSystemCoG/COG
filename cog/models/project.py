@@ -18,6 +18,7 @@ import sys
 import re
 from django.contrib.sites.models import Site
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 # Project
 class Project(models.Model):
@@ -25,7 +26,7 @@ class Project(models.Model):
     # mandatory attributes
     short_name = models.CharField(max_length=20, unique=True, help_text="Short project acronym, 20 characters maximum, use only letters, numbers and '_', '-', no spaces." )
     long_name = models.CharField(max_length=120, unique=True, help_text='Fully spelled project name.')
-    description = models.TextField(blank=False, null=False, help_text='A short paragraph that describes the project.')
+    description = models.TextField(blank=False, null=True, help_text='A short paragraph that describes the project.')
     
     site = models.ForeignKey(Site, default=settings.SITE_ID)
     
@@ -101,6 +102,11 @@ class Project(models.Model):
         
     class Meta:
         app_label= APPLICATION_LABEL
+        
+    def getAbsoluteUrl(self):
+        '''Returns the absolute home page URL for this project, keeping its site into account.'''
+        
+        return "http://%s%s" % (self.site.domain, reverse('project_home', args=[self.short_name.lower()]))
     
     # group of standard users associated with this project
     def getUserGroup(self):

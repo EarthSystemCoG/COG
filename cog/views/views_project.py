@@ -584,7 +584,8 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     else:     
         # loop over projects sorted by name
         for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):
-            html += '<a href="'+ reverse('project_home', args=[prj.short_name.lower()]) +'">'+prj.short_name+'</a><br/>'
+            #project_url = "http://%s%s" % (prj.site.domain, reverse('project_home', args=[prj.short_name.lower()]))
+            html += '<a href="'+ prj.getAbsoluteUrl() +'">'+prj.short_name+'</a><br/>'
     html += '</div>'
 
     # return both the HTML and the 'open' status of the following widget

@@ -59,7 +59,7 @@ def share_projects(request):
         # list projects from this site
         current_site = Site.objects.get_current()
         projects = {}
-        print 'Listing active, public projects for site=%s' % current_site
+        print 'Listing active, public projects for current site=%s' % current_site
         for project in Project.objects.filter(active=True).filter(private=False).filter(site=current_site):
             projects[project.short_name] = serialize_project(project)
             
@@ -70,13 +70,13 @@ def share_projects(request):
         return HttpResponseNotAllowed(['GET'])
     
 def share_reload(request):
-    '''Update the list of remote projects in current database.'''
+    '''Updates the list of remote projects in current database.'''
     
     if not request.user.is_staff:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    projectManager.reload()
+    sites = projectManager.reload()
     
-    return HttpResponse(json.dumps({}), content_type=JSON)
+    return HttpResponse(json.dumps(sites), content_type=JSON)
     
     
