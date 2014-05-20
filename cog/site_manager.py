@@ -19,6 +19,9 @@ class SiteManager(object):
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
        IDP_WHITELIST=/esg/config/esgf_idp_static.xml
+       
+       [peers]
+       http|//localhost|8001
     '''
 
     # location of site specific settigs configuration file
@@ -63,7 +66,7 @@ class SiteManager(object):
                 # remove last '/'
                 if option[-1]=='/':
                     option = option[0:-1]
-                peers.append( option.replace('|',':'))
+                peers.append( option.replace('|',':') )
         return peers
     
 siteManager = SiteManager()
