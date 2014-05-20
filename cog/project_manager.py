@@ -6,6 +6,7 @@ from django.contrib.sites.models import Site
 from cog.models import Project, ProjectTag
 import urllib2
 import json
+from cog.site_manager import siteManager
 
 TIMEOUT = 5
 
@@ -15,8 +16,7 @@ class ProjectManager(object):
         '''Updates the list of remote projects from all peer sites.'''
         
         # list of peer sites
-        sites = ["http://localhost:8001/share/projects/"]
-        
+        sites = [ "%s/share/projects/" % peer for peer in siteManager.getPeers()]                
         for site in sites:
             self._harvest(site)
         return sites

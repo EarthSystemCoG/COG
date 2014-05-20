@@ -11,15 +11,15 @@ DEFAULT_SEARCH_FACETS = { 'project':'Project',
 
 #===== SITE SPECIFIC CONFIGURATION =================
 
-from cog.site_manager import SiteManager
-siteManager = SiteManager()
-SITE_ID = siteManager.get('SITE_ID')
-TIME_ZONE = siteManager.get('TIME_ZONE')
-COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST')
+from cog.site_manager import siteManager
+
+SITE_ID = siteManager.get('SITE_ID', default=1)
+TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
+COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST', default='cog_info@list.woc.noaa.gov')
 SECRET_KEY = siteManager.get('SECRET_KEY')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
-DATABASE_PORT = siteManager.get('DATABASE_PORT')
+DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
 
 # ESGF specific settings
 ESGF = 'esgf'
