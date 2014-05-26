@@ -228,40 +228,31 @@ def user_detail(request, user_id):
                               { 'user_profile': user_profile, 'projects':projects },
                               context_instance=RequestContext(request))
     
-# view to loopkup a uyser by OpenID
-# if openid is not found, an error is returned
-# if the user is not local, the view redirects to the remote site
+# view to look up a user by OpenID
+# if the openid is not found, an error is returned
+# if the user is not local, the view redirects to the remote site look up by openid
 def user_byopenid(request):
     
     if (request.method=='GET'):
     
         openid = request.GET['openid']
-        print 'openid=%s' % openid
         
         # load User object
         userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
        
         # local user
         if userOpenid.user.profile.site == Site.objects.get_current():
-            
-            url = "http://%s/%s?openid=%s" % (userOpenid.user.profile.site.domain, reverse('user_byopenid'), openid)
-            print 'URL:=%s' % url
-
-        
+                    
             # redirect to user profile page on local site
-            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':userOpenid.user.id }))
+            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': userOpenid.user.id }))
         
         # remote user
         else:
             
             # redirect to openid resolution on remote site
             url = "http://%s%s?openid=%s" % (userOpenid.user.profile.site.domain, reverse('user_byopenid'), openid)
-            print 'URL:=%s' % url
             return HttpResponseRedirect(url)
             
-            
-            
-
     else:
         return HttpResponseNotAllowed(['GET'])
     
