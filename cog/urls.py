@@ -39,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^password/update/(?P<user_id>\d+)/$', 'cog.views.password_update', name='password_update'),
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
     url(r'^username/reminder/$', 'cog.views.username_reminder', name='username_reminder'),
+    url(r'^user/byopenid/$', 'cog.views.user_byopenid', name='user_byopenid'),
 
     # data cart
     url(r'^datacart/display/(?P<site_id>\d+)/(?P<user_id>\d+)/$', 'cog.views.datacart_display', name='datacart_display'),

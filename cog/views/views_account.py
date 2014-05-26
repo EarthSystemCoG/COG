@@ -1,7 +1,7 @@
 from cog.forms.forms_account import *
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -14,6 +14,8 @@ from django.contrib.auth.views import login
 from django_openid_auth.views import login_complete
 from django.contrib.auth.hashers import is_password_usable
 from django.core.exceptions import ObjectDoesNotExist
+from django_openid_auth.models import UserOpenID
+from django.contrib.sites.models import Site
 
 def custom_login(request, **kwargs):
     '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
@@ -225,6 +227,45 @@ def user_detail(request, user_id):
     return render_to_response('cog/account/user_detail.html',
                               { 'user_profile': user_profile, 'projects':projects },
                               context_instance=RequestContext(request))
+    
+# view to loopkup a uyser by OpenID
+# if openid is not found, an error is returned
+# if the user is not local, the view redirects to the remote site
+def user_byopenid(request):
+    
+    if (request.method=='GET'):
+    
+        openid = request.GET['openid']
+        print 'openid=%s' % openid
+        
+        # load User object
+        userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
+       
+        # local user
+        if userOpenid.user.profile.site == Site.objects.get_current():
+            
+            url = "http://%s/%s?openid=%s" % (userOpenid.user.profile.site.domain, reverse('user_byopenid'), openid)
+            print 'URL:=%s' % url
+
+        
+            # redirect to user profile page on local site
+            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':userOpenid.user.id }))
+        
+        # remote user
+        else:
+            
+            # redirect to openid resolution on remote site
+            url = "http://%s%s?openid=%s" % (userOpenid.user.profile.site.domain, reverse('user_byopenid'), openid)
+            print 'URL:=%s' % url
+            return HttpResponseRedirect(url)
+            
+            
+            
+
+    else:
+        return HttpResponseNotAllowed(['GET'])
+    
+    
 
 @login_required
 def user_update(request, user_id):
