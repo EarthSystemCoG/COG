@@ -17,7 +17,6 @@ import os
 import sys
 import re
 from django.contrib.sites.models import Site
-from django.conf import settings
 from django.core.urlresolvers import reverse
 
 # Project

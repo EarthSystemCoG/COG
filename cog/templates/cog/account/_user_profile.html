@@ -58,6 +58,10 @@
             <td class="head" nowrap="nowrap"><b>Listed in Projects</b></td>
             <td class="long">{% if user_profile.private %}No{% else %}Yes{% endif %}</td>
         </tr>
+        <tr>
+            <td class="head" nowrap="nowrap"><b>Home Site</b></td>
+            <td class="long">{{ user_profile.site.name }}</td>
+        </tr>
         {% endif %}
     </table>
 </div>

@@ -7,11 +7,15 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.utils import hasText
+from django.contrib.sites.models import Site
 
 class UserProfile(models.Model):
 
     # user
     user = models.OneToOneField(User, related_name='profile')
+    
+    # site
+    site = models.ForeignKey(Site, default=Site.objects.get_current().id)
 
     # additional mandatory fields
     institution = models.CharField(max_length=100, blank=False, default='')
