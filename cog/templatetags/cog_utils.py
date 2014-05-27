@@ -579,6 +579,10 @@ def isValidUser(user):
 def isLocal(user):
     return isUserLocal(user)
 
+@register.filter
+def isRemote(user):
+    return isUserRemote(user)
+
 #@register.filter
 #def dataCartItemValues(item, key):
 #    return item.getValues(key)
