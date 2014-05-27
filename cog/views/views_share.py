@@ -2,11 +2,13 @@
 Views for exchanging information with other sites.
 '''
 from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404
 import json
-from cog.models import Project
+from cog.models import Project, getProjectsForUser
 from django.contrib.sites.models import Site
 from cog.project_manager import projectManager
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
+from django_openid_auth.models import UserOpenID
 
 JSON = "application/json"
 
@@ -45,8 +47,19 @@ def serialize_site(site):
     
     return sdict
 
+def serialize_user(user):
+    
+    udict = { 'openid': user.profile.openid(),
+              'site': user.profile.site.name }
+    projects = []
+    for project in getProjectsForUser(user, False): # includePending=False
+        projects.append( project.short_name )
+    udict['projects'] = projects
+    return udict
+    
+
 def share_projects(request):
-    '''Exposes the site's projects as a JSON-formatted list.'''
+    '''Shares the site's projects as a JSON-formatted list.'''
     
     if (request.method=='GET'):
         
@@ -68,6 +81,29 @@ def share_projects(request):
         return HttpResponse(json.dumps(response_data, indent=4), content_type=JSON)
     else:
         return HttpResponseNotAllowed(['GET'])
+    
+    
+def share_user(request):
+    '''Share the user's access control memberships as a JSON-formatted document.'''
+    
+    if (request.method=='GET'):
+        
+        response_data = {}
+        
+        # load User object by openid
+        openid = request.GET['openid']
+        userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
+        
+        users = { userOpenid.claimed_id : serialize_user( userOpenid.user ) }
+        
+        response_data["users"] = users
+
+        return HttpResponse(json.dumps(response_data, indent=4), content_type=JSON)
+
+    else:
+        return HttpResponseNotAllowed(['GET'])
+
+    
     
 def share_reload(request):
     '''Updates the list of remote projects in current database.'''

@@ -73,7 +73,7 @@ class UserProfile(models.Model):
     # utility method to return the user first openid
     def openid(self):
         if len( self.user.useropenid_set.all() ) > 0:
-            return self.user.useropenid_set.all()[0]
+            return self.user.useropenid_set.all()[0].claimed_id
         else:
             return None
 

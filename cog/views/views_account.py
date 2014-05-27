@@ -48,8 +48,9 @@ def _custom_login(request, response):
 
     # succesfull login, but missing information
     if not request.user.is_anonymous():
-        if not isUserValid(request.user):
-            return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
+        if isUserLocal(request.user) and not isUserValid(request.user):
+            #return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
+            return HttpResponseRedirect(reverse('site_update', kwargs={ 'user_id':request.user.id }) )
 
     return response
 
