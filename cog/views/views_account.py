@@ -228,6 +228,24 @@ def user_detail(request, user_id):
                               { 'user_profile': user_profile, 'projects':projects },
                               context_instance=RequestContext(request))
     
+# view to redirect to the user profile on the local or remote site
+def user_profile_redirect(request, user_id):
+    
+    if (request.method=='GET'):
+        
+        # load User object
+        user = get_object_or_404(User, pk=user_id)
+        
+        if isUserRemote(user):
+            return HttpResponseRedirect( user.profile.getAbsoluteUrl() )
+                                         
+        else:
+            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id }))
+
+        
+    else:
+        return HttpResponseNotAllowed(['GET'])
+    
 # view to look up a user by OpenID
 # if the openid is not found, an error is returned
 # if the user is not local, the view redirects to the remote site look up by openid

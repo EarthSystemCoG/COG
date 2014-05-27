@@ -78,6 +78,8 @@ class SiteModelChoiceField(ModelChoiceField):
     
 class SiteChangeForm(Form):
     
+    # TODO: sub-select sites by user openid
+    
     site = SiteModelChoiceField(queryset=Site.objects.all(), empty_label=None)
     
     def __init__(self, user, *args,**kwargs):

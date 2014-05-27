@@ -8,6 +8,7 @@ from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.utils import hasText
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 
 class UserProfile(models.Model):
 
@@ -55,6 +56,11 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return "%s" % self.user.get_full_name()
+    
+    def getAbsoluteUrl(self):
+        '''Returns the absolute URL for this user profile, keeping the home site into account.'''
+        
+        return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid())
 
 
     class Meta:
@@ -87,6 +93,20 @@ def isUserValid(user):
 def isUserLocal(user):
     
     return user.profile.site == Site.objects.get_current()
+
+# Method to identify remote users as users that:
+# a) do NOT have their home site as their current site
+# b) do have an OpenID
+def isUserRemote(user):
+    
+    if user.profile.site == Site.objects.get_current():
+        return False
+    
+    elif user.profile.openid is None:
+        return False
+
+    else:
+        return True
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name

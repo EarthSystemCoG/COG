@@ -24,16 +24,12 @@
 		     {% endif %}
 	     {% endif %}
      {% endif %}
-     <!--  | <a href="{% url 'user_detail' user.id %}">My Account</a> -->
 
-     <!-- | <a href="{% url 'password_update' user.id %}">Change Password</a> -->
+
      {% if request.user.is_staff %}
          | <a href="{% url 'admin:index' %}">Django Admin</a>
          | <a href="{% url 'admin_index' %}">CoG Admin</a>
      {% endif %}
-	 <!-- | <a href="{% url 'user_detail' request.user.id %}">My Profile</a>
-     | <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle; padding-right:2px;" alt="datacart logo"/>
-       <a href="{% url 'datacart_display' site.id request.user.id %}">My Data Cart: <span id="datacart_size">{{ request.user.datacart.items.all|length }}</span></a> -->
      | <a href="{% url 'project_add' %}">Register a New Project</a>
      | <a href="{% url 'logout' %}?next={{ request.path }}">Log out</a>
 

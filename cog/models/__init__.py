@@ -1,5 +1,5 @@
 # Users, Groups
-from user_profile import UserProfile, isUserValid, isUserLocal
+from user_profile import UserProfile, isUserValid, isUserLocal, isUserRemote
 from user_url import UserUrl
 from membership import MembershipRequest
 from collaborator import Collaborator
