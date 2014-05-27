@@ -246,9 +246,7 @@ def user_profile_redirect(request, user_id):
     else:
         return HttpResponseNotAllowed(['GET'])
     
-# view to look up a user by OpenID
-# if the openid is not found, an error is returned
-# if the user is not local, the view redirects to the remote site look up by openid
+# view to look up a local user by OpenID
 def user_byopenid(request):
     
     if (request.method=='GET'):
@@ -257,19 +255,9 @@ def user_byopenid(request):
         
         # load User object
         userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
-       
-        # local user
-        if isUserLocal(userOpenid.user):
-                    
-            # redirect to user profile page on local site
-            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': userOpenid.user.id }))
         
-        # remote user
-        else:
-            
-            # redirect to openid resolution on remote site
-            url = "http://%s%s?openid=%s" % (userOpenid.user.profile.site.domain, reverse('user_byopenid'), openid)
-            return HttpResponseRedirect(url)
+        # redirect to user profile page on local site
+        return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': userOpenid.user.id }))
             
     else:
         return HttpResponseNotAllowed(['GET'])

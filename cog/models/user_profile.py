@@ -60,7 +60,7 @@ class UserProfile(models.Model):
     def getAbsoluteUrl(self):
         '''Returns the absolute URL for this user profile, keeping the home site into account.'''
         
-        return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid())
+        return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid().claimed_id)
 
 
     class Meta:
