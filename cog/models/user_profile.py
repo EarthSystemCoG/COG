@@ -62,7 +62,7 @@ class UserProfile(models.Model):
     def getAbsoluteUrl(self):
         '''Returns the absolute URL for this user profile, keeping the home site into account.'''
         
-        return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid().claimed_id)
+        return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid())
 
 
     class Meta:
@@ -121,6 +121,12 @@ def getSiteForUser(openid):
         jobj = getJson(url)
         if jobj is not None:
             print jobj
+            for key, value in jobj['users'].items():
+                print value
+                if str( value['site_domain'] ) == site.domain:
+                    print 'FOUND SITE=%s' % site
+                    return site
+                
         
     return None
         

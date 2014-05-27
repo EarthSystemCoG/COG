@@ -86,5 +86,5 @@ def getJson(url):
         
     except Exception as e:
         print 'Error retrieving url=%s' % url
-        print e
+        #print e
         return None
