@@ -2,6 +2,11 @@ import re
 from django import forms
 import os
 import datetime
+import urllib2
+import json
+
+# timeout for JSON HTTP requests
+TIMEOUT = 5
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9\.\s\?\&\=_\-\:\/\#,]"
@@ -68,3 +73,18 @@ def create_resized_image(newimagepath, imagepath, xconstrain=200, yconstrain=200
     resized_image.save(newimagepath) # Save the resized image as a jpeg into the MEDIA_ROOT/images/resized
 
     return newimagepath
+
+def getJson(url):
+    '''Retrieves and parses a JSON document at some URL.'''
+    
+    try:
+        opener = urllib2.build_opener()
+        request = urllib2.Request(url)
+        response = opener.open(request, timeout=TIMEOUT)
+        jdoc = response.read()
+        return json.loads(jdoc)
+        
+    except Exception as e:
+        print 'Error retrieving url=%s' % url
+        print e
+        return None

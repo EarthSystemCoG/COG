@@ -38,8 +38,16 @@ def custom_login_complete(request, **kwargs):
     if not request.user.is_anonymous():
         try:
             request.user.profile
+            
         except ObjectDoesNotExist:
-            UserProfile.objects.create(user=request.user, institution='', city='', country='', type=2) # type=2: ESGF
+
+            # retrieve user home site            
+            site = getSiteForUser( request.GET.get('openid.claimed_id', None) )
+            if site is None:
+                site = Site.objects.get_current()
+                
+            # create new ESGF/OpenID login
+            UserProfile.objects.create(user=request.user, institution='', city='', country='', type=2, site=site) # type=2: ESGF
 
     # check if user is valid
     return _custom_login(request, response)
@@ -49,8 +57,8 @@ def _custom_login(request, response):
     # succesfull login, but missing information
     if not request.user.is_anonymous():
         if isUserLocal(request.user) and not isUserValid(request.user):
-            #return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
-            return HttpResponseRedirect(reverse('site_update', kwargs={ 'user_id':request.user.id }) )
+            return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
+            #return HttpResponseRedirect(reverse('site_update', kwargs={ 'user_id':request.user.id }) )
 
     return response
 

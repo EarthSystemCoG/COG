@@ -50,7 +50,8 @@ def serialize_site(site):
 def serialize_user(user):
     
     udict = { 'openid': user.profile.openid(),
-              'site': user.profile.site.name }
+              'site_name': user.profile.site.name,
+              'site_domain': user.profile.site.domain }
     projects = []
     for project in getProjectsForUser(user, False): # includePending=False
         projects.append( project.short_name )

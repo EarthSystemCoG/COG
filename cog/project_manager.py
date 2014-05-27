@@ -4,11 +4,9 @@ Class responsible for listing and serving federation-wide projects.
 
 from django.contrib.sites.models import Site
 from cog.models import Project, ProjectTag
-import urllib2
-import json
-from cog.site_manager import siteManager
+from cog.utils import getJson
 
-TIMEOUT = 5
+from cog.site_manager import siteManager
 
 class ProjectManager(object):
   
@@ -35,23 +33,7 @@ class ProjectManager(object):
             except Project.DoesNotExist: # correct short name, wrong site ?
                 print 'Associated project does not exist in local database: short_name=%s site_domain=%s, will ignore' % (apdict['short_name'], apdict['site_domain'])
                 pass 
-        
-    def _getJson(self, url):
-        '''Retrieves and parses a JSON document at some URL.'''
-        
-        try:
-            opener = urllib2.build_opener()
-            request = urllib2.Request(url)
-            response = opener.open(request, timeout=TIMEOUT)
-            jdoc = response.read()
-            return json.loads(jdoc)
-            
-        except Exception as e:
-            print 'Error retrieving url=%s' % url
-            print e
-            return None
-
-            
+                    
         
     def _harvest(self, url):
         '''Harvests all information from a remote CoG instance.'''
@@ -59,7 +41,7 @@ class ProjectManager(object):
         # use current site to prevent overriding local objects
         local_site = Site.objects.get_current()
         
-        jobj = self._getJson(url)
+        jobj = getJson(url)
         if jobj is not None:
             
             # load/create remote site by domain

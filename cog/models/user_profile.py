@@ -8,7 +8,9 @@ from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.utils import hasText
 from django.contrib.sites.models import Site
+from cog.site_manager import siteManager
 from django.core.urlresolvers import reverse
+from cog.utils import getJson
 
 class UserProfile(models.Model):
 
@@ -107,6 +109,21 @@ def isUserRemote(user):
 
     else:
         return True
+    
+# loops over the site peers to identify the home site
+def getSiteForUser(openid):
+    
+    print 'Retrieving home site for user openid: %s' % openid
+    
+    for site in Site.objects.all():
+        url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+        print "SHARE URL =%s" % url
+        jobj = getJson(url)
+        if jobj is not None:
+            print jobj
+        
+    return None
+        
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
