@@ -128,9 +128,6 @@ class SoftwareForm(ModelForm):
             print 'error'
         return self.cleaned_data
 
-
-
-
 class UsersForm(ModelForm):
 
     class Meta:

@@ -1,0 +1,46 @@
+<!-- Template page used to change the user home site -->
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+    <div class="prepend-5 span-14">
+
+        <h2>{{ mytitle }}</h2>
+
+        <div class="mybox">
+
+            <form action="" method="post">
+
+                {% csrf_token %}
+
+                <table>
+                   <tr>
+                        <td>
+                        	<div style="text-align:center;">
+	                        	<b>Choose Home Site :</b>
+	                       		&nbsp;{{ form.site }}
+	                            <br/>{{ form.site.errors }}
+                            </div>
+                        </td>
+                   </tr>
+                   <tr>
+                   		<td>
+                   			<div style="text-align:center; font-style:italic">
+                        		The Home Site is where you maintain your user profile, including your OpenID.
+                        	</div>
+                        </td>
+                    </tr>
+            	</table>
+
+                <div style="text-align:center; padding:5px">
+                    <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
+                    <input type="submit" value="Submit" />
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+{% endblock %}

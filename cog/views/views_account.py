@@ -412,6 +412,41 @@ def password_update(request, user_id):
         else:
             print "Form is invalid: %s" % form.errors
             return render_password_change_form(request, form)
+        
+@login_required
+def site_update(request, user_id):
+
+    # security check
+    if str(request.user.id) != user_id and not request.user.is_staff:
+        raise Exception("User not authorized to change home site")
+
+    # load user object
+    user = get_object_or_404(User, pk=user_id)
+
+    if (request.method=='GET'):
+
+        # create empty form
+        form = SiteChangeForm(user, initial={ 'site': user.profile.site })
+        return render_site_change_form(request, form)
+
+    else:
+        form = SiteChangeForm(user, request.POST)
+        
+        print 'USER=%s' % user
+
+        if form.is_valid():
+
+            # change site in database
+            print 'SITE=%s' % form.cleaned_data.get('site')
+            user.profile.site = form.cleaned_data.get('site')
+            user.profile.save()
+            
+            # redirect to user home page
+            return HttpResponseRedirect(reverse('user_byopenid')+"?openid=%s" % user.profile.openid().claimed_id)
+
+        else:
+            print "Form is invalid: %s" % form.errors
+            return render_password_change_form(request, form)
 
 def username_reminder(request):
 
@@ -522,4 +557,9 @@ def render_password_reset_form(request, form, message=""):
 def render_username_reminder_form(request, form, message=""):
     return render_to_response('cog/account/username_reminder.html',
                               {'form':form, 'mytitle':'Username Reminder', 'message':message },
+                              context_instance=RequestContext(request))
+    
+def render_site_change_form(request, form):
+    return render_to_response('cog/account/site_change.html',
+                              {'form': form, 'mytitle' : 'Change User Home Site' },
                               context_instance=RequestContext(request))

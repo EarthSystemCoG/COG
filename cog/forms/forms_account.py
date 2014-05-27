@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.forms import Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, ImageField, FileInput, Textarea
+from django.forms import (Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, 
+                          ImageField, FileInput, Textarea, ModelChoiceField)
 from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
@@ -68,7 +69,20 @@ class UsernameReminderForm(Form):
         validate_field(self, 'email', email)
 
         return self.cleaned_data
-
+    
+# Must subclass ModelChoiceFeild to provide custom label for 'select' widget
+class SiteModelChoiceField(ModelChoiceField):
+    
+    def label_from_instance(self, obj):
+        return obj.name
+    
+class SiteChangeForm(Form):
+    
+    site = SiteModelChoiceField(queryset=Site.objects.all(), empty_label=None)
+    
+    def __init__(self, user, *args,**kwargs):
+        super(SiteChangeForm, self ).__init__(*args,**kwargs)
+        self.user = user
 
 class PasswordChangeForm(Form):
 

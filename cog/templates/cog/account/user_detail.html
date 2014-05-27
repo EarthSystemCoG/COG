@@ -33,6 +33,8 @@
 			                &nbsp; &nbsp;
 			                <a href="{% url 'password_update' user_profile.user.id %}">Change my password</a>
 		                {% endif %}
+		                &nbsp; &nbsp;
+		                <a href="{% url 'site_update' user_profile.user.id %}">Change my Home Site</a>
 		            </div>
 		        {% endif %}
 	   	   </div>
@@ -47,17 +49,30 @@
 
   {% else %}
   
-  	<br/>
-    User home site: {{ user_profile.site.name }}
+  	<div class="prepend-6 span-12">
+
+        <h2>User Profile</h2>
+  
+  		<div class="message-box">
+    		User Home Site: {{ user_profile.site.name }}
+    	</div>
     
     <br/>
-    <a href="{% url 'user_byopenid' %}?openid={{ user_profile.openids.0 }}">View User Profile</a>
-    
-    <br/>
-    {% if request.user.id = user_profile.user.id or request.user.is_staff %}
-    	CHANGE HOME SITE
+    {% if user_profile.openid %}	
+    	
+    	<div style="text-align: center">
+    		<a href="{% url 'user_byopenid' %}?openid={{ user_profile.openid }}">View User Profile at {{ user_profile.site.name }}</a>
+    	
+	    	{% if request.user.id = user_profile.user.id or request.user.is_staff %}
+	    		&nbsp; &nbsp; &nbsp; &nbsp; 	
+	    		<a href="{% url 'site_update' user_profile.user.id %}">Change Home Site</a>
+	    	{% endif %}
+    	
+    		</div>
+    	
     {% endif %}
     
+    <br/>
   
   {% endif %}
 

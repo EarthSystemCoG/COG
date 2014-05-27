@@ -63,6 +63,13 @@ class UserProfile(models.Model):
     # utility method to return the user openids
     def openids(self):
         return [ x.claimed_id for x in self.user.useropenid_set.all() ]
+    
+    # utility method to return the user first openid
+    def openid(self):
+        if len( self.user.useropenid_set.all() ) > 0:
+            return self.user.useropenid_set.all()[0]
+        else:
+            return None
 
 # Method to check whether a user object is valid
 # (i.d. it has an associated profile, and its the mandatory fields are populated)
