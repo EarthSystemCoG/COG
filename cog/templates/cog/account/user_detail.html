@@ -5,13 +5,15 @@
 
 {% block main %}
 
+  {% if user_profile.user|isLocal %}
+
     <div class="prepend-1 span-22">
 
         <h2>User Profile</h2>
 
         <div class="span-17">
 
-		    <div class="span-10">
+		   <div class="span-10">
 		        {% include 'cog/account/_user_profile.html' %}
 		   </div>
 		   <div class="span-7 last">
@@ -35,13 +37,28 @@
 		        {% endif %}
 	   	   </div>
 
-	   </div>
+	    </div>
 
-	   <div class="span-5 last">
+	    <div class="span-5 last">
 	   		<img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" {% endif %}/>
-	   </div>
+	    </div>
 
-   </div>
+     </div>
 
+  {% else %}
+  
+  	<br/>
+    User home site: {{ user_profile.site.name }}
+    
+    <br/>
+    <a href="{% url 'user_byopenid' %}?openid={{ user_profile.openids.0 }}">View User Profile</a>
+    
+    <br/>
+    {% if request.user.id = user_profile.user.id or request.user.is_staff %}
+    	CHANGE HOME SITE
+    {% endif %}
+    
+  
+  {% endif %}
 
 {% endblock %}

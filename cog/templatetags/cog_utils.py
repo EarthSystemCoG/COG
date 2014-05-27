@@ -575,6 +575,10 @@ def showMessage(message):
 def isValidUser(user):
     return isUserValid(user)
 
+@register.filter
+def isLocal(user):
+    return isUserLocal(user)
+
 #@register.filter
 #def dataCartItemValues(item, key):
 #    return item.getValues(key)

@@ -76,6 +76,11 @@ def isUserValid(user):
 
     return True
 
+# Method to determine whether a user home site is the current site
+def isUserLocal(user):
+    
+    return user.profile.site == Site.objects.get_current()
+
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
 

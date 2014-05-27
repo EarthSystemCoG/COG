@@ -241,7 +241,7 @@ def user_byopenid(request):
         userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
        
         # local user
-        if userOpenid.user.profile.site == Site.objects.get_current():
+        if isUserLocal(userOpenid.user):
                     
             # redirect to user profile page on local site
             return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': userOpenid.user.id }))
