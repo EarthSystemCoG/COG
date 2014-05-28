@@ -85,7 +85,7 @@ def share_projects(request):
     
     
 def share_user(request):
-    '''Share the user's access control memberships as a JSON-formatted document.'''
+    '''Shares the user's access control memberships as a JSON-formatted document.'''
     
     if (request.method=='GET'):
         
@@ -95,7 +95,7 @@ def share_user(request):
         openid = request.GET['openid']
         userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
         
-        users = { userOpenid.claimed_id : serialize_user( userOpenid.user ) }
+        users = { openid : serialize_user( userOpenid.user ) }
         
         response_data["users"] = users
 
