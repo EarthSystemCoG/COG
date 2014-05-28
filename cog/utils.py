@@ -84,7 +84,6 @@ def getJson(url):
         jdoc = response.read()
         return json.loads(jdoc)
         
-    except Exception as e:
-        print 'Error retrieving url=%s' % url
-        #print e
+    except Exception:
+        print 'Error retrieving URL=%s' % url
         return None

@@ -34,7 +34,7 @@ def custom_login_complete(request, **kwargs):
     # authenticate user
     response = login_complete(request, **kwargs)
 
-    # create a stab profile with blank mandatory fields
+    # create a stub profile with blank mandatory fields
     if not request.user.is_anonymous():
         try:
             request.user.profile
@@ -43,7 +43,8 @@ def custom_login_complete(request, **kwargs):
 
             # retrieve user home site            
             site = getSiteForUser( request.GET.get('openid.claimed_id', None) )
-            if site is None:
+            if site is None: 
+                # set user home site to current site
                 site = Site.objects.get_current()
                 
             # create new ESGF/OpenID login
@@ -58,7 +59,6 @@ def _custom_login(request, response):
     if not request.user.is_anonymous():
         if isUserLocal(request.user) and not isUserValid(request.user):
             return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
-            #return HttpResponseRedirect(reverse('site_update', kwargs={ 'user_id':request.user.id }) )
 
     return response
 
@@ -238,6 +238,7 @@ def user_detail(request, user_id):
                               context_instance=RequestContext(request))
     
 # view to redirect to the user profile on the local or remote site
+# this view is always invoked with the *local* user 'id'
 def user_profile_redirect(request, user_id):
     
     if (request.method=='GET'):
@@ -255,7 +256,9 @@ def user_profile_redirect(request, user_id):
     else:
         return HttpResponseNotAllowed(['GET'])
     
-# view to look up a local user by OpenID
+# view to look up a *local* user by OpenID
+# this view does NOT redirect to other peer sites
+# (user_profile_redirect does that)
 def user_byopenid(request):
     
     if (request.method=='GET'):

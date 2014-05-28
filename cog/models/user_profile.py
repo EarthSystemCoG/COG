@@ -64,7 +64,6 @@ class UserProfile(models.Model):
         
         return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid())
 
-
     class Meta:
         app_label= APPLICATION_LABEL
 
@@ -110,24 +109,18 @@ def isUserRemote(user):
     else:
         return True
     
-# loops over the site peers to identify the home site
+# loops over the peer sites to identify the home site for a given user
 def getSiteForUser(openid):
-    
-    print 'Retrieving home site for user openid: %s' % openid
-    
-    for site in Site.objects.all():
+        
+    for site in Site.objects.all(): # note: includes current site
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
-        print "SHARE URL =%s" % url
         jobj = getJson(url)
         if jobj is not None:
-            print jobj
             for key, value in jobj['users'].items():
-                print value
                 if str( value['site_domain'] ) == site.domain:
-                    print 'FOUND SITE=%s' % site
-                    return site
-                
-        
+                    return site # site found
+            
+    # site not found
     return None
         
 
