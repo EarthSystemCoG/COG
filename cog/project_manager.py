@@ -36,7 +36,9 @@ class ProjectManager(object):
                     
         
     def _harvest(self, url):
-        '''Harvests all information from a remote CoG instance.'''
+        '''Harvests all information from a remote CoG instance.
+           Also removes obsolete projects from that remote site.
+        '''
         
         # use current site to prevent overriding local objects
         local_site = Site.objects.get_current()
@@ -109,6 +111,12 @@ class ProjectManager(object):
                             
                         except Project.DoesNotExist:
                             pass # correct name, wrong site
+                        
+                # remove obsolete projects from this remote site
+                for proj in Project.objects.filter(site=remote_site):
+                    if proj.short_name not in jobj["projects"]:
+                        print 'Removing remote site=%s' % proj,short_name
+                        proj.delete()
     
                 # remove unused tags
                 for tag in ProjectTag.objects.all():
