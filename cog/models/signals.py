@@ -41,7 +41,7 @@ def update_user_projects_from_session(user):
 def update_user_projects(user):
     '''Function to update the user projects across the federation.'''
     
-    if user.is_authenticated and user.profile.openid() is not None:
+    if user.is_authenticated() and user.profile.openid() is not None:
         openid = user.profile.openid()
         print 'Updating projects for user with openid=%s' % openid
         
