@@ -15,6 +15,10 @@ from django.contrib.comments import Comment
 from django.contrib.contenttypes.models import ContentType
 from folder import Folder, getTopFolder, TOP_SUB_FOLDERS
 from project_tab import ProjectTab
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
+from cog.utils import getJson
+from django.contrib.auth.signals import user_logged_in
 
 # method to retrieve all news for a given project, ordered by date
 def news(project):
@@ -272,3 +276,30 @@ def createOrUpdateProjectSubFolders(project, request):
         else:
             folder.active = False
         folder.save()
+        
+def update_user_projects(sender, user, request, **kwargs):
+    
+    if user.is_authenticated and user.profile.openid() is not None:
+        openid = user.profile.openid()
+        print 'User logged in: openid=%s' % openid
+        
+        # loop over remote sites
+        for site in Site.objects.all(): # note: includes current site
+            if site != Site.objects.get_current():
+                url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+                print 'URL=%s' % url
+                jobj = getJson(url)
+                if jobj is not None:
+                    if openid in jobj['users']:
+                        for projname in jobj['users'][openid]['projects']:
+                            print 'User belongs to project=%s' % projname
+                            
+                            for project in  Project.objects.filter(short_name=projname).all():
+                                group = project.getUserGroup() # FIXME: admin group ?
+                                if not group in user.groups.all():
+                                    user.groups.add(group)
+                                    user.save()
+                                    print 'Associated user=%s to project=%s' % (user, project)
+        
+    
+user_logged_in.connect(update_user_projects)

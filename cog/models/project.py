@@ -18,6 +18,7 @@ import sys
 import re
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
+from collections import OrderedDict
 
 # Project
 class Project(models.Model):
@@ -220,14 +221,9 @@ class Project(models.Model):
     def home_page_url(self):
         return '/projects/%s/' % self.short_name.lower()
     
-    # method to return the relative URL of the project logo
-    #def get_logo(self):
-    #    
-    #    if self.logo:            
-    #        return self.logo.url
-    #    else: 
-    #        url = getattr(settings, "STATIC_URL", "") + DEFAULT_LOGO
-    #    return url
+    # method to check wether the project is local
+    def isLocal(self):
+        return self.site == Site.objects.get_current()
     
     # method to return an ordered list of the project predefined pages
     # the page URLs returned start with the project home page base URL
@@ -363,6 +359,28 @@ def getProjectsForUser(user, includePending):
         # in case he group has not been deleted with the project
         except Project.DoesNotExist:
             pass
+    return projects
+
+# method to return an ordered dictionary of (project_short_name, user_roles[]) pairs for a given user
+# pending projects are NOT included
+def getProjectsAndRolesForUsers(user, includeRemote=True):
+    
+    projects = OrderedDict()
+    
+    # ordered list of all user groups
+    groups = list(user.groups.all())
+    groups.sort(key=lambda x: x.name)
+    for group in user.groups.all():
+        roles = []
+        project = getProjectForGroup(group)
+        if includeRemote or project.isLocal():
+            project_short_name = group.name.replace('_users','').replace('_admins','')
+            if group.name.endswith('_admins'):
+                roles.append('admin')
+            elif group.name.endswith('_users'):
+                roles.append('user')
+            projects[project_short_name] = roles
+        
     return projects
 
 

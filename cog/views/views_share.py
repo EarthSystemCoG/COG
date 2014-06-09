@@ -4,7 +4,7 @@ Views for exchanging information with other sites.
 from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 import json
-from cog.models import Project, getProjectsForUser
+from cog.models import Project, getProjectsAndRolesForUsers
 from django.contrib.sites.models import Site
 from cog.project_manager import projectManager
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
@@ -52,10 +52,8 @@ def serialize_user(user):
     udict = { 'openid': user.profile.openid(),
               'site_name': user.profile.site.name,
               'site_domain': user.profile.site.domain }
-    projects = []
-    for project in getProjectsForUser(user, False): # includePending=False
-        projects.append( project.short_name )
-    udict['projects'] = projects
+    # only include local projects
+    udict['projects'] = getProjectsAndRolesForUsers(user, includeRemote=False)
     return udict
     
 
