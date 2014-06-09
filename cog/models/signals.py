@@ -28,7 +28,18 @@ def account_created_receiver(sender, **kwargs):
         print 'Inserting user into ESGF security database'
         esgfDatabaseManager.insertUser(userp)
 
-def update_user_projects(sender, user, request, **kwargs):
+def update_user_projects_at_login(sender, user, request, **kwargs):
+    '''Updates the user projects every time the user logs in.'''
+    
+    update_user_projects(user)
+    
+def update_user_projects_from_session(user):
+    '''Updates the user projects every time the session is too old.'''
+    
+    update_user_projects(user)
+    
+def update_user_projects(user):
+    '''Function to update the user projects across the federation.'''
     
     if user.is_authenticated and user.profile.openid() is not None:
         openid = user.profile.openid()
@@ -60,4 +71,4 @@ def update_user_projects(sender, user, request, **kwargs):
                 user.save()
         
     
-user_logged_in.connect(update_user_projects)
+user_logged_in.connect(update_user_projects_at_login)

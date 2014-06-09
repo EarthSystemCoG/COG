@@ -28,6 +28,7 @@ if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
+    MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', section=ESGF, default=3600)) # one hour 
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
@@ -156,6 +157,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'cog.plugins.esgf.login_middleware.LoginMiddleware',
+    'cog.middleware.session_middleware.SessionMiddleware',
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
