@@ -450,12 +450,9 @@ def site_update(request, user_id):
     else:
         form = SiteChangeForm(user, request.POST)
         
-        print 'USER=%s' % user
-
         if form.is_valid():
 
             # change site in database
-            print 'SITE=%s' % form.cleaned_data.get('site')
             user.profile.site = form.cleaned_data.get('site')
             user.profile.save()
             
