@@ -75,7 +75,7 @@ class ProjectManager(object):
                             Project.objects.create(short_name=short_name, long_name=long_name, site=remote_site, active=True)
                             print 'Created project=%s for site=%s in local database' % (short_name, remote_site)
                         else:
-                            print 'Project with name:%s already exists' % short_name
+                            print 'Project with name:%s already exists (local or remote)' % short_name
                 
                 # second loop to update project attributes and associations
                 for key, pdict in jobj["projects"].items():
