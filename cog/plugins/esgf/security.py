@@ -20,7 +20,7 @@ class ESGFDatabaseManager():
         from the configuration parameters contained in cog_settings.cfg'''
 
         #if os.getenv('DJANGO_SETTINGS_MODULE', None) and settings.ESGF_CONFIG:
-        if settings.ESGF_CONFIG:
+        if settings.ESGF_CONFIG and settings.ESGF_HOSTNAME and settings.ESGF_DBURL:
 
             #siteManager = SiteManager()
             self._hostname = settings.ESGF_HOSTNAME
