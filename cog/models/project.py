@@ -118,6 +118,16 @@ class Project(models.Model):
         groupName = getAdminGroupName(self)
         return getOrCreateGroup(groupName)
     
+    # returns the project group for the specified role
+    def getGroup(self, roleName):
+        
+        if roleName.lower()=='user':
+            return self.getUserGroup()
+        elif roleName.lower()=='admin':
+            return self.getAdminGroup()
+        else:
+            return None
+    
     # permission for standard users project
     def getUserPermission(self):
         pDescription = '%s User Permission' % self.short_name
@@ -157,7 +167,7 @@ class Project(models.Model):
         pubUsers = []
         for user in users:
             if not user.get_profile().private:
-               pubUsers.append(user)
+                pubUsers.append(user)
         return pubUsers
 
 

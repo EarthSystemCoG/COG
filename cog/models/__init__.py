@@ -51,3 +51,6 @@ from lock import Lock, getLock, createLock, deleteLock, isLockedOut
 
 # global function involving multiple objects
 from utils import *
+
+# model signals
+from signals import account_created_receiver, update_user_projects

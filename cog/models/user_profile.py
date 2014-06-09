@@ -2,10 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 
-from django.dispatch import receiver
-from django.db.models.signals import post_save
-from django.conf import settings
-from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.utils import hasText
 from django.contrib.sites.models import Site
 from cog.site_manager import siteManager
@@ -126,19 +122,3 @@ def getSiteForUser(openid):
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
-
-# callback receiver function for UserProfile post_save events
-@receiver(post_save, sender=UserProfile, dispatch_uid="user_profile_post_save")
-def account_created_receiver(sender, **kwargs):
-
-    # retrieve arguments
-    userp = kwargs['instance']
-    created = kwargs['created']
-
-    print 'Signal received: UserProfile post_save: user=%s created=%s openids=%s' % (userp.user.get_full_name(), created, userp.openids())
-
-    # create ESGF user: only when user profile is first created
-    # from a COG registration, not as a result of an OpenID login
-    if settings.ESGF_CONFIG and created and len(userp.openids())==0:
-        print 'Inserting user into ESGF security database'
-        esgfDatabaseManager.insertUser(userp)
