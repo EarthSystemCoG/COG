@@ -15,7 +15,7 @@ class SessionMiddleware(object):
         '''
         
         # must not use shared anonymous session
-        if request.user.is_authenticated and request.user.profile.openid() is not None:
+        if request.user.is_authenticated() and request.user.profile.openid() is not None:
             
             s = request.session
                     
