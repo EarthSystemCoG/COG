@@ -41,34 +41,40 @@ def update_user_projects_from_session(user):
 def update_user_projects(user):
     '''Function to update the user projects across the federation.'''
     
-    if user.is_authenticated() and user.profile is not None and user.profile.openid() is not None:
-        openid = user.profile.openid()
-        print 'Updating projects for user with openid=%s' % openid
-        
-        # loop over remote sites
-        for site in Site.objects.all().exclude(id=Site.objects.get_current().id): # must exclude current site
-                        
-            url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
-            jobj = getJson(url)
-            if jobj is not None and openid in jobj['users']:
+    if user.is_authenticated():
+    
+        try:
+            if user.profile.openid() is not None:
                 
-                # remove all current groups for this site projects
-                for project in Project.objects.filter(site=site):
-                    for group in project.getGroups():
-                        user.groups.remove( group )
+                openid = user.profile.openid()
+                print 'Updating projects for user with openid=%s' % openid
                 
-                # loop over remote projects, roles for this user
-                for projname, roles in jobj['users'][openid]['projects'].items():
-                    
-                    # match remote project to local project, if existing
-                    for project in  Project.objects.filter(short_name__iexact=projname).all():
-                        for role in roles:
-                            group = project.getGroup(role)
-                            if not group in user.groups.all():
-                                user.groups.add(group) 
+                # loop over remote sites
+                for site in Site.objects.all().exclude(id=Site.objects.get_current().id): # must exclude current site
                                 
-                # persist changes to user groups (site by site)
-                user.save()
-        
+                    url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+                    jobj = getJson(url)
+                    if jobj is not None and openid in jobj['users']:
+                        
+                        # remove all current groups for this site projects
+                        for project in Project.objects.filter(site=site):
+                            for group in project.getGroups():
+                                user.groups.remove( group )
+                        
+                        # loop over remote projects, roles for this user
+                        for projname, roles in jobj['users'][openid]['projects'].items():
+                            
+                            # match remote project to local project, if existing
+                            for project in  Project.objects.filter(short_name__iexact=projname).all():
+                                for role in roles:
+                                    group = project.getGroup(role)
+                                    if not group in user.groups.all():
+                                        user.groups.add(group) 
+                                        
+                        # persist changes to user groups (site by site)
+                        user.save()
+                        
+        except UserProfile.DoesNotExist:
+            pass # user profile not yet created
     
 user_logged_in.connect(update_user_projects_at_login)
