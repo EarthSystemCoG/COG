@@ -20,6 +20,7 @@ SECRET_KEY = siteManager.get('SECRET_KEY')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
+MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600)) # one hour 
 
 # ESGF specific settings
 ESGF = 'esgf'
@@ -28,7 +29,7 @@ if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
-    MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', section=ESGF, default=3600)) # one hour 
+    
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
