@@ -371,18 +371,17 @@ def getProjectsAndRolesForUsers(user, includeRemote=True):
     groups = list(user.groups.all())
     groups.sort(key=lambda x: x.name)
     
-    for group in user.groups.all():
+    for group in groups:
         project = getProjectForGroup(group)
         if includeRemote or project.isLocal():
-            project_short_name = group.name.replace('_users','').replace('_admins','')
             # add this project to the dictionary
-            if not project_short_name in projects:
-                projects[project_short_name] = []
-            # add this role to this projevy
+            if not project.short_name in projects:
+                projects[project.short_name] = []
+            # add this role to this project
             if group.name.endswith('_admins'):
-                projects[project_short_name].append('admin')
+                projects[project.short_name].append('admin')
             elif group.name.endswith('_users'):
-                projects[project_short_name].append('user')
+                projects[project.short_name].append('user')
         
     return projects
 
