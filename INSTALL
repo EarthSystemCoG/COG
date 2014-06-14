@@ -27,6 +27,9 @@ o South
 
 o Python Image Library
   easy_install --upgrade pil
+  
+o django kronos (needed to run cron jobs that use django environment)
+pip install django-kronos==0.4
 
 To run CoG with a Postgres database back-end:
 

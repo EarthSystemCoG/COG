@@ -10,7 +10,7 @@ from cog.site_manager import siteManager
 
 class ProjectManager(object):
   
-    def reload(self):
+    def sync(self):
         '''Updates the list of remote projects from all peer sites.'''
         
         # list of peer sites

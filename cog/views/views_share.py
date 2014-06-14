@@ -104,13 +104,13 @@ def share_user(request):
 
     
     
-def share_reload(request):
+def sync_projects(request):
     '''Updates the list of remote projects in current database.'''
     
     if not request.user.is_staff:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    sites = projectManager.reload()
+    sites = projectManager.sync()
     
     return HttpResponse(json.dumps(sites), content_type=JSON)
     
