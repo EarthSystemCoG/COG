@@ -11,7 +11,7 @@ from django.template import RequestContext
 from string import Template
 from urllib import quote, unquote
 import copy
-from constants import PERMISSION_DENIED_MESSAGE
+from constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.models.constants import SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from django.utils.timezone import now
@@ -78,6 +78,10 @@ def page_detail(request, project_short_name):
              
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # limit to local projects only
+    if not project.isLocal():
+        return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
     
     # check project is active
     if project.active==False:
