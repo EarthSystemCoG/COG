@@ -1,6 +1,5 @@
 COG WEB PORTAL INSTALLATION INSTRUCTIONS
 
-
 The following instructions describe how to quickly install the CoG environment on a Unix-type server (Cent-OS, Linux, Mac-OSX)
 for the purpose of starting to use and test the web application. In a production environment, the CoG should really be front-ended
 by a separately installed Apache httpd server (not covered here).
