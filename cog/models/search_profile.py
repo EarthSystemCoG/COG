@@ -14,7 +14,7 @@ class SearchProfile(models.Model):
     url = models.URLField(blank=False)
         
     # string of the form name=value, name=value....
-    constraints = models.CharField(max_length=200, blank=True, null=True, default='')
+    constraints = models.CharField(max_length=500, blank=True, null=True, default='')
     
     # flag to enable model metadata link
     modelMetadataFlag = models.BooleanField(default=False, blank=False, null=False)
