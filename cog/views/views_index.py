@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 import ast
+from django.contrib.sites.models import Site
 
 # temporary notice of sites moved to new URLs
 def thesitehasmoved(request):
@@ -44,13 +45,14 @@ def index(request):
 # COG home page for administrative actions
 @user_passes_test(lambda u: u.is_staff)
 def admin_index(request):
+    '''Only lists local projects.'''
     
     # optional active=True|False filter
     active = request.GET.get('active', None)
     if active != None:
-        project_list = Project.objects.filter(active=ast.literal_eval(active)).order_by('short_name')
+        project_list = Project.objects.filter(site=Site.objects.get_current()).filter(active=ast.literal_eval(active)).order_by('short_name')
     else:
-        project_list = Project.objects.all().order_by('short_name')
+        project_list = Project.objects.filter(site=Site.objects.get_current()).order_by('short_name')
     
     return render_to_response('cog/admin/admin_index.html',
                               { 
