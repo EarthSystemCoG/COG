@@ -18,7 +18,7 @@ from cog.services.membership import addMembership
 from cog.models.utils import *
 
 from cog.views.views_templated import templated_page_display
-from cog.views.constants import PERMISSION_DENIED_MESSAGE
+from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.models.navbar import TABS, TAB_LABELS, NAVMAP, INVNAVMAP
 from django.contrib.sites.models import Site
 
@@ -119,6 +119,10 @@ def project_index(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # limit to local projects only
+    if not project.isLocal():
+        return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
         
     # check permission
     if not userHasAdminPermission(request.user, project) and not request.user.is_staff:
@@ -206,6 +210,10 @@ def project_update(request, project_short_name):
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
             
+    # limit to local projects only
+    if not project.isLocal():
+        return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
+            
     # check permission
     if not userHasAdminPermission(request.user, project) and not request.user.is_staff:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
@@ -282,6 +290,10 @@ def project_delete(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # limit to local projects only
+    if not project.isLocal():
+        return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
     
     # check permission
     if not userHasAdminPermission(request.user, project):
