@@ -6,31 +6,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 import ast
-from django.contrib.sites.models import Site
+from django.contrib.sites.models import Site    
 
-# temporary notice of sites moved to new URLs
-def thesitehasmoved(request):
-    return thisprojecthasmoved(request, 'cog')
-    
-def thisprojecthasmoved(request, project_short_name):
-    
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-
-    return render_to_response('cog/thesitehasmoved.html',
-                              { 'project': project },
-                              context_instance=RequestContext(request))
-    
-
-#FIXME: remove
-# temporary view to redirect from the old COG top-level URL
-def earthsystemcog(request):
-    return HttpResponseRedirect('http://earthsystemcog.org/')
-
-#FIXME: remove
-# temporary view to redirect from an old COG URL project home
-def earthsystemcog_project(request, project_short_name):
-    return HttpResponseRedirect('http://earthsystemcog.org/projects/%s' % project_short_name)
 
 def index(request):
         
