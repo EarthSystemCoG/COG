@@ -39,7 +39,7 @@ LEAD_ORGANIZATIONAL_ROLES = (
                               ('Project Manager', 4),
                               ('Software Architect', 5),
                               ('Lead', 6),
-                              ('Other', 7),
+                              ('Other Lead', 7),
                             )
 
 # list of tuples containing (role value, role display order)
@@ -50,7 +50,7 @@ MEMBER_ORGANIZATIONAL_ROLES = (
                                ('Researcher', 4),
                                ('Software Developer', 5),
                                ('Webmaster', 6),
-                               ('Other', 7),
+                               ('Other Member', 7),
                               )
 
 ORGANIZATIONAL_ROLE_CV = [ (x[0]," %s (Lead Role)" % x[0]) for x in LEAD_ORGANIZATIONAL_ROLES ] + [('','--------------')] + [ (x[0]," %s (Member Role)" % x[0]) for x in MEMBER_ORGANIZATIONAL_ROLES ]
