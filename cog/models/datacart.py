@@ -2,7 +2,7 @@ from django.db import models
 from constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
 from cog.models.search import Record
-from django.utils import simplejson
+import json
 from django.db import transaction
 
 class DataCart(models.Model):
@@ -31,7 +31,7 @@ class DataCartItem(models.Model):
     def fromJson(datacart, id, metadata):
         '''Factory method to create and persist a DataCartItem (and related objects) from JSON metadata.'''
         
-        return DataCartItem.create(datacart, id, simplejson.loads(metadata))
+        return DataCartItem.create(datacart, id, json.loads(metadata))
                     
     @staticmethod 
     def fromRecord(datacart, record):
