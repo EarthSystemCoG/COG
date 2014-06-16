@@ -1,7 +1,7 @@
 '''
 Module containing URL mappong for project upper Navigational Bar.
 '''
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from cog.models import *
 
 urlpatterns = patterns('',

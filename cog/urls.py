@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url, include
 from cog.models import *
 from cog.views.views_account import custom_login, custom_login_complete
 
