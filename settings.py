@@ -196,7 +196,7 @@ INSTALLED_APPS = (
     'pagination',
     'south',
     'layouts',
-    'kronos',
+    #'kronos',
     'cog',
 )
 
