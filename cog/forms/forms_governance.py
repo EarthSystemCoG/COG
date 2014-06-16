@@ -26,7 +26,7 @@ class ManagementBodyForm(ModelForm):
 
     class Meta:
         model = ManagementBody
-        exclude = ('category')
+        exclude = ('category',)
         widgets = {
                    'description': Textarea(attrs={'rows':4}),
                    'other': Textarea(attrs={'rows':4}),
@@ -82,7 +82,7 @@ class OrganizationalRoleForm(ModelForm):
 
     class Meta:
         model = OrganizationalRole
-        exclude = ('category')
+        exclude = ('category',)
         widgets = { 'description': Textarea(attrs={'rows':2}) }
 
 

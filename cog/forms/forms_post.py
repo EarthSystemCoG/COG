@@ -102,7 +102,7 @@ class PostForm(ModelForm):
 
     class Meta:
         model = Post
-        exclude = ('author','publication_date','update_date')
+        exclude = ('author','publication_date','update_date',)
 
         widgets = {
             'title': TextInput(attrs={'size':'80'}),

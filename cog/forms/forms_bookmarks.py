@@ -6,7 +6,7 @@ class BookmarkForm(ModelForm):
     
     class Meta:
         model = Bookmark
-        exclude = ('type')
+        exclude = ('type',)
         
     # override __init__ method to provide a filtered list of options for the bookmark folder
     def __init__(self, project, *args,**kwargs):

@@ -75,7 +75,7 @@ class DocForm(ModelForm):
 
     class Meta:
         model = Doc
-        exclude = ('author','publication_date','update_date','project')
+        exclude = ('author','publication_date','update_date','project',)
 
 class UploadImageForm(forms.Form):
     # note: field MUST be named 'upload' as this is the parameter named used by CKeditor

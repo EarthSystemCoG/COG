@@ -36,12 +36,14 @@ from django.core.files.storage import DefaultStorage, default_storage, FileSyste
 from django.core.exceptions import ImproperlyConfigured
 
 # FILEBROWSER IMPORTS
-from filebrowser.settings import *
+from django.conf.urls import patterns, url, include
 from filebrowser.functions import get_breadcrumbs, get_filterdate, get_settings_var, handle_file_upload, convert_filename
 from filebrowser.templatetags.fb_tags import query_helper
 from filebrowser.base import FileListing, FileObject
 from filebrowser.decorators import path_exists, file_exists
 from filebrowser.storage import FileSystemStorageMixin, StorageMixin
+
+from filebrowser.settings import *
 
 # Add some required methods to FileSystemStorage
 if FileSystemStorageMixin not in FileSystemStorage.__bases__:
@@ -134,7 +136,7 @@ class FileBrowserSite(object):
         return login_required(never_cache(view))
 
     def get_urls(self):
-        from django.conf.urls.defaults import patterns, url, include    
+        from django.conf.urls import patterns, url, include  
 
         urlpatterns = patterns('',
     

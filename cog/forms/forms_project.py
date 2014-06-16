@@ -79,7 +79,7 @@ class ProjectForm(ModelForm):
                    'developmentOverview',
                    'software_features', 'system_requirements',
                    'getting_started',
-                   'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved')
+                   'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved',)
 
 
 class ContactusForm(ModelForm):
