@@ -154,7 +154,7 @@ By default, the wiki pages (including any project home page) are editable throug
 CoG can be easily configured to allow editing via the third-party CKEditor, which includes a WYSIWYG interface:
 
 Download the CKEditor version 3.6.4 and expand it to:
-<installation directory>/COG/cog/static/cog/ckeditor
+<installation directory>/cog/static/cog/ckeditor
 
 Then run again:
 
