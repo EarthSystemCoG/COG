@@ -1,11 +1,11 @@
 import sys, os
-
 sys.path.insert(0, '/usr/COG')
 
-import settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cog.settings")
+from django.conf import settings
 
-import django.core.management
-django.core.management.setup_environ(settings)
+#import django.core.management
+#django.core.management.setup_environ(settings)
 utility = django.core.management.ManagementUtility()
 command = utility.fetch_command('runserver')
 
