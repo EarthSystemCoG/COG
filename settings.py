@@ -243,3 +243,6 @@ if server_type=='PROD':
 #COLOR_LIGHT_YELLOW = "#FCE79F";
 
 #COLOR_DARK_GRAY = "#666666";
+
+# FIXME: necessary for openid-auth since django 1.6.5 otherwise session is not serialized correctly
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

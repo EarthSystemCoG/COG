@@ -247,6 +247,8 @@ o By hitting the URL: http(s)://<current cog domain>/share/sync/projects/ as a C
 
 o By running or scheduling a project synchronization task as described in the CRON TASKS section below. 
 
+NOTE: a site will only share projects correctly if its 'Site' domainname equals its real domain
+
 
 CRON TASKS
 
