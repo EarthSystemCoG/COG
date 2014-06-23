@@ -29,11 +29,6 @@ if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
-    
-# cron tasks
-CRON = 'cron'
-TASK_SYNC_PROJECTS = siteManager.get('TASK_SYNC_PROJECTS', section=CRON, default='0 0 * * *') # runs at midnight every day
-    
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 

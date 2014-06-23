@@ -233,7 +233,7 @@ After the first login, a new COG account is created with that openid and a usern
 PROJECTS FEDERATION
 
 The current COG site can be configured to federate with any number of remote COG sites. 
-The remoted COG sites to federate with are listed in teh '[peers]' section of the COG settings file /usr/local/cog/cog_settings.cfg
+The remote COG sites to federate with are listed in teh '[peers]' section of the COG settings file /usr/local/cog/cog_settings.cfg
 (replacing the ':' character with '|' otherwise python will not interpret the URLs correctly).
 
 For example:
@@ -241,33 +241,20 @@ For example:
 [peers]
 http|//localhost|8001/
 
-The current COG site can be updated with the latest information from the federated sites in two ways:
+The current COG site can be updated with the latest information from the federated sites in three ways:
 
-o By hitting the URL: http(s)://<current cog domain>/share/sync/projects/ as a COG site administrator
+o By manually invoking the URL: 
 
-o By running or scheduling a project synchronization task as described in the CRON TASKS section below. 
+http(s)://<current cog domain>/share/sync/projects/ as a COG site administrator
+
+o By manually executing the script 'scripts/cron.py' from anywhere in the system. 
+For example, if CoG is installed under '/usr/COG':
+
+/usr/COG/scripts/cron.py
+
+o By executing the script cron.py through the Unix cron command. 
+For example, to run the script every hour, at minute 0:
+
+0 * * * * /usr/COG/scripts/scripts/cron.py > /dev/null 2>&1
 
 NOTE: a site will only share projects correctly if its 'Site' domainname equals its real domain
-
-
-CRON TASKS
-
-COG uses django-kronos to manage jobs that need to run periodically within the COG site environment. 
-'django-kronos' is simply a handy interface on top of the standard Unix 'cron' facility.
-COG tasks are listed on the file cog/cron.py. Their cron settings are specified in the COF configuration file /usr/local/cog/cog_settings.cfg
-
-o To install all COG tasks into cron:
-
-python manage.py installtasks
-
-After this command is run, cron tasks can be listed, edited, deleted using the standard Unix cron commands:
-crontab -l
-crontab -e
-
-o To run a single cron task at the current time:
-
-python manage.py runtask <task name as listed in cron.py>
-
-for example: 
-
-python manage.py runtask syncProjects
