@@ -95,7 +95,7 @@ body {
 	padding:    0px;       /*remove all padding in the box model*/
 	font-size:  9pt;       /*set minimum font size for the entire systme*/
 	text-align: left;      /*default alignment is left-justified */
-	font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans","Verdana", "Arial", "sans-serif";  /*sjm, put quotes around fonts*/
+	font-family: Arial, sans-serif; 
 	color:      #333;     /*dark grey text*/
 	background: #FFFFFF; /*white background*/
 
@@ -931,3 +931,167 @@ END SPECIFIC CSS FIXES
 	color: #666666;
 	font-size: 9pt;
 }
+
+
+
+/***********************************
+BEGIN SPLASH PAGE STYLES
+************************************/
+
+h3.teal_box{
+font-size:   10pt;
+/*text-align:  center;*/
+padding-top: 10px;
+}
+
+h2.splash_functions{
+padding:        0px;
+margin:         0px;
+padding-bottom: 3px;
+margin-top:     0px;
+font-size:      11pt;
+}
+
+
+table.inner tbody tr td {
+background-color: white;
+}
+
+table.outer{
+width:         100%;
+margin-top:    0px;
+padding-top:   0px;
+}
+
+table.outer tbody tr td{
+background-color: white;
+}
+
+td.function{
+padding:        0px;
+margin:         0px;
+padding-left:	5px;
+vertical-align: top;
+}
+
+p.splash_functions{
+margin-top:     0px;
+padding-top:    0px;
+margin-bottom:  0px;
+}
+
+p.splash_functions_last{
+margin-top:    0px;
+margin-bottom: 0px;
+}
+
+
+td.icon{
+width:          70px;  /* make width of image and use padding for margin */
+height:         85px;
+padding-right: 	20px;
+padding-left:   0px;
+vertical-align: top;
+}
+
+
+td.yellow_col{
+vertical-align: top;
+}
+
+
+td.col_1{
+vertical-align: middle;
+width:          500px;
+}
+
+td.col_2{
+vertical-align: top;
+width:          300px;
+}
+
+div.teal_box {
+background-color: white;
+border: 3px solid #358C92;
+width:            247px;
+}
+
+/* hyperlinks */
+a:link, a:visited {
+color: #358C92;
+text-decoration: none;
+}
+a:hover {
+color: #205559;
+}
+
+
+ul.teal_box > li{
+margin-left:  10px;
+margin-right: 10px;
+margin-bottom: 10px;
+padding:       0px;
+line-height:  1.5;
+text-align: left;
+}
+
+
+div.yellow_box{
+background-color:#FAC24A;
+width:           250px;
+height:          70px;
+/*display:       table-cell;*/
+vertical-align:  middle;
+padding:         0px;
+}
+
+div.white_button{
+display:         inline-block;
+width:           150px;
+margin-right:    50px;
+margin-left:     50px;
+margin-top:      20px;
+background-color:white;
+height:          30px;
+border-radius:   15px;
+}
+
+
+div.logo{
+margin-top: 5px;
+}
+
+div.main{
+margin-left: auto;
+margin-right:auto;
+margin-top:  10px;
+width: 1000px;
+}
+
+p.yellow_box{
+margin-bottom:  0px;
+margin-left:    5px;
+margin-right:   5px;
+margin-top:     7px;
+padding:        0px;
+text-align:     center;
+}
+
+p.white_button{
+font-size:      11pt;
+text-align:     center;
+margin-bottom:  0px;
+padding-bottom: 0px;
+margin-top:     5px;
+color:          #333;
+
+}
+
+
+hr.top{
+background-color: #358C92;
+height: 2px;
+}
+/***********************************
+BEGIN SPLASH PAGE STYLES
+************************************/

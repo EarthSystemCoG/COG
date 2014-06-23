@@ -7,7 +7,8 @@ font-size:  9pt;
 line-height:1.5;
 color:      #333333;
 text-align: left;
-font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans",Verdana, Arial, sans-serif; /*only two word fonts have quotes*/
+font-family: Arial, sans-serif; 
+font: 9px/1.5 Arial,sans-serif;
 
 }
 
@@ -163,4 +164,17 @@ color:          #333;
 hr.top{
 background-color: #358C92;
 height: 2px;
+}
+
+/* The Django templates set styles all over the place. We want total control over what is set in this file. Below are generic items
+* that have been pulled from those other CSS files and placed here so we know what they are and have control */
+p {
+margin:  0px;
+padding: 0px;
+border:  0px none;
+font-weight: inherit;
+font-style: inherit;
+font-size: inherit;
+font-family: inherit;
+vertical-align: baseline;
 }
