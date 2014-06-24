@@ -539,7 +539,7 @@ def project_browser(request, project_short_name, tab):
     elif tab == 'my':
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
     
-    return HttpResponse(html, mimetype="text/html")
+    return HttpResponse(html, content_type="text/html")
 
 # utility class to track the status of the browser widgets
 class DisplayStatus:

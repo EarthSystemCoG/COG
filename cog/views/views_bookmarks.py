@@ -131,7 +131,7 @@ def bookmark_add2(request, project_short_name):
         response_data['result'] = 'Error'
         response_data['message'] = 'Sorry, the GET method is not supported'
                 
-    return HttpResponse(json.dumps(response_data), mimetype='application/json')    
+    return HttpResponse(json.dumps(response_data), content_type='application/json')    
 
 # View to delete a bookmark
 @login_required

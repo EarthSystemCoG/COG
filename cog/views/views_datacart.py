@@ -67,7 +67,7 @@ def datacart_add(request, site_id, user_id):
     # return identifier of newly added datcart item
     response_data['item'] = identifier
     
-    return HttpResponse(json.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), content_type='application/json') 
 
 # view to add ALL current search results (as displayed in the page) to the user data cart
 @login_required
@@ -193,7 +193,7 @@ def datacart_wget(request, site_id, user_id):
        ]
     }
     '''
-    return HttpResponse(json.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), content_type='application/json') 
     
 # view to delete an item to a user data cart
 @login_required
@@ -227,7 +227,7 @@ def datacart_delete(request, site_id, user_id):
     # return number of remaining items
     response_data['datacart_size'] = len( user.datacart.items.all() )
         
-    return HttpResponse(json.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), content_type='application/json') 
 
 # view to completely empty a user data cart
 # NOTE: no CSRF token required, but request must be authenticated

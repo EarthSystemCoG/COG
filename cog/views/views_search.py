@@ -190,7 +190,6 @@ def metadata_display(request, project_short_name):
     print 'Solr search URL=%s' % url
     fh = urllib2.urlopen( url )
     response = fh.read().decode("UTF-8")
-    #return HttpResponse(response, mimetype="application/json")
 
     # parse JSON response (containing only one matching 'doc)
     jsondoc = json.loads(response)
@@ -558,7 +557,7 @@ def search_files(request, dataset_id, index_node):
     fh = urllib2.urlopen( url )
     response = fh.read().decode("UTF-8")
 
-    return HttpResponse(response, mimetype="application/json")
+    return HttpResponse(response, content_type="application/json")
 
             
 def render_search_profile_form(request, project, form):
