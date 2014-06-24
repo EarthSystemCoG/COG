@@ -1,16 +1,19 @@
+/* This is the CSS page just for the splash */
+/* Since we may get rid of this page in the cog distribution with ESMF, it needs to be separate, but totally self contained */
+
 
 body{
 font-size:  9pt;
 line-height:1.5;
-color:      #333;
-font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans",Verdana, Arial, sans-serif;
-font-family: Arial, Helvetica, sans-serif;
+color:      #333333;
+text-align: left;
+font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans",Verdana, Arial, sans-serif; /*only two word fonts have quotes*/
+
 }
 
 h3.teal_box{
 font-size:   10pt;
-color:       #333;
-text-align:  center;
+/*text-align:  center;*/
 padding-top: 10px;
 }
 
@@ -102,6 +105,7 @@ margin-right: 10px;
 margin-bottom: 10px;
 padding:       0px;
 line-height:  1.5;
+text-align: left;
 }
 
 
@@ -134,10 +138,6 @@ div.main{
 margin-left: 10px;
 margin-right:10px;
 margin-top:  10px;
-}
-
-p{
-	text-align: left;
 }
 
 p.yellow_box{

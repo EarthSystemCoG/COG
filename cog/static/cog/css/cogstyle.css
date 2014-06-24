@@ -31,6 +31,21 @@
 
 ******************************/
 
+/*****************************
+BEGIN CONDITIONALS FOR INTERNET EXPLORER
+******************************/
+/* this creates a special HTML class for each version
+* of Internet Explorer. We will use these classes further
+* down in every instruction that has to be done for IE */
+
+<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+<!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+<!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+<!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+<!--[if IE 10 ]> <html class="ie10"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!--> <html> <!--<![endif]--> /* if > IE10 or not IE at all, set no class */
+
+
 /******************************
 BEGIN MEDIA-SPECIFIC STYLES
 ******************************/
@@ -76,6 +91,15 @@ html {
 * DESCRIPTION: center the body, specify the font, font-color, and background color
 ***************/
 body {
+<<<<<<< HEAD
+	padding:    0px;       /*remove all padding in the box model*/
+	font-size:  9pt;       /*set minimum font size for the entire systme*/
+	text-align: left;      /*default alignment is left-justified */
+	font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans","Verdana", "Arial", "sans-serif";  /*sjm, put quotes around fonts*/
+	color:      #333;     /*dark grey text*/
+	background: #FFFFFF; /*white background*/
+
+=======
         margin-right: auto !important; margin-left: auto !important;
         margin-top: 0 !important; margin-bottom: 0 !important;
 	padding: 0;
@@ -84,8 +108,20 @@ body {
 		Verdana, Arial, sans-serif;
 	color: #333;
 	background: #FFFFFF;
+>>>>>>> fc77ee43573708e31b2a062f3ca37da3818ad0fc
 }
 
+
+/* force IE to center the content in the body*/
+.ie6 .ie7 .ie8 .ie9 .ie10 body {
+        margin-right: auto; 
+	margin-left: auto;
+        margin-top: 0px;
+	margin-bottom: 0px;
+        text-align:center;
+/* debug */
+        background: red; 
+}
 
 /***************
 * NAME: headers
@@ -140,7 +176,7 @@ hr {
 /***************
 * NAME: links
 * SCOPE: the page body content
-* DESCRIPTION: center the body, specify the font, font-color, and background color
+* DESCRIPTION: control how links are displayed
 ***************/
 a:link, a:visited {
         /* keep the same style for links regardless of whether they've been visited */
@@ -189,6 +225,7 @@ tbody tr:nth-child(even) td, tbody tr.even td {
 
 /* additional styles were added to support tables swap the order of alternating row colors; */
 /* either starting w/ the "even" color, "odd" color, or no color */
+
 /* TODO: double-check that these classes are still being used */
 
 /* style for cells in an even row */
@@ -223,6 +260,7 @@ table.no-color td {
 /***************
 * NAME: table cells (standard data and headers)
 * SCOPE: the current table
+*SJM: is this just the wiki?
 ***************/
 
 /* table data and table headers have the same size */
@@ -362,9 +400,9 @@ END FORM ELEMENTS
 
 
 /******************************
-BEGIN TEXT STYLES (w/in the wiki)
+BEGIN CHANGES TO THE WIKI
 ******************************/
-
+/* These are the styles in the pulldown menu */
 small {
 	font-size: 8pt;
 	font-style: italic;
@@ -382,8 +420,11 @@ strong {
 	font-weight: normal;
 }
 
+/* prevent the wiki editor from resizing horizontally */
+textarea.ckeditor { resize: vertical; }
+
 /******************************
-END TEXT STYLES
+END CHANGES TO THE WIKI
 ******************************/
 
 
@@ -459,6 +500,8 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	background-color: white;
 }
 
+/*SJM...the alternating colors should be limited to the wiki rather than set globally and then contradicted??*/
+
 /* prevent alternating table row styles from affecting vertical_menu content */
 .vertical_menu tbody tr:nth-child(even) td,tbody tr.even td {
 	background: white;
@@ -511,22 +554,6 @@ END VERTICAL MENU (LEFT NAVBAR)
 ******************************/
 
 
-.mybox {
-	border: 1px solid #666666;
-	margin-bottom: 5px;
-	background: #FFFFFF;
-	float: center;
-}
-
-.header-gray {
-	border-bottom: 1px solid #666666;
-	margin-bottom: 0px;
-	background: #EEEEEE;
-	float: center;
-	text-align: left;
-	color: #666666;
-	font-size: 9pt;
-}
 
 
 /******************************
@@ -686,6 +713,21 @@ BEGIN ADVANCED SEARCH PAGE
 	font-size: 9pt;
 }
 
+.fieldset_box {
+	border: 1px solid #358C92;
+	padding: 5px;
+	text-align:center;
+	margin-top:-10px;
+	margin-bottom: 15px;
+}
+
+.fieldset_legend {
+	color: #000000;
+	text-align: left;
+	font-weight: bold;
+	padding: 2px;
+}
+
 /******************************
 END ADVANCED SEARCH PAGE
 ******************************/
@@ -751,19 +793,18 @@ BEGIN MESSAGES & ERRORS
 /* these are rendered as list elements within a div */
 
 ul.messagelist {
-	padding: 0 0 5px 0;
-	margin: 0;
+	padding: 0px 0px 5px 0px;
+	margin: 0px;
 }
 
 ul.messagelist li {
 	font-size: 9pt;
 	display: block;
 	padding: 4px 5px 4px 25px;
-	margin: 0 0 3px 0;
+	margin: 0px 0px 3px 0px;
 	border-bottom: 1px solid #ddd;
 	color: #666;
-	background: #ffc url(/static/admin/img/icon_success.gif) 5px .3em
-		no-repeat;
+	background: #ffc url(/static/admin/img/icon_success.gif) 5px .3em no-repeat;
 }
 
 .errornote {
@@ -774,8 +815,7 @@ ul.messagelist li {
 	border: 1px solid red;
 	color: red;
 	font-weight: bold;
-	background: #ffc url(/static/admin/img/icon_error.gif) 5px .3em
-		no-repeat;
+	background: #ffc url(/static/admin/img/icon_error.gif) 5px .3em no-repeat;
 }
 
 .warning {
@@ -806,13 +846,13 @@ ul.errorlist {
 /* ensure the styles apply to errors even when they are w/in tables */
 td ul.errorlist {
         /* note the !important keyword to override the styles from the table section */
-	margin: 0 !important;
-	padding: 0 !important;
+	margin: 0px !important;
+	padding: 0px !important;
 }
 
 td ul.errorlist li {
         /* note the !important keyword to override the styles from the table section */
-	margin: 0 !important;
+	margin: 0px !important;
 }
 
 .errors {
@@ -829,11 +869,15 @@ END MESSAGES & ERRORS
 
 
 /******************************
-BEGIN SPECIFIC CSS FIXES
+BEGIN SPECIFIC CSS FIXES FOR THIRD-PARTY ELEMENTS AND SOME IE
 ******************************/
+/*Some of these fixes are for Internet Explorer. If they are new classes, they live here, if they are hacks, they live near the
+* element they hack. 
+* These CSS elements fix bugs in third-party CSS (e.g. YUI, the embedded wiki). If those third party elements are removed, these 
+* need to be changed. */ 
 
 /* there is a known ("dropped float") issue w/ IE where the last column contents appears at the bottom of the page */
-/* the following style prevents right overflows */
+/* the following styles (x.last) prevents right overflows */
 div.last {
   margin-right: -100px;
   position: relative;
@@ -851,17 +895,6 @@ div.last ol {
     margin-left: 3px;
 }
 
-/* force IE to center the page content */
-body {
-    text-align: center;
-    margin-right: auto; margin-left: auto;
-    margin-top: 0; margin-bottom: 0;
-}
-body div {
-    /* then stop automatically centering */
-    text-align: left;
-}
-
 /* limit the maximum width of an uploaded image. */
 .myimage {
   width: 100%;
@@ -872,29 +905,29 @@ body div {
   border: 1px solid #666666;
 }
 
-/* YUI treeview introduces a bug; */
-/* when user is logged the background of the tree is teal, */
+/* YUI treeview introduces a bug when user is logged the background of the tree is teal, */
 /* this forces it to remain white */
 #project_views .yui-content td { background-color: #ffffff !important; }
 
-/* prevent the wiki editor from resizing horizontally */
-textarea.ckeditor { resize: vertical; }
+
 
 /******************************
 END SPECIFIC CSS FIXES
 ******************************/
 
-.fieldset_box {
-	border: 1px solid #358C92;
-	padding: 5px;
-	text-align:center;
-	margin-top:-10px;
-	margin-bottom: 15px;
+.mybox {
+	border: 1px solid #666666;
+	margin-bottom: 5px;
+	background: #FFFFFF;
+	float: center;
 }
 
-.fieldset_legend {
-	color: #000000;
+.header-gray {
+	border-bottom: 1px solid #666666;
+	margin-bottom: 0px;
+	background: #EEEEEE;
+	float: center;
 	text-align: left;
-	font-weight: bold;
-	padding: 2px;
+	color: #666666;
+	font-size: 9pt;
 }
