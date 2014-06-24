@@ -4,10 +4,9 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidde
 from django.core.urlresolvers import reverse
 from cog.models import *
 from django.contrib.auth.decorators import login_required
-from django.utils import simplejson
 import re
 from django.views.decorators.csrf import csrf_exempt
-from django.utils import simplejson
+import json
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 from django.core.exceptions import ObjectDoesNotExist
@@ -68,7 +67,7 @@ def datacart_add(request, site_id, user_id):
     # return identifier of newly added datcart item
     response_data['item'] = identifier
     
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), mimetype='application/json') 
 
 # view to add ALL current search results (as displayed in the page) to the user data cart
 @login_required
@@ -194,7 +193,7 @@ def datacart_wget(request, site_id, user_id):
        ]
     }
     '''
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), mimetype='application/json') 
     
 # view to delete an item to a user data cart
 @login_required
@@ -228,7 +227,7 @@ def datacart_delete(request, site_id, user_id):
     # return number of remaining items
     response_data['datacart_size'] = len( user.datacart.items.all() )
         
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), mimetype='application/json') 
 
 # view to completely empty a user data cart
 # NOTE: no CSRF token required, but request must be authenticated

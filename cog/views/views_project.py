@@ -424,7 +424,8 @@ def initProject(project):
     aPermission = project.getAdminPermission()
     
     # assign creator as project administrator
-    addMembership(project.author, aGroup)
+    if project.author is not None:
+        addMembership(project.author, aGroup)
     
     # configure the project search with the default behavior
     create_project_search_profile(project)

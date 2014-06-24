@@ -4,7 +4,7 @@ from django.template import RequestContext
 from cog.forms.forms_search import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
-from django.utils import simplejson 
+import json
 import urllib, urllib2
 
 
@@ -193,8 +193,8 @@ def metadata_display(request, project_short_name):
     #return HttpResponse(response, mimetype="application/json")
 
     # parse JSON response (containing only one matching 'doc)
-    json = simplejson.loads(response)
-    metadata = _processDoc( json["response"]["docs"][0] )
+    jsondoc = json.loads(response)
+    metadata = _processDoc( jsondoc["response"]["docs"][0] )
 
     # retrieve parent metadata    
     parentMetadata = {}
@@ -204,8 +204,8 @@ def metadata_display(request, project_short_name):
         #print 'Solr search URL=%s' % url
         fh = urllib2.urlopen( url )
         response = fh.read().decode("UTF-8")
-        json = simplejson.loads(response)
-        parentMetadata = _processDoc( json["response"]["docs"][0] )
+        jsondoc = json.loads(response)
+        parentMetadata = _processDoc( jsondoc["response"]["docs"][0] )
     
     return render_to_response('cog/search/metadata_display.html', 
                               {'title':metadata.title, 'project' : project, 'metadata':metadata, 'parentMetadata':parentMetadata, 'back': back }, 

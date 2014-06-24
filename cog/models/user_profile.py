@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     
     # site
-    site = models.ForeignKey(Site, default=Site.objects.get_current().id)
+    site = models.ForeignKey(Site, default=1)
 
     # additional mandatory fields
     institution = models.CharField(max_length=100, blank=False, default='')

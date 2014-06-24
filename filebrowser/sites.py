@@ -59,10 +59,7 @@ else:
         import Image
 
 # JSON import
-try:
-    import json
-except ImportError:
-    from django.utils import simplejson as json
+import json
 
 # This cache contains all *instantiated* FileBrowser sites
 _sites_cache = {}

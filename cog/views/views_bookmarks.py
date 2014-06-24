@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from cog.forms.forms_bookmarks import *
-from django.http import HttpResponseRedirect
-from django.utils import simplejson  
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+import json
 from django.http import HttpResponse  
 from constants import PERMISSION_DENIED_MESSAGE, BAD_REQUEST
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
@@ -94,8 +94,6 @@ def bookmark_add(request, project_short_name):
             print 'Form is invalid: %s' % form.errors
             return render_bookmark_form(request, project, form) 
                             
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')    
-
 # View to add a bookmark via an ajax call through a pop-up window
 @login_required
 def bookmark_add2(request, project_short_name):
@@ -133,7 +131,7 @@ def bookmark_add2(request, project_short_name):
         response_data['result'] = 'Error'
         response_data['message'] = 'Sorry, the GET method is not supported'
                 
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json')    
+    return HttpResponse(json.dumps(response_data), mimetype='application/json')    
 
 # View to delete a bookmark
 @login_required
