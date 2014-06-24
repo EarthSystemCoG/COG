@@ -1,50 +1,45 @@
 {% load cog_utils %}
+<!--cog-utils conttains the full page "span-24 last-->
+<!-- full page -->
+<div class="span-24 last">
+   <div id="header">
+      <div id="user_menu">
+         <!--load top-right user menut from cog/common/_user_menu.html-->
+	 {% include 'cog/common/_user_menu.html' %}
+      </div>
 	
-<div id="header">
-
-	<!-- full page -->
-	<div class="span-24 last">
-		<div id="user_menu">
-			{% include 'cog/common/_user_menu.html' %}
-		</div>
-	</div>
-
-	<!-- sidebar and center -->
-	<div class="span-17">
-		<div id="header_middle_layer">
-		
-	    	{% if project.logo %}
+	<!--<div class="span-17">-->
+	        <!--project title or uploaded project logo-->
+	    	    {% if project.logo %}
+	  		<div id="project_logo">
 	    		<!-- project logo -->
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
-	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo"/>
+	    				<img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/>
 	    			</a>
 	    		{% else %}
-	    			<a href="{% url 'project_home' project.short_name|lower %}">
-	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo" />
+	    			<a href="{% url 'project_home' project.short_name|lower %}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo" />
 	    			</a>
 	    		{% endif %}
+	    	</div>
+	    	     {% else %}
 	    	
-	    	{% else %}
-	    	
-	    	<!-- project title -->
-                      <div id="project_title">{{ project.long_name|capfirst }}</div>
+	    	            <!-- project title -->
+                            <div id="project_title">{{ project.long_name|capfirst }}</div>
 	    		
-	    	{% endif %}      
-			
-			
-		</div>
-	</div>
+	    	      {% endif %}      
+	        
+	<!--</div>-->
 	
-	<!-- right column -->
-	<div class="span-7 last">		
-		<div id="right_logo">
+	<!-- cog logo -->
+	<!--<div class="span-7 last">	-->	
+            <div id="right_cog_logo">
 	        <a href="{% url 'project_home' 'cog'%}"><img class="cog_logo" src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" alt="Earth System CoG logo"/></a>
 	    </div>
-	</div>
-	
+	<!--</div>-->
 </div>
-	    
+</div>
+<div class="span-24 last">	    
 <!-- top navigation bar -->
 <div class="top_nav">
 	<div class="span-19">

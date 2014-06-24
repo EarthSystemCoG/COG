@@ -84,7 +84,7 @@ can completly control in one file how things look
 
 If it is commented out here, then it is placed someplace else
 ******************************/
-/*body, div, span, p {
+/*body, div, span, p { 
 margin: 0px;
 padding: 0px;
 border: 0px none;
@@ -99,10 +99,13 @@ font-size: inherit;
 
 font-family: inherit;
 vertical-align: baseline;
-
-
 }
 */
+p table th tr td div{
+font: inherit
+}
+
+
 
 /***************
 * NAME: html
@@ -124,8 +127,9 @@ body {
     padding:    0px;       /*remove all padding in the box model*/
     margin:     0px;       /*remove all margins in the box model */
     /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
-    font: 13px/1.231 arial,helvetica,clean,sans-serif; /*fonts-min.css*/
-    font: normal normal normal 13px/1.3 Arial,sans-serif;
+    /*font: 13px/1.231 arial,helvetica,clean,sans-serif; */ /*fonts-min.css*/
+    /* px to pt ratio = 1.33, so 13px = 9.77pt */
+    font: normal normal normal 9pt/1.21 Arial,sans-serif; 
 
     color:      #333;     /* text color...dark grey*/
     text-align: left;      /*default alignment is left-justified */
@@ -153,13 +157,14 @@ body {
 * DESCRIPTION: specifies the fonts used by successive headers in the CoG wiki
 ***************/
 h1 {
-	color: #666;
-	font-size: 16pt;
+	color:       #666;
+	font-size:   16pt;
 	font-weight: bold;
         line-height: 1;
-        /* margin-bottom: 0.5em; typpography.css */
-        margin-bottom: 15px;
-        text-align: left;
+        margin: 0px;   /* we should not have to set these here */
+        padding: 0px;  /* we should not have to set these here */
+        margin-bottom: 10px;
+        text-align:  left;
 }
 h2 {
 	color: #666;
@@ -248,7 +253,8 @@ table {
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
 tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #B9E0E3;
+	background: #B9E0E3;/*light-teal */
+        background: #eee /*light-gray */
 }
 
 /* additional styles were added to support tables swap the order of alternating row colors; */
@@ -259,7 +265,8 @@ tbody tr:nth-child(even) td, tbody tr.even td {
 /* style for cells in an even row */
 /* style for cells in an even row in an "even-first" colored table */
 table.even-color tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #B9E0E3;
+	background: #B9E0E3; /*light-teal */
+        background: #eee /*light-gray */
 }
 
 /* style for cells in an odd row */
@@ -271,7 +278,8 @@ table.even-color tbody tr:nth-child(odd) td, tbody tr.odd td {
 /* style for cells in an odd row */
 /* style for cells in an odd row in an "odd-first" colored table */
 table.odd-color tbody tr:nth-child(odd) td, tbody tr.odd td {
-	background: #B9E0E3;
+	background: #B9E0E3;/*light-teal */
+        background: #eee /*light-gray */
 }
 
 /* style for cells in an even row */
@@ -519,8 +527,10 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	margin: 0px;
 }
 
+/* this is the upper section of the left nav bar */
 .vertical_menu table td {
-	font-size: 8pt;
+	/*font-size: 8pt;*/
+	font-size: 8pt; /* once we remove fonts-min from the left template, this should inherit from body  needs to be the same as <li> below*/
 	text-align: left;
 	vertical-align: top;
         padding: 1px 0px 0px 1px;
@@ -548,6 +558,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	border-bottom: 1px solid #358C92;
 }
 
+/*lower section of the left nav bar */
 .vertical_menu ul {
 	margin: 0;
 	padding-left: 4px;
@@ -561,7 +572,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	padding: 0px;
 	margin: 0px;
 	list-style: none;
-	font-size: 8pt;
+	font-size: 8pt; /* needs to be the same as the upper section which is a table */
 }
 
 .vertical_menu li li {
@@ -674,9 +685,10 @@ BEGIN SEARCH WIDGET
 }
 
 .instruction-box {
-	background: #e5ecf9;
-	padding: 5px; #
-	margin: 5px;
+        background:e5ecf9;  /* light-blue */	
+        background: #B9E0E3 /* dark-teal */
+	padding: 5px; 
+	/* margin: 5px; */
 	border: 1px solid #417690;
 	font-weight: bold;
 	text-align: center;
@@ -1124,14 +1136,14 @@ height: 2px;
 BEGIN HEADER STYLES
 ************************************/
 #header {
-
-    /*color: #ffc; /*yellow*/*/
     overflow: hidden;
     height: 85px;
-    margin: 0px;
+    /*color: #ffc; /*yellow*/*/
+    /*margin: 0px;*/
     /* margin-top: 10px; */
-    padding-top: 0px;
-    display:block;
+    /*padding-top: 0px;*/
+    /*display:block;*/
+    /* debug only... border: solid 2px yellow; */
 }
 
 /* note: the sum of the heights of user_menu, its margin-bottom, and right_logo must equal the height of right_header */
@@ -1139,50 +1151,58 @@ BEGIN HEADER STYLES
     margin-top: 0px;
     padding-top:2px;
     padding-bottom:0px;
-    /* padding-right: 10px; padding-left: 10px; */
     height: 8px;
-    /* margin-bottom:8px; */
     font-size: 12px;
     color: #333;
     float: right;
     display:block;
+    /* padding-right: 10px; padding-left: 10px; */
+    /* margin-bottom:8px; */
 }
 
-#header_middle_layer{
+#project_logo{
+    position: absolute; bottom: 4px; left: 2px; /* must have same bottom as #cog_logo */
+    height:         70px; 
+    width:          300px; /* logos larger than this will have issues. May have to expand at some point */
+    /*float:          left;*/
+    /*margin-top:     0px;*/
+    /*padding-top:    0px;*/
+    /*clear: right;*/
+    /* debug only...border: solid 2px pink; */
 
-    float: left;
-    margin-top: 0px;
-    height:75px; 
-    width: 700px;
-    padding-top: 0px;
-    padding-bottom: 15px;
 
 }
-
+/* The title and logo need to be aligned. Since different properties are used to place them */
 #project_title{
-    position:absolute; bottom:50px; left: 2px; 
-    text-align: left;
-    font-weight: bold;
-    font-size: 18pt;
-    font-style: italic;
-    font-weight: bold;
-    color: #666;
+    position: absolute; bottom: 4px; left: 2px;  /* needs to be identical to #project_logo */
+    font-weight:    bold;
+    font-style:     italic;
+    font-size:      18pt;
+    color:          #666;
     vertical-align: bottom;
+    /* debug only ... border: solid 2px brown; */
 }
 
-#right_logo {
-    float:right;
-    margin-top: 8px;
-    height: 50px; 
-    padding-bottom:5px; 
-    padding-top: 10px; 
-}
+#right_cog_logo {
+    position:absolute; bottom: 4px; right:0px; /* needs to have same bottom as #project_title or #project_logo */
+    height:         50px; 
+    padding-bottom: 0px;
+    margin-bottom:  0px;
+    width:          200px;
+    /* debug onlyu...border: solid 2px green;*/
+    /*float:         right;*/
+    /*margin-top:    38px;*/
+    /*padding-bottom:5px; */ 
+   }
 
 img.cog_logo{
     height:48px;
+    float: right;
 }
 
-
+img.project_logo{
+    height:70px;
+}
 
 #right_sentence {
 	margin-top:35px;
