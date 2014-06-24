@@ -75,6 +75,35 @@ END MEDIA-SPECIFIC STYLES
 BEGIN PAGE-LEVEL ELEMENTS
 ******************************/
 
+/*****************************
+BEGIN DJANGO and YUI CSS RESETS
+
+Django contains numerious CSS files that set many properties not 
+explicly covered in the areas below. These are reclaimed here so that we 
+can completly control in one file how things look
+
+If it is commented out here, then it is placed someplace else
+******************************/
+/*body, div, span, p {
+margin: 0px;
+padding: 0px;
+border: 0px none;
+/*font-weight: inherit; typography.css*/
+font-weight:normal;
+
+
+font-style: inherit;
+/*font-size: 100%; typopgraphy.css */
+font-size: inherit;
+
+
+font-family: inherit;
+vertical-align: baseline;
+
+
+}
+*/
+
 /***************
 * NAME: html
 * SCOPE: the entire page
@@ -91,24 +120,19 @@ html {
 * DESCRIPTION: center the body, specify the font, font-color, and background color
 ***************/
 body {
-<<<<<<< HEAD
-	padding:    0px;       /*remove all padding in the box model*/
-	font-size:  9pt;       /*set minimum font size for the entire systme*/
-	text-align: left;      /*default alignment is left-justified */
-	font-family: Arial, sans-serif; 
-	color:      #333;     /*dark grey text*/
-	background: #FFFFFF; /*white background*/
 
-=======
-        margin-right: auto !important; margin-left: auto !important;
-        margin-top: 0 !important; margin-bottom: 0 !important;
-	padding: 0;
-	font-size: 9pt;
-	font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans",
-		Verdana, Arial, sans-serif;
-	color: #333;
-	background: #FFFFFF;
->>>>>>> fc77ee43573708e31b2a062f3ca37da3818ad0fc
+    padding:    0px;       /*remove all padding in the box model*/
+    margin:     0px;       /*remove all margins in the box model */
+    /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
+    font: 13px/1.231 arial,helvetica,clean,sans-serif; /*fonts-min.css*/
+    font: normal normal normal 13px/1.3 Arial,sans-serif;
+
+    color:      #333;     /* text color...dark grey*/
+    text-align: left;      /*default alignment is left-justified */
+
+    background: #FFFFFF; /*white background*/
+    margin-right: auto !important; margin-left: auto !important;
+    margin-top: 0px !important; margin-bottom: 0px !important;
 }
 
 
@@ -132,6 +156,10 @@ h1 {
 	color: #666;
 	font-size: 16pt;
 	font-weight: bold;
+        line-height: 1;
+        /* margin-bottom: 0.5em; typpography.css */
+        margin-bottom: 15px;
+        text-align: left;
 }
 h2 {
 	color: #666;
@@ -1031,7 +1059,7 @@ margin-left:  10px;
 margin-right: 10px;
 margin-bottom: 10px;
 padding:       0px;
-line-height:  1.5;
+/*line-height:  1.5;*/
 text-align: left;
 }
 
@@ -1093,5 +1121,199 @@ background-color: #358C92;
 height: 2px;
 }
 /***********************************
-BEGIN SPLASH PAGE STYLES
+BEGIN HEADER STYLES
 ************************************/
+#header {
+
+    /*color: #ffc; /*yellow*/*/
+    overflow: hidden;
+    height: 85px;
+    margin: 0px;
+    /* margin-top: 10px; */
+    padding-top: 0px;
+    display:block;
+}
+
+/* note: the sum of the heights of user_menu, its margin-bottom, and right_logo must equal the height of right_header */
+#user_menu {
+    margin-top: 0px;
+    padding-top:2px;
+    padding-bottom:0px;
+    /* padding-right: 10px; padding-left: 10px; */
+    height: 8px;
+    /* margin-bottom:8px; */
+    font-size: 12px;
+    color: #333;
+    float: right;
+    display:block;
+}
+
+#header_middle_layer{
+
+    float: left;
+    margin-top: 0px;
+    height:75px; 
+    width: 700px;
+    padding-top: 0px;
+    padding-bottom: 15px;
+
+}
+
+#project_title{
+    position:absolute; bottom:50px; left: 2px; 
+    text-align: left;
+    font-weight: bold;
+    font-size: 18pt;
+    font-style: italic;
+    font-weight: bold;
+    color: #666;
+    vertical-align: bottom;
+}
+
+#right_logo {
+    float:right;
+    margin-top: 8px;
+    height: 50px; 
+    padding-bottom:5px; 
+    padding-top: 10px; 
+}
+
+img.cog_logo{
+    height:48px;
+}
+
+
+
+#right_sentence {
+	margin-top:35px;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 10pt;
+	text-align: left;
+	color: #333;
+	float:right;
+}
+
+#right_logo a:link, #right_logo a:visited {
+    color: #666;
+}
+
+/* TOP NAV */
+.top_nav {
+    width: 100%;
+    height: 20px;
+    margin: 0 auto;
+    padding: 0px;
+    /* padding-top: 2px; */
+    /* COG STYLE: TOP NAV BACKGROUND COLOR */
+    background: #FFFFFF;
+    /*background: #CC3300;*/
+    /*background: #84000;*/
+    color: #FFFFFF;
+    font-size: 9pt;
+ 	font-weight: bold;
+    /* font-family: Arial, Helvetica, sans-serif;  */
+    font-style: normal;
+}
+
+#top_nav_left {
+	padding-top: 2px;
+	padding-left: 6px;
+	width: 100%;
+	background: #358C92;
+	float:left;
+}
+
+#top_subnav_left {
+	padding-top: 2px;
+	padding-left: 6px;
+	width: 100%;
+	background: #B9E0E3;
+	float:left;
+}
+
+#top_subnav_left a:link, #top_subnav_left a:visited {
+    color: #666;
+}
+
+
+#top_nav_right {
+	width: 97%;
+	padding-top: 2px;
+	padding-left: 6px;
+	text-align: right;
+	/* background: #FCE79F; */
+	float: right;
+}
+
+#top_subnav {
+    width: 100%;
+    height: 20px;
+    margin: 0 auto;
+    padding: 0px;
+    /* padding-top: 2px; */
+    /* COG STYLE: TOP NAV BACKGROUND COLOR */
+    background: #FFFFFF;
+    /*background: #CC3300;*/
+    /*background: #84000;*/
+    color: #FFFFFF;
+    font-size: 9pt;
+ 	font-weight: bold;
+    /* font-family: Arial, Helvetica, sans-serif;  */
+    font-style: normal;
+}
+
+#top_subnav_right {
+	width: 97%;
+	padding-top: 2px;
+	padding-left: 6px;
+	text-align: center;
+	/* background: #FCE79F; */
+	float: center;
+	color: #666;
+}
+
+.top_nav ul {
+    margin: 0;
+    padding: 0px 0px 0px 0px;
+    list-style: none;
+    line-height: normal;
+}
+
+.top_nav li {
+    float: left;
+    height: 20px;
+}
+
+.top_nav a {
+    display: block;
+    margin-right: 3px;    
+    /* COG STYLE: TOP NAV BAR TEXT */
+    text-decoration: none;   
+    /* padding: top-right-bottom-left */
+    padding: 2px 6px 6px 6px;
+    font-weight: bold;
+    color: #FFFFFF;
+    border: none;
+}
+
+#top_nav_right a {
+	color: #000000;
+	/* font-weight: bold; */
+}
+
+.top_nav a:hover {
+    /* background: #FFFFFF; */
+    text-decoration: underline;
+    /* color: 417690; */
+}
+
+#top_subnav_right a {
+	display: inline;
+	color: #358C92;
+	font-weight: normal;
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
+	font-size: 8.5pt;
+}
