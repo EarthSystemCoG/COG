@@ -44,8 +44,8 @@ def formatMetadataKey(key):
 def toJson(record):
     '''Serializes the record metadata fields to JSON format.'''
     
-    json = json.dumps(record.fields)
-    return json
+    jsondoc = json.dumps(record.fields)
+    return jsondoc
 
 # function to custom order the URLs
 def url_order(mtype):
