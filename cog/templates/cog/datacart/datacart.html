@@ -18,8 +18,22 @@
 
 {% block main %}
 
-	<div style="text-align:center; font-weight:bold">Number of Items in Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span></div>
 
+	<div style="text-align:center; font-weight:bold">Number of Items in this Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span></div>
+	
+	<!-- remote data carts -->
+	{% if datacarts.items.all|length > 0 %}
+		<div style="text-align:center">
+			Data Carts at other Sites: 
+			{% for openid, dc in datacarts.items %}
+				{% for site, value in dc.items %}
+					&nbsp; <a href="http://{{ site.domain }}//datacart/byopenid?openid={{openid}}">{{ site.name }}: {{ value }}</a>
+				{% endfor %}
+			{% endfor %}
+		</div>
+	{% endif %}
+
+	<!-- local data cart -->
 	{% if datacart.items.all|length > 0 %}
 
 	  <!-- skeleton form to empty the data cart via POST -->

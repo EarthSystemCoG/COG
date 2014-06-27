@@ -66,20 +66,6 @@ def _custom_login(request, response):
     return response
 
 
-# view to display the data cart for a given site, user
-def datacart_display2(request, site_id, user_id):
-
-    # load User object
-    user = get_object_or_404(User, pk=user_id)
-
-    # TODO:: check site, redirect in case
-    datacart = DataCart.objects.get(user=user)
-
-    return render_to_response('cog/account/datacart.html',
-                              { 'datacart': datacart },
-                              context_instance=RequestContext(request))
-
-
 def notifyAdminsOfUserRegistration(user):
 
     subject = 'New User Registration'

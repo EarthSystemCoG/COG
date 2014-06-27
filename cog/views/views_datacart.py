@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.core.urlresolvers import reverse
 from cog.models import *
 from django.contrib.auth.decorators import login_required
@@ -10,6 +10,7 @@ import json
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 from django.core.exceptions import ObjectDoesNotExist
+from django_openid_auth.models import UserOpenID
 
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
@@ -18,9 +19,7 @@ INVALID_CHARS = "[<>&#%{}\[\]\$]"
 @require_GET
 @login_required
 def datacart_display(request, site_id, user_id):
-    
-    # TODO:: check site, redirect in case
-    
+        
     # load User object
     user = get_object_or_404(User, pk=user_id)
     try:
@@ -28,7 +27,36 @@ def datacart_display(request, site_id, user_id):
     except DataCart.DoesNotExist:
         datacart = None
         
-    return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart }, context_instance=RequestContext(request))    
+    # inspect remote data carts
+    dcs = {}
+    for openid in user.profile.openids():
+        dcs[openid] = {}
+        dc = getDataCartsForUser(openid)
+        for site, size in dc.items():
+            if size > 0:
+                dcs[openid][site] = size
+        
+    return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart, 'datacarts': dcs },
+                              context_instance=RequestContext(request))    
+    
+# view to display a user datacart by openid
+@require_GET
+@login_required
+def datacart_byopenid(request):
+    
+    if (request.method=='GET'):
+    
+        openid = request.GET['openid']
+        
+        # load User object
+        userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
+        
+        # redirect to user profile page on local site
+        return HttpResponseRedirect(reverse('datacart_display', 
+                                    kwargs={ 'site_id': Site.objects.get_current(), 'user_id': userOpenid.user.id }))
+            
+    else:
+        return HttpResponseNotAllowed(['GET'])
     
 # view to add an item to a user data cart
 # NOTE: no CSRF token required, but request must be authenticated

@@ -119,6 +119,22 @@ def getSiteForUser(openid):
     # site not found
     return None
         
+# loops over the peer sites to retrieve the data cart size
+def getDataCartsForUser(openid):
+        
+    dcs = {} # dictionary of (site_name, datacart_size) items
+    
+    for site in Site.objects.all(): # note: includes current site
+        if site != Site.objects.get_current():
+            url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+            print 'Querying for datacart: url=%s' % url
+            jobj = getJson(url)
+            if jobj is not None:
+                for key, value in jobj['users'].items():
+                    if str( value['site_domain'] ) == site.domain:
+                        dcs[ site ] = int( value['datacart']['size'] )
+            
+    return dcs
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
