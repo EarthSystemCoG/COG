@@ -53,7 +53,7 @@ def datacart_byopenid(request):
         
         # redirect to user profile page on local site
         return HttpResponseRedirect(reverse('datacart_display', 
-                                    kwargs={ 'site_id': Site.objects.get_current(), 'user_id': userOpenid.user.id }))
+                                    kwargs={ 'site_id': Site.objects.get_current().id, 'user_id': userOpenid.user.id }))
             
     else:
         return HttpResponseNotAllowed(['GET'])

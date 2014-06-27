@@ -27,7 +27,7 @@
 			Data Carts at other Sites: 
 			{% for openid, dc in datacarts.items %}
 				{% for site, value in dc.items %}
-					&nbsp; <a href="http://{{ site.domain }}//datacart/byopenid?openid={{openid}}">{{ site.name }}: {{ value }}</a>
+					&nbsp; <a href="http://{{ site.domain }}/datacart/byopenid?openid={{openid}}">{{ site.name }}: {{ value }}</a>
 				{% endfor %}
 			{% endfor %}
 		</div>
