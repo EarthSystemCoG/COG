@@ -4,7 +4,7 @@ Views for exchanging information with other sites.
 from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 import json
-from cog.models import Project, getProjectsAndRolesForUsers
+from cog.models import Project, getProjectsAndRolesForUsers, DataCart
 from django.contrib.sites.models import Site
 from cog.project_manager import projectManager
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
@@ -52,8 +52,13 @@ def serialize_user(user):
     udict = { 'openid': user.profile.openid(),
               'site_name': user.profile.site.name,
               'site_domain': user.profile.site.domain }
+    
     # only include local projects
     udict['projects'] = getProjectsAndRolesForUsers(user, includeRemote=False)
+    
+    # data cart
+    (dc, created) = DataCart.objects.get_or_create(user=user)
+    udict['datacart'] = { 'size': len( dc.items.all() ) }
     return udict
     
 

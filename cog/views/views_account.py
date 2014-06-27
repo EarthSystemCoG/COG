@@ -50,6 +50,9 @@ def custom_login_complete(request, **kwargs):
             # create new ESGF/OpenID login
             UserProfile.objects.create(user=request.user, institution='', city='', country='', type=2, site=site) # type=2: ESGF
 
+            # create user datacart
+            DataCart.objects.create(user=request.user)
+
     # check if user is valid
     return _custom_login(request, response)
 
