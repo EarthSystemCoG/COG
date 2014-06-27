@@ -29,12 +29,14 @@ def datacart_display(request, site_id, user_id):
         
     # inspect remote data carts
     dcs = {}
+    # combine from possible multiple user openids
     for openid in user.profile.openids():
-        dcs[openid] = {}
-        dc = getDataCartsForUser(openid)
-        for site, size in dc.items():
-            if size > 0:
-                dcs[openid][site] = size
+        _dcs = getDataCartsForUser(openid)
+        if len(_dcs) > 0:
+            dcs[openid] = {}
+            for site, size in _dcs.items():
+                if size > 0:
+                    dcs[openid][site] = size
         
     return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart, 'datacarts': dcs },
                               context_instance=RequestContext(request))    
