@@ -113,7 +113,7 @@ def getSiteForUser(openid):
         jobj = getJson(url)
         if jobj is not None:
             for key, value in jobj['users'].items():
-                if str( value['site_domain'] ) == site.domain:
+                if str( value['home_site_domain'] ) == site.domain:
                     return site # site found
             
     # site not found
