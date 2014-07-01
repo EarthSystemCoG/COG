@@ -50,6 +50,9 @@ def custom_login_complete(request, **kwargs):
             # create new ESGF/OpenID login
             UserProfile.objects.create(user=request.user, institution='', city='', country='', type=2, site=site) # type=2: ESGF
 
+            # create user datacart
+            DataCart.objects.create(user=request.user)
+
     # check if user is valid
     return _custom_login(request, response)
 
@@ -61,20 +64,6 @@ def _custom_login(request, response):
             return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
 
     return response
-
-
-# view to display the data cart for a given site, user
-def datacart_display2(request, site_id, user_id):
-
-    # load User object
-    user = get_object_or_404(User, pk=user_id)
-
-    # TODO:: check site, redirect in case
-    datacart = DataCart.objects.get(user=user)
-
-    return render_to_response('cog/account/datacart.html',
-                              { 'datacart': datacart },
-                              context_instance=RequestContext(request))
 
 
 def notifyAdminsOfUserRegistration(user):

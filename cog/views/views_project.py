@@ -424,7 +424,8 @@ def initProject(project):
     aPermission = project.getAdminPermission()
     
     # assign creator as project administrator
-    addMembership(project.author, aGroup)
+    if project.author is not None:
+        addMembership(project.author, aGroup)
     
     # configure the project search with the default behavior
     create_project_search_profile(project)
@@ -538,7 +539,7 @@ def project_browser(request, project_short_name, tab):
     elif tab == 'my':
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
     
-    return HttpResponse(html, mimetype="text/html")
+    return HttpResponse(html, content_type="text/html")
 
 # utility class to track the status of the browser widgets
 class DisplayStatus:

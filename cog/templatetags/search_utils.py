@@ -1,7 +1,7 @@
 from django import template
 from cog.models.search import searchMappings
 from string import replace
-from django.utils import simplejson 
+import json
 
 register = template.Library()
 
@@ -44,8 +44,8 @@ def formatMetadataKey(key):
 def toJson(record):
     '''Serializes the record metadata fields to JSON format.'''
     
-    json = simplejson.dumps(record.fields)
-    return json
+    jsondoc = json.dumps(record.fields)
+    return jsondoc
 
 # function to custom order the URLs
 def url_order(mtype):

@@ -29,11 +29,6 @@ if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
-    
-# cron tasks
-CRON = 'cron'
-TASK_SYNC_PROJECTS = siteManager.get('TASK_SYNC_PROJECTS', section=CRON, default='0 0 * * *') # runs at midnight every day
-    
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
 
@@ -243,3 +238,6 @@ if server_type=='PROD':
 #COLOR_LIGHT_YELLOW = "#FCE79F";
 
 #COLOR_DARK_GRAY = "#666666";
+
+# FIXME: necessary for openid-auth since django 1.6.5 otherwise session is not serialized correctly
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

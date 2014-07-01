@@ -1,16 +1,16 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.core.urlresolvers import reverse
 from cog.models import *
 from django.contrib.auth.decorators import login_required
-from django.utils import simplejson
 import re
 from django.views.decorators.csrf import csrf_exempt
-from django.utils import simplejson
+import json
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 from django.core.exceptions import ObjectDoesNotExist
+from django_openid_auth.models import UserOpenID
 
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
@@ -19,9 +19,7 @@ INVALID_CHARS = "[<>&#%{}\[\]\$]"
 @require_GET
 @login_required
 def datacart_display(request, site_id, user_id):
-    
-    # TODO:: check site, redirect in case
-    
+        
     # load User object
     user = get_object_or_404(User, pk=user_id)
     try:
@@ -29,7 +27,38 @@ def datacart_display(request, site_id, user_id):
     except DataCart.DoesNotExist:
         datacart = None
         
-    return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart }, context_instance=RequestContext(request))    
+    # inspect remote data carts
+    dcs = {}
+    # combine from possible multiple user openids
+    for openid in user.profile.openids():
+        _dcs = getDataCartsForUser(openid)
+        if len(_dcs) > 0:
+            dcs[openid] = {}
+            for site, size in _dcs.items():
+                if size > 0:
+                    dcs[openid][site] = size
+        
+    return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart, 'datacarts': dcs },
+                              context_instance=RequestContext(request))    
+    
+# view to display a user datacart by openid
+@require_GET
+@login_required
+def datacart_byopenid(request):
+    
+    if (request.method=='GET'):
+    
+        openid = request.GET['openid']
+        
+        # load User object
+        userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
+        
+        # redirect to user profile page on local site
+        return HttpResponseRedirect(reverse('datacart_display', 
+                                    kwargs={ 'site_id': Site.objects.get_current().id, 'user_id': userOpenid.user.id }))
+            
+    else:
+        return HttpResponseNotAllowed(['GET'])
     
 # view to add an item to a user data cart
 # NOTE: no CSRF token required, but request must be authenticated
@@ -68,7 +97,7 @@ def datacart_add(request, site_id, user_id):
     # return identifier of newly added datcart item
     response_data['item'] = identifier
     
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), content_type='application/json') 
 
 # view to add ALL current search results (as displayed in the page) to the user data cart
 @login_required
@@ -194,7 +223,7 @@ def datacart_wget(request, site_id, user_id):
        ]
     }
     '''
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), content_type='application/json') 
     
 # view to delete an item to a user data cart
 @login_required
@@ -228,7 +257,7 @@ def datacart_delete(request, site_id, user_id):
     # return number of remaining items
     response_data['datacart_size'] = len( user.datacart.items.all() )
         
-    return HttpResponse(simplejson.dumps(response_data), mimetype='application/json') 
+    return HttpResponse(json.dumps(response_data), content_type='application/json') 
 
 # view to completely empty a user data cart
 # NOTE: no CSRF token required, but request must be authenticated

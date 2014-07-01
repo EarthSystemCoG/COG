@@ -14,7 +14,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
     
     # site
-    site = models.ForeignKey(Site, default=Site.objects.get_current().id)
+    site = models.ForeignKey(Site, default=1)
 
     # additional mandatory fields
     institution = models.CharField(max_length=100, blank=False, default='')
@@ -113,12 +113,29 @@ def getSiteForUser(openid):
         jobj = getJson(url)
         if jobj is not None:
             for key, value in jobj['users'].items():
-                if str( value['site_domain'] ) == site.domain:
+                if str( value['home_site_domain'] ) == site.domain:
                     return site # site found
             
     # site not found
     return None
         
+# loops over the peer sites to retrieve the data cart size
+def getDataCartsForUser(openid):
+        
+    dcs = {} # dictionary of (site_name, datacart_size) items
+    
+    for site in Site.objects.all(): # note: includes current site
+        if site != Site.objects.get_current():
+            url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+            print 'Querying for datacart: url=%s' % url
+            jobj = getJson(url)
+            if jobj is not None:
+                for key, value in jobj['users'].items():
+                    size = int( value['datacart']['size'] )
+                    if size > 0:
+                        dcs[ site ] = size 
+            
+    return dcs
 
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
