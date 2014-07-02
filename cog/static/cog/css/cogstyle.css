@@ -124,8 +124,12 @@ font: inherit
         margin-top: 0px;
 	margin-bottom: 0px;
         text-align:center;
+	
 /* debug */
         /*background: red;*/
+}
+img{
+border:none;
 }
 
 /***************
@@ -182,6 +186,15 @@ hr {
 	margin-bottom: 4px;
 	margin-top: 4px;
 }
+/*force IE to behave the same as other browsers */
+.ie6 .ie7 .ie8 .ie9 .ie10 hr{
+        background:#358C92;
+	border:none;
+	height:1px;
+	margin-bottom: 4px;
+	margin-top: 4px;
+}
+
 
 
 /***************
@@ -234,7 +247,7 @@ table {
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
 tbody tr:nth-child(even) td, tbody tr.even td {
 	background: #B9E0E3;/*light-teal */
-        background: #eee /*light-gray */
+        background-color: #eee /*light-gray */
 }
 
 /* additional styles were added to support tables swap the order of alternating row colors; */
@@ -246,31 +259,31 @@ tbody tr:nth-child(even) td, tbody tr.even td {
 /* style for cells in an even row in an "even-first" colored table */
 table.even-color tbody tr:nth-child(even) td, tbody tr.even td {
 	background: #B9E0E3; /*light-teal */
-        background: #eee /*light-gray */
+        background-color: #eee /*light-gray */
 }
 
 /* style for cells in an odd row */
 /* style for cells in an odd row in an "even-first" colored table */
 table.even-color tbody tr:nth-child(odd) td, tbody tr.odd td {
-	background: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
 /* style for cells in an odd row */
 /* style for cells in an odd row in an "odd-first" colored table */
 table.odd-color tbody tr:nth-child(odd) td, tbody tr.odd td {
 	background: #B9E0E3;/*light-teal */
-        background: #eee /*light-gray */
+        background-color: #eee /*light-gray */
 }
 
 /* style for cells in an even row */
 /* style for cells in an even row in an "odd-first" colored table */
 table.odd-color tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
 /* style for all cells in a non-colored (ie: no alternating color) table */
 table.no-color td {
-	background: #FFFFFF !important;
+	background-color: #FFFFFF !important;
 }
 
 /***************
@@ -937,9 +950,10 @@ div.last ol {
     margin-left: 3px;
 }
 
-/* limit the maximum width of an uploaded image. */
+/* limit the maximum width the user profile image */
 .myimage {
-  width: 100%;
+  display:block; /* does this fix IE issue? */
+  /*width: 100%; */
   max-width: 200px;
   /* max-height: 200px; */
   width: expression(this.width > 200 ? "200"+"px" : true);
@@ -1073,7 +1087,7 @@ img.project_logo{
     /*background: #84000;*/
     color: #FFFFFF;
     font-size: 9pt;
- 	font-weight: bold;
+    font-weight: bold;
     /* font-family: Arial, Helvetica, sans-serif;  */
     font-style: normal;
 }
@@ -1090,7 +1104,7 @@ img.project_logo{
 	padding-top: 2px;
 	padding-left: 6px;
 	width: 100%;
-	background: #B9E0E3;
+	background-color: #B9E0E3;
 	float:left;
 }
 
@@ -1104,7 +1118,7 @@ img.project_logo{
 	padding-top: 2px;
 	padding-left: 6px;
 	text-align: right;
-	background: #FAC24A; /*dark yellow*/
+	background-color: #FAC24A; /*dark yellow*/
 	float: right;
 }
 
@@ -1120,7 +1134,7 @@ img.project_logo{
     /*background: #84000;*/
     color: #FFFFFF;
     font-size: 9pt;
- 	font-weight: bold;
+    font-weight: bold;
     /* font-family: Arial, Helvetica, sans-serif;  */
     font-style: normal;
 }
