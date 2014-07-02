@@ -18,7 +18,6 @@
 * additional information may be added above individual attributes
 ******************************/
 
-
 /******************************
 * CSS used w/in CoG
 * (for reference):
@@ -76,38 +75,6 @@ END MEDIA-SPECIFIC STYLES
 BEGIN PAGE-LEVEL ELEMENTS
 ******************************/
 
-/*****************************
-BEGIN DJANGO and YUI CSS RESETS
-
-Django contains numerious CSS files that set many properties not 
-explicly covered in the areas below. These are reclaimed here so that we 
-can completly control in one file how things look
-
-If it is commented out here, then it is placed someplace else
-******************************/
-/*body, div, span, p { 
-margin: 0px;
-padding: 0px;
-border: 0px none;
-/*font-weight: inherit; typography.css*/
-font-weight:normal;
-
-
-font-style: inherit;
-/*font-size: 100%; typopgraphy.css */
-font-size: inherit;
-
-
-font-family: inherit;
-vertical-align: baseline;
-}
-*/
-p table th tr td div{
-font: inherit
-}
-
-
-
 /***************
 * NAME: html
 * SCOPE: the entire page
@@ -123,23 +90,32 @@ html {
 * SCOPE: the page body content
 * DESCRIPTION: center the body, specify the font, font-color, and background color
 ***************/
-body {
+/*****************************
+BEGIN DJANGO and YUI CSS RESETS
+/*Django contains numerious CSS files that set many properties not 
+explicly covered in the areas below. These are reclaimed here so that we 
+can completly control in one file how things look*/
+body{
 
-    padding:    0px;       /*remove all padding in the box model*/
-    margin:     0px;       /*remove all margins in the box model */
     /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
     /*font: 13px/1.231 arial,helvetica,clean,sans-serif; */ /*fonts-min.css*/
     /* px to pt ratio = 1.33, so 13px = 9.77pt */
-    font: normal normal normal 9pt/1.21 Arial,sans-serif; 
+    font: normal normal normal 13px/1.231 Arial,sans-serif; 
 
-    color:      #333;     /* text color...dark grey*/
-    text-align: left;      /*default alignment is left-justified */
+    color:      #333;         /* text color...dark grey*/
+    text-align: left;         /*default alignment is left-justified */
 
-    background: #FFFFFF; /*white background*/
+    background: #FFFFFF;      /*white background*/
+    padding:      0px;       /*remove all padding in the box model*/
+    margin:       0px;       /*remove all margins in the box model */
     margin-right: auto !important; margin-left: auto !important;
-    margin-top: 0px !important; margin-bottom: 0px !important;
+    vertical-align: baseline;
 }
 
+/*p, h1,h2,h3,h4,h5,h6, table, th, tr, td, div, input{
+font: inherit
+}
+*/
 
 /* force IE to center the content in the body*/
 .ie6 .ie7 .ie8 .ie9 .ie10 body {
@@ -149,7 +125,7 @@ body {
 	margin-bottom: 0px;
         text-align:center;
 /* debug */
-        background: red; 
+        /*background: red;*/
 }
 
 /***************
@@ -158,14 +134,14 @@ body {
 * DESCRIPTION: specifies the fonts used by successive headers in the CoG wiki
 ***************/
 h1 {
-	color:       #666;
-	font-size:   16pt;
-	font-weight: bold;
-        line-height: 1;
-        margin: 0px;   /* we should not have to set these here */
-        padding: 0px;  /* we should not have to set these here */
+	color:         #666;
+	font-size:     16pt;
+	font-weight:   bold;
+        line-height:   1;
+        margin:        0px;   /* we should not have to set these here */
+        padding:       0px;  /* we should not have to set these here */
         margin-bottom: 10px;
-        text-align:  left;
+        text-align:    left;
 }
 h2 {
 	color: #666;
@@ -213,8 +189,10 @@ hr {
 * DESCRIPTION: control how links are displayed
 ***************/
 a:link, a:visited {
-        /* keep the same style for links regardless of whether they've been visited */
-	color: #5b80b2;	text-decoration: none;
+    /* keep the same style for links regardless of whether they've been visited */
+    color: #5b80b2;	/* blue */
+    color: #358C92;    /* dark teal */
+    text-decoration: none;
 }
 a:hover {
         /* only change the style of a link while a user is hovering over it */
@@ -301,8 +279,9 @@ table.no-color td {
 ***************/
 
 /* table data and table headers have the same size */
-td,th {
+td, th {
     font-size: 9pt; padding: 5px;
+    vertical-align:top;
 }
 
 /* but table headers are bold with a cyan background */
@@ -385,21 +364,6 @@ END TABLE ELEMENTS
 /******************************
 BEGIN FORM ELEMENTS
 ******************************/
-
-/***************
-* NAME: textarea
-* SCOPE: the current form
-***************/
-textarea {
-        /* display scrollbars as needed */
-	overflow: auto;
-	border: 1px solid #417690;
-	margin: 1px;
-        /* TODO: why is this not 100%? */
-	width: 99%;
-}
-
-
 /***************
 * NAME: all buttons
 * SCOPE: the current form
@@ -408,10 +372,10 @@ textarea {
 .button,input[type=submit],input[type=button],input[type=reset],input[type=file],.submit-row input {
         /* force a white background by combining a color with a white image */
         /* TODO: why is this forcing needed here, but not on other form elements? */
-	background: white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
-	padding: 3px 5px;
-	color: black;
-	border: 1px solid #bbb;
+	background:   white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+	padding:      3px 5px;
+	color:        black;
+	border:       1px solid #bbb;
 	border-color: #666666;
 }
 
@@ -424,12 +388,37 @@ input[type=text] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
 	color: #5D781D;
+	width:99% /* same width as all other types of inputs */
+}
+
+input[type=password] {
+	border: 1px solid #666666;
+	background: #FFFFFF;
+	color: #5D781D;
+        width:99% /* same width as all other types of inputs */
+}
+
+input[type=url] {
+        border: 1px solid #666666;
+	background: #FFFFFF;
+	color: #5D781D;
+        width:99% /* same width as all other types of inputs */
 }
 
 /* allow for text inputs that span their entire container */
 .long input[type=text] {
-	width: 100%;
+	width: 99%; /* same width as all other inputs and features that use .long (e.g. table cells) */
 }
+
+textarea {
+        /* display scrollbars as needed */
+	overflow: auto;
+	border:   1px solid #417690;
+	margin:   1px;
+	width:    99%; /* not 100% because it provides a nice margin inside a table */
+}
+
+
 
 /******************************
 END FORM ELEMENTS
@@ -973,166 +962,6 @@ END SPECIFIC CSS FIXES
 	font-size: 9pt;
 }
 
-
-
-/***********************************
-BEGIN SPLASH PAGE STYLES
-************************************/
-
-h3.teal_box{
-font-size:   10pt;
-/*text-align:  center;*/
-padding-top: 10px;
-}
-
-h2.splash_functions{
-padding:        0px;
-margin:         0px;
-padding-bottom: 3px;
-margin-top:     0px;
-font-size:      11pt;
-}
-
-
-table.inner tbody tr td {
-background-color: white;
-}
-
-table.outer{
-width:         100%;
-margin-top:    0px;
-padding-top:   0px;
-}
-
-table.outer tbody tr td{
-background-color: white;
-}
-
-td.function{
-padding:        0px;
-margin:         0px;
-padding-left:	5px;
-vertical-align: top;
-}
-
-p.splash_functions{
-margin-top:     0px;
-padding-top:    0px;
-margin-bottom:  0px;
-}
-
-p.splash_functions_last{
-margin-top:    0px;
-margin-bottom: 0px;
-}
-
-
-td.icon{
-width:          70px;  /* make width of image and use padding for margin */
-height:         85px;
-padding-right: 	20px;
-padding-left:   0px;
-vertical-align: top;
-}
-
-
-td.yellow_col{
-vertical-align: top;
-}
-
-
-td.col_1{
-vertical-align: middle;
-width:          500px;
-}
-
-td.col_2{
-vertical-align: top;
-width:          300px;
-}
-
-div.teal_box {
-background-color: white;
-border: 3px solid #358C92;
-width:            247px;
-}
-
-/* hyperlinks */
-a:link, a:visited {
-color: #358C92;
-text-decoration: none;
-}
-a:hover {
-color: #205559;
-}
-
-
-ul.teal_box > li{
-margin-left:  10px;
-margin-right: 10px;
-margin-bottom: 10px;
-padding:       0px;
-/*line-height:  1.5;*/
-text-align: left;
-}
-
-
-div.yellow_box{
-background-color:#FAC24A;
-width:           250px;
-height:          70px;
-/*display:       table-cell;*/
-vertical-align:  middle;
-padding:         0px;
-}
-
-div.white_button{
-display:         inline-block;
-width:           150px;
-margin-right:    50px;
-margin-left:     50px;
-margin-top:      20px;
-background-color:white;
-height:          30px;
-border-radius:   15px;
-}
-
-
-div.logo{
-margin-top: 5px;
-}
-
-div.main{
-margin-left: auto;
-margin-right:auto;
-margin-top:  10px;
-width: 1000px;
-}
-
-p.yellow_box{
-margin-bottom:  0px;
-margin-left:    5px;
-margin-right:   5px;
-margin-top:     7px;
-padding:        0px;
-text-align:     center;
-}
-
-p.white_button{
-font-size:      11pt;
-text-align:     center;
-margin-bottom:  0px;
-padding-bottom: 0px;
-margin-top:     5px;
-color:          #333;
-
-}
-
-
-hr.top{
-background-color: #358C92;
-height: 2px;
-}
 /***********************************
 BEGIN HEADER STYLES
 ************************************/

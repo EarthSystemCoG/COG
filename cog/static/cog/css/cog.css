@@ -1,21 +1,21 @@
 /* This is the CSS page just for the splash */
 /* Since we may get rid of this page in the cog distribution with ESMF, it needs to be separate, but totally self contained */
 
-
+/* note this is different from the cog body which is 9px/1.231 */
 body{
-font-size:  9pt;
-line-height:1.5;
+font-size:   9pt;
+line-height: 1.5;
 color:      #333333;
 text-align: left;
 font-family: Arial, sans-serif; 
-font: 9px/1.5 Arial,sans-serif;
-
+margin-top:0px;
 }
 
 h3.teal_box{
 font-size:   10pt;
-/*text-align:  center;*/
-padding-top: 10px;
+color:#333;
+margin-top:8px;
+margin-bottom: 10px;
 }
 
 h2.splash_functions{
@@ -99,12 +99,15 @@ a:hover {
 color: #205559;
 }
 
+ul.teal_box {
+margin:0px;
+padding:0px;
+margin-left: 28px;
+margin-right:40px;
+}
 
 ul.teal_box > li{
-margin-left:  10px;
-margin-right: 10px;
 margin-bottom: 10px;
-padding:       0px;
 line-height:  1.5;
 text-align: left;
 }
@@ -139,6 +142,7 @@ div.main{
 margin-left: 10px;
 margin-right:10px;
 margin-top:  10px;
+margin-bottom: 20px;
 }
 
 p.yellow_box{
@@ -164,17 +168,6 @@ color:          #333;
 hr.top{
 background-color: #358C92;
 height: 2px;
-}
-
-/* The Django templates set styles all over the place. We want total control over what is set in this file. Below are generic items
-* that have been pulled from those other CSS files and placed here so we know what they are and have control */
-p {
-margin:  0px;
-padding: 0px;
-border:  0px none;
-font-weight: inherit;
-font-style: inherit;
-font-size: inherit;
-font-family: inherit;
-vertical-align: baseline;
+margin:0px;
+padding:0px;
 }
