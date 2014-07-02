@@ -1,4 +1,5 @@
 {% extends "cog/common/layout_center.html" %}
+<!--LOCATION: /cog/templates/cog/openid/login2.html-->
 
 {% block extrahead %}
 	<style type="text/css">
@@ -23,15 +24,13 @@
 
   <div class="prepend-4 span-14">
 
-	<i>Some CoG projects allow you to search and download data archived on 
-	<a href="http://www.esgf.org">
-	Earth System Grid Federation (ESGF)</a> data nodes.  In order to access this data,
-	you will need to have a valid ESGF OpenID.
-	
-	If you don't wish to access any data, and you have a CoG username and
-	password, use the CoG Login option below.</i>
+	<p><i>Some CoG projects allow you to search and download data archived on <a href="http://www.esgf.org">
+	Earth System Grid Federation (ESGF)</a> data nodes.  In order
+	to access this data, you will need to have a valid ESGF
+	OpenID. If you don't wish to access any data, and you have a CoG username and
+	password, use the CoG Login option below.</i></p>
 
-	<p/><i>To get a CoG login, see <a href="{% url 'user_add' %}">this page</a>.
+	<p><i>To get a CoG login, see <a href="{% url 'user_add' %}">this page</a>.
 	New CoG accounts will generate ESGF OpenIDs.
 	If you would like to access ESGF data, the options are explained below.</i>
 
@@ -60,23 +59,22 @@
 	<form method="post" action="{% url 'login' %}" method="post">
 	   {% csrf_token %}
 		<div class="mybox">
-			<table>
-				<caption>CoG Login</caption>
-				<tr>
-				    <td class="th">Username</td>
-				    <td>
-				    	<input type="text" id="username" name="username" value="{{ request.REQUEST.username }}" size="30" />
-				    </td>
-				</tr>
-				<tr>
-					<td class="th">Password</td>
-				    <td>
-				    	<input type="password" id="password" name="password" size="30"  />
-				    	&nbsp;<input type="submit" value="Login" />
-				    </td>
-				</tr>
-			</table>
-         </div>
+		<table>
+		<caption>CoG Login</caption>
+		<tr>
+	          <td style="width:10%;text-align:right;"><b>Username</b></td>
+	          <td style="width:90%">
+		    <input type="text" id="username" name="username" value="{{ request.REQUEST.username }}" size="30" />
+	          </td>
+		</tr>
+		<tr>
+		  <!--inline styles needed to override default table elements-->
+		  <td style="width:20%;text-align:right;vertical-align:middle;"><b>Password</b></td>
+	          <td style="width:50%; vertical-align:middle;"><input type="password" id="password" name="password" size="30" /></td>
+		  <td style="width:30%;"><input type="submit" value="Login" /></td>
+		</tr>
+		</table>
+                </div>
 
          <!-- next page field -->
          {% if next %}
@@ -106,29 +104,29 @@
 		   <p/>
 		{% endif %}
 
-		<i>
+		<p><i>
 		You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time.
 		This method is recommended if you plan on downloading data from ESGF, 
 		since you will not be asked to enter your password again.
 		If this is the first time you are using your ESGF OpenID on CoG, you will be asked to
 		provide some additional information to create a new CoG account.
 		</i>
+		</p>
 		<p/>
 
 		<form name="fopenid" action="{% url 'openid-login' %}" method="post">
     		{% csrf_token %}
 
     		<div class="mybox">
-	    		<table>
-	    			<caption>ESGF Login</caption>
-	    			<tr>
-	    				<td class="th">OpenID</td>
-	    				<td>
-	    					<input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/>
-	    					&nbsp;<input name="bsignin" type="submit" value="Login">
-	    				</td>
-	    			</tr>
-	    		</table>
+	    	<table>
+	    	  <caption>ESGF Login</caption>
+	    	  <tr>
+	    	    <td style="width:10%;text-align:right; vertical-align:middle;"><b>OpenID</b></td>
+		    <td style="width:80%; vertical-align:middle;"><input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/></td>
+	    	    <td style="width:10%;"><input name="bsignin" type="submit" value="Login"></td>
+	    	</td>
+	    	</tr>
+	    	</table>
     		</div>
 
     		<!-- next page field -->

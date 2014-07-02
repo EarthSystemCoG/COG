@@ -395,7 +395,8 @@ input[type=text] {
 	background: #FFFFFF;
 	color: #5D781D;
 	width:99%; /* same width as all other types of inputs */
-	padding-left: 2px;
+	padding-left: 2px; /* space before text starts */
+	height:15px;
 }
 
 input[type=password] {
@@ -403,6 +404,8 @@ input[type=password] {
 	background: #FFFFFF;
 	color: #5D781D;
         width:99%; /* same width as all other types of inputs */
+        padding-left: 2px; /* space before text starts */
+	height:15px;
 }
 
 input[type=url] {
@@ -410,6 +413,8 @@ input[type=url] {
 	background: #FFFFFF;
 	color: #5D781D;
         width:99%; /* same width as all other types of inputs */
+        padding-left: 2px; /* space before text starts */
+	height:15px;
 }
 
 /* allow for text inputs that span their entire container */
@@ -422,6 +427,7 @@ textarea {
 	overflow: auto;
 	border:   1px solid #666666;
 	width:    99%; /* not 100% because it provides a nice margin inside a table */
+        padding-left: 2px;/* space before text starts */
 }
 
 
