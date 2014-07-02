@@ -280,8 +280,10 @@ table.no-color td {
 
 /* table data and table headers have the same size */
 td, th {
-    font-size: 9pt; padding: 5px;
-    vertical-align:top;
+    margin:0px;
+    font-size: 9pt; 
+    padding: 4px;
+    vertical-align: top;
 }
 
 /* but table headers are bold with a cyan background */
@@ -377,6 +379,8 @@ BEGIN FORM ELEMENTS
 	color:        black;
 	border:       1px solid #bbb;
 	border-color: #666666;
+	margin-bottom:5px;
+	margin-right:2px;
 }
 
 
@@ -388,7 +392,8 @@ input[type=text] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
 	color: #5D781D;
-	width:99% /* same width as all other types of inputs */
+	width:99%; /* same width as all other types of inputs */
+	padding-left: 2px;
 }
 
 input[type=password] {
@@ -413,7 +418,7 @@ input[type=url] {
 textarea {
         /* display scrollbars as needed */
 	overflow: auto;
-	border:   1px solid #417690;
+	border:   1px solid #666666;
 	margin:   1px;
 	width:    99%; /* not 100% because it provides a nice margin inside a table */
 }
@@ -1092,7 +1097,7 @@ img.project_logo{
 	padding-top: 2px;
 	padding-left: 6px;
 	text-align: right;
-	/* background: #FCE79F; */
+	background: #FAC24A; /*dark yellow*/
 	float: right;
 }
 

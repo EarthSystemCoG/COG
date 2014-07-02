@@ -5,8 +5,8 @@
 
 {% block extrahead %}
 
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
+	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css"/>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
@@ -52,10 +52,11 @@
 {% endblock %}
 
 {% block main %}
-
+<!--why is this not span-24? Going across the entire page?-->
 <div class="prepend-3 span-18">
 
     <h2>{{ mytitle }}</h2>
+    <p>Required fields are in <b>bold</b>. The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .</p>
 
     <!-- display extra message if available -->
 	{% if request.GET.message %}
@@ -91,9 +92,6 @@
 	                    <td>{{ form.username }}
 	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
 	                        <br />{{ form.username.errors }}
-	                    </td>
-	                    <td colspan="2">
-
 	                    </td>
 	                </tr>
 
@@ -177,88 +175,83 @@
                         <br/>(Format: 'jpg', 'png', or 'gif')
                         </td>
                         <td class="long">
-                        	<table>
-                        		<tr>
-                        			<td>
-                        				<img src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
-                        			</td>
-                        			<td align="left">
-			                        	<div style="margin-top:2px">
-			                        		{% if not 'unknown' in form.instance|getImage %}
-			                        			{{ form.delete_image }} Delete current picture ?
-			                        		{% endif %}
-			                        		<br/>
-			                        		{{ form.image }}
-			                        		&nbsp;{{ form.image.errors }}
-			                        	</div>
-                        			</td>
-                        		</tr>
-                        	</table>
+                        <table>
+                        	<tr>
+                        	<td>
+                        	<img src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
+                        	</td>
+                        	<td align="left">
+			              <div style="margin-top:2px">
+			                  {% if not 'unknown' in form.instance|getImage %}
+			                      {{ form.delete_image }} Delete current picture ?
+			                  {% endif %}
+			                  <br/>
+			                  {{ form.image }}
+			                  &nbsp;{{ form.image.errors }}
+			               </div>
+                                  </td>
+                        	</tr>
+                        </table>
                         </td>
-                    </tr>
+                        </tr>
               </table>
 
 
               <table>
-
-              		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
+             		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
               		{% if form.instance.id %}
               			<tr>
-              				<td colspan="2">Optional ESGF OpenID(s) associated with this COG user account:</td>
+              			<td colspan="3">Optional ESGF OpenID(s) associated with this COG user account:</td>
               			</tr>
 	                    {% for openidform in formset2 %}
-			       			{{ openidform.id }}
-				        	<tr>
-				        		<td colspan="2" nowrap="nowrap">
-				        			<span>OpenID: &nbsp; <b>URL</b> {{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</span>
-				        		</td>
-				        		<td>
-				        			&nbsp; {{ openidform.DELETE }} Delete ?
-				        		</td>
-					        </tr>
-			    		{% endfor %}
-		    		{% endif %}
-
-		    		<!-- URLs -->
+			       	{{ openidform.id }}
+				<tr>
+				<td style="width:80px;"><b>OpenID URL:</b></td>
+				<td style="width:500px;">{{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</td>
+				<td style="vertical-align:bottom;">{{openidform.DELETE }} Delete ? </td>
+                                </tr>
+			    {% endfor %}
+		    	{% endif %}
+             </table>
+	     <!--this section is its own table in order to make the td
+             		widths different from the one above-->
+	     <table class="odd-color">
+				
+		    	<!-- URLs -->
 		    		<tr>
-              			<td colspan="2">Optional web sites associated with this COG user account:</td>
-              		</tr>
-                    {% for urlform in formset1 %}
-		       			{{ urlform.id }}
-			        	<tr>
-			        		<td nowrap="nowrap">
-			        			<span>Web Site: <b>URL</b> {{ urlform.url }} {{ urlform.url.errors }}</span>
-			        		</td>
-			        		<td>
-			        			<b>Title</b> {{ urlform.name }} ('Home Page', 'My Blog', ...) {{ urlform.name.errors }}
-			        		</td>
-			        		<td>
-			        			&nbsp; {{ urlform.DELETE }} Delete ?
-			        		</td>
-				        </tr>
+              			<td colspan="6">Optional web sites
+		    		associated with this COG user account:
+		    		('Home Page', 'My Blog', ...)</td>
+              		        </tr>
+                                {% for urlform in formset1 %}
+		       		   {{ urlform.id }}
+			           <tr>
+			           <td style="width:60px;"><b>Web URL:</b></td>
+				   <td style="width:300px;">{{ urlform.url }} {{ urlform.url.errors }}</td>
+			           <td style="width:30px;"><b>Title:</b></td>
+				   <td style="width:200px;">{{ urlform.name }} {{ urlform.name.errors }}</td>
+			           <td style="vertical-align:bottom;">
+			              {{ urlform.DELETE }} Delete ?
+			          </td>
+				  </tr>
 		    		{% endfor %}
 
   	            </table>
 
-	            <div style="text-align:center">
+	            <div style="text-align:right;">
 	                <hr/>
-	                Required fields are in <b>bold</b>.<br/>
 	                {% if request.user.is_anonymous %}
 	                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
 	                {% else %}
 	                   <!-- prevent user with non-complete data to hit 'cancel' button -->
 	                   {% if request.user|isValidUser %}
-	                   		<input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
+	                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
 	                   {% endif %}
 	                {% endif %}
-	                &nbsp; &nbsp;
-	                The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
-	                &nbsp; &nbsp;
 	                <input type="submit" value="Submit" />
 	            </div>
 
 	        </form>
-			&nbsp;
 	    </div>
     </div>
 </div>
