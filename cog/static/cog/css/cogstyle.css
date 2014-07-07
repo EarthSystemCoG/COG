@@ -108,7 +108,7 @@ font: inherit
 	margin-left:   auto;
         margin-top:    0px;
 	margin-bottom: 0px;
-        text-align:    center;
+        text-align:    left;
 	
 /* debug: are the IE conditionals even working? */
         /*background-color: pink;*/
@@ -118,10 +118,10 @@ img{
         border:none;
 }
 
-ul{
-margin:0px;
-padding:0px;
-text:align-left;
+.ie6 ul, ie7 ul, ie8 ul, ie9 ul{
+     margin:              0px;
+     padding:             0px;
+     list-style-position: inside;
 }
 
 /***************
@@ -583,6 +583,10 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	padding-bottom: 0px;
 	list-style:     none;
 }
+
+
+
+
 
 .vertical_menu li {
         /* line-height tweaked to match project browser elements */
