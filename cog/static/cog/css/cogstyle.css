@@ -391,10 +391,6 @@ BEGIN FORM ELEMENTS
 * NAME: text input
 * SCOPE: the current form
 ***************/
-.ie9 input[type=text] {
-width:300px;
-background: pink;
-}
 
 
 
@@ -402,10 +398,16 @@ input[type=text] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
 	color: #5D781D;
-	width:99%; !important /* same width as all other types of inputs */
+	width:99%; /* same width as all other types of inputs */
 	padding-left: 2px; /* space before text starts */
 	height:15px;
 }
+
+.ie9 input[type=text] {
+width: inherit;
+color: red;
+}
+
 
 input[type=password] {
 	border: 1px solid #666666;
@@ -570,19 +572,19 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 /*lower section of the left nav bar */
 .vertical_menu ul {
-	margin: 0;
-	padding-left: 4px;
+	margin:         0px;
+	padding-left:   4px;
 	padding-bottom: 0px;
-	list-style: none;
+	list-style:     none;
 }
 
 .vertical_menu li {
         /* line-height tweaked to match project browser elements */
 	line-height: 14pt;
-	padding: 0px;
-	margin: 0px;
-	list-style: none;
-	font-size: 8pt; /* needs to be the same as the upper section which is a table */
+	padding:     0px;
+	margin:      0px;
+	list-style:  none;
+	font-size:   8pt; /* needs to be the same as the upper section which is a table */
 }
 
 .vertical_menu li li {
