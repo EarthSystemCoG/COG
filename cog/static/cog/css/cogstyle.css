@@ -410,12 +410,6 @@ input[type=text] {
 	height:15px;
 }
 
-.ie9 input[type=text] {
-/* width: 99%;*/
-/*debug ... color: red; */
-}
-
-
 input[type=password] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
@@ -447,6 +441,18 @@ textarea {
         padding-left: 2px;/* space before text starts */
 }
 
+.required {
+	font-weight: bold; /* = 700 */
+}
+
+ie9 .required {
+        font-weight: 600; /* 700 is too much on IE */
+	color: red;
+}
+
+.optional {
+	font-weight: normal;
+}
 
 
 /******************************
@@ -465,17 +471,6 @@ small {
 
 strong {
 	font-weight: bold;
-}
-
-.required {
-	font-weight: bold; /* = 700 */
-}
-ie9 .required {
-        font-weight: 500; /* 700 is too much on IE */
-}
-
-.optional {
-	font-weight: normal;
 }
 
 /* prevent the wiki editor from resizing horizontally */
