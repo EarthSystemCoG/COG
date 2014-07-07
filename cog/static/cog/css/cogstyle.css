@@ -93,7 +93,8 @@ body{
     background: #FFFFFF;      /*white background*/
     padding:      0px;       /*remove all padding in the box model*/
     margin:       0px;       /*remove all margins in the box model */
-    margin-right: auto !important; margin-left: auto !important;
+    margin-right: auto !important;
+    margin-left: auto  !important;
     vertical-align: baseline;
 }
 
@@ -103,7 +104,7 @@ font: inherit
 */
 
 /* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body,.ie10 body {
+.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body {
         margin-right:  auto; 
 	margin-left:   auto;
         margin-top:    0px;
@@ -118,7 +119,7 @@ img{
         border:none;
 }
 
-.ie6 ul, ie7 ul, ie8 ul, ie9 ul{
+.ie6 ul, ie7 ul, ie8 ul, ie9 ul, ie10 ul{
      margin:              0px;
      padding:             0px;
      list-style-position: inside;
