@@ -103,7 +103,7 @@ font: inherit
 */
 
 /* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body {
+.ie6 body,.ie7 body, .ie8 body, .ie9 body,.ie10 body {
         margin-right:  auto; 
 	margin-left:   auto;
         margin-top:    0px;
@@ -111,7 +111,7 @@ font: inherit
         text-align:    center;
 	
 /* debug: are the IE conditionals even working? */
-        background-color: pink;
+        /*background-color: pink;*/
 }
 
 img{
@@ -391,9 +391,9 @@ BEGIN FORM ELEMENTS
 * NAME: text input
 * SCOPE: the current form
 ***************/
-.ie9 input[type=text]{
+.ie9 input[type=text] {
 width:300px;
-background-color:pink;
+background: pink;
 }
 
 
