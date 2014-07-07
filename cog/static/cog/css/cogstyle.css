@@ -103,7 +103,7 @@ font: inherit
 */
 
 /* force IE to center the content in the body*/
-.ie6 .ie7 .ie8 .ie9 .ie10 body {
+.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body {
         margin-right:  auto; 
 	margin-left:   auto;
         margin-top:    0px;
