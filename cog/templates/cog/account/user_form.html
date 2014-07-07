@@ -25,6 +25,8 @@
         }
     </style>
      <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+     <!-- loading CoG-specific styles. Needs to be last -->
+     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
 
     {% include 'cog/account/_countries.html' %}
     {% include 'cog/account/_states.html' %}
