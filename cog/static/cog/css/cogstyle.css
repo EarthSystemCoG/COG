@@ -118,6 +118,12 @@ img{
         border:none;
 }
 
+ul{
+margin:0px;
+padding:0px;
+text:align-left;
+}
+
 /***************
 * NAME: headers
 * SCOPE: the page body content
@@ -1147,7 +1153,7 @@ img.project_logo{
 }
 
 .top_nav ul {
-    margin: 0;
+    margin: 0px;
     padding: 0px 0px 0px 0px;
     list-style: none;
     line-height: normal;
