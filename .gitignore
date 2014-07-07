@@ -13,7 +13,7 @@ cog/static/cog/ckeditor
 static/
 
 # site media
-site_media/
+#site_media/
 
 # database directory
 database/
