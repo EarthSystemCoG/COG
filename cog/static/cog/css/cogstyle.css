@@ -411,7 +411,7 @@ input[type=text] {
 }
 
 .ie9 input[type=text] {
-width: 99%;
+/* width: 99%;*/
 /*debug ... color: red; */
 }
 
@@ -471,7 +471,7 @@ strong {
 	font-weight: bold; /* = 700 */
 }
 ie9 .required {
-        font-weight: 500;
+        font-weight: 500; /* 700 is too much on IE */
 }
 
 .optional {
