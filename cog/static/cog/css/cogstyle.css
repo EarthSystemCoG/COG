@@ -411,8 +411,8 @@ input[type=text] {
 }
 
 .ie9 input[type=text] {
-width: inherit;
-color: red;
+width: 99%;
+/*debug ... color: red; */
 }
 
 
