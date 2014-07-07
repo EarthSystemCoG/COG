@@ -445,7 +445,7 @@ textarea {
 	font-weight: bold; /* = 700 */
 }
 
-ie9 .required {
+.ie9 .required {
         font-weight: 600; /* 700 is too much on IE */
 	color: red;
 }
