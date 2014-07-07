@@ -620,7 +620,6 @@ BEGIN NEWS WIDGET
 	margin-bottom: 12px;
         margin-top: 0px;
 	background: #FFFFFF;
-	float: center;
 }
 
 .news_header {
@@ -701,8 +700,8 @@ BEGIN SEARCH WIDGET
 }
 
 .instruction-box {
-        background:e5ecf9;  /* light-blue */	
-        background: #B9E0E3 /* dark-teal */
+        background: #3e5ecf;  /* light-blue */	
+        background: #B9E0E3; /* dark-teal */
 	padding: 5px; 
 	/* margin: 5px; */
 	border: 1px solid #417690;
@@ -711,8 +710,9 @@ BEGIN SEARCH WIDGET
 }
 
 .message-box {
-	background: #f4f379;
-	padding: 5px; #
+	background: #f4f379; /*bright yellow */
+        background: #FAC24A; /* dark yellow*/
+	padding: 5px; 
 	margin: 5px;
 	border: 1px solid #417690;
 	font-weight: bold;
@@ -729,8 +729,9 @@ BEGIN SEARCH WIDGET
 
 /* prevent error styles from affecting error content w/in search widget */
 .error-box {
-	background: #f4f379;
-	padding: 5px; #
+	background: #f4f379; /*yellow??*/
+        background: #FAC24A; /* dark yellow*/
+	padding: 5px; 
 	margin: 5px;
 	border: 1px solid #417690;
 	font-weight: bold;
@@ -831,8 +832,7 @@ BEGIN PAGINATOR
 ***************/
 
 .pagination {
-    /* center the paginator controls */
-    float: center; text-align: center;
+    text-align: center;
 }
 
 /******************************
@@ -957,7 +957,7 @@ div.last ol {
   /*width: 100%; */
   max-width: 200px;
   /* max-height: 200px; */
-  width: expression(this.width > 200 ? "200"+"px" : true);
+ /* width: expression(this.width > 200 ? "200"+"px" : true);*/
   /* height: expression(this.height > 200 ? "200"+"px" : true); */
   border: 1px solid #666666;
 }
@@ -975,15 +975,12 @@ END SPECIFIC CSS FIXES
 .mybox {
 	border: 1px solid #666666;
 	margin-bottom: 5px;
-	background: #FFFFFF;
-	float: center;
-}
+	background: #FFFFFF;}
 
 .header-gray {
 	border-bottom: 1px solid #666666;
 	margin-bottom: 0px;
 	background: #EEEEEE;
-	float: center;
 	text-align: left;
 	color: #666666;
 	font-size: 9pt;
@@ -995,7 +992,7 @@ BEGIN HEADER STYLES
 #header {
     overflow: hidden;
     height: 85px;
-    /*color: #ffc; /*yellow*/*/
+    /*color: #ffc; yellow*/
     /*margin: 0px;*/
     /* margin-top: 10px; */
     /*padding-top: 0px;*/
@@ -1146,9 +1143,9 @@ img.project_logo{
 	padding-left: 6px;
 	text-align: center;
 	/* background: #FCE79F; */
-	float: center;
 	color: #666;
 }
+
 
 .top_nav ul {
     margin: 0px;
