@@ -31,21 +31,6 @@
 
 ******************************/
 
-/*****************************
-BEGIN CONDITIONALS FOR INTERNET EXPLORER
-******************************/
-/* this creates a special HTML class for each version
-* of Internet Explorer. We will use these classes further
-* down in every instruction that has to be done for IE */
-
-<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
-<!--[if IE 7 ]> <html class="ie7"> <![endif]-->
-<!--[if IE 8 ]> <html class="ie8"> <![endif]-->
-<!--[if IE 9 ]> <html class="ie9"> <![endif]-->
-<!--[if IE 10 ]> <html class="ie10"> <![endif]-->
-<!--[if (gt IE 10)|!(IE)]><!--> <html> <!--<![endif]--> /* if > IE10 or not IE at all, set no class */
-
-
 /******************************
 BEGIN MEDIA-SPECIFIC STYLES
 ******************************/
@@ -118,7 +103,7 @@ font: inherit
 */
 
 /* force IE to center the content in the body*/
-.ie9 body {
+.ie6 .ie7 .ie8 .ie9  .ie10 body {
         margin-right:  auto; 
 	margin-left:   auto;
         margin-top:    0px;
@@ -126,7 +111,7 @@ font: inherit
         text-align:    center;
 	
 /* debug */
-        background-color: pink;
+        /*background-color: pink;*/
 }
 img{
 border:none;
