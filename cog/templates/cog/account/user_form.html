@@ -55,7 +55,7 @@
 {% block main %}
 <!--why is this not span-24? Going across the entire page?-->
 <!--<div class="prepend-3 span-18">-->
-  <div class="span-22">
+  <div class="preend-3 span-22">
 
     <h2>{{ mytitle }}</h2>
     <p>Required fields are in <b>bold</b>. The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .</p>
@@ -75,23 +75,25 @@
 	            {% csrf_token %}
 	            {{ formset1.management_form }}
 	            {{ formset2.management_form }}
+	           <!--width specified for IE, which does not accept
+	            width=99% as listed in the CSS for long-->
 
 	            <table>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap">First Name</td>
-	                    <td class="long">{{ form.first_name }} {{ form.first_name.errors }}</td>
+	                    <td class="long" style="width:300px;">{{ form.first_name }} {{ form.first_name.errors }}</td>
 	                </tr>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>Last Name</b></td>
-	                    <td class="long">{{ form.last_name }} {{ form.last_name.errors }}</td>
+	                    <td class="long" style="width:300px;">{{ form.last_name }} {{ form.last_name.errors }}</td>
 	                </tr>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>Email</b></td>
-	                    <td class="long">{{ form.email }} {{ form.email.errors }}</td>
+	                    <td class="long" style="width:300px;" >{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
-	                    <td>{{ form.username }}
+	                    <td style="width:300px;" >{{ form.username }}
 	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
 	                        <br />{{ form.username.errors }}
 	                    </td>
@@ -111,14 +113,14 @@
 		                <!-- otherwise, the user must submit a password -->
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
-		                    <td>{{ form.password }}
+		                    <td style="width:300px;">{{ form.password }}
 		                       <i>[ At least 6 characters, all characters are allowed ]</i>
 		                       <br/>{{ form.password.errors }}
 		                       </td>
 		                </tr>
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
-		                    <td>{{ form.confirm_password }}
+		                    <td style="width:300px;">{{ form.confirm_password }}
 		                        <i>[ At least 6 characters, all characters are allowed ]</i>
 		                        <br/>{{ form.confirm_password.errors }}
 		                    </td>
@@ -126,33 +128,33 @@
 	                {% endif %}
 	                <tr>
                         <td class="head required" nowrap="nowrap"><b>Institution</b></td>
-                        <td class="long">{{ form.institution }} {{ form.institution.errors }}</td>
+                        <td class="long" style="width:300px;">{{ form.institution }} {{ form.institution.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Department</td>
-                        <td class="long">{{ form.department }} {{ form.department.errors }}</td>
+                        <td class="long" style="width:300px;">{{ form.department }} {{ form.department.errors }}</td>
                     </tr>
                     <tr>
                         <td class="head required" nowrap="nowrap"><b>City</b></td>
-                        <td class="long">{{ form.city }} {{ form.city.errors }}</td>
+                        <td class="long" style="width:300px;">{{ form.city }} {{ form.city.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">State</td>
-                        <td class="long">
+                        <td class="long" style="width:300px;">
                             <div id="stateAutoComplete">
                             {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}
                         </td>
                     </tr>
                     <tr>
                         <td class="head required" nowrap="nowrap"><b>Country</b></td>
-                        <td class="long">
+                        <td class="long" style="width:300px;">
                             <div id="countryAutoComplete">
                             {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}
                         </td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Keywords</td>
-                        <td class="long">
+                        <td class="long" style="width:300px;">
                         A short list of science fields you are involved with (60 characters maximum).
                         <br/>Example: Software Engineering, Grid Computing, Climate Change.
                         <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>

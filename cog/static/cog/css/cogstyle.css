@@ -317,8 +317,8 @@ th {
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
 
 .long {
-	width: 100%;
-	text-align: left;
+	width:          99%;
+	text-align:     left;
 	vertical-align: top;
 }
 
