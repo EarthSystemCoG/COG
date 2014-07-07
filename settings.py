@@ -17,6 +17,7 @@ SITE_ID = siteManager.get('SITE_ID', default=1)
 TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
 COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST', default='cog_info@list.woc.noaa.gov')
 SECRET_KEY = siteManager.get('SECRET_KEY')
+DATABASE_NAME = siteManager.get('DATABASE_NAME')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
@@ -69,7 +70,7 @@ DATABASES = {
     # Postgres
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cogdb',
+        'NAME': DATABASE_NAME,
         'USER': DATABASE_USER,                      # Not used with sqlite3.
         'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
