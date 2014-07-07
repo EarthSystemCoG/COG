@@ -402,7 +402,7 @@ input[type=text] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
 	color: #5D781D;
-	width:99%; /* same width as all other types of inputs */
+	width:99%; !important /* same width as all other types of inputs */
 	padding-left: 2px; /* space before text starts */
 	height:15px;
 }
