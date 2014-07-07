@@ -55,7 +55,7 @@
 {% block main %}
 <!--why is this not span-24? Going across the entire page?-->
 <!--<div class="prepend-3 span-18">-->
-  <div class="preend-3 span-22">
+  <div class="prepend-1 span-22">
 
     <h2>{{ mytitle }}</h2>
     <p>Required fields are in <b>bold</b>. The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .</p>
@@ -81,19 +81,19 @@
 	            <table>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap">First Name</td>
-	                    <td class="long" style="width:300px;">{{ form.first_name }} {{ form.first_name.errors }}</td>
+	                    <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
 	                </tr>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>Last Name</b></td>
-	                    <td class="long" style="width:300px;">{{ form.last_name }} {{ form.last_name.errors }}</td>
+	                    <td >{{ form.last_name }} {{ form.last_name.errors }}</td>
 	                </tr>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>Email</b></td>
-	                    <td class="long" style="width:300px;" >{{ form.email }} {{ form.email.errors }}</td>
+	                    <td>{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
 	                <tr>
 	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
-	                    <td style="width:300px;" >{{ form.username }}
+	                    <td>{{ form.username }}
 	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
 	                        <br />{{ form.username.errors }}
 	                    </td>
@@ -113,14 +113,14 @@
 		                <!-- otherwise, the user must submit a password -->
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
-		                    <td style="width:300px;">{{ form.password }}
+		                    <td>{{ form.password }}
 		                       <i>[ At least 6 characters, all characters are allowed ]</i>
 		                       <br/>{{ form.password.errors }}
 		                       </td>
 		                </tr>
 		                <tr>
 		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
-		                    <td style="width:300px;">{{ form.confirm_password }}
+		                    <td>{{ form.confirm_password }}
 		                        <i>[ At least 6 characters, all characters are allowed ]</i>
 		                        <br/>{{ form.confirm_password.errors }}
 		                    </td>
@@ -128,57 +128,57 @@
 	                {% endif %}
 	                <tr>
                         <td class="head required" nowrap="nowrap"><b>Institution</b></td>
-                        <td class="long" style="width:300px;">{{ form.institution }} {{ form.institution.errors }}</td>
+                        <td>{{ form.institution }} {{ form.institution.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Department</td>
-                        <td class="long" style="width:300px;">{{ form.department }} {{ form.department.errors }}</td>
+                        <td class="long">{{ form.department }} {{ form.department.errors }}</td>
                     </tr>
                     <tr>
                         <td class="head required" nowrap="nowrap"><b>City</b></td>
-                        <td class="long" style="width:300px;">{{ form.city }} {{ form.city.errors }}</td>
+                        <td class="long">{{ form.city }} {{ form.city.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">State</td>
-                        <td class="long" style="width:300px;">
+                        <td>
                             <div id="stateAutoComplete">
                             {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}
                         </td>
                     </tr>
                     <tr>
                         <td class="head required" nowrap="nowrap"><b>Country</b></td>
-                        <td class="long" style="width:300px;">
+                        <td>
                             <div id="countryAutoComplete">
                             {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}
                         </td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Keywords</td>
-                        <td class="long" style="width:300px;">
+                        <td>
                         A short list of science fields you are involved with (60 characters maximum).
                         <br/>Example: Software Engineering, Grid Computing, Climate Change.
                         <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Statement</td>
-                        <td class="long">
+                        <td>
                         A short paragraph describing your professional interests (1000 characters maximum).
                         <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Subscribe to COG Email List ?</td>
-                        <td class="long">{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
+                        <td>{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Do not list me among project members</td>
-                        <td class="long">{{ form.private }} {{ form.private.errors }}</td>
+                        <td>{{ form.private }} {{ form.private.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Picture
                         <br/>(Maximum Size: 1MB)
                         <br/>(Format: 'jpg', 'png', or 'gif')
                         </td>
-                        <td class="long">
+                        <td>
                         <table>
                         	<tr>
                         	<td>

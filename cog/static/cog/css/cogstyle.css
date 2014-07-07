@@ -119,11 +119,11 @@ font: inherit
 
 /* force IE to center the content in the body*/
 .ie6 .ie7 .ie8 .ie9 .ie10 body {
-        margin-right: auto; 
-	margin-left: auto;
-        margin-top: 0px;
+        margin-right:  auto; 
+	margin-left:   auto;
+        margin-top:    0px;
 	margin-bottom: 0px;
-        text-align:center;
+        text-align:    center;
 	
 /* debug */
         /*background: red;*/
@@ -187,12 +187,12 @@ hr {
 	margin-top: 4px;
 }
 /*force IE to behave the same as other browsers */
-.ie6 .ie7 .ie8 .ie9 .ie10 hr{
-        background:#358C92;
-	border:none;
-	height:1px;
+.ie9 hr{
+        background:   #358C92;
+	border:       none;
+	height:        1px;
 	margin-bottom: 4px;
-	margin-top: 4px;
+	margin-top:    4px;
 }
 
 
@@ -405,6 +405,12 @@ BEGIN FORM ELEMENTS
 * NAME: text input
 * SCOPE: the current form
 ***************/
+.ie9 input[type=text],input[type=url] {
+width:300px;
+}
+
+
+
 input[type=text] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
