@@ -211,6 +211,8 @@ a:link, a:visited {
 a:hover {
         /* only change the style of a link while a user is hovering over it */
 	color: #036;
+	color: #358C92; /*dark teal */
+	text-decoration: none;
 }
 
 
