@@ -468,7 +468,10 @@ strong {
 }
 
 .required {
-	font-weight: bold;
+	font-weight: bold; /* = 700 */
+}
+ie9 .required {
+        font-weight: 500;
 }
 
 .optional {
