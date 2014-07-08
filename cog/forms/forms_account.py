@@ -70,21 +70,6 @@ class UsernameReminderForm(Form):
 
         return self.cleaned_data
     
-# Must subclass ModelChoiceFeild to provide custom label for 'select' widget
-class SiteModelChoiceField(ModelChoiceField):
-    
-    def label_from_instance(self, obj):
-        return obj.name
-    
-class SiteChangeForm(Form):
-    
-    # TODO: sub-select sites by user openid
-    
-    site = SiteModelChoiceField(queryset=Site.objects.all(), empty_label=None)
-    
-    def __init__(self, user, *args,**kwargs):
-        super(SiteChangeForm, self ).__init__(*args,**kwargs)
-        self.user = user
 
 class PasswordChangeForm(Form):
 
