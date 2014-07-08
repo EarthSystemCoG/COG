@@ -49,3 +49,5 @@ admin.site.register(Lock, admin.ModelAdmin)
 admin.site.register(ProjectTag, admin.ModelAdmin)
 
 admin.site.register(UserProfile, admin.ModelAdmin)
+
+admin.site.register(PeerSite, admin.ModelAdmin)

@@ -54,20 +54,6 @@ class SiteManager(object):
         '''Returns True if the configuration file contains the named section.'''
 
         return self.config.has_section(section)
-
-    def getPeers(self):
-        '''Returns a list of peer site URLs.
-           Will replace the '|' with the ':' character for all URLs.
-        '''
-        
-        peers = []
-        if self.hasConfig('peers'):
-            for option in self.config.options('peers'):
-                # remove last '/'
-                if option[-1]=='/':
-                    option = option[0:-1]
-                peers.append( option.replace('|',':') )
-        return peers
     
 siteManager = SiteManager()
             
