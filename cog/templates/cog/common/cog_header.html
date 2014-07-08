@@ -1,243 +1,45 @@
-<!-- Header style -->
-<style type="text/css">
-
-#header {
-    background: #FFFFFF;
-    color: #ffc;
-    overflow: hidden;
-    height: 85px;
-    margin: 0px;
-    /* margin-top: 10px; */
-    padding-top: 0px;
-    display:block;
-}
-
-/* note: the sum of the heights of user_menu, its margin-bottom, and right_logo must equal the height of right_header */
-#user_menu {
-    margin-top: 0px;
-    padding-top:2px;
-    padding-bottom:0px;
-    /* padding-right: 10px; padding-left: 10px; */
-    height: 8px;
-    /* margin-bottom:8px; */
-    font-size: 12px;
-    color: #333;
-    float: right;
-    display:block;
-}
-
-#project_header {
-
-    float: left;
-    background: #FFFFFF; 
-    margin-top: 0px;
-    height:75px; 
-    padding-top: 0px;
-    padding-bottom: 5px;
-
-	color: #333;
-    font-weight: bold;
-	font-style: italic;
-	font-size: 12pt;
-	text-align: left;
-	vertical-align: bottom;
-
-}
-
-#right_logo {
-    float:right;
-    background: #FFFFFF; 
-    margin-top: 8px;
-    height: 75px; 
-    padding-bottom:5px; 
-    padding-top: 14px; 
-}
-
-#right_sentence {
-	margin-top:35px;
-	font-weight: bold;
-	font-style: italic;
-	font-size: 10pt;
-	text-align: left;
-	color: #333;
-	float:right;
-}
-
-#right_logo a:link, #right_logo a:visited {
-    color: #666;
-}
-
-/* TOP NAV */
-.top_nav {
-    width: 100%;
-    height: 20px;
-    margin: 0 auto;
-    padding: 0px;
-    /* padding-top: 2px; */
-    /* COG STYLE: TOP NAV BACKGROUND COLOR */
-    background: #FFFFFF;
-    /*background: #CC3300;*/
-    /*background: #84000;*/
-    color: #FFFFFF;
-    font-size: 9pt;
- 	font-weight: bold;
-    /* font-family: Arial, Helvetica, sans-serif;  */
-    font-style: normal;
-}
-
-#top_nav_left {
-	padding-top: 2px;
-	padding-left: 6px;
-	width: 100%;
-	background: #358C92;
-	float:left;
-}
-
-#top_subnav_left {
-	padding-top: 2px;
-	padding-left: 6px;
-	width: 100%;
-	background: #B9E0E3;
-	float:left;
-}
-
-#top_subnav_left a:link, #top_subnav_left a:visited {
-    color: #666;
-}
-
-
-#top_nav_right {
-	width: 97%;
-	padding-top: 2px;
-	padding-left: 6px;
-	text-align: right;
-	/* background: #FCE79F; */
-	float: right;
-}
-
-#top_subnav {
-    width: 100%;
-    height: 20px;
-    margin: 0 auto;
-    padding: 0px;
-    /* padding-top: 2px; */
-    /* COG STYLE: TOP NAV BACKGROUND COLOR */
-    background: #FFFFFF;
-    /*background: #CC3300;*/
-    /*background: #84000;*/
-    color: #FFFFFF;
-    font-size: 9pt;
- 	font-weight: bold;
-    /* font-family: Arial, Helvetica, sans-serif;  */
-    font-style: normal;
-}
-
-#top_subnav_right {
-	width: 97%;
-	padding-top: 2px;
-	padding-left: 6px;
-	text-align: center;
-	/* background: #FCE79F; */
-	float: center;
-	color: #666;
-}
-
-.top_nav ul {
-    margin: 0;
-    padding: 0px 0px 0px 0px;
-    list-style: none;
-    line-height: normal;
-}
-
-.top_nav li {
-    float: left;
-    height: 20px;
-}
-
-.top_nav a {
-    display: block;
-    margin-right: 3px;    
-    /* COG STYLE: TOP NAV BAR TEXT */
-    text-decoration: none;   
-    /* padding: top-right-bottom-left */
-    padding: 2px 6px 6px 6px;
-    font-weight: bold;
-    color: #FFFFFF;
-    border: none;
-}
-
-#top_nav_right a {
-	color: #000000;
-	/* font-weight: bold; */
-}
-
-.top_nav a:hover {
-    /* background: #FFFFFF; */
-    text-decoration: underline;
-    /* color: 417690; */
-}
-
-#top_subnav_right a {
-	display: inline;
-	color: #358C92;
-	font-weight: normal;
-	padding: 0px;
-	margin: 0px;
-	text-align: center;
-	font-size: 8.5pt;
-}
-
-</style>
-
 {% load cog_utils %}
+<!--cog-utils conttains the full page "span-24 last-->
+<!-- full page -->
+<div class="span-24 last">
+   <div id="header">
+      <div id="user_menu">
+         <!--load top-right user menut from cog/common/_user_menu.html-->
+	 {% include 'cog/common/_user_menu.html' %}
+      </div>
 	
-<div id="header">
-
-	<!-- full page -->
-	<div class="span-24 last">
-		<div id="user_menu">
-			{% include 'cog/common/_user_menu.html' %}
-		</div>
-	</div>
-
-	<!-- sidebar and center -->
-	<div class="span-17">
-		<div id="project_header">
-		
-	    	{% if project.logo %}
+	<!--<div class="span-17">-->
+	        <!--project title or uploaded project logo-->
+	    	    {% if project.logo %}
+	  		<div id="project_logo">
 	    		<!-- project logo -->
 	    		{% if project.logo_url %}
 	    			<a href="{{ project.logo_url }}">
-	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo"/>
+	    				<img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/>
 	    			</a>
 	    		{% else %}
-	    			<a href="{% url 'project_home' project.short_name|lower %}">
-	    				<img src="{{ project.logo.url }}" height="70px" alt="{{ project.short_name }} logo" />
+	    			<a href="{% url 'project_home' project.short_name|lower %}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo" />
 	    			</a>
 	    		{% endif %}
+	    	</div>
+	    	     {% else %}
 	    	
-	    	{% else %}
-	    	
-	    		<!-- project title -->
-                        <div style="position:absolute; bottom:50px; left: 2px; width: 700px; ">
-                            <h1 style="font-size: 18pt;">{{ project.long_name|capfirst }}</h1>
-                        </div>
+	    	            <!-- project title -->
+                            <div id="project_title">{{ project.long_name|capfirst }}</div>
 	    		
-	    	{% endif %}      
-			
-			
-		</div>
-	</div>
+	    	      {% endif %}      
+	        
+	<!--</div>-->
 	
-	<!-- right column -->
-	<div class="span-7 last">		
-		<div id="right_logo">
-	        <a href="{% url 'project_home' 'cog'%}"><img src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" height="48px" alt="Earth System CoG logo"/></a>
+	<!-- cog logo -->
+	<!--<div class="span-7 last">	-->	
+            <div id="right_cog_logo">
+	        <a href="{% url 'project_home' 'cog'%}"><img class="cog_logo" src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" alt="Earth System CoG logo"/></a>
 	    </div>
-	</div>
-	
+	<!--</div>-->
 </div>
-	    
+</div>
+<div class="span-24 last">	    
 <!-- top navigation bar -->
 <div class="top_nav">
 	<div class="span-19">

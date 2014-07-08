@@ -1,12 +1,13 @@
 <!-- Template page used to create a user account -->
+<!--LOCATION: /cog/templates/cog/account/user_form.html-->
 {% extends "cog/common/layout_center.html" %}
 
 {% load cog_utils %}
 
 {% block extrahead %}
 
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
-	<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
+	<!--<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css"/>-->
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
@@ -23,6 +24,9 @@
             padding-bottom: 8px;
         }
     </style>
+     <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+     <!-- loading CoG-specific styles. Needs to be last -->
+     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
 
     {% include 'cog/account/_countries.html' %}
     {% include 'cog/account/_states.html' %}
@@ -52,10 +56,12 @@
 {% endblock %}
 
 {% block main %}
-
-<div class="prepend-3 span-18">
+<!--why is this not span-24? Going across the entire page?-->
+<!--<div class="prepend-3 span-18">-->
+  <div class="prepend-1 span-22">
 
     <h2>{{ mytitle }}</h2>
+    <p>Required fields are in <b>bold</b>. The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .</p>
 
     <!-- display extra message if available -->
 	{% if request.GET.message %}
@@ -72,28 +78,26 @@
 	            {% csrf_token %}
 	            {{ formset1.management_form }}
 	            {{ formset2.management_form }}
+	           <!--width specified for IE, which does not accept
+	            width=99% as listed in the CSS for long-->
 
 	            <table>
 	                <tr>
-	                    <td class="head required" nowrap="nowrap">First Name</td>
-	                    <td class="long">{{ form.first_name }} {{ form.first_name.errors }}</td>
+	                    <td class="required" nowrap="nowrap">First Name</td>
+	                    <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
 	                </tr>
 	                <tr>
-	                    <td class="head required" nowrap="nowrap"><b>Last Name</b></td>
-	                    <td class="long">{{ form.last_name }} {{ form.last_name.errors }}</td>
+	                    <td class="required" nowrap="nowrap">Last Name</td>
+	                    <td >{{ form.last_name }} {{ form.last_name.errors }}</td>
 	                </tr>
 	                <tr>
-	                    <td class="head required" nowrap="nowrap"><b>Email</b></td>
-	                    <td class="long">{{ form.email }} {{ form.email.errors }}</td>
+	                    <td class="required" nowrap="nowrap">Email</td>
+	                    <td>{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
 	                <tr>
-	                    <td class="head required" nowrap="nowrap"><b>User Name</b></td>
+	                    <td class="required" nowrap="nowrap">User Name</td>
 	                    <td>{{ form.username }}
-	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i>
-	                        <br />{{ form.username.errors }}
-	                    </td>
-	                    <td colspan="2">
-
+	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br/>{{ form.username.errors }}
 	                    </td>
 	                </tr>
 
@@ -110,14 +114,14 @@
 	                {% else %}
 		                <!-- otherwise, the user must submit a password -->
 		                <tr>
-		                    <td class="head required" nowrap="nowrap"><b>Password</b></td>
+		                    <td class="required" nowrap="nowrap">Password</td>
 		                    <td>{{ form.password }}
 		                       <i>[ At least 6 characters, all characters are allowed ]</i>
 		                       <br/>{{ form.password.errors }}
 		                       </td>
 		                </tr>
 		                <tr>
-		                    <td class="head required" nowrap="nowrap"><b>Confirm Password</b></td>
+		                    <td class="required" nowrap="nowrap">Confirm Password</td>
 		                    <td>{{ form.confirm_password }}
 		                        <i>[ At least 6 characters, all characters are allowed ]</i>
 		                        <br/>{{ form.confirm_password.errors }}
@@ -125,140 +129,135 @@
 		                </tr>
 	                {% endif %}
 	                <tr>
-                        <td class="head required" nowrap="nowrap"><b>Institution</b></td>
-                        <td class="long">{{ form.institution }} {{ form.institution.errors }}</td>
+                        <td class="required" nowrap="nowrap">Institution</td>
+                        <td>{{ form.institution }} {{ form.institution.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Department</td>
                         <td class="long">{{ form.department }} {{ form.department.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="head required" nowrap="nowrap"><b>City</b></td>
+                        <td class="required" nowrap="nowrap">City</td>
                         <td class="long">{{ form.city }} {{ form.city.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">State</td>
-                        <td class="long">
+                        <td>
                             <div id="stateAutoComplete">
                             {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}
                         </td>
                     </tr>
                     <tr>
-                        <td class="head required" nowrap="nowrap"><b>Country</b></td>
-                        <td class="long">
+                        <td class="required" nowrap="nowrap">Country</td>
+                        <td>
                             <div id="countryAutoComplete">
                             {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}
                         </td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Keywords</td>
-                        <td class="long">
+                        <td>
                         A short list of science fields you are involved with (60 characters maximum).
                         <br/>Example: Software Engineering, Grid Computing, Climate Change.
                         <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Statement</td>
-                        <td class="long">
+                        <td>
                         A short paragraph describing your professional interests (1000 characters maximum).
                         <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Subscribe to COG Email List ?</td>
-                        <td class="long">{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
+                        <td>{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Do not list me among project members</td>
-                        <td class="long">{{ form.private }} {{ form.private.errors }}</td>
+                        <td>{{ form.private }} {{ form.private.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Picture
                         <br/>(Maximum Size: 1MB)
                         <br/>(Format: 'jpg', 'png', or 'gif')
                         </td>
-                        <td class="long">
-                        	<table>
-                        		<tr>
-                        			<td>
-                        				<img src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
-                        			</td>
-                        			<td align="left">
-			                        	<div style="margin-top:2px">
-			                        		{% if not 'unknown' in form.instance|getImage %}
-			                        			{{ form.delete_image }} Delete current picture ?
-			                        		{% endif %}
-			                        		<br/>
-			                        		{{ form.image }}
-			                        		&nbsp;{{ form.image.errors }}
-			                        	</div>
-                        			</td>
-                        		</tr>
-                        	</table>
+                        <td>
+                        <table>
+                        	<tr>
+                        	<td>
+                        	<img src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
+                        	</td>
+                        	<td align="left">
+			              <div style="margin-top:2px">
+			                  {% if not 'unknown' in form.instance|getImage %}
+			                      {{ form.delete_image }} Delete current picture ?
+			                  {% endif %}
+			                  <br/>
+			                  {{ form.image }}
+			                  &nbsp;{{ form.image.errors }}
+			               </div>
+                                  </td>
+                        	</tr>
+                        </table>
                         </td>
-                    </tr>
+                        </tr>
               </table>
 
 
               <table>
-
-              		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
+             		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
               		{% if form.instance.id %}
               			<tr>
-              				<td colspan="2">Optional ESGF OpenID(s) associated with this COG user account:</td>
+              			<td colspan="3">Optional ESGF OpenID(s) associated with this COG user account:</td>
               			</tr>
 	                    {% for openidform in formset2 %}
-			       			{{ openidform.id }}
-				        	<tr>
-				        		<td colspan="2" nowrap="nowrap">
-				        			<span>OpenID: &nbsp; <b>URL</b> {{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</span>
-				        		</td>
-				        		<td>
-				        			&nbsp; {{ openidform.DELETE }} Delete ?
-				        		</td>
-					        </tr>
-			    		{% endfor %}
-		    		{% endif %}
-
-		    		<!-- URLs -->
+			       	{{ openidform.id }}
+				<tr>
+				<td style="width:80px;"><b>OpenID URL:</b></td>
+				<td style="width:500px;">{{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</td>
+				<td style="vertical-align:bottom;">{{openidform.DELETE }} Delete ? </td>
+                                </tr>
+			    {% endfor %}
+		    	{% endif %}
+             </table>
+	     <!--this section is its own table in order to make the td
+             		widths different from the one above-->
+	     <table class="odd-color">
+				
+		    	<!-- URLs -->
 		    		<tr>
-              			<td colspan="2">Optional web sites associated with this COG user account:</td>
-              		</tr>
-                    {% for urlform in formset1 %}
-		       			{{ urlform.id }}
-			        	<tr>
-			        		<td nowrap="nowrap">
-			        			<span>Web Site: <b>URL</b> {{ urlform.url }} {{ urlform.url.errors }}</span>
-			        		</td>
-			        		<td>
-			        			<b>Title</b> {{ urlform.name }} ('Home Page', 'My Blog', ...) {{ urlform.name.errors }}
-			        		</td>
-			        		<td>
-			        			&nbsp; {{ urlform.DELETE }} Delete ?
-			        		</td>
-				        </tr>
+              			<td colspan="6">Optional web sites
+		    		associated with this COG user account:
+		    		('Home Page', 'My Blog', ...)</td>
+              		        </tr>
+                                {% for urlform in formset1 %}
+		       		   {{ urlform.id }}
+			           <tr>
+			           <td style="width:60px;"><b>Web URL:</b></td>
+				   <td style="width:300px;">{{ urlform.url }} {{ urlform.url.errors }}</td>
+			           <td style="width:30px;"><b>Title:</b></td>
+				   <td style="width:200px;">{{ urlform.name }} {{ urlform.name.errors }}</td>
+			           <td style="vertical-align:bottom;">
+			              {{ urlform.DELETE }} Delete ?
+			          </td>
+				  </tr>
 		    		{% endfor %}
 
   	            </table>
 
-	            <div style="text-align:center">
+	            <div style="text-align:right;">
 	                <hr/>
-	                Required fields are in <b>bold</b>.<br/>
 	                {% if request.user.is_anonymous %}
 	                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
 	                {% else %}
 	                   <!-- prevent user with non-complete data to hit 'cancel' button -->
 	                   {% if request.user|isValidUser %}
-	                   		<input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
+	                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
 	                   {% endif %}
 	                {% endif %}
-	                &nbsp; &nbsp;
-	                The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ .
-	                &nbsp; &nbsp;
 	                <input type="submit" value="Submit" />
 	            </div>
 
 	        </form>
-			&nbsp;
 	    </div>
     </div>
 </div>

@@ -7,8 +7,10 @@
     {% include 'cog/common/yui.html' %} 
     {% include 'cog/common/yui_panels.html' %}    
 
-    {% include 'cog/common/cog_js.html' %} 
-    {% include 'cog/common/mystyle.html' %} 
+    {% include 'cog/common/cog_js.html' %}
+{% comment %}
+    {% include 'cog/common/mystyle.html' %}
+{% endcomment %}
     
     {% include 'cog/common/cim.html' %} 
     
@@ -17,6 +19,9 @@
     {% include 'cog/common/google_analytics.html' %}
 
 {% endblock %}
+
+
+
 
 {% block header %}
     {% include 'cog/common/cog_header.html' %} 

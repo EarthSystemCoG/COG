@@ -31,21 +31,6 @@
 
 ******************************/
 
-/*****************************
-BEGIN CONDITIONALS FOR INTERNET EXPLORER
-******************************/
-/* this creates a special HTML class for each version
-* of Internet Explorer. We will use these classes further
-* down in every instruction that has to be done for IE */
-
-<!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
-<!--[if IE 7 ]> <html class="ie7"> <![endif]-->
-<!--[if IE 8 ]> <html class="ie8"> <![endif]-->
-<!--[if IE 9 ]> <html class="ie9"> <![endif]-->
-<!--[if IE 10 ]> <html class="ie10"> <![endif]-->
-<!--[if (gt IE 10)|!(IE)]><!--> <html> <!--<![endif]--> /* if > IE10 or not IE at all, set no class */
-
-
 /******************************
 BEGIN MEDIA-SPECIFIC STYLES
 ******************************/
@@ -90,37 +75,54 @@ html {
 * SCOPE: the page body content
 * DESCRIPTION: center the body, specify the font, font-color, and background color
 ***************/
-body {
-<<<<<<< HEAD
-	padding:    0px;       /*remove all padding in the box model*/
-	font-size:  9pt;       /*set minimum font size for the entire systme*/
-	text-align: left;      /*default alignment is left-justified */
-	font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans","Verdana", "Arial", "sans-serif";  /*sjm, put quotes around fonts*/
-	color:      #333;     /*dark grey text*/
-	background: #FFFFFF; /*white background*/
+/*****************************
+BEGIN DJANGO and YUI CSS RESETS
+/*Django contains numerious CSS files that set many properties not 
+explicly covered in the areas below. These are reclaimed here so that we 
+can completly control in one file how things look*/
+body{
 
-=======
-        margin-right: auto !important; margin-left: auto !important;
-        margin-top: 0 !important; margin-bottom: 0 !important;
-	padding: 0;
-	font-size: 9pt;
-	font-family: "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans",
-		Verdana, Arial, sans-serif;
-	color: #333;
-	background: #FFFFFF;
->>>>>>> fc77ee43573708e31b2a062f3ca37da3818ad0fc
+    /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
+    /*font: 13px/1.231 arial,helvetica,clean,sans-serif; */ /*fonts-min.css*/
+    /* px to pt ratio = 1.33, so 13px = 9.77pt */
+    font: normal normal normal 13px/1.231 Arial,sans-serif; 
+
+    color:      #333;         /* text color...dark grey*/
+    text-align: left;         /*default alignment is left-justified */
+
+    background: #FFFFFF;      /*white background*/
+    padding:      0px;       /*remove all padding in the box model*/
+    margin:       0px;       /*remove all margins in the box model */
+    margin-right: auto !important;
+    margin-left: auto  !important;
+    vertical-align: baseline;
 }
 
+/*p, h1,h2,h3,h4,h5,h6, table, th, tr, td, div, input{
+font: inherit
+}
+*/
 
 /* force IE to center the content in the body*/
-.ie6 .ie7 .ie8 .ie9 .ie10 body {
-        margin-right: auto; 
-	margin-left: auto;
-        margin-top: 0px;
+.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body {
+        margin-right:  auto; 
+	margin-left:   auto;
+        margin-top:    0px;
 	margin-bottom: 0px;
-        text-align:center;
-/* debug */
-        background: red; 
+        text-align:    left;
+	
+/* debug: are the IE conditionals even working? */
+        /*background-color: pink;*/
+}
+
+img{
+        border:none;
+}
+
+.ie6 ul, ie7 ul, ie8 ul, ie9 ul, ie10 ul{
+     margin:              0px;
+     padding:             0px;
+     list-style-position: inside;
 }
 
 /***************
@@ -129,9 +131,14 @@ body {
 * DESCRIPTION: specifies the fonts used by successive headers in the CoG wiki
 ***************/
 h1 {
-	color: #666;
-	font-size: 16pt;
-	font-weight: bold;
+	color:         #666;
+	font-size:     16pt;
+	font-weight:   bold;
+        line-height:   1;
+        margin:        0px;   /* we should not have to set these here */
+        padding:       0px;  /* we should not have to set these here */
+        margin-bottom: 10px;
+        text-align:    left;
 }
 h2 {
 	color: #666;
@@ -167,10 +174,20 @@ h6 {
 * SCOPE: the page body content
 ***************/
 hr {
-	background-color: #CCC;
+	/*background-color: #CCC; light-gray*/
+        background-color:  #358C92; /* dark teal */
 	margin-bottom: 4px;
 	margin-top: 4px;
 }
+/*force IE to behave the same as other browsers */
+.ie9 hr {
+        background:   #358C92;
+	border:       none;
+	height:        1px;
+	margin-bottom: 4px;
+	margin-top:    4px;
+}
+
 
 
 /***************
@@ -179,12 +196,16 @@ hr {
 * DESCRIPTION: control how links are displayed
 ***************/
 a:link, a:visited {
-        /* keep the same style for links regardless of whether they've been visited */
-	color: #5b80b2;	text-decoration: none;
+    /* keep the same style for links regardless of whether they've been visited */
+    color: #5b80b2;	/* blue */
+    color: #358C92;    /* dark teal */
+    text-decoration: none;
 }
 a:hover {
         /* only change the style of a link while a user is hovering over it */
 	color: #036;
+	color: #358C92; /*dark teal */
+	text-decoration: none;
 }
 
 
@@ -220,7 +241,8 @@ table {
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
 tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #B9E0E3;
+	background: #B9E0E3;/*light-teal */
+        background-color: #eee /*light-gray */
 }
 
 /* additional styles were added to support tables swap the order of alternating row colors; */
@@ -231,30 +253,32 @@ tbody tr:nth-child(even) td, tbody tr.even td {
 /* style for cells in an even row */
 /* style for cells in an even row in an "even-first" colored table */
 table.even-color tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #B9E0E3;
+	background: #B9E0E3; /*light-teal */
+        background-color: #eee /*light-gray */
 }
 
 /* style for cells in an odd row */
 /* style for cells in an odd row in an "even-first" colored table */
 table.even-color tbody tr:nth-child(odd) td, tbody tr.odd td {
-	background: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
 /* style for cells in an odd row */
 /* style for cells in an odd row in an "odd-first" colored table */
 table.odd-color tbody tr:nth-child(odd) td, tbody tr.odd td {
-	background: #B9E0E3;
+	background: #B9E0E3;/*light-teal */
+        background-color: #eee /*light-gray */
 }
 
 /* style for cells in an even row */
 /* style for cells in an even row in an "odd-first" colored table */
 table.odd-color tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #FFFFFF;
+	background-color: #FFFFFF;
 }
 
 /* style for all cells in a non-colored (ie: no alternating color) table */
 table.no-color td {
-	background: #FFFFFF !important;
+	background-color: #FFFFFF !important;
 }
 
 /***************
@@ -264,8 +288,11 @@ table.no-color td {
 ***************/
 
 /* table data and table headers have the same size */
-td,th {
-    font-size: 9pt; padding: 5px;
+td, th {
+    margin:0px;
+    font-size: 9pt; 
+    padding: 4px;
+    vertical-align: top;
 }
 
 /* but table headers are bold with a cyan background */
@@ -283,8 +310,8 @@ th {
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
 
 .long {
-	width: 100%;
-	text-align: left;
+	width:          99%;
+	text-align:     left;
 	vertical-align: top;
 }
 
@@ -348,21 +375,6 @@ END TABLE ELEMENTS
 /******************************
 BEGIN FORM ELEMENTS
 ******************************/
-
-/***************
-* NAME: textarea
-* SCOPE: the current form
-***************/
-textarea {
-        /* display scrollbars as needed */
-	overflow: auto;
-	border: 1px solid #417690;
-	margin: 1px;
-        /* TODO: why is this not 100%? */
-	width: 99%;
-}
-
-
 /***************
 * NAME: all buttons
 * SCOPE: the current form
@@ -371,11 +383,14 @@ textarea {
 .button,input[type=submit],input[type=button],input[type=reset],input[type=file],.submit-row input {
         /* force a white background by combining a color with a white image */
         /* TODO: why is this forcing needed here, but not on other form elements? */
-	background: white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
-	padding: 3px 5px;
-	color: black;
-	border: 1px solid #bbb;
+	background:   white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+	padding:      3px 5px;
+	color:        black;
+	border:       1px solid #bbb;
 	border-color: #666666;
+	margin-bottom:5px;
+	margin-right: 2px;
+	margin-top:   5px;
 }
 
 
@@ -383,16 +398,57 @@ textarea {
 * NAME: text input
 * SCOPE: the current form
 ***************/
+
+
+
 input[type=text] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
 	color: #5D781D;
+	width:99%; /* same width as all other types of inputs */
+	padding-left: 2px; /* space before text starts */
+	height:15px;
+}
+
+input[type=password] {
+	border: 1px solid #666666;
+	background: #FFFFFF;
+	color: #5D781D;
+        width:99%; /* same width as all other types of inputs */
+        padding-left: 2px; /* space before text starts */
+	height:15px;
+}
+
+input[type=url] {
+        border: 1px solid #666666;
+	background: #FFFFFF;
+	color: #5D781D;
+        width:99%; /* same width as all other types of inputs */
+        padding-left: 2px; /* space before text starts */
+	height:15px;
 }
 
 /* allow for text inputs that span their entire container */
 .long input[type=text] {
-	width: 100%;
+	width: 99%; /* same width as all other inputs and features that use .long (e.g. table cells) */
 }
+
+textarea {
+        /* display scrollbars as needed */
+	overflow: auto;
+	border:   1px solid #666666;
+	width:    99%; /* not 100% because it provides a nice margin inside a table */
+        padding-left: 2px;/* space before text starts */
+}
+
+.required {
+	font-weight: bold; /* = 700 */
+}
+
+.optional {
+	font-weight: normal;
+}
+
 
 /******************************
 END FORM ELEMENTS
@@ -410,14 +466,6 @@ small {
 
 strong {
 	font-weight: bold;
-}
-
-.required {
-	font-weight: bold;
-}
-
-.optional {
-	font-weight: normal;
 }
 
 /* prevent the wiki editor from resizing horizontally */
@@ -491,8 +539,10 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	margin: 0px;
 }
 
+/* this is the upper section of the left nav bar */
 .vertical_menu table td {
-	font-size: 8pt;
+	/*font-size: 8pt;*/
+	font-size: 8pt; /* once we remove fonts-min from the left template, this should inherit from body  needs to be the same as <li> below*/
 	text-align: left;
 	vertical-align: top;
         padding: 1px 0px 0px 1px;
@@ -520,20 +570,25 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	border-bottom: 1px solid #358C92;
 }
 
+/*lower section of the left nav bar */
 .vertical_menu ul {
-	margin: 0;
-	padding-left: 4px;
+	margin:         0px;
+	padding-left:   4px;
 	padding-bottom: 0px;
-	list-style: none;
+	list-style:     none;
 }
+
+
+
+
 
 .vertical_menu li {
         /* line-height tweaked to match project browser elements */
 	line-height: 14pt;
-	padding: 0px;
-	margin: 0px;
-	list-style: none;
-	font-size: 8pt;
+	padding:     0px;
+	margin:      0px;
+	list-style:  none;
+	font-size:   8pt; /* needs to be the same as the upper section which is a table */
 }
 
 .vertical_menu li li {
@@ -565,7 +620,6 @@ BEGIN NEWS WIDGET
 	margin-bottom: 12px;
         margin-top: 0px;
 	background: #FFFFFF;
-	float: center;
 }
 
 .news_header {
@@ -646,17 +700,19 @@ BEGIN SEARCH WIDGET
 }
 
 .instruction-box {
-	background: #e5ecf9;
-	padding: 5px; #
-	margin: 5px;
+        background: #3e5ecf;  /* light-blue */	
+        background: #B9E0E3; /* dark-teal */
+	padding: 5px; 
+	/* margin: 5px; */
 	border: 1px solid #417690;
 	font-weight: bold;
 	text-align: center;
 }
 
 .message-box {
-	background: #f4f379;
-	padding: 5px; #
+	background: #f4f379; /*bright yellow */
+        background: #FAC24A; /* dark yellow*/
+	padding: 5px; 
 	margin: 5px;
 	border: 1px solid #417690;
 	font-weight: bold;
@@ -673,8 +729,9 @@ BEGIN SEARCH WIDGET
 
 /* prevent error styles from affecting error content w/in search widget */
 .error-box {
-	background: #f4f379;
-	padding: 5px; #
+	background: #f4f379; /*yellow??*/
+        background: #FAC24A; /* dark yellow*/
+	padding: 5px; 
 	margin: 5px;
 	border: 1px solid #417690;
 	font-weight: bold;
@@ -775,8 +832,7 @@ BEGIN PAGINATOR
 ***************/
 
 .pagination {
-    /* center the paginator controls */
-    float: center; text-align: center;
+    text-align: center;
 }
 
 /******************************
@@ -895,12 +951,13 @@ div.last ol {
     margin-left: 3px;
 }
 
-/* limit the maximum width of an uploaded image. */
+/* limit the maximum width the user profile image */
 .myimage {
-  width: 100%;
+  display:block; /* does this fix IE issue? */
+  /*width: 100%; */
   max-width: 200px;
   /* max-height: 200px; */
-  width: expression(this.width > 200 ? "200"+"px" : true);
+ /* width: expression(this.width > 200 ? "200"+"px" : true);*/
   /* height: expression(this.height > 200 ? "200"+"px" : true); */
   border: 1px solid #666666;
 }
@@ -918,16 +975,219 @@ END SPECIFIC CSS FIXES
 .mybox {
 	border: 1px solid #666666;
 	margin-bottom: 5px;
-	background: #FFFFFF;
-	float: center;
-}
+	background: #FFFFFF;}
 
 .header-gray {
 	border-bottom: 1px solid #666666;
 	margin-bottom: 0px;
 	background: #EEEEEE;
-	float: center;
 	text-align: left;
 	color: #666666;
 	font-size: 9pt;
+}
+
+/***********************************
+BEGIN HEADER STYLES
+************************************/
+#header {
+    overflow: hidden;
+    height: 85px;
+    /*color: #ffc; yellow*/
+    /*margin: 0px;*/
+    /* margin-top: 10px; */
+    /*padding-top: 0px;*/
+    /*display:block;*/
+    /* debug only... border: solid 2px yellow; */
+}
+
+/* note: the sum of the heights of user_menu, its margin-bottom, and right_logo must equal the height of right_header */
+#user_menu {
+    margin-top: 0px;
+    padding-top:2px;
+    padding-bottom:0px;
+    height: 8px;
+    font-size: 12px;
+    color: #333;
+    float: right;
+    display:block;
+    /* padding-right: 10px; padding-left: 10px; */
+    /* margin-bottom:8px; */
+}
+
+#project_logo{
+    position: absolute; bottom: 4px; left: 2px; /* must have same bottom as #cog_logo */
+    height:         70px; 
+    width:          300px; /* logos larger than this will have issues. May have to expand at some point */
+    /*float:          left;*/
+    /*margin-top:     0px;*/
+    /*padding-top:    0px;*/
+    /*clear: right;*/
+    /* debug only...border: solid 2px pink; */
+
+
+}
+/* The title and logo need to be aligned. Since different properties are used to place them */
+#project_title{
+    position: absolute; bottom: 4px; left: 2px;  /* needs to be identical to #project_logo */
+    font-weight:    bold;
+    font-style:     italic;
+    font-size:      18pt;
+    color:          #666;
+    vertical-align: bottom;
+    /* debug only ... border: solid 2px brown; */
+}
+
+#right_cog_logo {
+    position:absolute; bottom: 4px; right:0px; /* needs to have same bottom as #project_title or #project_logo */
+    height:         50px; 
+    padding-bottom: 0px;
+    margin-bottom:  0px;
+    width:          200px;
+    /* debug onlyu...border: solid 2px green;*/
+    /*float:         right;*/
+    /*margin-top:    38px;*/
+    /*padding-bottom:5px; */ 
+   }
+
+img.cog_logo{
+    height:48px;
+    float: right;
+}
+
+img.project_logo{
+    height:70px;
+}
+
+#right_sentence {
+	margin-top:35px;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 10pt;
+	text-align: left;
+	color: #333;
+	float:right;
+}
+
+#right_logo a:link, #right_logo a:visited {
+    color: #666;
+}
+
+/* TOP NAV */
+.top_nav {
+    width: 100%;
+    height: 20px;
+    margin: 0 auto;
+    padding: 0px;
+    /* padding-top: 2px; */
+    /* COG STYLE: TOP NAV BACKGROUND COLOR */
+    background: #FFFFFF;
+    /*background: #CC3300;*/
+    /*background: #84000;*/
+    color: #FFFFFF;
+    font-size: 9pt;
+    font-weight: bold;
+    /* font-family: Arial, Helvetica, sans-serif;  */
+    font-style: normal;
+}
+
+#top_nav_left {
+	padding-top: 2px;
+	padding-left: 6px;
+	width: 100%;
+	background: #358C92;
+	float:left;
+}
+
+#top_subnav_left {
+	padding-top: 2px;
+	padding-left: 6px;
+	width: 100%;
+	background-color: #B9E0E3;
+	float:left;
+}
+
+#top_subnav_left a:link, #top_subnav_left a:visited {
+    color: #666;
+}
+
+
+#top_nav_right {
+	width: 97%;
+	padding-top: 2px;
+	padding-left: 6px;
+	text-align: right;
+	background-color: #FAC24A; /*dark yellow*/
+	float: right;
+}
+
+#top_subnav {
+    width: 100%;
+    height: 20px;
+    margin: 0 auto;
+    padding: 0px;
+    /* padding-top: 2px; */
+    /* COG STYLE: TOP NAV BACKGROUND COLOR */
+    background: #FFFFFF;
+    /*background: #CC3300;*/
+    /*background: #84000;*/
+    color: #FFFFFF;
+    font-size: 9pt;
+    font-weight: bold;
+    /* font-family: Arial, Helvetica, sans-serif;  */
+    font-style: normal;
+}
+
+#top_subnav_right {
+	width: 97%;
+	padding-top: 2px;
+	padding-left: 6px;
+	text-align: center;
+	/* background: #FCE79F; */
+	color: #666;
+}
+
+
+.top_nav ul {
+    margin: 0px;
+    padding: 0px 0px 0px 0px;
+    list-style: none;
+    line-height: normal;
+}
+
+.top_nav li {
+    float: left;
+    height: 20px;
+}
+
+.top_nav a {
+    display: block;
+    margin-right: 3px;    
+    /* COG STYLE: TOP NAV BAR TEXT */
+    text-decoration: none;   
+    /* padding: top-right-bottom-left */
+    padding: 2px 6px 6px 6px;
+    font-weight: bold;
+    color: #FFFFFF;
+    border: none;
+}
+
+#top_nav_right a {
+	color: #000000;
+	/* font-weight: bold; */
+}
+
+.top_nav a:hover {
+    /* background: #FFFFFF; */
+    text-decoration: underline;
+    /* color: 417690; */
+}
+
+#top_subnav_right a {
+	display: inline;
+	color: #358C92;
+	font-weight: normal;
+	padding: 0px;
+	margin: 0px;
+	text-align: center;
+	font-size: 8.5pt;
 }

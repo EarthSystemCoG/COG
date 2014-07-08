@@ -1,5 +1,5 @@
 {% extends "cog/common/layout_sidebar_center.html" %}
-
+<!--LOCATION:/cog/templates/cog/project/about_us_form.html-->
 {% block main %}
 
 	{% load cog_utils %}
@@ -22,7 +22,7 @@
 			     <tr>
 			        <td nowrap="nowrap"><b>Description</b></td>
 			        <td class="long" colspan="2">
-			        	{{form.description.help_text}}.
+			            {{form.description.help_text}}
 			            {{ form.description }} 
 			            {{ form.description.errors }}
 			         </td>
