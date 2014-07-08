@@ -247,6 +247,10 @@ class Project(models.Model):
     def isLocal(self):
         return self.site == Site.objects.get_current()
     
+    def isRemoteAndDisabled(self):
+        '''Returns True if the project is NOT local and its remote site is disabled.'''
+        return not self.isLocal() and not self.site.peersite.enabled
+    
     # method to return an ordered list of the project predefined pages
     # the page URLs returned start with the project home page base URL
     def predefined_pages(self):

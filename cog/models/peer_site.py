@@ -10,7 +10,7 @@ from cog.models.constants import APPLICATION_LABEL
 
 class PeerSite(models.Model):
     
-    site = models.OneToOneField(Site, blank=False, null=False)
+    site = models.OneToOneField(Site, blank=False, null=False, related_name='peersite')
     enabled = models.BooleanField(default=False, null=False)
     
     class Meta:
