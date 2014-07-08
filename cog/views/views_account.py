@@ -192,7 +192,7 @@ def user_add(request):
                 subscribeUserToMailingList(user, request)
 
             # redirect to login page with special message
-            return HttpResponseRedirect(reverse('login')+"?message=user_add")
+            return HttpResponseRedirect(reverse('login')+"?message1=user_add")
 
         else:
             if not form.is_valid():
