@@ -400,7 +400,6 @@ BEGIN FORM ELEMENTS
 ***************/
 
 
-
 input[type=text] {
 	border: 1px solid #666666;
 	background: #FFFFFF;
@@ -556,18 +555,63 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 .vertical_menu tbody tr:nth-child(even) td,tbody tr.even td {
 	background: white;
 }
+/* These two items need to be the same except for the color */
+
+.right_widget_header {
+            margin:      0px;
+	    padding:     2px 5px 3px 5px;
+	    font-size:   9pt;
+	    text-align:  left;
+	    font-weight: bold;
+	    color:       #666;
+	    background-color: #FCE79F; /* dark yellow */
+
+}
+
+.left_widget_header {
+            margin:      0px;
+	    padding-top:   2px;
+	    padding-bottom:2px;
+	    padding-right: 5px;
+	    padding-left:  5px;
+	    font-size:     9pt;
+	    text-align:    left;
+	    font-weight:   bold;
+	    color:         #666;
+	    background-color: #B9E0E3; /*light teal*/
+	    border-top:       1px solid #358C92;
+	    border-bottom:    1px solid #358C92;
+
+}
+/*first section of the left nav bar is in dark teal */
+.left_upper_widget_header {
+            margin:           0px;
+            padding-top:      2px;
+	    padding-bottom:   3px;
+	    padding-right:    5px;
+	    padding-left:     5px;
+	    font-size:        9pt;
+	    text-align:       left;
+	    font-weight:      bold;
+	    color:            white;
+	    background-color: #358C92; /*dark teal*/
+	    border-top:       1px solid #358C92;
+	    border-bottom:    1px solid #358C92;
+
+}
+
 
 /* prevent body heading styles from affecting vertical_menu content */
 .vertical_menu h3 {
-	margin: 0;
-	padding: 2px 5px 3px 5px;
-	font-size: 9pt;
-	text-align: left;
+	margin:      0px;
+	padding:     2px 5px 3px 5px;
+	font-size:   9pt;
+	text-align:  left;
 	font-weight: bold;
+	color:       #666;
 	background-color: #B9E0E3;
-	color: #666;
-	border-top: 1px solid #358C92;
-	border-bottom: 1px solid #358C92;
+	border-top:       1px solid #358C92;
+	border-bottom:    1px solid #358C92;
 }
 
 /*lower section of the left nav bar */
@@ -753,6 +797,7 @@ BEGIN SEARCH WIDGET
 	color: #666;
 	display: block;
 }
+
 
 /******************************
 END SEARCH WIDGET

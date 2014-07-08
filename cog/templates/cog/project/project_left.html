@@ -8,9 +8,9 @@
 	    
 	    	<!-- topic bar -->
 	    	{% if index_item.topic == None %}
-	    		<h3 style="background-color:#358C92; color:#FFFFFF">{{ project.short_name }}</h3>
-	    	{% else %}
-	    		<h3>{{ index_item.topic.name }}</h3>
+                       <div class="left_upper_widget_header"> {{ project.short_name }}</div>
+                {% else %}
+	    		<div class="left_widget_header">{{ index_item.topic.name }}</div>
 	    	{% endif %}
 	    	
 	    	<!-- topic top-level pages -->
@@ -39,7 +39,7 @@
     <div class="vertical_menu">
     
        <!-- open access -->
-       <h3>Visitors</h3>
+       <div class="left_widget_header"> Visitors</div>
        <ul>
             <!-- <li><a href="{% url 'post_list' project.short_name.lower %}?type=blog" class="listlink">&nbsp;List All Blogs</a></li> -->
             <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li>
@@ -48,9 +48,9 @@
  
        <!-- access restricted to project members -->
        {% if user|hasUserPermission:project %}
-       <h3>Members</h3>
+       <div class="left_widget_header">Members</div>
        <ul>
-       		<li><a href="{% url 'news_add' project.short_name.lower %}" class="addlink">&nbsp;Publish News</a></li>
+       	    <li><a href="{% url 'news_add' project.short_name.lower %}" class="addlink">&nbsp;Publish News</a></li>
             <li><a href="{% url 'post_add' project.short_name.lower %}?type=page" class="addlink">&nbsp;Add Page</a></li>
             <!-- <li><a href="{% url 'post_add' project.short_name.lower %}?type=blog" class="addlink">&nbsp;Add Blog</a></li> -->
             <li><a href="{% url 'doc_add' project.short_name.lower %}" class="addlink">&nbsp;Add File</a></li>
@@ -60,7 +60,7 @@
     
        <!-- access restricted to project admins -->
        {% if user|hasAdminPermission:project %}
-       <h3>Administrators</h3>
+       <div class="left_widget_header">Administrators</div>
        <ul>                       
             <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
             <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
@@ -80,7 +80,7 @@
        
        <!-- access restricted to site adminstrators -->
        {% if user.is_staff %}
-       <h3>Site Administrators</h3>
+       <div class="left_widget_header">Site Administrators</div>
        <ul>
             <li><a href="{% url 'admin_index' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
             <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List System Users</a></li>                 
