@@ -22,7 +22,7 @@
 	<div style="text-align:center; font-weight:bold">Number of Items in this Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span></div>
 	
 	<!-- remote data carts -->
-	{% if datacarts.items.all|length > 0 %}
+	{% if datacarts.items|length > 0 %}
 		<div style="text-align:center">
 			Data Carts at other Sites: 
 			{% for openid, dc in datacarts.items %}
