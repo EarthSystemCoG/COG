@@ -1,28 +1,41 @@
-{% extends "cog/common/layout_center.html" %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 
-{% block header %}
-    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cog.css" />
-{% endblock %}
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        
+        <title>{% block head_title %} {{ title|removetags:"h2"|safe }} {% endblock %}</title>
+            
+        <!-- CSS for grid layout -->
+        <!-- <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/screen.css" type="text/css" media="screen, projection"/> -->
+        <!--<link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/reset.css" type="text/css" media="screen, projection"/>-->
+       <!--<link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/typography.css" type="text/css" media="screen, projection"/>-->
+        <!--<link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/print.css" type="text/css" media="print"/> -->
+        <!-- [if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen,projection"/><![endif] -->
+        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/grid.css" type="text/css" media="screen, projection"/>
 
-{% block body %}
+                
+        <!--  Local CSS -->
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cog.css" />
+	    
+   </head>
+<!--  LOCATION:/cog/templates/cog/index.html -->
+<body>
 
-<!-- START SPLASH PAGE -->
-
-<div class="span-24 last">
-
-	<div class="logo">
-		<table>
-			<tr>
-				<td style="width:150px;vertical-align:bottom;"><a href="/projects/cog"><img src = "{{STATIC_URL}}cog/img/cog_engineer_sm.png" alt="CoG logo"/></a></td>
-			</tr>
-		</table>
-	</div>
-
-	<hr class="top" />
+<div class="container">
+   <div class="span-24 last">
+      <div class="logo">
+         <table>
+		<tr>
+		<td style="width:150px;vertical-align:bottom;"><a href="/projects/cog"><img src = "{{STATIC_URL}}cog/img/cog_engineer_sm.png" alt="CoG logo"/></a></td>
+		</tr>
+	</table>
+      </div>
+      <hr class="top" />
+      <div class="main">
 	
-		<div class="main">
-	
-		<p style="padding-left:8px;padding-right:30px;padding-bottom:10px;">
+		<p style="padding-left:8px;padding-right:30px;padding-bottom:15px;">
 			Earth System CoG is a web environment that enables users to create project workspaces, connect projects into networks, 
 			share and consolidate information within those networks, 
 			and seamlessly link to tools for data archival, reformatting and search, data visualization, and metadata collection and display. 
@@ -30,64 +43,65 @@
 			data distribution software and provides an easy to use interface to its services. 
 		</p>
 	
-		<table class="outer">
-			<tr>
-				<td class="col_1">
-					<table class="inner">
-						<tr>
-							<td class="icon"><a href="/projects/cog/doc/collaborative_workspaces"><img style="padding-top:7px;" src="{{STATIC_URL}}/cog/img/project_icon_sjm.png" alt="collaborative project logo"/></a></td>
-							<td class="function"> <h2 class="splash_functions"><a href="/projects/cog/doc/collaborative_workspaces">Collaborative Project Workspaces</a></h2>
-								<p class="splash_functions">CoG workspaces come with their own wiki, news, data space, and customizable navigation. Projects can be linked to other projects, and information can be shared across this network.</p>
-							</td>
-						</tr>
-						<tr>
-							<td width="90px" class="icon"><a href="/projects/cog/doc/governance"><img src="{{STATIC_URL}}/cog/img/governance_sjm.png" alt="project governance logo"/></a></td>
-							<td class="function">
-								<h2 class="splash_functions"><a href="/projects/cog/doc/governance">Support for Project Governance</a></h2>
-								<p class="splash_functions">CoG supports open governance processes by encouraging projects to share information about  their management bodies, organizational roles, prioritization strategies, meeting and call schedules, and other aspects of project operation.</p>
-							</td>
-						</tr>
-						<tr>
-							<td class="icon"><a href="/projects/cog/doc/data_services"><img style="padding-top:5px;" src="{{STATIC_URL}}/cog/img/data_sjm.png" alt="data services logo"/></a></td>
-							<td class="function" >
-								<h2 class="splash_functions"><a href="/projects/cog/doc/data_services">Data Services</a></h2>
-								<p class="splash_functions">CoG comes bundled with an <a href="http://www.esgf.org">Earth System Grid Federation (ESGF)</a> datanode. Individual projects can store data on the node and customize a search to their project's holdings.</p>
-							</td>
-						</tr>	
-						<tr>
-							<td class="icon"><a href="/projects/cog/doc/metadata_services"><img src="{{STATIC_URL}}/cog/img/metadata_sjm.png" alt="metadata services logo"/></a></td>
-							<td class="function"><h2 class="splash_functions"><a href="/projects/cog/doc/metadata_services">Metadata Services</a></h2>
-								<p class="splash_functions_last" >CoG has partnered with the <a href="/projects/es-doc-models/">ES-DOC</a> project to provide services to create and display Earth system model metadata.</p>
-							</td>
-						</tr>
-					</table>
-				</td>
-				<td class="col_2">
-					<center>
-						<div class="yellow_box">
-						  <div class="white_button">
-						    <p class="white_button"><a href="/login/?next=/projects/cog/"><b>Login/Register</b></a></p>
-						  </div>
-						</div>
-						<br />
-						<div class="teal_box" style="width:250px;margin-left:auto;margin-right:auto;">
-							<h3 class="teal_box">Who is Using CoG?</h3>
-							<ul class="teal_box">
-								<li>NOAA Environmental Software Infrastructure and Interoperability <a href="/projects/nesii"> (NESII)</a></li>
-								<li>National Climate Predictions and Projections Platform <a href="/projects/ncpp/"> (NCPP)</a></li>
-								<li>Earth System Documentation-Models <a href="/projects/es-doc-models/"> (ES-DOC)</a></li>
-								<li>Dynamical Core Model Intercomparison Project<a href="/projects/dcmip-2012/"> (DCMIP)</a></li>
-								<li>Visit the <a href="/projects/cog/">CoG Project</a> on CoG</li>
-							</ul>
-						</div>
-					</center>
-				</td>
-			</tr>
+	   <table class="outer">
+		<tr>
+		<td class="col_1">
+		<table class="inner">
+		<tr>
+		<td class="icon"><a href="/projects/cog/doc/collaborative_workspaces"><img style="padding-top:7px;" src="{{STATIC_URL}}/cog/img/project_icon_sjm.png" alt="collaborative project logo"/></a></td>
+		<td class="function"> <h2 class="splash_functions"><a href="/projects/cog/doc/collaborative_workspaces">Collaborative Project Workspaces</a></h2>
+		<p class="splash_functions">CoG workspaces come with their own wiki, news, data space, and customizable navigation. Projects can be linked to other projects, and information can be shared across this network.</p>
+		</td>
+		</tr>
+		<tr>
+		<td width="90px" class="icon"><a href="/projects/cog/doc/governance"><img src="{{STATIC_URL}}/cog/img/governance_sjm.png" alt="project governance logo"/></a></td>
+		<td class="function">
+		<h2 class="splash_functions"><a href="/projects/cog/doc/governance">Support for Project Governance</a></h2>
+		<p class="splash_functions">CoG supports open governance processes by encouraging projects to share information about  their management bodies, organizational roles, prioritization strategies, meeting and call schedules, and other aspects of project operation.</p>
+		</td>
+		</tr>
+		<tr>
+		<td class="icon"><a href="/projects/cog/doc/data_services"><img style="padding-top:5px;" src="{{STATIC_URL}}/cog/img/data_sjm.png" alt="data services logo"/></a></td>
+		<td class="function" >
+		<h2 class="splash_functions"><a href="/projects/cog/doc/data_services">Data Services</a></h2>
+		<p class="splash_functions">CoG comes bundled with an <a href="http://www.esgf.org">Earth System Grid Federation (ESGF)</a> datanode. Individual projects can store data on the node and customize a search to their project's holdings.</p>
+	        </td>
+		</tr>	
+		<tr>
+		<td class="icon"><a href="/projects/cog/doc/metadata_services"><img src="{{STATIC_URL}}/cog/img/metadata_sjm.png" alt="metadata services logo"/></a></td>
+		<td class="function"><h2 class="splash_functions"><a href="/projects/cog/doc/metadata_services">Metadata Services</a></h2>
+		<p class="splash_functions_last" >CoG has partnered with the <a href="/projects/es-doc-models/">ES-DOC</a> project to provide services to create and display Earth system model metadata.</p>
+		</td>
+		</tr>
 		</table>
-	</div>
-</div>
-
-<!-- END SPLASH PAGE -->
-
+		</td>
+		<td class="col_2">
+		<center>
+		<div class="yellow_box">
+		   <div class="white_button">
+		   <p class="white_button"><a href="/login/?next=/projects/cog/"><b>Login/Register</b></a></p>
+		   </div>
+		</div>
+		<br />
+		<div class="teal_box" style="width:250px;margin-left:auto;margin-right:auto;">
+		  <h3 class="teal_box">Who is Using CoG?</h3>
+		  <ul class="teal_box">
+		  <li>NOAA Environmental Software Infrastructure and Interoperability <a href="/projects/nesii"> (NESII)</a></li>
+		  <li>National Climate Predictions and Projections Platform <a href="/projects/ncpp/"> (NCPP)</a></li>
+		  <li>Earth System Documentation-Models <a href="/projects/es-doc-models/"> (ES-DOC)</a></li>
+		  <li>Dynamical Core Model Intercomparison Project<a href="/projects/dcmip-2012/"> (DCMIP)</a></li>
+		  <li>Visit the <a href="/projects/cog/">CoG Project</a> on CoG</li>
+		  </ul>
+		</div>
+		</center>
+		</td>
+		</tr>
+		</table>
+	</div> <!--end div main-->
+   </div><!--end div span-24 last-->
+{% block footer %}
+    {% include 'cog/common/cog_footer.html' %} 
 {% endblock %}
-
+</div> <!--end div container-->
+</body>
+</html>

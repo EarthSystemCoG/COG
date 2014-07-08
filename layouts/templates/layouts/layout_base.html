@@ -1,51 +1,61 @@
-{# force IE to render according to strict mode as opposed to quirks mode #}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!--<html xmlns="http://www.w3.org/1999/xhtml">-->
+<html>
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=9">
         
         <title>{% block head_title %} {{ title|removetags:"h2"|safe }} {% endblock %}</title>
             
         <!-- CSS for grid layout -->
         <!-- <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/screen.css" type="text/css" media="screen, projection"/> -->
-        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/reset.css" type="text/css" media="screen, projection"/>
+        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/reset.css" type="text/css" media="screen, projection"/> 
         <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/grid.css" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/typography.css" type="text/css" media="screen, projection"/>
         <!--<link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/print.css" type="text/css" media="print"/> -->
         <!-- [if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/><![endif] -->
-                
-        <!--  Django admin CSS -->
-        {% block style %}
-           <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
-	    {% endblock %}
 	    
-	    
-	    <!-- WorldPress tricolor CSS -->
+	<!-- WorldPress tricolor CSS -->
         <!--  <link rel="stylesheet" href="{{MEDIA_URL}}css/tricolor/mystyle.css" type="text/css"> -->
-            
+
+        <!-- from /layouts/layout_center.html -- >
+        <!-- loads YUI style sheets and scripts -->
         {% block head %}{% endblock %}
-        
-        <!-- hooks for page-specific head content -->
+
+        <!-- loading CoG-specific styles. Needs to be last -->
+        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
+
+
+       <!-- hooks for page-specific head content -->
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
-    
+       <!--creates classes for the various versions of internet
+        explorer. These are then used in the CSS to fix specific issues-->
+       <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
+       <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
+       <!--[if IE 8 ]> <html class="ie8"> <![endif]-->
+       <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
+       <!--[if IE 10 ]> <html class="ie10"> <![endif]-->
+       <!--[if (gt IE 10)|!(IE)]><!--> <html> <!--<![endif]--> <!--if > IE10 or not IE at all, set no class -->
+   
     </head>
     
     <body>
     	
-    	<!-- Facebook -->
-    	
         <div class="container">
-        
+            <!--Being Header-->
             <div class="span-24 last">
                 {% block header %} {% include 'layouts/layout_header.html' %} {% endblock %}
             </div>
-                        
+	    
+            <!--Begin Body-->             
             {% block body %}{% endblock %}
             
-            <div class="span-24 last">
+	    <!-- Begin Footer-->
+	    <div class="span-24 last">
                 {% block footer %} {% include 'layouts/layout_footer.html' %} {% endblock %}
             </div>
   
@@ -53,3 +63,4 @@
     </body>
     
 </html>
+	
