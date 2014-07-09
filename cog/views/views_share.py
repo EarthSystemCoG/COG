@@ -2,13 +2,16 @@
 Views for exchanging information with other sites.
 '''
 from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 import json
 from cog.models import Project, getProjectsAndRolesForUsers, DataCart
 from django.contrib.sites.models import Site
 from cog.project_manager import projectManager
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from django_openid_auth.models import UserOpenID
+from django.contrib.auth.decorators import user_passes_test
+from django.template import RequestContext
+
 
 JSON = "application/json"
 
@@ -109,6 +112,7 @@ def share_user(request):
 
     
     
+@user_passes_test(lambda u: u.is_staff)
 def sync_projects(request):
     '''Updates the list of remote projects in current database.'''
     
@@ -117,6 +121,7 @@ def sync_projects(request):
     
     sites = projectManager.sync()
     
-    return HttpResponse(json.dumps(sites), content_type=JSON)
-    
+    return render_to_response('cog/admin/sync_projects.html', {'sites':sites },
+                                  context_instance=RequestContext(request))
+        
     
