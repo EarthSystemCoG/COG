@@ -6,7 +6,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 import ast
-from django.contrib.sites.models import Site    
+from django.contrib.sites.models import Site  
+from cog.models import PeerSite
+from django.forms.models import modelformset_factory
 
 
 def index(request):
@@ -19,7 +21,7 @@ def index(request):
                               {'title':'Welcome to COG' }, 
                               context_instance=RequestContext(request))
     
-# COG home page for administrative actions
+# admin page for managing projects
 @user_passes_test(lambda u: u.is_staff)
 def admin_projects(request):
     '''Only lists local projects.'''
@@ -38,3 +40,30 @@ def admin_projects(request):
                                'title':'COG Projects Administration' 
                               }, 
                               context_instance=RequestContext(request))    
+    
+# admin page for managing peers
+@user_passes_test(lambda u: u.is_staff)
+def admin_peers(request):
+    
+    PeerSiteFormSet = modelformset_factory(PeerSite, extra=0, can_delete=False)
+    
+    if request.method=='GET':
+        
+        formset = PeerSiteFormSet(queryset=PeerSite.objects.all())
+        return render_to_response('cog/admin/admin_peers.html', {'formset':formset },
+                                  context_instance=RequestContext(request))
+        
+    else:
+        
+        formset = PeerSiteFormSet(request.POST)
+        
+        if formset.is_valid():
+            instances = formset.save()
+            return HttpResponseRedirect( reverse('admin_peers')+"?status=success" )
+        
+        else:
+            print formset.errors
+            return render_to_response('cog/admin/admin_peers.html', {'formset':formset},
+                                      context_instance=RequestContext(request))
+
+

@@ -83,7 +83,8 @@
        <h3>Site Administrators</h3>
        <ul>
             <li><a href="{% url 'admin_projects' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
-            <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List System Users</a></li>                 
+            <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List System Users</a></li>           
+            <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>      
 			<!-- <li><a href="/admin/filebrowser/browse" class="listlink">&nbsp;Browse All Uploads</a></li> -->      
        </ul>
        {% endif %}      

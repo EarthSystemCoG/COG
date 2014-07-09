@@ -4,9 +4,12 @@ from cog.views.views_account import custom_login, custom_login_complete
 
 urlpatterns = patterns('',
 
-    # indexes
+    # top-level index
     url(r'^$', 'cog.views.index', name='cog_index' ) ,
+    
+    # COG administration
     url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
+    url(r'^cogadmin/peers/$', 'cog.views.admin_peers', name='admin_peers' ),
 
     # overridden search page to execute project-dependent configuration
     url(r'^search/(?P<project_short_name>.+)/$', 'cog.views.search', name='search' ),
