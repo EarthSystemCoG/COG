@@ -655,6 +655,23 @@ END VERTICAL MENU (LEFT NAVBAR)
 
 
 
+/******************************/
+/* BEGIN TAG SELECTION BOX */
+/******************************/
+
+#id_tags{
+min-width:200px; /*when there are no tags the box has no size*/
+border: 1px solid #666;
+}
+
+/******************************/
+/* BEGIN TAG SELECTION BOX */
+/******************************/
+
+
+
+
+
 /******************************
 BEGIN NEWS WIDGET
 ******************************/
@@ -690,23 +707,6 @@ BEGIN NEWS WIDGET
 .news_box table.even-color tbody tr:nth-child(even) td,tbody tr.even td {
 	background: #FCF2CE;
 }
-
-.box-comment {
-	padding: 5px;
-	margin: 2px;
-	border: 0px solid #417690;
-	background: #FFFFFF;
-}
-
-.box-comment .caption {
-	color: #417690;
-	background: #B9E0E3;
-	border: 1px solid #417690;
-	margin-bottom: 3px;
-	font-weight: bold;
-	font-style: italic;
-}
-
 .news_footer {
 	margin: 0px;
 	padding: 2px 5px 3px 5px;
@@ -724,23 +724,45 @@ BEGIN NEWS WIDGET
 END NEWS WIDGET
 ******************************/
 
+
+/**** BEGIN COMMENTS *****/
+.box-comment {
+	padding: 5px;
+	margin: 2px;
+	border: 0px solid #417690;
+	background: #FFFFFF;
+}
+
+.box-comment .caption {
+	color: #417690; /*blueish color??*/
+	color: #358C92; /*dark teal*/
+	background: #B9E0E3;
+	/*border: 1px solid #417690;*/
+	border: 1px solid #666;
+	margin-bottom: 3px;
+	font-weight: bold;
+	font-style: italic;
+}
+/****** END COMMENTS ****/
+
+
 /******************************
 BEGIN SEARCH WIDGET
 ******************************/
 
 .search-box {
-	background: #FFFFFF;
-	border: 1px solid #666;
-	font-size: 8pt;
+	background:    #FFFFFF;
+	border:        1px solid #666;
+	font-size:     8pt;
         margin-bottom: 12px;
-        margin-top: 0px;
+        margin-top:    0px;
 }
 
 /* Data Text Search */
 .box-colored {
 	background: #FCE79F; /*light yellow*/
-	border: 1px solid #666;
-	font-size: 8pt;
+	border:     1px solid #666;
+	font-size:  8pt;
 }
 
 .instruction-box {
