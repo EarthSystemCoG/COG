@@ -14,10 +14,16 @@ class ProjectManager(object):
     def sync(self):
         '''Updates the list of remote projects from all peer sites.'''
         
-        # list of peer sites
-        sites = [ "http://%s/share/projects/" % site.domain for site in getPeerSites() ]                
-        for site in sites:
-            self._harvest(site)
+        # loop over peer sites  
+        sites = {}            
+        for site in getPeerSites():
+            url = "http://%s/share/projects/" % site.domain
+            jobj = self._harvest(url)
+            if jobj is None:
+                status = 'ERROR'
+            else:
+                status = 'OK'
+            sites[site.id] = { 'name': site.name, 'domain':site.domain, 'url': url, 'status':status }
         return sites
         
     def _associateProjects(self, objList, apDictList):
@@ -123,6 +129,8 @@ class ProjectManager(object):
                 for tag in ProjectTag.objects.all():
                     if len(tag.projects.all()) == 0:
                         tag.delete()    
+                        
+        return jobj
         
     def listAllProjects(self):
         '''List all projects.'''
