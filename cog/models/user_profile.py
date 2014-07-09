@@ -130,9 +130,7 @@ def getDataCartsForUser(openid):
         jobj = getJson(url)
         if jobj is not None:
             for key, value in jobj['users'].items():
-                size = int( value['datacart']['size'] )
-                if size > 0:
-                    dcs[ site ] = size 
+                dcs[ site ] = int( value['datacart']['size'] )
             
     return dcs
 
