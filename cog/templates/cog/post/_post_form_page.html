@@ -1,7 +1,8 @@
 <!-- form table for generic page -->
 <style type=text/css>
 td.col1{
-width:100px;
+width:70px;
+min-width:70px;
 }
 td{
 wi
@@ -10,40 +11,55 @@ wi
 <table>
     <tr>
 	<td class="col1"}>Author</td>
-	<td colspan="3">{{ request.user }} </td>		          
+	<td>{{ request.user }} </td>		          
     </tr>
     <tr>
         <td class="col1"><b>Title</b></td>
-        <td colspan="3">{{ form.title }} {{ form.title.errors }}</td>
+        <td>{{ form.title }} {{ form.title.errors }}</td>
     </tr>
+</table>
+<table>
    <tr>
         <td class="col1">Label</td>
         <td style="width=200px%;">{{ form.label }}</td>
-	<td style="width=50%;">&nbsp; <i>Optional shorter label for left menu, max 25 characters, defaults to page title</i> {{ form.label.errors }}</td>
+	<td style="vertical-align:middle;">&nbsp; <i>Optional shorter label for left menu, max 25 characters, defaults to page title</i> {{ form.label.errors }}</td>
     </tr>
+</table>
+<table class="odd-color">
    <tr>
          <td class="col1"><b>URL</b></td>
-         <td><span style="vertical-align:abs_middle">/projects/{{project.short_name|lower }}/</span></td>
-         <td>{{ form.url }} &nbsp; <i>Use only letters, numbers, '_', '-' and '/'</i>{{ form.url.errors }}</td>
-   </tr>   
+         <td style="max-width:300px;vertical-align:middle;" nowrap="nowrap">/projects/{{project.short_name|lower }}/</td>
+         <td style="width:300px;">{{ form.url }}</td>
+	 <td style="width:400px;vertical-align:middle;"><i>Use only letters, numbers, '_', '-' and '/'</i>{{ form.url.errors }}</td>
+   </tr>
+</table>
+<table>
     <tr>
          <td class="col1"><b>Template</b></td>
          <td class="long">{{ form.template }} {{ form.template.errors }}</td>
-    </tr>      
-    <tr>
-          <td nowrap="nowrap">Parent Page</td>
+    </tr>
+<table class="odd-color">
+   <tr>
+          <td class="col1" nowrap="nowrap">Parent Page</td>
           <td>{{ form.parent }} </td>                
     </tr>
+</table>
+<table>
     <tr>
           <td class="col1"><b>Topic</b></td>
-          <td nowrap="nowrap">{{ form.topic }} &nbsp; <b>or New Topic</b>&nbsp;{{ form.newtopic }} 
-              {{ form.newtopic.errors }} {{ form.topic.errors }}
-          </td>
-    </tr>    
+          <td style="width:80px; vertical-align:middle;" nowrap="nowrap">{{ form.topic }}</td>
+          <td style="width:80px; vertical-align:middle;" <b>or New Topic</b></td>
+	  <td style="width:140px;vertical-align:middle;">{{ form.newtopic }}</td>
+	  <td>{{form.newtopic.errors }} {{ form.topic.errors }}</td>
+   </tr>
+ </table>
+ <table class="odd-color">
     <tr>
           <td class="col1" nowrap="nowrap">Private ?</td>
-          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                   
-    </tr>    
+          <td>{{form.is_private }} (<i>if checked, only project members will be able to view this page</i>)</td>                   
+    </tr>
+</table>
+<table>
     <tr>
         <td class="col1"><b>Body</b></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>
