@@ -28,7 +28,7 @@
 
      {% if request.user.is_staff %}
          | <a href="{% url 'admin:index' %}">Django Admin</a>
-         | <a href="{% url 'admin_index' %}">CoG Admin</a>
+         | <a href="{% url 'admin_projects' %}">CoG Admin</a>
      {% endif %}
      | <a href="{% url 'project_add' %}">Register a New Project</a>
      | <a href="{% url 'logout' %}?next={{ request.path }}">Log out</a>

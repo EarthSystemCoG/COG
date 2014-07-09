@@ -6,7 +6,7 @@ urlpatterns = patterns('',
 
     # indexes
     url(r'^$', 'cog.views.index', name='cog_index' ) ,
-    url(r'^cogadmin/$', 'cog.views.admin_index', name='admin_index' ),
+    url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
 
     # overridden search page to execute project-dependent configuration
     url(r'^search/(?P<project_short_name>.+)/$', 'cog.views.search', name='search' ),

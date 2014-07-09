@@ -21,7 +21,7 @@ def index(request):
     
 # COG home page for administrative actions
 @user_passes_test(lambda u: u.is_staff)
-def admin_index(request):
+def admin_projects(request):
     '''Only lists local projects.'''
     
     # optional active=True|False filter
@@ -31,10 +31,10 @@ def admin_index(request):
     else:
         project_list = Project.objects.filter(site=Site.objects.get_current()).order_by('short_name')
     
-    return render_to_response('cog/admin/admin_index.html',
+    return render_to_response('cog/admin/admin_projects.html',
                               { 
                                # retrieve top-level projects, ordered alphabetically
                                'project_list': project_list, 
-                               'title':'COG Administration Index' 
+                               'title':'COG Projects Administration' 
                               }, 
                               context_instance=RequestContext(request))    
