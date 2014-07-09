@@ -736,9 +736,9 @@ BEGIN SEARCH WIDGET
         margin-top: 0px;
 }
 
-/* TODO: where is this used? */
+/* Data Text Search */
 .box-colored {
-	background: #FCE79F;
+	background: #FCE79F; /*light yellow*/
 	border: 1px solid #666;
 	font-size: 8pt;
 }
@@ -753,12 +753,14 @@ BEGIN SEARCH WIDGET
 	text-align: center;
 }
 
+/*login failure.*/ /*project registration notification*/
 .message-box {
 	background: #f4f379; /*bright yellow */
-        background: #FAC24A; /* dark yellow*/
-	padding: 5px; 
-	margin: 5px;
-	border: 1px solid #417690;
+        background: #fce79f; /* light yellow*/
+	padding:    5px; 
+	margin:     5px;
+	/*border:     1px solid #417690;*/
+	border: 1px solid #666;*/
 	font-weight: bold;
 	text-align: center;
 }
