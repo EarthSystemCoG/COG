@@ -4,9 +4,12 @@ from cog.views.views_account import custom_login, custom_login_complete
 
 urlpatterns = patterns('',
 
-    # indexes
+    # top-level index
     url(r'^$', 'cog.views.index', name='cog_index' ) ,
-    url(r'^cogadmin/$', 'cog.views.admin_index', name='admin_index' ),
+    
+    # COG administration
+    url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
+    url(r'^cogadmin/peers/$', 'cog.views.admin_peers', name='admin_peers' ),
 
     # overridden search page to execute project-dependent configuration
     url(r'^search/(?P<project_short_name>.+)/$', 'cog.views.search', name='search' ),
@@ -40,7 +43,6 @@ urlpatterns = patterns('',
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
     url(r'^username/reminder/$', 'cog.views.username_reminder', name='username_reminder'),
     url(r'^user/byopenid/$', 'cog.views.user_byopenid', name='user_byopenid'),
-    #url(r'^user/site_update/(?P<user_id>\d+)/$', 'cog.views.site_update', name='site_update'),
     url(r'^user/profile/(?P<user_id>\d+)/$', 'cog.views.user_profile_redirect', name='user_profile_redirect'),
 
     # data cart

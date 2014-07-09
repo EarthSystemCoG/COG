@@ -82,8 +82,9 @@
        {% if user.is_staff %}
        <div class="left_widget_header">Site Administrators</div>
        <ul>
-            <li><a href="{% url 'admin_index' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
-            <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List System Users</a></li>                 
+            <li><a href="{% url 'admin_projects' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
+            <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List System Users</a></li>           
+            <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>      
 			<!-- <li><a href="/admin/filebrowser/browse" class="listlink">&nbsp;Browse All Uploads</a></li> -->      
        </ul>
        {% endif %}      

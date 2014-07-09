@@ -11,6 +11,7 @@ from django.contrib.sites.models import Site
 
 from cog.models import UserProfile, Project
 from cog.utils import getJson
+from cog.models.peer_site import getPeerSites
 
 # callback receiver function for UserProfile post_save events
 @receiver(post_save, sender=UserProfile, dispatch_uid="user_profile_post_save")
@@ -49,8 +50,8 @@ def update_user_projects(user):
                 openid = user.profile.openid()
                 print 'Updating projects for user with openid=%s' % openid
                 
-                # loop over remote sites
-                for site in Site.objects.all().exclude(id=Site.objects.get_current().id): # must exclude current site
+                # loop over remote (enabled) sites
+                for site in getPeerSites():
                                 
                     url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
                     jobj = getJson(url)

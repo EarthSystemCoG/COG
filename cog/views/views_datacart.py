@@ -35,8 +35,8 @@ def datacart_display(request, site_id, user_id):
         if len(_dcs) > 0:
             dcs[openid] = {}
             for site, size in _dcs.items():
-                if size > 0:
-                    dcs[openid][site] = size
+                print site, size
+                dcs[openid][site] = size
         
     return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart, 'datacarts': dcs },
                               context_instance=RequestContext(request))    
