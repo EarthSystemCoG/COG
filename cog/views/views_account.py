@@ -420,38 +420,6 @@ def password_update(request, user_id):
             print "Form is invalid: %s" % form.errors
             return render_password_change_form(request, form)
         
-@login_required
-def site_update(request, user_id):
-
-    # security check
-    if str(request.user.id) != user_id and not request.user.is_staff:
-        raise Exception("User not authorized to change home site")
-
-    # load user object
-    user = get_object_or_404(User, pk=user_id)
-
-    if (request.method=='GET'):
-
-        # create empty form
-        form = SiteChangeForm(user, initial={ 'site': user.profile.site })
-        return render_site_change_form(request, form)
-
-    else:
-        form = SiteChangeForm(user, request.POST)
-        
-        if form.is_valid():
-
-            # change site in database
-            user.profile.site = form.cleaned_data.get('site')
-            user.profile.save()
-            
-            # redirect to user home page
-            return HttpResponseRedirect(reverse('user_byopenid')+"?openid=%s" % user.profile.openid().claimed_id)
-
-        else:
-            print "Form is invalid: %s" % form.errors
-            return render_password_change_form(request, form)
-
 def username_reminder(request):
 
     if (request.method=='GET'):

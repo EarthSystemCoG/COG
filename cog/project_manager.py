@@ -7,6 +7,7 @@ from cog.models import Project, ProjectTag
 from cog.utils import getJson
 
 from cog.site_manager import siteManager
+from cog.models import getPeerSites
 
 class ProjectManager(object):
   
@@ -14,7 +15,7 @@ class ProjectManager(object):
         '''Updates the list of remote projects from all peer sites.'''
         
         # list of peer sites
-        sites = [ "%s/share/projects/" % peer for peer in siteManager.getPeers()]                
+        sites = [ "http://%s/share/projects/" % site.domain for site in getPeerSites() ]                
         for site in sites:
             self._harvest(site)
         return sites

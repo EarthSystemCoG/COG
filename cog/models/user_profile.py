@@ -4,9 +4,9 @@ from constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_I
 
 from cog.utils import hasText
 from django.contrib.sites.models import Site
-from cog.site_manager import siteManager
 from django.core.urlresolvers import reverse
 from cog.utils import getJson
+from cog.models.peer_site import getPeerSites
 
 class UserProfile(models.Model):
 
@@ -124,16 +124,13 @@ def getDataCartsForUser(openid):
         
     dcs = {} # dictionary of (site_name, datacart_size) items
     
-    for site in Site.objects.all(): # note: includes current site
-        if site != Site.objects.get_current():
-            url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
-            print 'Querying for datacart: url=%s' % url
-            jobj = getJson(url)
-            if jobj is not None:
-                for key, value in jobj['users'].items():
-                    size = int( value['datacart']['size'] )
-                    if size > 0:
-                        dcs[ site ] = size 
+    for site in getPeerSites():
+        url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+        print 'Querying for datacart: url=%s' % url
+        jobj = getJson(url)
+        if jobj is not None:
+            for key, value in jobj['users'].items():
+                dcs[ site ] = int( value['datacart']['size'] )
             
     return dcs
 

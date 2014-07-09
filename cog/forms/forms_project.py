@@ -33,18 +33,21 @@ class ProjectForm(ModelForm):
 
         if 'instance' in kwargs:
             instance = kwargs.get('instance')
-            # parent query-set options: exclude the project itself, and all its children
-            parentQueryset =  ~Q(id=instance.id)
+            current_site = Site.objects.get_current()
+            # exclude the project itself, and all its children
+            queryset1 =  ~Q(id=instance.id)
+            # exclude projects from disabled peer sites
+            queryset2 = Q(site__id=current_site.id) | Q(site__peersite__enabled = True)
             # FIXME ? Should children be excluded from list of possible parents ?
             # exclude children from parents
             #for child in instance.children():
             #    parentQueryset = parentQueryset & ~Q(id=child.id)
             # make the ordering case=independent (NOTE: the generated SQL is database-dependent!)
             #self.fields['parents'].queryset =  Project.objects.filter( parentQueryset ).distinct().order_by('short_name')
-            self.fields['parents'].queryset =  Project.objects.filter( parentQueryset ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
+            self.fields['parents'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
             # peer query-set options: exclude the project itself
             #self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().order_by('short_name')
-            self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
+            self.fields['peers'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
 
             #self.fields['folders'].queryset = Folder.objects.filter(project=instance)
             #self.fields['folders'].queryset = instance.folder_set

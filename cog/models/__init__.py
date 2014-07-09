@@ -16,6 +16,9 @@ from news import News
 from project_tag import ProjectTag, MAX_PROJECT_TAG_LENGTH
 from project_impact import ProjectImpact
 
+# Peers
+from peer_site import PeerSite, getPeerSites
+
 # Posts
 from doc import Doc
 from post import Post

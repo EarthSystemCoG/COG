@@ -105,7 +105,7 @@ def impacts_update(request, project_short_name, tab):
     # exclude fields 'project', so it doesn't get validated
     # allow for instances to be deleted
     nextras = 2
-    ProjectImpactFormSet = modelformset_factory(ProjectImpact, extra=nextras, exclude=('project'), can_delete=True,
+    ProjectImpactFormSet = modelformset_factory(ProjectImpact, extra=nextras, exclude=('project',), can_delete=True,
                                                 formfield_callback=custom_field_callback)
     queryset = ProjectImpact.objects.filter(project=project)
 

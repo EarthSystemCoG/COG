@@ -7,7 +7,7 @@ from views_doc import *
 from views_external_urls import *
 from views_account import *
 from views_governance import *
-from views_index import *
+from views_admin import *
 from views_membership import *
 from views_news import *
 from views_post import *

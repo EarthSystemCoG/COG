@@ -629,8 +629,12 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
     # filter projects
     _projects = [] # empty list
     for prj in projects:
+
         prjtags = list(prj.tags.all())
-        if not prj.active:
+        if prj.isRemoteAndDisabled():
+            # filter out projects from peer sites that are NOT enabled
+            pass
+        elif not prj.active:
             # do not add
             pass
         # only display projects that are visible to the user ?
