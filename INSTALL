@@ -261,11 +261,19 @@ python manage.py sync_projects
 o By setting up a cron job that executes the same command above. For example:
 
 crontab -l
-0 * * * * python /full_path_to_cog_installation_directory/cog/manage.py sync_projects > /dev/null 2>&1
+0 * * * * source ~/.bashrc; python /usr/COG/manage.py sync_projects >> /tmp/crontab.log 2>&1
 
-will run the command at minute 0 of every hour.
+will parse the user environment, and run the command at minute 0 of every hour, appending the output to file.
 
 NOTES: 
 	- projects will be updated only from peer sites that are "enabled". 
 	- a site will only share projects correctly if its 'Site' domainname equals its real domain
 	- a site will only share those projects that are both 'active' and 'public'
+	
+REGULAR ADMINISTRATION TASKS
+
+o Setup a cron job to periodically update the projects around the federation:
+
+0 * * * * source ~/.bashrc; python /usr/COG/manage.py sync_projects >> /tmp/crontab.log 2>&1
+
+o Setup a cron job to backup the postgres database content every night
