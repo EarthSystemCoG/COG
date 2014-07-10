@@ -11,17 +11,16 @@ class SiteManager(object):
        TIME_ZONE=America/Denver
        COG_MAILING_LIST=cog_info@list.woc.noaa.gov
        SECRET_KEY=yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#
+       DATABASE_NAME=cogdb
        DATABASE_USER=database_user
        DATABASE_PORT=database_port
        DATABASE_PORT=5432
+       MY_PROJECTS_REFRESH_SECONDS=10
 
        [esgf]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
        IDP_WHITELIST=/esg/config/esgf_idp_static.xml
-       
-       [peers]
-       http|//localhost|8001
     '''
 
     # location of site specific settigs configuration file
