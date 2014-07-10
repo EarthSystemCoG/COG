@@ -287,3 +287,10 @@ An example script is provided as 'scripts/cog_backup.sh' - which might need to b
 For example, to backup the database every day at midnight:
 
 0 0 * * * /usr/COG/scripts/cog_backup.sh
+
+NOTE: to run as cron, the postgres database password must be located in file ~/.pgpass with the format:
+host_name:port:database_name:database_user:database_password
+
+Also must set the file permissionss as follows:
+
+chmod 0600 ~/.pgpass
