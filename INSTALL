@@ -270,10 +270,20 @@ NOTES:
 	- a site will only share projects correctly if its 'Site' domainname equals its real domain
 	- a site will only share those projects that are both 'active' and 'public'
 	
-REGULAR ADMINISTRATION TASKS
+PERIODIC ADMINISTRATION TASKS
 
-o Setup a cron job to periodically update the projects around the federation:
+o Setup a cron job to periodically update the projects around the federation.
+An example such script is provided as scripts/sync_projects.sh - which might need to be customized to your environment.
 
-0 * * * * source ~/.bashrc; python /usr/COG/manage.py sync_projects >> /tmp/crontab.log 2>&1
+For example, to synchronize the projects every hour and append the log to a file:
 
-o Setup a cron job to backup the postgres database content every night
+0 * * * * /usr/COG/scripts/sync_projects.sh  >> /tmp/crontab.log 2>&1
+
+
+o Setup a cron job to backup the postgres database content every night. 
+
+An example script is provided as 'scripts/cog_backup.sh' - which might need to be customized to your specific installation.
+
+For example, to backup the database every day at midnight:
+
+0 0 * * * /usr/COG/scripts/cog_backup.sh
