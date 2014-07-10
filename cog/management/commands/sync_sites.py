@@ -1,7 +1,7 @@
 '''
 Django management command to update the list of CoG peer nodes in the local database.
 Execute as:
-python manage.py update_peers [--delete]
+python manage.py sync_sites [--delete]
 '''
 
 from optparse import make_option
@@ -31,7 +31,7 @@ class Command(BaseCommand):
     )
 
     
-    def handle(self, **options):
+    def handle(self, *args, **options):
         
         
         self.stdout.write('Updating list of CoG sites (delete=%s)' % options['delete'])
