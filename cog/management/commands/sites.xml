@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sites>
+	<site name="EarthSystemCoG" domain="www.earthsystemcog.org" />
+	<site name="CoG-CU" domain="cog-cu.colorado.edu" />
+	<site name="CoG @ localhost:8000" domain="localhost:8000" />
+	<site name="CoG @ localhost:8001" domain="localhost:8001" />
+	<site name="CoG @ dev-hydra" domain="dev-hydra-httpd.esrl.svc" />
+</sites>
