@@ -6,6 +6,7 @@
     @param topic_list : optional list of topics for sub-selection
     @param topic : optional currently selected topic
 -->
+<!--LOCATION:/cog/templates/cog/common/_search.html-->
  
 <div class="box-colored">
     
@@ -16,18 +17,15 @@
         <!-- text box -->
         <table>
            <tr>
-            <td valign="top" nowrap="nowrap">
-            	<img src="{{STATIC_URL}}/cog/img/icon_listlink.gif">
-            	&nbsp;<b>Search</b>
-            </td>
-            <td class="long">
-            	<input type="text" name="query" value="{{ query|escape }}">
+            <td style="vertical-align:middle;" nowrap="nowrap"> <img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"></td>
+	    <td style="vertical-align:middle;"><b>Search</b></td>
+            <td class="long" style="vertical-align:middle;" ><input type="text" name="query" value="{{ query|escape }}">
             </td>
             <td>
             <!-- sub-select -->
 	        {% if topic_list %}
-	            <td nowrap="nowrap"><b>Select Topic</b></td> 
-	            <td>
+	            <td sytle="vertical-align:middle;" nowrap="nowrap"><b>Select Topic</b></td> 
+	            <td style="vertical-align:middle;">
 		            <select name="topic">
 		                <option value="">-- Any --</option>
 		                {% for option in topic_list %}
@@ -42,7 +40,7 @@
 	        {% endif %}  
             </td>
             <!-- filter by -->
-            <td nowrap="nowrap" valign="top">
+            <td nowrap="nowrap" style="vertical-align:middle;">
             	<b>Type</b>
             	<select name="filter_by" onChange="document.getElementById('searchForm').submit()">
             		<option value="All"           {% if filter_by = 'All' %}  selected="selected" {% endif %}>All Files
@@ -54,7 +52,7 @@
             </td>
             
             <!-- order by -->
-            <td nowrap="nowrap" valign="top">
+            <td nowrap="nowrap" style="vertical-align:middle;">
             	<b>Order By</b>
             	<select name="order_by" onChange="document.getElementById('searchForm').submit()">
             		<option value="title"        {% if order_by = 'title' %}  selected="selected" {% endif %}>Title
@@ -63,7 +61,7 @@
             		<option value="update_date"  {% if order_by = 'update_date' %} selected="selected" {% endif %}>Last Update (reversed)
             	</select>
             </td>
-            <td><input type="submit" value="Search"></td>
+            <td style="vertical-align:top;"><input type="submit" value="Search"></td>
            </tr>
         </table>
     </form>

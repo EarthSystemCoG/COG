@@ -1,5 +1,5 @@
+<!--LOCATION:/cog/templates/cog/search/_search_text.html-->
 <!-- Title -->
-
 <h1 class="title">{{ project.short_name }} Data Search </h1>
 
 
@@ -11,22 +11,24 @@
 	<br/>
 {% endif %}
 
-<!-- Search Text widget-->
-<div class="box-colored" style="padding: 5px">
-	<div style="text-align: center">
-		Enter text &nbsp; <input type="text" name="text" size="30" value="{{search_input.text}}"/> 
-		&nbsp; <input type="submit" value="Search"/>
-		&nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
-		&nbsp; Display
-		<select name="limit" id="limit">
-			<option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
-			<option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
-			<option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
-			<option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
-		</select> results per page
-	</div>
+<!-- Search Text Box-->
+<div class="box-colored">
+        <table>
+	<tr>
+	<td style="width:20%;text-align:right;vertical-align:middle;">Enter Text</td>
+	<td style="width:30%;vertical-align:middle;"><input type="text" name="text" size="30" value="{{search_input.text}}"/>
+	<td style="width:50%;">&nbsp;<input type="submit" value="Search"/> &nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
+	Display
+	<select name="limit" id="limit">
+	  <option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
+	  <option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
+	  <option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
+	  <option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
+	</select> results per page
+	  </td></tr>
+        </table>
 </div>
-<!-- Form errors -->
+<!-- Form Errors -->
 {% if error_message %}
 	<p/><div class="error-box">{{ error_message }}</div>
 {% endif %}
