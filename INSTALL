@@ -233,28 +233,39 @@ After the first login, a new COG account is created with that openid and a usern
 PROJECTS FEDERATION
 
 The current COG site can be configured to federate with any number of remote COG sites. 
-The remote COG sites to federate with are listed in teh '[peers]' section of the COG settings file /usr/local/cog/cog_settings.cfg
-(replacing the ':' character with '|' otherwise python will not interpret the URLs correctly).
+The list of possible CoG peers must be seeded from the file cog/management/commands/sites.xml that is distributed with the CoG application.
 
-For example:
+In order to load the most up-to-date list of peers into the local database, run the following django management command:
 
-[peers]
-http|//localhost|8001/
+cd <COG installation directory>
+python manage.py sync_sites
 
-The current COG site can be updated with the latest information from the federated sites in three ways:
+This command will insert any missing sites in the local database (and update their names if they have changed), but will not activate the sites by default.
+Note that the same command can also be passed the '--delete' option to delete stale sites that are found in the local database, but are missing from the sites.xml file:
 
-o By manually invoking the URL: 
+python manage.py sync_sites --delete
 
-http(s)://<current cog domain>/share/sync/projects/ as a COG site administrator
+Once the sites are listed in the local database, they can be enabled by logging in as a site administrator and clicking 
+on the 'Configure Peers' link in the 'Admin' menu in the lower left navigation bar.
 
-o By manually executing the script 'scripts/cron.py' from anywhere in the system. 
-For example, if CoG is installed under '/usr/COG':
+The local CoG application can be instructed to load the most recent list of projects from the other federated instances in one of three ways:
 
-/usr/COG/scripts/cron.py
+o By visiting the page "Configure Peers" and clicking on the lower link "Synchronize with Peer CoGs Now "
+(or directly invoking the URL "http://<your cog domain name>/share/sync/projects/")
 
-o By executing the script cron.py through the Unix cron command. 
-For example, to run the script every hour, at minute 0:
+o By invoking the following django management command:
 
-0 * * * * /usr/COG/scripts/scripts/cron.py > /dev/null 2>&1
+cd <COG installation directory>
+python manage.py sync_projects
 
-NOTE: a site will only share projects correctly if its 'Site' domainname equals its real domain
+o By setting up a cron job that executes the same command above. For example:
+
+crontab -l
+0 * * * * python /full_path_to_cog_installation_directory/cog/manage.py sync_projects > /dev/null 2>&1
+
+will run the command at minute 0 of every hour.
+
+NOTES: 
+	- projects will be updated only from peer sites that are "enabled". 
+	- a site will only share projects correctly if its 'Site' domainname equals its real domain
+	- a site will only share those projects that are both 'active' and 'public'
