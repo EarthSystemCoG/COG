@@ -8,45 +8,18 @@ PRE-REQUISITES
 
 The system must have the following Python packages installed:
 
-o Python 2.7.2+
+python 2.7.2
+django==1.6.5
+django-grappelli==2.4.5
+django-openid-auth==0.5
+django-pagination==1.0.7
+sqlalchemy==0.9.2
+south==1.0
+psycopg2==2.5.2
+python-openid==2.2.5
+passlib==1.6.2
+pil==1.1.7
 
-o Django 1.5.2
-  pip install Django==1.5.2
-  (sqlalchemy 0.9.3+ comes with Django)
-
-o Django Grappelli
-  pip install django_grappelli==2.4.5
-
-
-o Django pagination:
-  easy_install --upgrade django-pagination
-
-o South
-  easy_install --upgrade south
-
-o Python Image Library
-  easy_install --upgrade pil
-  
-o django kronos (needed to run cron jobs that use django environment)
-pip install django-kronos==0.4
-
-To run CoG with a Postgres database back-end:
-
-o Must have Postgres installed on server
-
-o Python postgres libraries
-  easy_install psycopg2
-
-To enable openid logins:
-
-o install JainRain openid python library:
-sudo pip install python-openid
-
-o install django openid_auth client library
-sudo pip install django_openid_auth
-
-o install passlib to encrypt passwords with MD5_CRYPT algorithm
-sudo pip install passlib
 Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
 
 DOWNLOAD
@@ -269,6 +242,14 @@ NOTES:
 	- projects will be updated only from peer sites that are "enabled". 
 	- a site will only share projects correctly if its 'Site' domainname equals its real domain
 	- a site will only share those projects that are both 'active' and 'public'
+	
+	
+NOTE: if a CoG peer site is disabled through the admin interface:
+	- Its projects won't show up in the projects browser (for none of the tabs)
+	- Its projects will not be selectable as peers/parent/children in the project configuration panel
+	- Its data cart won't show up in the current data cart page
+	- The site will not be queried for user projects updates
+
 	
 PERIODIC ADMINISTRATION TASKS
 
