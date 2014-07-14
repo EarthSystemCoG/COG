@@ -148,7 +148,7 @@ email.password=<email server password>
 
 For example, on the NOAA server:
 
-[apache@hydra ~]$ cat ~apache/.cog.cfg
+[apache@hydra ~]$ cat/usr/local/cog/cog.cfg
 [email]
 email.server=dmzmail.fsl.noaa.gov
 # leave port blank if default
