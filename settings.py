@@ -140,6 +140,10 @@ PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
 # absolute path to root directory containing projects data
 DATA_ROOT = os.path.join(MEDIA_ROOT, "data/")
 
+# custom template and media directories
+MYTEMPLATES = os.path.join(siteManager.cog_config_dir, 'mytemplates')
+MYMEDIA = os.path.join(siteManager.cog_config_dir, 'mymedia')
+
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
 
@@ -170,6 +174,9 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     #os.path.join(os.path.basename(__file__), 'templates'),
+    # IMPORTANT: no leading or trailing '/' for 'mytemplates'
+    # default: '/usr/local/cog/mytemplates'
+    MYTEMPLATES,
     rel('templates/'),
     rel('static/'),
     #'/usr/COG/filebrowser/templates',

@@ -275,3 +275,18 @@ host_name:port:database_name:database_user:database_password
 Also must set the file permissionss as follows:
 
 chmod 0600 ~/.pgpass
+
+CUSTOMIZATION
+
+Any HTML template used by the CoG application can be overridden by placing a custom temaplate with the same name and system path under the
+root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>,
+where by default COG_CONFIG_DIR=/usr/local/cog
+
+For example, to override the template cog/common/cog_header.html and cog/common/cog_footer.html which come with the distribution, create the two custom files:
+
+/usr/local/cog/mytemplates/cog/common/cog_header.html
+/usr/local/cog/mytemplates/cog/common/cog_footer.html
+
+Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the template as "/mymedia/<image name>".
+
+For example, the file located at /usr/local/cog/mymedia/nasa.jpeg can be loaded by any template as src="/mymedia/nasa.jpeg" (please note the first leading '/').

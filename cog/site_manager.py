@@ -22,24 +22,25 @@ class SiteManager(object):
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
        IDP_WHITELIST=/esg/config/esgf_idp_static.xml
     '''
-
+    
     # location of site specific settigs configuration file
-    cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
-    CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog_settings.cfg')
+    COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
+    CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
 
     def __init__(self):
         '''Initialization method reads the configuration file.'''
 
         self.config = ConfigParser.ConfigParser(allow_no_value=True)
-        configFilePath = os.path.expanduser(SiteManager.CONFIGFILEPATH)
+        # location of site specific settigs configuration file
+        self.cog_config_dir = SiteManager.COG_CONFIG_DIR
         try:
-            config = self.config.read( configFilePath )
+            config = self.config.read( SiteManager.CONFIGFILEPATH )
             if not config:
                 # if the configFilePath cannot be read (ie: doesn't exist), raise an error
                 raise ValueError
 
         except Exception as e:
-            print "Error reading site settings configuration file: %s" % configFilePath
+            print "Error reading site settings configuration file: %s" % SiteManager.CONFIGFILEPATH
 
     def get(self, name, section='default', default=None):
         '''Method that retrieves a settings value from a specified section of the configuration file.'''
