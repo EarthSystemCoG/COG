@@ -22,6 +22,12 @@ class SolrSearchService:
             params.append( ('query', input.text.strip()) )
         if input.type:
             params.append( ('type', input.type) )
+        if not input.replica: # service default: replica='false'
+            params.append( ('replica', "false") )
+        if input.latest:      # service default: no 'latest' specified
+            params.append( ('latest', "true") )
+        if input.local: # service default: distrib='true'
+            params.append( ('distrib', "false") )
         for key, values in input.constraints.items():
             for value in values:
                 params.append( (key, value) )

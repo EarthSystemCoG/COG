@@ -81,13 +81,28 @@ def search_config(request, searchConfig, extra={}):
     # add fixed constraints - override previous values
     for key, values in searchConfig.fixedConstraints.items():
             input.setConstraint(key, values)
-    
+            
+     
     # text
     if request.REQUEST.get('text', None):
         input.text = request.REQUEST['text']
     # type
     if request.REQUEST.get('type', None):
         input.type = request.REQUEST['type']
+    # replica=True/False
+    if request.REQUEST.get('replica', None) == 'on':
+        input.replica = True
+    else:
+        input.replica = False
+    # latest=True/False
+    if request.REQUEST.get('latest', None) == 'on':
+        input.latest = False
+    else:
+        input.latest = True
+    # local=True/False
+    if request.REQUEST.get('local', None) == 'on':
+        input.local = True
+
     # offset, limit
     if request.REQUEST.get('offset', 0):
         input.offset = int(request.REQUEST['offset'])

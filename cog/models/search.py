@@ -43,6 +43,9 @@ class SearchInput:
         self.constraints = {}
         self.text = ''
         self.type = 'Dataset' # default target type
+        self.replica = False
+        self.latest = True
+        self.local = False
         
     def addConstraint(self, name, value):
         try:

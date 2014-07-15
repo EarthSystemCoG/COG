@@ -13,22 +13,33 @@
 
 <!-- Search Text Box-->
 <div class="box-colored">
-        <table>
+  <table>
 	<tr>
 	<td style="width:20%;text-align:right;vertical-align:middle;">Enter Text</td>
 	<td style="width:30%;vertical-align:middle;"><input type="text" name="text" size="30" value="{{search_input.text}}"/>
 	<td style="width:50%;">&nbsp;<input type="submit" value="Search"/> &nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
-	Display
-	<select name="limit" id="limit">
+	 Display
+	 <select name="limit" id="limit">
 	  <option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
 	  <option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
 	  <option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
 	  <option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
-	</select> results per page
-	  </td></tr>
-        </table>
+	  </select> results per page
+	 </td>
+   </tr>
+ </table>
 </div>
+
+<!-- optional checkbox flags -->
+<br/>
+<input type="checkbox" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />Show All Replicas
+&nbsp; &nbsp;
+<input type="checkbox" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />Show All Versions
+&nbsp; &nbsp;
+<input type="checkbox" name="local" {% if search_input.local %} checked="checked" {% endif %} />Search Local Site Only
+
 <!-- Form Errors -->
 {% if error_message %}
 	<p/><div class="error-box">{{ error_message }}</div>
 {% endif %}
+
