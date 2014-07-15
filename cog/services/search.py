@@ -22,9 +22,9 @@ class SolrSearchService:
             params.append( ('query', input.text.strip()) )
         if input.type:
             params.append( ('type', input.type) )
-        if not input.replica: # service default: replica='false'
+        if not input.replica: # service default: replica=True+False
             params.append( ('replica', "false") )
-        if input.latest:      # service default: no 'latest' specified
+        if input.latest:      # service default: latest=True+False
             params.append( ('latest', "true") )
         if input.local: # service default: distrib='true'
             params.append( ('distrib', "false") )
