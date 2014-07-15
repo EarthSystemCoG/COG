@@ -82,7 +82,6 @@ def search_config(request, searchConfig, extra={}):
     for key, values in searchConfig.fixedConstraints.items():
             input.setConstraint(key, values)
             
-     
     # text
     if request.REQUEST.get('text', None):
         input.text = request.REQUEST['text']
@@ -112,11 +111,14 @@ def search_config(request, searchConfig, extra={}):
     # GET/POST switch
     print "search() view: HTTP Request method=%s search_data flag=%s" % (request.method, request.REQUEST.get(SEARCH_DATA, None))
     if (request.method=='GET'):
-        return search_get(request, input, searchConfig.facetProfile, searchConfig.searchService, extra)
+        return search_get(request, input, searchConfig, extra)
     else:
-        return search_post(request, input, searchConfig.facetProfile, searchConfig.searchService, extra)
+        return search_post(request, input, searchConfig, extra)
         
-def search_get(request, searchInput, facetProfile, searchService, extra={}):
+def search_get(request, searchInput, searchConfig, extra={}):
+    
+    facetProfile = searchConfig.facetProfile
+    searchService = searchConfig.searchService
     
     #data = {}
     # pass on all the extra arguments
@@ -281,7 +283,10 @@ def _processDoc(doc):
     return metadoc
     
     
-def search_post(request, searchInput, facetProfile, searchService, extra={}):
+def search_post(request, searchInput, searchConfig, extra={}):
+    
+    facetProfile = searchConfig.facetProfile
+    searchService = searchConfig.searchService
     
     # valid user input
     if (searchInput.isValid()):

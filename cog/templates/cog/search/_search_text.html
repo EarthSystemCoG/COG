@@ -32,11 +32,13 @@
 
 <!-- optional checkbox flags -->
 <br/>
-<input type="checkbox" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />Show All Replicas
-&nbsp; &nbsp;
-<input type="checkbox" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />Show All Versions
-&nbsp; &nbsp;
-<input type="checkbox" name="local" {% if search_input.local %} checked="checked" {% endif %} />Search Local Site Only
+<div style="text-align:center">
+	<input type="checkbox" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />Show All Replicas
+	&nbsp; &nbsp;
+	<input type="checkbox" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />Show All Versions
+	&nbsp; &nbsp;
+	<input type="checkbox" name="local" {% if search_input.local %} checked="checked" {% endif %} />Search Local Site Only
+</div>
 
 <!-- Form Errors -->
 {% if error_message %}
