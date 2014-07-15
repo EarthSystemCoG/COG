@@ -167,7 +167,8 @@ class SearchConfig:
     Class containing parameters to configure a search service.
     """
     
-    def __init__(self, facetProfile, fixedConstraints, searchService):
+    def __init__(self, facetProfile, fixedConstraints, searchService,
+                 replicaFlag, latestFlag, localFlag):
         
         # back-end search service
         self.searchService = searchService
@@ -178,6 +179,11 @@ class SearchConfig:
         # map of (name,values[]) constraints to be always added to the search
         self.fixedConstraints = fixedConstraints
         
+        # option check-boxes
+        self.replicaFlag = replicaFlag
+        self.latestFlag = latestFlag
+        self.localFlag = localFlag
+        
     def printme(self):
         print 'Search Configuration Service:%s' % self.searchService
         print 'Search Configuration Facets:'
@@ -186,6 +192,7 @@ class SearchConfig:
             for key in facetGroup.getKeys():
                 print "\t\tFacet key=%s, label=%s" % (key, facetGroup.getLabel(key))
         print 'Search Configuration Fixed Constraints=%s' % self.fixedConstraints
+        print 'Search Configuration options: show replica checkbox: %s, show latest checkbox: %s, show local checkbox:%s' % (self.replicaFlag, self.latestFlag, self.localFlag)
     
 class SearchMappings(object):
     """Class that reads facet option mappings from a local configuration file,

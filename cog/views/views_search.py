@@ -24,12 +24,15 @@ from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 from cog.models.utils import get_or_create_default_search_group
 
 
-SEARCH_INPUT = "search_input"
+SEARCH_INPUT  = "search_input"
 SEARCH_OUTPUT = "search_output"
 FACET_PROFILE = "facet_profile"
 ERROR_MESSAGE = "error_message"
-SEARCH_DATA = "search_data"
-SEARCH_PAGES = "search_pages"
+SEARCH_DATA   = "search_data"
+SEARCH_PAGES  = "search_pages"
+REPLICA_FLAG  = "replica_flag"
+LATEST_FLAG   = "latest_flag"
+LOCAL_FLAG    = "local_flag"
 
 # singleton instance - instantiated only once
 testSearchService = TestSearchService()
@@ -181,6 +184,11 @@ def search_get(request, searchInput, searchConfig, extra={}):
         
     if offset+limit < totResults:
         data[SEARCH_PAGES].append( ('Next >>', offset+numResults ) )
+        
+    # add configuration flags
+    data[REPLICA_FLAG] = searchConfig.replicaFlag
+    data[LATEST_FLAG] = searchConfig.latestFlag
+    data[LOCAL_FLAG] = searchConfig.localFlag
         
     return render_to_response('cog/search/search.html', data, context_instance=RequestContext(request))    
 
@@ -404,7 +412,8 @@ def getSearchConfig(request, project):
     #for key, facet in searchService.myfacets.items():
     #    facets.append((facet.key,facet.label))
 
-    return SearchConfig(facetProfile, fixedConstraints, searchService)
+    return SearchConfig(facetProfile, fixedConstraints, searchService,
+                        profile.replicaSearchFlag, profile.latestSearchFlag, profile.localSearchFlag)
                 
 def search(request, project_short_name):
     """

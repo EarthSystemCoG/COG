@@ -13,44 +13,77 @@
            <table>
                 <tr>
                     <td class="righthead" nowrap="nowrap">Search Service URL</td>
-                    <td class="long">{{ form.url }}{{ form.url.errors }}
-                </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td><i>Must be the URL of a compliant RESTful search service</i></td>
-                </tr>
-                <tr>
-                    <td class="righthead" nowrap="nowrap">Constraints</td>
-                    <td class="long">{{ form.constraints }}{{ form.constraints.errors }}
-               </tr>
-               <tr>
-                    <td>&nbsp;</td>
-                    <td><i>Optional fixed constraints as: name1=value1, name2=value2, ...</i></td>
-                </tr>
-                <tr>
-                    <td>Description</td>
-                    <td>                   	
-                    	   {{ form.description }}
-                    	   {{ form.description.errors }}
+                    <td class="long" colspan="2">
+                    	{{ form.url }}
+                    	{{ form.url.errors }}
+                    	<div style="font-style:italic; padding-top:2px;">Must be the URL of a compliant RESTful search service</div>
                     </td>
                 </tr>
                 <tr>
-                	<td>&nbsp;</td>
-                	<td><i>{{form.description.help_text}}</i></td>
+                    <td class="righthead" nowrap="nowrap">Constraints</td>
+                    <td class="long" colspan="2">
+                    	{{ form.constraints }}
+                    	{{ form.constraints.errors }}
+                    	<div style="font-style:italic; padding-top:2px;">Optional fixed constraints as: name1=value1, name2=value2, ...</div>
+                    </td>
+               </tr>
+               <tr>
+                    <td>Description</td>
+                    <td colspan="2">                   	
+                    	   {{ form.description }}
+                    	   {{ form.description.errors }}
+                    	   <div style="font-style:italic; padding-top:0px;">
+                    	   		{{form.description.help_text}}
+                    	   		<br/>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.
+                    	   </div>
+                    </td>
                 </tr>
                 <tr>
                     <td class="righthead" nowrap="nowrap">Model Metadata Flag</td>
-                    <td class="long">{{ form.modelMetadataFlag }}{{ form.modelMetadataFlag.errors }}
-               </tr>
-               <tr>
-                    <td>&nbsp;</td>
-                    <td><i>Check to enable model metadata links for search results</i></td>
+                    <td>{{ form.modelMetadataFlag }}</td>
+                    <td class="long">
+                    	<i>Check to enable model metadata links for search results</i>
+                        {{ form.modelMetadataFlag.errors }}
+                    </td>
                 </tr>
-                
                 <tr>
-                    <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
+                    <td class="righthead" nowrap="nowrap">Display 'All Replicas'<br/>Checkbox</td>
+                    <td>{{ form.replicaSearchFlag }} </td>
+                    <td class="long">
+                    	<div style="font-style:italic;">
+                    	   Check to enable users to toggle replicas search on/off.
+                    	   <br/>Search default: always search for ALL replicas.
+                    	   <br/>Use fixed constraint: 'replica=false' to ALWAYS search for non-replicas.
+                           {{ form.replicaSearchFlag.errors }}
+                        </div>
+                     </td>
+                </tr>
+                <tr>
+                    <td class="righthead" nowrap="nowrap">Display 'All Versions'<br/>Checkbox</td>
+                    <td>{{ form.latestSearchFlag }}</td>
+                    <td class="long">
+                    	<div style="font-style:italic;">
+                    		Check to enable users to toggle versions search on/off.
+                            <br/>Search default: always search for ALL versions.
+                            <br/>Use fixed constraint: 'latest=true' to ALWAYS search for latest version only.
+                            {{ form.latestSearchFlag.errors }}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="righthead" nowrap="nowrap">Display 'Local Search Only'<br/>Checkbox</td>
+                    <td>{{ form.localSearchFlag }} </td>
+                    <td class="long">
+                    	<div style="font-style:italic;">
+                    		Check to enable users to toggle all sites search on/off.
+                            <br/>Search default: always search ALL sites.
+                            <br/>Use fixed constraint: 'distrib=false' to ALWAYS search local site only.
+                            {{ form.localSearchFlag.errors }}
+                        </div>
+                    </td>
                 </tr>
             </table>
+            
             <!-- pass on the profile project as hidden field -->
             {{ form.project.as_hidden }}
              

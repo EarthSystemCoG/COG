@@ -19,6 +19,15 @@ class SearchProfile(models.Model):
     # flag to enable model metadata link
     modelMetadataFlag = models.BooleanField(default=False, blank=False, null=False)
     
+    # flag to display replicas checkbox
+    replicaSearchFlag = models.BooleanField(default=False, blank=False, null=False)
+    
+    # flag to display versions checkbox
+    latestSearchFlag = models.BooleanField(default=False, blank=False, null=False)
+
+    # flag to display local search checkbox
+    localSearchFlag = models.BooleanField(default=False, blank=False, null=False)
+    
     # help text to describe this project's search capabilities
     description = models.TextField(blank=True, null=True, verbose_name='Search Help', help_text='Optional description of this project search capabilities.')
     
