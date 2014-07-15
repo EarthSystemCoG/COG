@@ -15,11 +15,12 @@
 <div class="box-colored">
   <table>
 	<tr>
-	<td style="width:20%;text-align:right;vertical-align:middle;">Enter Text</td>
+	  <!--Safari requidres the middle alignment. We may want to consolidate this style-->
+	<td style="width:20%;vertical-align:middle;text-align:right;">Enter Text</td>
 	<td style="width:30%;vertical-align:middle;"><input type="text" name="text" size="30" value="{{search_input.text}}"/>
-	<td style="width:50%;">&nbsp;<input type="submit" value="Search"/> &nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
-	 Display
-	 <select name="limit" id="limit">
+	<td style="width:50%;vertical-align:middle;">&nbsp;<input type="submit" value="Search"/> &nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
+	Display
+	<select name="limit" id="limit">
 	  <option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
 	  <option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
 	  <option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
