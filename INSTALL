@@ -240,7 +240,9 @@ will parse the user environment, and run the command at minute 0 of every hour, 
 
 NOTES: 
 	- projects will be updated only from peer sites that are "enabled". 
-	- a site will only share projects correctly if its 'Site' domainname equals its real domain
+	- IMPORTANT: a site will only share projects correctly if its 'Site' domainname equals its real domain.
+	  If its site domain has been recently updated, CoG must be restarted for that change to take effect, otherwise
+	  the other CoGs won't see its projects
 	- a site will only share those projects that are both 'active' and 'public'
 	
 	
