@@ -49,7 +49,7 @@ def admin_peers(request):
     
     if request.method=='GET':
         
-        formset = PeerSiteFormSet(queryset=PeerSite.objects.all())
+        formset = PeerSiteFormSet(queryset=PeerSite.objects.exclude(site=Site.objects.get_current()))
         return render_to_response('cog/admin/admin_peers.html', {'formset':formset },
                                   context_instance=RequestContext(request))
         
