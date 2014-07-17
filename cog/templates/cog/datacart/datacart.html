@@ -1,5 +1,6 @@
 <!-- Template page to display user's profile -->
 {% extends "cog/common/layout_center.html" %}
+<!--LOCATION:/cog/templates/cog/datacart.html-->
 
 {% load cog_utils %}
 
@@ -26,7 +27,7 @@
 
 {% block main %}
 
-
+<!--pulldown menu of other data carts-->
 	<div style="text-align:center; font-weight:bold">
 		
 		<!-- local data cart -->
@@ -51,7 +52,7 @@
 	</div>
 	
 	
-	<!-- local data cart -->
+<!-- local data cart -->
 	{% if datacart.items.all|length > 0 %}
 
 	  <!-- skeleton form to empty the data cart via POST -->
@@ -62,25 +63,31 @@
 
 	  	<!-- data cart table -->
 	  	<p/>
-		<table class="no-color" id="datacart-table">
+		<table class="no-color" id="datacart-table" style="width:100%;">
 
 			<!-- Header: services -->
 			<tr>
-				<td align='left' colspan="4" style="vertical-align: middle;">
-					<b>Collective Services for All Selected Datasets:</b>
-					&nbsp; [ <b><a href=""
-					               onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">
-					               WGET Script</a></b> ]
-					<!-- FIXME &nbsp; [ <b><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></b> ] -->
-					<br/>When 'Show Files' is clicked, or when generating WGET scripts, you may use an optional string to sub-select the filenames:
-			  		&nbsp;<input type="text" name="query-filter" id="query-filter"
-			  		             onkeydown="if (event.keyCode == 13) { applyQueryFilter(); return false; }" />
-	  				&nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
-	  				&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>
-
-					<!-- wget scripts place-holder -->
-					<div class="padded-box" id="wget-scripts" style="display:none"></div>
-				</td>
+			<td colspan="3" style="vertical-align: middle;"><b>Collective Services for All Selected Datasets: </b>
+			[<b><a href="" onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">WGET Script</a></b> ]
+      <!-- FIXME &nbsp; [ <b><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></b> ] -->
+			</td>
+			</tr>
+			
+			<tr>
+			<td style="width:72%;vertical-align:middle;">When 'Show Files' is clicked, or when generating WGET scripts, you may use an optional string to sub-select the filenames:</td>
+			<td style="width:14%;vertical-align:middle;"><input type="text" name="query-filter" id="query-filter" placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter(); return false; }" /></td>
+			<td style="width:14%;vertical-align:middle;display:inline;"> 
+	  	        &nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
+	  		&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>
+			</td>
+			</tr>
+		</table>
+		<table class="no-color" id="datacart-table">
+			<tr>
+			<td>
+			<!-- wget scripts place-holder -->
+			<div class="padded-box" id="wget-scripts" style="display:none"></div>
+			</td>
 			</tr>
 			<tr id="item_{{ item.identifier }}_hr">
 				<td colspan="4"><hr/></td>
@@ -99,8 +106,9 @@
                        Remove All</a>
 				</td>
 			</tr>
-
-			<!-- items -->
+                 </table>
+                 <table class="no-color" id="datacart-table">
+		 <!-- items stored in the Data Cart -->
 			{% for item in datacart.items.all %}
 				<tr id="item_{{ item.identifier }}_hr">
 					<td colspan="4"><hr/></td>
