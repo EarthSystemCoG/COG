@@ -394,13 +394,15 @@ def getSearchConfig(request, project):
     # fixedConstraints = { 'project': ['dycore_2009'], } 
     fixedConstraints = {}   
     if project.searchprofile.constraints:
-        constraints = project.searchprofile.constraints.split(',')
+        constraints = project.searchprofile.constraints.split('&')
         for constraint in constraints:
-            (key,value) = constraint.strip().split('=')
-            try:
-                fixedConstraints[key].append(value)
-            except KeyError:
-                fixedConstraints[key] = [value]
+            (key,values) = constraint.strip().split('=')
+            _values = values.split(',')
+            for value in _values:
+                try:
+                    fixedConstraints[key].append(value)
+                except KeyError:
+                    fixedConstraints[key] = [value]
             
     # How to use TestSerachService instead
     #searchService = TestSearchService()

@@ -13,7 +13,7 @@ class SearchProfileForm(ModelForm):
         return clean_url_field(self, 'url')
     
     def clean_constraints(self):
-        return default_clean_field(self, 'constraints')
+        return clean_url_field(self, 'constraints')
         
 class SearchFacetForm(ModelForm):
     
