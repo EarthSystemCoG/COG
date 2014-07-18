@@ -14,7 +14,7 @@
 
 	{% if post.body %}
 		<!-- note: must process the text to remove undesired characters, tags  -->
-		<meta name="description" content="{{ post.body|truncatewords:50|safe|striptags|cut:'&nbsp;' }}" />
+		<meta name="description" content="{{ post.body|striptags|safe|truncatewords:50 }}" />
 	
 	{% endif %}
 
