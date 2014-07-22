@@ -68,6 +68,7 @@ BEGIN PAGE-LEVEL ELEMENTS
 html {
     overflow: -moz-scrollbars-vertical;
     overflow-y: scroll;
+    background: gainsboro;
 }
 
 /***************
@@ -90,13 +91,20 @@ body{
     color:      #333;         /* text color...dark grey*/
     text-align: left;         /*default alignment is left-justified */
 
-    background: #FFFFFF;      /*white background*/
-    padding:      0px;       /*remove all padding in the box model*/
+    /*background: #FFFFFF;      /*white background*/
+    /*padding-left: 20px;       
+    padding-right:20px; */
     margin:       0px;       /*remove all margins in the box model */
     margin-right: auto !important;
-    margin-left: auto  !important;
+    margin-left:  auto  !important;
     vertical-align: baseline;
+    width:   1000px; /*must be larger than span-24, which is 950px */
+    border: 1px solid black; /* puts box around the body. Added at the same time as the custom header */
+
+
 }
+
+
 
 /*p, h1,h2,h3,h4,h5,h6, table, th, tr, td, div, input{
 font: inherit

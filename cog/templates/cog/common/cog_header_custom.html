@@ -1,3 +1,25 @@
-<div class="span-24 last">
-	<div style="text-align:center">THIS IS YOUR CUSTOM HEADER</div>
-</div>
+<!--LOCATION: /cog/templates/cog/common/cog_header_custom.html-->
+<style type="text/css">
+div.custom_header{
+    border-bottom: 2px solid #666;
+    background-color: white;
+    width:inherit;
+}
+img.esgf{
+    width:100px;
+}
+td.welcome{
+    vertical-align:middle;
+    font-size:14px;  /* note this is in px and not pt */
+    color: #666;
+}
+</style>
+
+    <div class="custom_header">
+      <table class="no_color">
+         <tr>	
+         <td style="width:120px;"><img class="esgf" src="/static/cog/img/esgf.png" alt="ESGF logo"></td>
+	 <td class="welcome">Welcome to the NOAA ESRL ESGF-CoG node</td>
+	 </tr>
+      </table>
+   </div>    
