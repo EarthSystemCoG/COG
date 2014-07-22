@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<!--LOCATION: /layouts/templates/layouts/layout_base.html-->
 
 <!--<html xmlns="http://www.w3.org/1999/xhtml">-->
 <html>
@@ -32,8 +32,7 @@
        <!-- hooks for page-specific head content -->
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
-       <!--creates classes for the various versions of internet
-        explorer. These are then used in the CSS to fix specific issues-->
+       <!--creates classes for the various versions of internet explorer. These are then used in the CSS to fix specific issues-->
        <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
        <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
        <!--[if IE 8 ]> <html class="ie8"> <![endif]-->
@@ -44,17 +43,20 @@
     </head>
     
     <body>
+        <!--custom header spans with of the body and is LARGER than "container"-->
+        {% block custom_header %} {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
     	
         <div class="container">
-            <!--Being Header-->
+            <!--Begin Header by Loading: layouts/layout_header.html-->
+	  
             <div class="span-24 last">
                 {% block header %} {% include 'layouts/layout_header.html' %} {% endblock %}
             </div>
 	    
-            <!--Begin Body-->             
+            <!--Begin Body by Loading: various templates (e.g. layouts/center_left.html-->             
             {% block body %}{% endblock %}
             
-	    <!-- Begin Footer-->
+	    <!-- Begin Footer by Loading: layouts/layout_footer.html-->
 	    <div class="span-24 last">
                 {% block footer %} {% include 'layouts/layout_footer.html' %} {% endblock %}
             </div>
