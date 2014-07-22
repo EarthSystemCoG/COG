@@ -145,7 +145,7 @@ class ProjectManager(object):
         elif ptype=='peers':
             return project.peers.all()
             
-        elif ptype=='child':
+        elif ptype=='children':
             return project.children()
             
         else:
