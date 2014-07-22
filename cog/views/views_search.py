@@ -9,7 +9,7 @@ import urllib, urllib2
 
 
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.services.search import SolrSearchService, TestSearchService
+from cog.services.search import SolrSearchService
 from cog.models.search import SearchOutput, Record, Facet, FacetProfile
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -17,7 +17,6 @@ from copy import copy, deepcopy
 from urllib2 import HTTPError
 
 from cog.models.search import *
-from cog.services.search import TestSearchService, SolrSearchService
 from cog.services.SolrSerializer import deserialize
 
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
@@ -33,34 +32,6 @@ SEARCH_PAGES  = "search_pages"
 REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
 LOCAL_FLAG    = "local_flag"
-
-# singleton instance - instantiated only once
-testSearchService = TestSearchService()
-
-# method to configure the search on a per-request basis
-def getTestSearchConfig(request):
-    """
-    Example of search configuration method that ties into a test search service and associated facets,
-    and sets one fixed constraint.
-    """
-        
-    facetProfile = FacetProfile([ 
-                                 #('project','Project'),
-                                 ('model','Model'),
-                                 ('experiment','Experiment'),
-                                 ('instrument','Instrument'),
-                                 ])
-    fixedConstraints = { 'project': ['Test Project'], }
-    
-    return SearchConfig(facetProfile, fixedConstraints, testSearchService)
-
-#def search(request):
-    """
-    Default view entry point that configures the search with a test search configuration.
-    """
-    
-#    config = getTestSearchConfig(request)
-#    return search_config(request, config)
 
 def search_config(request, searchConfig, extra={}):
     """
@@ -404,12 +375,6 @@ def getSearchConfig(request, project):
                 except KeyError:
                     fixedConstraints[key] = [value]
             
-    # How to use TestSerachService instead
-    #searchService = TestSearchService()
-    #facets = []
-    #for key, facet in searchService.myfacets.items():
-    #    facets.append((facet.key,facet.label))
-
     return SearchConfig(facetProfile, fixedConstraints, searchService,
                         profile.replicaSearchFlag, profile.latestSearchFlag, profile.localSearchFlag)
                 
