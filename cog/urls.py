@@ -11,9 +11,6 @@ urlpatterns = patterns('',
     url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
     url(r'^cogadmin/peers/$', 'cog.views.admin_peers', name='admin_peers' ),
 
-    # re-initialized search URL
-    url(r'^search_init/(?P<project_short_name>.+)/$', 'cog.views.search_init', name='search_init' ),
-    # stateful search URL
     url(r'^search/(?P<project_short_name>.+)/$', 'cog.views.search', name='search' ),
     url(r'^search_profile/config/(?P<project_short_name>.+)/$', 'cog.views.search_profile_config', name='search_profile_config'),
     url(r'^search_facet/add/(?P<project_short_name>.+)/$', 'cog.views.search_facet_add', name='search_facet_add'),

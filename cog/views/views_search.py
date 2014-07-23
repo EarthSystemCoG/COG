@@ -28,32 +28,12 @@ SEARCH_OUTPUT = "search_output"
 FACET_PROFILE = "facet_profile"
 ERROR_MESSAGE = "error_message"
 SEARCH_DATA   = "search_data"
-SEARCH_INIT   = "search_init"
-SEARCH_URL    = "search_url"
 SEARCH_REDIRECT = "search_redirect"
 SEARCH_PAGES  = "search_pages"
 REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
 LOCAL_FLAG    = "local_flag"
 
-def search_init(request, project_short_name):
-    '''View for starting a search from scratch.'''
-    
-    # clean the session
-    try: 
-        del request.session[SEARCH_DATA]
-    except KeyError:
-        pass
-    try:
-        del request.session[SEARCH_URL]
-    except KeyError:
-        pass
-    
-    # set first time flag
-    request.session[SEARCH_INIT] = True
-    
-    # redirect
-    return HttpResponseRedirect(reverse('search', args=[project_short_name]))
                 
 def search(request, project_short_name):
     """
