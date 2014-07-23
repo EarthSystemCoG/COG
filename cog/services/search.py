@@ -15,8 +15,8 @@ class SolrSearchService:
         
         # Note: use sequence of 2-tuples to allow for multiple values
         params = [ ('offset',input.offset), ('limit',input.limit) ]
-        if input.text:
-            params.append( ('query', input.text.strip()) )
+        if input.query:
+            params.append( ('query', input.query.strip()) )
         if input.type:
             params.append( ('type', input.type) )
         if not input.replica: # service default: replica=True+False

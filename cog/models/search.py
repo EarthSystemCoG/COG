@@ -41,7 +41,7 @@ class SearchInput:
         self.offset = 0
         self.limit = LIMIT
         self.constraints = {}
-        self.text = ''
+        self.query = ''
         self.type = 'Dataset' # default target type
         self.replica = False
         self.latest = True
@@ -59,16 +59,16 @@ class SearchInput:
         
     def isValid(self):
         for c in INVALID_CHARACTERS:
-            if c in self.text:
+            if c in self.query:
                 return False
         return True
     
     def isEmpty(self):
-        return self.text == '' and len(self.constraints)==0
+        return self.query == '' and len(self.constraints)==0
         
     def printme(self):
         print "Search Input"
-        print "\t Text=%s Type=%s Offset=%d Limit=%d" % (self.text, self.type, self.offset, self.limit)
+        print "\t Query=%s Type=%s Offset=%d Limit=%d" % (self.query, self.type, self.offset, self.limit)
         for key, values in self.constraints.items():
             print "\t Constraint key=%s value(s)=%s" % (key, values)
         

@@ -98,8 +98,8 @@ def search_config(request, searchConfig, extra={}):
             input.setConstraint(key, values)
             
     # text
-    if request.REQUEST.get('text', None):
-        input.text = request.REQUEST['text']
+    if request.REQUEST.get('query', None):
+        input.query = request.REQUEST['query']
     # type
     if request.REQUEST.get('type', None):
         input.type = request.REQUEST['type']
@@ -344,7 +344,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
         # override search input from request
         data[SEARCH_INPUT] = searchInput
         # add error
-        data[ERROR_MESSAGE] = "Error: search text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
+        data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
          
     # store data in session 
     #data['title'] = 'Advanced Data Search'
