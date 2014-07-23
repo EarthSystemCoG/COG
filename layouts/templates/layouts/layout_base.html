@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <!--LOCATION: /layouts/templates/layouts/layout_base.html-->
-
+<!--FROM: /layouts/templates/layouts/layout_base.html-->
 <!--<html xmlns="http://www.w3.org/1999/xhtml">-->
 <html>
-
-    <head>
+   <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=9">
-        
+        <meta http-equiv="X-UA-Compatible" content="IE=9"> <!--required to get IE out of quirks mode-->
+
+        <!--add meta title-->
         <title>{% block head_title %} {{ title|removetags:"h2"|safe }} {% endblock %}</title>
             
         <!-- CSS for grid layout -->
@@ -17,21 +17,18 @@
         <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/typography.css" type="text/css" media="screen, projection"/>
         <!--<link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/print.css" type="text/css" media="print"/> -->
         <!-- [if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/><![endif] -->
-	    
-	<!-- WorldPress tricolor CSS -->
-        <!--  <link rel="stylesheet" href="{{MEDIA_URL}}css/tricolor/mystyle.css" type="text/css"> -->
 
-        <!-- from /layouts/layout_center.html -- >
-        <!-- loads YUI style sheets and scripts -->
+        <!--Load header from template -->
         {% block head %}{% endblock %}
 
         <!-- loading CoG-specific styles. Needs to be last -->
         <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
 
-
        <!-- hooks for page-specific head content -->
+       <!--do we need this??-->
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
+
        <!--creates classes for the various versions of internet explorer. These are then used in the CSS to fix specific issues-->
        <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
        <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
@@ -43,26 +40,19 @@
     </head>
     
     <body>
-        <!--custom header spans with of the body and is LARGER than "container"-->
-        {% block custom_header %} {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
-    	
-        <div class="container">
-            <!--Begin Header by Loading: layouts/layout_header.html-->
-	  
-            <div class="span-24 last">
-                {% block header %} {% include 'layouts/layout_header.html' %} {% endblock %}
-            </div>
-	    
-            <!--Begin Body by Loading: various templates (e.g. layouts/center_left.html-->             
+       <!--Load block custom_header from various templates -->
+       {% block custom_header %} {% endblock %}
+       <div class="container">
+	   <!--Load block header from various templates-->
+	    {% block header %}{% endblock %}
+	 
+           <!--Load block body from various templates -->
             {% block body %}{% endblock %}
-            
-	    <!-- Begin Footer by Loading: layouts/layout_footer.html-->
-	    <div class="span-24 last">
-                {% block footer %} {% include 'layouts/layout_footer.html' %} {% endblock %}
-            </div>
-  
-        </div>
+	 
+	   <!--Load block footer from various templates -->
+            {% block footer %}{% endblock %}
+      </div>
     </body>
     
 </html>
-	
+<!--END: /layouts/templates/layouts/layout_base.html-->	

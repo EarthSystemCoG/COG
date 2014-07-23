@@ -1,17 +1,17 @@
 <!--LOCATION: /layouts//templates/layouts/layout_main.html-->
-<!--EXTENDS: layout_base.html">
+<!--EXTENDS: layout_base.html"-->
 {% extends "layouts/layout_base.html" %}
 
 {% block body %}  
-    <!--/layouts/layout_main.html-->
-    <!--adding the page title to the body section-->
+    <!--FROM: /layouts/templates/layouts/layout_main.html-->
+    <!--add page title above block main-->
     <div class="span-24 last">
         {% block title %} <h1 class="title"> {{ title }} </h1> {% endblock %}
     </div>
 
-    <!--/templates/layout_main.html-->
+    <!--load block main-->
     <div class="span-24 last">
          {% block main %} Main content {% endblock %}
     </div>
-    
+   <!--END: /layouts/templates/layouts/layout_main.html-->
 {% endblock %}
