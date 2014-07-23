@@ -30,6 +30,7 @@ ERROR_MESSAGE = "error_message"
 SEARCH_DATA   = "search_data"
 SEARCH_INIT   = "search_init"
 SEARCH_URL    = "search_url"
+SEARCH_REDIRECT = "search_redirect"
 SEARCH_PAGES  = "search_pages"
 REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
@@ -119,9 +120,12 @@ def search_config(request, searchConfig, extra={}):
         input.limit = int(request.REQUEST['limit'])
         
     # GET/POST switch
-    print "search() view: HTTP Request method=%s search_data flag=%s" % (request.method, request.REQUEST.get(SEARCH_DATA, None))
+    print "search() view: HTTP Request method=%s search_redirect flag=%s" % (request.method, request.session.get(SEARCH_REDIRECT, None))
     if (request.method=='GET'):
-        return search_get(request, input, searchConfig, extra)
+        if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: # pre-seeded search
+            return search_post(request, input, searchConfig, extra)
+        else:
+            return search_get(request, input, searchConfig, extra)
     else:
         return search_post(request, input, searchConfig, extra)
         
@@ -135,9 +139,10 @@ def search_get(request, searchInput, searchConfig, extra={}):
     data = extra
     
     # after POST redirection
-    if (request.session.get(SEARCH_DATA, None)):
+    if (request.session.get(SEARCH_REDIRECT, None)):
         print "Retrieving search data from session"
         data = request.session.get(SEARCH_DATA)
+        del request.session[SEARCH_REDIRECT]
         if data.get(ERROR_MESSAGE,None):
             print "Found Error=%s" % data[ERROR_MESSAGE]
     
@@ -346,8 +351,9 @@ def search_post(request, searchInput, searchConfig, extra={}):
     request.session[SEARCH_DATA] = data
     
     # use POST-REDIRECT-GET pattern
-    #return HttpResponseRedirect( reverse('cog_search')+"?%s=True" % SEARCH_DATA )
-    return HttpResponseRedirect( request.path )
+    # flag the redirect in session
+    request.session[SEARCH_REDIRECT] = True
+    return HttpResponseRedirect( request.get_full_path() ) # relative search page URL + optional query string
 
 
 
