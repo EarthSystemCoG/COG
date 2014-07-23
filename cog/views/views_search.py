@@ -28,10 +28,50 @@ SEARCH_OUTPUT = "search_output"
 FACET_PROFILE = "facet_profile"
 ERROR_MESSAGE = "error_message"
 SEARCH_DATA   = "search_data"
+SEARCH_INIT   = "search_init"
+SEARCH_URL    = "search_url"
 SEARCH_PAGES  = "search_pages"
 REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
 LOCAL_FLAG    = "local_flag"
+
+def search_init(request, project_short_name):
+    '''View for starting a search from scratch.'''
+    
+    # clean the session
+    try: 
+        del request.session[SEARCH_DATA]
+    except KeyError:
+        pass
+    try:
+        del request.session[SEARCH_URL]
+    except KeyError:
+        pass
+    
+    # set first time flag
+    request.session[SEARCH_INIT] = True
+    
+    # redirect
+    return HttpResponseRedirect(reverse('search', args=[project_short_name]))
+                
+def search(request, project_short_name):
+    """
+    COG-specific search-view that configures the back-end search engine on a per-project basis.
+    """
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    config = getSearchConfig(request, project)
+
+    if config:        
+        config.printme()
+        # pass on project as extra argument to search
+        return search_config(request, config, extra = {'project' : project} )
+    # search is not configured for this project
+    else:
+        messages = ['Searching is not enabled for this project.',
+                    'Please contact the project administrators for further assistance.']
+        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
 
 def search_config(request, searchConfig, extra={}):
     """
@@ -95,9 +135,9 @@ def search_get(request, searchInput, searchConfig, extra={}):
     data = extra
     
     # after POST redirection
-    if (request.GET.get(SEARCH_DATA)):
+    if (request.session.get(SEARCH_DATA, None)):
         print "Retrieving search data from session"
-        data = request.session.get(SEARCH_DATA, None)
+        data = request.session.get(SEARCH_DATA)
         if data.get(ERROR_MESSAGE,None):
             print "Found Error=%s" % data[ERROR_MESSAGE]
     
@@ -106,11 +146,12 @@ def search_get(request, searchInput, searchConfig, extra={}):
         
         # set retrieval of all facets in profile
         searchInput.facets = facetProfile.getAllKeys()
+        searchInput.limit = 0
+        searchInput.offset = 0
         
         # execute query for facets
-        #searchOutput = searchService.search(searchInput, False, True)
         try:
-            xml = searchService.search(searchInput, False, True)
+            xml = searchService.search(searchInput)
             searchOutput = deserialize(xml, facetProfile)
             #FIXME
             #searchOutput.printme()
@@ -134,23 +175,24 @@ def search_get(request, searchInput, searchConfig, extra={}):
     # build pagination links
     offset = data[SEARCH_INPUT].offset
     limit = data[SEARCH_INPUT].limit
-    currentPage = offset/limit + 1
-    numResults = len(data[SEARCH_OUTPUT].results)
-    totResults = data[SEARCH_OUTPUT].counts
-    data[SEARCH_PAGES] = []
-        
-    if offset > 0:
-        data[SEARCH_PAGES].append( ('<< Previous', offset-limit ) )
+    if limit > 0:
+        currentPage = offset/limit + 1
+        numResults = len(data[SEARCH_OUTPUT].results)
+        totResults = data[SEARCH_OUTPUT].counts
+        data[SEARCH_PAGES] = []
             
-    for page in range(currentPage-5, currentPage+6):
-        pageOffset = (page-1)*limit
-        if page==currentPage:
-            data[SEARCH_PAGES].append( ('-%s-' % page, pageOffset) )
-        elif page > 0 and pageOffset < totResults:
-            data[SEARCH_PAGES].append( ('%s' % page, pageOffset) )
-        
-    if offset+limit < totResults:
-        data[SEARCH_PAGES].append( ('Next >>', offset+numResults ) )
+        if offset > 0:
+            data[SEARCH_PAGES].append( ('<< Previous', offset-limit ) )
+                
+        for page in range(currentPage-5, currentPage+6):
+            pageOffset = (page-1)*limit
+            if page==currentPage:
+                data[SEARCH_PAGES].append( ('-%s-' % page, pageOffset) )
+            elif page > 0 and pageOffset < totResults:
+                data[SEARCH_PAGES].append( ('%s' % page, pageOffset) )
+            
+        if offset+limit < totResults:
+            data[SEARCH_PAGES].append( ('Next >>', offset+numResults ) )
         
     # add configuration flags
     data[REPLICA_FLAG] = searchConfig.replicaFlag
@@ -270,9 +312,8 @@ def search_post(request, searchInput, searchConfig, extra={}):
         searchInput.facets = facetProfile.getAllKeys()
     
         # execute query for results, facets
-        #searchOutput = searchService.search(searchInput, True, True)
         try:
-            xml = searchService.search(searchInput, True, True)
+            xml = searchService.search(searchInput)
             searchOutput = deserialize(xml, facetProfile)
             #searchOutput.printme()
             
@@ -304,9 +345,9 @@ def search_post(request, searchInput, searchConfig, extra={}):
     #data['title'] = 'Advanced Data Search'
     request.session[SEARCH_DATA] = data
     
-    # use POST-REDIRECT-GET pattern with additional parameter "?search_data"
+    # use POST-REDIRECT-GET pattern
     #return HttpResponseRedirect( reverse('cog_search')+"?%s=True" % SEARCH_DATA )
-    return HttpResponseRedirect( request.path+"?%s=True" % SEARCH_DATA )
+    return HttpResponseRedirect( request.path )
 
 
 
@@ -377,25 +418,8 @@ def getSearchConfig(request, project):
             
     return SearchConfig(facetProfile, fixedConstraints, searchService,
                         profile.replicaSearchFlag, profile.latestSearchFlag, profile.localSearchFlag)
-                
-def search(request, project_short_name):
-    """
-    COG-specific search-view that configures the back-end search engine on a per-project basis.
-    """
     
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    config = getSearchConfig(request, project)
 
-    if config:        
-        config.printme()
-        # pass on project as extra argument to search
-        return search_config(request, config, extra = {'project' : project} )
-    # search is not configured for this project
-    else:
-        messages = ['Searching is not enabled for this project.',
-                    'Please contact the project administrators for further assistance.']
-        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
 
 def search_profile_config(request, project_short_name):
     

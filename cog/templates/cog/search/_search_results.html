@@ -1,7 +1,7 @@
 {% load cog_utils %}
 {% load search_utils %}
 
-{% if request.GET.search_data %}
+{% if request.session.search_data %}
 
   <!-- anchor for dialogs -->
   <div id="myDialog" class="yui-skin-sam"></div>
@@ -12,7 +12,9 @@
     {% with search_output.results as results %}
 
         {% if results|length == 0 %}
-            <p/><div style="text-align:center; font-weight:bold">The search returned 0 results.</div>
+            {% if search_input.limit != 0 %}
+            	<p/><div style="text-align:center; font-weight:bold">The search returned 0 results.</div>
+            {% endif %}
         {% else %}
 
             <p/>

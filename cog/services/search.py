@@ -8,7 +8,7 @@ class SolrSearchService:
         self.url = url
         self.facets = facets
     
-    def search(self, input, doResults, doFacets):
+    def search(self, input):
         
         # debug
         input.printme()
