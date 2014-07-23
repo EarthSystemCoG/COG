@@ -1,4 +1,7 @@
 <!--LOCATION: /cog/templates/cog/common/cog_header_custom.html-->
+<!--This is the default custom header for ESGF-COG-->
+<!--It contains the ESGF logo, space for welcome message or node name, and space for institutional logos.-->
+<!--Maintain-->
 <style type="text/css">
 div.custom_header{
     border-bottom: 2px solid #666;
@@ -6,20 +9,31 @@ div.custom_header{
     width:inherit;
 }
 img.esgf{
-    width:100px;
+    width:105px;
 }
-td.welcome{
+td.custom_header_esgf{
+    width:120px;
+    vertical-align:middle;
+}
+td.custom_header_welcome{
     vertical-align:middle;
     font-size:14px;  /* note this is in px and not pt */
     color: #666;
+}
+img.custom_header_logo{
+    width: 37px;
+}
+td.custom_header_images{
+   text-align:right;
 }
 </style>
 
     <div class="custom_header">
       <table class="no_color">
          <tr>	
-         <td style="width:120px;"><img class="esgf" src="/static/cog/img/esgf.png" alt="ESGF logo"></td>
-	 <td class="welcome">Welcome to the NOAA ESRL ESGF-CoG node</td>
+         <td class="custom_header_esgf"><img class="esgf" src="/static/cog/img/esgf.png" alt="ESGF logo"></td>
+	 <td class="custom_header_welcome">Welcome to ESGF-CoG </td>
+	 <td class="custom_header_images"><img class="custom_header_logo" src="/static/cog/img/noaa.jpg"></img></src>
 	 </tr>
       </table>
    </div>    

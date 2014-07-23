@@ -1,5 +1,6 @@
 {% extends "layouts/layout_main.html" %}
 <!--LOCATION: /cog/templates/cog/common/layout_center.html-->
+<!--EXTENDS: /layouts/templates/layouts/layout_main.html-->
 
 {% block head %}
 
@@ -19,6 +20,10 @@
     
     {% include 'cog/common/google_analytics.html' %}
 
+{% endblock %}
+
+{% block custom_header %}
+     {% include 'cog/common/cog_header_custom.html' %}
 {% endblock %}
 
 {% block header %}
