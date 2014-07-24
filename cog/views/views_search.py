@@ -37,7 +37,8 @@ LOCAL_FLAG    = "local_flag"
                 
 def search(request, project_short_name):
     """
-    COG-specific search-view that configures the back-end search engine on a per-project basis.
+    Entry point for all search requests (GET/POST).
+    Loads project-specific configuration.
     """
     
     # retrieve project from database
@@ -56,8 +57,10 @@ def search(request, project_short_name):
 
 def search_config(request, searchConfig, extra={}):
     """
-    View entry point for applications that need to provide their own
-    per-request search configuration.
+    Project-specific search view that processes all GET/POST requests.
+    Parses GET/POST requests parameters and combines them with the project fixed constraints.
+    Delegates to 'search_get' and 'search_post'.
+    Pre-seeded search URLs are automatically processed (i.e. GET requests with additional HTTP parameters, but NOT after a POST redirect).
     """
         
     # print extra arguments
@@ -100,9 +103,11 @@ def search_config(request, searchConfig, extra={}):
         input.limit = int(request.REQUEST['limit'])
         
     # GET/POST switch
-    print "search() view: HTTP Request method=%s search_redirect flag=%s" % (request.method, request.session.get(SEARCH_REDIRECT, None))
+    print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
+                                                                                                request.session.get(SEARCH_REDIRECT, None), 
+                                                                                                request.REQUEST)
     if (request.method=='GET'):
-        if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: # pre-seeded search
+        if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: # pre-seeded search URL
             return search_post(request, input, searchConfig, extra)
         else:
             return search_get(request, input, searchConfig, extra)
@@ -110,31 +115,36 @@ def search_config(request, searchConfig, extra={}):
         return search_post(request, input, searchConfig, extra)
         
 def search_get(request, searchInput, searchConfig, extra={}):
+    '''
+    View that processes search GET requests.
+    If invoked directly, it executes a query for facets but no results.
+    After a POST redirect, it retrieves results from the session and removes the SEARCH_REDIRECT flag.
+    '''
     
     facetProfile = searchConfig.facetProfile
     searchService = searchConfig.searchService
     
-    #data = {}
     # pass on all the extra arguments
     data = extra
     
-    # after POST redirection
+    # GET request after POST redirection
     if (request.session.get(SEARCH_REDIRECT, None)):
+        
         print "Retrieving search data from session"
         data = request.session.get(SEARCH_DATA)
+        
+        # remove POST redirect flag
         del request.session[SEARCH_REDIRECT]
-        if data.get(ERROR_MESSAGE,None):
-            print "Found Error=%s" % data[ERROR_MESSAGE]
     
-    # first GET invocation
+    # direct GET request
     else:
         
         # set retrieval of all facets in profile
+        # but do not retrieve any results
         searchInput.facets = facetProfile.getAllKeys()
-        searchInput.limit = 0
+        searchInput.limit = 0  # don't query for results
         searchInput.offset = 0
         
-        # execute query for facets
         try:
             xml = searchService.search(searchInput)
             searchOutput = deserialize(xml, facetProfile)
@@ -145,7 +155,6 @@ def search_get(request, searchInput, searchConfig, extra={}):
             data[SEARCH_OUTPUT] = searchOutput
             data[FACET_PROFILE] = facetProfile
             #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
-            #data['title'] = 'Advanced Data Search'
             
             # save data in session
             request.session[SEARCH_DATA] = data
@@ -185,6 +194,61 @@ def search_get(request, searchInput, searchConfig, extra={}):
     data[LOCAL_FLAG] = searchConfig.localFlag
         
     return render_to_response('cog/search/search.html', data, context_instance=RequestContext(request))    
+
+def search_post(request, searchInput, searchConfig, extra={}):
+    '''
+    View that processes a search POST request.
+    Stores results in session, together with special SEARCH_REDIRECT session flag.
+    Then redirects to the search GET URL.
+    '''
+    
+    facetProfile = searchConfig.facetProfile
+    searchService = searchConfig.searchService
+    
+    # valid user input
+    if (searchInput.isValid()):
+        
+        # set retrieval of all facets in profile
+        searchInput.facets = facetProfile.getAllKeys()
+    
+        # execute query for results, facets
+        try:
+            xml = searchService.search(searchInput)
+            searchOutput = deserialize(xml, facetProfile)
+            #searchOutput.printme()
+            
+            # initialize new session data from extra argument dictionary
+            data = extra
+            data[SEARCH_INPUT] = searchInput
+            data[SEARCH_OUTPUT] = searchOutput
+            data[FACET_PROFILE] = facetProfile
+            #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
+            
+        except HTTPError:
+            print "HTTP Request Error"
+            data = request.session[SEARCH_DATA]
+            data[SEARCH_INPUT] = searchInput
+            data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
+
+            
+    # invalid user input
+    else:
+        print "Invalid Search Input"
+        # re-use previous data (output, profile and any extra argument) from session
+        data = request.session[SEARCH_DATA]
+        # override search input from request
+        data[SEARCH_INPUT] = searchInput
+        # add error
+        data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
+         
+    # store data in session 
+    #data['title'] = 'Advanced Data Search'
+    request.session[SEARCH_DATA] = data
+    
+    # use POST-REDIRECT-GET pattern
+    # flag the redirect in session
+    request.session[SEARCH_REDIRECT] = True
+    return HttpResponseRedirect( request.get_full_path() ) # relative search page URL + optional query string
 
 def metadata_display(request, project_short_name):
     
@@ -284,83 +348,6 @@ def _processDoc(doc):
                         
     return metadoc
     
-    
-def search_post(request, searchInput, searchConfig, extra={}):
-    
-    facetProfile = searchConfig.facetProfile
-    searchService = searchConfig.searchService
-    
-    # valid user input
-    if (searchInput.isValid()):
-        
-        # set retrieval of all facets in profile
-        searchInput.facets = facetProfile.getAllKeys()
-    
-        # execute query for results, facets
-        try:
-            xml = searchService.search(searchInput)
-            searchOutput = deserialize(xml, facetProfile)
-            #searchOutput.printme()
-            
-            # initialize new session data from extra argument dictionary
-            data = extra
-            data[SEARCH_INPUT] = searchInput
-            data[SEARCH_OUTPUT] = searchOutput
-            data[FACET_PROFILE] = facetProfile
-            #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
-            
-        except HTTPError:
-            print "HTTP Request Error"
-            data = request.session[SEARCH_DATA]
-            data[SEARCH_INPUT] = searchInput
-            data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
-
-            
-    # invalid user input
-    else:
-        print "Invalid Search Input"
-        # re-use previous data (output, profile and any extra argument) from session
-        data = request.session[SEARCH_DATA]
-        # override search input from request
-        data[SEARCH_INPUT] = searchInput
-        # add error
-        data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
-         
-    # store data in session 
-    #data['title'] = 'Advanced Data Search'
-    request.session[SEARCH_DATA] = data
-    
-    # use POST-REDIRECT-GET pattern
-    # flag the redirect in session
-    request.session[SEARCH_REDIRECT] = True
-    return HttpResponseRedirect( request.get_full_path() ) # relative search page URL + optional query string
-
-
-
-
-# Note: all the facets available through the REST API are defined by the Search Services and returned by an unbound query
-# Each client application (such as this controller) is responsible for using a sub-set of these facets, and providing appropriate labels
-# (labels could be provided by the REST API, but there is no Solr schema for encoding the information)
-"""
-facetProfile = FacetProfile([ 
-                             ('project','Data Project'),
-                             ('model','Model'),
-                             ('experiment','Experiment'),
-                             ('cf_variable','CF Standard Name'), 
-                             ('resolution','Resolution'), 
-                             #'institute':'Institute', 
-                              #'instrument':'Instrument', 
-                              #'obs_project':'Mission', 
-                              #'obs_structure':'Data Structure',
-                              #'obs_type':'Measurement Type',
-                              #'product':'Product', 
-                              #'time_frequency':'Time Frequency',
-                              #'realm':'Realm',  
-                             ('variable','Variable'),
-                           ])
-"""
-
-
 # method to configure the search on a per-request basis
 def getSearchConfig(request, project):
     
