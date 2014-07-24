@@ -98,11 +98,12 @@ body{
     margin-right: auto !important;
     margin-left:  auto  !important;
     vertical-align: baseline;
-    width:   1000px; /*must be larger than span-24, which is 950px */
     border: 1px solid black; /* puts box around the body. Added at the same time as the custom header */
+    width:1000px;
 
 
 }
+
 
 
 

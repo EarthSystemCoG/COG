@@ -1,3 +1,26 @@
-<div class="span-24 last">
-	<div style="text-align:center">THIS IS YOUR CUSTOM FOOTER</div>
+<!--LOCATION: /cog/templates/cog/common/cog_footer_custom.html-->
+<!--This is the default custom footer for ESGF-COG-->
+<!--It contains space for the node URL address and institutional links-->
+<!--Maintaining the style will make ESGF consistent across nodes.-->
+<style type="text/css">
+div.custom_footer{
+    border-bottom: 2px solid #666;
+    background-color: #666;
+    width:inherit;
+    color:white; /*text color */
+    text-align:left;
+}
+
+td.machine_name{
+   text-align:left;
+}
+</style>
+
+<div class="custom_footer">
+  <!--#echo var="DATE_LOCAL" -->
+<table class="no_color">
+  <tr>
+    <td class="machine_name">This is some text </td>
+  </tr>
+</table>
 </div>
