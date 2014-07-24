@@ -1,3 +1,4 @@
+<!--//START: /cog/templates/cog/common/_user_menu.html //-->
 {% load cog_utils %}
 
 {% if request.user.is_authenticated %}
@@ -39,7 +40,4 @@
      <!-- | <a href="{% url 'openid-login' %}?next={{ request.path }}">OpenID Login</a> -->
      | <a href="{% url 'user_add' %}">Create Account</a>
 {% endif %}
-
-<!--  new project link
-<br/>| <a href="{% url 'project_add' %}">Register a New Project</a>
--->
+<!--//END: /cog/templates/cog/common/_user_menu.html //-->

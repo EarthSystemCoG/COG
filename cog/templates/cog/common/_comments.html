@@ -1,3 +1,5 @@
+<!--// START: /cog/templates//cog/common/_comments.html //-->
+
 <!-- 
     Django template snippet to render comments for an object
     object: the object the comments refer to
@@ -15,14 +17,15 @@
 <hr class="white"/>
 <div class="header_bar"> 
      <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">&nbsp;Comments ({{ comment_count }})</a>
-</div>
+</div> <!--// end div.header_bar //-->
 <!-- NOTE: open up comments when page is first loaded -->
+
 <div class="mybox" id="mycomments" style="display:none">
 	{% for comment in comment_list %}
 	   <div id="comment_{{ comment.id }}" class="box-comment">
 	       <div class="caption">{{ comment.name|escape }}, on {{ comment.submit_date|date:"d M Y, H:m" }}</div>
 	       {{ comment.comment|escape|urlizetrunc:40|linebreaksbr }}
-	   </div>
+	   </div><!--// end div id=comment_ //-->
 	{% endfor %}
 	{% paginate %}
 	
@@ -47,4 +50,6 @@
 		</form>
 	{% endif %}
 
-</div>
+</div> <!--// end div id=mycomments //-->
+
+<!--// END: /cog/templates//cog/common/_comments.html //-->

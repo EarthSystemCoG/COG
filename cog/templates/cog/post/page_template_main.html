@@ -1,37 +1,44 @@
-<!-- page body -->
+<!--// START: /cog/templates/cog/post/page_template_main.html //-->
+<!--// loading page body from page_template_main.html //-->
 {% load cog_utils %}
 
-<p/>
+<p>&nbsp;</p>
 {% autoescape off %}
 
     <div id="cog_post_body">
         {{ post.body }}
-    </div> <!-- /#cog_post_body -->
+    </div> <!--// end div id=cog_post_body //-->
     
-    <!-- include action links -->
+    <!--// include action links via cog/post/_post_actions.html  //-->
     {% include 'cog/post/_post_actions.html' %}
     
-    <!-- social media buttons -->
-	<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
-		 {% include 'cog/common/cog_social_media.html' %} 
-	</div>	
+    <!--// add social media buttons //-->
+    <div id="social_media" style="text-align:center; padding-top: 4px; padding-bottom:8px;">
+        {% include 'cog/common/cog_social_media.html' %} 
+    </div><!--// end div id=social_media //-->
         	
-	<!-- Comments -->
+    <!--// add comments via cog/common/_comments.html //-->
+    <div id="comments" style="text-align:left;">
     {% with post.url as next_view %}
-	    {% with post as object %}
-	        {% include 'cog/common/_comments.html' %}
-	    {% endwith %}
-    {% endwith %}
-    
-    <!-- Attachments -->  
-    {% include 'cog/post/_post_attachements.html' %}
-    
-    <!-- Hierarchy -->
-    {% with related_pages as related_posts %}
-		{% include 'cog/post/_post_hierarchy.html' %}
+        {% with post as object %}
+	   {% include 'cog/common/_comments.html' %}
 	{% endwith %}
+    {% endwith %}
+    </div>
     
-    <!-- include signals, if available -->
+    <!--// include attachments via cog/post/_post_attachements.html  //-->
+    <div id="attachments">
+        {% include 'cog/post/_post_attachements.html' %}
+    </div> <!--// end div id=attachments //-->
+    
+    <!--// add related paged via cog/post/_post_hierarch.html  //-->
+    <div id="related_pages">
+       {% with related_pages as related_posts %}
+	   {% include 'cog/post/_post_hierarchy.html' %}
+       {% endwith %}
+    </div> <!--// end div id=related_pages //-->
+
+    <!--// include signals, if available via cog/project/_project_signals.html //-->
     {% include 'cog/project/_project_signals.html' %}
            	
 {% endautoescape %}

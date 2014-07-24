@@ -7,27 +7,27 @@
 <!--some css styles located in project_right.html-->    
     <div class="news_box">
          <table>
-             <div class="right_widget_header" style="border-bottom:1px
-	       solid #666;">Read News</div>
+	    <tr>
+	    <td>
+             <div class="right_widget_header" style="border-bottom: 1px solid #666;">Read News</div>
+	     </td>
+	     </tr>
              <tr>
              	<td>
-		             <div class="news_box_body">
-			             <table class="even-color">
-				             {% for news in project|projectNews|slice:":5" %}
-				                 <tr>
-				                     <td>
-				                     	<div class="news_text" style="padding: 4px">
-					                     	<a href="{% url 'news_detail' news.id %}">
-					                        <b>{{ news.title|truncatewords:8 }}</b>
-					                        </a>
-					                        <br/>
-					                        {{ news.text|urlizetrunc:20|truncatewords:8 }} 
-				                        </div>
-				                    </td>
-				                 </tr>
-			             {% endfor %}
-			             </table>
-		             </div>
+		     <div class="news_box_body">
+			   <table class="even-color">
+		           {% for news in project|projectNews|slice:":5" %}
+		           <tr>
+		             <td>
+		               <div class="news_text" style="padding: 4px">
+				   <a href="{% url 'news_detail' news.id %}"><b>{{ news.title|truncatewords:8 }}</b></a><br/>
+				   {{ news.text|urlizetrunc:20|truncatewords:8 }} 
+			       </div>
+			     </td>
+                           </tr>
+                           {% endfor %}
+                           </table>
+		     </div> <!--// end div.news_box_body //-->
              	</td>
              </tr>
          </table>  
@@ -36,5 +36,7 @@
          		<a href="{% url 'news_list' project.short_name.lower %}">&nbsp;More Project News &raquo;</a>
          	</div>
          {% endif %}
-     </div>
+     </div> <!--// end div.news_box //-->
 {% endif %}
+
+     

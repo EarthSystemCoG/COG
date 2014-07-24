@@ -1,11 +1,11 @@
-<!-- Attachments -->
+<!--// START: /cog/templates/cog/post/_post_attachements.html //-->
 {% load cog_utils %}
 
 {% if post.docs.all %}
    <hr class="white"/>
    <div class="header_bar"> 
         <a href="" onclick="javascript:toggle_visibility('attachments'); return false;" class="listlink">&nbsp;Attachments ({{ post.docs.all|length }})</a>
-   </div>
+   </div> <!--// end div.header_bar //-->
    <div class="mybox" id="attachments" style="display:none">
         <table>
             {% for doc in post.docs.all %}
@@ -30,6 +30,6 @@
                 </tr>
             {% endfor %}
         </table>  
-    </div>
-    <div id="myDialog" class="yui-skin-sam"></div>
+    </div> <!--// end div id=attachments //-->
+    <div id="myDialog" class="yui-skin-sam"></div><!--// end div id=myDialog //-->
 {% endif %}

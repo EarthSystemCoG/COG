@@ -1,9 +1,7 @@
-<!-- social media buttons for CoG -->
+<!--// START: /cog/templates/cog/common/cog_social_media.html //-->
 
-<!-- Google+ -->
-<!-- Place this tag where you want the share button to render. -->
-<div class="g-plus" data-action="share" data-annotation="none" data-href="{{ request.build_absolute_uri|urlencode }}"></div>
-<!-- Place this tag after the last share tag. -->
+<!--// add social media buttons //-->
+<!--// load google+ social media //-->
 <script type="text/javascript">
 //<![CDATA[
  (function() {
@@ -13,26 +11,38 @@
  })();
 //]]>
 </script>
-&nbsp;
 
-<!-- Facebook -->
-<a href="#" 
-  onclick="
-    window.open(
-      'https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}', 
-      'facebook-share-dialog', 
-      'width=626,height=436'); 
-    return false;">
-    <img src="{{STATIC_URL}}cog/img/facebook.png" height="20px" alt="Facebook logo"/>
-</a>
-&nbsp;
-
-<!-- Twitter -->
-<a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{ request.build_absolute_uri|urlencode }}">Tweet</a>
 <script type="text/javascript">
-//<![CDATA[
+    //<![CDATA[
         !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 //]]>
 </script>
+
+<table class="no_color" style="width:200px;margin-left:auto;margin-right:auto;">
+<tr>
+   <td>
+   <!-- Google+ -->
+   <div class="g-plus" data-action="share" data-annotation="none" data-href="{{ request.build_absolute_uri|urlencode }}">&nbsp;
+   </div><!--// end div.g-plus //-->
+   </td>
+
+   <td>
+   <!-- Facebook -->
+   <div id="facebook">
+      <a href="#" onclick=" window.open('https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}','facebook-share-dialog','width=626,height=436');return false;"><img src="{{STATIC_URL}}cog/img/facebook.png" height="20" alt="Facebook logo"/></a>&nbsp;
+    </div> <!--// end div id=facebook //-->
+    </td>
+
+    <td>
+    <!-- Twitter -->
+    <div id="twitter">
+        <a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="{{ request.build_absolute_uri|urlencode }}">Tweet</a>
+    </div> <!--// end div id=twitter //-->
+    </td>
+</tr>
+</table>
+    
+
+
 		
 		

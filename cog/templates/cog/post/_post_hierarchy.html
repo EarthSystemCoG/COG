@@ -1,4 +1,5 @@
-<!-- parent/children posts -->
+<!--// START: /cog/templates//cog/post/_post_heirarchy.html //-->
+<!--//Related pages //-->
 {% load cog_utils %}
 
 {% with post|relatedPostCount:related_posts as counts %}
@@ -6,7 +7,7 @@
    	   <hr class="white"/>
 	   <div class="header_bar"> 
 	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst}}{{counts|pluralize }} ({{ counts }})</a>
-	   </div>
+	   </div><!--// end div.header_bar //-->
 	   <div class="mybox" id="post_hierarchy" style="display:none">
 	        <table>
 	            {% if post.parent %} 
@@ -24,6 +25,6 @@
 	                </tr>
 	            {% endfor %}
 	        </table>  
-	    </div>
+	    </div><!--// end div id=post_hierarchy //-->
 	{% endif %}
 {% endwith %}

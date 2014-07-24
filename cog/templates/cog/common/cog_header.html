@@ -1,111 +1,106 @@
-<!--LOCATION: /cog/templates/common/cog_header.html-->
+<!--// START: /cog/templates/common/cog_header.html //-->
 {% load cog_utils %}
 <!--cog-utils is a full page "span-24 last" width-->
 <div class="span-24 last">
+   <!--// header with user links, project logo and cog logo //-->
    <div id="header">
-      <div id="user_menu">
-         <!--load top-right user menut from cog/common/_user_menu.html-->
+      <!--load top-right user menu from cog/common/_user_menu.html-->
+     <div id="user_menu">
 	 {% include 'cog/common/_user_menu.html' %}
-      </div>
-	
-	<!--<div class="span-17">-->
-	        <!--project title or uploaded project logo-->
-	    	    {% if project.logo %}
-	  		<div id="project_logo">
-	    		<!-- project logo -->
-	    		{% if project.logo_url %}
-	    			<a href="{{ project.logo_url }}">
-	    				<img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/>
-	    			</a>
-	    		{% else %}
-	    			<a href="{% url 'project_home' project.short_name|lower %}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo" />
-	    			</a>
-	    		{% endif %}
-	    	</div>
-	    	     {% else %}
-	    	
-	    	            <!-- project title -->
-                            <div id="project_title">{{ project.long_name|capfirst }}</div>
-	    		
-	    	      {% endif %}      
-	        
-	<!--</div>-->
-	
-	<!-- cog logo -->
-	<!--<div class="span-7 last">	-->	
-            <div id="right_cog_logo">
-	        <a href="{% url 'project_home' 'cog'%}"><img class="cog_logo" src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" alt="Earth System CoG logo"/></a>
-	    </div>
-	<!--</div>-->
-</div>
-</div>
-<div class="span-24 last">	    
-<!-- top navigation bar -->
-<div class="top_nav">
+      </div> <!--// end div id=user_menu //-->
+      <!--project title or uploaded project logo-->
+      {% if project.logo %}
+	     <div id="project_logo"><!-- project logo -->
+	    	 {% if project.logo_url %}
+	    	     <a href="{{ project.logo_url }}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/></a>
+	    	  {% else %}
+	    	     <a href="{% url 'project_home' project.short_name|lower %}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo" /></a>
+	    	  {% endif %}
+	     </div> <!--// end div id=project_logo //-->
+	    	  {% else %}
+	    	  <!-- project title -->
+                      <div id="project_title">
+			   {{ project.long_name|capfirst }}
+	              </div> <!--//end div id=project_title //-->
+       {% endif %}      
+       <!-- cog logo -->
+       <div id="right_cog_logo">
+	    <a href="{% url 'project_home' 'cog'%}"><img class="cog_logo" src="{{STATIC_URL}}cog/img/cog_engineer_sm.png" alt="Earth System CoG logo"/></a>
+       </div> <!--// end div id="right_cog_logo //-->
+   </div><!--// end div id=header //-->
+</div><!--// end div.span-24 last //-->
+
+
+<div class="span-24 last">
+  
+   <!-- top navigation bar -->
+   <div class="top_nav">
 	<div class="span-19">
 		<div id="top_nav_left">
 			{% if project %}
 			    <ul>
-					{% for tablist in project|getTopNav:request %}
-						{% for tab in tablist %}
-							<!-- top-level tab only -->
-							{% if forloop.counter == 1 %}
-								<li><a href="{{ tab.1 }}" {{ tablist|getTopTabStyle:tab.2 }}>{{ tab.0 }}</a></li>
-							{% endif %}
-						{% endfor %}
-					{% endfor %}
+				{% for tablist in project|getTopNav:request %}
+				   {% for tab in tablist %}
+					<!-- top-level tab only -->
+					{% if forloop.counter == 1 %}
+						<li><a href="{{ tab.1 }}" {{ tablist|getTopTabStyle:tab.2 }}>{{ tab.0 }}</a></li>
+					{% endif %}
+				   {% endfor %}
+				{% endfor %}
 			    </ul>
 		    {% endif %}
-		</div>
-	</div>
+		</div> <!--// end div id=top_nav_left //-->
+	</div> <!--//end div.span-19 //-->
+	
 	<div class="span-5 last">
 		<div id="top_nav_right">
 			<ul>
-				<li><a href="{% url 'project_home' 'cog' %}">What is CoG?</a></li>
-				<li><a href="/projects/cog/contactus/">Site Support</a></li>
+			<li><a href="{% url 'project_home' 'cog' %}">What is CoG?</a></li>
+			<li><a href="/projects/cog/contactus/">Site Support</a></li>
 			</ul>
-		</div>
-	</div>
-</div>
+		</div> <!--//end div id=top_nav_right //-->
+	</div> <!--// end div.span-5 last //-->
+   </div><!--// end div.top_nav -->
 
-<!-- top navigation sub-bar -->
-<div class="top_nav">
+   <!-- top navigation sub-bar -->
+   <div class="top_nav" id="sub_nav_bar">
 	<div class="span-19">
-		{% if project %}
-			{% for tablist in project|getTopNav:request %}
-				{% if tablist|length > 1 %}						
-					<div id="top_subnav_left">					
-						    <ul>							
-								{% for tab in tablist %}
-									<!-- sub-tabs only -->
-									{% if forloop.counter > 1 %}
-										<li><a href="{{ tab.1 }}" {{ tablist|getSubTabStyle:tab }}>
-											<span style="color: #666">{{ tab.0 }}</span>
-											</a></li>
-									{% endif %}
-								{% endfor %}						
-						    </ul>				   
-					</div>
-				{% endif %}
-			{% endfor %}	
+	   {% if project %}
+	      {% for tablist in project|getTopNav:request %}
+		{% if tablist|length > 1 %}						
+		  <div id="top_subnav_left">					
+		    <ul>							
+		      {% for tab in tablist %}
+		         <!-- sub-tabs only -->
+		         {% if forloop.counter > 1 %}
+		           <li><a href="{{ tab.1 }}" {{ tablist|getSubTabStyle:tab }}><span style="color: #666">{{ tab.0 }}</span></a></li>
+		         {% endif %}
+	              {% endfor %}						
+                    </ul>				   
+	          </div><!--// end div id=top_subnav_left //-->
 		{% endif %}
-		&nbsp;
-	</div>
+	      {% endfor %}	
+	   {% endif %}
+	&nbsp;
+	</div> <!--// end div.span-19 //-->
+	
 	<div class="span-5 last">
-		<div id="top_subnav_right">
+	    <div id="top_subnav_right">
 	        {% if request.user.is_authenticated %}
 		        <a href="{% url 'user_profile_redirect' request.user.id %}">My Profile</a>
 		        | <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle;" alt="datacart logo"/>
-		        <a href="{% url 'datacart_display' site.id request.user.id %}">My Data Cart:
-		                <span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>
+		        <a href="{% url 'datacart_display' site.id request.user.id %}">My Data Cart:<span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>
 		        </a>
 	        {% endif %}		
-		</div>
-	</div>						
-</div>
+	    </div> <!--// end div id=top_subnav_right //-->
+	</div>	<!--// end div.span-5 last//-->					
+    </div><!--//end div id=sub_nav_bar //-->
 
-<!-- anchor for message dialogs -->
-<div id="myDialog" class="yui-skin-sam"></div>
+    <!-- anchor for message dialogs -->
+    <div id="myDialog" class="yui-skin-sam"></div>
+</div> <!--// end div.span-24 last //-->
+&nbsp; </br>
+<!--// END: /cog/templates/common/cog_header.html //-->
 
-&nbsp;<br/>
+
 

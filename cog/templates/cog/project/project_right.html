@@ -1,90 +1,6 @@
-{% block right %}
 <!--LOCATION:/cog/templates/cog/project/project_right.html-->
-
-    <!-- COG custom filters -->
-    {% load cog_utils %}
-
-    <script type="text/javascript">
-    //<![CDATA[
-
-       // function to populate the project widget via ajax call
-       function loadProjectBrowser(project_short_name) {
-
-    	   // loop over YUI tab identifiers, execute separate ajax requests
-    	   var tabs = ['this', 'all', 'my']
-    	   for (var i=0; i<tabs.length; i++) {
-
-	    	   // build request URL
-	    	   // example: /projects/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
-	    	   var url = "/projects/"+project_short_name+"/browse/"+tabs[i]+"/";
-	    	   var tag = document.getElementById('projectBrowserText').value;
-	    	   if (tag != null && tag!="") url += "?tag="+tag;
-
-	    	   // define the callback function dynamically
-	    	   // so to pass in the target tab identifier as extra argument
-	    	   var callback = {
-	 				  success:handleSuccess,
-	 				  failure: handleFailure,
-	 				  cache:false,
-	 				  timeout:5000,
-	 				  argument: []
-	    	   }
-			   // pass in target tab identifier as extra argument to ajax callback
-			   callback.argument[0] = tabs[i]+"ProjectsBrowser";
-
-			   // execute asynchronous GET request
-			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
-
-    	   }
-
-       }
-
-		// function called if the ajax request failed
-		var handleFailure = function(o) {
-			// do nothing
-			//showMessage("An Error Occurred",
-			//		    "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
-		}
-
-		// function called if the ajax request succeded
-		var handleSuccess = function(o) {
-
-			// retrieve target tab id from callback extra argument
-			tabId = o.argument[0]
-
-			// replace browser window with new content
-			document.getElementById(tabId).innerHTML = o.responseText;
-
-		}
-    //]]>
-   </script>
-
-   <script type="text/javascript">
-   //<![CDATA[
-
-   	   // populate project tags from django database query
-   	   var projectTags = [
-   	   	  {{ project|projectTags }}
-        ];
-
-       function initTags() {
-           var dataSource = new YAHOO.util.LocalDataSource(projectTags.sort()); // sort tags alphabetically
-           var autoComp = new YAHOO.widget.AutoComplete("projectBrowserText", "tagContainer", dataSource);
-           autoComp.prehighlightClassName = "yui-ac-prehighlight";
-           autoComp.useShadow = true;
-           autoComp.allowBrowserAutocomplete = false;
-           autoComp.animSpeed = 0.2;
-           autoComp.maxResultsDisplayed = 10;
-           autoComp.minQueryLength = 0;
-           autoComp.typeHead = true;
-           //autoComp.alwaysShowContainer = true;
-       }
-       YAHOO.util.Event.onContentReady("project_widget", initTags);
-   //]]>
-   </script>
-
-
-<style type="text/css">
+<!--HTML validations requires the css to be outside the block -->
+<style scoped type="text/css">
 
 	/* NOTE: scrollbar controlled by "overflow-y: auto;" in tabview.css
 	   NOTE: overall widget height also controlled by .yui-content
@@ -154,29 +70,113 @@
 	    /* important: must align project labels with middle of checkbox */
 		vertical-align: middle;
 	}
-/* autocomplete widget must be styled otherwise it will expand to take all available room */
+
+       /* autocomplete widget must be styled otherwise it will expand to take all available room */
 	#tagAutoComplete {
            width: 138px;
            padding-bottom: 20px;
     }
 
-    /* enable vertical scrollbar if large number of items needs to be displayed
-       (in conjunction with large autoComp.maxResultsDisplayed) */
+    /* enable vertical scrollbar if large number of items needs to be displayed (in conjunction with large autoComp.maxResultsDisplayed) */
     .yui-skin-sam .yui-ac-content { /* set scrolling */
 	    max-height:10em;
 	    overflow:auto; overflow-x:hidden; /* set scrolling */
 	    _height:10em; /* ie6 */
 	}
 
-   </style>
+ </style>
 
-   <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/yui/tabview.css" />
+<link rel="stylesheet" type="text/css" media="screen, projection" href="{{MEDIA_URL}}css/yui/tabview.css"></link>
+{% block right %}
+
+<!-- COG custom filters -->
+{% load cog_utils %}
+<script type="text/javascript">
+    //<![CDATA[
+
+       // function to populate the project widget via ajax call
+       function loadProjectBrowser(project_short_name) {
+
+    	   // loop over YUI tab identifiers, execute separate ajax requests
+    	   var tabs = ['this', 'all', 'my']
+    	   for (var i=0; i<tabs.length; i++) {
+
+	    	   // build request URL
+	    	   // example: /projects/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
+	    	   var url = "/projects/"+project_short_name+"/browse/"+tabs[i]+"/";
+	    	   var tag = document.getElementById('projectBrowserText').value;
+	    	   if (tag != null && tag!="") url += "?tag="+tag;
+
+	    	   // define the callback function dynamically
+	    	   // so to pass in the target tab identifier as extra argument
+	    	   var callback = {
+	 				  success:handleSuccess,
+	 				  failure: handleFailure,
+	 				  cache:false,
+	 				  timeout:5000,
+	 				  argument: []
+	    	   }
+			   // pass in target tab identifier as extra argument to ajax callback
+			   callback.argument[0] = tabs[i]+"ProjectsBrowser";
+
+			   // execute asynchronous GET request
+			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+
+    	   }
+
+       }
+
+		// function called if the ajax request failed
+		var handleFailure = function(o) {
+			// do nothing
+			//showMessage("An Error Occurred",
+			//		    "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
+		}
+
+		// function called if the ajax request succeded
+		var handleSuccess = function(o) {
+
+			// retrieve target tab id from callback extra argument
+			tabId = o.argument[0]
+
+			// replace browser window with new content
+			document.getElementById(tabId).innerHTML = o.responseText;
+
+		}
+    //]]>
+</script>
+
+<script type="text/javascript">
+   //<![CDATA[
+
+   	   // populate project tags from django database query
+   	   var projectTags = [
+   	   	  {{ project|projectTags }}
+        ];
+
+       function initTags() {
+           var dataSource = new YAHOO.util.LocalDataSource(projectTags.sort()); // sort tags alphabetically
+           var autoComp = new YAHOO.widget.AutoComplete("projectBrowserText", "tagContainer", dataSource);
+           autoComp.prehighlightClassName = "yui-ac-prehighlight";
+           autoComp.useShadow = true;
+           autoComp.allowBrowserAutocomplete = false;
+           autoComp.animSpeed = 0.2;
+           autoComp.maxResultsDisplayed = 10;
+           autoComp.minQueryLength = 0;
+           autoComp.typeHead = true;
+           //autoComp.alwaysShowContainer = true;
+       }
+       YAHOO.util.Event.onContentReady("project_widget", initTags);
+   //]]>
+</script>
+
 
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
-	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data</div>
-	       <div style="width:99%; padding:4px;">
+	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data
+	       </div> <!--// end div.right_widget_header //-->
+	       <div id="search_entry" style="width:99%; padding:4px;">
 		       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
 		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
@@ -192,11 +192,11 @@
 	                </select> -->
 		       </form>
 	       <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
-	       </div>
-	  </div>
+	       </div> <!--// end div id=search_entry //-->
+	  </div> <!--//end div.search-box //-->
   {% endif %}
 
-  <!-- News widget  -->
+  <!-- News widget loaded via cog/project/_project_latest_news.html  -->
   {% include 'cog/project/_project_latest_news.html' %}
 
    <!-- Project Browser widget -->
@@ -216,7 +216,7 @@
               <div id="allProjectsBrowser">&nbsp;</div>
               <div id="myProjectsBrowser">&nbsp;</div>
           </div>
-       </div>
+       </div> <!--// end div id=project_views //-->
 
        <!-- project widget controls -->
 
@@ -225,22 +225,21 @@
 	       	<tr>
                    <td class="long">
 		       	<div id="tagAutoComplete">
-		       	<input type="text" id="projectBrowserText" placeholder=" Enter Tag" style="font-size:8.5pt;"/></input>
-		        <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
-		         <div id="tagContainer"></div>
-		            </div>
+		       	    <input type="text" id="projectBrowserText" placeholder=" Enter Tag" style="font-size:8.5pt;"/>
+		            <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
+		            <div id="tagContainer"></div>
+		        </div>
 		       </td>
 		       <td style="padding: 2px; margin-right: 2px;">
-                           <input type="button" id="projectBrowserButton" value="Go" style="font-size:8.5pt;"
-                                  onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/></input>
+                           <input type="button" id="projectBrowserButton" value="Go" style="font-size:8.5pt;" onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
 		       </td>
 	       	</tr>
 	       </table>
 	       <div style="text-align:center; font-style: italic;">Start typing, or use the 'Delete' key to show all available tags.</div>
-       </div>
+          </div><!--// end div id=project_browser_controls //-->
 
-      </div>
-    </div>
+      </div><!--end div id=project_widget //-->
+    </div><!--end div id=yui-skin-sam // -->
 
     <!-- render YUI tabs -->
     <script type="text/javascript">var myTabs = new YAHOO.widget.TabView("project_views");</script>
@@ -252,3 +251,6 @@
     <script type="text/javascript">initTags()</script>
 
 {% endblock %}
+
+<!--//END: /cog/templates/cog/project/projet_right.html //-->
+    
