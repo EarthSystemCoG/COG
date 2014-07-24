@@ -9,7 +9,7 @@ import urllib, urllib2
 
 
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.services.search import SolrSearchService, TestSearchService
+from cog.services.search import SolrSearchService
 from cog.models.search import SearchOutput, Record, Facet, FacetProfile
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -17,7 +17,6 @@ from copy import copy, deepcopy
 from urllib2 import HTTPError
 
 from cog.models.search import *
-from cog.services.search import TestSearchService, SolrSearchService
 from cog.services.SolrSerializer import deserialize
 
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
@@ -29,43 +28,39 @@ SEARCH_OUTPUT = "search_output"
 FACET_PROFILE = "facet_profile"
 ERROR_MESSAGE = "error_message"
 SEARCH_DATA   = "search_data"
+SEARCH_REDIRECT = "search_redirect"
 SEARCH_PAGES  = "search_pages"
 REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
 LOCAL_FLAG    = "local_flag"
 
-# singleton instance - instantiated only once
-testSearchService = TestSearchService()
-
-# method to configure the search on a per-request basis
-def getTestSearchConfig(request):
+                
+def search(request, project_short_name):
     """
-    Example of search configuration method that ties into a test search service and associated facets,
-    and sets one fixed constraint.
-    """
-        
-    facetProfile = FacetProfile([ 
-                                 #('project','Project'),
-                                 ('model','Model'),
-                                 ('experiment','Experiment'),
-                                 ('instrument','Instrument'),
-                                 ])
-    fixedConstraints = { 'project': ['Test Project'], }
-    
-    return SearchConfig(facetProfile, fixedConstraints, testSearchService)
-
-#def search(request):
-    """
-    Default view entry point that configures the search with a test search configuration.
+    Entry point for all search requests (GET/POST).
+    Loads project-specific configuration.
     """
     
-#    config = getTestSearchConfig(request)
-#    return search_config(request, config)
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    config = getSearchConfig(request, project)
+
+    if config:        
+        config.printme()
+        # pass on project as extra argument to search
+        return search_config(request, config, extra = {'project' : project} )
+    # search is not configured for this project
+    else:
+        messages = ['Searching is not enabled for this project.',
+                    'Please contact the project administrators for further assistance.']
+        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
 
 def search_config(request, searchConfig, extra={}):
     """
-    View entry point for applications that need to provide their own
-    per-request search configuration.
+    Project-specific search view that processes all GET/POST requests.
+    Parses GET/POST requests parameters and combines them with the project fixed constraints.
+    Delegates to 'search_get' and 'search_post'.
+    Pre-seeded search URLs are automatically processed (i.e. GET requests with additional HTTP parameters, but NOT after a POST redirect).
     """
         
     # print extra arguments
@@ -86,8 +81,8 @@ def search_config(request, searchConfig, extra={}):
             input.setConstraint(key, values)
             
     # text
-    if request.REQUEST.get('text', None):
-        input.text = request.REQUEST['text']
+    if request.REQUEST.get('query', None):
+        input.query = request.REQUEST['query']
     # type
     if request.REQUEST.get('type', None):
         input.type = request.REQUEST['type']
@@ -108,38 +103,50 @@ def search_config(request, searchConfig, extra={}):
         input.limit = int(request.REQUEST['limit'])
         
     # GET/POST switch
-    print "search() view: HTTP Request method=%s search_data flag=%s" % (request.method, request.REQUEST.get(SEARCH_DATA, None))
+    print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
+                                                                                                request.session.get(SEARCH_REDIRECT, None), 
+                                                                                                request.REQUEST)
     if (request.method=='GET'):
-        return search_get(request, input, searchConfig, extra)
+        if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: # pre-seeded search URL
+            return search_post(request, input, searchConfig, extra)
+        else:
+            return search_get(request, input, searchConfig, extra)
     else:
         return search_post(request, input, searchConfig, extra)
         
 def search_get(request, searchInput, searchConfig, extra={}):
+    '''
+    View that processes search GET requests.
+    If invoked directly, it executes a query for facets but no results.
+    After a POST redirect, it retrieves results from the session and removes the SEARCH_REDIRECT flag.
+    '''
     
     facetProfile = searchConfig.facetProfile
     searchService = searchConfig.searchService
     
-    #data = {}
     # pass on all the extra arguments
     data = extra
     
-    # after POST redirection
-    if (request.GET.get(SEARCH_DATA)):
+    # GET request after POST redirection
+    if (request.session.get(SEARCH_REDIRECT, None)):
+        
         print "Retrieving search data from session"
-        data = request.session.get(SEARCH_DATA, None)
-        if data.get(ERROR_MESSAGE,None):
-            print "Found Error=%s" % data[ERROR_MESSAGE]
+        data = request.session.get(SEARCH_DATA)
+        
+        # remove POST redirect flag
+        del request.session[SEARCH_REDIRECT]
     
-    # first GET invocation
+    # direct GET request
     else:
         
         # set retrieval of all facets in profile
+        # but do not retrieve any results
         searchInput.facets = facetProfile.getAllKeys()
+        searchInput.limit = 0  # don't query for results
+        searchInput.offset = 0
         
-        # execute query for facets
-        #searchOutput = searchService.search(searchInput, False, True)
         try:
-            xml = searchService.search(searchInput, False, True)
+            xml = searchService.search(searchInput)
             searchOutput = deserialize(xml, facetProfile)
             #FIXME
             #searchOutput.printme()
@@ -148,7 +155,6 @@ def search_get(request, searchInput, searchConfig, extra={}):
             data[SEARCH_OUTPUT] = searchOutput
             data[FACET_PROFILE] = facetProfile
             #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
-            #data['title'] = 'Advanced Data Search'
             
             # save data in session
             request.session[SEARCH_DATA] = data
@@ -163,23 +169,24 @@ def search_get(request, searchInput, searchConfig, extra={}):
     # build pagination links
     offset = data[SEARCH_INPUT].offset
     limit = data[SEARCH_INPUT].limit
-    currentPage = offset/limit + 1
-    numResults = len(data[SEARCH_OUTPUT].results)
-    totResults = data[SEARCH_OUTPUT].counts
-    data[SEARCH_PAGES] = []
-        
-    if offset > 0:
-        data[SEARCH_PAGES].append( ('<< Previous', offset-limit ) )
+    if limit > 0:
+        currentPage = offset/limit + 1
+        numResults = len(data[SEARCH_OUTPUT].results)
+        totResults = data[SEARCH_OUTPUT].counts
+        data[SEARCH_PAGES] = []
             
-    for page in range(currentPage-5, currentPage+6):
-        pageOffset = (page-1)*limit
-        if page==currentPage:
-            data[SEARCH_PAGES].append( ('-%s-' % page, pageOffset) )
-        elif page > 0 and pageOffset < totResults:
-            data[SEARCH_PAGES].append( ('%s' % page, pageOffset) )
-        
-    if offset+limit < totResults:
-        data[SEARCH_PAGES].append( ('Next >>', offset+numResults ) )
+        if offset > 0:
+            data[SEARCH_PAGES].append( ('<< Previous', offset-limit ) )
+                
+        for page in range(currentPage-5, currentPage+6):
+            pageOffset = (page-1)*limit
+            if page==currentPage:
+                data[SEARCH_PAGES].append( ('-%s-' % page, pageOffset) )
+            elif page > 0 and pageOffset < totResults:
+                data[SEARCH_PAGES].append( ('%s' % page, pageOffset) )
+            
+        if offset+limit < totResults:
+            data[SEARCH_PAGES].append( ('Next >>', offset+numResults ) )
         
     # add configuration flags
     data[REPLICA_FLAG] = searchConfig.replicaFlag
@@ -187,6 +194,61 @@ def search_get(request, searchInput, searchConfig, extra={}):
     data[LOCAL_FLAG] = searchConfig.localFlag
         
     return render_to_response('cog/search/search.html', data, context_instance=RequestContext(request))    
+
+def search_post(request, searchInput, searchConfig, extra={}):
+    '''
+    View that processes a search POST request.
+    Stores results in session, together with special SEARCH_REDIRECT session flag.
+    Then redirects to the search GET URL.
+    '''
+    
+    facetProfile = searchConfig.facetProfile
+    searchService = searchConfig.searchService
+    
+    # valid user input
+    if (searchInput.isValid()):
+        
+        # set retrieval of all facets in profile
+        searchInput.facets = facetProfile.getAllKeys()
+    
+        # execute query for results, facets
+        try:
+            xml = searchService.search(searchInput)
+            searchOutput = deserialize(xml, facetProfile)
+            #searchOutput.printme()
+            
+            # initialize new session data from extra argument dictionary
+            data = extra
+            data[SEARCH_INPUT] = searchInput
+            data[SEARCH_OUTPUT] = searchOutput
+            data[FACET_PROFILE] = facetProfile
+            #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
+            
+        except HTTPError:
+            print "HTTP Request Error"
+            data = request.session[SEARCH_DATA]
+            data[SEARCH_INPUT] = searchInput
+            data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
+
+            
+    # invalid user input
+    else:
+        print "Invalid Search Input"
+        # re-use previous data (output, profile and any extra argument) from session
+        data = request.session[SEARCH_DATA]
+        # override search input from request
+        data[SEARCH_INPUT] = searchInput
+        # add error
+        data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
+         
+    # store data in session 
+    #data['title'] = 'Advanced Data Search'
+    request.session[SEARCH_DATA] = data
+    
+    # use POST-REDIRECT-GET pattern
+    # flag the redirect in session
+    request.session[SEARCH_REDIRECT] = True
+    return HttpResponseRedirect( request.get_full_path() ) # relative search page URL + optional query string
 
 def metadata_display(request, project_short_name):
     
@@ -286,83 +348,6 @@ def _processDoc(doc):
                         
     return metadoc
     
-    
-def search_post(request, searchInput, searchConfig, extra={}):
-    
-    facetProfile = searchConfig.facetProfile
-    searchService = searchConfig.searchService
-    
-    # valid user input
-    if (searchInput.isValid()):
-        
-        # set retrieval of all facets in profile
-        searchInput.facets = facetProfile.getAllKeys()
-    
-        # execute query for results, facets
-        #searchOutput = searchService.search(searchInput, True, True)
-        try:
-            xml = searchService.search(searchInput, True, True)
-            searchOutput = deserialize(xml, facetProfile)
-            #searchOutput.printme()
-            
-            # initialize new session data from extra argument dictionary
-            data = extra
-            data[SEARCH_INPUT] = searchInput
-            data[SEARCH_OUTPUT] = searchOutput
-            data[FACET_PROFILE] = facetProfile
-            #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
-            
-        except HTTPError:
-            print "HTTP Request Error"
-            data = request.session[SEARCH_DATA]
-            data[SEARCH_INPUT] = searchInput
-            data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
-
-            
-    # invalid user input
-    else:
-        print "Invalid Search Input"
-        # re-use previous data (output, profile and any extra argument) from session
-        data = request.session[SEARCH_DATA]
-        # override search input from request
-        data[SEARCH_INPUT] = searchInput
-        # add error
-        data[ERROR_MESSAGE] = "Error: search text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
-         
-    # store data in session 
-    #data['title'] = 'Advanced Data Search'
-    request.session[SEARCH_DATA] = data
-    
-    # use POST-REDIRECT-GET pattern with additional parameter "?search_data"
-    #return HttpResponseRedirect( reverse('cog_search')+"?%s=True" % SEARCH_DATA )
-    return HttpResponseRedirect( request.path+"?%s=True" % SEARCH_DATA )
-
-
-
-
-# Note: all the facets available through the REST API are defined by the Search Services and returned by an unbound query
-# Each client application (such as this controller) is responsible for using a sub-set of these facets, and providing appropriate labels
-# (labels could be provided by the REST API, but there is no Solr schema for encoding the information)
-"""
-facetProfile = FacetProfile([ 
-                             ('project','Data Project'),
-                             ('model','Model'),
-                             ('experiment','Experiment'),
-                             ('cf_variable','CF Standard Name'), 
-                             ('resolution','Resolution'), 
-                             #'institute':'Institute', 
-                              #'instrument':'Instrument', 
-                              #'obs_project':'Mission', 
-                              #'obs_structure':'Data Structure',
-                              #'obs_type':'Measurement Type',
-                              #'product':'Product', 
-                              #'time_frequency':'Time Frequency',
-                              #'realm':'Realm',  
-                             ('variable','Variable'),
-                           ])
-"""
-
-
 # method to configure the search on a per-request basis
 def getSearchConfig(request, project):
     
@@ -404,33 +389,10 @@ def getSearchConfig(request, project):
                 except KeyError:
                     fixedConstraints[key] = [value]
             
-    # How to use TestSerachService instead
-    #searchService = TestSearchService()
-    #facets = []
-    #for key, facet in searchService.myfacets.items():
-    #    facets.append((facet.key,facet.label))
-
     return SearchConfig(facetProfile, fixedConstraints, searchService,
                         profile.replicaSearchFlag, profile.latestSearchFlag, profile.localSearchFlag)
-                
-def search(request, project_short_name):
-    """
-    COG-specific search-view that configures the back-end search engine on a per-project basis.
-    """
     
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    config = getSearchConfig(request, project)
 
-    if config:        
-        config.printme()
-        # pass on project as extra argument to search
-        return search_config(request, config, extra = {'project' : project} )
-    # search is not configured for this project
-    else:
-        messages = ['Searching is not enabled for this project.',
-                    'Please contact the project administrators for further assistance.']
-        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
 
 def search_profile_config(request, project_short_name):
     

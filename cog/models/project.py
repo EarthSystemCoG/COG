@@ -20,18 +20,10 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from collections import OrderedDict
 
-# custom project manager to define natural key
-class ProjectsManager(models.Manager):
-    
-    def get_by_natural_key(self, short_name):
-        return self.get(short_name=short_name)
 
 # Project
 class Project(models.Model):
-    
-    # custom models manager to support natural key
-    objects = ProjectsManager()
-    
+        
     # mandatory attributes
     short_name = models.CharField(max_length=20, unique=True, help_text="Short project acronym, 20 characters maximum, use only letters, numbers and '_', '-', no spaces." )
     long_name = models.CharField(max_length=120, unique=True, help_text='Fully spelled project name.')
@@ -111,10 +103,7 @@ class Project(models.Model):
         
     class Meta:
         app_label= APPLICATION_LABEL
-        
-    def natural_key(self):
-        return (self.short_name,)
-        
+                
     def getAbsoluteUrl(self):
         '''Returns the absolute home page URL for this project, keeping its site into account.'''
         

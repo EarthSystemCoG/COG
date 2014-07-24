@@ -16,9 +16,11 @@
   <table>
 	<tr>
 	  <!--Safari requidres the middle alignment. We may want to consolidate this style-->
-	<td style="width:20%;vertical-align:middle;text-align:right;">Enter Text</td>
-	<td style="width:30%;vertical-align:middle;"><input type="text" name="text" size="30" value="{{search_input.text}}"/>
-	<td style="width:50%;vertical-align:middle;">&nbsp;<input type="submit" value="Search"/> &nbsp; <input type="button" value="Reset" onclick="window.location='.'"/>
+	<td style="width:10%;vertical-align:middle;text-align:right;">Enter Text</td>
+	<td style="width:30%;vertical-align:middle;"><input type="text" name="query" size="30" value="{{search_input.query}}"/>
+	<td style="width:50%;vertical-align:middle;">&nbsp;<input type="submit" value="Search"/> 
+		&nbsp; <input type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
+	    {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
 	Display
 	<select name="limit" id="limit">
 	  <option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
