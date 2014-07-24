@@ -1,36 +1,50 @@
 <!DOCTYPE html>
-<!--LOCATION: /layouts/templates/layouts/layout_base.html-->
-<!--FROM: /layouts/templates/layouts/layout_base.html-->
-<!--<html xmlns="http://www.w3.org/1999/xhtml">-->
+<!--// LOCATION: /layouts/templates/layouts/layout_base.html //-->
+<!--// START: /layouts/templates/layouts/layout_base.html //-->
+<!--// <html xmlns="http://www.w3.org/1999/xhtml">  //-->
+
+
 <html>
+<!--creates classes for the various versions of internet explorer. These are then used in the CSS to fix specific issues-->
+<!--[if lt IE 7 ]>   <html class="ie6">  <![endif]-->
+<!--[if IE 7 ]>      <html class="ie7">  <![endif]-->
+<!--[if IE 8 ]>      <html class="ie8">  <![endif]-->
+<!--[if IE 9 ]>      <html class="ie9">  <![endif]-->
+<!--[if IE 10 ]>     <html class="ie10"> <![endif]-->
+<!--[if IE 11 ]>     <html class="ie11"> <![endif]--> 
+
    <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=9"> <!--required to get IE out of quirks mode-->
 
-        <!--add meta title-->
+        <!--// add meta-tag "title" //-->
         <title>{% block head_title %} {{ title|removetags:"h2"|safe }} {% endblock %}</title>
             
-        <!-- CSS for grid layout -->
-        <!-- <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/screen.css" type="text/css" media="screen, projection"/> -->
-        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/reset.css" type="text/css" media="screen, projection"/> 
-        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/grid.css" type="text/css" media="screen, projection"/>
-        <link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/src/typography.css" type="text/css" media="screen, projection"/>
-        <!--<link rel="stylesheet" href="{{MEDIA_URL}}css/blueprint/print.css" type="text/css" media="print"/> -->
+        <!--// consider removing these all together //-->
+        <!--// <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{MEDIA_URL}}css/blueprint/screen.css"/> //-->
+        <!--// <link type="text/css" rel="stylesheet"  media="print" href="{{MEDIA_URL}}css/blueprint/print.css"/> //-->
+
+        <!--// CSS for grid layout //-->
+        <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{MEDIA_URL}}css/blueprint/src/reset.css"/> 
+        <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{MEDIA_URL}}css/blueprint/src/grid.css"/>
+        <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{MEDIA_URL}}css/blueprint/src/typography.css" />
+
         <!-- [if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/><![endif] -->
 
-        <!--Load header from template -->
+        <!--// Load head section from template. Contains CSS //-->
         {% block head %}{% endblock %}
 
-        <!-- loading CoG-specific styles. Needs to be last -->
+        <!--// loading CoG-specific styles. Needs to be last //-->
         <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
 
-       <!-- hooks for page-specific head content -->
-       <!--do we need this??-->
+       <!--// hooks for page-specific head content //-->
+       <!--// do we need this section?? //-->
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
 
        <style type="text/css">
 
+        
         div.cog_container{
           width:       1000px; /*must be larger than span-24, which is 950px */
           margin:       0px;       /*remove all margins in the box model */
@@ -38,14 +52,7 @@
           margin-left:  auto  !important;
         }
         </style>
-
-       <!--creates classes for the various versions of internet explorer. These are then used in the CSS to fix specific issues-->
-       <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
-       <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
-       <!--[if IE 8 ]> <html class="ie8"> <![endif]-->
-       <!--[if IE 9 ]> <html class="ie9"> <![endif]-->
-       <!--[if IE 10 ]> <html class="ie10"> <![endif]-->
-       <!--[if (gt IE 10)|!(IE)]><!--> <html> <!--<![endif]--> <!--if > IE10 or not IE at all, set no class -->
+       
    
     </head>
     
@@ -63,12 +70,11 @@
 	 
 	   <!--Load block footer from various templates -->
             {% block footer %} {% endblock %}
-      </div>
-      </div><!--added div-->
-      <!--after of "div.container"-->
+      </div> <!--// end div.container //-->
+
       <!--Load block custom_footer from various templates -->
       {% block custom_footer %} {% endblock %}
-     </div>
+     </div> <!--// end div.cog_container //-->
     </body>
     
 </html>

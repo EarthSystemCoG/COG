@@ -1,17 +1,17 @@
 <!--LOCATION: /layouts//templates/layouts/layout_main.html-->
-<!--EXTENDS: layout_base.html"-->
+<!--EXTENDS: /layouts/layout_base.html"-->
 {% extends "layouts/layout_base.html" %}
 
 {% block body %}  
-    <!--FROM: /layouts/templates/layouts/layout_main.html-->
-    <!--add page title above block main-->
+    <!--// START: /layouts/templates/layouts/layout_main.html //-->
+    <!--// add page title above "block main" //-->
     <div class="span-24 last">
         {% block title %} <h1 class="title"> {{ title }} </h1> {% endblock %}
-    </div>
+    </div> <!--// closing div.span-24 last //-->
 
     <!--load block main-->
     <div class="span-24 last">
          {% block main %} Main content {% endblock %}
-    </div>
-   <!--END: /layouts/templates/layouts/layout_main.html-->
+    </div> <!--// closing div.span-24 last //-->
+   <!--//END: /layouts/templates/layouts/layout_main.html-->
 {% endblock %}
