@@ -29,6 +29,16 @@
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
 
+       <style type="text/css">
+
+        div.cog_container{
+          width:       1000px; /*must be larger than span-24, which is 950px */
+          margin:       0px;       /*remove all margins in the box model */
+          margin-right: auto !important;
+          margin-left:  auto  !important;
+        }
+        </style>
+
        <!--creates classes for the various versions of internet explorer. These are then used in the CSS to fix specific issues-->
        <!--[if lt IE 7 ]> <html class="ie6"> <![endif]-->
        <!--[if IE 7 ]> <html class="ie7"> <![endif]-->
@@ -40,18 +50,25 @@
     </head>
     
     <body>
+      <div class="cog_container">
        <!--Load block custom_header from various templates -->
        {% block custom_header %} {% endblock %}
+
        <div class="container">
 	   <!--Load block header from various templates-->
-	    {% block header %}{% endblock %}
+	    {% block header %} {% endblock %}
 	 
            <!--Load block body from various templates -->
-            {% block body %}{% endblock %}
+            {% block body %} {% endblock %}
 	 
 	   <!--Load block footer from various templates -->
-            {% block footer %}{% endblock %}
+            {% block footer %} {% endblock %}
       </div>
+      </div><!--added div-->
+      <!--after of "div.container"-->
+      <!--Load block custom_footer from various templates -->
+      {% block custom_footer %} {% endblock %}
+     </div>
     </body>
     
 </html>
