@@ -2,25 +2,41 @@
 <!--This is the default custom footer for ESGF-COG-->
 <!--It contains space for the node URL address and institutional links-->
 <!--Maintaining the style will make ESGF consistent across nodes.-->
-<style  scoped type="text/css">
-div.custom_footer{
+<style scope type="text/css">
+#custom_footer{
     border-bottom: 2px solid #666;
-    background-color: #666;
-    width:inherit;
-    color:white; /*text color */
-    text-align:left;
+    background-color:        #666;
+    color:                   white; /*text color */
+    height:                  40px;
+    padding-left:            5px;
+    padding-right:           5px;
 }
 
-td.machine_name{
-   text-align:left;
+#custom_footer td{
+    vertical-align: middle;
+    font:           normal normal 8pt/1.231 Arial,sans-serif;
+
+}
+
+
+#custom_footer a:link, #custom_footer a:hover, #custom_footer a:visited{
+   color: white;
+   text-decoration:underline;
 }
 </style>
 
-<div class="custom_footer">
-  <!--#echo var="DATE_LOCAL" -->
-<table class="no_color">
-  <tr>
-    <td class="machine_name">This is some text </td>
-  </tr>
-</table>
-</div>
+
+       <table id="custom_footer">
+       <tr>
+       <td style="width:30%;">https://hydra.esrl.svc.noaa.gov</td>
+       <td style="width:70%;text-align:right;">
+	        <a href="http://www.commerce.gov/">Department of Commerce</a> |
+		<a href="http://www.noaa.gov/">NOAA</a> |
+		<a href="http://www.noaa.gov/privacy.html">Privacy Policy</a> |
+		<a href="http://www.noaa.gov/foia/">FOIA</a> |
+		<a href="http://www.noaa.gov/disclaimer.html">Disclaimer</a> |
+		<a href="http://www.usa.gov/">USA.gov</a>
+        </td>
+	</tr>
+	</table>
+<!--//--end div.custom_footer //-->
