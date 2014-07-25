@@ -3,7 +3,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, Select, FileInput, CheckboxSelectMultiple
+from django.forms import ModelForm, Textarea, TextInput, Select, SelectMultiple, FileInput, CheckboxSelectMultiple
 from django.core.exceptions import ObjectDoesNotExist
 from os.path import basename
 import re
@@ -12,12 +12,14 @@ from django.db.models import Q
 from cog.forms.forms_image import ImageForm
 from cog.utils import hasText
 
-
+#note parent and peer formating is in forms_other.py
 class ProjectForm(ModelForm):
 
-    # note: alternative widget for peer selection would require additional js and css
-    #peers = ModelMultipleChoiceField(Project.objects.all(),
-    #        widget=FilteredSelectMultiple("Peer Projects", False, attrs={'rows':'10'}))
+    # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its styles are controlled in cogstyle.css
+    peers   = ModelMultipleChoiceField(Project.objects.all(),widget=FilteredSelectMultiple("Peer Projects", False, attrs={'size':'12',}))
+    parents = ModelMultipleChoiceField(Project.objects.all(),widget=FilteredSelectMultiple("Parent Projects", False, attrs={'size':'12',}))
+    # filtering of what is seein in the form is done down below. 
+    # don't know why we can't use a SelectMultiple here vice a FilteredSelectMultiple
 
     # extra field not present in model, used for deletion of previously uploaded logo
     delete_logo = forms.BooleanField(required=False)
@@ -25,6 +27,8 @@ class ProjectForm(ModelForm):
     logo_url = forms.CharField(required=False, widget=TextInput(attrs={'size':'80'}))
     # extra fields to manage folder state
     #folders = ModelMultipleChoiceField(queryset=Folder.objects.all(), required=False, widget=CheckboxSelectMultiple)
+
+    
 
     # override __init__ method to change the querysets for 'parent' and 'peers'
     def __init__(self, *args, **kwargs):
@@ -34,21 +38,20 @@ class ProjectForm(ModelForm):
         if 'instance' in kwargs:
             instance = kwargs.get('instance')
             current_site = Site.objects.get_current()
-            # exclude the project itself, and all its children
-            queryset1 =  ~Q(id=instance.id)
-            # exclude projects from disabled peer sites
-            queryset2 = Q(site__id=current_site.id) | Q(site__peersite__enabled = True)
+            queryset1 =  ~Q(id=instance.id)         # exclude the project itself, and all its children
+            queryset2 = Q(site__id=current_site.id) | Q(site__peersite__enabled = True) # exclude projects from disabled peer sites
+
             # FIXME ? Should children be excluded from list of possible parents ?
             # exclude children from parents
             #for child in instance.children():
             #    parentQueryset = parentQueryset & ~Q(id=child.id)
             # make the ordering case=independent (NOTE: the generated SQL is database-dependent!)
-            #self.fields['parents'].queryset =  Project.objects.filter( parentQueryset ).distinct().order_by('short_name')
-            self.fields['parents'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
-            # peer query-set options: exclude the project itself
-            #self.fields['peers'].queryset =  Project.objects.filter( ~Q(id=instance.id) ).distinct().order_by('short_name')
-            self.fields['peers'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
 
+            # peer and parent query-set options: exclude the project itself
+            self.fields['parents'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
+            self.fields['peers'].queryset = Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
+            
+          
             #self.fields['folders'].queryset = Folder.objects.filter(project=instance)
             #self.fields['folders'].queryset = instance.folder_set
 

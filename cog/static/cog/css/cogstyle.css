@@ -672,7 +672,7 @@ END VERTICAL MENU (LEFT NAVBAR)
 /******************************/
 
 #id_tags{
-min-width:200px; /*when there are no tags the box has no size*/
+min-width:200px;              /*when there are no tags the box has no size*/
 border: 1px solid #666;
 }
 
@@ -681,7 +681,17 @@ border: 1px solid #666;
 /******************************/
 
 
+/******************************/
+/* BEGIN PARENT/PEER SELECTION BOX */
+/******************************/
+/* used on the update project page */
+.selectfilter{
+min-width:300px;              /*when there are no tags the box has no size*/
+}
 
+/******************************/
+/* BEGIN TAG SELECTION BOX */
+/******************************/
 
 
 /******************************

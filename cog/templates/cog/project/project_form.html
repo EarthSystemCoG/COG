@@ -1,15 +1,12 @@
+<!--// START: /cog/templates/cog/project/project_form.html //-->
 {% extends "cog/common/layout_center.html" %}}
 
+<!--// Loading block main //-->
 {% block main %}
-
-	{% load cog_utils %}
-	
+  {% load cog_utils %}
 	<script language="javascript">
-	
-	
 		// function that selects/deselects tab/subtabs checkboxes to insure consistency
 		function trigger(checkbox) {
-			
 			// if subtab is checked, tab must be checked
 			if (checkbox.checked==true) {
 				
@@ -20,8 +17,6 @@
 						document.getElementsByName( "{{ tab|getTabLabel }}" )[0].checked = true; 
 					}
 				{% endfor %}
-				
-				
 			// it tab is not checked, all subtabs must be not-checked
 			} else if (checkbox.checked==false) {
 				
@@ -32,27 +27,27 @@
 						{% endfor %}
 					}				
 				{% endfor %}
-				
 			}
-			
 		}
 	</script>
+<style scope="true" type="text/css">
+#id_parents select{
+   width:400px;
+}
+</style>
 	 
-     <div class="mybox">
-     
-        <!-- note: action form can be "add" or "update" -->
+ <div class="mybox">
+       <!-- note: action form can be "add" or "update" -->
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            
-            <table>
+           <table>
                 <tr>
-                	<!-- new project -->
-                	{% if action == 'add' %}
-                    	<td valign="top" nowrap="nowrap"><b>Short Name</b></td>
-                    	<td>{{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> 
-                    		{{ form.short_name.errors }}
-                    		<br/>WARNING: the project's 'Short Name' CANNOT be changed after project registration.
-                    	</td>
+                <!-- new project -->
+                {% if action == 'add' %}
+                    <td valign="top" nowrap="nowrap"><b>Short Name</b></td>
+                    <td>{{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
+                    	<br/>WARNING: the project's 'Short Name' CANNOT be changed after project registration.
+                    </td>
                     <!-- project already existing - cannot change short name -->
                     {% else %}
                     	<td valign="top" nowrap="nowrap"><b>Short Name</b></td>
@@ -81,6 +76,7 @@
                     <td nowrap="nowrap"><b>Description</b></td>
                     <td>{{ form.description }} {{ form.description.errors }}</td>
                 </tr>
+		
                 <tr>
                     <td nowrap="nowrap">Parent Projects</td>
                     <td>
@@ -142,29 +138,29 @@
                 		</div>
                 		<table>
                 			{% for tablist in tabs %}
-                				{% if forloop.counter == 1 %}
-                					<!--  Home page must be always selected, do not display -->
-									<input name="tab_{{tablist.0.label}}" type="hidden"/>
-								{% else %}
-                					<tr>
-                						<td>
-											{% for tab in tablist %}
-												<input name="tab_{{tab.label}}"  
-											       		{% if tab.active %} checked="checked" {% endif %}							       
-											       		type="checkbox" onclick="trigger(this)"> 
-											       		<span style="margin-top:2px">
-												       		{% if forloop.counter == 1 %}
-												       			<b>{{tab.label}}</b>				
-												       		{% else %}
-												       			{{tab.label}}
-												       		{% endif %}
-											       		</span>
-											{% endfor %}
-										</td>
-									</tr>	
-								{% endif %}									
-							{% endfor %}
-						</table>
+                			    {% if forloop.counter == 1 %}
+                				<!--  Home page must be always selected, do not display -->
+						<input name="tab_{{tablist.0.label}}" type="hidden"/>
+						{% else %}
+                				<tr>
+                				<td>
+						  {% for tab in tablist %}
+						  <input name="tab_{{tab.label}}"  
+						  {% if tab.active %} checked="checked" {% endif %}							       
+						  type="checkbox" onclick="trigger(this)"> 
+						  <span style="margin-top:2px;vertical-align:middle;">
+					          {% if forloop.counter == 1 %}
+						     {{tab.label}}				
+						  {% else %}
+						     {{tab.label}}
+						  {% endif %}
+						  </span>
+						{% endfor %}
+					       </td>
+					       </tr>	
+					    {% endif %}									
+					{% endfor %}
+				</table>
                 	</td>
                 </tr>
                 <tr>
