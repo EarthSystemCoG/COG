@@ -211,10 +211,11 @@
               			</tr>
 	                    {% for openidform in formset2 %}
 			       	{{ openidform.id }}
+				<!--// inline styles needed to override default table //-->
 				<tr>
-				<td style="width:80px;"><b>OpenID URL:</b></td>
-				<td style="width:500px;">{{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</td>
-				<td style="vertical-align:bottom;">{{openidform.DELETE }} Delete ? </td>
+				<td style="width:80px;vertical-align:middle;"><b>OpenID URL:</b></td>
+				<td style="width:500px;vertical-align:middle;">{{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</td>
+				<td style="vertical-align:middle;">{{openidform.DELETE }} Delete ? </td>
                                 </tr>
 			    {% endfor %}
 		    	{% endif %}
@@ -225,24 +226,18 @@
 				
 		    	<!-- URLs -->
 		    		<tr>
-              			<td colspan="6">Optional web sites
-		    		associated with this COG user account:
-		    		('Home Page', 'My Blog', ...)</td>
+              			<td colspan="6">Optional web sites associated with this COG user account:('Home Page', 'My Blog', ...)</td>
               		        </tr>
-                                {% for urlform in formset1 %}
-		       		   {{ urlform.id }}
-			           <tr>
-			           <td style="width:60px;"><b>Web URL:</b></td>
-				   <td style="width:300px;">{{ urlform.url }} {{ urlform.url.errors }}</td>
-			           <td style="width:30px;"><b>Title:</b></td>
-				   <td style="width:200px;">{{ urlform.name }} {{ urlform.name.errors }}</td>
-			           <td style="vertical-align:bottom;">
-			              {{ urlform.DELETE }} Delete ?
-			          </td>
+                                 {% for urlform in formset1 %}{{ urlform.id }}
+				 <tr>
+			           <td style="width:60px;vertical-align:middle;"><b>Web URL:</b></td>
+				   <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
+			           <td style="width:30px;vertical-align:middle;"><b>Title:</b></td>
+				   <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
+			           <td style="vertical-align:middle;">{{ urlform.DELETE }} Delete ?</td>
 				  </tr>
-		    		{% endfor %}
-
-  	            </table>
+		    	 	 {% endfor %}
+ 	            </table>
 
 	            <div style="text-align:right;">
 	                <hr/>
