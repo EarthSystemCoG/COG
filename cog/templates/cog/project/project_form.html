@@ -156,6 +156,7 @@
 						  {% endif %}
 						  </span>
 						{% endfor %}
+						</input>
 					       </td>
 					       </tr>	
 					    {% endif %}									
@@ -168,9 +169,10 @@
                 	<td>
                 		
                 		{% for folder in folders %}
-							<input name="folder_{{folder.name}}" type="checkbox"
-							       {% if folder.active %} checked="checked" {% endif %} >
-							       {{ folder.name }}		
+				<input name="folder_{{folder.name}}" type="checkbox"
+				{% if folder.active %} checked="checked" {% endif %} >
+			        <span style="vertical-align:middle;">{{ folder.name }}</span>
+			        </input>
                 		{% endfor %}
                 	</td>
                 </tr>
