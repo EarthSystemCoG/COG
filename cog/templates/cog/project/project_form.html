@@ -113,9 +113,9 @@
                 {% if request.user.is_staff and action == 'update' %}
 	                <tr>
 	                    <td style="width:15%;">Is Active ?</td>
-	                    <td style="width:85%;">
+	                    <td style="width:85%;vertical-align:middle;">
 	                        {{ form.active }} 
-	                        <span style="margin-top:2px;vertical-align:middle;">
+	                        <span>
 	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
 	                        </span>
 	                        {{ form.active.errors }}
@@ -127,9 +127,9 @@
                 <!--// Checkbox for private sites   \\-->			
                 <tr>
 	            <td nowrap="nowrap">Is Private ?</td>
-	            <td>
+	            <td vertical-align:middle;">
 	                    {{ form.private }} 
-	                    <span style="margin-top:2px;vertical-align:middle;">
+	                    <span>
 	                    [ A private project is only visible to project members - users and administrators. ]
 	                    </span>
 	                    {{ form.private.errors }}
