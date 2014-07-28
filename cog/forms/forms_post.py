@@ -16,6 +16,7 @@ POST_TEMPLATES = (
                    ("cog/post/page_template_sidebar_center_right.html", "Left Menu, Main Content, Right Widgets"),
                  )
 
+
 class PostForm(ModelForm):
 
     # extra field not present in Post model

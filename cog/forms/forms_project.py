@@ -18,8 +18,9 @@ class ProjectForm(ModelForm):
     # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its styles are controlled in cogstyle.css
     peers   = ModelMultipleChoiceField(Project.objects.all(),widget=FilteredSelectMultiple("Peer Projects", False, attrs={'size':'12',}))
     parents = ModelMultipleChoiceField(Project.objects.all(),widget=FilteredSelectMultiple("Parent Projects", False, attrs={'size':'12',}))
-    # filtering of what is seein in the form is done down below. 
-    # don't know why we can't use a SelectMultiple here vice a FilteredSelectMultiple
+    # filtering of what is see in the form is done down below. 
+
+    # ERROR: FilteredSelectMultiple does not exist in the module but choosing widget=SelectMultiple throws an error. FilteredSelectMultiple throws an error in IE. 
 
     # extra field not present in model, used for deletion of previously uploaded logo
     delete_logo = forms.BooleanField(required=False)

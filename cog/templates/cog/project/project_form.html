@@ -10,8 +10,8 @@
 			// if subtab is checked, tab must be checked
 			if (checkbox.checked==true) {
 				
-				// "download/"" -> "software/" 
-                // "partners/ -> "aboutus/"
+				// "download/" -> "software/" 
+                               // "partners/"  -> "aboutus/"
 				{% for subtab, tab in INVNAVMAP.items %}
 					if (checkbox.name == "{{ subtab|getTabLabel|safe }}") {
 						document.getElementsByName( "{{ tab|getTabLabel }}" )[0].checked = true; 
@@ -30,11 +30,6 @@
 			}
 		}
 	</script>
-<style scope="true" type="text/css">
-#id_parents select{
-   width:400px;
-}
-</style>
 	 
  <div class="mybox">
        <!-- note: action form can be "add" or "update" -->
@@ -76,7 +71,7 @@
                     <td nowrap="nowrap"><b>Description</b></td>
                     <td>{{ form.description }} {{ form.description.errors }}</td>
                 </tr>
-		
+		<!--// functions used for parents and peers comes from /cog/forms/forms_project.py //-->
                 <tr>
                     <td nowrap="nowrap">Parent Projects</td>
                     <td>
@@ -144,6 +139,7 @@
                 	   <!--  Home page must be always selected, do not display -->
 				<input name="tab_{{tablist.0.label}}" type="hidden"/>
 			   {% else %}
+			   <!--//  table of tab options //-->
                 	     <tr>
                 	       <td>
 				 {% for tab in tablist %}
