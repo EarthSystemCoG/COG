@@ -139,8 +139,8 @@
 	        <tr>
                     <td nowrap="nowrap">Upper Menu Bar</td>
                     <td>
-                       <div style="text-align:center">
-                       [ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
+                       <div style="text-align:left">
+                       [ IMPORTANT: If you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content. ]
                        </div>
                        <table class="gray">
                 	 {% for tablist in tabs %}
@@ -156,7 +156,7 @@
 				    <input name="tab_{{tab.label}}"{% if tab.active %} checked="checked" {% endif %} type="checkbox" id="{{tab.label}} onclick="trigger(this)"> 
 				    <span style="margin-top:2px;vertical-align:middle;">
 			              {% if forloop.counter == 1 %}
-					{{tab.label}}				
+					<b>{{tab.label}}</b>				
 				      {% else %}
 				        {{tab.label}}
 				      {% endif %}
