@@ -144,7 +144,7 @@ img{
 
 /* checkboxes and labels don't align correctly in IE. */
 .ie9 input[type=checkbox], .ie10 input[type=checkbox], .ie11 input[type=checkbox] {
-    vertical-align: -2px;
+    vertical-align: -3px;
 }
 
 /****************************
