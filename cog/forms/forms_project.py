@@ -16,8 +16,9 @@ from cog.utils import hasText
 class ProjectForm(ModelForm):
 
     # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its styles are controlled in cogstyle.css
-    peers   = ModelMultipleChoiceField(Project.objects.all(),widget=FilteredSelectMultiple("Peer Projects", False, attrs={'size':'12',}))
-    parents = ModelMultipleChoiceField(Project.objects.all(),widget=FilteredSelectMultiple("Parent Projects", False, attrs={'size':'12',}))
+
+    parents = forms.ModelMultipleChoiceField("parents",cache_choices=False,required=False,widget=forms.SelectMultiple(attrs={'size':'20','class':'selectprojects'}))
+    peers   = forms.ModelMultipleChoiceField("peers",cache_choices=False,required=False,widget=forms.SelectMultiple(attrs={'size':'20','class':'selectprojects'}))
     # filtering of what is see in the form is done down below. 
 
     # ERROR: FilteredSelectMultiple does not exist in the module but choosing widget=SelectMultiple throws an error. FilteredSelectMultiple throws an error in IE. 
@@ -50,7 +51,7 @@ class ProjectForm(ModelForm):
 
             # peer and parent query-set options: exclude the project itself
             self.fields['parents'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
-            self.fields['peers'].queryset = Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
+            self.fields['peers'].queryset   =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
             
           
             #self.fields['folders'].queryset = Folder.objects.filter(project=instance)

@@ -703,10 +703,11 @@ border: 1px solid #666;
 /* BEGIN PARENT/PEER SELECTION BOX */
 /******************************/
 /* used on the update project page */
-.selectfilter{
+.selectprojects{
     min-width:300px;              /*when there are no tags the box has no size*/
     border: 1px solid black;
     margin-bottom: 5px; /* some extra space before the help text */
+    required:false;
 
 }
 
