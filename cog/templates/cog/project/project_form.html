@@ -120,49 +120,52 @@
                 {% else %}
                    {{ form.active.as_hidden }}
                 {% endif %}
+                <!--// Checkbox for private sites   \\-->			
                 <tr>
-	            	<td nowrap="nowrap">Is Private ?</td>
-	                <td>
+	            <td nowrap="nowrap">Is Private ?</td>
+	            <td>
 	                    {{ form.private }} 
 	                    <span style="margin-top:2px">
 	                    [ A private project is only visible to project members - users and administrators. ]
 	                    </span>
 	                    {{ form.private.errors }}
-	                </td>
-	            </tr>
-	            <tr>
-                	<td nowrap="nowrap">Upper Menu Bar</td>
-                	<td>
-                		<div style="text-align:center">
-                			[ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
-                		</div>
-                		<table>
-                			{% for tablist in tabs %}
-                			    {% if forloop.counter == 1 %}
-                				<!--  Home page must be always selected, do not display -->
-						<input name="tab_{{tablist.0.label}}" type="hidden"/>
-						{% else %}
-                				<tr>
-                				<td>
-						  {% for tab in tablist %}
-						  <input name="tab_{{tab.label}}"  
-						  {% if tab.active %} checked="checked" {% endif %}							       
-						  type="checkbox" onclick="trigger(this)"> 
-						  <span style="margin-top:2px;vertical-align:middle;">
-					          {% if forloop.counter == 1 %}
-						     {{tab.label}}				
-						  {% else %}
-						     {{tab.label}}
-						  {% endif %}
-						  </span>
-						{% endfor %}
-						</input>
-					       </td>
-					       </tr>	
-					    {% endif %}									
-					{% endfor %}
-				</table>
-                	</td>
+	            </td>
+	        </tr>
+	        <!--// Turn on/off tabs and sub-tabs \\-->	    
+	        <tr>
+                    <td nowrap="nowrap">Upper Menu Bar</td>
+                    <td>
+                       <div style="text-align:center">
+                       [ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
+                       </div>
+                       <table>
+                	 {% for tablist in tabs %}
+                	   {% if forloop.counter == 1 %}
+                	   <!--  Home page must be always selected, do not display -->
+				<input name="tab_{{tablist.0.label}}" type="hidden"/>
+			   {% else %}
+                	     <tr>
+                	       <td>
+				 {% for tab in tablist %}
+				    <label for="{{tab_label}}">
+				    <input name="tab_{{tab.label}}"{% if tab.active %} checked="checked" {% endif %}type="checkbox" id="{{tab.label}} onclick="trigger(this)"> 
+				    <span style="margin-top:2px;vertical-align:middle;">
+			              {% if forloop.counter == 1 %}
+					{{tab.label}}				
+				      {% else %}
+				        {{tab.label}}
+				      {% endif %}
+		                    </span>
+				    </input>
+				    </label>
+				 {% endfor %}
+
+			        </td>
+			      </tr>	
+			     {% endif %}									
+			   {% endfor %}
+			</table>
+                   </td>
                 </tr>
                 <tr>
                 	<td nowrap="nowrap"><span style="margin-top:2px">Resource Folders</span></td>

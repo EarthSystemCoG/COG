@@ -104,16 +104,12 @@ body{
 
 }
 
-
-
-
-/*p, h1,h2,h3,h4,h5,h6, table, th, tr, td, div, input{
-font: inherit
-}
-*/
+/****************************
+* BEGIN FIXES FOR IE
+/****************************
 
 /* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body {
+.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, ie11 body{
         margin-right:  auto; 
 	margin-left:   auto;
         margin-top:    0px;
@@ -124,15 +120,28 @@ font: inherit
         /*background-color: pink;*/
 }
 
+/* turn off image borders by default */
 img{
         border:none;
 }
 
-.ie6 ul, ie7 ul, ie8 ul, ie9 ul, ie10 ul{
+/* adjust bullets which are outside by default in IE */
+.ie6 ul, ie7 ul, ie8 ul, ie9 ul, ie10 ul, ie11 ul{
      margin:              0px;
      padding:             0px;
      list-style-position: inside;
 }
+
+/* checkboxes and labels don't align correctly in IE. */
+ie9 input[type=checkbox], ie10 input[type=checkbox], ie11 input[type=checkbox], {
+    vertical-align: middle;
+    position:       relative;
+    bottom:         1px;
+}
+
+/****************************
+* END FIXES FOR IE
+/****************************
 
 /***************
 * NAME: headers
