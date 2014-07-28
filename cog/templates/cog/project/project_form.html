@@ -39,23 +39,24 @@
                 <tr>
                 <!-- new project -->
                 {% if action == 'add' %}
-                    <td valign="top" nowrap="nowrap"><b>Short Name</b></td>
-                    <td>{{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
+		<!--width of first row carries down to all others in the table-->
+                    <td style="width:15%;"><b>Short Name</b></td>
+                    <td style="width:85%;">{{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
                     	<br/>WARNING: the project's 'Short Name' CANNOT be changed after project registration.
                     </td>
                     <!-- project already existing - cannot change short name -->
                     {% else %}
-                    	<td valign="top" nowrap="nowrap"><b>Short Name</b></td>
-                    	<td>{{ form.instance.short_name }} {{ form.short_name.as_hidden }}</td>                   	
+                    	<td style="width:15%;" ><b>Short Name</b></td>
+                    	<td style="width:85%;">{{ form.instance.short_name }} {{ form.short_name.as_hidden }}</td>                   	
                     {% endif %}
                 </tr>               
                 <tr>
-                    <td nowrap="nowrap"><b>Long Name</b></td>
-                    <td class="long">{{ form.long_name }} {{ form.long_name.errors }}</td>
+                    <td><b>Long Name</b></td>
+                    <td>{{ form.long_name }} {{ form.long_name.errors }}</td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap"><b>Creator</b></td>
-                    <td class="long">
+                    <td><b>Creator</b></td>
+                    <td>
                         {% if form.instance.author %}
                             {% if form.instance.author.get_full_name %}
                                 <a href="mailto:{{form.instance.author.email}}">{{ form.instance.author.get_full_name }}</a>
@@ -89,24 +90,32 @@
                                  Assigning peer projects is NOT required.]
                     </td>
                 </tr>
+	</table>
+	<table>
                 <tr>
-                    <td nowrap="nowrap"><div style="margin-top:2px">Project Logo</div></td>
-                    <td> <span style="margin-top:2px">
-                    	 	{{ form.logo }} 
-                         	{{ form.logo.errors }} &nbsp; 
-                         	[ optional project logo, will be displayed with height=70px ]
-                    	 	<br>&nbsp;</br>
-                    	 	{{ form.logo_url }} &nbsp; [ optional URL to hyperlink logo, defaults to project home]
-                    	</span>
-                    </td>
-                </tr>                                         
+                    <td style="width:15%;">Project Logo</td>
+                    <td style="width:85%;vertical-align:middle;"> 
+                    	 {{ form.logo }} {{ form.logo.errors }}
+                         [ optional project logo, will be displayed with height=70px ]
+		    </td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+		    <td style="width:15%;"></td>
+		    <td style="width:45%;">{{ form.logo_url }}</td>
+		    <td>[ optional URL to hyperlink logo, defaults to project home]</td>
+               </tr>
+	</table>
+	<table>
+        <table class="odd-color">
                 <!-- only allow site administrators to change the active state of a project  -->
                 {% if request.user.is_staff and action == 'update' %}
 	                <tr>
-	                    <td nowrap="nowrap">Is Active ?</td>
-	                    <td>
+	                    <td style="width:15%;">Is Active ?</td>
+	                    <td style="width:85%;">
 	                        {{ form.active }} 
-	                        <span style="margin-top:2px">
+	                        <span style="margin-top:2px;vertical-align:middle;">
 	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
 	                        </span>
 	                        {{ form.active.errors }}
@@ -120,7 +129,7 @@
 	            <td nowrap="nowrap">Is Private ?</td>
 	            <td>
 	                    {{ form.private }} 
-	                    <span style="margin-top:2px">
+	                    <span style="margin-top:2px;vertical-align:middle;">
 	                    [ A private project is only visible to project members - users and administrators. ]
 	                    </span>
 	                    {{ form.private.errors }}
@@ -133,7 +142,7 @@
                        <div style="text-align:center">
                        [ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
                        </div>
-                       <table>
+                       <table class="gray">
                 	 {% for tablist in tabs %}
                 	   {% if forloop.counter == 1 %}
                 	   <!--  Home page must be always selected, do not display -->

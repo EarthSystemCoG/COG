@@ -297,6 +297,11 @@ table.no-color td {
 	background-color: #FFFFFF !important;
 }
 
+/* for tables that are entirely gray. Used when a table is imbedded in another table with a dark row */
+table.gray td{
+        background-color: #eee !important;
+}
+
 /***************
 * NAME: table cells (standard data and headers)
 * SCOPE: the current table
@@ -426,7 +431,8 @@ input[type=text] {
 }
 
 input[type=checkbox]{
-        vertical-align:baseline;
+        vertical-align:baseline; /* default but want to make sure so we can do ie fixex */
+	margin-left:   0px; /* so they line up nicely in tables */
 }
 
 
@@ -698,7 +704,10 @@ border: 1px solid #666;
 /******************************/
 /* used on the update project page */
 .selectfilter{
-min-width:300px;              /*when there are no tags the box has no size*/
+    min-width:300px;              /*when there are no tags the box has no size*/
+    border: 1px solid black;
+    margin-bottom: 5px; /* some extra space before the help text */
+
 }
 
 /******************************/
