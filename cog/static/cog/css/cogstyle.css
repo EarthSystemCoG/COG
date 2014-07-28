@@ -126,14 +126,24 @@ img{
 }
 
 /* adjust bullets which are outside by default in IE */
-.ie6 ul, ie7 ul, ie8 ul, ie9 ul, ie10 ul, ie11 ul{
+.ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul, .ie10 ul, .ie11 ul{
      margin:              0px;
      padding:             0px;
      list-style-position: inside;
 }
 
+/*force IE to behave the same as other browsers */
+.ie9 hr, {
+        background:   #358C92;
+	border:       none;
+	height:        1px;
+	margin-bottom: 4px;
+	margin-top:    4px;
+}
+
+
 /* checkboxes and labels don't align correctly in IE. */
-ie9 input[type=checkbox], ie10 input[type=checkbox], ie11 input[type=checkbox] {
+.ie9 input[type=checkbox], .ie10 input[type=checkbox], .ie11 input[type=checkbox] {
     vertical-align: -5px;
     background-color:pink;
 }
@@ -196,14 +206,6 @@ hr {
 	margin-bottom: 4px;
 	margin-top: 4px;
 }
-/*force IE to behave the same as other browsers */
-.ie9 hr {
-        background:   #358C92;
-	border:       none;
-	height:        1px;
-	margin-bottom: 4px;
-	margin-top:    4px;
-}
 
 
 
@@ -214,13 +216,11 @@ hr {
 ***************/
 a:link, a:visited {
     /* keep the same style for links regardless of whether they've been visited */
-    color: #5b80b2;	/* blue */
     color: #358C92;    /* dark teal */
     text-decoration: none;
 }
 a:hover {
         /* only change the style of a link while a user is hovering over it */
-	color: #036;
 	color: #358C92; /*dark teal */
 	text-decoration: none;
 }
@@ -258,7 +258,7 @@ table {
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
 tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #B9E0E3;/*light-teal */
+	background:       #B9E0E3;/*light-teal */
         background-color: #eee /*light-gray */
 }
 
@@ -425,6 +425,11 @@ input[type=text] {
 	padding-left: 2px; /* space before text starts */
 	height:15px;
 }
+
+input[type=checkbox]{
+        vertical-align:baseline;
+}
+
 
 input[type=password] {
 	border: 1px solid #666666;
