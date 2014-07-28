@@ -22,7 +22,7 @@
         </tr>
         {% endif %}
         <tr>
-            <td class="head" nowrap="nowrap"><b>Institution</b></td>
+            <td nowrap="nowrap"><b>Institution</b></td>
             <td class="long">{{ user_profile.institution }}</td>
         </tr>
         <tr>
@@ -30,11 +30,11 @@
             <td class="long">{{ user_profile.department }}</td>
         </tr>
         <tr>
-            <td class="head" nowrap="nowrap"><b>City</b></td>
+            <td nowrap="nowrap"><b>City</b></td>
             <td class="long">{{ user_profile.city }}</td>
         </tr>
         <tr>
-            <td class="head" nowrap="nowrap"><b>State</b></td>
+            <td nowrap="nowrap"><b>State</b></td>
             <td class="long">{{ user_profile.state }}</td>
         </tr>
         <tr>
@@ -49,7 +49,7 @@
         {% endfor %}
         {% if user.is_staff or user_profile.user == user %}
         <tr>
-            <td class="head" nowrap="nowrap"><b>COG Email List</b></td>
+            <td nowrap="nowrap"><b>COG Email List</b></td>
             <td class="long">{% if user_profile.subscribed %}Subscribed{% else %}Not Subscribed{% endif %}</td>
         </tr>
         {% endif %}
