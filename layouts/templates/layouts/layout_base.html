@@ -42,26 +42,19 @@
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
 
-       <style type="text/css">
-
-        
-        div.cog_container{
-          width:       1000px; /*must be larger than span-24, which is 950px */
-          margin:       0px;       /*remove all margins in the box model */
-          margin-right: auto !important;
-          margin-left:  auto  !important;
-        }
-        </style>
        
    
     </head>
     
     <body>
-      <div class="cog_container">
+      <div class="custom_header_bar">
        <!--Load block custom_header from various templates -->
        {% block custom_header %} {% endblock %}
-
-       <div class="container">
+      </div> <!--// end div.custom_header //-->
+      
+      <hr style="background:#333;margin:0px;padding:0px;"/>
+      
+      <div class="container">
 	   <!--Load block header from various templates-->
 	    {% block header %} {% endblock %}
 	 
@@ -71,10 +64,12 @@
 	   <!--Load block footer from various templates -->
             {% block footer %} {% endblock %}
       </div> <!--// end div.container //-->
-
+      
+      <div class="custom_footer_bar">
       <!--Load block custom_footer from various templates -->
       {% block custom_footer %} {% endblock %}
-     </div> <!--// end div.cog_container //-->
+     </div> <!--// end div.custom_footer_bar //-->
+     
     </body>
     
 </html>
