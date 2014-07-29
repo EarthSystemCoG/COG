@@ -50,7 +50,6 @@
 		    
 		    <!-- update to existing form -->
 			{% if form.instance.id %}
-				
 				<!-- must resubmit attachments as hidden fields (only if the post has been saved already to the database) -->
 			    {% for doc in form.instance.docs.all %}
 	                <input type="hidden" name="docs" value="{{doc.id}}"/>

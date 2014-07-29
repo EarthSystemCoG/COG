@@ -68,7 +68,7 @@ BEGIN PAGE-LEVEL ELEMENTS
 html {
     overflow: -moz-scrollbars-vertical;
     overflow-y: scroll;
-    background: gainsboro;
+    background:white;
 }
 
 /***************
@@ -88,21 +88,42 @@ body{
     /* px to pt ratio = 1.33, so 13px = 9.77pt */
     font: normal normal normal 13px/1.231 Arial,sans-serif; 
 
-    color:      #333;         /* text color...dark grey*/
-    text-align: left;         /*default alignment is left-justified */
-
-    /*background: #FFFFFF;      /*white background*/
-    /*padding-left: 20px;       
-    padding-right:20px; */
-    margin:       0px;       /*remove all margins in the box model */
-    margin-right: auto !important;
-    margin-left:  auto  !important;
-    vertical-align: baseline;
-    border: 1px solid black; /* puts box around the body. Added at the same time as the custom header */
-    width:1000px;
-
+    color:         #333;         /* text color...dark grey*/
+    text-align:    left;         /*default alignment is left-justified */
+    margin:         0px;       /*remove all margins in the box model */
+    padding:        0px;
+    margin-right:   auto       !important;
+    margin-left:    auto       !important;
+    vertical-align: baseline; /* this is the default, be we want to control */
+    /*border: 1px solid #333; /* puts box around the body. Added at the same time as the custom header */ 
+    width:     100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
+    min-width: 1000px;        /* don't scrunch the site */
 
 }
+ 
+
+div.custom_header_bar {
+    width:        100%;
+    margin-top:   3px;
+}
+div.custom_header{
+    width:        1000px; /* note span-24 = 950px */
+    margin-left:  auto !important;
+    margin-right: auto !important;
+
+}
+
+div.custom_footer_bar{
+    width:        100%; /* note span-24 = 950px */
+    background-color:   #666;
+}
+
+div.custom_footer{
+    width:        1000px; /* note span-24 = 950px */
+    margin-left:  auto !important;
+    margin-right: auto !important;
+}
+       
 
 /****************************
 * BEGIN FIXES FOR IE
@@ -233,6 +254,11 @@ a:hover {
 	display: none;
 }
 
+
+        
+
+
+       
 /******************************
 END PAGE-LEVEL ELEMENTS
 ******************************/

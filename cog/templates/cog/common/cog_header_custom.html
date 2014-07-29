@@ -2,39 +2,32 @@
 <!--This is the default custom header for ESGF-COG-->
 <!--It contains the ESGF logo, space for welcome message or node name, and space for institutional logos.-->
 <!--Maintaining the style will make ESGF consistent across nodes.-->
-<style scoped="true" type="text/css">
-div.custom_header{
-    border-bottom: 2px solid #666;
-    background-color: white;
-
-}
+<style scoped type="text/css">
 img.esgf{
     width:105px;
+    margin: 0px;
+    padding:0px;
 }
 td.custom_header_esgf{
     width:120px;
     vertical-align:middle;
+    margin:        0px;
+    padding:       0px;
 }
 td.custom_header_welcome{
     vertical-align:middle;
     font-size:14px;  /* note this is in px and not pt */
     color: #666;
-}
-img.custom_header_logo{
-    width: 37px;
-}
-td.custom_header_images{
-   text-align:right;
+    font-style:italic;
 }
 </style>
 
-    <div class="custom_header">
-      <table class="no_color">
-         <tr>	
-         <td class="custom_header_esgf"><img class="esgf" src="/static/cog/img/esgf.png" alt="ESGF logo"/></td>
-	 <td class="custom_header_welcome">Welcome to ESGF-CoG </td>
-	 <td class="custom_header_images"><img class="custom_header_logo" src="/static/cog/img/noaa.jpg" alt="NOAA logo"/></td>
-	 </tr>
+<div class="custom_header">
+<table style="padding:0px;margin:0px;" class="no_color">
+   <tr>	
+     <td class="custom_header_esgf"><img class="esgf" src="/static/cog/img/esgf.png" alt="ESGF logo"/></td>
+     <td class="custom_header_welcome">Welcome to ESGF-CoG </td>
+   </tr>
       </table>
-   </div><!--// end div id=custom_header //-->
+</div>
 <!--END: /cog/templates/cog/common/cog_header_custom.html-->

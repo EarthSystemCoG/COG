@@ -3,30 +3,24 @@
 <!--It contains space for the node URL address and institutional links-->
 <!--Maintaining the style will make ESGF consistent across nodes.-->
 <style scope type="text/css">
-#custom_footer{
-    border-bottom: 2px solid #666;
-    background-color:        #666;
+table.custom_footer{
     color:                   white; /*text color */
     height:                  40px;
-    padding-left:            5px;
-    padding-right:           5px;
 }
 
-#custom_footer td{
+table.custom_footer td{
     vertical-align: middle;
     font:           normal normal 8pt/1.231 Arial,sans-serif;
-
 }
 
-
-#custom_footer a:link, #custom_footer a:hover, #custom_footer a:visited{
+table.custom_footer a:link, table.custom_footer a:hover,table.custom_footer a:visited{
    color: white;
    text-decoration:underline;
 }
 </style>
 
-
-       <table id="custom_footer">
+<div class="custom_footer">
+       <table class="custom_footer">
        <tr>
        <td style="width:30%;">https://hydra.esrl.svc.noaa.gov</td>
        <td style="width:70%;text-align:right;">
@@ -39,4 +33,5 @@
         </td>
 	</tr>
 	</table>
+</div>	
 <!--//--end div.custom_footer //-->

@@ -1,16 +1,14 @@
-<!-- form table for generic page -->
-<style type=text/css>
+<!--// START: /cog/templates/cog/post/_post_form_page.html //-->
+<style scoped type=text/css>
 td.col1{
-width:70px;
+width:    70px;
 min-width:70px;
 }
-td{
-wi
 </style>
 
 <table>
     <tr>
-	<td class="col1"}>Author</td>
+	<td class="col1">Author</td>
 	<td>{{ request.user }} </td>		          
     </tr>
     <tr>
@@ -33,11 +31,13 @@ wi
 	 <td style="width:400px;vertical-align:middle;"><i>Use only letters, numbers, '_', '-' and '/'</i>{{ form.url.errors }}</td>
    </tr>
 </table>
+<!--// Load list of templates from /cog/forms/forms_post.py //-->
 <table>
     <tr>
          <td class="col1"><b>Template</b></td>
          <td class="long">{{ form.template }} {{ form.template.errors }}</td>
     </tr>
+</table>
 <table class="odd-color">
    <tr>
           <td class="col1" nowrap="nowrap">Parent Page</td>
@@ -65,3 +65,4 @@ wi
         <td>{{ form.body }} {{ form.body.errors }}</td>
     </tr>
 </table>
+<!--// END: /cog/templates/cog/post/_post_form_page.html //-->

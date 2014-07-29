@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
+from django.forms import TextInput
 from membership import MembershipRequest
 from os.path import basename
 from cog.models.user_profile import UserProfile
@@ -36,6 +37,7 @@ class Project(models.Model):
     vision  = models.TextField(blank=True, help_text='Outlines what a project wants to be, or how it wants the world in which it operates to be. It is a long-term view.')
     values  = models.TextField(blank=True, help_text='Beliefs that are shared among the members of a project. Values influence culture and priorities and provide a framework for informing decisions.')
     history = models.TextField(blank=True, help_text='A narrative describing the origination and evolution of the project.')
+    #history = models.TextField(blank=True, help_text='A narrative describing the origination and evolution of the project.', widget=TextInput('history',attr={'rows:50'}) )
     external_homepage = models.URLField(max_length=200, blank=True, null=True, help_text='External Home Page')
     
     governanceOverview = models.TextField(blank=False, null=True, verbose_name='Governance Overview', \
