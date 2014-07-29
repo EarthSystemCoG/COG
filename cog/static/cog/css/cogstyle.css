@@ -96,16 +96,17 @@ body{
     margin-left:    auto       !important;
     vertical-align: baseline; /* this is the default, be we want to control */
     /*border: 1px solid #333; /* puts box around the body. Added at the same time as the custom header */ 
-    width:     100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
-    min-width: 1000px;        /* don't scrunch the site */
+    width:          100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
+    min-width:      1000px;        /* don't scrunch the site */
 
 }
  
-
+/* create white header bar that spans the entire browser window */
 div.custom_header_bar {
     width:        100%;
     margin-top:   3px;
 }
+
 div.custom_header{
     width:        1000px; /* note span-24 = 950px */
     margin-left:  auto !important;
@@ -113,8 +114,9 @@ div.custom_header{
 
 }
 
+/* create gray footer that spans the entire browser window */
 div.custom_footer_bar{
-    width:        100%; /* note span-24 = 950px */
+    width:              100%; /* note span-24 = 950px */
     background-color:   #666;
 }
 
@@ -1216,7 +1218,7 @@ img.project_logo{
     width: 100%;
     height: 20px;
     margin: 0 auto;
-    padding: 0px;
+    padding:   0px;
     /* padding-top: 2px; */
     /* COG STYLE: TOP NAV BACKGROUND COLOR */
     background: #FFFFFF;
@@ -1229,12 +1231,14 @@ img.project_logo{
     font-style: normal;
 }
 
+/*bar that shows up when there is no upper navigation items (e.g. data cart) */
 #top_nav_left {
-	padding-top: 2px;
+	padding-top:  2px;
 	padding-left: 6px;
-	width: 100%;
-	background: #358C92;
-	float:left;
+	width:        100%;
+	background:   #358C92;
+	float:        left;
+        height:       20px;
 }
 
 #top_subnav_left {
@@ -1251,12 +1255,12 @@ img.project_logo{
 
 
 #top_nav_right {
-	width: 97%;
-	padding-top: 2px;
-	padding-left: 6px;
-	text-align: right;
+	width:            97%;
+	padding-top:      2px;
+	padding-left:     6px;
+	text-align:       right;
 	background-color: #FAC24A; /*dark yellow*/
-	float: right;
+	float:            right;
 }
 
 #top_subnav {
