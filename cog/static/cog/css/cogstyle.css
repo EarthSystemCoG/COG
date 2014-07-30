@@ -66,8 +66,7 @@ BEGIN PAGE-LEVEL ELEMENTS
 * PURPOSE: force the browser's vertical scrollbar to always display
 ***************/
 html {
-    /*overflow-y: scroll; /* force a scrollbar */
-    overflow: hidden;
+    overflow-y: scroll; /* force a scrollbar */
     background: white;
     height:     100%;
 }
