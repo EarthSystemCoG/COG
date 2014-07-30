@@ -79,9 +79,11 @@ html {
 ***************/
 /*****************************
 BEGIN DJANGO and YUI CSS RESETS
-/*Django contains numerious CSS files that set many properties not 
+
+Django contains numerious CSS files that set many properties not 
 explicly covered in the areas below. These are reclaimed here so that we 
-can completly control in one file how things look*/
+can completly control in one file how things look 
+*******************************/
 body{
 
     /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
@@ -100,6 +102,11 @@ body{
     height:         100%; 
 
 }
+
+/**********************************
+BEGIN: Custom header and footer
+This sets the styles for the defaults
+*********************************/
  
 /* create white header bar that spans the entire browser window */
 div.custom_header_bar {
@@ -107,25 +114,28 @@ div.custom_header_bar {
     margin-top:   3px;
 }
 
+/* create a white header that is just slightly larger than the main cog site */
 div.custom_header{
     width:        1000px; /* note span-24 = 950px */
     margin-left:  auto !important;
     margin-right: auto !important;
 
 }
-
+/* create a sticky footer. This div pushes the footer down the full height of the browser window
+but then enables the footer bar to be at the bottom */
 div.content_wrapper{
-    height:     100%;
-    margin:      0px;
-    margin-bottom: -40px;
+    height:        100%;
+    margin:        0px;
+    margin-bottom: -40px; /*this needs to be the same height as the custom footer */
 }
 
-/* create gray footer that spans the entire browser window */
+/* create gray footer bar that spans the entire browser window */
 div.custom_footer_bar{
     width:              100%; /* note span-24 = 950px */
     background-color:   #666;
 }
 
+/* create a custom footer that is slightly larger than the main cog site */ 
 div.custom_footer{
     width:        1000px; /* note span-24 = 950px */
     margin-left:  auto !important;
@@ -133,16 +143,50 @@ div.custom_footer{
     color:        white; /*text color */
 }
 
+.custom_footer td{
+    vertical-align: middle;
+    font:           normal normal 8pt/1.231 Arial,sans-serif;
+}
+
+.custom_footer td a:link, .custom_footer td a:hover, .custom_footer td a:visited{
+   color: white;
+   text-decoration:underline;
+}
+
 table.custom_footer{
   height: 40px;    /* set table height to be what we want the footer to be and the text will be centered in that */
 }
        
+/**********************************
+END: Custom header and footer
+/*********************************/
 
+/**********************************
+BEGIN: CoG footer
+/*********************************/
 
+div.footer{
+  background-color:#e9f5f6;
+  font-size:       8pt;
+  border: 1px solid #666;
+}
+
+.footer td{
+    vertical-align: middle;
+    font:           normal normal 8pt/1.231 Arial,sans-serif;
+    text-align:     center;
+    color:          #666;
+    padding:        2px;
+}
+
+/*override standard table with gray rows*/
+.footer tbody tr:nth-child(even) td, .footer tbody tr.even td {
+ background-color :#e9f5f6;
+}
 
 /****************************
 * BEGIN FIXES FOR IE
-/****************************
+/****************************/
 
 /* force IE to center the content in the body*/
 .ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, ie11 body{
@@ -185,7 +229,7 @@ img{
 
 /****************************
 * END FIXES FOR IE
-/****************************
+/****************************/
 
 /***************
 * NAME: headers
@@ -268,12 +312,6 @@ a:hover {
 .invisible {
 	display: none;
 }
-
-
-        
-
-
-       
 /******************************
 END PAGE-LEVEL ELEMENTS
 ******************************/
@@ -345,27 +383,26 @@ table.gray td{
 
 /***************
 * NAME: table cells (standard data and headers)
-* SCOPE: the current table
-*SJM: is this just the wiki?
 ***************/
 
-/* table data and table headers have the same size */
+/* set defaults for all tables and headers on the site. Make table data and table headers have the same size */
 td, th {
-    margin:0px;
-    font-size: 9pt; 
-    padding: 4px;
+    margin:         0px;
+    font-size:      9pt; 
+    padding:        4px;
     vertical-align: top;
 }
 
-/* but table headers are bold with a cyan background */
+/* default table headers are bold with a cyan background. Change this.*/
 th {
     font-weight: bold;
-    background: none repeat scroll 0 0 #C3D9FF;
+    background:  none repeat scroll 0 0 #C3D9FF;
 }
 
 /* other CSS can alter the table header's size; this more specific CSS sets it to the proper value */
 #cog_post_body th {
-    padding: 5px; font-size: 9pt;
+    padding: 5px; 
+    font-size: 9pt;  /*this is different from the font on the page...will need to standardize */
 }
 
 
@@ -378,8 +415,8 @@ th {
 }
 
 .long_middle {
-	width: 100%;
-	text-align: left;
+	width:          100%;
+	text-align:     left;
 	vertical-align: middle;
 }
 
@@ -405,12 +442,12 @@ td.righttop {
 }
 
 .right {
-	text-align: right;
+	text-align:     right;
 	vertical-align: middle;
 }
 
 .left {
-	text-align: left;
+	text-align:     left;
 	vertical-align: middle;
 }
 
