@@ -99,9 +99,13 @@ body{
     vertical-align: baseline; /* this is the default, be we want to control */
     width:          100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
     height:         100%; 
+    min-height:     800px;
 
 }
 
+div.main_content{
+   min-height: 700px;
+}
 /**********************************
 BEGIN: Custom header and footer
 This sets the styles for the defaults

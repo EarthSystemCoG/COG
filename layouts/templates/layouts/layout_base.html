@@ -53,14 +53,16 @@
       
 
         <div class="container"> <!--// django class //-->
+	  <div class="main_content">
 	    {% block header %} {% include 'cog/common/cog_header.html' %} {% endblock %}
 	 
            <!--Load block body from various templates -->
             {% block body %} {% endblock %}
-	 
-          {% block footer %}  {% include 'cog/common/cog_footer_bar_only.html' %} {% endblock %}
-       </div> <!--// end div.container //-->
- 
+	  </div>
+	  {% block footer %}  {% include 'cog/common/cog_footer_bar_only.html' %} {% endblock %}
+        </div> <!--// end div.container //-->
+
+
  <!--</div> <!--// end div.content_wrapper //-->
 
  	<div class="custom_footer_bar">
