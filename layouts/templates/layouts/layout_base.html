@@ -47,28 +47,24 @@
    <!--<div class="content_wrapper">-->
     <div class="custom_header_bar">
        <!--Load block custom_header from various templates -->
-       {% block custom_header %} {% endblock %}
+       {% block custom_header %}  {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
+          <hr style="background:#333;margin:0px;padding:0px;"/>
     </div> <!--// end div.custom_header //-->
       
-    <hr style="background:#333;margin:0px;padding:0px;"/>
-      
 
-         <div class="container"> <!--// django class //-->
-	   <!--Load block header from various templates-->
-	    {% block header %} {% endblock %}
+        <div class="container"> <!--// django class //-->
+	    {% block header %} {% include 'cog/common/cog_header.html' %} {% endblock %}
 	 
            <!--Load block body from various templates -->
             {% block body %} {% endblock %}
 	 
-	  <!--Load block footer from various templates -->
-           {% block footer %} {% endblock %}
+          {% block footer %}  {% include 'cog/common/cog_footer_bar_only.html' %} {% endblock %}
        </div> <!--// end div.container //-->
  
  <!--</div> <!--// end div.content_wrapper //-->
 
  	<div class="custom_footer_bar">
-           <!--Load block custom_footer from various templates -->
-           {% block custom_footer %} {% endblock %}
+          {% block custom_footer %}  {% include 'cog/common/cog_footer_custom.html' %} {% endblock %}
         </div> <!--// end div.custom_footer_bar //-->
    
 
