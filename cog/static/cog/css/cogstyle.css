@@ -125,6 +125,7 @@ div.custom_header{
 but then enables the footer bar to be at the bottom */
 div.content_wrapper{
     height:        100%;
+    min-height:    100%;
     margin:        0px;
     margin-bottom: -40px; /*this needs to be the same height as the custom footer */
 }
@@ -137,7 +138,7 @@ div.custom_footer_bar{
 
 /* create a custom footer that is slightly larger than the main cog site */ 
 div.custom_footer{
-    width:        1000px; /* note span-24 = 950px */
+    width:        950px; /* note span-24 = 950px */
     margin-left:  auto !important;
     margin-right: auto !important;
     color:        white; /*text color */
@@ -168,7 +169,8 @@ BEGIN: CoG footer
 div.footer{
   background-color:#e9f5f6;
   font-size:       8pt;
-  border: 1px solid #666;
+  /*border: 1px solid #666;*/
+  margin-bottom:1px;
 }
 
 .footer td{

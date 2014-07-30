@@ -44,7 +44,7 @@
  </head>
     
   <body>
-    <div class="content_wrapper">
+   <!--<div class="content_wrapper">-->
     <div class="custom_header_bar">
        <!--Load block custom_header from various templates -->
        {% block custom_header %} {% endblock %}
@@ -62,16 +62,15 @@
 	 
 	  <!--Load block footer from various templates -->
            {% block footer %} {% endblock %}
-        </div> <!--// end div.container //-->
-	
-  
-  </div> <!--// end div.content_wrapper //-->
-
+       </div> <!--// end div.container //-->
  
-   <div class="custom_footer_bar">
-      <!--Load block custom_footer from various templates -->
-      {% block custom_footer %} {% endblock %}
-   </div> <!--// end div.custom_footer_bar //-->
+ <!--</div> <!--// end div.content_wrapper //-->
+
+ 	<div class="custom_footer_bar">
+           <!--Load block custom_footer from various templates -->
+           {% block custom_footer %} {% endblock %}
+        </div> <!--// end div.custom_footer_bar //-->
+   
 
      
   </body>
