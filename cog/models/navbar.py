@@ -59,10 +59,10 @@ PROJECT_PAGES = (
                                                  ("Sponsors", "%s/" % TABS["SPONSORS"]), 
                                                  ("People", "%s/" % TABS["PEOPLE"])],   
         [("Agenda / Logistics", "%s/" % TABS["LOGISTICS"]), ("Registration", "%s/" % TABS["REGISTRATION"]), 
-                                                   ("Location", "%s/" % TABS["LOCATION"]), 
-                                                   ("Lodging", "%s/" % TABS["LODGING"]),
-                                                   ("Transportation", "%s/" % TABS["TRANSPORTATION"]), 
-                                                   ("Computing", "%s/" % TABS["COMPUTING"]), ],
+                                                            ("Location", "%s/" % TABS["LOCATION"]), 
+                                                            ("Lodging", "%s/" % TABS["LODGING"]),
+                                                            ("Transportation", "%s/" % TABS["TRANSPORTATION"]), 
+                                                            ("Computing", "%s/" % TABS["COMPUTING"]), ],
          [("Software", "%s/" % TABS["SOFTWARE"]), ("Release Schedules", "%s/" % TABS["RELEASE_SCHEDULES"]),
                                                   ("Download / Releases", "%s/" % TABS["DOWNLOAD"]), 
                                                   ("Install / Admin Docs", "%s/" % TABS["ADMIN_DOCS"])],
@@ -98,7 +98,7 @@ for pages in PROJECT_PAGES:
 # labels of tabs that are enabled by default (i.e. at project creation)
 DEFAULT_TABS = [ "Home", TAB_LABELS["aboutus"], TAB_LABELS["resources"], TAB_LABELS["contactus"] ]
 
-# Navigational map: tab --> [suntabs]
+# Navigational map: tab --> [subtabs]
 # {
 #  '': [], 
 #  'support/': [], 
