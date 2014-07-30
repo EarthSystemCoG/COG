@@ -13,7 +13,7 @@
 <!--[if IE 10 ]>     <html class="ie10"> <![endif]-->
 <!--[if IE 11 ]>     <html class="ie11"> <![endif]--> 
 
-   <head>
+ <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=9"> <!--required to get IE out of quirks mode-->
 
@@ -41,20 +41,19 @@
        <!--// do we need this section?? //-->
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
-
-       
-   
-    </head>
+ </head>
     
-    <body>
-      <div class="custom_header_bar">
+  <body>
+    <div class="content_wrapper">
+    <div class="custom_header_bar">
        <!--Load block custom_header from various templates -->
        {% block custom_header %} {% endblock %}
-      </div> <!--// end div.custom_header //-->
+    </div> <!--// end div.custom_header //-->
       
-      <hr style="background:#333;margin:0px;padding:0px;"/>
+    <hr style="background:#333;margin:0px;padding:0px;"/>
       
-      <div class="container">
+
+         <div class="container"> <!--// django class //-->
 	   <!--Load block header from various templates-->
 	    {% block header %} {% endblock %}
 	 
@@ -62,15 +61,18 @@
             {% block body %} {% endblock %}
 	 
 	   <!--Load block footer from various templates -->
-            {% block footer %} {% endblock %}
-      </div> <!--// end div.container //-->
+           {% block footer %} {% endblock %}
+        </div> <!--// end div.container //-->
+	
+  </div> <!--// end div.content_wrapper //-->
       
-      <div class="custom_footer_bar">
+   <div class="custom_footer_bar">
       <!--Load block custom_footer from various templates -->
       {% block custom_footer %} {% endblock %}
-     </div> <!--// end div.custom_footer_bar //-->
+   </div> <!--// end div.custom_footer_bar //-->
+
      
-    </body>
+  </body>
     
 </html>
 <!--END: /layouts/templates/layouts/layout_base.html-->	
