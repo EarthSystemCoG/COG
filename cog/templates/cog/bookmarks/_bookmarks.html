@@ -1,6 +1,6 @@
-
+<!--//BEGIN  /templates/cog/bookmarks/_bookmarks.html //-->
     <!-- note: pixel styles must be adjusted to specific icons -->
-    <style type="text/css"> 
+    <style scoped type="text/css"> 
          .folder { display:block; height:24px; padding-left: 28px; background: transparent url({{STATIC_URL}}cog/img/folder_24x24.png) 0 -4px no-repeat; font-weight: bold; }        
          .bookmark { margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0px no-repeat;  } 
     </style>  
@@ -38,4 +38,4 @@
        
     <!-- This project bookmarks -->
     {{ proj|list_bookmarks:request.user }}
-    
+<!--//END  /templates/cog/bookmarks/_bookmarks.html //-->   
