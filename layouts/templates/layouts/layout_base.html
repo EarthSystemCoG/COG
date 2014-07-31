@@ -37,34 +37,40 @@
         <!--// loading CoG-specific styles. Needs to be last //-->
         <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
 
-       <!--// hooks for page-specific head content //-->
-       <!--// do we need this section?? //-->
+       <!--// hooks for page-specific head content. Both style statements and javascript need to be loaded in the header only. //-->
         {% block extrahead %}{% endblock %}
         {% block extrastyle %}{% endblock %}
  </head>
     
   <body>
-   <!--<div class="content_wrapper">-->
+   <div class="content_wrapper"><!--// makes the footers always at the bottom of the window //-->
+     
     <div class="custom_header_bar">
-       <!--Load block custom_header from various templates -->
-       {% block custom_header %}  {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
-          <hr style="background:#333;margin:0px;padding:0px;"/>
-    </div> <!--// end div.custom_header //-->
+    {% block custom_header %}  {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
+     <hr class="custom_header"/>
+   </div> <!--// end div.custom_header //-->
       
 
         <div class="container"> <!--// django class //-->
-	  <div class="main_content">
+	  
+	  <!--<div class="main_content"> <!--// class to create a minimum sized page //-->
+	    
 	    {% block header %} {% include 'cog/common/cog_header.html' %} {% endblock %}
 	 
-           <!--Load block body from various templates -->
+            <!--Load block body from various templates -->
             {% block body %} {% endblock %}
-	  </div>
-	  {% block footer %}  {% include 'cog/common/cog_footer_bar_only.html' %} {% endblock %}
+	    
+	  <!--</div> <!--// end div.main_content //-->
+	  
+	  
         </div> <!--// end div.container //-->
 
 
- <!--</div> <!--// end div.content_wrapper //-->
+</div> <!--// end div.content_wrapper //-->
 
+        <div class="footer_bar">
+	  {% block footer %}  {% include 'cog/common/cog_footer_bar_only.html' %} {% endblock %}
+        </div>
  	<div class="custom_footer_bar">
           {% block custom_footer %}  {% include 'cog/common/cog_footer_custom.html' %} {% endblock %}
         </div> <!--// end div.custom_footer_bar //-->
