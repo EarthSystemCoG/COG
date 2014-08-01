@@ -103,6 +103,19 @@ body{
 
 }
 
+/*********************************
+BEGIN: Content wrappers
+**********************************/
+
+/* create a sticky footer. This div pushes the footer down the full height of the browser window
+but then enables the footer bar to be at the bottom */
+div.content_wrapper{
+    height:         100%;  /*extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
+    min-height:     100%;
+    margin-bottom:  -80px; /*this needs to be the same height as the custom footer height + footer height */
+    overflow: auto:
+}
+
 div.main_content{
    overflow:auto;
 }
@@ -128,11 +141,6 @@ div.custom_header{
 
 }
 
-img.esgf{
-    width:  105px;
-    margin:   0px;
-    padding:  0px;
-}
 td.custom_header_esgf{
     width:         120px;
     vertical-align:middle;
@@ -157,14 +165,7 @@ This sets the styles for the defaults
 *********************************/
 
 
-/* create a sticky footer. This div pushes the footer down the full height of the browser window
-but then enables the footer bar to be at the bottom */
-div.content_wrapper{
-    height:         100%;  /*extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
-    min-height:     100%;
-    margin-bottom:  -80px; /*this needs to be the same height as the custom footer height + footer height */
-    overflow: auto:
-}
+
 
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 div.custom_footer_bar{
