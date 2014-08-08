@@ -66,7 +66,7 @@ BEGIN PAGE-LEVEL ELEMENTS
 * PURPOSE: force the browser's vertical scrollbar to always display
 ***************/
 html {
-    overflow: scroll; /* force a scrollbar */
+    overflow: scroll;
     background: white;
     height:     100%;
 }
@@ -113,11 +113,25 @@ div.content_wrapper{
     height:         100%;  /*extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
     min-height:     100%;
     margin-bottom:  -80px; /*this needs to be the same height as the custom footer height + footer height */
-    overflow: auto:
 }
 
 div.main_content{
    overflow:auto;
+}
+
+/* moves footers down when the body exceeds the window and you have to scroll */
+div.push{
+  height:     80px;
+
+}
+
+div.footer_wrapper{
+  width:              100%;
+  height:             80px;
+  bottom:             0;
+
+
+
 }
 /**********************************
 BEGIN: Custom header 
@@ -171,8 +185,6 @@ This sets the styles for the defaults
 div.custom_footer_bar{
     width:              100%; /* note span-24 = 950px */
     background-color:   #666; /*gray */
-    position:           absolute; /*this puts the footer below content that is larger than the window*/
-
 }
 
 /* create a custom footer that is slightly larger than the main cog site */ 
@@ -210,7 +222,6 @@ BEGIN: CoG footer
 div.footer_bar{
     width:              100%; /* note span-24 = 950px */
     background-color:   #e9f5f6;
-    postition:absolute;
     clear:              both;     /*this puts the footer on top of any content that might be blow it*/
 }
 

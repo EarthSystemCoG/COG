@@ -1,18 +1,13 @@
 <!--//BEGIN  /templates/cog/bookmarks/_bookmarks.html //-->
+
+{% block extrahead %}
     <!-- note: pixel styles must be adjusted to specific icons -->
     <style scoped type="text/css"> 
          .folder { display:block; height:24px; padding-left: 28px; background: transparent url({{STATIC_URL}}cog/img/folder_24x24.png) 0 -4px no-repeat; font-weight: bold; }        
          .bookmark { margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0px no-repeat;  } 
-    </style>  
+    </style>
 
-    <!-- create and display bookmark tree -->
-    {% comment %}
-    <p>
-       This is a set of external resources for {{ project.short_name }}.
-    </p>
-    {% endcomment %}
- 
-    <script>
+ <script>
     //<![CDATA[
           
        // function to initialize the bookmark tree object
@@ -30,12 +25,28 @@
        }
    //]]>
    </script>
+ {% endblock %}
+
+ {% block main %}
+ {% load cog_utils %}
+
+    <!-- create and display bookmark tree -->
+    {% comment %}
+    <p>
+       This is a set of external resources for {{ project.short_name }}.
+    </p>
+    {% endcomment %}
+ 
+
       
-    {% load cog_utils %}
+   
     
     <!-- anchor for dialogs -->
     <div id="myDialog" class="yui-skin-sam"></div>
        
     <!-- This project bookmarks -->
     {{ proj|list_bookmarks:request.user }}
+    
+{% endblock %}
+    
 <!--//END  /templates/cog/bookmarks/_bookmarks.html //-->   
