@@ -42,16 +42,16 @@
         {% block extrastyle %}{% endblock %}
  </head>
     
-  <body>
+ <body>
    <div class="content_wrapper"><!--// makes the footers always at the bottom of the window //-->
      
-    <div class="custom_header_bar">
-    {% block custom_header %}  {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
-     <hr class="custom_header"/>
-   </div> <!--// end div.custom_header //-->
+      <div class="custom_header_bar">
+         {% block custom_header %}  {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
+         <hr class="custom_header"/>
+      </div> <!--// end div.custom_header //-->
       
 
-        <div class="container"> <!--// django class //-->
+      <div class="container"> <!--// django class //-->
 	  
 	  <!--<div class="main_content"> <!--// class to create a minimum sized page //-->
 	    
@@ -62,22 +62,18 @@
 	    
 	  <!--</div> <!--// end div.main_content //-->
 	  
-	  
-        </div> <!--// end div.container //-->
+      </div> <!--// end div.container //-->
+      <div class="push"></div>
 
-
-</div> <!--// end div.content_wrapper //-->
-
-        <div class="footer_bar">
+  </div> <!--// end div.content_wrapper //-->
+    <div class="footer_wrapper">
+      <div class="footer_bar">
 	  {% block footer %}  {% include 'cog/common/cog_footer_bar_only.html' %} {% endblock %}
-        </div>
- 	<div class="custom_footer_bar">
+      </div>
+      <div class="custom_footer_bar">
           {% block custom_footer %}  {% include 'cog/common/cog_footer_custom.html' %} {% endblock %}
-        </div> <!--// end div.custom_footer_bar //-->
-   
-
-     
-  </body>
-    
+      </div> <!--// end div.custom_footer_bar //-->
+   </div>
+ </body>
 </html>
 <!--END: /layouts/templates/layouts/layout_base.html-->	
