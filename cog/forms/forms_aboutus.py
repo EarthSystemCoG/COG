@@ -15,7 +15,7 @@ class AboutusForm(ModelForm):
                    'mission':     Textarea(attrs={'rows':6}),
                    'vision':      Textarea(attrs={'rows':6}),
                    'values':      Textarea(attrs={'rows':6}),
-                   'history':     Textarea(attrs={'rows':6}),
+                   'history':     Textarea(attrs={'rows':20}),
                    }
         
 # Custom form to define custom widget, and use 'delete_image' field        
