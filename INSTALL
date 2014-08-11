@@ -282,7 +282,7 @@ CUSTOMIZATION
 
 Any HTML template used by the CoG application can be overridden by placing a custom temaplate with the same name and system path under the
 root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>,
-where by default COG_CONFIG_DIR=/usr/local/cog
+where by default COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
 
 For example, to override the template cog/common/cog_header.html and cog/common/cog_footer.html which come with the distribution, create the two custom files:
 
