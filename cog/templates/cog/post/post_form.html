@@ -1,6 +1,25 @@
 {% extends "cog/common/layout_sidebar_center.html" %}
 
 
+{% block extrahead %}
+<!--// begin styles for _post_form_home.html //-->
+<!--// note: don't incoude scoped for this style because it is used one template down //-->
+   <style type="text/css">
+      table.post_home td{
+      vertical-align:middle;
+      }
+   </style>
+
+<!--// begin styles for _post_form_page.html //-->
+<!--// note: don't incoude scoped for this style because it is used one template down //-->
+   <style type="text/css">
+     td.col1{
+         width:    70px;
+         min-width:70px;
+     }
+</style>
+{% endblock %}
+
 {% block main %}
     {{ form.media }}
     

@@ -1,10 +1,57 @@
+<!--//START: /cog/templates/cog/common/rollup.html //-->
 {% extends "cog/common/layout_sidebar_center_right.html" %}
+
+<!--// This template is used for any page that contains a rollup. It includes templated content and bookmarks //-->
 
 {% load cog_utils %}
 
+{% block extrahead %}
+
+    <!--// styles and scripts for the resources/bookmarks page. Loaded from /cog/templates/cog/common/rollup.html //-->
+    <!-- note: pixel styles must be adjusted to specific icons -->
+    <!--// note: don't use scoped for this style because it is one level above the location where it is used //-->
+    <style type="text/css"> 
+         .folder { display:block; height:24px; padding-left: 28px; background: transparent url({{STATIC_URL}}cog/img/folder_24x24.png) 0 -4px no-repeat; font-weight: bold; }        
+         .bookmark { margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0px no-repeat;  } 
+    </style>
+
+    <script>
+       //<![CDATA[
+          
+       // function to initialize the bookmark tree object
+       var tree;
+       function bookmarkTreeInit() {
+           
+           treeId = this.id
+           tree = new YAHOO.widget.TreeView(document.getElementById(treeId));
+           tree.subscribe('clickEvent',tree.onEventToggleHighlight);  
+           //tree.setNodesProperty('propagateHighlightUp',true); 
+           tree.setNodesProperty('propagateHighlightDown',true); 
+           //tree.singleNodeHighlight = true; 
+           tree.render();
+
+       }
+      //]]>
+   </script>
+   <!--// css for the governance page. Loaded from /cog/templates/cog/common/rollup.html //-->
+   <!--// note: don't use scoped for this style because it is one level above the location where it is used //-->
+   <style type="text/css">
+	.leftcolumn {
+		width: 130px;
+		text-align: right;
+		vertical-align: top;
+	}
+   </style>
+
+
+ {% endblock %}
+
+
+
+
 {% block main %} 
 
-	<!-- this project -->
+	<!-- load the template for the page (e.g. contact_us) -->
 	{% with project as proj %}
 		{% include template_page %}	
 	{% endwith %}
@@ -74,3 +121,4 @@
     
 	
 {% endblock %}
+<!--//START: /cog/templates/cog/common/rollup.html //-->

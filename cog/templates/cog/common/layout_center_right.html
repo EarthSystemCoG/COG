@@ -12,6 +12,10 @@
     
 {% endblock %}
 
+{% block extrahead %}
+    {% include 'cog/common/right_column_css.html' %}
+{% endblock %}
+
 {% block main %}
     {{ project }}
 {% endblock %}

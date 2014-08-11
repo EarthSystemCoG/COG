@@ -5,14 +5,10 @@
 {{ form.topic.as_hidden }}
 {{ form.parent.as_hidden }}
 
-<style scope type="text/css">
-table td{
-vertical-align:middle;
-}
-</style>
+
 
 <!-- mutable fields -->
-<table>
+<table class="post_home">
     <tr>
       <td>Author</td>
       <td>{{ request.user }} </td>		          
