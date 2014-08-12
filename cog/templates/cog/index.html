@@ -24,8 +24,7 @@
 
 <body>
 <div class="content_wrapper"> <!--// pushes custom footer down //-->
-  <div class="main_content"> <!--// pushes custom footer down //-->
-   <div class="container"> 
+  <div class="container"> 
     <div class="span-24 last">
       <div class="logo">
          <table>
@@ -99,17 +98,15 @@
 		</td>
 		</tr>
 		</table>
-     </div> <!--end div main-->
-    </div><!--end div span-24 last-->
-   </div> <!--end div container-->
-  </div> <!--end div main_content-->
+    </div> <!--end div span-24 last-->
+  </div> <!--end div container-->
 </div> <!--end div.content_wrapper-->
 
+<div class="footer_bar">
 {% block footer %}
-    {% include 'cog/common/cog_footer_bar_only.html' %} 
-    {% include 'cog/common/cog_footer_custom.html' %}
+   {% include 'cog/common/cog_footer_bar_only.html' %}
 {% endblock %}
-
+</div>
 
 </body>
 </html>
