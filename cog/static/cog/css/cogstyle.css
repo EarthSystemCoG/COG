@@ -112,12 +112,12 @@ but then enables the footer bar to be at the bottom */
 div.content_wrapper{
     height:         100%;  /*extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
     min-height:     100%;
-    margin-bottom:  -80px; /*this needs to be the same height as the custom footer height + footer height + footer spacer height */
+    margin-bottom:  -90px; /*this needs to be the same height as the custom footer height + footer height + footer spacer height */
 }
 
 /* moves footers down when the body exceeds the window and you have to scroll */
 div.push{
-   height: 80px; /* value is the height of the two footers + the footer spacer */
+   height: 90px; /* value is the height of the two footers + the footer spacer */
 }
 
 /**********************************
