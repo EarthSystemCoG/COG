@@ -66,7 +66,7 @@ BEGIN PAGE-LEVEL ELEMENTS
 * PURPOSE: force the browser's vertical scrollbar to always display
 ***************/
 html {
-    overflow: scroll;
+    overflow-y:   scroll;
     background: white;
     height:     100%;
 }
@@ -112,27 +112,14 @@ but then enables the footer bar to be at the bottom */
 div.content_wrapper{
     height:         100%;  /*extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
     min-height:     100%;
-    margin-bottom:  -80px; /*this needs to be the same height as the custom footer height + footer height */
-}
-
-div.main_content{
-   overflow:auto;
+    margin-bottom:  -80px; /*this needs to be the same height as the custom footer height + footer height + footer spacer height */
 }
 
 /* moves footers down when the body exceeds the window and you have to scroll */
 div.push{
-  height:     80px;
-
+   height: 80px; /* value is the height of the two footers + the footer spacer */
 }
 
-div.footer_wrapper{
-  width:              100%;
-  height:             80px;
-  bottom:             0;
-
-
-
-}
 /**********************************
 BEGIN: Custom header 
 This sets the styles for the defaults
@@ -151,8 +138,6 @@ div.custom_header{
     width:        950px; /* note span-24 = 950px */
     margin-left:  auto;
     margin-right: auto;
-
-
 }
 
 td.custom_header_esgf{
@@ -178,13 +163,11 @@ BEGIN: Custom footer
 This sets the styles for the defaults
 *********************************/
 
-
-
-
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 div.custom_footer_bar{
     width:              100%; /* note span-24 = 950px */
     background-color:   #666; /*gray */
+    position:           relative;
 }
 
 /* create a custom footer that is slightly larger than the main cog site */ 
@@ -220,9 +203,15 @@ BEGIN: CoG footer
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 
 div.footer_bar{
-    width:              100%; /* note span-24 = 950px */
+    width:              100%;     /* note span-24 = 950px */
     background-color:   #e9f5f6;
-    clear:              both;     /*this puts the footer on top of any content that might be blow it*/
+    clear:              both;     /*this puts the footer on top of any content that might be below it*/
+}
+
+/* gives the footer a margin below the content of the page */ 
+div.footer_spacer{
+      height:           10px;  /* value needs to be the same as "standard spacing" of the site, currently 10px */
+      background-color: white;
 }
 
 div.footer{
@@ -691,7 +680,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 .vertical_menu {
 	border: 1px solid #358C92;
 	border-top: 0px;
-	margin-bottom: 12px;
+	margin-bottom: 10px;
 	margin-top: 0px;
 	background: white;
 }
@@ -857,7 +846,7 @@ BEGIN NEWS WIDGET
 
 .news_box {
 	border: 1px solid #666666;
-	margin-bottom: 12px;
+	margin-bottom: 10px;
         margin-top: 0px;
 	background: #FFFFFF;
 }
@@ -933,7 +922,7 @@ BEGIN SEARCH WIDGET
 	background:    #FFFFFF;
 	border:        1px solid #666;
 	font-size:     8pt;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         margin-top:    0px;
 }
 
