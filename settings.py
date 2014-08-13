@@ -13,7 +13,6 @@ DEFAULT_SEARCH_FACETS = { 'project':'Project',
 
 from cog.site_manager import siteManager
 
-SITE_ID = siteManager.get('SITE_ID', default=1)
 TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
 COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST', default='cog_info@list.woc.noaa.gov')
 SECRET_KEY = siteManager.get('SECRET_KEY')
@@ -93,7 +92,8 @@ DATABASES = {
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-#SITE_ID = 1
+# current site identifier - always first site in database
+SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -162,7 +162,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'cog.middleware.login_middleware.LoginMiddleware',
-    'cog.middleware.session_middleware.SessionMiddleware',
+    'cog.middleware.session_middleware.SessionMiddleware'
+    #'django.contrib.sites.middleware.CurrentSiteMiddleware' # django 1.7
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 

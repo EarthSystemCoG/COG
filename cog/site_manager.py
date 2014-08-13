@@ -7,6 +7,8 @@ class SiteManager(object):
        Example configuration file:
 
        [default]
+       SITE_NAME=My Site
+       SITE_DOMAIN=localhost:8000
        TIME_ZONE=America/Denver
        COG_MAILING_LIST=cog_info@list.woc.noaa.gov
        SECRET_KEY=yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#
