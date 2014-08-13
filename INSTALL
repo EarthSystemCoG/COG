@@ -63,7 +63,8 @@ The file must have the following content, with values replaced by the installati
 
 cat cog_settings.cfg
 
-SITE_ID=<the site specific id, an integre number. Must be coordinated with other federated CoG installations>
+SITE_NAME=<a short human readable name identifying this specific CoG instance>
+SITE_DOMAIN=<the site domain name and optional port number, without any protocol. Example: lab.gov:8080>
 TIME_ZONE=<"America/Denver by default". See list of Django values for time zones>
 COG_MAILING_LIST=<"cog_info@list.woc.noaa.gov" by default. Mailing list where users subscribe to>
 SECRET_KEY=<the site specific key: an arbitrary string with lots of strange characters>
@@ -82,6 +83,10 @@ o gather the static media files from the different applications into a single di
 
 mkdir static
 python manage.py collectstatic
+
+o Update the current site object with the name and domain read from the local configuration file:
+
+python manage.py init_site
 
 RESTORE BACKUP
 
