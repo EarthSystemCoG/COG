@@ -535,7 +535,8 @@ def projectNews(project):
 @register.filter
 def dataCartContains(user, item_identifier):
 
-    return user.datacart.contains(item_identifier)
+    (datacart, _) = DataCart.objects.get_or_create(user=user)
+    return datacart.contains(item_identifier)
 
 @register.filter
 def showMessage(message):

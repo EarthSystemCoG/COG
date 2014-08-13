@@ -242,10 +242,7 @@ def datacart_delete(request, site_id, user_id):
     identifier = request.REQUEST['item']
     
     # NOTE: make sure this item belongs to the user's data cart
-    try:
-        datacart = DataCart.objects.get(user=user)
-    except DataCart.DoesNotExist:
-        datacart = None
+    (datacart, _) = DataCart.objects.get_or_create(user=user)
 
     item = DataCartItem.objects.get(identifier=identifier, cart=datacart)
     item.delete()
@@ -255,7 +252,7 @@ def datacart_delete(request, site_id, user_id):
     # return id of item just deleted so it can be hidden
     response_data['item'] = identifier
     # return number of remaining items
-    response_data['datacart_size'] = len( user.datacart.items.all() )
+    response_data['datacart_size'] = len( datacart.items.all() )
         
     return HttpResponse(json.dumps(response_data), content_type='application/json') 
 
