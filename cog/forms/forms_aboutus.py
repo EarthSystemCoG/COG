@@ -12,10 +12,10 @@ class AboutusForm(ModelForm):
                    'topics','taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview',)
         widgets = {
                    'description': Textarea(attrs={'rows':6}),
-                   'mission':     Textarea(attrs={'rows':6}),
-                   'vision':      Textarea(attrs={'rows':6}),
-                   'values':      Textarea(attrs={'rows':6}),
-                   'history':     Textarea(attrs={'rows':20}),
+                   'mission':     Textarea(attrs={'rows':8}),
+                   'vision':      Textarea(attrs={'rows':8}),
+                   'values':      Textarea(attrs={'rows':8}),
+                   'history':     Textarea(attrs={'rows':12}),
                    }
         
 # Custom form to define custom widget, and use 'delete_image' field        
