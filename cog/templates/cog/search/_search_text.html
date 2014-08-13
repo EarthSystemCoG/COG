@@ -35,15 +35,20 @@
 
 <!-- optional checkbox flags -->
 <br/>
+<!--//note: the style on the span below is to ensure the text lines up with the bottom of the checkbox. This needs to be the same style as on the update project
+page. At some point we may want to move this into cogstyle.css //-->
 <div style="text-align:center">
 	{% if replica_flag = True %}
-		&nbsp; <input type="checkbox" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />Show All Replicas &nbsp;
+		&nbsp; <input type="checkbox" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />
+                       <span style="margin-top:2px;vertical-align:middle;"> Show All Replicas &nbsp;</span>
 	{% endif %}
 	{% if latest_flag = True %}
-		&nbsp; <input type="checkbox" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />Show All Versions &nbsp;
+		&nbsp; <input type="checkbox" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />
+                       <span style="margin-top:2px;vertical-align:middle;"> Show All Versions &nbsp;</span>
 	{% endif %}
 	{% if local_flag = True %}
-		&nbsp; <input type="checkbox" name="local" {% if search_input.local %} checked="checked" {% endif %} />Search Local Site Only &nbsp;
+		&nbsp; <input type="checkbox" name="local" {% if search_input.local %} checked="checked" {% endif %} />
+                       <span style="margin-top:2px;vertical-align:middle;"> Search Local Site Only</span>
 	{% endif %}
 </div>
 
