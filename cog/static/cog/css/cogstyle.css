@@ -84,7 +84,6 @@ explicly covered in the areas below. These are reclaimed here so that we
 can completly control in one file how things look 
 *******************************/
 body{
-
     /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
     /*font: 13px/1.231 arial,helvetica,clean,sans-serif; */ /*fonts-min.css*/
     /* px to pt ratio = 1.33, so 13px = 9.77pt */
@@ -128,7 +127,7 @@ This sets the styles for the defaults
 /* create white header bar that spans the entire browser window */
 div.custom_header_bar {
     width:        100%;
-    margin-top:   3px;
+    margin-top:   0px;
     /*background: -moz-linear-gradient(left, #666 0%, white 15%, white 85%, #666 100%); */
 }
 
@@ -141,10 +140,12 @@ div.custom_header{
 }
 
 td.custom_header_esgf{
-    width:         120px;
-    vertical-align:middle;
-    margin:        0px;
-    padding:       0px;
+    width:          120px;
+    vertical-align: middle;
+    margin:         0px;
+    padding:        0px;
+    padding-top:    1px;
+    padding-bottom: 1px;
 }
 td.custom_header_welcome{
     vertical-align: middle;
@@ -156,6 +157,7 @@ td.custom_header_welcome{
 hr.custom_header {
    background-color: #666;
    height: 2px;
+   margin-top: 0px; /*override the default margins on HRs*/
 }
 
 /**********************************
