@@ -35,6 +35,9 @@ class Command(BaseCommand):
         
         
         self.stdout.write('Updating list of CoG sites (delete=%s)' % options['delete'])
+        
+        # current site - must not be updated from file list
+        current_site = Site.objects.get_current()
                     
         # read sites.xml file located in this directory    
         filepath = os.path.join(os.path.dirname(__file__), FILENAME)
@@ -55,10 +58,11 @@ class Command(BaseCommand):
                 # update Site objects
                 try:
                     _site = Site.objects.get(domain=domain)
-                    # update site
-                    _site.name = name
-                    _site.save()
-                    self.stdout.write('Update site: %s' % _site)
+                    if _site != current_site:
+                        # update site
+                        _site.name = name
+                        _site.save()
+                        self.stdout.write('Update site: %s' % _site)
                 except ObjectDoesNotExist:
                     _site = Site.objects.create(name=name, domain=domain)
                     self.stdout.write('Created site: %s' % _site)
@@ -74,7 +78,8 @@ class Command(BaseCommand):
         if options['delete']:
             for peer in PeerSite.objects.all():
                 if peer.site.domain not in domains:
-                    self.stdout.write('Stale peer site found at domain: %s' % peer.site.domain + ", deleting it...")
-                    peer.site.delete() # will also delete the PeerSite object on cascade
+                    if peer.site != current_site:
+                        self.stdout.write('Stale peer site found at domain: %s' % peer.site.domain + ", deleting it...")
+                        peer.site.delete() # will also delete the PeerSite object on cascade
 
                 

@@ -13,6 +13,8 @@ DEFAULT_SEARCH_FACETS = { 'project':'Project',
 
 from cog.site_manager import siteManager
 
+SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
+SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
 TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
 COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST', default='cog_info@list.woc.noaa.gov')
 SECRET_KEY = siteManager.get('SECRET_KEY')
