@@ -73,7 +73,8 @@
     <div class="yui-skin-sam">
 	    <div class="mybox" id="userDiv">
 
-	        <form action="" method="post" enctype="multipart/form-data">
+			<!-- NOTE: form cannot be submitted unless password meets criteria -->
+	        <form action="" method="post" enctype="multipart/form-data" onsubmit="return checkPassword();">
 	        
 	            {% csrf_token %}
 	            {{ formset1.management_form }}
@@ -116,15 +117,15 @@
 		                <tr>
 		                    <td class="required" nowrap="nowrap">Password</td>
 		                    <td>{{ form.password }}
-		                       <i>[ At least 6 characters, all characters are allowed ]</i>
-		                       <br/>{{ form.password.errors }}
+		                       <br/><i>[ {{ form.password.help_text }} ]</i>
+		                       {{ form.password.errors }}
 		                       <div id="password_check" style="display:none; margin-top:2px; text-align: middle;" />
 		                    </td>
 		                </tr>
 		                <tr>
 		                    <td class="required" nowrap="nowrap">Confirm Password</td>
 		                    <td>{{ form.confirm_password }}
-		                        <i>[ At least 6 characters, all characters are allowed ]</i>
+		                        <br/><i>[ {{ form.confirm_password.help_text }} ]</i>
 		                        <br/>{{ form.confirm_password.errors }}
 		                    </td>
 		                </tr>

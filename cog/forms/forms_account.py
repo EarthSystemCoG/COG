@@ -18,6 +18,10 @@ from django_openid_auth.models import UserOpenID
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
 
+PASSWORD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one upper case letter, one number, and one special symbol. '\
+                      + 'All characters are allowed.'
+CONFIRM_PASSWORD_INSTRUCTIONS = 'Must match the password above.'
+
 class UserUrlForm(ModelForm):
 
     url = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
@@ -76,9 +80,10 @@ class PasswordChangeForm(Form):
     old_password = CharField(required=True, widget=PasswordInput(render_value=True))
     password = CharField(required=True, 
                      # trigger javascript function when input field looses focus
-                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword(this);", })
+                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", }),
+                     help_text = PASSWORD_INSTRUCTIONS
                      ) # not required for OpenID users
-    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True))
+    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
 
     # override __init__ method to store the user object
     def __init__(self, user, *args,**kwargs):
@@ -108,11 +113,12 @@ class UserForm(ImageForm):
     password = CharField(required=False, 
                          # trigger javascript function when input field looses focus
                          # could have also used: YAHOO.util.Event.addListener(id_myField, "click", myClickEventHandler, myOptionalData);
-                         widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword(this);", })
+                         widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", }),
+                         help_text = PASSWORD_INSTRUCTIONS
                          ) # not required for OpenID users
 
     # additional fields not in User
-    confirm_password = CharField(required=False, widget=PasswordInput(render_value=True)) # not required for OpenID users
+    confirm_password = CharField(required=False, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS) # not required for OpenID users
     institution = CharField(required=True)
     department = CharField(required=False)
     city = CharField(required=True)
