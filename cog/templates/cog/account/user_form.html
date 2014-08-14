@@ -52,12 +52,32 @@
 
     //]]>
     </script>
+    
+    <!-- password strength meter -->
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/zxcvbn/zxcvbn-async.js"></script>
+    
+    <script type="text/javascript">
+    
+    	password_strength = ["very weak", "weak", "medium", "strong", "excellent"];
+    	text_color = ["red", "red", "blue", "green", " green"];
+    
+    	function checkPassword(input) {
+
+    		user_inputs = []; // fill with other information from user form
+    		result = zxcvbn(input.value, user_inputs);
+    		var checkdiv = document.getElementById("password_check");
+    		checkdiv.innerHTML = "<meter value='" + result.score + "' min='0' max='4'>"+ result.score + " out of 5</meter>"
+    		                   + "&nbsp; Password score: " + password_strength[result.score] + "."
+    		                   + "&nbsp; Estimated time to crack password: "+ result.crack_time_display;
+    		checkdiv.style.color = text_color[result.score];  
+    		checkdiv.style.display = "block";               
+    		                   
+    	}
+    </script>
 
 {% endblock %}
 
 {% block main %}
-<!--why is this not span-24? Going across the entire page?-->
-<!--<div class="prepend-3 span-18">-->
   <div class="prepend-1 span-22">
 
     <h2>{{ mytitle }}</h2>
@@ -68,13 +88,12 @@
 	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
 	   <p/>
 	{% endif %}
-
-
+	
     <div class="yui-skin-sam">
 	    <div class="mybox" id="userDiv">
 
 	        <form action="" method="post" enctype="multipart/form-data">
-
+	        
 	            {% csrf_token %}
 	            {{ formset1.management_form }}
 	            {{ formset2.management_form }}
@@ -118,7 +137,8 @@
 		                    <td>{{ form.password }}
 		                       <i>[ At least 6 characters, all characters are allowed ]</i>
 		                       <br/>{{ form.password.errors }}
-		                       </td>
+		                       <div id="password_check" style="display:none; margin-top:2px; text-align: middle;" />
+		                    </td>
 		                </tr>
 		                <tr>
 		                    <td class="required" nowrap="nowrap">Confirm Password</td>

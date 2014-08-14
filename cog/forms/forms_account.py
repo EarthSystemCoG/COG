@@ -102,7 +102,11 @@ class UserForm(ImageForm):
     last_name = CharField(required=True)
     username = CharField(required=True)
     email = CharField(required=True)
-    password = CharField(required=False, widget=PasswordInput()) # not required for OpenID users
+    password = CharField(required=False, 
+                         # trigger javascript function when input field looses focus
+                         # could have also used: YAHOO.util.Event.addListener(id_myField, "click", myClickEventHandler, myOptionalData);
+                         widget=PasswordInput(attrs = { "onchange" : "checkPassword(this);", })
+                         ) # not required for OpenID users
 
     # additional fields not in User
     confirm_password = CharField(required=False, widget=PasswordInput()) # not required for OpenID users
