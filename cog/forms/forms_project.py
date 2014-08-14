@@ -3,7 +3,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
-from django.forms import ModelForm, Textarea, TextInput, Select, FileInput, CheckboxSelectMultiple
+from django.forms import ModelForm, Textarea, TextInput, Select, SelectMultiple, FileInput, CheckboxSelectMultiple
 from django.core.exceptions import ObjectDoesNotExist
 from os.path import basename
 import re
@@ -13,11 +13,16 @@ from cog.forms.forms_image import ImageForm
 from cog.utils import hasText
 
 
+#note parent and peer formating is in forms_other.py
 class ProjectForm(ModelForm):
 
-    # note: alternative widget for peer selection would require additional js and css
-    #peers = ModelMultipleChoiceField(Project.objects.all(),
-    #        widget=FilteredSelectMultiple("Peer Projects", False, attrs={'rows':'10'}))
+    # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its styles are controlled in cogstyle.css
+
+    parents = forms.ModelMultipleChoiceField("parents",cache_choices=False,required=False,widget=forms.SelectMultiple(attrs={'size':'20','class':'selectprojects'}))
+    peers   = forms.ModelMultipleChoiceField("peers",cache_choices=False,required=False,widget=forms.SelectMultiple(attrs={'size':'20','class':'selectprojects'}))
+    # filtering of what is see in the form is done down below. 
+
+    # ERROR: FilteredSelectMultiple does not exist in the module but choosing widget=SelectMultiple throws an error. FilteredSelectMultiple throws an error in IE. 
 
     # extra field not present in model, used for deletion of previously uploaded logo
     delete_logo = forms.BooleanField(required=False)
@@ -26,26 +31,27 @@ class ProjectForm(ModelForm):
     # extra fields to manage folder state
     #folders = ModelMultipleChoiceField(queryset=Folder.objects.all(), required=False, widget=CheckboxSelectMultiple)
 
+    
+
     # override __init__ method to change the querysets for 'parent' and 'peers'
     def __init__(self, *args, **kwargs):
 
-        super(ProjectForm, self ).__init__(*args,**kwargs) # populates the post
-
-        # exclude projects from disabled peer sites
+        super(ProjectForm, self ).__init__(*args,**kwargs) 
+        
         current_site = Site.objects.get_current()
         queryset2 = Q(site__id=current_site.id) | Q(site__peersite__enabled = True)
 
         if 'instance' in kwargs:
+            # peer and parent query-set options: exclude the project itself, projects from disabled peer sites
             instance = kwargs.get('instance')
-            # exclude the project itself
             queryset1 =  ~Q(id=instance.id)
             self.fields['parents'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
-            self.fields['peers'].queryset =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
-
-        else:
+            self.fields['peers'].queryset   =  Project.objects.filter( queryset1 ).filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
+        
+        else:    
+            # peer and parent query-set options: exclude projects from disabled peer sites
             self.fields['parents'].queryset =  Project.objects.filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
-            self.fields['peers'].queryset =  Project.objects.filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
-
+            self.fields['peers'].queryset   =  Project.objects.filter( queryset2 ).distinct().extra( select={'snl':'lower(short_name)'}, order_by = ['snl'] )
 
     # overridden validation method for project short name
     def clean_short_name(self):
