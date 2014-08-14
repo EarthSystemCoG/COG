@@ -1,22 +1,27 @@
-<!--// START: /cog/templates/cog/project/project_form.html //-->
 {% extends "cog/common/layout_center.html" %}}
 
-<!--// Loading block main //-->
 {% block main %}
-  {% load cog_utils %}
+
+	{% load cog_utils %}
+	
 	<script language="javascript">
+	
+	
 		// function that selects/deselects tab/subtabs checkboxes to insure consistency
 		function trigger(checkbox) {
+			
 			// if subtab is checked, tab must be checked
 			if (checkbox.checked==true) {
 				
-				// "download/" -> "software/" 
-                               // "partners/"  -> "aboutus/"
+				// "download/"" -> "software/" 
+                // "partners/ -> "aboutus/"
 				{% for subtab, tab in INVNAVMAP.items %}
 					if (checkbox.name == "{{ subtab|getTabLabel|safe }}") {
 						document.getElementsByName( "{{ tab|getTabLabel }}" )[0].checked = true; 
 					}
 				{% endfor %}
+				
+				
 			// it tab is not checked, all subtabs must be not-checked
 			} else if (checkbox.checked==false) {
 				
@@ -27,36 +32,40 @@
 						{% endfor %}
 					}				
 				{% endfor %}
+				
 			}
+			
 		}
 	</script>
 	 
- <div class="mybox">
-       <!-- note: action form can be "add" or "update" -->
-        <form action="" method="post" enctype="multipart/form-data" novalidate>
+     <div class="mybox">
+     
+        <!-- note: action form can be "add" or "update" -->
+        <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-           <table>
+            
+            <table>
                 <tr>
-                <!-- new project -->
-                {% if action == 'add' %}
-		<!--width of first row carries down to all others in the table-->
-                    <td style="width:15%;"><b>Short Name</b></td>
-                    <td style="width:85%;">{{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
-                    	<br/>WARNING: the project's 'Short Name' CANNOT be changed after project registration.
-                    </td>
+                	<!-- new project -->
+                	{% if action == 'add' %}
+                    	<td valign="top" nowrap="nowrap"><b>Short Name</b></td>
+                    	<td>{{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> 
+                    		{{ form.short_name.errors }}
+                    		<br/>WARNING: the project's 'Short Name' CANNOT be changed after project registration.
+                    	</td>
                     <!-- project already existing - cannot change short name -->
                     {% else %}
-                    	<td style="width:15%;" ><b>Short Name</b></td>
-                    	<td style="width:85%;">{{ form.instance.short_name }} {{ form.short_name.as_hidden }}</td>                   	
+                    	<td valign="top" nowrap="nowrap"><b>Short Name</b></td>
+                    	<td>{{ form.instance.short_name }} {{ form.short_name.as_hidden }}</td>                   	
                     {% endif %}
                 </tr>               
                 <tr>
-                    <td><b>Long Name</b></td>
-                    <td>{{ form.long_name }} {{ form.long_name.errors }}</td>
+                    <td nowrap="nowrap"><b>Long Name</b></td>
+                    <td class="long">{{ form.long_name }} {{ form.long_name.errors }}</td>
                 </tr>
                 <tr>
-                    <td><b>Creator</b></td>
-                    <td>
+                    <td nowrap="nowrap"><b>Creator</b></td>
+                    <td class="long">
                         {% if form.instance.author %}
                             {% if form.instance.author.get_full_name %}
                                 <a href="mailto:{{form.instance.author.email}}">{{ form.instance.author.get_full_name }}</a>
@@ -72,7 +81,6 @@
                     <td nowrap="nowrap"><b>Description</b></td>
                     <td>{{ form.description }} {{ form.description.errors }}</td>
                 </tr>
-		<!--// functions used for parents and peers comes from /cog/forms/forms_project.py //-->
                 <tr>
                     <td nowrap="nowrap">Parent Projects</td>
                     <td>
@@ -90,32 +98,24 @@
                                  Assigning peer projects is NOT required.]
                     </td>
                 </tr>
-	</table>
-	<table>
                 <tr>
-                    <td style="width:15%;">Project Logo</td>
-                    <td style="width:85%;vertical-align:middle;"> 
-                    	 {{ form.logo }} {{ form.logo.errors }}
-                         [ optional project logo, will be displayed with height=70px ]
-		    </td>
-		</tr>
-	</table>
-	<table>
-		<tr>
-		    <td style="width:15%;"></td>
-		    <td style="width:45%;">{{ form.logo_url }}</td>
-		    <td>[ optional URL to hyperlink logo, defaults to project home]</td>
-               </tr>
-	</table>
-	<table>
-        <table class="odd-color">
+                    <td nowrap="nowrap"><div style="margin-top:2px">Project Logo</div></td>
+                    <td> <span style="margin-top:2px">
+                    	 	{{ form.logo }} 
+                         	{{ form.logo.errors }} &nbsp; 
+                         	[ optional project logo, will be displayed with height=70px ]
+                    	 	<br>&nbsp;</br>
+                    	 	{{ form.logo_url }} &nbsp; [ optional URL to hyperlink logo, defaults to project home]
+                    	</span>
+                    </td>
+                </tr>                                         
                 <!-- only allow site administrators to change the active state of a project  -->
                 {% if request.user.is_staff and action == 'update' %}
 	                <tr>
-	                    <td style="width:15%;">Is Active ?</td>
-	                    <td style="width:85%;vertical-align:middle;">
+	                    <td nowrap="nowrap">Is Active ?</td>
+	                    <td>
 	                        {{ form.active }} 
-	                        <span>
+	                        <span style="margin-top:2px">
 	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
 	                        </span>
 	                        {{ form.active.errors }}
@@ -124,63 +124,57 @@
                 {% else %}
                    {{ form.active.as_hidden }}
                 {% endif %}
-                <!--// Checkbox for private sites   \\-->			
                 <tr>
-	            <td nowrap="nowrap">Is Private ?</td>
-	            <td vertical-align:middle;">
+	            	<td nowrap="nowrap">Is Private ?</td>
+	                <td>
 	                    {{ form.private }} 
-	                    <span>
+	                    <span style="margin-top:2px">
 	                    [ A private project is only visible to project members - users and administrators. ]
 	                    </span>
 	                    {{ form.private.errors }}
-	            </td>
-	        </tr>
-	        <!--// Turn on/off tabs and sub-tabs \\-->	    
-	        <tr>
-                    <td nowrap="nowrap">Upper Menu Bar</td>
-                    <td>
-                       <div style="text-align:left">
-                       [ IMPORTANT: If you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content. ]
-                       </div>
-                       <table class="gray">
-                	 {% for tablist in tabs %}
-                	   {% if forloop.counter == 1 %}
-                	   <!--  Home page must be always selected, do not display -->
-				<input name="tab_{{tablist.0.label}}" type="hidden"/>
-			   {% else %}
-			   <!--//  table of tab options //-->
-                	     <tr>
-                	       <td>
-				 {% for tab in tablist %}
-				    <label for="{{tab_label}}">
-				    <input name="tab_{{tab.label}}"{% if tab.active %} checked="checked" {% endif %} type="checkbox" id="{{tab.label}} onclick="trigger(this)"> 
-				    <span style="margin-top:2px;vertical-align:middle;">
-			              {% if forloop.counter == 1 %}
-					<b>{{tab.label}}</b>				
-				      {% else %}
-				        {{tab.label}}
-				      {% endif %}
-		                    </span>
-				    </input>
-				    </label>
-				 {% endfor %}
-
-			        </td>
-			      </tr>	
-			     {% endif %}									
-			   {% endfor %}
-			</table>
-                   </td>
+	                </td>
+	            </tr>
+	            <tr>
+                	<td nowrap="nowrap">Upper Menu Bar</td>
+                	<td>
+                		<div style="text-align:center">
+                			[ IMPORTANT: if you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content ]
+                		</div>
+                		<table>
+                			{% for tablist in tabs %}
+                				{% if forloop.counter == 1 %}
+                					<!--  Home page must be always selected, do not display -->
+									<input name="tab_{{tablist.0.label}}" type="hidden"/>
+								{% else %}
+                					<tr>
+                						<td>
+											{% for tab in tablist %}
+												<input name="tab_{{tab.label}}"  
+											       		{% if tab.active %} checked="checked" {% endif %}							       
+											       		type="checkbox" onclick="trigger(this)"> 
+											       		<span style="margin-top:2px">
+												       		{% if forloop.counter == 1 %}
+												       			<b>{{tab.label}}</b>				
+												       		{% else %}
+												       			{{tab.label}}
+												       		{% endif %}
+											       		</span>
+											{% endfor %}
+										</td>
+									</tr>	
+								{% endif %}									
+							{% endfor %}
+						</table>
+                	</td>
                 </tr>
                 <tr>
                 	<td nowrap="nowrap"><span style="margin-top:2px">Resource Folders</span></td>
                 	<td>
                 		
                 		{% for folder in folders %}
-				<input name="folder_{{folder.name}}" type="checkbox"
-				{% if folder.active %} checked="checked" {% endif %} >
-			        <span style="vertical-align:middle;">{{ folder.name }}</span>
-			        </input>
+							<input name="folder_{{folder.name}}" type="checkbox"
+							       {% if folder.active %} checked="checked" {% endif %} >
+							       {{ folder.name }}		
                 		{% endfor %}
                 	</td>
                 </tr>
