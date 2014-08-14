@@ -1,17 +1,19 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block extrahead %}
+<!--// Javascript must be loaded in the header //-->
 	{% include 'cog/datacart/_datacart_js.html' %}
-{% endblock %}
-
-{% block main %}
-         	
 	{% include 'cog/search/_search_js.html' %}
 	{% include 'cog/search/yui_accordion.html' %} 
 	{% include 'cog/datacart/_services_js.html' %} 
 	{% include 'cog/datacart/_datacart_js.html' %} 
 	{% include 'cog/datacart/_wget_js.html' %} 
 	{% include 'cog/datacart/_las_js.html' %}
+
+
+{% endblock %}
+
+{% block main %}
 	  
      <div class="yui-skin-sam">
     		<form action='' method="post" id="search-form">
@@ -24,15 +26,15 @@
     		<!-- layout for facets + text box -->
     		{% if search_output.facets %}
 	    		<div class="span-6">
-	    		    <!-- search facets -->
-	                {% include 'cog/search/_search_facets.html' %}                  
+	    	   	   <!-- search facets -->
+	                   {% include 'cog/search/_search_facets.html' %}                  
 	    		</div>
 	    		
 	    		<div class="span-18 last">
-	    		     <!-- form text box -->
-	                 {% include 'cog/search/_search_text.html' %}        
-	                 <!-- search results -->
-	                 {% include 'cog/search/_search_results.html' %}   		  
+	    	 	    <!-- form text box -->
+	                    {% include 'cog/search/_search_text.html' %}        
+	                    <!-- search results -->
+	                    {% include 'cog/search/_search_results.html' %}   		  
 	    		</div>
 	    		
 	    	<!-- layout for text-box only -->
@@ -40,10 +42,10 @@
     		      <div class="span-3">&nbsp;</div>
     		      
     		      <div class="span-18">
-                     <!-- form text box -->
-                     {% include 'cog/search/_search_text.html' %}        
-                     <!-- search results -->
-                     {% include 'cog/search/_search_results.html' %}          
+                        <!-- form text box -->
+                        {% include 'cog/search/_search_text.html' %}        
+                        <!-- search results -->
+                        {% include 'cog/search/_search_results.html' %}          
                 </div>
     		         		
     		    <div class="span-3 last">&nbsp;</div>
