@@ -73,9 +73,12 @@ class UsernameReminderForm(Form):
 
 class PasswordChangeForm(Form):
 
-    old_password = CharField(required=True, widget=PasswordInput())
-    password = CharField(required=True, widget=PasswordInput())
-    confirm_password = CharField(required=True, widget=PasswordInput())
+    old_password = CharField(required=True, widget=PasswordInput(render_value=True))
+    password = CharField(required=True, 
+                     # trigger javascript function when input field looses focus
+                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword(this);", })
+                     ) # not required for OpenID users
+    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True))
 
     # override __init__ method to store the user object
     def __init__(self, user, *args,**kwargs):
@@ -105,11 +108,11 @@ class UserForm(ImageForm):
     password = CharField(required=False, 
                          # trigger javascript function when input field looses focus
                          # could have also used: YAHOO.util.Event.addListener(id_myField, "click", myClickEventHandler, myOptionalData);
-                         widget=PasswordInput(attrs = { "onchange" : "checkPassword(this);", })
+                         widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword(this);", })
                          ) # not required for OpenID users
 
     # additional fields not in User
-    confirm_password = CharField(required=False, widget=PasswordInput()) # not required for OpenID users
+    confirm_password = CharField(required=False, widget=PasswordInput(render_value=True)) # not required for OpenID users
     institution = CharField(required=True)
     department = CharField(required=False)
     city = CharField(required=True)
