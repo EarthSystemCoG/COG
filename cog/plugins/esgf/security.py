@@ -32,7 +32,7 @@ class ESGFDatabaseManager():
 
             # session factory
             self.Session = sessionmaker(bind=engine)
-
+            
     def insertUser(self, userProfile):
 
         session = self.Session()
@@ -54,7 +54,10 @@ class ESGFDatabaseManager():
 
                 # encrypt password with MD5_CRYPT
                 clearTextPassword = userProfile.clearTextPassword
-                encPassword = md5_crypt.encrypt(clearTextPassword)
+                if clearTextPassword is not None and len(clearTextPassword)>0:
+                    encPassword = md5_crypt.encrypt(clearTextPassword)
+                else:
+                    encPassword = None
                 #test = md5_crypt.verify(clearTextPassword, encPassword)
                 #print "password encryption test was succesfull: %s" % test
 
