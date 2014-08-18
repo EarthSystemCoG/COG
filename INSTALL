@@ -208,6 +208,11 @@ After the first login, a new COG account is created with that openid and a usern
 
 3) When a new COG account is created, a new ESGF account is created at the same time. The new ESGF openid is automatically associated with the COG account.
 
+o USER UPDATES
+
+If a CoG user with an ESGF openid from the local node (cases 2) and 3) above) updates his/her password, 
+the change is propagated to the ESGF database so the user can log onto its idP.
+
 PROJECTS FEDERATION
 
 The current COG site can be configured to federate with any number of remote COG sites. 
