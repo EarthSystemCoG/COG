@@ -478,9 +478,10 @@ def password_reset(request):
             try:
                 # retrieve user for given username and email
                 user = User.objects.filter(username=username).get(email__iexact=email)
-
+                
                 # generate new random password
-                new_password = User.objects.make_random_password(length=10)
+                # prepend "AB1-" to satisfy mandatory requirements
+                new_password = "Ab1-"+User.objects.make_random_password(length=8)
 
                 # change password in database
                 user.set_password(new_password)

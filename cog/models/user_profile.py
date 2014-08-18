@@ -89,17 +89,19 @@ def isUserValid(user):
 # Method to determine whether a user home site is the current site
 def isUserLocal(user):
     
-    return user.profile.site == Site.objects.get_current()
+    (profile, _) = UserProfile.objects.get_or_create(user=user)
+    return profile.site == Site.objects.get_current()
 
 # Method to identify remote users as users that:
 # a) do NOT have their home site as their current site
 # b) do have an OpenID
 def isUserRemote(user):
     
-    if user.profile.site == Site.objects.get_current():
+    (profile, _) = UserProfile.objects.get_or_create(user=user)
+    if profile.site == Site.objects.get_current():
         return False
     
-    elif user.profile.openid is None:
+    elif profile.openid is None:
         return False
 
     else:

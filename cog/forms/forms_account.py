@@ -18,6 +18,12 @@ from django_openid_auth.models import UserOpenID
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
 
+# NOTE: must be same as JavaScript pattern in _password_check.html
+PASSWORD_PATTERN = r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$'
+PASSWORD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one upper case letter, one number, and one special symbol. '\
+                      + 'All characters are allowed.'
+CONFIRM_PASSWORD_INSTRUCTIONS = 'Must match the password above.'
+
 class UserUrlForm(ModelForm):
 
     url = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
@@ -73,9 +79,13 @@ class UsernameReminderForm(Form):
 
 class PasswordChangeForm(Form):
 
-    old_password = CharField(required=True, widget=PasswordInput())
-    password = CharField(required=True, widget=PasswordInput())
-    confirm_password = CharField(required=True, widget=PasswordInput())
+    old_password = CharField(required=True, widget=PasswordInput(render_value=True))
+    password = CharField(required=True, 
+                     # trigger javascript function when input field looses focus
+                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", }),
+                     help_text = PASSWORD_INSTRUCTIONS
+                     ) # not required for OpenID users
+    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
 
     # override __init__ method to store the user object
     def __init__(self, user, *args,**kwargs):
@@ -102,10 +112,15 @@ class UserForm(ImageForm):
     last_name = CharField(required=True)
     username = CharField(required=True)
     email = CharField(required=True)
-    password = CharField(required=False, widget=PasswordInput()) # not required for OpenID users
+    password = CharField(required=False, 
+                         # trigger javascript function when input field looses focus
+                         # could have also used: YAHOO.util.Event.addListener(id_myField, "click", myClickEventHandler, myOptionalData);
+                         widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", }),
+                         help_text = PASSWORD_INSTRUCTIONS
+                         ) # not required for OpenID users
 
     # additional fields not in User
-    confirm_password = CharField(required=False, widget=PasswordInput()) # not required for OpenID users
+    confirm_password = CharField(required=False, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS) # not required for OpenID users
     institution = CharField(required=True)
     department = CharField(required=False)
     city = CharField(required=True)
@@ -189,8 +204,10 @@ def validate_password(form):
         if password is None:
             form._errors["password"] = form.error_class(["'Password' is a required field."])
         else:
-            if len(password) < 6:
-                form._errors["password"] = form.error_class(["'Password' must contain at least 6 characters."])
+            if len(password) < 8:
+                form._errors["password"] = form.error_class(["'Password' must contain at least 8 characters."])
+            elif re.match(PASSWORD_PATTERN, password) is None:
+                form._errors["password"] = form.error_class(["'Password' does not match the required criteria."])
 
         if confirm_password is None:
             form._errors["confirm_password"] = form.error_class(["'Confirm Password' is a required field."])
