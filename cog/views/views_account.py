@@ -16,6 +16,7 @@ from django.contrib.auth.hashers import is_password_usable
 from django.core.exceptions import ObjectDoesNotExist
 from django_openid_auth.models import UserOpenID
 from django.contrib.sites.models import Site
+from cog.plugins.esgf.security import esgfDatabaseManager
 
 def custom_login(request, **kwargs):
     '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
@@ -411,10 +412,15 @@ def password_update(request, user_id):
             # change password in database
             user.set_password(form.cleaned_data.get('password'))
             user.save()
+            
+            # update ESGF user object
+            if settings.ESGF_CONFIG:
+                esgfDatabaseManager.updatePassword(user, form.cleaned_data.get('password') )
+            
             # logout user
             logout(request)
             # redirect to login page with special message
-            return HttpResponseRedirect(reverse('login')+"?message=password_update")
+            return HttpResponseRedirect(reverse('login')+"?message1=password_update")
 
         else:
             print "Form is invalid: %s" % form.errors
@@ -486,6 +492,11 @@ def password_reset(request):
                 # change password in database
                 user.set_password(new_password)
                 user.save()
+                
+                # update ESGF user object
+                if settings.ESGF_CONFIG:
+                    esgfDatabaseManager.updatePassword(user, new_password)
+
 
                 # logout user (if logged in)
                 logout(request)
@@ -502,7 +513,7 @@ def password_reset(request):
                 notify(user, subject, message)
 
                 # redirect to login page with special message
-                return HttpResponseRedirect(reverse('login')+"?message=password_reset")
+                return HttpResponseRedirect(reverse('login')+"?message1=password_reset")
 
             # user not found
             except User.DoesNotExist:
