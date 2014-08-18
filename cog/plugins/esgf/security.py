@@ -89,6 +89,25 @@ class ESGFDatabaseManager():
         esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==openid).scalar()
         session.close()
         return esgfUser
+    
+    def updatePassword(self, user, clearTextPassword):
+        '''Updates the user password in the ESGF database.'''
+                
+        for openid in user.profile.openids():
+            
+            # openid must match the configured ESGF host name
+            if settings.ESGF_HOSTNAME in openid:
+                
+                esgfUser = self.getUserByOpenid(openid)
+                if esgfUser is not None:
+                    session = self.Session()
+                    encPasword = md5_crypt.encrypt(clearTextPassword)
+                    esgfUser.password = encPasword
+                    print 'Updated ESGF password for user with openid: %s' % openid
+                    session.add(esgfUser)
+                    session.commit()
+                    session.close()
+            
 
 
 Base = declarative_base()
