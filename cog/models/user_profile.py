@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
+from django.conf import settings
 
 from cog.utils import hasText
 from django.contrib.sites.models import Site
@@ -67,12 +68,23 @@ class UserProfile(models.Model):
     def openids(self):
         return [ x.claimed_id for x in self.user.useropenid_set.all() ]
     
+    # utility method to return openids that match the local node
+    def localOpenids(self):
+        return [ x for x in self.openids() if settings.ESGF_HOSTNAME in x]
+    
     # utility method to return the user first openid
     def openid(self):
         if len( self.user.useropenid_set.all() ) > 0:
             return self.user.useropenid_set.all()[0].claimed_id
         else:
             return None
+        
+    # returns the first local openid, if existing
+    def localOpenid(self):
+        if len( self.localOpenids() ) > 0:
+            return self.localOpenids()[0]
+        else:
+            return None 
 
 # Method to check whether a user object is valid
 # (i.d. it has an associated profile, and its the mandatory fields are populated)
