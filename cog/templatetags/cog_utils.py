@@ -51,6 +51,11 @@ def get_escape_function(autoescape):
 def index(project):
     return site_index(project)
 
+@register.filter
+def settings_value(key):
+    '''Custom filter to access a settings value in a template.'''
+    return getattr(settings, key, '')
+
 # filter to list the bookmarks folders for a user, project combination
 @register.filter
 def list_bookmarks(project, user, autoescape=None):
