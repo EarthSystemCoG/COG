@@ -24,6 +24,7 @@ DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
 MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600)) # one hour 
 PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
+IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 
 # ESGF specific settings
 ESGF = 'esgf'

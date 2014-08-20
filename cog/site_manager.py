@@ -17,6 +17,10 @@ class SiteManager(object):
        DATABASE_PORT=database_port
        DATABASE_PORT=5432
        MY_PROJECTS_REFRESH_SECONDS=10
+       # optional number of days after which password expire
+       PASSWORD_EXPIRATION_DAYS=0
+       # optional top-level URL to redirect user registration (no trailing '/')
+       IDP_REDIRECT=https://www.earthsystemcog.org
 
        [esgf]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
