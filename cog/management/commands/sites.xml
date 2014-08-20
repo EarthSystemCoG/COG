@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sites>
-	<site name="EarthSystemCoG" domain="www.earthsystemcog.org" />
+	<site name="NOAA ESRL ESGF-CoG" domain="www.earthsystemcog.org" />
 	<site name="CoG-CU" domain="cog-cu.colorado.edu" />
 	<site name="CoG @ dev-hydra" domain="dev-hydra-httpd.esrl.svc" />
 </sites>
