@@ -288,16 +288,15 @@ Also must set the file permissionss as follows:
 
 chmod 0600 ~/.pgpass
 
-CUSTOMIZATION
+CUSTOMIZED HEADER AND FOOTER
 
-Any HTML template used by the CoG application can be overridden by placing a custom temaplate with the same name and system path under the
-root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>,
-where by default COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
+The default header and footer can be overridden by placing a custom temaplate with the same name and system path under the
+root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, where by default COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
 
-For example, to override the template cog/common/cog_header.html and cog/common/cog_footer.html which come with the distribution, create the two custom files:
+For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html which come with the distribution, create the two custom files:
 
-/usr/local/cog/mytemplates/cog/common/cog_header.html
-/usr/local/cog/mytemplates/cog/common/cog_footer.html
+/usr/local/cog/mytemplates/cog/templates/common/cog_header_custom.html
+/usr/local/cog/mytemplates/cog/templates/common/cog_footer_custom.html
 
 Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the template as "/mymedia/<image name>".
 
