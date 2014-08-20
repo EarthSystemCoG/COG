@@ -569,6 +569,9 @@ def showMessage(message):
     elif message=="login_failed":
         return "Error entering username and/or password."
 
+    elif message=="password_expired":
+        return "Your password has expired. Please choose a new password conforming to the requirements below."
+
     else:
         return message
 

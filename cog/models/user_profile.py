@@ -8,6 +8,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from cog.utils import getJson
 from cog.models.peer_site import getPeerSites
+import datetime
 
 class UserProfile(models.Model):
 
@@ -44,6 +45,9 @@ class UserProfile(models.Model):
 
     # user (login) type: 1=COG, 2=ESGF
     type = models.IntegerField(null=False, blank=False, default=1)
+    
+    # datetime when password was last updated, used to trigger mandatory resets
+    last_password_update = models.DateTimeField('Date and Time when Password was Last Updated', blank=True, null=True)
 
     def isCogUser(self):
         ''' Utility method to detect a user with CoG login type.'''
@@ -60,6 +64,19 @@ class UserProfile(models.Model):
         '''Returns the absolute URL for this user profile, keeping the home site into account.'''
         
         return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid())
+    
+    def hasPasswordExpired(self):
+        
+        if self.last_password_update is None:
+            return True
+        
+        if settings.PASSWORD_EXPIRATION_DAYS > 0:
+            today = datetime.date.today()
+            if (today - self.last_password_update).days > settings.PASSWORD_EXPIRATION_DAYS:
+                return True
+            
+        # default
+        return False
 
     class Meta:
         app_label= APPLICATION_LABEL

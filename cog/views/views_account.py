@@ -17,6 +17,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django_openid_auth.models import UserOpenID
 from django.contrib.sites.models import Site
 from cog.plugins.esgf.security import esgfDatabaseManager
+import datetime
 
 def custom_login(request, **kwargs):
     '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
@@ -61,6 +62,8 @@ def _custom_login(request, response):
 
     # succesfull login, but missing information
     if not request.user.is_anonymous():
+        print 'user profile=%s' % request.user.profile
+        print 'isUserLocal=%s' % isUserLocal(request.user) 
         if isUserLocal(request.user) and not isUserValid(request.user):
             return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
 
@@ -157,7 +160,8 @@ def user_add(request):
                                 researchInterests=form.cleaned_data['researchInterests'],
                                 subscribed=form.cleaned_data['subscribed'],
                                 private=form.cleaned_data['private'],
-                                image=form.cleaned_data['image'])
+                                image=form.cleaned_data['image'],
+                                last_password_update=datetime.datetime.now())
 
             userp.clearTextPassword = clearTextPassword # NOTE: this field is NOT persisted
             userp.save()
@@ -412,6 +416,8 @@ def password_update(request, user_id):
             # change password in database
             user.set_password(form.cleaned_data.get('password'))
             user.save()
+            user.profile.last_password_update = datetime.datetime.now()
+            user.profile.save()
             
             # update ESGF user object
             if settings.ESGF_CONFIG:
@@ -492,6 +498,8 @@ def password_reset(request):
                 # change password in database
                 user.set_password(new_password)
                 user.save()
+                user.profile.last_password_update = datetime.datetime.now()
+                user.profile.save()
                 
                 # update ESGF user object
                 if settings.ESGF_CONFIG:
