@@ -44,7 +44,7 @@ def custom_login_complete(request, **kwargs):
         except ObjectDoesNotExist:
 
             # retrieve user home site            
-            site = getSiteForUser( request.GET.get('openid.claimed_id', None) )
+            site = discoverSiteForUser( request.GET.get('openid.claimed_id', None) )
             if site is None: 
                 # set user home site to current site
                 site = Site.objects.get_current()

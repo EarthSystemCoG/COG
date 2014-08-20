@@ -137,7 +137,8 @@ def isUserRemote(user):
         return True
     
 # loops over the peer sites to identify the home site for a given user
-def getSiteForUser(openid):
+def discoverSiteForUser(openid):
+    '''IMPORTANT: call this function ONLY at account creation as it makes requests to all peer sites.'''
         
     for site in Site.objects.all(): # note: includes current site
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
