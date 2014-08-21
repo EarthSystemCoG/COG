@@ -436,11 +436,11 @@ def password_update(request, user_id):
             print "Form is invalid: %s" % form.errors
             return render_password_change_form(request, form)
         
-def username_reminder(request):
+def user_reminder(request):
 
     if (request.method=='GET'):
         form = UsernameReminderForm()
-        return render_username_reminder_form(request, form)
+        return render_user_reminder_form(request, form)
 
     else:
         form = UsernameReminderForm(request.POST)
@@ -465,15 +465,15 @@ def username_reminder(request):
                 notify(user, subject, message)
 
                 # redirect to login page with special message
-                return HttpResponseRedirect(reverse('login')+"?message=username_reminder")
+                return HttpResponseRedirect(reverse('login')+"?message2=user_reminder")
 
             # user not found
             else:
-                return render_username_reminder_form(request, form, "This email address cannot be found")
+                return render_user_reminder_form(request, form, "This email address cannot be found")
 
         else:
             print "Form is invalid: %s" % form.errors
-            return render_username_reminder_form(request, form)
+            return render_user_reminder_form(request, form)
 
 
 def password_reset(request):
@@ -550,9 +550,9 @@ def render_password_reset_form(request, form, message=""):
                               {'form':form, 'mytitle':'Reset User Password', 'message':message },
                               context_instance=RequestContext(request))
 
-def render_username_reminder_form(request, form, message=""):
-    return render_to_response('cog/account/username_reminder.html',
-                              {'form':form, 'mytitle':'Username Reminder', 'message':message },
+def render_user_reminder_form(request, form, message=""):
+    return render_to_response('cog/account/user_reminder.html',
+                              {'form':form, 'mytitle':'UserName and OpenID Reminder', 'message':message },
                               context_instance=RequestContext(request))
     
 def render_site_change_form(request, form):

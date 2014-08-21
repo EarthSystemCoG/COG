@@ -26,7 +26,7 @@
 
 	<!-- display extra message if available -->
 	{% if request.GET.message2 %}
-	   <div class="message-box"> {{ request.GET.message2|showMessage }}</div>
+	   <div class="message-box"> {{ request.GET.message2|showMessage|safe }}</div>
 	   <p/>
 	{% endif %}
 
@@ -68,7 +68,7 @@
 		<!-- reminder links -->
 		<div style="position: relative;">
 			<span style="position: absolute; right: 0px;">
-				<a href="{% url 'username_reminder' %}">Forgot OpenID?</a>
+				<a href="{% url 'user_reminder' %}">Forgot OpenID?</a>
 			</span>
             <br/>&nbsp;
 		</div>

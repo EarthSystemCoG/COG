@@ -48,7 +48,7 @@ urlpatterns = patterns('',
     url(r'^user/detail/(?P<user_id>\d+)/$', 'cog.views.user_detail', name='user_detail'),
     url(r'^password/update/(?P<user_id>\d+)/$', 'cog.views.password_update', name='password_update'),
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
-    url(r'^username/reminder/$', 'cog.views.username_reminder', name='username_reminder'),
+    url(r'^user/reminder/$', 'cog.views.user_reminder', name='user_reminder'),
     url(r'^user/byopenid/$', 'cog.views.user_byopenid', name='user_byopenid'),
     url(r'^user/profile/(?P<user_id>\d+)/$', 'cog.views.user_profile_redirect', name='user_profile_redirect'),
 
