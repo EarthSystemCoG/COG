@@ -88,6 +88,14 @@ o Update the current site object with the name and domain read from the local co
 
 python manage.py init_site
 
+o By default, the CoG database comes configured with a single user "admin" with administrator privileges,
+with password "changeme". You must immediately change the password for this user by running the following command,
+which will also create a valid OpenID to login:
+
+python manage.py create_openid admin <new password>
+
+where 'admin' is the administrator username.
+
 RESTORE BACKUP
 
 To restore the database status from a SQL backup:
@@ -110,20 +118,17 @@ http://localhost:8000/
 
 Please note that none of the project links contained in the right column will work because those projects do NOT exist in the local database.
 
-o By default, the CoG database is configured with one single project called 'Test'. Access the 'Test' project home page by visiting the following URL:
+o Login as the site administrator in one of two possible ways:
+	
+	- by accessing the URL http://localhost:8000/login/ and entering the administrator openid
+	- by accessing the "secret" URL http://localhost:8000/admin/ which will trigger a standard username/password login
+
+o By default, the CoG database is configured with one single project called 'Test'. 
+Access the 'Test' project home page by visiting the following URL:
 
 http://localhost:8000/projects/test/
 
-o Login as the site administrator by clicking the 'Login' hyperlink in the upper right of the page, and login with the following username/password:
-
-Username: changeme
-Password: changeme
-
-IMPORTANT: immediately change the administrator username and password by clicking on the upper right link 'Django Admin',
-which will show the Django Administrator web interface. Further click on 'Users', then 'changeme_user',
-then start changing the administraror's profile.
-
-o Start experimenting with creating new projects and registering new users.
+Start experimenting with creating other projects and registering new users.
 
 FURTHER CONFIGURATION
 
