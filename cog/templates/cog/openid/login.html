@@ -20,9 +20,9 @@
 
 {% block main %}
 
-  {% load cog_utils %}
+{% load cog_utils %}
 
-  <div class="prepend-4 span-14">
+<div class="prepend-4 span-14">
 
 	<!-- display extra message if available -->
 	{% if request.GET.message2 %}
@@ -32,14 +32,18 @@
 
 	<h2>OpenID Login</h2>
 
-	{% if form.errors %}
-	    {% if form.openid_identifier.errors %}
-	    	<span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
-	    {% endif %}
-	    {% if form.next.errors %}
-	    	<span class="error">{{ form.next.errors|join:", " }}</span>
-	    {% endif %}
-	{% endif %}
+	<p>
+	  <i>
+		You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time.
+		<br/>If this is the first time you are using your ESGF OpenID on CoG, you will be asked to
+		provide some additional information to create a new CoG account.
+	  </i>
+	</p>
+	
+	<p/>
+	<div style="font-style: italic; text-align:center;">
+		Please note that ESGF OpenIDs are case-sensitive.
+ 	</div>
 
 	<form name="fopenid" action="{% url 'openid-login' %}" method="post">
 		{% csrf_token %}
@@ -71,11 +75,5 @@
 
 	</form>
 
-		<div style="text-align:center; padding-top:10px">
-			<a href="{% url 'username_reminder' %}">Forgot OpenID?</a>
-			&nbsp; &nbsp;
-			Alternatively, you can use the <a href="{% url 'login' %}">COG login</a> with username and password.
-		</div>
-
-	</div>
+</div>
 {% endblock %}
