@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     # authentication options
     # a) django (username/password) login
     #url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),
+    url(r'^login2/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),
     
     # b) combined django + openid login
     #url(r'^login/$', custom_login, {'template_name': 'cog/openid/login2.html'}, name='login'),
