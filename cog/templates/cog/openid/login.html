@@ -35,8 +35,15 @@
 	<p>
 	  <i>
 		You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time.
-		<br/>If this is the first time you are using your ESGF OpenID on CoG, you will be asked to
-		provide some additional information to create a new CoG account.
+		
+		<p/>If you previously created a CoG account, your assigned OpenID should be:
+		<br/><b>https://{{ 'ESGF_HOSTNAME'|settings_value }}/esgf-idp/openid/your_cog_username</b>
+		<br/>unless there was a conflict with some other user. 
+		<br/>For any problem, click on
+		<a href="{% url 'user_reminder' %}">Forgot OpenID?</a> or visit <a href="/projects/cog/contactus/">Site Support</a>.
+		
+		<p/>If this is the first time you are using your ESGF OpenID on CoG, 
+		<br/>you will be asked to provide some additional information to create a new CoG account.
 	  </i>
 	</p>
 	
