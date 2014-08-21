@@ -25,8 +25,8 @@
   <div class="prepend-4 span-14">
 
 	<!-- display extra message if available -->
-	{% if request.GET.message %}
-	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
+	{% if request.GET.message2 %}
+	   <div class="message-box"> {{ request.GET.message2|showMessage }}</div>
 	   <p/>
 	{% endif %}
 
@@ -41,27 +41,35 @@
 	    {% endif %}
 	{% endif %}
 
-		<form name="fopenid" action="{{ action }}" method="post">
-			{% csrf_token %}
+	<form name="fopenid" action="{% url 'openid-login' %}" method="post">
+		{% csrf_token %}
 
-			<div class="mybox">
-	    		<table>
-	    			<caption>OpenID Login</caption>
-	    			<tr>
-	    				<td class="th">OpenID</td>
-	    				<td>{{ form.openid_identifier }}
-	    					&nbsp;<input name="bsignin" type="submit" value="Login">
-	    				</td>
-	    			</tr>
-	    		</table>
-			</div>
+		<div class="mybox">
+    	<table>
+    	  <caption>ESGF Login</caption>
+    	  <tr>
+    	    <td style="width:10%;text-align:right; vertical-align:middle;"><b>OpenID</b></td>
+	    <td style="width:80%; vertical-align:middle;"><input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/></td>
+    	    <td style="width:10%;"><input name="bsignin" type="submit" value="Login"></td>
+    	</td>
+    	</tr>
+    	</table>
+		</div>
 
-			<!-- next page field -->
-			{% if next %}
-				<input type="hidden" name="next" value="{{ next }}" />
-			{% endif %}
+		<!-- next page field -->
+		{% if next %}
+			<input type="hidden" name="next" value="{{ next }}" />
+		{% endif %}
 
-		</form>
+		<!-- reminder links -->
+		<div style="position: relative;">
+			<span style="position: absolute; right: 0px;">
+				<a href="{% url 'username_reminder' %}">Forgot OpenID?</a>
+			</span>
+            <br/>&nbsp;
+		</div>
+
+	</form>
 
 		<div style="text-align:center; padding-top:10px">
 			<a href="{% url 'username_reminder' %}">Forgot OpenID?</a>
