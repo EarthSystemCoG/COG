@@ -154,7 +154,7 @@ td.custom_header_esgf{
 }
 td.custom_header_welcome{
     vertical-align: middle;
-    font-size:      14px;  /* note this is in px and not pt */
+    font-size:      13px;  /* note this is in px and not pt */
     color:          #666;
     font-style:     italic;
 }
