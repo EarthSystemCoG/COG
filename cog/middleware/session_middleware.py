@@ -43,7 +43,6 @@ class SessionMiddleware(object):
         
             # set openid cookie if not found already
             if request.COOKIES.get('openid', None) is None or len(request.COOKIES['openid'])==0:
-                print 'SETTING THE COOKIE ANYHOW TO %s' % request.user.profile.openid()
                 set_openid_cookie(response, request.user.profile.openid())
                 
         return response

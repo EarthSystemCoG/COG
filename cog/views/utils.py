@@ -24,7 +24,9 @@ def getProjectNotVisibleRedirect(request, project):
         
 def set_openid_cookie(response, openid):
     '''Utility method to consistently set the openid cookie.'''
-    print 'Setting openid cookie to: %s' % openid
+    
+    print 'SETTING openid cookie to: %s' % openid
+    
     response.set_cookie('openid', openid, 
                         expires = (datetime.datetime.now() + datetime.timedelta(days=3650)), # expires in 10 years
                         httponly=True)

@@ -57,8 +57,8 @@ def custom_login_complete(request, **kwargs):
             # create user datacart
             DataCart.objects.create(user=request.user)
             
-        # set openid cookie
-        set_openid_cookie(response, openid)
+            # set openid cookie
+            set_openid_cookie(response, openid)
 
     # check if user is valid
     print 'TO CUSTOM LOGIN'
@@ -394,7 +394,7 @@ def user_update(request, user_id):
             for openid in openids:
                 openid.user = profile.user
                 openid.save()
-
+                
 
             # generate thumbnail - after picture has been saved
             if _generateThumbnail:
@@ -407,7 +407,12 @@ def user_update(request, user_id):
                 subscribeUserToMailingList(user, request)
 
             # redirect user profile page
-            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':user.id }))
+            response = HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id':user.id }))
+            
+            # set openid cookie to first available openid
+            set_openid_cookie(response, user.profile.openid())
+
+            return response
 
         else:
             if not form.is_valid():
