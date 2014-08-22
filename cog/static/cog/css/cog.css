@@ -2,6 +2,7 @@
 /* Since we may get rid of this page in the cog distribution with ESMF, it needs to be separate, but totally self contained */
 
 /* note this is different from the cog body which is 9px/1.231 */
+
 body{
 font-size:   9pt;
 line-height: 1.5;
