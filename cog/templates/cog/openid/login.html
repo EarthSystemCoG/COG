@@ -26,7 +26,14 @@
 
 	<!-- display extra message if available -->
 	{% if request.GET.message2 %}
-	   <div class="message-box"> {{ request.GET.message2|showMessage|safe }}</div>
+	   <div class="message-box"> 
+	   	{{ request.GET.message2|showMessage|safe }}
+	   	
+	   	{% if request.COOKIES.openid %}
+	   		<br/>Your assigned OpenID is: <b> {{ request.COOKIES.openid }} </b>
+	   	{% endif %}
+	   		
+	   </div>
 	   <p/>
 	{% endif %}
 

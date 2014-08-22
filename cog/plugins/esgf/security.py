@@ -69,8 +69,6 @@ class ESGFDatabaseManager():
         
         # use existing local openid...
         _openid = userProfile.localOpenid()
-        print 'insertUser: LOCAL OPENID=%s' % _openid
-        print userProfile.openids()
         
         # ...or create new local openid and insert into CoG database
         if _openid is None:

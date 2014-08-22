@@ -89,6 +89,9 @@ def notifyAdminsOfUserRegistration(user):
     message += "\nLast Name: %s" % user.last_name
     message += "\nUser Name: %s" % user.username
     message += "\nEmail: %s" % user.email
+    
+    # openid
+    message += "\nOpenID is: %s" % user.profile.localOpenid()
 
     # user profile attributes
     profile = UserProfile.objects.get(user=user)
@@ -101,6 +104,17 @@ def notifyAdminsOfUserRegistration(user):
 
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
+        
+def notifyUserOfRegistration(user):
+    
+    subject = "CoG Account Creation"
+    message = "Thank you for creating a new CoG account."
+    message += "\n"
+    message += "\nYour User Name is: %s" % user.username
+    message += "\nYour OpenID is: %s" % user.profile.localOpenid()
+    message += "\n"
+    message += "\nPlease note that you will need your OpenID to login"
+    notify(user, subject, message)
 
 def subscribeUserToMailingList(user, request):
     """Method to notify administrators of user subscription request."""
@@ -198,7 +212,8 @@ def user_add(request):
                 except ValueError:
                     pass # image does not exist, ignore
 
-            # notify site administrators
+            # notify user, site administrators of new registration
+            notifyUserOfRegistration(user)
             notifyAdminsOfUserRegistration(user)
 
             # subscribe to mailing list ?
