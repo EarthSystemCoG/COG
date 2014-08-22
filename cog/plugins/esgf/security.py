@@ -33,8 +33,8 @@ class ESGFDatabaseManager():
             # session factory
             self.Session = sessionmaker(bind=engine)
             
-    def _chooseOpenid(self, userProfile):
-        '''Selects the first available ESGF openid starting from the CoG username.'''
+    def createOpenid(self, userProfile):
+        '''Selects the first available ESGF openid starting from the CoG username, and saves it in the CoG database'''
         
         openid = ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", userProfile.user.username)        
         session = self.Session()
@@ -54,10 +54,14 @@ class ESGFDatabaseManager():
     
                 except NoResultFound:    
                     # this openid is available
-                    return _openid
+                    userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
+                    print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user)
+                    return userOpenID.claimed_id
                 
         finally:
             session.close()
+            
+        return None # openid not assigned
         
         
             
@@ -65,13 +69,12 @@ class ESGFDatabaseManager():
         
         # use existing local openid...
         _openid = userProfile.localOpenid()
+        print 'insertUser: LOCAL OPENID=%s' % _openid
+        print userProfile.openids()
         
         # ...or create new local openid and insert into CoG database
         if _openid is None:
-            _openid = self._chooseOpenid(userProfile)
-            # add this openid to the COG database
-            userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
-            print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user)
+            _openid = self.createOpenid(userProfile)
 
         # do NOT override ESGF database
         esgfUser = self.getUserByOpenid(_openid)

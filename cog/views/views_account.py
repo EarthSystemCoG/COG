@@ -56,12 +56,18 @@ def custom_login_complete(request, **kwargs):
             # create user datacart
             DataCart.objects.create(user=request.user)
             
-        # set openid cookie (expires in one year)
-        response.set_cookie('openid', openid, 
-                            expires = (datetime.datetime.now() + datetime.timedelta(days=365)))
+        # set openid cookie
+        _set_openid_cookie(response, openid)
 
     # check if user is valid
     return _custom_login(request, response)
+
+def _set_openid_cookie(response, openid):
+    '''Utility method to consistently set the openid cookie.'''
+    response.set_cookie('openid', openid, 
+                        expires = (datetime.datetime.now() + datetime.timedelta(days=3650)), # expires in 10 years
+                        httponly=True)
+
 
 def _custom_login(request, response):
 
@@ -171,6 +177,8 @@ def user_add(request):
                                 last_password_update=datetime.datetime.now())
 
             userp.clearTextPassword = clearTextPassword # NOTE: this field is NOT persisted
+            
+            # save user profile --> will trigger userProfile post_save and consequent creation of openid
             userp.save()
 
             # create user data cart
@@ -182,12 +190,6 @@ def user_add(request):
             for url in urls:
                 url.profile = userp
                 url.save()
-
-            # must assign openids to this user
-            openids = formset2.save(commit=False)
-            for openid in openids:
-                openid.user = userp.user
-                openid.save()
 
             # generate thumbnail image
             if userp.image is not None:
@@ -204,7 +206,12 @@ def user_add(request):
                 subscribeUserToMailingList(user, request)
 
             # redirect to login page with special message
-            return HttpResponseRedirect(reverse('login')+"?message2=user_add")
+            response = HttpResponseRedirect(reverse('login')+"?message2=user_add")
+            
+            # set openid cookie
+            _set_openid_cookie(response, userp.localOpenid())
+
+            return response
 
         else:
             if not form.is_valid():
