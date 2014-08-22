@@ -18,6 +18,7 @@ from django_openid_auth.models import UserOpenID
 from django.contrib.sites.models import Site
 from cog.plugins.esgf.security import esgfDatabaseManager
 import datetime
+from cog.views.utils import set_openid_cookie
 
 def custom_login(request, **kwargs):
     '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
@@ -57,25 +58,22 @@ def custom_login_complete(request, **kwargs):
             DataCart.objects.create(user=request.user)
             
         # set openid cookie
-        _set_openid_cookie(response, openid)
+        set_openid_cookie(response, openid)
 
     # check if user is valid
+    print 'TO CUSTOM LOGIN'
     return _custom_login(request, response)
-
-def _set_openid_cookie(response, openid):
-    '''Utility method to consistently set the openid cookie.'''
-    response.set_cookie('openid', openid, 
-                        expires = (datetime.datetime.now() + datetime.timedelta(days=3650)), # expires in 10 years
-                        httponly=True)
 
 
 def _custom_login(request, response):
 
-    # succesfull login, but missing information
+    # succesfull login
     if not request.user.is_anonymous():
+        
+        # missing information
         if isUserLocal(request.user) and not isUserValid(request.user):
             return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
-
+        
     return response
 
 
@@ -224,7 +222,7 @@ def user_add(request):
             response = HttpResponseRedirect(reverse('login')+"?message2=user_add")
             
             # set openid cookie
-            _set_openid_cookie(response, userp.localOpenid())
+            set_openid_cookie(response, userp.localOpenid())
 
             return response
 
