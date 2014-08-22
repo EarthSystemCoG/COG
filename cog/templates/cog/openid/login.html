@@ -60,7 +60,8 @@
     	  <caption>ESGF Login</caption>
     	  <tr>
     	    <td style="width:10%;text-align:right; vertical-align:middle;"><b>OpenID</b></td>
-	    <td style="width:80%; vertical-align:middle;"><input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/></td>
+	    		<td style="width:80%; vertical-align:middle;">
+	    			<input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.COOKIES.openid }}" size="70"/></td>
     	    <td style="width:10%;"><input name="bsignin" type="submit" value="Login"></td>
     	</td>
     	</tr>

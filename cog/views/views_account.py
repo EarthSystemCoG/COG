@@ -21,7 +21,7 @@ import datetime
 
 def custom_login(request, **kwargs):
     '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
-
+    
     # authenticate user via standard login
     response = login(request, **kwargs)
 
@@ -38,13 +38,14 @@ def custom_login_complete(request, **kwargs):
 
     # create a stub profile with blank mandatory fields
     if not request.user.is_anonymous():
+        openid = request.GET.get('openid.claimed_id', None)
         try:
             request.user.profile
             
         except ObjectDoesNotExist:
 
             # retrieve user home site            
-            site = discoverSiteForUser( request.GET.get('openid.claimed_id', None) )
+            site = discoverSiteForUser( openid )
             if site is None: 
                 # set user home site to current site
                 site = Site.objects.get_current()
@@ -54,6 +55,10 @@ def custom_login_complete(request, **kwargs):
 
             # create user datacart
             DataCart.objects.create(user=request.user)
+            
+        # set openid cookie (expires in one year)
+        response.set_cookie('openid', openid, 
+                            expires = (datetime.datetime.now() + datetime.timedelta(days=365)))
 
     # check if user is valid
     return _custom_login(request, response)
@@ -62,8 +67,6 @@ def _custom_login(request, response):
 
     # succesfull login, but missing information
     if not request.user.is_anonymous():
-        print 'user profile=%s' % request.user.profile
-        print 'isUserLocal=%s' % isUserLocal(request.user) 
         if isUserLocal(request.user) and not isUserValid(request.user):
             return HttpResponseRedirect(reverse('user_update', kwargs={ 'user_id':request.user.id })+"?message=incomplete_profile")
 
