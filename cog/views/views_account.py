@@ -61,7 +61,6 @@ def custom_login_complete(request, **kwargs):
             set_openid_cookie(response, openid)
 
     # check if user is valid
-    print 'TO CUSTOM LOGIN'
     return _custom_login(request, response)
 
 
@@ -69,6 +68,11 @@ def _custom_login(request, response):
 
     # succesfull login
     if not request.user.is_anonymous():
+        
+        # FIXME
+        print 'USER TYPE=%s' % request.user.profile.type
+        print 'isUserLocal=%s' % isUserLocal(request.user)
+        print 'isUserValid=%s' % isUserValid(request.user)
         
         # missing information
         if isUserLocal(request.user) and not isUserValid(request.user):
