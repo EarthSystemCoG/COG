@@ -31,6 +31,9 @@ class SessionMiddleware(object):
                 # refresh session stamp
                 s['LAST_ACCESSED'] = now_seconds
                 s.save()
+                
+        # keep on processing this request
+        return None
 
 
     def process_response(self, request, response):
@@ -39,10 +42,14 @@ class SessionMiddleware(object):
         Used to set the openid cookie if not set already.
         '''
         
-        if request.user.is_authenticated() and request.user.profile.openid() is not None:
-        
-            # set openid cookie if not found already
-            if request.COOKIES.get('openid', None) is None or len(request.COOKIES['openid'])==0:
-                set_openid_cookie(response, request.user.profile.openid())
+        try:
+            if request.user.is_authenticated() and request.user.profile.openid() is not None:
+            
+                # set openid cookie if not found already
+                if request.COOKIES.get('openid', None) is None or len(request.COOKIES['openid'])==0:
+                    set_openid_cookie(response, request.user.profile.openid())
+                    
+        except AttributeError:
+            pass
                 
         return response
