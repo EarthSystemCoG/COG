@@ -153,10 +153,11 @@ td.custom_header_esgf{
     padding-bottom: 2px; /* Cecelia wanted this 1px larger than the top */
 }
 td.custom_header_welcome{
-    vertical-align: middle;
-    font-size:      14px;  /* note this is in px and not pt */
+    vertical-align: bottom;
+    font-size:      12px;  /* note this is in px and not pt */
     color:          #666;
     font-style:     italic;
+    line-height:    1.35;
 }
 
 hr.custom_header {
