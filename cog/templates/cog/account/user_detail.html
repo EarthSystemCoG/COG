@@ -24,9 +24,9 @@
   {% else %}
   
    	<!-- display extra message if available -->
-	{% if request.GET.message1 %}
+	{% if request.GET.message %}
 		<div class="prepend-6 span-12 last">
-	   		<div class="message-box"> {{ request.GET.message1|showMessage }}</div>
+	   		<div class="message-box"> {{ request.GET.message|showMessage }}</div>
 	   	</div>
 	   	<p/>
 	{% endif %}

@@ -48,11 +48,11 @@ class LoginMiddleware(object):
     
                     # invalid OpenID
                     if not openid_identifier.lower().startswith('https'):
-                        return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_openid&next=%s&openid=%s" % (next, openid_identifier))
+                        return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_openid&next=%s&openid=%s" % (next, openid_identifier))
     
                     # invalid IdP
                     if not self.whitelist.trust(openid_identifier):
-                        return HttpResponseRedirect(reverse('openid-login')+"?message2=invalid_idp&next=%s&openid=%s" % (next, openid_identifier) )
+                        return HttpResponseRedirect(reverse('openid-login')+"?message=invalid_idp&next=%s&openid=%s" % (next, openid_identifier) )
 
         # keep on processing this request
         return None
@@ -77,12 +77,12 @@ class LoginMiddleware(object):
                 if request.method=='POST' and not request.user.is_authenticated():
                     if response.status_code == 500:
                         if 'OpenID discovery error' in response.content:
-                            return HttpResponseRedirect(reverse('openid-login')+"?message2=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
+                            return HttpResponseRedirect(reverse('openid-login')+"?message=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
     
             # process errors from standard authentication
             elif request.path == self.url1:
     
                 if request.method=='POST' and not request.user.is_authenticated():
-                    return HttpResponseRedirect(reverse('login')+"?message1=login_failed&next=%s&username=%s" % (next, username) )
+                    return HttpResponseRedirect(reverse('login')+"?message=login_failed&next=%s&username=%s" % (next, username) )
 
         return response

@@ -12,8 +12,8 @@
 	<h2>User Login</h2>
 
 	<!-- display extra message if available -->
-	{% if request.GET.message1 %}
-	   <div class="message-box"> {{ request.GET.message1|showMessage }}</div>
+	{% if request.GET.message %}
+	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
 	   <p/>
 	{% endif %}
 

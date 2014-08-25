@@ -39,8 +39,8 @@
 	<h2>CoG Login</h2>
 
 	<!-- display extra message if available -->
-	{% if request.GET.message1 %}
-	   <div class="message-box"> {{ request.GET.message1|showMessage }}</div>
+	{% if request.GET.message %}
+	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
 	   <p/>
 	{% endif %}
 
@@ -99,8 +99,8 @@
 		<h2>ESGF Login</h2>
 
 		<!-- display extra message if available -->
-		{% if request.GET.message2 %}
-		   <div class="message-box"> {{ request.GET.message2|showMessage }}</div>
+		{% if request.GET.message %}
+		   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
 		   <p/>
 		{% endif %}
 

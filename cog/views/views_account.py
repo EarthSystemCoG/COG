@@ -223,7 +223,7 @@ def user_add(request):
                 subscribeUserToMailingList(user, request)
 
             # redirect to login page with special message
-            response = HttpResponseRedirect(reverse('login')+"?message2=user_add")
+            response = HttpResponseRedirect(reverse('login')+"?messageuser_add")
             
             # set openid cookie
             set_openid_cookie(response, userp.localOpenid())
@@ -462,10 +462,10 @@ def password_update(request, user_id):
             # logout user
             #logout(request)
             # redirect to login page with special message
-            #return HttpResponseRedirect(reverse('login')+"?message1=password_update")
+            #return HttpResponseRedirect(reverse('login')+"?message=password_update")
         
             # redirect user to profile page, after setting openid cookie
-            response = HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id })+"?message1=password_update")
+            response = HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id })+"?message=password_update")
             openid = request.user.profile.localOpenid()
             if openid is not None:
                 set_openid_cookie(response, openid)
@@ -505,7 +505,7 @@ def user_reminder(request):
                 notify(user, subject, message)
 
                 # redirect to login page with special message
-                return HttpResponseRedirect(reverse('login')+"?message2=user_reminder")
+                return HttpResponseRedirect(reverse('login')+"?message=user_reminder")
 
             # user not found
             else:
@@ -564,7 +564,7 @@ def password_reset(request):
                 notify(user, subject, message)
 
                 # redirect to login page with special message
-                return HttpResponseRedirect(reverse('login')+"?message1=password_reset")
+                return HttpResponseRedirect(reverse('login')+"?message=password_reset")
 
             # user not found
             except User.DoesNotExist:
