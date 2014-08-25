@@ -460,9 +460,12 @@ def password_update(request, user_id):
                 esgfDatabaseManager.updatePassword(user, form.cleaned_data.get('password') )
             
             # logout user
-            logout(request)
+            #logout(request)
             # redirect to login page with special message
-            return HttpResponseRedirect(reverse('login')+"?message1=password_update")
+            #return HttpResponseRedirect(reverse('login')+"?message1=password_update")
+        
+            # redirect user to profile page
+            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id }), "?message1=password_update")
 
         else:
             print "Form is invalid: %s" % form.errors
@@ -540,7 +543,6 @@ def password_reset(request):
                 # update ESGF user object
                 if settings.ESGF_CONFIG:
                     esgfDatabaseManager.updatePassword(user, new_password)
-
 
                 # logout user (if logged in)
                 logout(request)
