@@ -464,8 +464,13 @@ def password_update(request, user_id):
             # redirect to login page with special message
             #return HttpResponseRedirect(reverse('login')+"?message1=password_update")
         
-            # redirect user to profile page
-            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id })+"?message1=password_update")
+            # redirect user to profile page, after setting openid cookie
+            response = HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id })+"?message1=password_update")
+            openid = request.user.profile.localOpenid()
+            if openid is not None:
+                set_openid_cookie(response, openid)
+            
+            return response
 
         else:
             print "Form is invalid: %s" % form.errors

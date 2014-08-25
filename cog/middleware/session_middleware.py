@@ -36,11 +36,10 @@ class SessionMiddleware(object):
         return None
 
 
+    '''
     def process_response(self, request, response):
-        '''
         Method called before response is returned to the browser.
         Used to set the openid cookie if not set already.
-        '''
         
         try:
             if request.user.is_authenticated() and request.user.profile.openid() is not None:
@@ -53,3 +52,4 @@ class SessionMiddleware(object):
             pass
                 
         return response
+    '''
