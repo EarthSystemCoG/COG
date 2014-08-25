@@ -465,7 +465,7 @@ def password_update(request, user_id):
             #return HttpResponseRedirect(reverse('login')+"?message1=password_update")
         
             # redirect user to profile page
-            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id }), "?message1=password_update")
+            return HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id })+"?message1=password_update")
 
         else:
             print "Form is invalid: %s" % form.errors

@@ -554,7 +554,8 @@ def showMessage(message):
         return 'Thank you for creating an account. You can now login.'
 
     elif message=='password_update':
-        return 'Your password has been changed. Please login again.'
+        #return 'Your password has been changed. Please login again.'
+        return 'Thank you for changing your password.'
 
     elif message=='user_reminder':
         return 'Your UserName and OpenID have been emailed to the address you provided.<br/>Please check your email box.'

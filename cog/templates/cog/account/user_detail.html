@@ -7,7 +7,7 @@
 
   {% if user_profile.user|isRemote %}
   
-    <div class="prepend-6 span-12">
+    <div class="prepend-6 span-12 last">
 
         <h2>User Profile</h2>
   
@@ -23,12 +23,20 @@
     	
   {% else %}
   
+   	<!-- display extra message if available -->
+	{% if request.GET.message1 %}
+		<div class="prepend-6 span-12 last">
+	   		<div class="message-box"> {{ request.GET.message1|showMessage }}</div>
+	   	</div>
+	   	<p/>
+	{% endif %}
+  
     <div class="prepend-1 span-24">
 
         <h2>User Profile</h2>
-
+        
           <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
-            <div class="span-10"style="margin-bottom:5px;">
+         <div class="span-10"style="margin-bottom:5px;">
 		 {% include 'cog/account/_user_profile.html' %}
 	    </div>
 		   
