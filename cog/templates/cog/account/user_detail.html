@@ -63,7 +63,7 @@
 		                <a href="{% url 'user_update' user_profile.user.id %}">Update my profile</a>
 		                {% if user_profile.isCogUser %}
 			                &nbsp; &nbsp;
-			                <a href="{% url 'password_update' user_profile.user.id %}">Change my password</a>
+			                <a href="{% url 'password_update' %}">Change my password</a>
 		                {% endif %}
 		            </div>
 		        {% endif %}

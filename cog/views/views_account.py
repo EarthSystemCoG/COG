@@ -428,26 +428,26 @@ def user_update(request, user_id):
 
             return render_user_form(request, form, formset1, formset2, title='Update User Profile')
 
-@login_required
-def password_update(request, user_id):
+#@login_required
+def password_update(request):
 
-    # security check
-    if str(request.user.id) != user_id:
-        raise Exception("User not authorized to change password")
-
-    # load user object
-    user = get_object_or_404(User, pk=user_id)
 
     if (request.method=='GET'):
 
-        # create empty form
-        form = PasswordChangeForm(user)
+        # create form
+        if request.user.is_anonymous():
+            initial = {}
+        else: # pre-fill username
+            initial={ 'username': request.user.username }
+        form = PasswordChangeForm(initial=initial)
         return render_password_change_form(request, form)
 
     else:
-        form = PasswordChangeForm(user, request.POST)
+        form = PasswordChangeForm(request.POST)
 
         if form.is_valid():
+            
+            user = User.objects.get(username=form.cleaned_data.get('username'))
 
             # change password in database
             user.set_password(form.cleaned_data.get('password'))
@@ -460,16 +460,13 @@ def password_update(request, user_id):
                 esgfDatabaseManager.updatePassword(user, form.cleaned_data.get('password') )
             
             # logout user
-            #logout(request)
+            logout(request)
+                        
             # redirect to login page with special message
-            #return HttpResponseRedirect(reverse('login')+"?message=password_update")
-        
-            # redirect user to profile page, after setting openid cookie
-            response = HttpResponseRedirect(reverse('user_detail', kwargs={ 'user_id': user.id })+"?message=password_update")
-            openid = request.user.profile.localOpenid()
+            response = HttpResponseRedirect(reverse('login')+"?message=password_update")
+            openid = user.profile.localOpenid()
             if openid is not None:
-                set_openid_cookie(response, openid)
-            
+                set_openid_cookie(response, openid)        
             return response
 
         else:

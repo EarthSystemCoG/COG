@@ -19,7 +19,7 @@ class PasswordMiddleware(object):
             if request.user.is_authenticated() and request.user.profile.type==1 and request.user.profile.hasPasswordExpired():
                 print 'Password for user %s has expired, forcing mandatory change.' % request.user
                 
-                return HttpResponseRedirect(reverse('password_update', args=[request.user.id])+"?message=password_expired&next=%s" % request.path)
+                return HttpResponseRedirect(reverse('password_update')+"?message=password_expired&next=%s" % request.path)
             
         # keep on processing this request
         return None

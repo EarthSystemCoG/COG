@@ -79,6 +79,7 @@ class UsernameReminderForm(Form):
 
 class PasswordChangeForm(Form):
 
+    username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
     old_password = CharField(required=True, widget=PasswordInput(render_value=True))
     password = CharField(required=True, 
                      # trigger javascript function when input field looses focus
@@ -88,20 +89,29 @@ class PasswordChangeForm(Form):
     confirm_password = CharField(required=True, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
 
     # override __init__ method to store the user object
-    def __init__(self, user, *args,**kwargs):
+    #def __init__(self, user, *args,**kwargs):
 
-        super(PasswordChangeForm, self ).__init__(*args,**kwargs) # populates the post
-        self.user = user
+    #    super(PasswordChangeForm, self ).__init__(*args,**kwargs) # populates the post
+    #    self.user = user
 
     def clean(self):
-
-        # check current password
-        old_password = self.cleaned_data.get('old_password')
-        if not check_password(old_password, self.user.password):
-            self._errors["old_password"] = self.error_class(["Wrong old password."])
-
-        # validate 'password', 'confirm_password' fields
-        validate_password(self)
+        
+        # load user by username
+        username = self.cleaned_data.get('username')
+        
+        try:
+            user = User.objects.get(username=username)
+    
+            # check current password
+            old_password = self.cleaned_data.get('old_password')
+            if not check_password(old_password, user.password):
+                self._errors["old_password"] = self.error_class(["Wrong old password."])
+    
+            # validate 'password', 'confirm_password' fields
+            validate_password(self)
+            
+        except ObjectDoesNotExist:
+            self._errors["username"] = self.error_class(["Username not found."])
 
         return self.cleaned_data
 
