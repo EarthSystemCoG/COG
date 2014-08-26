@@ -52,6 +52,7 @@ urlpatterns = patterns('',
     url(r'^user/reminder/$', 'cog.views.user_reminder', name='user_reminder'),
     url(r'^user/byopenid/$', 'cog.views.user_byopenid', name='user_byopenid'),
     url(r'^user/profile/(?P<user_id>\d+)/$', 'cog.views.user_profile_redirect', name='user_profile_redirect'),
+    
 
     # data cart
     url(r'^datacart/display/(?P<site_id>\d+)/(?P<user_id>\d+)/$', 'cog.views.datacart_display', name='datacart_display'),
