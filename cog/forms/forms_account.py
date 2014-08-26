@@ -12,6 +12,7 @@ from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 import os.path
 from django_openid_auth.models import UserOpenID
+from cog.plugins.esgf.security import esgfDatabaseManager
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
@@ -47,6 +48,16 @@ class UserOpenidForm(ModelForm):
     class Meta:
         model = UserOpenID
         fields = ('claimed_id',)
+        
+    # make sure that the requested openid is not taken already
+    def clean(self):
+        
+        claimed_id = self.cleaned_data.get('claimed_id')
+        if esgfDatabaseManager.getUserByOpenid(claimed_id) is not None:
+            self._errors["claimed_id"] = self.error_class(["OpenID already exists in database"])
+        
+        return self.cleaned_data
+
 
 class PasswordResetForm(Form):
 

@@ -86,6 +86,31 @@
 
 	            <table>
 	                <tr>
+	                    <td class="required" nowrap="nowrap">User Name</td>
+	                    {% if form.instance.id %}
+	                   		<td>{{ form.instance.username }} {{ form.username.as_hidden }}</td>
+	                	{% else %}
+	                   		<td>{{ form.username }}
+	                        	<i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br/>{{ form.username.errors }}
+	                    	</td>
+	                   {% endif %}
+	                </tr>
+	                
+             		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
+              		{% if form.instance.id %}
+              			{% for openidform in formset2 %}
+              				{{ openidform.id }}
+	              			<tr>
+	              				<td class="required" nowrap="nowrap">ESGF OpenID:</td>
+	              				<td style="width:500px;vertical-align:middle;">
+	              					{{ openidform.instance.claimed_id }} 
+	              					{{ openidform.claimed_id.as_hidden }}
+	              				</td>
+	              			</tr> 	
+			    		{% endfor %}
+		    		{% endif %}
+	            
+	             	<tr>
 	                    <td class="required" nowrap="nowrap">First Name</td>
 	                    <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
 	                </tr>
@@ -97,12 +122,7 @@
 	                    <td class="required" nowrap="nowrap">Email</td>
 	                    <td>{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
-	                <tr>
-	                    <td class="required" nowrap="nowrap">User Name</td>
-	                    <td>{{ form.username }}
-	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br/>{{ form.username.errors }}
-	                    </td>
-	                </tr>
+	                
 
 	                <!-- existing COG users: the encrypted passwords are resubmitted as hidden fields -->
 	                {% if form.instance.id %}
@@ -206,24 +226,6 @@
                         </tr>
               </table>
 
-
-              <table>
-             		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
-              		{% if form.instance.id %}
-              			<tr>
-              			<td colspan="3">Optional ESGF OpenID(s) associated with this COG user account:</td>
-              			</tr>
-	                    {% for openidform in formset2 %}
-			       	{{ openidform.id }}
-				<!--// inline styles needed to override default table //-->
-				<tr>
-				<td style="width:80px;vertical-align:middle;"><b>OpenID URL:</b></td>
-				<td style="width:500px;vertical-align:middle;">{{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</td>
-				<td style="vertical-align:middle;">{{openidform.DELETE }} Delete ? </td>
-                                </tr>
-			    {% endfor %}
-		    	{% endif %}
-             </table>
 	     <!--this section is its own table in order to make the td
              		widths different from the one above-->
 	     <table class="odd-color">

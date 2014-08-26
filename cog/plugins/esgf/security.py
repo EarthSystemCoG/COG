@@ -113,10 +113,14 @@ class ESGFDatabaseManager():
     def getUserByOpenid(self, openid):
         '''Retrieves a user by the unique openid value.'''
 
-        session = self.Session()
-        esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==openid).scalar()
-        session.close()
-        return esgfUser
+        try:
+            session = self.Session()
+            esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==openid).one()
+            session.close()
+            return esgfUser
+        
+        except NoResultFound:
+            return None
     
     def getUsersByEmail(self, email):
         '''Retrieves a list of users with a given email address.'''
