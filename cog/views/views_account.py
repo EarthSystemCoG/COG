@@ -223,7 +223,7 @@ def user_add(request):
                 subscribeUserToMailingList(user, request)
 
             # redirect to login page with special message
-            response = HttpResponseRedirect(reverse('login')+"?messageuser_add")
+            response = HttpResponseRedirect(reverse('login')+"?message=user_add")
             
             # set openid cookie
             set_openid_cookie(response, userp.localOpenid())
