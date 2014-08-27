@@ -40,26 +40,30 @@
 	<h2>OpenID Login</h2>
 
 	<p>
-	  <i>
-		<b>You must use a valid ESGF OpenID to log onto CoG and ESGF at the same time.</b>
+	We improved the security of our authentication process and now require an ESGF OpenID for logging onto ESGF-CoG.
+	</p>
+	
+	<p>
+		<b>If you don't have an ESGF OpenID</b>, please see the box below for how to update your account. 
 		
-		<p/>
-		1) If you already have a CoG account, 
-		please visit the <a href="{% url 'password_update'%}">Password Update</a> page to reset your password and obtain an ESGF OpenID.
-		You only need to do this once.
+			<div class="message-box">
+				<p>
+					<b>How to update your ESGF-CoG Account for OpenID Changes</b>
+				</p>
+				<p>
+				If you already have an existing CoG username and password, 
+				you will need to obtain an ESGF OpenID and change your password.
+				Please visit the <a href="{% url 'password_update'%}">Password Update</a> page.
+				</p>
+				You will no longer be able to login with your old CoG username and password,
+				rather you will need to use your assigned ESGF-CoG OpenID and new password.
+			</div>
 		
-		<p/>
-		2) If you already have a valid ESGF OpenID, you can use it to log onto CoG.
-		If your are using this OpenID for the first time, you will be asked to provide some additional information
-		to create a new CoG account.
-		
-		<p/>
-		3) If you are new to CoG and ESGF, please visit the <a href="{% url 'user_add'%}">Create Account</a> page.
-		
-		<p/>For any problem, click on
-		<a href="{% url 'user_reminder' %}">Forgot OpenID?</a> or visit <a href="/projects/cog/contactus/">Site Support</a>.
-		
-	  </i>
+
+	</p>
+	
+	<p>
+		<b>If you already have an ESGF OpenID</b>, you can use it to log onto ESGF-CoG below.
 	</p>
 	
 	<p/>
@@ -72,7 +76,7 @@
 
 		<div class="mybox">
     	<table>
-    	  <caption>ESGF Login</caption>
+    	  <caption>ESGF-CoG Login</caption>
     	  <tr>
     	    <td style="width:10%;text-align:right; vertical-align:middle;"><b>OpenID</b></td>
 	    		<td style="width:80%; vertical-align:middle;">
@@ -91,9 +95,11 @@
 		<!-- reminder links -->
 		<div style="position: relative;">
 			<span style="position: absolute; right: 0px;">
-				<a href="{% url 'user_reminder' %}">Forgot OpenID?</a>
+				<a href="{% url 'user_reminder' %}">Forgot OpenID ?</a>
 				&nbsp;
-				<a href="{% url 'password_reset' %}">Forgot Password?</a>
+				<a href="{% url 'password_reset' %}">Forgot Password ?</a>
+				&nbsp;
+				<a href="{% url 'user_add' %}">Create Account</a>
 			</span>
             <br/>&nbsp;
 		</div>
