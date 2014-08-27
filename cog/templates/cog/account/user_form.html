@@ -99,9 +99,9 @@
              		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
               		{% if form.instance.id %}
               			{% for openidform in formset2 %}
-              				{{ openidform.id }}
 	              			<tr>
-	              				<td class="required" nowrap="nowrap">ESGF OpenID:</td>
+	              				{{ openidform.id }}
+	              				<td class="required" nowrap="nowrap">ESGF OpenID</td>
 	              				<td style="width:500px;vertical-align:middle;">
 	              					{{ openidform.instance.claimed_id }} 
 	              					{{ openidform.claimed_id.as_hidden }}
