@@ -132,6 +132,19 @@ Start experimenting with creating other projects and registering new users.
 
 FURTHER CONFIGURATION
 
+o IDP_REDIRECT
+
+If a CoG installation is NOT associated with any ESGF Identity Provider, 
+a user who wants to create an account should be redirected to a CoG installation that does have an associated IdP.
+This can be accomplished by inserting the following optional line in the [default] section of the file cog_settings.cfg:
+
+IDP_REDIRECT=https://<CoG with IdP base URL with no />
+
+For example:
+
+IDP_REDIRECT=https://www.earthsystemcog.org
+
+
 o CKEDITOR
 By default, the wiki pages (including any project home page) are editable through a simple text area widget.
 CoG can be easily configured to allow editing via the third-party CKEditor, which includes a WYSIWYG interface:

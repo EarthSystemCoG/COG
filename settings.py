@@ -30,7 +30,7 @@ IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 ESGF = 'esgf'
 ESGF_CONFIG = siteManager.hasConfig(ESGF)
 if ESGF_CONFIG:
-    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
+    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF, default='')
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
 
