@@ -27,7 +27,7 @@
 		Please note that username and password are case-sensitive.
 	</div>
 
-	<form method="post" action="{% url 'login' %}">
+	<form method="post">
 	   {% csrf_token %}
 		<div class="mybox">
 			<table>
@@ -49,7 +49,7 @@
 			  <input type="hidden" name="next" value="{{ next }}" />
 			</span>
 			<span style="position: absolute; right: 0px;">
-			  <a href="{% url 'username_reminder' %}">Forgot Username?</a>
+			  <a href="{% url 'user_reminder' %}">Forgot Username?</a>
 			  &nbsp;
 			  <a href="{% url 'password_reset' %}">Forgot Password?</a>
 			</span>

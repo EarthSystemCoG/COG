@@ -20,54 +20,91 @@
 
 {% block main %}
 
-  {% load cog_utils %}
+{% load cog_utils %}
 
-  <div class="prepend-4 span-14">
+<div class="prepend-4 span-14">
 
 	<!-- display extra message if available -->
 	{% if request.GET.message %}
-	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
+	   <div class="message-box"> 
+	   	{{ request.GET.message|showMessage|safe }}
+	   	
+	   	{% if request.COOKIES.openid %}
+	   		<br/>Your assigned OpenID is: <b> {{ request.COOKIES.openid }} </b>
+	   	{% endif %}
+	   		
+	   </div>
 	   <p/>
 	{% endif %}
 
 	<h2>OpenID Login</h2>
 
-	{% if form.errors %}
-	    {% if form.openid_identifier.errors %}
-	    	<span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
-	    {% endif %}
-	    {% if form.next.errors %}
-	    	<span class="error">{{ form.next.errors|join:", " }}</span>
-	    {% endif %}
-	{% endif %}
-
-		<form name="fopenid" action="{{ action }}" method="post">
-			{% csrf_token %}
-
-			<div class="mybox">
-	    		<table>
-	    			<caption>OpenID Login</caption>
-	    			<tr>
-	    				<td class="th">OpenID</td>
-	    				<td>{{ form.openid_identifier }}
-	    					&nbsp;<input name="bsignin" type="submit" value="Login">
-	    				</td>
-	    			</tr>
-	    		</table>
+	<p>
+	We improved the security of our authentication process and now require an ESGF OpenID for logging onto ESGF-CoG.
+	</p>
+	
+	<p>
+		<b>If you don't have an ESGF OpenID</b>, please see the box below for how to update your account. 
+		
+			<div class="changeID-box">
+				<p>
+			           <b>How to update your ESGF-CoG Account for OpenID Changes</b>
+				</p>
+				<p>
+				If you already have an existing CoG username and password, 
+				you will need to obtain an ESGF OpenID and change your password.
+				Please visit the <a href="{% url 'password_update'%}">Password Update</a> page.
+				</p>
+				You will no longer be able to login with your old CoG username and password. 
+				Please use your ESGF OpenID and new password to login.
 			</div>
+		
 
-			<!-- next page field -->
-			{% if next %}
-				<input type="hidden" name="next" value="{{ next }}" />
-			{% endif %}
+	</p>
+	<br/>
+	<p>
+		<b>If you already have an ESGF OpenID</b>, you can use it to log onto ESGF-CoG below.
+	</p>
+	
+	<p/>
+	<div style="font-style: italic; text-align:center;">
+		Please note that ESGF OpenIDs are case-sensitive.
+ 	</div>
 
-		</form>
+	<form name="fopenid" action="{% url 'openid-login' %}" method="post">
+		{% csrf_token %}
 
-		<div style="text-align:center; padding-top:10px">
-			<a href="{% url 'username_reminder' %}">Forgot OpenID?</a>
-			&nbsp; &nbsp;
-			Alternatively, you can use the <a href="{% url 'login' %}">COG login</a> with username and password.
+		<div class="mybox">
+    	<table>
+    	  <caption>ESGF-CoG Login</caption>
+    	  <tr>
+    	    <td style="width:10%;text-align:right; vertical-align:middle;"><b>OpenID</b></td>
+	    		<td style="width:80%; vertical-align:middle;">
+	    			<input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.COOKIES.openid }}" size="70"/></td>
+    	    <td style="width:10%;"><input name="bsignin" type="submit" value="Login"></td>
+    	</td>
+    	</tr>
+    	</table>
 		</div>
 
-	</div>
+		<!-- next page field -->
+		{% if next %}
+			<input type="hidden" name="next" value="{{ next }}" />
+		{% endif %}
+
+		<!-- reminder links -->
+		<div style="position: relative;">
+			<span style="position: absolute; right: 0px;">
+				<a href="{% url 'user_reminder' %}">Forgot OpenID ?</a>
+				&nbsp;
+				<a href="{% url 'password_reset' %}">Forgot Password ?</a>
+				&nbsp;
+				<a href="{% url 'user_add' %}">Create Account</a>
+			</span>
+            <br/>&nbsp;
+		</div>
+
+	</form>
+
+</div>
 {% endblock %}

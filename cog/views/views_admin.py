@@ -14,12 +14,12 @@ from django.forms.models import modelformset_factory
 def index(request):
         
     # redirect to 'cog' project hone page
-    #return HttpResponseRedirect(reverse('project_home', args=['cog']))
+    return HttpResponseRedirect(reverse('project_home', args=['cog']))
             
-    # redirect to independent welcome page
-    return render_to_response('cog/index.html', 
-                              {'title':'Welcome to COG' }, 
-                              context_instance=RequestContext(request))
+    # redirect to independent splash page
+    #return render_to_response('cog/index.html', 
+    #                          {'title':'Welcome to COG' }, 
+    #                          context_instance=RequestContext(request))
     
 # admin page for managing projects
 @user_passes_test(lambda u: u.is_staff)

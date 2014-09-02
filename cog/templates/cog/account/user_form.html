@@ -7,7 +7,7 @@
 {% block extrahead %}
 
 	<!--<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css"/>-->
-        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
@@ -52,29 +52,32 @@
 
     //]]>
     </script>
-
+    
+    <!-- JavaScript for checking passwords -->
+    {% include 'cog/account/_password_checker.html' %}
+    
 {% endblock %}
 
 {% block main %}
-<!--why is this not span-24? Going across the entire page?-->
-<!--<div class="prepend-3 span-18">-->
   <div class="prepend-1 span-22">
 
     <h2>{{ mytitle }}</h2>
-    <p>Required fields are in <b>bold</b>. The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ </p>
+    <p>Please provide the information below to request a CoG account. Required fields are in <b>bold</b>. 
+    <br/>Upon submission, an OpenID will be automatically assigned to you: you will need that OpenID to login. 
+    <br/>The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ </p>
 
     <!-- display extra message if available -->
 	{% if request.GET.message %}
 	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
 	   <p/>
 	{% endif %}
-
-
+	
     <div class="yui-skin-sam">
 	    <div class="mybox" id="userDiv">
 
-	        <form action="" method="post" enctype="multipart/form-data">
-
+			<!-- NOTE: form cannot be submitted unless password meets criteria -->
+	        <form action="" method="post" enctype="multipart/form-data" onsubmit="return checkPassword();">
+	        
 	            {% csrf_token %}
 	            {{ formset1.management_form }}
 	            {{ formset2.management_form }}
@@ -83,6 +86,31 @@
 
 	            <table>
 	                <tr>
+	                    <td class="required" nowrap="nowrap">User Name</td>
+	                    {% if form.instance.id %}
+	                   		<td>{{ form.instance.username }} {{ form.username.as_hidden }}</td>
+	                	{% else %}
+	                   		<td>{{ form.username }}
+	                        	<i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br/>{{ form.username.errors }}
+	                    	</td>
+	                   {% endif %}
+	                </tr>
+	                
+             		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
+              		{% if form.instance.id %}
+              			{% for openidform in formset2 %}
+	              			<tr>
+	              				{{ openidform.id }}
+	              				<td class="required" nowrap="nowrap">ESGF OpenID</td>
+	              				<td style="width:500px;vertical-align:middle;">
+	              					{{ openidform.instance.claimed_id }} 
+	              					{{ openidform.claimed_id.as_hidden }}
+	              				</td>
+	              			</tr> 	
+			    		{% endfor %}
+		    		{% endif %}
+	            
+	             	<tr>
 	                    <td class="required" nowrap="nowrap">First Name</td>
 	                    <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
 	                </tr>
@@ -94,12 +122,7 @@
 	                    <td class="required" nowrap="nowrap">Email</td>
 	                    <td>{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
-	                <tr>
-	                    <td class="required" nowrap="nowrap">User Name</td>
-	                    <td>{{ form.username }}
-	                        <i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br/>{{ form.username.errors }}
-	                    </td>
-	                </tr>
+	                
 
 	                <!-- existing COG users: the encrypted passwords are resubmitted as hidden fields -->
 	                {% if form.instance.id %}
@@ -116,14 +139,15 @@
 		                <tr>
 		                    <td class="required" nowrap="nowrap">Password</td>
 		                    <td>{{ form.password }}
-		                       <i>[ At least 6 characters, all characters are allowed ]</i>
-		                       <br/>{{ form.password.errors }}
-		                       </td>
+		                       <br/><i>[ {{ form.password.help_text }} ]</i>
+		                       {{ form.password.errors }}
+		                       <div id="password_check" style="display:none; margin-top:2px; text-align: middle;" />
+		                    </td>
 		                </tr>
 		                <tr>
 		                    <td class="required" nowrap="nowrap">Confirm Password</td>
 		                    <td>{{ form.confirm_password }}
-		                        <i>[ At least 6 characters, all characters are allowed ]</i>
+		                        <br/><i>[ {{ form.confirm_password.help_text }} ]</i>
 		                        <br/>{{ form.confirm_password.errors }}
 		                    </td>
 		                </tr>
@@ -202,24 +226,6 @@
                         </tr>
               </table>
 
-
-              <table>
-             		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
-              		{% if form.instance.id %}
-              			<tr>
-              			<td colspan="3">Optional ESGF OpenID(s) associated with this COG user account:</td>
-              			</tr>
-	                    {% for openidform in formset2 %}
-			       	{{ openidform.id }}
-				<!--// inline styles needed to override default table //-->
-				<tr>
-				<td style="width:80px;vertical-align:middle;"><b>OpenID URL:</b></td>
-				<td style="width:500px;vertical-align:middle;">{{ openidform.claimed_id }} {{ openidform.claimed_id.errors }}</td>
-				<td style="vertical-align:middle;">{{openidform.DELETE }} Delete ? </td>
-                                </tr>
-			    {% endfor %}
-		    	{% endif %}
-             </table>
 	     <!--this section is its own table in order to make the td
              		widths different from the one above-->
 	     <table class="odd-color">

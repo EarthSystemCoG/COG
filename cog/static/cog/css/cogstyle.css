@@ -508,16 +508,17 @@ td.righttop {
 /***************
 * NAME: caption
 * SCOPE: the caption of a table
+* used in lots of places outside of the wiki
 ***************/
 caption {
-	margin: 0;
-	padding: 2px 5px 3px 5px;
-	font-size: 8pt;
-	text-align: left;
-	font-weight: bold;
-	background: #B9E0E3;
+	margin:        0px;
+	padding:       2px 5px 3px 5px;
+	font-size:     9pt; /* this needs to be the same size as other headers on the site */
+	text-align:    left;
+	font-weight:   bold;
+	background:    #B9E0E3;
 	border-bottom: 1px solid #666666;
-	color: #666;
+	color:         #666;
 }
 
 /******************************
@@ -942,45 +943,53 @@ BEGIN SEARCH WIDGET
 }
 
 .instruction-box {
-        background: #3e5ecf;  /* light-blue */	
-        background: #B9E0E3; /* dark-teal */
-	padding: 5px; 
+        background:  #B9E0E3; /* dark-teal */
+	padding:     5px; 
 	/* margin: 5px; */
-	border: 1px solid #417690;
+	border:      1px solid #417690;
 	font-weight: bold;
-	text-align: center;
+	text-align:  center;
 }
 
 /*login failure.*/ /*project registration notification*/
 .message-box {
-	background: #f4f379; /*bright yellow */
-        background: #fce79f; /* light yellow*/
-	padding:    5px; 
-	margin:     5px;
-	/*border:     1px solid #417690;*/
-	border: 1px solid #666;*/
+        background:  #fce79f; /* light yellow*/
+	padding:     5px; 
+	margin:      5px;
+	border:      1px solid #666;*/
 	font-weight: bold;
-	text-align: center;
+	text-align:  center;
+}
+
+/*update openID box. This should be removed when no longer needed */
+.changeID-box {
+        background:  #fce79f; /* light yellow*/
+	padding:     10px; 
+	margin-left: auto;
+        margin-right:auto;
+        width:       80%;
+	border:      1px solid #666;*/
+	font-weight: bold;
+	text-align:  center;
 }
 
 .padded-box {
 	background: #FFFFFF;
-	padding: 5px;
+	padding:    5px;
 	margin-top: 5px;
-	border: 1px solid #417690;
+	border:     1px solid #417690;
 	text-align: left;
 }
 
 /* prevent error styles from affecting error content w/in search widget */
 .error-box {
-	background: #f4f379; /*yellow??*/
-        background: #FAC24A; /* dark yellow*/
-	padding: 5px; 
-	margin: 5px;
-	border: 1px solid #417690;
+        background:  #FAC24A; /* dark yellow*/
+	padding:     5px; 
+	margin:      5px;
+	border:      1px solid #417690;
 	font-weight: bold;
-	text-align: center;
-	color: #FF0000;
+	text-align:  center;
+	color:       #FF0000;
 }
 
 .search_header {

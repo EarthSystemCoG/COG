@@ -32,60 +32,122 @@ class ESGFDatabaseManager():
 
             # session factory
             self.Session = sessionmaker(bind=engine)
-
-    def insertUser(self, userProfile):
-
+            
+    def createOpenid(self, userProfile):
+        '''Selects the first available ESGF openid starting from the CoG username, and saves it in the CoG database'''
+        
+        openid = ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", userProfile.user.username)        
         session = self.Session()
+        
+        try:
+            
+            # try N times
+            for ext in OPENID_EXTENSIONS:
+                _openid = openid + ext
+                try:
+                    result = session.query(ESGFUser).filter(ESGFUser.openid==_openid).one()
+                    print 'User with openid=%s already exists, trying another one' % _openid
+    
+                except MultipleResultsFound:
+                    # problem in ESGF database, but ignore here
+                    print 'Warning: found multiple users with openid=%s' % _openid
+    
+                except NoResultFound:    
+                    # this openid is available
+                    userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
+                    print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user)
+                    return userOpenID.claimed_id
+                
+        finally:
+            session.close()
+            
+        return None # openid not assigned
+        
+        
+            
+    def insertUser(self, userProfile):
+        
+        # use existing local openid...
+        _openid = userProfile.localOpenid()
+        
+        # ...or create new local openid and insert into CoG database
+        if _openid is None:
+            _openid = self.createOpenid(userProfile)
 
-        # create openid
-        openid = ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", userProfile.user.username)
-        for ext in OPENID_EXTENSIONS:
+        # do NOT override ESGF database
+        esgfUser = self.getUserByOpenid(_openid)
 
-            _openid = openid + ext
+        if esgfUser is None:
+            
+            session = self.Session()
+    
             try:
-                result = session.query(ESGFUser).filter(ESGFUser.openid==_openid).one()
-                print 'User with openid=%s already exist, trying another one' % _openid
-
-            except MultipleResultsFound:
-
-                print 'Warning: found multiple users with openid=%s' % _openid
-
-            except NoResultFound:
-
+                
                 # encrypt password with MD5_CRYPT
                 clearTextPassword = userProfile.clearTextPassword
-                encPassword = md5_crypt.encrypt(clearTextPassword)
-                #test = md5_crypt.verify(clearTextPassword, encPassword)
-                #print "password encryption test was succesfull: %s" % test
-
+                if clearTextPassword is not None and len(clearTextPassword)>0:
+                    encPassword = md5_crypt.encrypt(clearTextPassword)
+                else:
+                    encPassword = None
+    
                 _username = _openid[ _openid.rfind('/')+1: ]
                 esgfUser = ESGFUser(firstname=userProfile.user.first_name, lastname=userProfile.user.last_name,
                                     email=userProfile.user.email, username=_username, password=encPassword,
                                     dn='', openid=_openid, organization=userProfile.institution, organization_type='',
                                     city=userProfile.city, state=userProfile.state, country=userProfile.country,
                                     status_code=1, verification_token=str(uuid4()), notification_code=0)
-
+    
                 session.add(esgfUser)
                 session.commit()
                 print 'Inserted user with openid=%s into ESGF database' % _openid
+    
+            finally:
+                session.close()
 
-                # add this openid to the COG database
-                userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
-                print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user)
-
-                return esgfUser
-
-        session.close()
-
-        return None
+        else:
+            #print 'User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid
+            pass
+            
+        return esgfUser
 
     def getUserByOpenid(self, openid):
         '''Retrieves a user by the unique openid value.'''
 
+        try:
+            session = self.Session()
+            esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==openid).one()
+            session.close()
+            return esgfUser
+        
+        except NoResultFound:
+            return None
+    
+    def getUsersByEmail(self, email):
+        '''Retrieves a list of users with a given email address.'''
+
         session = self.Session()
-        esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==openid).scalar()
+        esgfUsers = session.query(ESGFUser).filter(ESGFUser.email==email).all()
         session.close()
-        return esgfUser
+        return esgfUsers
+    
+    def updatePassword(self, user, clearTextPassword):
+        '''Updates the user password in the ESGF database.'''
+                
+        for openid in user.profile.openids():
+            
+            # openid must match the configured ESGF host name
+            if settings.ESGF_HOSTNAME in openid:
+                
+                esgfUser = self.getUserByOpenid(openid)
+                if esgfUser is not None:
+                    session = self.Session()
+                    encPasword = md5_crypt.encrypt(clearTextPassword)
+                    esgfUser.password = encPasword
+                    print 'Updated ESGF password for user with openid: %s' % openid
+                    session.add(esgfUser)
+                    session.commit()
+                    session.close()
+            
 
 
 Base = declarative_base()

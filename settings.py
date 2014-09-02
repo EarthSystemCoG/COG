@@ -23,12 +23,14 @@ DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
 MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600)) # one hour 
+PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
+IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 
 # ESGF specific settings
 ESGF = 'esgf'
 ESGF_CONFIG = siteManager.hasConfig(ESGF)
 if ESGF_CONFIG:
-    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF)
+    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF, default='')
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
 
@@ -164,7 +166,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'cog.middleware.login_middleware.LoginMiddleware',
-    'cog.middleware.session_middleware.SessionMiddleware'
+    'cog.middleware.session_middleware.SessionMiddleware',
+    'cog.middleware.password_middleware.PasswordMiddleware'
     #'django.contrib.sites.middleware.CurrentSiteMiddleware' # django 1.7
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )

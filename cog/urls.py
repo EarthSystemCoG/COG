@@ -19,30 +19,40 @@ urlpatterns = patterns('',
     url(r'^search_files/(?P<dataset_id>.+)/(?P<index_node>.+)/$', 'cog.views.search_files', name='search_files'),
     url(r'^metadata_display/(?P<project_short_name>.+)/$', 'cog.views.metadata_display', name='metadata_display' ),
 
-
-    # authentication - use django auth
+    # authentication options
+    # a) django (username/password) login
     #url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),
-    url(r'^login/$', custom_login, {'template_name': 'cog/openid/login2.html'}, name='login'),
+    url(r'^login2/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),
+    
+    # b) combined django + openid login
+    #url(r'^login/$', custom_login, {'template_name': 'cog/openid/login2.html'}, name='login'),
+    #url(r'^openid/login/$', 'django_openid_auth.views.login_begin', {'template_name': 'cog/openid/login2.html'}, name='openid-login'),
+    
+    # c) openid-only login
+    url(r'^login/$', custom_login, {'template_name': 'cog/openid/login.html'}, name='login'),
+    url(r'^openid/login/$', 'django_openid_auth.views.login_begin', {'template_name': 'cog/openid/login.html'}, name='openid-login'),
+    
+    # b) or c)
+    #url(r'^openid/complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
+    url(r'^openid/complete/$', custom_login_complete, name='openid-complete'),
+    url(r'^openid/logo.gif$', 'django_openid_auth.views.logo', name='openid-logo'),
+
+    
     # force redirection to login page after logout
     #url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     # use next=... to redirect to previous page after logout
     url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
 
-    # include openid URLs
-    url(r'^openid/login/$', 'django_openid_auth.views.login_begin', {'template_name': 'cog/openid/login2.html'}, name='openid-login'),
-    #url(r'^openid/complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
-    url(r'^openid/complete/$', custom_login_complete, name='openid-complete'),
-    url(r'^openid/logo.gif$', 'django_openid_auth.views.logo', name='openid-logo'),
-
     # user management
     url(r'^user/add/$', 'cog.views.user_add', name='user_add' ),
     url(r'^user/update/(?P<user_id>\d+)/$', 'cog.views.user_update', name='user_update' ),
     url(r'^user/detail/(?P<user_id>\d+)/$', 'cog.views.user_detail', name='user_detail'),
-    url(r'^password/update/(?P<user_id>\d+)/$', 'cog.views.password_update', name='password_update'),
+    url(r'^password/update/$', 'cog.views.password_update', name='password_update'),
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
-    url(r'^username/reminder/$', 'cog.views.username_reminder', name='username_reminder'),
+    url(r'^user/reminder/$', 'cog.views.user_reminder', name='user_reminder'),
     url(r'^user/byopenid/$', 'cog.views.user_byopenid', name='user_byopenid'),
     url(r'^user/profile/(?P<user_id>\d+)/$', 'cog.views.user_profile_redirect', name='user_profile_redirect'),
+    
 
     # data cart
     url(r'^datacart/display/(?P<site_id>\d+)/(?P<user_id>\d+)/$', 'cog.views.datacart_display', name='datacart_display'),

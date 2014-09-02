@@ -51,6 +51,11 @@ def get_escape_function(autoescape):
 def index(project):
     return site_index(project)
 
+@register.filter
+def settings_value(key):
+    '''Custom filter to access a settings value in a template.'''
+    return getattr(settings, key, '')
+
 # filter to list the bookmarks folders for a user, project combination
 @register.filter
 def list_bookmarks(project, user, autoescape=None):
@@ -550,9 +555,10 @@ def showMessage(message):
 
     elif message=='password_update':
         return 'Your password has been changed. Please login again.'
+        #return 'Thank you for changing your password.'
 
-    elif message=='username_reminder':
-        return 'Your username and OpenID(s) have been emailed to the address you provided. Please check your email box.'
+    elif message=='user_reminder':
+        return 'Your UserName and OpenID have been emailed to the address you provided.<br/>Please check your email box.'
 
     elif message=='incomplete_profile':
         return 'Please update your profile to contain at least the mandatory information required by COG (the fields in bold).'
@@ -568,6 +574,9 @@ def showMessage(message):
 
     elif message=="login_failed":
         return "Error entering username and/or password."
+
+    elif message=="password_expired":
+        return "Your password has expired. Please choose a new password conforming to the requirements below."
 
     else:
         return message

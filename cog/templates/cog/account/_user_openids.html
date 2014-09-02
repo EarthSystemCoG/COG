@@ -4,7 +4,7 @@
 {% if request.user.id = user_profile.user.id or request.user.is_staff %}
 	<div class="mybox">
 		 <table>
-		     <caption>My OpenIDs</caption>
+		     <caption>My OpenID</caption>
 		     {% if user_profile.openids %}
 			     {% for openid in user_profile.openids %}
 		        	<tr>

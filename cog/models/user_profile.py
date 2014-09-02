@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
+from django.conf import settings
 
 from cog.utils import hasText
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from cog.utils import getJson
 from cog.models.peer_site import getPeerSites
+import datetime
 
 class UserProfile(models.Model):
 
@@ -43,6 +45,9 @@ class UserProfile(models.Model):
 
     # user (login) type: 1=COG, 2=ESGF
     type = models.IntegerField(null=False, blank=False, default=1)
+    
+    # datetime when password was last updated, used to trigger mandatory resets
+    last_password_update = models.DateTimeField('Date and Time when Password was Last Updated', blank=True, null=True)
 
     def isCogUser(self):
         ''' Utility method to detect a user with CoG login type.'''
@@ -59,6 +64,19 @@ class UserProfile(models.Model):
         '''Returns the absolute URL for this user profile, keeping the home site into account.'''
         
         return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid())
+    
+    def hasPasswordExpired(self):
+        
+        if self.last_password_update is None:
+            return True
+        
+        if settings.PASSWORD_EXPIRATION_DAYS > 0:
+            today = datetime.date.today()
+            if (today - self.last_password_update).days > settings.PASSWORD_EXPIRATION_DAYS:
+                return True
+            
+        # default
+        return False
 
     class Meta:
         app_label= APPLICATION_LABEL
@@ -67,12 +85,23 @@ class UserProfile(models.Model):
     def openids(self):
         return [ x.claimed_id for x in self.user.useropenid_set.all() ]
     
+    # utility method to return openids that match the local node
+    def localOpenids(self):
+        return [ x for x in self.openids() if settings.ESGF_HOSTNAME in x]
+    
     # utility method to return the user first openid
     def openid(self):
         if len( self.user.useropenid_set.all() ) > 0:
             return self.user.useropenid_set.all()[0].claimed_id
         else:
             return None
+        
+    # returns the first local openid, if existing
+    def localOpenid(self):
+        if len( self.localOpenids() ) > 0:
+            return self.localOpenids()[0]
+        else:
+            return None 
 
 # Method to check whether a user object is valid
 # (i.d. it has an associated profile, and its the mandatory fields are populated)
@@ -89,24 +118,27 @@ def isUserValid(user):
 # Method to determine whether a user home site is the current site
 def isUserLocal(user):
     
-    return user.profile.site == Site.objects.get_current()
+    (profile, _) = UserProfile.objects.get_or_create(user=user)
+    return profile.site == Site.objects.get_current()
 
 # Method to identify remote users as users that:
 # a) do NOT have their home site as their current site
 # b) do have an OpenID
 def isUserRemote(user):
     
-    if user.profile.site == Site.objects.get_current():
+    (profile, _) = UserProfile.objects.get_or_create(user=user)
+    if profile.site == Site.objects.get_current():
         return False
     
-    elif user.profile.openid is None:
+    elif profile.openid is None:
         return False
 
     else:
         return True
     
 # loops over the peer sites to identify the home site for a given user
-def getSiteForUser(openid):
+def discoverSiteForUser(openid):
+    '''IMPORTANT: call this function ONLY at account creation as it makes requests to all peer sites.'''
         
     for site in Site.objects.all(): # note: includes current site
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
