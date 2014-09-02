@@ -1022,12 +1022,13 @@ BEGIN ADVANCED SEARCH PAGE
 
 .facet-option {
 	font-size: 9pt;
+	text-align:left;
 }
 
 .fieldset_box {
 	border: 1px solid #358C92;
 	padding: 5px;
-	text-align:center;
+	text-align:left;
 	margin-top:-10px;
 	margin-bottom: 15px;
 }
