@@ -251,7 +251,7 @@
 	                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
 	                {% else %}
 	                   <!-- prevent user with non-complete data to hit 'cancel' button -->
-	                   {% if request.user|isValidUser %}
+	                   {% if request.user|isValidUser and form.instance.id %}
 	                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
 	                   {% endif %}
 	                {% endif %}
