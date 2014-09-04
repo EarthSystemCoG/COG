@@ -53,3 +53,5 @@ admin.site.register(UserProfile, admin.ModelAdmin)
 admin.site.register(PeerSite, admin.ModelAdmin)
 
 admin.site.register(DataCart, admin.ModelAdmin)
+
+admin.site.register(Permission, admin.ModelAdmin)
