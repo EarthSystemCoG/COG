@@ -20,12 +20,18 @@ from cog.models import Project
 
 
 # load CU, NOAA Sites
-cuSite = Site.objects.get(domain='www.earthsystemcog.org')
-noaaSite = Site.objects.get(domain='cog-esgf.esrl.noaa.gov')
+
+# before DNS change
+cuSite = Site.objects.get(domain='cog-cu.colorado.edu')
+noaaSite = Site.objects.get(domain='www.earthsystemcog.org')
+
+# after DNS change:
+#cuSite = Site.objects.get(domain='www.earthsystemcog.org')
+#noaaSite = Site.objects.get(domain='cog-esgf.esrl.noaa.gov')
 if cuSite != Site.objects.get_current():
     raise Exception("Running script for wrong site, exiting")
 
-dryrun = False
+dryrun = True
 
 # loop over projects
 noaaProjects = ['HIWPP', 'CMDTF', 'CoupledNEMS', 
@@ -36,7 +42,7 @@ for project in Project.objects.all():
     
     if project.short_name in noaaProjects:
         
-        print "Processing project=%s" % project.short_name
+        print "Deleting project=%s" % project.short_name
            
         # delete project User group, permissions
         ug = project.getUserGroup()
@@ -58,14 +64,14 @@ for project in Project.objects.all():
         if not dryrun:
             ag.delete()
     
-        # remove project media
-        media_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
-        print "\tRemoving directory tree: %s" % media_dir
-        if not dryrun:
-            try:
-                shutil.rmtree(media_dir)
-            except OSError as e:
-                print e
+        # do NOT remove project media for now (so links will still work)
+        #media_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
+        #print "\tRemoving directory tree: %s" % media_dir
+        #if not dryrun:
+        #    try:
+        #        shutil.rmtree(media_dir)
+        #    except OSError as e:
+        #        print e
         
         print '\tDeleting project: %s' % project
         if not dryrun:
@@ -100,4 +106,5 @@ for user in User.objects.all():
             user.profile.save()
     
     else:
-        print 'Disregarding user=%s site=%s site_id=%s' % (user, user.profile.site, user.profile.site.id)
+        pass
+        #print 'Disregarding user=%s site=%s site_id=%s' % (user, user.profile.site, user.profile.site.id)
