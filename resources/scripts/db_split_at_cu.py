@@ -16,7 +16,7 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from cog.models import UserProfile
 
-from cog.models import Project
+from cog.models import Project, deleteProject
 
 
 # load CU, NOAA Sites
@@ -38,45 +38,13 @@ noaaProjects = ['HIWPP', 'CMDTF', 'CoupledNEMS',
                        'HIWPP_HurricaneNest', 'HIWPP_Hydrostatic', 'HIWPP_Internal',
                        'HIWPP_Management', 'HIWPP_NMME', 'HIWPP_NonHydrostatic', 'HIWPP_TestProgram',
                        ]
+
+# delete NOAA projects
 for project in Project.objects.all():
     
     if project.short_name in noaaProjects:
+        deleteProject(project, dryrun=dryrun, rmdir=False) # do NOT delete directories (for now)
         
-        print "Deleting project=%s" % project.short_name
-           
-        # delete project User group, permissions
-        ug = project.getUserGroup()
-        for p in ug.permissions.all():
-            print '\tDeleting permission: %s' % p
-            if not dryrun:
-                p.delete()
-        print '\tDeleting group: %s' % ug
-        if not dryrun:
-            ug.delete()
-        
-        # delete project Admin group, permissions
-        ag = project.getAdminGroup()
-        for p in ag.permissions.all():
-            print '\tDeleting permission: %s' % p
-            if not dryrun:
-                p.delete()
-        print '\tDeleting group: %s' % ag
-        if not dryrun:
-            ag.delete()
-    
-        # do NOT remove project media for now (so links will still work)
-        #media_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
-        #print "\tRemoving directory tree: %s" % media_dir
-        #if not dryrun:
-        #    try:
-        #        shutil.rmtree(media_dir)
-        #    except OSError as e:
-        #        print e
-        
-        print '\tDeleting project: %s' % project
-        if not dryrun:
-            project.delete()
-    
 
 # loop over users
 for user in User.objects.all():

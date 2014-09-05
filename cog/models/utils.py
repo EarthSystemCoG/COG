@@ -15,6 +15,8 @@ from django.contrib.comments import Comment
 from django.contrib.contenttypes.models import ContentType
 from folder import Folder, getTopFolder, TOP_SUB_FOLDERS
 from project_tab import ProjectTab
+import shutil
+import os
 
 # method to retrieve all news for a given project, ordered by date
 def news(project):
@@ -272,3 +274,41 @@ def createOrUpdateProjectSubFolders(project, request):
         else:
             folder.active = False
         folder.save()
+        
+def deleteProject(project, dryrun=True, rmdir=False):
+    '''Utility method to delete a project and associated objects, media.'''
+    
+    print "Deleting project=%s" % project.short_name
+           
+    # delete project User group, permissions
+    ug = project.getUserGroup()
+    for p in ug.permissions.all():
+        print '\tDeleting permission: %s' % p
+        if not dryrun:
+            p.delete()
+    print '\tDeleting group: %s' % ug
+    if not dryrun:
+        ug.delete()
+        
+    # delete project Admin group, permissions
+    ag = project.getAdminGroup()
+    for p in ag.permissions.all():
+        print '\tDeleting permission: %s' % p
+        if not dryrun:
+            p.delete()
+    print '\tDeleting group: %s' % ag
+    if not dryrun:
+        ag.delete()
+
+    if rmdir:
+        media_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
+        print "\tRemoving directory tree: %s" % media_dir
+        if not dryrun:
+            try:
+                shutil.rmtree(media_dir)
+            except OSError as e:
+                print e
+    
+    print '\tDeleting project: %s' % project
+    if not dryrun:
+        project.delete()

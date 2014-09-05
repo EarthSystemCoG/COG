@@ -5,7 +5,6 @@ Script to perform database setup at CoG-NOAA after 2.6.1 deployment (CoG sites s
 import os
 import sys
 import cog
-import shutil
 path = os.path.dirname(cog.__file__)
 sys.path.append( path )
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -16,7 +15,7 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from cog.models import UserProfile
 
-from cog.models import Project
+from cog.models import Project, deleteProject
 
 
 # load CU, NOAA Sites
@@ -28,13 +27,19 @@ from cog.models import Project
 # after DNS change:
 cuSite = Site.objects.get(domain='www.earthsystemcog.org')
 noaaSite = Site.objects.get(domain='cog-esgf.esrl.noaa.gov')
-if cuSite != Site.objects.get_current():
+if noaaSite != Site.objects.get_current():
     raise Exception("Running script for wrong site, exiting")
 
-dryrun = True
+dryrun = False
 
 # loop over projects
 noaaProjects = ['HIWPP', 'CMDTF', 'CoupledNEMS', 
-                       'HIWPP_HurricaneNest', 'HIWPP_Hydrostatic', 'HIWPP_Internal',
-                       'HIWPP_Management', 'HIWPP_NMME', 'HIWPP_NonHydrostatic', 'HIWPP_TestProgram',
-                       ]
+                'HIWPP_HurricaneNest', 'HIWPP_Hydrostatic', 'HIWPP_Internal',
+                'HIWPP_Management', 'HIWPP_NMME', 'HIWPP_NonHydrostatic', 'HIWPP_TestProgram',
+               ]
+
+# delete non-NOAA projects
+for project in Project.objects.all():
+    
+    if not project.short_name in noaaProjects:
+        deleteProject(project, dryrun=dryrun, rmdir=True) # remove media directories
