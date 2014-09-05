@@ -309,7 +309,7 @@ def project_delete(request, project_short_name):
         deleteProject(project)
         
         # redirect to admin index
-        return HttpResponseRedirect(reverse('site_index'))
+        return HttpResponseRedirect(reverse('site_home'))
 
 def contactus_display(request, project_short_name):
     ''' View to display the project "Contact Us" page. '''

@@ -248,7 +248,7 @@
 	            <div style="text-align:right;">
 	                <hr/>
 	                {% if request.user.is_anonymous %}
-	                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_index' %}'"/>
+	                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_home' %}'"/>
 	                {% else %}
 	                   <!-- prevent user with non-complete data to hit 'cancel' button -->
 	                   {% if request.user|isValidUser and form.instance.id %}
