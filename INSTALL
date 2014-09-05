@@ -71,6 +71,7 @@ SECRET_KEY=<the site specific key: an arbitrary string with lots of strange char
 DATABASE_USER=<username to access cogdb postgres database>
 DATABASE_PASSWORD=<password to access cogdb postgres database>
 DATABASE_PORT=<port used by postgres database>
+HOME_PROJECT=<short name of the project that serves as the site home (i.e. where requests to '/' are redirected)
 
 
 INITIALIZATION

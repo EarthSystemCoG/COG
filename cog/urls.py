@@ -5,7 +5,7 @@ from cog.views.views_account import custom_login, custom_login_complete
 urlpatterns = patterns('',
 
     # top-level index
-    url(r'^$', 'cog.views.index', name='cog_index' ) ,
+    url(r'^$', 'cog.views.site_home', name='site_home' ) ,
     
     # COG administration
     url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
@@ -119,7 +119,7 @@ urlpatterns = patterns('',
 
     # project generic pages
     # Note: these URLs must come last because the last URL matches everything within the project!
-    url(r'^projects/$', 'cog.views.index', name='unspecified_project'),
+    #url(r'^projects/$', 'cog.views.index', name='unspecified_project'),
     url(r'^projects/(?P<project_short_name>[^/]+)/$', 'cog.views.project_home', name='project_home'),
     url(r'^projects/(?P<project_short_name>[^/]+)/.+$', 'cog.views.page_detail', name='page_detail'),
 

@@ -10,7 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
                            
     # site index
-    url(r'^$', 'cog.views.index', name='site_index'),
+    url(r'^$', 'cog.views.site_home', name='site_home'),
                            
     # Grappelli
     (r'^grappelli/', include('grappelli.urls')),

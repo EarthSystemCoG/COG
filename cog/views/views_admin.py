@@ -11,10 +11,13 @@ from cog.models import PeerSite
 from django.forms.models import modelformset_factory
 
 
-def index(request):
+def site_home(request):
+    
+    # redirect to HOME_PROJECT home
+    return HttpResponseRedirect(reverse('project_home', args=[settings.HOME_PROJECT]))
         
     # redirect to 'cog' project hone page
-    return HttpResponseRedirect(reverse('project_home', args=['cog']))
+    #return HttpResponseRedirect()
             
     # redirect to independent splash page
     #return render_to_response('cog/index.html', 
