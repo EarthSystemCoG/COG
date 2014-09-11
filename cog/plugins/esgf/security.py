@@ -121,6 +121,21 @@ class ESGFDatabaseManager():
         
         except NoResultFound:
             return None
+        
+    def listUsers(self):
+        
+        session = self.Session()
+        users = session.query(ESGFUser)
+        
+        for user in users:
+            parts = user.openid.split('/')
+            new_username = parts[-1]
+            print 'Updating user: openid=%s new username=%s' % (user.openid, new_username)
+            user.username = new_username
+            
+        session.commit()
+        session.close()
+        
     
     def getUsersByEmail(self, email):
         '''Retrieves a list of users with a given email address.'''
