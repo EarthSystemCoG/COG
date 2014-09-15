@@ -68,9 +68,7 @@
 
 	<b>Dataset Metadata</b>
 
-	{% if record.fields.master_id.0 %}
-	<br/><span style="text-decoration:underline">ID</span> = {{ record.fields.master_id.0 }}
-	{% endif %}
+	<br/><span style="text-decoration:underline">ID</span> = {{ record.id }}
 	{% if record.fields.version.0 %}
 	<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
 	{% endif %}
