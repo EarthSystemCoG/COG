@@ -4,9 +4,9 @@
 {% if post.docs.all %}
    <hr class="white"/>
    <div class="header_bar"> 
-        <a href="" onclick="javascript:toggle_visibility('attachments'); return false;" class="listlink">&nbsp;Attachments ({{ post.docs.all|length }})</a>
+        <a href="" onclick="javascript:toggle_visibility('myattachments'); return false;" class="listlink">&nbsp;Attachments ({{ post.docs.all|length }})</a>
    </div> <!--// end div.header_bar //-->
-   <div class="mybox" id="attachments" style="display:none">
+   <div class="mybox" id="myattachments" style="display:none">
         <table>
             {% for doc in post.docs.all %}
                 <tr>
