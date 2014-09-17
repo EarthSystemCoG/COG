@@ -10,6 +10,7 @@ from cog.models.utils import get_project_communication_means
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.utils import hasText
 from cog.views.utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from django.http import HttpResponseRedirect
 
 
 def _hasTemplatedInfo(project, tab):
@@ -75,6 +76,10 @@ def templated_page_display(request, project_short_name, tab, template_page, temp
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # HTTP redirect for non-local projects
+    if not project.isLocal():
+        return HttpResponseRedirect( "http://%s%s" % (project.site.domain, request.path) )
         
     # check project is active
     if project.active==False:

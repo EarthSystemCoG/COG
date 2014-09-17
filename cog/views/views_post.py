@@ -78,10 +78,10 @@ def page_detail(request, project_short_name):
              
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # limit to local projects only
+        
+    # HTTP redirect for non-local projects
     if not project.isLocal():
-        return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
+        return HttpResponseRedirect( "http://%s%s" % (project.site.domain, request.path) )
     
     # check project is active
     if project.active==False:
