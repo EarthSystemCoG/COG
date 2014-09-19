@@ -4,6 +4,13 @@
 
   <!-- anchor for dialogs -->
   <div id="myDialog" class="yui-skin-sam"></div>
+  
+  <p>
+  SEARCH PATH: &nbsp; 
+  {% for item in request.session.search_path %}
+  	{{ item }} &gt;
+  {% endfor %}
+  </p>
 
   <!-- don't display results if form submission resulted in error -->
   {% if not error_message %}

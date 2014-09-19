@@ -33,6 +33,7 @@ SEARCH_PAGES  = "search_pages"
 REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
 LOCAL_FLAG    = "local_flag"
+SEARCH_PATH   = "search_path"
 
                 
 def search(request, project_short_name):
@@ -139,6 +140,10 @@ def search_get(request, searchInput, searchConfig, extra={}):
     # direct GET request
     else:
         
+        # reset the search path
+        #if (request.session.get(SEARCH_PATH, None)):
+        #    del request.session[SEARCH_PATH]
+        
         # set retrieval of all facets in profile
         # but do not retrieve any results
         searchInput.facets = facetProfile.getAllKeys()
@@ -244,6 +249,18 @@ def search_post(request, searchInput, searchConfig, extra={}):
     # store data in session 
     #data['title'] = 'Advanced Data Search'
     request.session[SEARCH_DATA] = data
+    
+    # update search path
+    sp = request.session.get(SEARCH_PATH, [])
+    #for key, values in searchInput.constraints.items():
+    # note: request parameters do NOT include the project fixed constraints
+    for key, value in request.REQUEST.items():
+        if value is not None and len(value)>0: # empty facet
+            print 'constraint: %s=%s' % (key, value)
+            constraint = "%s=%s" % (key, value)
+            if not constraint in sp:
+                sp.append(constraint)
+    request.session[SEARCH_PATH] = sp
     
     # use POST-REDIRECT-GET pattern
     # flag the redirect in session
