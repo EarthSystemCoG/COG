@@ -17,3 +17,7 @@ site_media/
 
 # database directory
 database/
+
+# setuptools artifacts
+cog.egg-info/
+dist/

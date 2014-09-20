@@ -1,0 +1,16 @@
+include INSTALL 
+include LICENSE
+include README.md
+
+include *.py
+
+recursive-include apache *
+recursive-include database *
+recursive-include filebrowser *
+recursive-include layouts *
+recursive-include resources *
+recursive-include site_media *
+recursive-include templates *
+recursive-include cog/templates/*
+
+recursive-include cog *.py *.rst *.html *.css *.js *.png *.gif *.html *.css *.js *.png *.gif *.txt *.bat *.wsgi *.data
