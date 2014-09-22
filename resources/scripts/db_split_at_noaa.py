@@ -21,12 +21,12 @@ from cog.models import Project, deleteProject
 # load CU, NOAA Sites
 
 # before DNS change
-#cuSite = Site.objects.get(domain='cog-cu.colorado.edu')
-#noaaSite = Site.objects.get(domain='www.earthsystemcog.org')
+cuSite = Site.objects.get(domain='cog-cu.colorado.edu')
+noaaSite = Site.objects.get(domain='cog-esgf.esrl.noaa.gov')
 
 # after DNS change:
-cuSite = Site.objects.get(domain='www.earthsystemcog.org')
-noaaSite = Site.objects.get(domain='cog-esgf.esrl.noaa.gov')
+#cuSite = Site.objects.get(domain='www.earthsystemcog.org')
+#noaaSite = Site.objects.get(domain='cog-esgf.esrl.noaa.gov')
 if noaaSite != Site.objects.get_current():
     raise Exception("Running script for wrong site, exiting")
 
