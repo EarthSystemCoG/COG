@@ -33,7 +33,7 @@ if noaaSite != Site.objects.get_current():
 dryrun = False
 
 # loop over projects
-noaaProjects = ['HIWPP', 'CMDTF', 'CoupledNEMS', 
+noaaProjects = ['HIWPP', 'CMDTF', 'CoupledNEMS', 'ESRL_ESGF-CoG',
                 'HIWPP_HurricaneNest', 'HIWPP_Hydrostatic', 'HIWPP_Internal',
                 'HIWPP_Management', 'HIWPP_NMME', 'HIWPP_NonHydrostatic', 'HIWPP_TestProgram',
                ]
