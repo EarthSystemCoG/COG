@@ -142,8 +142,7 @@ def search_get(request, searchInput, searchConfig, extra={}):
     else:
         
         # reset the search path
-        if (request.session.get(SEARCH_PATH, None)):
-            del request.session[SEARCH_PATH]
+        request.session[SEARCH_PATH] = []
         
         # set retrieval of all facets in profile
         # but do not retrieve any results
@@ -259,14 +258,13 @@ def search_post(request, searchInput, searchConfig, extra={}):
     for key, value in request.REQUEST.items():
         if not key in SEARCH_PATH_EXCLUDE:
             if value is not None and len(value)>0: # disregard empty facet
-                constraint = "%s=%s" % (key, value)     
+                constraint = (key, value)     
                 req_constraints.append(constraint)
                 if not constraint in sp:
                     sp.append(constraint)
+                    
     # remove obsolete constraints
-    for constraint in sp:
-        if constraint not in req_constraints:
-            sp.remove(constraint)
+    sp = [item for item in sp if item in req_constraints]
     request.session[SEARCH_PATH] = sp
     
     # use POST-REDIRECT-GET pattern

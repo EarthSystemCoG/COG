@@ -15,10 +15,35 @@
   		}
 
   		function resetFacet(facetKey) {
+  			
   			var searchForm = getSearchForm();
+  			
+  			// reset this facet
   			var input = searchForm[facetKey];
 			input.value = "";
+			
+			// execute a new search
 			searchit(0);
+			
+  		}
+  		
+  		function resetFromFacetIndex(idx) {
+  			
+  			idx = parseInt(idx);
+  			var searchForm = getSearchForm();
+  			
+  			// loop over SEARCH_PATH stored in session
+  			{% for item in request.session.search_path %}
+  				// reset all facets after index "idx"
+  				if ( {{ forloop.counter0 }} > idx) {
+  					var input = searchForm["{{item.0}}"];
+					input.value = "";
+				}
+			{% endfor %}
+			
+			// execute a new search
+			searchit(0);
+			
   		}
 
   		function searchit(offset) {

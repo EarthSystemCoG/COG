@@ -5,12 +5,18 @@
   <!-- anchor for dialogs -->
   <div id="myDialog" class="yui-skin-sam"></div>
   
-  <p>
-  SEARCH PATH: &nbsp; 
-  {% for item in request.session.search_path %}
-  	{{ item }} &gt;
-  {% endfor %}
-  </p>
+  <!-- display search path (aka bread-crumming) -->
+  {% if request.session.search_path|length > 0 %}
+	  <p>
+	  <b>Search Path</b>: &nbsp; 
+	  {% for item in request.session.search_path %}
+	  	<a href='javascript:resetFacet("{{item.0}}")' class='deletelink'> </a> 
+	  	<a href='javascript:resetFromFacetIndex({{forloop.counter0}})'>{{ item.1 }}</a>
+	  	{% if not forloop.last %} &gt; {% endif %}
+	  {% endfor %}
+	  </p>
+  {% endif %}
+  
 
   <!-- don't display results if form submission resulted in error -->
   {% if not error_message %}
