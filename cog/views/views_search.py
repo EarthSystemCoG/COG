@@ -109,7 +109,8 @@ def search_config(request, searchConfig, extra={}):
                                                                                                 request.session.get(SEARCH_REDIRECT, None), 
                                                                                                 request.REQUEST)
     if (request.method=='GET'):
-        if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: # pre-seeded search URL
+        if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: 
+            # GET pre-seeded search URL -> redirect to POST immediately
             return search_post(request, input, searchConfig, extra)
         else:
             return search_get(request, input, searchConfig, extra)
@@ -153,8 +154,6 @@ def search_get(request, searchInput, searchConfig, extra={}):
         try:
             xml = searchService.search(searchInput)
             searchOutput = deserialize(xml, facetProfile)
-            #FIXME
-            #searchOutput.printme()
             
             data[SEARCH_INPUT] = searchInput
             data[SEARCH_OUTPUT] = searchOutput
@@ -245,7 +244,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
         data[SEARCH_INPUT] = searchInput
         # add error
         data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS;
-         
+             
     # store data in session 
     #data['title'] = 'Advanced Data Search'
     request.session[SEARCH_DATA] = data
@@ -392,8 +391,6 @@ def getSearchConfig(request, project):
     #facets = []
     #for facet in project.searchprofile.facets():    
     #    facets.append((facet.key,facet.label))
-    # FIXME
-    #facetGroup = FacetGroup(facets,'My Facets')
     facetProfile = FacetProfile(facet_groups)
     #facetProfile = FacetProfile( list(profile.searchgroup_set.all()) )
     
