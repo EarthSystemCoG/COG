@@ -13,6 +13,11 @@ DEFAULT_SEARCH_FACETS = { 'project':'Project',
 
 from cog.site_manager import siteManager
 
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+import os
+
+rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
+
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
 TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
@@ -26,6 +31,7 @@ MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS',
 PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
+DATABASE_PATH = siteManager.get('DATABASE_PATH', default=rel('./database/django.data'))
 
 # ESGF specific settings
 ESGF = 'esgf'
@@ -36,12 +42,6 @@ if ESGF_CONFIG:
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
 
 #=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
-
-# Django settings for COG project.
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
-import os
-
-rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -62,10 +62,8 @@ MANAGERS = ADMINS
 DATABASES = {
     # SQLite database
     #'default': {
-    #     #'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-    #     #'NAME': '',                      # Or path to database file if using sqlite3.
     #    'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-    #    'NAME': rel('./database/django.data'),
+    #    'NAME':   DATABASE_PATH,
     #    'USER': '',                      # Not used with sqlite3.
     #    'PASSWORD': '',                  # Not used with sqlite3.
     #    'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -80,6 +78,7 @@ DATABASES = {
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
     }
+
 }
 
 # Local time zone for this installation. Choices can be found here:
