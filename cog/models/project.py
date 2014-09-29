@@ -20,6 +20,7 @@ import re
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from collections import OrderedDict
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # Project
@@ -388,16 +389,20 @@ def getProjectsAndRolesForUsers(user, includeRemote=True):
     groups.sort(key=lambda x: x.name)
     
     for group in groups:
-        project = getProjectForGroup(group)
-        if includeRemote or project.isLocal():
-            # add this project to the dictionary
-            if not project.short_name in projects:
-                projects[project.short_name] = []
-            # add this role to this project
-            if group.name.endswith('_admins'):
-                projects[project.short_name].append('admin')
-            elif group.name.endswith('_users'):
-                projects[project.short_name].append('user')
+        try:
+            project = getProjectForGroup(group)
+            if includeRemote or project.isLocal():
+                # add this project to the dictionary
+                if not project.short_name in projects:
+                    projects[project.short_name] = []
+                # add this role to this project
+                if group.name.endswith('_admins'):
+                    projects[project.short_name].append('admin')
+                elif group.name.endswith('_users'):
+                    projects[project.short_name].append('user')
+        except ObjectDoesNotExist:
+            print "WARNING: cannot retrieve project for group=%s" % group
+            pass
         
     return projects
 
