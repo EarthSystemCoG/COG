@@ -30,6 +30,7 @@ IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default=rel('site_media/'))
 DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
+DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
 
 # FIXME
 # ESGF specific settings
@@ -61,25 +62,26 @@ MANAGERS = ADMINS
 
 DATABASES = {
     # SQLite database
-    'default': {
+    'sqllite3': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME':   DATABASE_PATH,
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
+    },
     # Postgres
-    #'default': {
-    #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #    'NAME': DATABASE_NAME,
-    #    'USER': DATABASE_USER,                      # Not used with sqlite3.
-    #    'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
-    #    'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-    #    'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
-    #}
+    'postgres': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_USER,                      # Not used with sqlite3.
+        'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
+    }
 
 }
+DATABASES['default'] = DATABASES[ DJANGO_DATABASE ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
