@@ -31,6 +31,7 @@ HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default=rel('site_media/'))
 DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
 DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
+print 'USING DJANGO_DATABASE=%s' % DJANGO_DATABASE
 
 # FIXME
 # ESGF specific settings
