@@ -37,6 +37,7 @@ MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS',
 PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
+MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default=rel('site_media/'))
 
 # FIXME
 # ESGF specific settings
@@ -116,7 +117,7 @@ USE_L10N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = rel('site_media/')
+#MEDIA_ROOT = rel('site_media/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).

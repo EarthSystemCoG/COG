@@ -1,6 +1,5 @@
 APPLICATION_LABEL = 'cog'
 
-
 PURPOSE_TYPES = (
                  'Overall Project Coordination',
                  'Steering Committee',
@@ -127,10 +126,11 @@ FOOTER_LOGO = "cog/img/logo_1310_cogfootershrunk.PNG"
 UPLOAD_DIR_PHOTOS = "photos/"
 UPLOAD_DIR_LOGOS = "logos/"
 
-DEFAULT_IMAGES = { 'User':'/%s/unknown.jpeg' % UPLOAD_DIR_PHOTOS,
-                   'Collaborator':'/%s/unknown.jpeg' % UPLOAD_DIR_PHOTOS,
-                   'Organization':'/%s/notfound.jpeg' % UPLOAD_DIR_LOGOS,
-                   'FundingSource':'/%s/notfound.jpeg' % UPLOAD_DIR_LOGOS }
+# DEFAULT_IMAGES are located under static/cog/img/...
+DEFAULT_IMAGES = { 'User':'cog/img/unknown.jpeg',
+                   'Collaborator':'cog/img/unknown.jpeg',
+                   'Organization':'cog/img/notfound.jpeg',
+                   'FundingSource':'cog/img/notfound.jpeg'}
 
 # legacy media sub-directories of 'projects/'
 SYSTEM_DOCS = 'system_docs'

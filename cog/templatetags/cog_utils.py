@@ -462,7 +462,7 @@ def getImage(obj):
     try:
         # AnonymousUser
         if isinstance(obj, AnonymousUser):
-            return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['User']
+            return getattr(settings, "STATIC_URL") + DEFAULT_IMAGES['User']
 
         # User
         elif isinstance(obj, User):
@@ -478,7 +478,7 @@ def getImage(obj):
 
     except (ValueError, ObjectDoesNotExist) as e:
         # if the image field has no associated file -> return default (no image found)
-        return getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES['%s' % obj.__class__.__name__]
+        return getattr(settings, "STATIC_URL") + DEFAULT_IMAGES['%s' % obj.__class__.__name__]
 
 @register.filter
 def getThumbnailById(id, type):
@@ -493,7 +493,7 @@ def getThumbnailById(id, type):
         return getThumbnail(obj)
 
     else:
-        imagepath = getattr(settings, "MEDIA_URL") + DEFAULT_IMAGES[type]
+        imagepath = getattr(settings, "STATIC_URL") + DEFAULT_IMAGES[type]
         return getThumbnailPath(imagepath)
 
 @register.filter
