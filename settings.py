@@ -1,28 +1,34 @@
-#== LOCAL SETTINGS - CHANGE AS APPROPRIATE FOR EACH INSTALLATION ========
+import os
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+
+rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
 # default search configuration
+# start FIXME
 DEFAULT_SEARCH_URL = 'http://hydra.fsl.noaa.gov/esg-search/search/'
 DEFAULT_SEARCH_FACETS = { 'project':'Project',
                           'realm':'Realm',
                           'variable':'Variable',
                           'cf_variable':'CF Variable'  }
+# end FIXME
 
-#COG_MAILING_LIST = "cog_info@list.woc.noaa.gov"
-
-#===== SITE SPECIFIC CONFIGURATION =================
+''' 
+SITE SPECIFIC CONFIGURATION
+These parameters are read from file 'cog_settings.cfg' 
+located in directory COG_CONFIG_DIR (or by default '/usr/local/cog').
+Each parameter has a default value.
+'''
 
 from cog.site_manager import siteManager
-
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
-import os
-
-rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
 TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
 COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST', default='cog_info@list.woc.noaa.gov')
 SECRET_KEY = siteManager.get('SECRET_KEY')
+# for SQLLite back-end
+DATABASE_PATH = siteManager.get('DATABASE_PATH', default=rel('./database/django.data'))
+# for postgres back-end
 DATABASE_NAME = siteManager.get('DATABASE_NAME', default='cogdb')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
@@ -31,8 +37,8 @@ MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS',
 PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
-DATABASE_PATH = siteManager.get('DATABASE_PATH', default=rel('./database/django.data'))
 
+# FIXME
 # ESGF specific settings
 ESGF = 'esgf'
 ESGF_CONFIG = siteManager.hasConfig(ESGF)
@@ -40,8 +46,9 @@ if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF, default='')
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
     IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
+# FIXME
 
-#=================== DO NOT CHANGE ANYTHING BELOW THIS LINE =============
+#====================== standard django settings.py ======================
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -61,23 +68,23 @@ MANAGERS = ADMINS
 
 DATABASES = {
     # SQLite database
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-    #    'NAME':   DATABASE_PATH,
-    #    'USER': '',                      # Not used with sqlite3.
-    #    'PASSWORD': '',                  # Not used with sqlite3.
-    #    'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-    #    'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    #}
-    # Postgres
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': DATABASE_NAME,
-        'USER': DATABASE_USER,                      # Not used with sqlite3.
-        'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME':   DATABASE_PATH,
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
+    # Postgres
+    #'default': {
+    #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #    'NAME': DATABASE_NAME,
+    #    'USER': DATABASE_USER,                      # Not used with sqlite3.
+    #    'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
+    #    'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+    #    'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
+    #}
 
 }
 
