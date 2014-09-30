@@ -3,15 +3,6 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
-# default search configuration
-# start FIXME
-DEFAULT_SEARCH_URL = 'http://hydra.fsl.noaa.gov/esg-search/search/'
-DEFAULT_SEARCH_FACETS = { 'project':'Project',
-                          'realm':'Realm',
-                          'variable':'Variable',
-                          'cf_variable':'CF Variable'  }
-# end FIXME
-
 ''' 
 SITE SPECIFIC CONFIGURATION
 These parameters are read from file 'cog_settings.cfg' 
@@ -38,6 +29,7 @@ PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', defau
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default=rel('site_media/'))
+DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
 
 # FIXME
 # ESGF specific settings

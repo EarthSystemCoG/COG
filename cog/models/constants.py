@@ -154,3 +154,6 @@ RESEARCH_INTERESTS_MAX_CHARS = 1000
 SIGNAL_OBJECT_CREATED = 'object_created'
 SIGNAL_OBJECT_UPDATED = 'object_updated'
 SIGNAL_OBJECT_DELETED = 'object_deleted'
+
+DEFAULT_SEARCH_FACETS = { 'project':'Project',                         
+                          'variable':'Variable' }

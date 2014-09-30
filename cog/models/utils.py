@@ -14,6 +14,7 @@ from django.db.models import Q
 from django.contrib.comments import Comment
 from django.contrib.contenttypes.models import ContentType
 from folder import Folder, getTopFolder, TOP_SUB_FOLDERS
+from cog.models.constants import DEFAULT_SEARCH_FACETS
 from project_tab import ProjectTab
 import shutil
 import os
@@ -91,7 +92,7 @@ def create_project_search_profile(project):
         group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=0)
         group.save()
         # assign default facets
-        facets = getattr(settings, "DEFAULT_SEARCH_FACETS", {})
+        facets = DEFAULT_SEARCH_FACETS
         for key, label in facets.items():
             facet = SearchFacet(key=key, label=label, group=group)
             facet.save()
