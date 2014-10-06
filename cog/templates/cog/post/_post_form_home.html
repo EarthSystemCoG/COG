@@ -33,8 +33,15 @@
          </td>
     </tr>
     <tr>
-          <td>Private ?</td>
-          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                      
+          <td>Private (read) ?</td>
+          <td>{{ form.is_private }} &nbsp; (<i>If checked, only project members will be able to view this page.
+                                               If not checked, the page will be publicly visible.</i>)
+          </td>                      
+    </tr>  
+    <tr>
+          <td>Restricted (write) ?</td>
+          <td>{{ form.is_restricted }} &nbsp; (<i>If checked, only project administrators will be able to edit this page. 
+                                               If not checked, all project members can edit this page.</i>)</td>                      
     </tr>   
     <tr>
         <td style="vertical-align:top;"><b>Body</b></td>

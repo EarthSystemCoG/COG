@@ -7,18 +7,28 @@
         {% if request.user|canPost:post %}
         <div id="page_actions_box" style="text-align:center">
 	   <hr/>
-	   <a href="{% url 'post_update' post.id %}" class="changelink">&nbsp;Update {{ post.type|capfirst }}</a>&nbsp;&nbsp;
-	   <a href="{% url 'doc_add' post.project.short_name.lower %}?redirect={% url 'post_add_doc' post.id %}" class="addlink">Add File</a>&nbsp;&nbsp;
-           <a href="{% url 'post_add' post.project.short_name.lower %}?type={{ post.type }}&amp;parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }}</a>&nbsp;&nbsp;
+	   <a href="{% url 'post_update' post.id %}" class="changelink">&nbsp;Update {{ post.type|capfirst }}</a>&nbsp;
+	   <a href="{% url 'doc_add' post.project.short_name.lower %}?redirect={% url 'post_add_doc' post.id %}" class="addlink">Add File</a>&nbsp;
+           <a href="{% url 'post_add' post.project.short_name.lower %}?type={{ post.type }}&amp;parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }}</a>&nbsp;
            {% if user|hasUserPermission:post.project %}
                 {% if not post.is_predefined %}
-                    <a href="{% url 'post_delete' post.id %}" class="deletelink">Delete {{ post.type|capfirst }}</a>&nbsp;&nbsp;  
+                    <a href="{% url 'post_delete' post.id %}" class="deletelink">Delete {{ post.type|capfirst }}</a>&nbsp; 
                 {% endif %}  
             {% endif %}   
-            &nbsp;&nbsp;
+
             {% if post.is_private %}
-	         <span class='privatelink'>&nbsp;This page is private</span>
-	    {% endif %}       
+            	{% if post.is_restricted %}
+            		<span class='privatelink'>
+            		<span class='restrictedlink'>&nbsp;This page is private and restricted</span>
+            		</span>
+	        	{% else %}
+	        		<span class='privatelink'>&nbsp;This page is private</span>
+	        	{% endif %} 
+            {% else %}
+	        	{% if post.is_restricted %}
+	        		<span class='restrictedlink'>&nbsp;This page is restricted</span>
+	        	{% endif %} 
+	      	{% endif %}      
         </div> <!--// end div id="page_actions_box" //-->          
     {% endif %}
 {% endif %}

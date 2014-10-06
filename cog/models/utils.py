@@ -112,7 +112,9 @@ def create_project_home(project, user):
                                update_date=now(),
                                #topic='Home Page',
                                project=project,
-                               body=project.description)
+                               body=project.description,
+                               is_private=False,
+                               is_restricted=True) # project home page is restricted by default
     home.save()
     return home
 

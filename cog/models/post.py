@@ -40,8 +40,10 @@ class Post(models.Model):
         template = models.CharField(max_length=200, verbose_name='Template', blank=True)
         # home page flag
         is_home = models.BooleanField(verbose_name='Is Home Page ?', default=False, null=False)
-        # public/private flag
+        # public/private flag: private posts can only be viewed by project members
         is_private = models.BooleanField(verbose_name='Private ?', default=False, null=False)
+        # restricted flag: restricted posts can only be edited by project administrators
+        is_restricted = models.BooleanField(verbose_name='Restricted ?', default=False, null=False)
         # version number
         version = models.IntegerField(null=False, blank=False, default=1)
                 

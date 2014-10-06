@@ -660,6 +660,12 @@ BEGIN SPECIFIC ACTIONS
 	background: url(/static/cog/img/icon-lock-small.png) 0 .2em no-repeat;
 }
 
+.restrictedlink {
+	padding-left: 12px;
+	padding-top: 2px;
+	background: url(/static/cog/img/icon-lock-small2.png) 0 .2em no-repeat;
+}
+
 .deletelink {
 	padding-left: 12px;
 	background: url(/static/admin/img/icon_deletelink.gif) 0 .25em no-repeat;

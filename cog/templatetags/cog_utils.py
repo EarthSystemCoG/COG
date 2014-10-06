@@ -377,10 +377,11 @@ def is_locked(post, request, autoescape=None):
     #    html = "&nbsp;<span class='privatelink'>&nbsp;</span>"
 
     # show lock depending on page properties
+    html = ""
     if post.is_private:
-        html = "&nbsp;<span class='privatelink'>&nbsp;</span>"
-    else:
-        html = ""
+        html += "&nbsp;<span class='privatelink'>&nbsp;</span>"
+    if post.is_restricted:
+        html += "&nbsp;<span class='restrictedlink'>&nbsp;</span>"
 
     # mark the result as safe from further escaping
     return mark_safe(html)

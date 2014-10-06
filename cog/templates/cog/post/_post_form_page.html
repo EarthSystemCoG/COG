@@ -50,8 +50,16 @@
  </table>
  <table class="odd-color">
     <tr>
-          <td class="col1" nowrap="nowrap">Private ?</td>
-          <td>{{form.is_private }} (<i>if checked, only project members will be able to view this page</i>)</td>                   
+          <td class="col1" nowrap="nowrap">Private (read) ?</td>
+          <td>{{form.is_private }} 
+               (<i>If checked, only project members will be able to view this page.
+                   If not checked, the page will be publicly visible.</i>)</td>                   
+    </tr>
+    <tr>
+          <td class="col1" nowrap="nowrap">Restricted (write) ?</td>
+          <td>{{form.is_restricted}} 
+               (<i>If checked, only project administrators will be able to edit this page. 
+                    If not checked, all project members can edit this page.</i>)</td>                   
     </tr>
 </table>
 <table>
