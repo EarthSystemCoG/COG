@@ -36,8 +36,11 @@ class PostForm(ModelForm):
             instance = kwargs.get('instance')
             # exclude this post itself
             queryset = queryset & ~Q(id=instance.id)
-        # get list of posts that can be a new post's parent page and alphabetize. 
-        self.fields['parent'].queryset =  Post.objects.filter( queryset ).order_by('title')
+        # get list of posts that can be a new post's parent page and alphabetize. Put the home page first.
+        self.fields['parent'].queryset =  Post.objects.filter( queryset ).order_by('-is_home','title')
+        print self.fields['parent'].queryset
+
+        #self.fields['parent'].queryset[0]=Q(is_home="true")
         self.fields['parent'].empty_label = "Top Level Page (no parent)"
         # limit topic selection to current project and post type
         self.fields['topic'].queryset = Topic.objects.filter( Q(post__project=project) & Q(post__type=type) ).distinct().order_by('name')
