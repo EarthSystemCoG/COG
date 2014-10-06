@@ -49,21 +49,21 @@
             {% csrf_token %}
             <table>
                 <tr>
-                    <td class="head"><b>Title</b></td>
+                    <td><b>Title</b></td>
                     <td>{{ form.title }} {{ form.title.errors }}</td>
                 </tr>
                 <tr>
-                    <td class="head"><b>Text</b></td>
+                    <td><b>Text</b></td>
                     <td>{{ form.text }} {{ form.text.errors }}</td>
                 </tr>
 
                 <tr>
-                    <td class="head"><b>Author</b></td>
+                    <td><b>Author</b></td>
                     <td>{{ request.user }} </td>
                     <input type="hidden" name="author" value="{{request.user.id}}"/>
                 </tr>
                  <tr>
-                    <td class="tophead"><b>Publish to</b></td>
+                    <td style="vertical-align:top;"><b>Publish to</b></td>
                     <td>
                     	<!-- this project -->
                         {{ form.instance.project }}
