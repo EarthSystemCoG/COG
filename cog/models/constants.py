@@ -83,7 +83,7 @@ OPERATIONAL_MANAGEMENT_BODIES = (
                                  ('Requirements Identification', 3),
                                  ('Task Prioritization', 4),
                                  ('Testing', 5),
-                                 ('Web Review', 6),
+                                 ('Review', 6),
                                  ('Meeting and Event Planning', 7),
                                  ('Administration', 8),
                                 )
