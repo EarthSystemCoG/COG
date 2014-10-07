@@ -5,10 +5,20 @@
     <!-- display submission form -->
     {% if request.method == "GET" %}
            
-        <div class="instruction-box">    
-	        Please note that the contents of this project's workspace can be read by anybody.
-	        <br/>To edit any page, you must request to join the project by clicking the button below.
-	        <br/>Thank you for your interest in project {{ project.short_name }}.
+        <div class="instruction-box">
+	  <p>Thank you for your interest in joining the {{ project.short_name }} project. <br>In general, project membership allows you to:</p>
+
+	  <div style="margin-left:auto;margin-right:auto;margin-bottom: 1.5em;width:260px;">
+                <ul style="text-align:left;margin:0px;">
+		   <li>View content on a private project.</li>
+		   <li>View private pages on a public project.</li>
+		   <li>Edit project wiki pages.</li>
+		</ul>
+          </div>
+		
+          <p>***You do not need to join a project to view public information.***</p>
+	  <p>If you still wish to join the {{ project.short_name }} project, click on the button below. <br> The project administrator will be notified of your request.</p>
+		
 	        <form method="post" action="">
 	           {% csrf_token %}
 	           <input type="submit" value="Join"/>
