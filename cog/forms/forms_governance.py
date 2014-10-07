@@ -30,7 +30,7 @@ class ManagementBodyForm(ModelForm):
         widgets = {
                    'description': Textarea(attrs={'rows':4}),
                    'other': Textarea(attrs={'rows':4}),
-                   'termsOfReference': Textarea(attrs={'rows':2})
+                   'termsOfReference': Textarea(attrs={'rows':6})
                    }
 
 class StrategicManagementBodyForm(ManagementBodyForm):
