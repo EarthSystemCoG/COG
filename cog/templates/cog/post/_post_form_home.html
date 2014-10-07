@@ -1,11 +1,11 @@
 <!--START: /cog/templates/cog/post/_post_form_home.html //--><!-- form table for home page -->
 
+{% load cog_utils %}
+
 <!-- immutable fields -->
 {{ form.url.as_hidden }}
 {{ form.topic.as_hidden }}
 {{ form.parent.as_hidden }}
-
-
 
 <!-- mutable fields -->
 <table class="post_home">
@@ -33,16 +33,17 @@
          </td>
     </tr>
     <tr>
-          <td>Private (read) ?</td>
-          <td>{{ form.is_private }} &nbsp; (<i>If checked, only project members will be able to view this page.
-                                               If not checked, the page will be publicly visible.</i>)
+          <td nowrap="nowrap">Not Viewable ?</td>
+          <td>{{ form.is_private }} &nbsp; (<i>If checked, only project members will be able to view this page.</i>)
           </td>                      
     </tr>  
-    <tr>
-          <td>Restricted (write) ?</td>
-          <td>{{ form.is_restricted }} &nbsp; (<i>If checked, only project administrators will be able to edit this page. 
-                                               If not checked, all project members can edit this page.</i>)</td>                      
-    </tr>   
+    {% if user|hasAdminPermission:project %}
+	    <tr>
+	          <td nowrap="nowrap">Not Editable ?</td>
+	          <td>{{ form.is_restricted }} &nbsp; (<i>If checked, only project administrators will be able to edit this page. 
+	                                               If not checked, all project members can edit this page.</i>)</td>                      
+	    </tr>   
+    {% endif %}
     <tr>
         <td style="vertical-align:top;"><b>Body</b></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>
