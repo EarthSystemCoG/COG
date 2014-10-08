@@ -6,17 +6,17 @@
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
-	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data
-	       </div> <!--// end div.right_widget_header //-->
-	       <div id="search_entry" style="width:99%; padding:4px;">
+	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data</div> <!--// end div.right_widget_header //-->
+	       <div id="search_entry" style="padding:4px; padding-right:0px;margin:0px;">
 		       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
 		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
 		            <input type="hidden" name="type" value="Dataset" />
-	                <input type="text" name="query" size="24" value="" style="width:137px; font-size:8.5pt;"
-	                        placeholder=" Enter Text"/>&nbsp;
-	                <input type="submit" value="Go" style="font-size:8.5pt;"/>
+	                <input type="text" name="query" size="24" value="" style="width:137px; font-size:8.5pt; padding:0px; margin:0px; padding-left:2px;" placeholder="Enter Text"/>
+                        <input class="right_go" type="submit" value="Go"/>
+
+
 	                <!--  <select name="type">
 	                    <option value="Dataset">Data</option>
 	                    <option value="Model">Models</option>
@@ -50,23 +50,20 @@
           </div>
        </div> <!--// end div id=project_views //-->
 
-       <!-- project widget controls -->
+       <!-- project tagging -->
+       <!-- Note, the style of the YUI divs were modified significantly from their defaults in order to match up with the Django divs in the search widget. The main items involved
+       changing the position back to static and display back to inline. -->
 
 	   <div id="project_browser_controls">
-	      <table style="margin-top: 4px;">
-	       	<tr>
-                   <td class="long">
-		       	<div id="tagAutoComplete">
-		       	    <input type="text" id="projectBrowserText" placeholder=" Enter Tag" style="font-size:8.5pt;"/>
-		            <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
-		            <div id="tagContainer"></div>
-		        </div>
-		       </td>
-		       <td style="padding: 2px; margin-right: 2px;">
-                           <input type="button" id="projectBrowserButton" value="Go" style="font-size:8.5pt;" onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
-		       </td>
-	       	</tr>
-	       </table>
+	        <div id="tag_entry" style="padding:4px; padding-right:0px;margin:0px;">
+		      <div id="tagAutoComplete" style="margin:0px; padding:0px; margin-top:8px; width:137px; postion:static; display:inline; "> <!--class=yui-ac-->
+			 <!--class=yui-ac-input-->
+		         <input type="text" id="projectBrowserText" placeholder="Enter Tag" style="position:static; width:137px; font-size:8.5pt;padding:0px;padding-left:2px;margin:0px;"/>
+			 <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
+		         <div style="width:133px" id="tagContainer"></div> <!--class=yui-ac-container-->
+		     </div>
+	           <input class="right_go"  type="submit" value="Go" id="projectBrowserButton" onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
+		</div>     
 	       <div style="text-align:center; font-style: italic;">Start typing, or use the 'Delete' key to show all available tags.</div>
           </div><!--// end div id=project_browser_controls //-->
 
