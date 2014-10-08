@@ -10,6 +10,9 @@ import logging
 import time
 import collections
 import StringIO
+import shutil
+from django.core import management
+import cog
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -23,13 +26,14 @@ class CogConfig(object):
     def __init__(self):
         pass
     
-    def config(self):
+    def run(self):
         '''Driver method.'''
         
         self._readCogConfig()
         self._readEsgfConfig()
         self._setup()
         self._writeCogConfig()
+        self._upgradeCog()
     
     def _readCogConfig(self):
         '''Method that reads an existing COG configuration file, or create a new one if not existing.'''
@@ -145,8 +149,8 @@ DATABASE_PORT=5432
         #self._safeSet('PASSWORD_EXPIRATION_DAYS', '0')
         #
         
-        
     def _writeCogConfig(self):
+        '''Method to write out the new CoG configuration.'''
         
         # backup existing file
         if os.path.exists(self.cogConfigFilePath):
@@ -155,11 +159,30 @@ DATABASE_PORT=5432
         cfgfile = open(self.cogConfigFilePath,'w')
         self.cogConfig.write(cfgfile)
         cfgfile.close()
+        
+    def _upgradeCog(self):
+        '''Method to run the necessary Django management commands to upgrade the CoG installation.'''
+        
+        cogpath = os.path.dirname(cog.__file__)
+        
+        # create database if not existing already
+        dbtype = self.cogConfig.get(SECTION_DEFAULT, 'DJANGO_DATABASE')
+        if dbtype=='sqllite3':
+            dbpath = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_PATH')
+            if not os.path.exists(dbpath):
+                shutil.copyfile('%s/../database/django.data' % cogpath, dbpath) # directory parallel to 'cog' module
+        else:
+            pass
+        
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+        management.call_command("syncdb")
+        management.call_command("migrate", "cog")
+        management.call_command("collectstatic", interactive=False)
     
 def main():
     
     cogConfig = CogConfig()
-    cogConfig.config()
+    cogConfig.run()
 
     
 if __name__ == '__main__':
