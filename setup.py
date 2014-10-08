@@ -1,5 +1,15 @@
 import os
 from setuptools import setup, find_packages
+from setuptools.command.install import install
+from cog.installation.setup import main
+
+class CustomInstallCommand(install):
+    '''Custom setup install command to execute post-install configuration.'''
+    
+    def run(self):
+        print 'Beginning the installation'
+        install.run(self)
+        main()
 
 # Utility function to read the README file.
 def read(fname):
@@ -25,4 +35,6 @@ setup(
         'Environment :: Web Environment',
         "Framework :: Django",
     ],
+    cmdclass={ 'install': CustomInstallCommand },
+
 )
