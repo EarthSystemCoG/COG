@@ -540,14 +540,27 @@ BEGIN FORM ELEMENTS
 	background:   white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
 	padding:      3px 5px;
 	color:        black;
-	border:       1px solid #bbb;
-	border-color: #666666;
+	border:       1px solid #666;
 	margin-bottom:5px;
 	margin-right: 2px;
 	margin-top:   5px;
 }
 
-
+input.right_go{
+	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+	margin-right:   0px;
+        margin-left:    8px;
+        height:         22px;
+	padding-top:    2px;
+        padding-bottom: 2px;
+        padding-left:   4px;
+        padding-right:  4px;
+	color:          black;
+	border:         1px solid #bbb;
+	border-color:   #666666;
+        font-size:      8.5pt;
+    
+}
 /***************
 * NAME: text input
 * SCOPE: the current form
@@ -555,12 +568,12 @@ BEGIN FORM ELEMENTS
 
 
 input[type=text] {
-	border: 1px solid #666666;
-	background: #FFFFFF;
-	color: #5D781D;
-	width:99%; /* same width as all other types of inputs */
+	border:       1px solid #666666;
+	background:   #FFFFFF;
+	color:        #5D781D;
+	width:        99%; /* same width as all other types of inputs */
 	padding-left: 2px; /* space before text starts */
-	height:15px;
+	height:       18px;
 }
 
 input[type=checkbox]{
@@ -570,21 +583,21 @@ input[type=checkbox]{
 
 
 input[type=password] {
-	border: 1px solid #666666;
-	background: #FFFFFF;
-	color: #5D781D;
-        width:99%; /* same width as all other types of inputs */
+	border:       1px solid #666666;
+	background:   #FFFFFF;
+	color:        #5D781D;
+        width:        99%; /* same width as all other types of inputs */
         padding-left: 2px; /* space before text starts */
-	height:15px;
+	height:       18px;
 }
 
 input[type=url] {
-        border: 1px solid #666666;
-	background: #FFFFFF;
-	color: #5D781D;
-        width:99%; /* same width as all other types of inputs */
+        border:       1px solid #666666;
+	background:   #FFFFFF;
+	color:        #5D781D;
+        width:        99%; /* same width as all other types of inputs */
         padding-left: 2px; /* space before text starts */
-	height:15px;
+	height:       18px;
 }
 
 /* allow for text inputs that span their entire container */
@@ -594,10 +607,10 @@ input[type=url] {
 
 textarea {
         /* display scrollbars as needed */
-	overflow: auto;
-	border:   1px solid #666666;
-	width:    99%; /* not 100% because it provides a nice margin inside a table */
-        padding-left: 2px;/* space before text starts */
+	overflow:     auto;
+	border:       1px solid #666666;
+	width:        99%; /* not 100% because it provides a nice margin inside a table */
+        padding-left: 2px; /* space before text starts */
 }
 
 .required {
