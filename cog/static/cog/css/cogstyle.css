@@ -548,13 +548,14 @@ BEGIN FORM ELEMENTS
 
 input.right_go{
 	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+        width:          28px;
 	margin-right:   0px;
-        margin-left:    8px;
+        margin-left:    5px;
         height:         22px;
 	padding-top:    2px;
         padding-bottom: 2px;
-        padding-left:   4px;
-        padding-right:  4px;
+        padding-left:   3px;
+        padding-right:  3px;
 	color:          black;
 	border:         1px solid #bbb;
 	border-color:   #666666;
