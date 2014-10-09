@@ -20,6 +20,12 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 import datetime
 from cog.views.utils import set_openid_cookie
 
+def redirectToIdp():
+    if settings.IDP_REDIRECT is not None and len(settings.IDP_REDIRECT.strip())>0:
+        return True
+    else:
+        return False
+
 def custom_login(request, **kwargs):
     '''Overriden standard login view that checks whether the authenticated user has any missing information.'''
     
@@ -144,7 +150,7 @@ def notifyAdminsOfUserSubscription(user, request, action):
 def user_add(request):
     
     # redirect to another site if necessary
-    if settings.IDP_REDIRECT is not None:
+    if redirectToIdp():
         return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
 
     # create URLs formset
@@ -432,7 +438,7 @@ def user_update(request, user_id):
 def password_update(request):
 
     # redirect to another site if necessary
-    if settings.IDP_REDIRECT is not None:
+    if redirectToIdp():
         return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
 
     if (request.method=='GET'):
@@ -479,7 +485,7 @@ def password_update(request):
 def user_reminder(request):
     
     # redirect to another site if necessary
-    if settings.IDP_REDIRECT is not None:
+    if redirectToIdp():
         return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
 
     if (request.method=='GET'):
@@ -523,7 +529,7 @@ def user_reminder(request):
 def password_reset(request):
     
     # redirect to another site if necessary
-    if settings.IDP_REDIRECT is not None:
+    if redirectToIdp():
         return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
 
     if (request.method=='GET'):
@@ -566,9 +572,12 @@ def password_reset(request):
 
                 # send email to user
                 subject = "Password Reset"
-                message =  "Your new password has been set to: %s .\nFor security reasons, please change this password as soon as you log in."  % new_password
-                message += "\nTo change your password, click on the 'My Profile' link on the top-right of each page, " \
-                         + "\nor visit the following URL: %s" % url
+                message =  "Your new password has been set to: %s\n" % new_password
+                message += "Your openid is: %s\n"  % user.profile.openid()
+                message += "For security reasons, please change this password as soon as you log in.\n"  
+                message += "To change your password, first log in with your openid and new password,\n"
+                message += "then click on the 'My Profile' link on the top-right of each page,\n"
+                message += "or visit the following URL: %s" % url
                 notify(user, subject, message)
 
                 # redirect to login page with special message
