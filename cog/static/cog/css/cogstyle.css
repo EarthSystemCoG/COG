@@ -573,7 +573,7 @@ input[type=text] {
 	color:        #5D781D;
 	width:        99%; /* same width as all other types of inputs */
 	padding-left: 2px; /* space before text starts */
-	height:       18px;
+	height:       16px;
 }
 
 input[type=checkbox]{
@@ -588,7 +588,7 @@ input[type=password] {
 	color:        #5D781D;
         width:        99%; /* same width as all other types of inputs */
         padding-left: 2px; /* space before text starts */
-	height:       18px;
+	height:       16px;
 }
 
 input[type=url] {
@@ -597,7 +597,7 @@ input[type=url] {
 	color:        #5D781D;
         width:        99%; /* same width as all other types of inputs */
         padding-left: 2px; /* space before text starts */
-	height:       18px;
+	height:       16px;
 }
 
 /* allow for text inputs that span their entire container */
@@ -1049,7 +1049,7 @@ BEGIN ADVANCED SEARCH PAGE
 	padding: 5px;
 	text-align:left;
 	margin-top:-10px;
-	margin-bottom: 15px;
+	margin-bottom: 16px;
 }
 
 .fieldset_legend {
