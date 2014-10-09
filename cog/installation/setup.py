@@ -22,7 +22,7 @@ from cog.models import Project
 from cog.models import UserProfile
 from cog.views.views_project import initProject
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 SECTION_DEFAULT = 'DEFAULT'
 SECTION_ESGF = 'esgf'
@@ -33,10 +33,23 @@ ESGF_PROPERTIES_FILE = '/esg/config/esgf.properties'
 DEFAULT_PROJECT_SHORT_NAME = 'TestProject'
 
 class CogConfig(object):
+    '''
+    Settings imported from /esg/config/esgf.properties, unless already found in cog_settings.cfg:
+    esgf.host=esg-datanode.jpl.nasa.gov:
+        - SITE_NAME = ESG-DATANODE.JPL.NASA.GOV
+        - SITE_DOMAIN = esg-datanode.jpl.nasa.gov:8000
+        - DEFAULT_SEARCH_URL = http://esg-datanode.jpl.nasa.gov/esg-search/search/
+    db.user=...
+        - DATABASE_USER=...
+    db.password=...
+        - DATABASE_PASSWORD=...
+    db.port=5432
+        - DATABASE_PORT=5432
+    '''
     
     def __init__(self):
         
-        self.esgf = False
+        self.esgf = True
     
     def run(self):
         '''Driver method.'''
@@ -130,8 +143,10 @@ class CogConfig(object):
         self._safeSet('TIME_ZONE', 'America/Denver')
         self._safeSet('SECRET_KEY','<change this to a random sequence of characters 20 or more and dont share it>')
         self._safeSet('COG_MAILING_LIST','cog_info@list.woc.noaa.gov')
-        
-        self._safeSet('DJANGO_DATABASE','sqllite3')
+        if self.esgf: # ESGF: use postgres by default
+            self._safeSet('DJANGO_DATABASE','postgres')
+        else:         # no ESGF: use sqllite3 by default
+            self._safeSet('DJANGO_DATABASE','sqllite3')
         # if DJANGO_DATABASE=sqllite3
         self._safeSet('DATABASE_PATH','/usr/local/cog/django.data')
         # if DJANGO_DATABASE=postgres
