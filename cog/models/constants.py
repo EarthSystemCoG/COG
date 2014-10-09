@@ -27,6 +27,7 @@ COMMUNICATION_TYPES = (
                        'Wiki',
                        'Mailing List'
                      )
+
 COMMUNICATION_CV = [ (x,x) for x in COMMUNICATION_TYPES ]
 
 
