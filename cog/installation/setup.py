@@ -177,12 +177,10 @@ class CogConfig(object):
         cogpath = os.path.dirname(cog.__file__)
         
         # create database if not existing already
-        # FIXME ?
         dbtype = self.cogConfig.get(SECTION_DEFAULT, 'DJANGO_DATABASE')
         if dbtype=='sqllite3':
-            dbpath = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_PATH')
-            if not os.path.exists(dbpath):
-                shutil.copyfile('%s/../database/django.data' % cogpath, dbpath) # directory parallel to 'cog' module
+            pass # database will be created automatically
+
         elif dbtype=='postgres':
             self._createPostgresDB()
             
