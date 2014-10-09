@@ -22,6 +22,7 @@ from cog.models import Project
 from cog.models import UserProfile
 from cog.views.views_project import initProject
 from django.contrib.sites.models import Site
+import sqlalchemy
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -29,6 +30,9 @@ SECTION_DEFAULT = 'DEFAULT'
 SECTION_ESGF = 'esgf'
 
 ESGF_PROPERTIES_FILE = '/esg/config/esgf.properties'
+
+# some default parameter values
+DEFAULT_PROJECT_SHORT_NAME = 'TestProject'
 
 class CogConfig(object):
     
@@ -105,13 +109,13 @@ class CogConfig(object):
         if not self.cogConfig.has_option(section, key):
             self.cogConfig.set(section, key, value)
         
-    def _safeGet(self, key, defaultValue=None, section=SECTION_DEFAULT):
+    def _safeGet(self, key, default=None, section=SECTION_DEFAULT):
         '''Method to retrieve a value by key, or use a default.'''
         
         try:
             return self.esgfConfig.get(section, key)
         except:
-            return defaultValue
+            return default
 
     def _setupConfig(self):
         '''Method that assigns the CoG settings.'''
@@ -125,7 +129,7 @@ class CogConfig(object):
         '''
         
         # [DEFAULT]        
-        hostName = self._safeGet("esgf.host", defaultValue='localhost') 
+        hostName = self._safeGet("esgf.host", default='localhost') 
         self._safeSet('SITE_NAME', hostName.upper())
         self._safeSet('SITE_DOMAIN', hostName + ":8000") # FIXME after Apache integration
         self._safeSet('TIME_ZONE', 'America/Denver')
@@ -139,7 +143,7 @@ class CogConfig(object):
         
         self._safeSet('MEDIA_ROOT','/usr/local/cog/site_media')
         # defeault project to where '/' requests are redirected
-        self._safeSet('HOME_PROJECT', 'cog')
+        self._safeSet('HOME_PROJECT', DEFAULT_PROJECT_SHORT_NAME)
         # default search service URL, before any project customization
         self._safeSet('DEFAULT_SEARCH_URL','http://%s/esg-search/search/' % hostName)
         # interval between updates of user's projects, during user session
@@ -149,11 +153,10 @@ class CogConfig(object):
         # optional top-level URL to redirect user registration (no trailing '/')
         self._safeSet('IDP_REDIRECT','') # no redirect by default
         
-        # FIXME: read values from ESGF files
-        self._safeSet('DATABASE_NAME', 'cogdb2')
-        self._safeSet('DATABASE_USER', '<CoG database user>')
-        self._safeSet('DATABASE_NAME', '<CoG database password>')
-        self._safeSet('PASSWORD_PORT', '5432')
+        self._safeSet('DATABASE_NAME', 'cogdb')
+        self._safeSet('DATABASE_USER', self._safeGet("db.user") )
+        self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
+        self._safeSet('DATABASE_PORT', self._safeGet("db.port", default='5432'))
         
     def _writeCogConfig(self):
         '''Method to write out the new CoG configuration.'''
@@ -180,12 +183,40 @@ class CogConfig(object):
             dbpath = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_PATH')
             if not os.path.exists(dbpath):
                 shutil.copyfile('%s/../database/django.data' % cogpath, dbpath) # directory parallel to 'cog' module
+        elif dbtype=='postgres':
+            self._createPostgresDB()
+            
         else:
-            pass
+            raise Exception("Unknow database type: %s" % dbtype)
         
         management.call_command("syncdb", interactive=False)
         management.call_command("migrate", "cog")
         management.call_command("collectstatic", interactive=False)
+        
+    def _createPostgresDB(self):
+        '''Method to create the Postgres database if not existing already.'''
+        
+        dbname = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_NAME')
+        dbuser = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_USER')
+        dbpassword = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_PASSWORD')
+        dbport = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_PORT')
+        dburl = 'postgresql://%s:%s@localhost:%s/postgres' % (dbuser, dbpassword, dbport)
+    
+        # connect to the 'postgres' database
+        engine = sqlalchemy.create_engine(dburl)
+        conn = engine.connect()
+        # must end current transaction before creating a new database
+        conn.execute("commit")
+        
+        # create new database if not existing already
+        try:
+            conn.execute("create database %s with owner=%s" % (dbname, dbuser))
+            logging.info("Postgres database: %s created" % dbname)
+        except sqlalchemy.exc.ProgrammingError as e:
+            logging.warn(e)
+            logging.info("Postgres database: %s already exists" % dbname)
+ 
+        conn.close()
         
     def _createObjects(self):
         '''Method to populate the database with some initial objects.'''
@@ -197,20 +228,23 @@ class CogConfig(object):
         site.save()
         
         # Test project
-        project = Project.objects.create(short_name='TestProject', long_name='Test Project', 
-                                         description='This is a text project',
-                                         site=site, active=True)
-        initProject(project)
-        project.save()
+        if not Project.objects.filter(short_name=DEFAULT_PROJECT_SHORT_NAME).exists():
+            project = Project.objects.create(short_name=DEFAULT_PROJECT_SHORT_NAME, 
+                                             long_name='Test Project', 
+                                             description='This is a text project',
+                                             site=site, active=True)
+            initProject(project)
+            project.save()
         
         # Administrator user
-        user = User.objects.create(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
-                                   is_staff=True, is_superuser=True)
-        user.set_password( 'changeit' )
-        user.save()
-        UserProfile.objects.create(user=user, institution='Institution', city='City', state='State', country='Country',
-                                   site=site,
-                                   last_password_update=datetime.datetime.now())
+        if not User.objects.filter(username='admin').exists():
+            user = User.objects.create(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
+                                       is_staff=True, is_superuser=True)
+            user.set_password( 'changeit' )
+            user.save()
+            UserProfile.objects.create(user=user, institution='Institution', city='City', state='State', country='Country',
+                                       site=site,
+                                       last_password_update=datetime.datetime.now())
     
 def main():
     
