@@ -4,15 +4,23 @@ Created on Oct 8, 2014
 @author: cinquini
 '''
 
+# setup CoG settings first
 import os
+import cog
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
 import ConfigParser
 import logging
-import time
+import datetime
 import collections
 import StringIO
 import shutil
 from django.core import management
-import cog
+from django.contrib.auth.models import User
+
+from cog.models import Project
+from cog.models import UserProfile
+from django.contrib.sites.models import Site
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -24,16 +32,20 @@ ESGF_PROPERTIES_FILE = '/esg/config/esgf.properties'
 class CogConfig(object):
     
     def __init__(self):
+        
+        #os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         pass
     
     def run(self):
         '''Driver method.'''
         
+        # FIXME
         self._readCogConfig()
         self._readEsgfConfig()
-        self._setup()
+        self._setupConfig()
         self._writeCogConfig()
         self._upgradeCog()
+        self._createObjects()
     
     def _readCogConfig(self):
         '''Method that reads an existing COG configuration file, or create a new one if not existing.'''
@@ -100,20 +112,11 @@ class CogConfig(object):
         except:
             return defaultValue
 
-    def _setup(self):
+    def _setupConfig(self):
         '''Method that assigns the CoG settings.'''
         
         '''
-        [default]
-
-
-DATABASE_NAME=cogdb
-DATABASE_USER=
-DATABASE_PASSWORD=
-DATABASE_PORT=5432
-
-
-
+        # FIXME
 #[esgf]
 #ESGF_HOSTNAME=hydra.fsl.noaa.gov
 #ESGF_DBURL=postgresql://dbsuper:dbpwd@localhost/esgcet
@@ -145,16 +148,20 @@ DATABASE_PORT=5432
         # optional top-level URL to redirect user registration (no trailing '/')
         self._safeSet('IDP_REDIRECT','') # no redirect by default
         
-        #self._safeSet('DATABASE_NAME', 'cogdb')
-        #self._safeSet('PASSWORD_EXPIRATION_DAYS', '0')
-        #
+        # FIXME: read values from ESGF files
+        self._safeSet('DATABASE_NAME', 'cogdb2')
+        self._safeSet('DATABASE_USER', '<CoG database user>')
+        self._safeSet('DATABASE_NAME', '<CoG database password>')
+        self._safeSet('PASSWORD_PORT', '5432')
         
     def _writeCogConfig(self):
         '''Method to write out the new CoG configuration.'''
         
         # backup existing file
         if os.path.exists(self.cogConfigFilePath):
-            os.rename(self.cogConfigFilePath, self.cogConfigFilePath + "-backup-%s" % time.strftime('%Y-%m-%d_%H:%M:%S'))  
+            # FIXME
+            #os.rename(self.cogConfigFilePath, self.cogConfigFilePath + "-backup-%s" % time.strftime('%Y-%m-%d_%H:%M:%S'))  
+            os.rename(self.cogConfigFilePath, self.cogConfigFilePath + "-backup")  
                 
         cfgfile = open(self.cogConfigFilePath,'w')
         self.cogConfig.write(cfgfile)
@@ -166,6 +173,7 @@ DATABASE_PORT=5432
         cogpath = os.path.dirname(cog.__file__)
         
         # create database if not existing already
+        # FIXME ?
         dbtype = self.cogConfig.get(SECTION_DEFAULT, 'DJANGO_DATABASE')
         if dbtype=='sqllite3':
             dbpath = self.cogConfig.get(SECTION_DEFAULT, 'DATABASE_PATH')
@@ -174,10 +182,30 @@ DATABASE_PORT=5432
         else:
             pass
         
-        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-        management.call_command("syncdb")
+        management.call_command("syncdb", interactive=False)
         management.call_command("migrate", "cog")
         management.call_command("collectstatic", interactive=False)
+        
+    def _createObjects(self):
+        '''Method to populate the database with some initial objects.'''
+        
+        # Site
+        site = Site.objects.create(name='localhost', domain='localhost:8000')
+        site.save()
+        
+        # Test project
+        project = Project.objects.create(short_name='TestProject', long_name='Test Project', site=site, active=True)
+        project.save()
+        
+        # Administrator user
+        user = User.objects.create(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
+                                   is_staff=True, is_superuser=True)
+        user.set_password( 'changeit' )
+        user.save()
+        userProfile = UserProfile.objects.create(user=user, 
+                                                 institution='Institution', city='City', state='State', country='Country',
+                                                 last_password_update=datetime.datetime.now())
+        userProfile.save()
     
 def main():
     

@@ -6,6 +6,7 @@ from datetime import datetime
 from django.conf import settings
 from cog.models import update_user_projects
 from cog.views.utils import set_openid_cookie
+from django.core.exceptions import ObjectDoesNotExist
 
 class SessionMiddleware(object):
     
@@ -16,21 +17,24 @@ class SessionMiddleware(object):
         '''
         
         # must not use shared anonymous session
-        if request.user.is_authenticated() and request.user.profile.openid() is not None:
+        try:
+            if request.user.is_authenticated() and request.user.profile.openid() is not None:
             
-            s = request.session
+                s = request.session
+                        
+                last_accessed_seconds = s.get('LAST_ACCESSED', 0) # defaults to Unix Epoch
+                now_seconds = int(datetime.now().strftime("%s"))
+                
+                if now_seconds - last_accessed_seconds > settings.MY_PROJECTS_REFRESH_SECONDS:
                     
-            last_accessed_seconds = s.get('LAST_ACCESSED', 0) # defaults to Unix Epoch
-            now_seconds = int(datetime.now().strftime("%s"))
-            
-            if now_seconds - last_accessed_seconds > settings.MY_PROJECTS_REFRESH_SECONDS:
-                
-                # update the user's projects across the federation                
-                update_user_projects(request.user)
-                
-                # refresh session stamp
-                s['LAST_ACCESSED'] = now_seconds
-                s.save()
+                    # update the user's projects across the federation                
+                    update_user_projects(request.user)
+                    
+                    # refresh session stamp
+                    s['LAST_ACCESSED'] = now_seconds
+                    s.save()
+        except ObjectDoesNotExist:
+            pass # no profile
                 
         # keep on processing this request
         return None
