@@ -431,6 +431,9 @@ def user_update(request, user_id):
 #@login_required
 def password_update(request):
 
+    # redirect to another site if necessary
+    if settings.IDP_REDIRECT is not None:
+        return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
 
     if (request.method=='GET'):
 
@@ -474,6 +477,10 @@ def password_update(request):
             return render_password_change_form(request, form)
         
 def user_reminder(request):
+    
+    # redirect to another site if necessary
+    if settings.IDP_REDIRECT is not None:
+        return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
 
     if (request.method=='GET'):
         form = UsernameReminderForm()
@@ -514,6 +521,10 @@ def user_reminder(request):
 
 
 def password_reset(request):
+    
+    # redirect to another site if necessary
+    if settings.IDP_REDIRECT is not None:
+        return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
 
     if (request.method=='GET'):
         form = PasswordResetForm()
