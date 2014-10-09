@@ -127,13 +127,13 @@ def doc_download(request, path):
     # media in legacy storage locations
     if project_short_name_lower==SYSTEM_DOCS or project_short_name_lower==SYSTEM_IMAGES:
         return serve(request, path, document_root=settings.PROJECTS_ROOT )
-    
+        
     # load document by path
     #print 'looking for doc ending in path=%s' % path
     doc = Doc.objects.get(path__endswith=path)
     
     # public documents
-    if not doc.is_private:
+    if not doc.is_private and not doc.project.private:
         return serve(request, path, document_root=settings.PROJECTS_ROOT )
     else:
         return doc_download_private(request, path, doc)

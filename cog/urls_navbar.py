@@ -62,6 +62,8 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>usecases)/$', 'cog.views.external_urls_display', name='usecases_display'),
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>checklist)/update/$', 'cog.views.external_urls_update', name='checklist_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>checklist)/$', 'cog.views.external_urls_display', name='checklist_display'),
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>prioritization)/update/$', 'cog.views.external_urls_update', name='prioritization_update'),   
+    url(r'^projects/(?P<project_short_name>[^/]+)/(?P<suburl>prioritization)/$', 'cog.views.external_urls_display', name='prioritization_display'),
 
         
     # "PLANS"

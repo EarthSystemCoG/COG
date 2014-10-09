@@ -455,8 +455,13 @@ def userCanPost(user, post):
     #    if not userHasUserPermission(user, post.project):
     #        return False
     #return True
-    # all project members can modify all pages
-    return userHasUserPermission(user, post.project)
+    
+    # page editing is restricted to project administrators
+    if post.is_restricted:
+        return userHasAdminPermission(user, post.project)
+    # page can be edited by all project members
+    else:
+        return userHasUserPermission(user, post.project)
 
 # function to check whether the user can view the current page
 def userCanView(user, post):
@@ -478,19 +483,19 @@ def getNotAuthorizedRedirect(request, post):
     elif post.project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, post.project)
     
-    # use is NOT authorized
+    # user is NOT authorized
     if not userCanView(request.user, post):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path)
         else:
-             messages = ['This page is restricted to member of project %s' % post.project.short_name,
+            messages = ['This page is restricted to member of project %s' % post.project.short_name,
                          'Please contact support for any questions.'] 
-             return render_to_response('cog/common/message.html', 
+            return render_to_response('cog/common/message.html', 
                               {'mytitle':'Page Access Restricted', 
                                'project':post.project,
                                'messages':messages }, 
                               context_instance=RequestContext(request))    
 
-    # use is authorized, return no redirect
+    # user is authorized, return no redirect
     else:
         return None

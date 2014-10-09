@@ -40,14 +40,16 @@ class SiteManager(object):
         self.cog_config_dir = SiteManager.COG_CONFIG_DIR
         try:
             config = self.config.read( SiteManager.CONFIGFILEPATH )
+            print 'Read files=%s' % config
             if not config:
                 # if the configFilePath cannot be read (ie: doesn't exist), raise an error
                 raise ValueError
 
+            print 'Initialized CoG settings from file: %s' % SiteManager.CONFIGFILEPATH
         except Exception as e:
             print "Error reading site settings configuration file: %s" % SiteManager.CONFIGFILEPATH
 
-    def get(self, name, section='default', default=None):
+    def get(self, name, section='DEFAULT', default=None):
         '''Method that retrieves a settings value from a specified section of the configuration file.'''
         
         if self.config.has_option(section, name):

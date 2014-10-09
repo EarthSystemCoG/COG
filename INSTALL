@@ -1,3 +1,23 @@
+
+NEW INSTALLATION INSTRUCTIONS
+
+o Download CoG distribution to any directory
+
+o tar xvf cog-2.7.0.tar.gz
+--> expands package in subdirectory cog-2.7.0/
+
+o cd cog-2.7.0
+
+o python setup.py install
+--> installs all dependencies
+--> installs CoG
+--> creates CoG configuration file cog_settings.cfg
+
+
+
+
+===========================================
+
 COG WEB PORTAL INSTALLATION INSTRUCTIONS
 
 The following instructions describe how to quickly install the CoG environment on a Unix-type server (Cent-OS, Linux, Mac-OSX)

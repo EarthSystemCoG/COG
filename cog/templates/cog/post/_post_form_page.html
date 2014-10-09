@@ -1,5 +1,6 @@
 <!--// START: /cog/templates/cog/post/_post_form_page.html //-->
 
+{% load cog_utils %}
 
 <table>
     <tr>
@@ -50,9 +51,18 @@
  </table>
  <table class="odd-color">
     <tr>
-          <td class="col1" nowrap="nowrap">Private ?</td>
-          <td>{{form.is_private }} (<i>if checked, only project members will be able to view this page</i>)</td>                   
+          <td nowrap="nowrap">Not Viewable ?</td>
+          <td>{{form.is_private }} 
+               (<i>If checked, only project members will be able to view this page.</i>)</td>                   
     </tr>
+    {% if user|hasAdminPermission:project %}
+    	<tr>
+          <td nowrap="nowrap">Not Editable ?</td>
+          <td>{{form.is_restricted}} 
+               (<i>If checked, only project administrators will be able to edit this page. 
+                    If not checked, all project members can edit this page.</i>)</td>                   
+    	</tr>
+    {% endif %}
 </table>
 <table>
     <tr>
