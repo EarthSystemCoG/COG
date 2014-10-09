@@ -1,7 +1,5 @@
 '''
-Created on Oct 8, 2014
-
-@author: cinquini
+Installation script for CoG application.
 '''
 
 # setup CoG settings first
@@ -14,15 +12,15 @@ import logging
 import datetime
 import collections
 import StringIO
-import shutil
 from django.core import management
 from django.contrib.auth.models import User
+
+from django.contrib.sites.models import Site
+import sqlalchemy
 
 from cog.models import Project
 from cog.models import UserProfile
 from cog.views.views_project import initProject
-from django.contrib.sites.models import Site
-import sqlalchemy
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -38,13 +36,11 @@ class CogConfig(object):
     
     def __init__(self):
         
-        #os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-        pass
+        self.esgf = False
     
     def run(self):
         '''Driver method.'''
         
-        # FIXME
         self._readCogConfig()
         self._readEsgfConfig()
         self._setupConfig()
@@ -92,7 +88,6 @@ class CogConfig(object):
             with open(ESGF_PROPERTIES_FILE, 'r') as f:
                 # transform Java properties file into python configuration file: must prepend a section
                 config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
-                #print config_string
             config_file = StringIO.StringIO(config_string)
             self.esgfConfig.readfp(config_file)        
         except IOError:
@@ -140,6 +135,10 @@ class CogConfig(object):
         # if DJANGO_DATABASE=sqllite3
         self._safeSet('DATABASE_PATH','/usr/local/cog/django.data')
         # if DJANGO_DATABASE=postgres
+        self._safeSet('DATABASE_NAME', 'cogdb')
+        self._safeSet('DATABASE_USER', self._safeGet("db.user") )
+        self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
+        self._safeSet('DATABASE_PORT', self._safeGet("db.port", default='5432'))
         
         self._safeSet('MEDIA_ROOT','/usr/local/cog/site_media')
         # defeault project to where '/' requests are redirected
@@ -152,12 +151,7 @@ class CogConfig(object):
         self._safeSet('PASSWORD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
         self._safeSet('IDP_REDIRECT','') # no redirect by default
-        
-        self._safeSet('DATABASE_NAME', 'cogdb')
-        self._safeSet('DATABASE_USER', self._safeGet("db.user") )
-        self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
-        self._safeSet('DATABASE_PORT', self._safeGet("db.port", default='5432'))
-        
+                
     def _writeCogConfig(self):
         '''Method to write out the new CoG configuration.'''
         
