@@ -23,9 +23,9 @@ COMMUNICATION_TYPES = (
                        'Face-to-face',
                        'Webinar',
                        'Video Conference',
-                       'Internet chat',
+                       'Internet Chat',
                        'Wiki',
-                       'Mailing list'
+                       'Mailing List'
                      )
 COMMUNICATION_CV = [ (x,x) for x in COMMUNICATION_TYPES ]
 
