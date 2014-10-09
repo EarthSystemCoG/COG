@@ -20,6 +20,7 @@ from django.contrib.auth.models import User
 
 from cog.models import Project
 from cog.models import UserProfile
+from cog.views.views_project import initProject
 from django.contrib.sites.models import Site
 
 logging.basicConfig(level=logging.DEBUG)
@@ -189,12 +190,17 @@ class CogConfig(object):
     def _createObjects(self):
         '''Method to populate the database with some initial objects.'''
         
-        # Site
-        site = Site.objects.create(name='localhost', domain='localhost:8000')
+        # Site: reuse default site 'example.com'
+        site = Site.objects.get(pk=1)
+        site.name = self.cogConfig.get(SECTION_DEFAULT, 'SITE_NAME')
+        site.domain = self.cogConfig.get(SECTION_DEFAULT, 'SITE_DOMAIN')
         site.save()
         
         # Test project
-        project = Project.objects.create(short_name='TestProject', long_name='Test Project', site=site, active=True)
+        project = Project.objects.create(short_name='TestProject', long_name='Test Project', 
+                                         description='This is a text project',
+                                         site=site, active=True)
+        initProject(project)
         project.save()
         
         # Administrator user
@@ -202,10 +208,9 @@ class CogConfig(object):
                                    is_staff=True, is_superuser=True)
         user.set_password( 'changeit' )
         user.save()
-        userProfile = UserProfile.objects.create(user=user, 
-                                                 institution='Institution', city='City', state='State', country='Country',
-                                                 last_password_update=datetime.datetime.now())
-        userProfile.save()
+        UserProfile.objects.create(user=user, institution='Institution', city='City', state='State', country='Country',
+                                   site=site,
+                                   last_password_update=datetime.datetime.now())
     
 def main():
     
