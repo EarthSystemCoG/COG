@@ -10,10 +10,10 @@ esgf.host=esg-datanode.jpl.nasa.gov:
     - DEFAULT_SEARCH_URL = http://esg-datanode.jpl.nasa.gov/esg-search/search/
 db.user=...
     - DATABASE_USER=...
-db.password=...
-    - DATABASE_PASSWORD=...
 db.port=5432
     - DATABASE_PORT=5432
+    
+The postgres database password is read from the file /esg/config/.esg_pg_pass
 
 '''
 
@@ -22,7 +22,7 @@ import ConfigParser
 import logging
 import collections
 import StringIO
-from constants import SECTION_DEFAULT, SECTION_ESGF, ESGF_PROPERTIES_FILE, DEFAULT_PROJECT_SHORT_NAME
+from constants import SECTION_DEFAULT, ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, DEFAULT_PROJECT_SHORT_NAME
 
 # location of site specific settigs configuration file
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
@@ -78,14 +78,27 @@ class CogConfig(object):
         # read ESGF configuration file, if available
         self.esgfConfig = ConfigParser.ConfigParser()
         
+        # $esg_config_dir/esgf.properties
         try:
             with open(ESGF_PROPERTIES_FILE, 'r') as f:
                 # transform Java properties file into python configuration file: must prepend a section
                 config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
             config_file = StringIO.StringIO(config_string)
-            self.esgfConfig.readfp(config_file)        
+            self.esgfConfig.readfp(config_file)      
+            logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)  
         except IOError:
-            pass # file not found
+            # file not found
+            logging.warn("ESGF properties file: %s not found" % ESGF_PROPERTIES_FILE) 
+        
+        # $esg_config_dir/.esg_pg_pass
+        try:
+            with open(ESGF_PASSWORD_FILE, 'r') as f:
+                password = f.read().strip()
+                self.esgfConfig.set(SECTION_DEFAULT, "DATABASE_PASSWORD", password)
+                logging.info("Read ESGF database password from file: %s" % ESGF_PASSWORD_FILE)  
+        except IOError:
+            # file not found
+            logging.warn("ESGF database password file: %s not found" % ESGF_PASSWORD_FILE) 
                 
                 
     def _safeSet(self, key, value, section=SECTION_DEFAULT):

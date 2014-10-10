@@ -1,5 +1,6 @@
 import os
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+import logging
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -85,8 +86,9 @@ DATABASES = {
 }
 DATABASES['default'] = DATABASES[ DJANGO_DATABASE ]
 
-# FIXME
-print 'Using Django Database=%s path=%s' % (DJANGO_DATABASE, DATABASE_PATH)
+logging.info('Using Django Database=%s' % DJANGO_DATABASE)
+if DJANGO_DATABASE=='sqllite3':
+    logging.info("Database path=%s" % DATABASE_PATH)
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

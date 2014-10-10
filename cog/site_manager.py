@@ -1,5 +1,6 @@
 import os
 import ConfigParser
+import logging
 
 class SiteManager(object):
     '''Class used to load site-specific settings at COG startup.
@@ -40,7 +41,7 @@ class SiteManager(object):
         self.cog_config_dir = SiteManager.COG_CONFIG_DIR
         try:
             config = self.config.read( SiteManager.CONFIGFILEPATH )
-            print 'Read files=%s' % config
+            logging.info("Site manager: using CoG settings from file(s): %s" % config)
             if not config:
                 # if the configFilePath cannot be read (ie: doesn't exist), raise an error
                 raise ValueError
