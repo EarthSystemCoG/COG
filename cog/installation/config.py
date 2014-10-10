@@ -14,6 +14,7 @@ db.port=5432
     - DATABASE_PORT=5432
     
 The postgres database password is read from the file /esg/config/.esg_pg_pass
+    - DATABASE_PASSWORD
 
 '''
 
@@ -22,7 +23,9 @@ import ConfigParser
 import logging
 import collections
 import StringIO
-from constants import SECTION_DEFAULT, ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, DEFAULT_PROJECT_SHORT_NAME
+from constants import (SECTION_DEFAULT, SECTION_ESGF, 
+                       ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, ESGF_IDP_WHITELIST, 
+                       DEFAULT_PROJECT_SHORT_NAME )
 
 # location of site specific settigs configuration file
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
@@ -94,7 +97,8 @@ class CogConfig(object):
         try:
             with open(ESGF_PASSWORD_FILE, 'r') as f:
                 password = f.read().strip()
-                self.esgfConfig.set(SECTION_DEFAULT, "DATABASE_PASSWORD", password)
+                # if found, value in .esg_pg_pass will override value from esgf.properties
+                self.esgfConfig.set(SECTION_DEFAULT, "db.password", password)
                 logging.info("Read ESGF database password from file: %s" % ESGF_PASSWORD_FILE)  
         except IOError:
             # file not found
@@ -121,14 +125,6 @@ class CogConfig(object):
 
     def _setupConfig(self):
         '''Method that assigns the CoG settings.'''
-        
-        '''
-        # FIXME
-#[esgf]
-#ESGF_HOSTNAME=hydra.fsl.noaa.gov
-#ESGF_DBURL=postgresql://dbsuper:dbpwd@localhost/esgcet
-#IDP_WHITELIST=/esg/config/esgf_idp_static.xml        
-        '''
         
         # [DEFAULT]        
         hostName = self._safeGet("esgf.host", default='localhost') 
@@ -160,13 +156,22 @@ class CogConfig(object):
         self._safeSet('PASSWORD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
         self._safeSet('IDP_REDIRECT','') # no redirect by default
+        
+        #[ESGF]
+        if self.esgf:
+            self._safeSet('ESGF_HOSTNAME', hostName, section=SECTION_ESGF)
+            self._safeSet('ESGF_DBURL', 
+                          "postgresql://%s:%s@localhost/esgcet" % (self._safeGet("db.user"), self._safeGet("db.password")),
+                          section=SECTION_ESGF)
+            self._safeSet('IDP_WHITELIST', ESGF_IDP_WHITELIST, section=SECTION_ESGF)
+            
                 
     def _writeCogConfig(self):
         '''Method to write out the new CoG configuration.'''
         
         # backup existing file
         if os.path.exists( CONFIGFILEPATH ):
-            # FIXME
+            # FIXME ?
             #os.rename(self.cogConfigFilePath, self.cogConfigFilePath + "-backup-%s" % time.strftime('%Y-%m-%d_%H:%M:%S'))  
             os.rename(CONFIGFILEPATH, CONFIGFILEPATH + "-backup")  
                 

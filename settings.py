@@ -11,6 +11,9 @@ located in directory COG_CONFIG_DIR (or by default '/usr/local/cog').
 Each parameter has a default value.
 '''
 
+SECTION_DEFAULT = 'DEFAULT'
+SECTION_ESGF = 'ESGF'
+
 from cog.site_manager import siteManager
 
 COG_CONFIG_DIR = os.environ.get('COG_CONFIG_DIR', '/usr/local/cog')
@@ -37,12 +40,11 @@ DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
 
 # FIXME
 # ESGF specific settings
-ESGF = 'esgf'
-ESGF_CONFIG = siteManager.hasConfig(ESGF)
+ESGF_CONFIG = siteManager.hasConfig(SECTION_ESGF)
 if ESGF_CONFIG:
-    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF, default='')
-    ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
-    IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
+    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=SECTION_ESGF, default='')
+    ESGF_DBURL = siteManager.get('ESGF_DBURL', section=SECTION_ESGF)
+    IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=SECTION_ESGF)
 # FIXME
 
 #====================== standard django settings.py ======================
