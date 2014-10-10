@@ -9,19 +9,25 @@ class CogSetupCommand(Command):
     '''Custom CoG install command to execute post-install configuration.'''
     
     description = "CoG configuration and installation command"
-    user_options = []
+    user_options = [ ('esgf=', None, 'Optional flag for ESGF configuration'), ]
     
     def initialize_options(self):
-        pass
+        self.esgf = False
     
     def finalize_options(self):
-        pass
+        assert self.esgf in (None, 'True', 'true', 't', 'False', 'false', 'f'), "'esgf=' flag not specified"
+        if self.esgf in ('True', 'true', 't'):
+            self.esgf = True
+        else:
+            self.esgf = False
     
     def run(self):
+        
+        print 'ESGF FLAG=%s' % self.esgf
     
         # create/update cog_settings.cfg
         from config import CogConfig
-        cogConfig = CogConfig()
+        cogConfig = CogConfig(self.esgf)
         cogConfig.config()
         
         # use cog_settings.cfg to install/upgrade CoG database

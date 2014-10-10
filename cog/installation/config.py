@@ -34,10 +34,9 @@ CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
 
 class CogConfig(object):
     
-    def __init__(self):
+    def __init__(self, esgfFlag):
         
-        # FIXME
-        self.esgf = True
+        self.esgf = esgfFlag
     
     def config(self):
         '''Driver method.'''

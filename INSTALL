@@ -14,6 +14,8 @@ o python setup.py install --user
 
 
 o python setup.py setup_cog
+o python setup.py setup_cog --esgf=False
+
 --> creates CoG configuration file cog_settings.cfg
 --> creates, populates, upgrades the database
 
