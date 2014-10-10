@@ -8,12 +8,14 @@ o tar xvf cog-2.7.0.tar.gz
 
 o cd cog-2.7.0
 
-o python setup.py install
+o python setup.py install --user
 --> installs all dependencies
---> installs CoG
+--> installs CoG under /Users/cinquini/Library/Python/2.7/lib/python/site-packages/cog-2.7.0-py2.7.egg
+
+
+o python setup.py setup_cog
 --> creates CoG configuration file cog_settings.cfg
-
-
+--> creates, populates, upgrades the database
 
 
 ===========================================
