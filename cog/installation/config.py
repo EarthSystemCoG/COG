@@ -178,13 +178,9 @@ class CogConfig(object):
         self.cogConfig.write(cfgfile)
         cfgfile.close()
         
-
-    
-def main():
-    
-    cogConfig = CogConfig()
-    cogConfig.config()
-
     
 if __name__ == '__main__':
-    main()
+    
+    logging.basicConfig(level=logging.INFO)    
+    cogConfig = CogConfig(False) # esgfFlag
+    cogConfig.config()

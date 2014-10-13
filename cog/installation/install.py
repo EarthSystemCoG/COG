@@ -90,12 +90,15 @@ class CoGInstall(object):
                 
         # Site: reuse default site 'example.com'
         site = Site.objects.get(pk=1)
+        logging.info("Updating site: %s" % site)
         site.name = self.siteManager.get('SITE_NAME')
         site.domain = self.siteManager.get('SITE_DOMAIN')
         site.save()
         
         # Test project
-        if not Project.objects.filter(short_name=DEFAULT_PROJECT_SHORT_NAME).exists():
+        #if not Project.objects.filter(short_name=DEFAULT_PROJECT_SHORT_NAME).exists():
+        if Project.objects.count() == 0:
+            logging.info("Creating project: %s" % DEFAULT_PROJECT_SHORT_NAME)
             project = Project.objects.create(short_name=DEFAULT_PROJECT_SHORT_NAME, 
                                              long_name='Test Project', 
                                              description='This is a text project',
@@ -104,7 +107,9 @@ class CoGInstall(object):
             project.save()
         
         # Administrator user
-        if not User.objects.filter(username='admin').exists():
+        if User.objects.count() == 0:
+        #if not User.objects.filter(username='admin').exists():
+            logging.info("Creating admin user")
             user = User.objects.create(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
                                        is_staff=True, is_superuser=True)
             user.set_password( 'changeit' )
@@ -115,5 +120,6 @@ class CoGInstall(object):
             
 if __name__ == '__main__':
 
+    logging.basicConfig(level=logging.INFO)
     installer = CoGInstall()
     installer.install()

@@ -22,9 +22,7 @@ class CogSetupCommand(Command):
             self.esgf = False
     
     def run(self):
-        
-        print 'ESGF FLAG=%s' % self.esgf
-    
+            
         # create/update cog_settings.cfg
         from config import CogConfig
         cogConfig = CogConfig(self.esgf)
