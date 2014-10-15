@@ -17,7 +17,13 @@ def getSelectedState(constraints, key):
         return 'selected'
     else:
         return ''
-    
+        
+# returns the list of constraints for a given facet key,
+# or the empty array
+@register.filter
+def getConstraints(constraints, key):
+    return constraints.get(key, [])
+
 @register.filter
 def getFacetOptionLabel(facet_key, facet_value):
     """Return the label to be displayed for a given (facet key, facet value) combination, 
