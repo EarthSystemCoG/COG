@@ -22,7 +22,12 @@ def getSelectedState(constraints, key):
 # or the empty array
 @register.filter
 def getConstraints(constraints, key):
-    return constraints.get(key, [])
+    # example: Constraint key=realm value(s)=[u'atmos,ocean']
+    try:
+        values = str(constraints[key][0])
+        return values.split(',')
+    except KeyError:
+        return []
 
 @register.filter
 def getFacetOptionLabel(facet_key, facet_value):

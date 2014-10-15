@@ -7,6 +7,32 @@
 			return document.getElementById("search-form");
   	  	}
 
+		// function to set the value of all facets before form is submitted
+		function setFacet2(facetKey, facetValue) {
+						
+		  var searchForm = getSearchForm();			
+  		  var input = searchForm[facetKey];
+  		  input.value = ''; // reset facet value
+  			
+  			// loop over all form elements
+  			var els = searchForm.elements;
+  			for (var i=0; i < els.length; i++ ) {
+  				
+  				// select this facet checkboxes
+    			if (els[i].type == 'checkbox') {
+    				var startswith = 'checkbox_'+facetKey; 
+    				if (els[i].id.substring(0, startswith.length) == startswith) {
+    					if (els[i].checked) {
+    						if (input.value.length>0) input.value += ",";
+    						input.value += els[i].name; // checkbox name carries the option
+    					}
+    				}
+    			}
+    			
+    		} // loop over all form elements
+    		    		
+		}
+		
   		function setFacet(facetKey, facetValue) {
   			var searchForm = getSearchForm();
   			var input = searchForm[facetKey];
@@ -46,7 +72,7 @@
 			
   		}
 
-  		function searchit(offset) {
+  		function searchit(offset) {  		
   			var searchForm = getSearchForm();
   			searchForm.offset.value = offset;
   			searchForm.submit();

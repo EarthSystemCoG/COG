@@ -32,14 +32,33 @@
 					{% with search_input.constraints|getSelectedState:key as selected %}
 						<!-- if facet has been selected > open the accordion -->
 						<div class="yui-cms-item yui-panel {{ selected }} ">
-				            <div class="hd"><span class="facet-category">{{facet.label }}</span></div>
+				            <div class="hd"><span class="facet-category">{{ facet.label }}</span></div>
 
 				            <!-- only show the +/- button if there are options available -->
 				            {% if facet.getValues %}
 					            <div class="bd">
 				              		<div class="fixed">
+				              		
+				              		  {% if key = 'realm' %} <!-- FIXME -->
+				              		  
+				              		  	{% for value_counts in facet.getSortedValues %}
+					              			{% if value_counts.1 > 0 %}
+		              			    			<li class="facet-option">
+		              			    				<input type="checkbox" id="checkbox_{{key}}_{{value_counts.0}}" 
+		              			    				       name="{{value_counts.0}}"
+		              			    				       {% if value_counts.0 in search_input.constraints|getConstraints:key %}
+		              			    				         	checked='checked'
+		              			    				       {% endif %}
+		              			    				       onclick="javascript:setFacet2('{{ key }}','{{ value_counts.0 }}');">
+		              			    				       {{ key|getFacetOptionLabel:value_counts.0 }} ({{value_counts.1}})
+		              			    			</li>
+					              			{% endif %}
+					              		{% endfor %}
+				              		  
+				              		  {% else %}
 
 				              			{% if selected %}
+				              			
 				              				<!-- facet has been selected > include selected option and backup link -->
 				              				<ul>
 												<li class="facet-option">&#171; <a href='javascript:resetFacet("{{key}}")'>Any {{facet.label}}</a></li>
@@ -54,13 +73,15 @@
 				              			{% else %}
 				              				<!-- facet not selected > include all options -->
 					              			<ul>
-						            			{% for value_counts in facet.getSortedValues %}
+							            		{% for value_counts in facet.getSortedValues %}
 						            				{% if value_counts.1 > 0 %}
 						            					<li class="facet-option">&#187; <a href="javascript:setFacet('{{ key }}','{{ value_counts.0 }}')">{{ key|getFacetOptionLabel:value_counts.0 }}</a> ({{value_counts.1}})</li>
 						            				{% endif %}
 						            			{% endfor %}
 					              			</ul>
 				              			{% endif %}
+				              			
+				              		  {% endif %}
 						      		</div>
 								</div>
 					            <div class="actions">
