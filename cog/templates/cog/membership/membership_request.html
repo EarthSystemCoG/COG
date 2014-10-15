@@ -6,23 +6,25 @@
     {% if request.method == "GET" %}
            
         <div class="instruction-box">
-	  <p>Thank you for your interest in joining the {{ project.short_name }} project. <br>In general, project membership allows you to:</p>
+	       <p>Thank you for your interest in joining the {{ project.short_name }} project. </p>
+           <p>***You do not need to join a project to view public information.***</br>
+           In general, project membership allows you to:</p>
 
-	  <div style="margin-left:auto;margin-right:auto;margin-bottom: 1.5em;width:260px;">
-                <ul style="text-align:left;margin:0px;">
-		   <li>View content on a private project.</li>
-		   <li>View private pages on a public project.</li>
-		   <li>Edit project wiki pages.</li>
-		</ul>
-          </div>
+	       <div style="margin-left:auto; margin-right:auto; margin-bottom: 1.5em; width:260px;">
+              <ul style="text-align:left;margin:0;">
+		         <li>View content on a private project.</li>
+		         <li>View private pages on a public project.</li>
+		         <li>Modify editable wiki pages.</li>
+		      </ul>
+           </div>
 		
-          <p>***You do not need to join a project to view public information.***</p>
-	  <p>If you still wish to join the {{ project.short_name }} project, click on the button below. <br> The project administrator will be notified of your request.</p>
+
+	       <p>If you still wish to join the {{ project.short_name }} project, click on the button below. <br> The project administrator will be notified of your request.</p>
 		
-	        <form method="post" action="">
-	           {% csrf_token %}
-	           <input type="submit" value="Join"/>
-	        </form>
+	           <form method="post" action="">
+	              {% csrf_token %}
+	              <input type="submit" value="Join"/>
+	           </form>
         </div>
     
     
@@ -39,7 +41,7 @@
 			    <br/>and will be reviewed by the project administrators as soon as possible.
 			    <br/>You will be notified of the administrators' decision by email.
 			
-			<!-- Memberhsip was already requested -->
+			<!-- Membership was already requested -->
 			{% else %}
 			
 			    <br/>Your request for membership <span style="text-decoration:underline">has already been submitted</span>, 
