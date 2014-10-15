@@ -16,7 +16,7 @@ setup(
     url = "https://github.com/EarthSystemCoG/COG",
     packages=find_packages(exclude=[]),
     include_package_data=True,
-    install_requires=['pil'],
+    install_requires=['pil','django==1.6.5'],
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
