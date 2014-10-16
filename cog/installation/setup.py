@@ -12,7 +12,7 @@ class CogSetupCommand(Command):
     user_options = [ ('esgf=', None, 'Optional flag for ESGF configuration'), ]
     
     def initialize_options(self):
-        self.esgf = False
+        self.esgf = 'False'
     
     def finalize_options(self):
         assert self.esgf in (None, 'True', 'true', 't', 'False', 'false', 'f'), "'esgf=' flag not specified"
