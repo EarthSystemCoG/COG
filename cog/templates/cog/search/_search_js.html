@@ -7,8 +7,8 @@
 			return document.getElementById("search-form");
   	  	}
 
-		// function to set the value of all facets before form is submitted
-		function setFacet2(facetKey, facetValue) {
+		// function to set the value(s) of a facet
+		function setFacet(facetKey, facetValue) {
 						
 		  var searchForm = getSearchForm();			
   		  var input = searchForm[facetKey];
@@ -33,7 +33,7 @@
     		    		
 		}
 		
-  		function setFacet(facetKey, facetValue) {
+  		function setFacetOld(facetKey, facetValue) {
   			var searchForm = getSearchForm();
   			var input = searchForm[facetKey];
 		    input.value = facetValue;
