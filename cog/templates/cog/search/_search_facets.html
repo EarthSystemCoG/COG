@@ -38,9 +38,7 @@
 				            {% if facet.getValues %}
 					            <div class="bd">
 				              		<div class="fixed">
-				              		
-				              		  {% if key = 'project' %} <!-- FIXME -->
-				              		  
+				              						              		  
 				              		  	{% for value_counts in facet.getSortedValues %}
 					              			{% if value_counts.1 > 0 %}
 		              			    			<li class="facet-option">
@@ -54,34 +52,7 @@
 		              			    			</li>
 					              			{% endif %}
 					              		{% endfor %}
-				              		  
-				              		  {% else %}
 
-				              			{% if selected %}
-				              			
-				              				<!-- facet has been selected > include selected option and backup link -->
-				              				<ul>
-												<li class="facet-option">&#171; <a href='javascript:resetFacet("{{key}}")'>Any {{facet.label}}</a></li>
-												{% for value_counts in facet.getSortedValues %}
-												    <!-- only show the selected value, not other values that might be co-selected -->
-												    {% if value_counts.0 in search_input.constraints|hash:key %}
-													    <li class="facet-option">= {{ key|getFacetOptionLabel:value_counts.0 }} ({{value_counts.1}})</li>
-													{% endif %}
-												{% endfor %}
-											</ul>
-
-				              			{% else %}
-				              				<!-- facet not selected > include all options -->
-					              			<ul>
-							            		{% for value_counts in facet.getSortedValues %}
-						            				{% if value_counts.1 > 0 %}
-						            					<li class="facet-option">&#187; <a href="javascript:setFacet('{{ key }}','{{ value_counts.0 }}')">{{ key|getFacetOptionLabel:value_counts.0 }}</a> ({{value_counts.1}})</li>
-						            				{% endif %}
-						            			{% endfor %}
-					              			</ul>
-				              			{% endif %}
-				              			
-				              		  {% endif %}
 						      		</div>
 								</div>
 					            <div class="actions">
