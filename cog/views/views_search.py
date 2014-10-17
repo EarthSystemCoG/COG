@@ -255,8 +255,9 @@ def search_post(request, searchInput, searchConfig, extra={}):
     # note: request parameters do NOT include the project fixed constraints
     req_constraints = [] # latest constraints from request
     for key, value in request.REQUEST.items():
-        if not key in SEARCH_PATH_EXCLUDE:
+        if not key in SEARCH_PATH_EXCLUDE and value != 'on': # value from 'checkbox_...'
             if value is not None and len(value)>0: # disregard empty facet
+                print 'key=%s value=%s' % (key, value)
                 constraint = (key, value)     
                 req_constraints.append(constraint)
                 if not constraint in sp:

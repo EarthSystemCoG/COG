@@ -1,15 +1,5 @@
 import os
 from setuptools import setup, find_packages
-from setuptools.command.install import install
-from cog.installation.setup import main
-
-class CustomInstallCommand(install):
-    '''Custom setup install command to execute post-install configuration.'''
-    
-    def run(self):
-        print 'Beginning the installation'
-        install.run(self)
-        main()
 
 # Utility function to read the README file.
 def read(fname):
@@ -26,7 +16,17 @@ setup(
     url = "https://github.com/EarthSystemCoG/COG",
     packages=find_packages(exclude=[]),
     include_package_data=True,
-    install_requires=['pil'],
+    install_requires=['pil==1.1.7',
+                      'django==1.6.5',
+                      'django-grappelli==2.4.5',
+                      'django-openid-auth==0.5',
+                      'django-pagination==1.0.7',
+                      'sqlalchemy==0.9.2',
+                      'south==1.0.0',
+                      'psycopg2==2.5.2',
+                      'python-openid==2.2.5',
+                      'passlib==1.6.2',                  
+                      ],
     long_description=read('README.md'),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -35,6 +35,9 @@ setup(
         'Environment :: Web Environment',
         "Framework :: Django",
     ],
-    cmdclass={ 'install': CustomInstallCommand },
+    #cmdclass={ 'install': CustomInstallCommand },
+    entry_points = {
+     "distutils.commands": [ "setup_cog = cog.installation.setup:CogSetupCommand"]
+    }
 
 )

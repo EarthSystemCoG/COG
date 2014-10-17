@@ -1,5 +1,6 @@
 import os
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+import logging
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -10,7 +11,12 @@ located in directory COG_CONFIG_DIR (or by default '/usr/local/cog').
 Each parameter has a default value.
 '''
 
+SECTION_DEFAULT = 'DEFAULT'
+SECTION_ESGF = 'ESGF'
+
 from cog.site_manager import siteManager
+
+COG_CONFIG_DIR = os.environ.get('COG_CONFIG_DIR', '/usr/local/cog')
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
@@ -18,7 +24,7 @@ TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
 COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST', default='cog_info@list.woc.noaa.gov')
 SECRET_KEY = siteManager.get('SECRET_KEY', default='ds4sjjj(76K=={%$HHH1@#b:l;')
 # for SQLLite back-end
-DATABASE_PATH = siteManager.get('DATABASE_PATH', default=rel('./database/django.data'))
+DATABASE_PATH = siteManager.get('DATABASE_PATH', default="%s/django.data" % COG_CONFIG_DIR)
 # for postgres back-end
 DATABASE_NAME = siteManager.get('DATABASE_NAME', default='cogdb')
 DATABASE_USER = siteManager.get('DATABASE_USER')
@@ -28,18 +34,17 @@ MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS',
 PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
-MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default=rel('site_media/'))
+MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % COG_CONFIG_DIR)
 DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
 DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
 
 # FIXME
 # ESGF specific settings
-ESGF = 'esgf'
-ESGF_CONFIG = siteManager.hasConfig(ESGF)
+ESGF_CONFIG = siteManager.hasConfig(SECTION_ESGF)
 if ESGF_CONFIG:
-    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=ESGF, default='')
-    ESGF_DBURL = siteManager.get('ESGF_DBURL', section=ESGF)
-    IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=ESGF)
+    ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=SECTION_ESGF, default='')
+    ESGF_DBURL = siteManager.get('ESGF_DBURL', section=SECTION_ESGF)
+    IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=SECTION_ESGF)
 # FIXME
 
 #====================== standard django settings.py ======================
@@ -69,13 +74,24 @@ DATABASES = {
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    # Postgres
+    'postgres': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DATABASE_NAME,
+        'USER': DATABASE_USER,                      # Not used with sqlite3.
+        'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
     }
 
 }
+
 DATABASES['default'] = DATABASES[ DJANGO_DATABASE ]
 
-# FIXME
-print 'Using Django Database=%s path=%s' % (DJANGO_DATABASE, DATABASE_PATH)
+logging.info('Using Django Database=%s' % DJANGO_DATABASE)
+if DJANGO_DATABASE=='sqllite3':
+    logging.info("Database path=%s" % DATABASE_PATH)
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

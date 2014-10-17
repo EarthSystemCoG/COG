@@ -8,13 +8,25 @@ o tar xvf cog-2.7.0.tar.gz
 
 o cd cog-2.7.0
 
-o python setup.py install
+o python setup.py install --user
 --> installs all dependencies
---> installs CoG
+--> installs CoG under /Users/cinquini/Library/Python/2.7/lib/python/site-packages/cog-2.7.0-py2.7.egg
+
+
+o python setup.py setup_cog
+o python setup.py setup_cog --esgf=False|True
+
 --> creates CoG configuration file cog_settings.cfg
+--> creates, populates, upgrades the database
+		- test project TestProject
+		- admin user
+--> if esgf=True will create associated openid: http://<hostname>/esgf-idp/openid/admin (or first available openid)
 
-
-
+o Testing
+	python manage.py runserver
+	access http://localhost:8000/projects/testproject
+	log onto /admin
+	log with openid
 
 ===========================================
 
