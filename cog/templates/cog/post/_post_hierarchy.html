@@ -1,30 +1,38 @@
 <!--// START: /cog/templates//cog/post/_post_heirarchy.html //-->
-<!--//Related pages //-->
+<!--// Related Pages //-->
 {% load cog_utils %}
 
 {% with post|relatedPostCount:related_posts as counts %}
-   {% if counts > 0 %}
-   	   <hr class="white"/>
-	   <div class="header_bar"> 
-	        <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst}}{{counts|pluralize }} ({{ counts }})</a>
-	   </div><!--// end div.header_bar //-->
-	   <div class="mybox" id="post_hierarchy" style="display:none">
-	        <table>
-	            {% if post.parent %} 
+
+   {% with post|relatedPostSorted:related_posts as sorted_posts %}
+
+      {% if counts > 0 %}
+                    <hr class="white"/>
+	       <div class="header_bar">
+           <!--// Create header bar and include the number of Related Pages in parentheses //-->
+	            <a href="" onclick="javascript:toggle_visibility('post_hierarchy'); return false;" class="listlink">&nbsp;Related {{ post.type|capfirst}}{{counts|pluralize }} ({{ counts }})</a>
+	       </div><!--// end div.header_bar //-->
+	       <div class="mybox" id="post_hierarchy" style="display:none">
+	           <table>
+	              {% if post.parent %}
 	                <tr>
 	                    <td>
 	                       Parent {{ post.type|capfirst }}: <a href="{% url 'post_detail' post.parent.id %}">{{ post.parent }}</a>{{ post.parent|is_locked:request }}          
 	                   </td>
 	                </tr>
-	            {% endif %}
-	            {% for child in related_posts %}
+	              {% endif %}
+
+	              {% for child in sorted_posts %}
+                  <!--// Child Pages: //-->
 	                <tr>
-	                    <td>
-	                       Child {{ post.type|capfirst }}: <a href="{% url 'post_detail' child.id %}">{{ child }}</a>{{ child|is_locked:request }}             
+	                   <td>
+	                     Child {{ post.type|capfirst }}: <a href="{% url 'post_detail' child.id %}">{{ child }}</a>{{ child|is_locked:request }}
 	                   </td>
 	                </tr>
-	            {% endfor %}
+	              {% endfor %}
+
 	        </table>  
-	    </div><!--// end div id=post_hierarchy //-->
-	{% endif %}
+	       </div><!--// end div id=post_hierarchy //-->
+      {% endif %}
+   {% endwith %}
 {% endwith %}

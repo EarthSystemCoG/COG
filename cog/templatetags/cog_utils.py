@@ -252,6 +252,14 @@ def relatedPostCount(post, related_posts):
     return count
 
 @register.filter
+
+# function to sort Child Pages alphabetically by title
+def relatedPostSorted(post, related_posts):
+    sorted_posts = sorted(related_posts, key=lambda x: x.title, reverse=False)
+    return sorted_posts
+
+@register.filter
+
 def numberOptions(lastNumber, selectedNumber):
     lastNumberPlusOne = int(lastNumber)
     selectedNumber = int(selectedNumber)
