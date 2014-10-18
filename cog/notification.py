@@ -26,7 +26,7 @@ class EmailConfig:
         
         try:
             
-            cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
+            cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
             CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog.cfg')
     
             config.read( CONFIGFILEPATH )

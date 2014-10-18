@@ -30,7 +30,7 @@ class SiteManager(object):
     '''
     
     # location of site specific settigs configuration file
-    COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
+    COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
     CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
 
     def __init__(self):

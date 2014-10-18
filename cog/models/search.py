@@ -201,7 +201,7 @@ class SearchMappings(object):
     
     def __init__(self):
         
-        cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
+        cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
         CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog_search.cfg')
         
         self.mappings = {}
