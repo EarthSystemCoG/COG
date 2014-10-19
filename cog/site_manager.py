@@ -23,10 +23,20 @@ class SiteManager(object):
        # optional top-level URL to redirect user registration (no trailing '/')
        IDP_REDIRECT=https://www.earthsystemcog.org
 
-       [esgf]
+       [ESGF]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
        IDP_WHITELIST=/esg/config/esgf_idp_static.xml
+       
+       [EMAIL]
+       email.server=smtp.gmail.com
+       # leave port blank if default
+       email.port=
+       email.sender=Earth System COG
+       email.username=notify_esmf.esrl@noaa.gov
+       email.password=........
+       email.security=STARTTLS
+
     '''
     
     # location of site specific settigs configuration file
