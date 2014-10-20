@@ -5,6 +5,7 @@ import os
 
 SECTION_DEFAULT = 'DEFAULT'
 SECTION_ESGF = 'ESGF'
+SECTION_EMAIL = 'EMAIL'
 
 ESG_CONFIG_DIR = os.getenv("esg_config_dir","/esg/config")
 ESGF_PROPERTIES_FILE = '%s/esgf.properties' % ESG_CONFIG_DIR

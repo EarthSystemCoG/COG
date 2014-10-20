@@ -23,7 +23,7 @@ import ConfigParser
 import logging
 import collections
 import StringIO
-from constants import (SECTION_DEFAULT, SECTION_ESGF, 
+from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, ESGF_IDP_WHITELIST, 
                        DEFAULT_PROJECT_SHORT_NAME )
 
@@ -163,6 +163,14 @@ class CogConfig(object):
                           "postgresql://%s:%s@localhost/esgcet" % (self._safeGet("db.user"), self._safeGet("db.password")),
                           section=SECTION_ESGF)
             self._safeSet('IDP_WHITELIST', ESGF_IDP_WHITELIST, section=SECTION_ESGF)
+            
+        #[EMAIL]
+        self._safeSet('EMAIL_SERVER', self._safeGet("mail.smtp.host"), section=SECTION_EMAIL)
+        self._safeSet('EMAIL_PORT', '', section=SECTION_EMAIL)
+        self._safeSet('EMAIL_SENDER', '', section=SECTION_EMAIL)
+        self._safeSet('EMAIL_USERNAME', '', section=SECTION_EMAIL)
+        self._safeSet('EMAIL_PASSWORD', '', section=SECTION_EMAIL)
+        self._safeSet('EMAIL_SECURITY', 'STARTTLS', section=SECTION_EMAIL)
             
                 
     def _writeCogConfig(self):

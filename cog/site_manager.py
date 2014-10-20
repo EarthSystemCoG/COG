@@ -29,13 +29,13 @@ class SiteManager(object):
        IDP_WHITELIST=/esg/config/esgf_idp_static.xml
        
        [EMAIL]
-       email.server=smtp.gmail.com
+       EMAIL_SERVER=smtp.gmail.com
        # leave port blank if default
-       email.port=
-       email.sender=Earth System COG
-       email.username=notify_esmf.esrl@noaa.gov
-       email.password=........
-       email.security=STARTTLS
+       EMAIL_PORT=
+       EMAIL_SENDER=Earth System COG
+       EMAIL_USERNAME=........
+       EMAIL_PASSWORD=........
+       EMAIL_SECURITY=STARTTLS
 
     '''
     
