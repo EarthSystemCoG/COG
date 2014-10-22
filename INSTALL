@@ -134,9 +134,7 @@ the new values should be entered in cog_settings.cfg, then run the command:
 cd $COG_INSTALL_DIR
 python manage.py init_site
 
-o Setup federation with other CoG instances by visiting the URL:
-
-http://<hostname>/cogadmin/peers/
+o Setup federation with other CoG instances:
 
 The list of possible CoG peers is seeded from the file cog/management/commands/sites.xml that is distributed with the CoG application.
 
