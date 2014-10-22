@@ -12,26 +12,43 @@
 {% endif %}
 
 <!-- Search Text Box-->
-<div class="box-colored">
-  <table>
-	<tr>
-	  <!--Safari requidres the middle alignment. We may want to consolidate this style-->
-	<td style="width:10%;vertical-align:middle;text-align:right;">Enter Text</td>
-	<td style="width:30%;vertical-align:middle;"><input type="text" name="query" size="30" value="{{search_input.query}}"/>
-	<td style="width:50%;vertical-align:middle;">&nbsp;<input type="submit" value="Search" return true;"/> 
-		&nbsp; <input type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
-	    {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
-	Display
-	<select name="limit" id="limit">
-	  <option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
-	  <option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
-	  <option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
-	  <option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
-	  </select> results per page
-	 </td>
-   </tr>
- </table>
-</div>
+<table>
+    <tr>
+    <td>
+      <div style="background-color:#EEEEEE;border:1px solid #666; padding-right:5px;height:41px;">
+        <table>
+	      <tr>
+	      <!--Safari requires the middle alignment. We may want to consolidate this style-->
+	       <td style="width:20%;text-align:center;vertical-align:middle;">Enter Text:</td>
+	       <td style="width:50%;vertical-align:middle;">
+               <input style="padding-top:1px;padding-bottom:1px;margin-bottom: 7px; margin-top:7px;" type="text" name="query" size="30" value="{{search_input.query}}"/>
+           </td>
+          </tr>
+        </table>
+      </div>
+    </td>
+    <td>
+      <div class="box-colored" style="height:41px;">
+        <table>
+        <tr>
+	       <td style="width:50%;text-align:center;vertical-align:middle;">
+           &nbsp;<input type="submit" value="Search" return true;"/>
+		   &nbsp; <input type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
+	      {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
+	      Display
+	      <select name="limit" id="limit">
+	      <option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
+	      <option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
+	      <option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
+	      <option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
+	      </select> results per page
+	     </td>
+        </tr>
+        </table>
+      </div>
+    </td>
+    </tr>
+</table>
 
 <!-- optional checkbox flags -->
 <br/>
