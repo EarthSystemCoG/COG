@@ -26,7 +26,7 @@ class EmailConfig:
                 print 'Using email port=%s' %  self.port
                 print 'Using email sender=%s' %  self.sender
                 print 'Using email username=%s' %  self.username
-                print 'Using email password=%s' %  self.password
+                #print 'Using email password=%s' %  self.password
                 print 'Using email security=%s' %  self.security
                 self.init = True
             
