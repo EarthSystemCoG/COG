@@ -109,6 +109,7 @@ o login as administrator:
 	
 o immediately change the "admin" password by clicking on "My Profile" -> "Change Password" 
   or directly accessing the URL "http://<hostname>/password/update/
+  Note: to fully test the password change, you need to COMPLETELY quit the browser and log-in as 'admin' again,
 
 o also change all other "admin" data to match a local user, 
 especially the email address where all site-level notifications will be sent
@@ -170,7 +171,7 @@ will parse the user environment, and run the command at minute 0 of every hour, 
 
 NOTES: 
 	- projects will be updated only from peer sites that are "enabled". 
-	- IMPORTANT: a site will only share projects correctly if its 'Site' domainname equals its real domain.
+	- IMPORTANT: a site will only share projects correctly if its 'Site' domain name equals its real domain.
 	  If its site domain has been recently updated, CoG must be restarted for that change to take effect, otherwise
 	  the other CoGs won't see its projects
 	- a site will only share those projects that are both 'active' and 'public'
@@ -192,27 +193,24 @@ psql -U postgres -p 5432 cogdb < cogdb_2014-03-12.sql
 simply copy the older django.data file to the DATABASE_PATH location 
 Finally restart CoG
 
-
-
-
 	
 PERIODIC ADMINISTRATION TASKS
 
 o Setup a cron job to periodically update the projects around the federation.
-An example such script is provided as scripts/sync_projects.sh - which might need to be customized to your environment.
+An example such script is provided as scripts/sync_projects.sh - which will need to be customized to your environment.
 
 For example, to synchronize the projects every hour and append the log to a file:
 
-0 * * * * /usr/COG/scripts/sync_projects.sh  >> /tmp/crontab.log 2>&1
+0 * * * * /usr/local/cog/cog_install/resources/scripts/sync_projects.sh  >> /tmp/crontab.log 2>&1
 
 
 o Setup a cron job to backup the postgres database content every night. 
 
-An example script is provided as 'scripts/cog_backup.sh' - which might need to be customized to your specific installation.
+An example script is provided as 'scripts/cog_backup.sh' - which will need to be customized to your specific installation.
 
 For example, to backup the database every day at midnight:
 
-0 0 * * * /usr/COG/scripts/cog_backup.sh
+0 0 * * * /usr/local/cog/cog_install/scripts/cog_backup.sh
 
 NOTE: to run as cron, the postgres database password must be located in file ~/.pgpass with the format:
 host_name:port:database_name:database_user:database_password
@@ -221,18 +219,20 @@ Also must set the file permissionss as follows:
 
 chmod 0600 ~/.pgpass
 
-CUSTOMIZED HEADER AND FOOTER
+o Customize the header and footer
 
 The default header and footer can be overridden by placing a custom temaplate with the same name and system path under the
-root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, where by default COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
+root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, w
+here by default COG_CONFIG_DIR=/usr/local/cog/cog_config (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
 
-For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html which come with the distribution, create the two custom files:
+For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html 
+which come with the distribution, create the two custom files:
 
-/usr/local/cog/mytemplates/cog/templates/common/cog_header_custom.html
-/usr/local/cog/mytemplates/cog/templates/common/cog_footer_custom.html
+/usr/local/cog/cog_config/mytemplates/cog/templates/common/cog_header_custom.html
+/usr/local/cog/cog_config/mytemplates/cog/templates/common/cog_footer_custom.html
 
 Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the template as "/mymedia/<image name>".
 
-For example, the file located at /usr/local/cog/mymedia/nasa.jpeg can be loaded by any template as src="/mymedia/nasa.jpeg" (please note the first leading '/').
+For example, the file located at /usr/local/cog/cog_config/mymedia/nasa.jpeg can be loaded by any template as src="/mymedia/nasa.jpeg" (please note the first leading '/').
 
 The directories resources/noaa/mytemplates and resources/noaa/mymedia contain some examples of custom header, footer and associated media.
