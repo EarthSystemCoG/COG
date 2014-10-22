@@ -99,10 +99,10 @@ class CoGInstall(object):
         #if not Project.objects.filter(short_name=DEFAULT_PROJECT_SHORT_NAME).exists():
         if Project.objects.count() == 0:
             logging.info("Creating project: %s" % DEFAULT_PROJECT_SHORT_NAME)
-            project = Project.objects.create(short_name=DEFAULT_PROJECT_SHORT_NAME, 
-                                             long_name='Test Project', 
-                                             description='This is a text project',
-                                             site=site, active=True)
+            project = Project(short_name=DEFAULT_PROJECT_SHORT_NAME, 
+                              long_name='Test Project', 
+                              description='This is a text project',
+                              site=site, active=True)
             initProject(project)
             project.save()
         
@@ -110,13 +110,15 @@ class CoGInstall(object):
         if User.objects.count() == 0:
         #if not User.objects.filter(username='admin').exists():
             logging.info("Creating admin user")
-            user = User.objects.create(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
-                                       is_staff=True, is_superuser=True)
-            user.set_password( 'changeit' )
+            user = User(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
+                        is_staff=True, is_superuser=True)
+            user.set_password('changeit')
             user.save()
-            UserProfile.objects.create(user=user, institution='Institution', city='City', state='State', country='Country',
-                                       site=site,
-                                       last_password_update=datetime.datetime.now())
+            userp = UserProfile(user=user, institution='Institution', city='City', state='State', country='Country',
+                                site=site,
+                                last_password_update=datetime.datetime.now())
+            userp.clearTextPassword='changeit' # needed by esgfDatabaseManager, NOT saved as clear text in any database
+            userp.save()
             
 if __name__ == '__main__':
 

@@ -155,18 +155,18 @@ on the 'Configure Peers' link in the 'Admin' menu in the lower left navigation b
 
 The local CoG application can be instructed to load the most recent list of projects from the other federated instances in one of three ways:
 
-o By visiting the page "Configure Peers" and clicking on the lower link "Synchronize with Peer CoGs Now "
+a) By visiting the page "Configure Peers" and clicking on the lower link "Synchronize with Peer CoGs Now "
 (or directly invoking the URL "http://<your cog domain name>/share/sync/projects/")
 
-o By invoking the following django management command:
+b) By invoking the following django management command:
 
-cd <COG installation directory>
+cd $COG_INSTALL_DIR
 python manage.py sync_projects
 
-o By setting up a cron job that executes the same command above. For example:
+c) By setting up a cron job that executes the same command above. For example:
 
 crontab -l
-0 * * * * source ~/.bashrc; python /usr/COG/manage.py sync_projects >> /tmp/crontab.log 2>&1
+0 * * * * source ~/.bashrc; python /usr/local/cog/cog_install/manage.py sync_projects >> /tmp/crontab.log 2>&1
 
 will parse the user environment, and run the command at minute 0 of every hour, appending the output to file.
 
