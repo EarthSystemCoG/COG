@@ -263,7 +263,7 @@ def getUnsavedProjectSubFolders(project, request):
     return folders
 
 
-def createOrUpdateProjectSubFolders(project, request):
+def createOrUpdateProjectSubFolders(project, request=None):
     '''Function to set the state of the top sub-folders, creating them if necessary.'''
     
     topFolder = getTopFolder(project)
@@ -272,7 +272,7 @@ def createOrUpdateProjectSubFolders(project, request):
         folder, created = Folder.objects.get_or_create(name=name, parent=topFolder, project=project)
         if created:
             print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
-        if ("folder_%s" % folder.name) in request.POST.keys():
+        if request is not None and ("folder_%s" % folder.name) in request.POST.keys():
             folder.active = True
         else:
             folder.active = False
