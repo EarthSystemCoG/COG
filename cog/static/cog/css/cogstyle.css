@@ -133,7 +133,7 @@ This sets the styles for the defaults
 div.custom_header_bar {
     width:        100%;
     margin-top:   0px;
-    /*background: -moz-linear-gradient(left, #666 0%, white 15%, white 85%, #666 100%); */
+    background-color: #E9F5F6;
 }
 
 
@@ -145,19 +145,35 @@ div.custom_header{
 }
 
 td.custom_header_esgf{
-    width:          120px;
+    width:          120px; /*width of logo*/
     vertical-align: middle;
     margin:         0px;
     padding:        0px;
     padding-top:    1px;
     padding-bottom: 2px; /* Cecelia wanted this 1px larger than the top */
 }
+
+td.custom_header_cog{
+    width:          70px; /*width of cog logo*/
+    text-align:     right;
+    vertical-align: middle;
+    margin:         0px;
+    padding:        0px;
+    padding-top:    3px;
+    padding-bottom: 2px;
+
+
+}
 td.custom_header_welcome{
-    vertical-align: bottom;
+    vertical-align: middle;
     font-size:      12px;  /* note this is in px and not pt */
     color:          #666;
     font-style:     italic;
     line-height:    1.35;
+    width:          249px; /*may need to make this larger if people have large names for their nodes */
+    text-align:     left;
+    padding:        2px;
+    padding-left:   4px;
 }
 
 hr.custom_header {
