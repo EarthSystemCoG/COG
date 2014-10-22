@@ -99,10 +99,10 @@ class CoGInstall(object):
         #if not Project.objects.filter(short_name=DEFAULT_PROJECT_SHORT_NAME).exists():
         if Project.objects.count() == 0:
             logging.info("Creating project: %s" % DEFAULT_PROJECT_SHORT_NAME)
-            project = Project(short_name=DEFAULT_PROJECT_SHORT_NAME, 
-                              long_name='Test Project', 
-                              description='This is a text project',
-                              site=site, active=True)
+            project = Project.objects.create(short_name=DEFAULT_PROJECT_SHORT_NAME, 
+                                             long_name='Test Project', 
+                                             description='This is a text project',
+                                             site=site, active=True)
             initProject(project)
             project.save()
         
