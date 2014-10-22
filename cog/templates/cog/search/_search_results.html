@@ -5,10 +5,10 @@
   <!-- anchor for dialogs -->
   <div id="myDialog" class="yui-skin-sam"></div>
   
-  <!-- display search path (aka bread-crumming) -->
+  <!-- display search path (aka bread-crumbing) -->
   {% if request.session.search_path|length > 0 %}
 	  <p>
-	  <b>Search Path</b>: &nbsp; 
+	  <b>Search Constraints</b>: &nbsp;
 	  {% for item in request.session.search_path %}
 	  	<a href='javascript:resetFacet("{{item.0}}")' class='deletelink'> </a> 
 	  	<a href='javascript:resetFromFacetIndex({{forloop.counter0}})'>{{ item.1 }}</a>
