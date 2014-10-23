@@ -25,7 +25,8 @@ setup(
                       'south==1.0.0',
                       'psycopg2==2.5.2',
                       'python-openid==2.2.5',
-                      'passlib==1.6.2',                  
+                      'passlib==1.6.2',
+                      'pysqlite==2.6.3',                  
                       ],
     long_description=read('README.md'),
     classifiers=[

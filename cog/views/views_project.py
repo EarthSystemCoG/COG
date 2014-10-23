@@ -1,28 +1,28 @@
-from django.shortcuts import get_object_or_404, render_to_response, redirect
-from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.core.urlresolvers import reverse
+import os
+import string
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory, inlineformset_factory
 from django.http import HttpResponse
-import string
-import os
-from django.conf import settings
-from django.contrib.auth.models import User, AnonymousUser
+from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, render_to_response, redirect
+from django.template import RequestContext
 
-from cog.models import *
 from cog.forms import *
-from cog.utils import *
-from cog.notification import notify
-from cog.services.membership import addMembership
-from cog.models.utils import *
-
-from cog.views.views_templated import templated_page_display
-from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
+from cog.models import *
 from cog.models.navbar import TABS, TAB_LABELS, NAVMAP, INVNAVMAP
-from django.contrib.sites.models import Site
-
+from cog.models.utils import *
+from cog.models.utils import createOrUpdateProjectSubFolders
+from cog.notification import notify
 from cog.project_manager import projectManager
+from cog.services.membership import addMembership
+from cog.utils import *
+from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
+from cog.views.views_templated import templated_page_display
 
 
 # method to add a new project, with optional parent project
@@ -435,6 +435,9 @@ def initProject(project):
     
     # create top-level bookmarks folder, needed to add a resource from any page
     folder = getTopFolder(project)
+    
+    # create default sub-folders
+    createOrUpdateProjectSubFolders(project)
     
     # create images upload directory
     create_upload_directory(project)        

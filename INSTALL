@@ -1,277 +1,153 @@
+====================== COG INSTALLATION INSTRUCTIONS ======================================
 
-NEW INSTALLATION INSTRUCTIONS
 
-o Download CoG distribution to any directory
+>>> PRE-REQUISITES
 
-o tar xvf cog-2.7.0.tar.gz
---> expands package in subdirectory cog-2.7.0/
+*-nix OS, including Cent-OS, linux and MacOSX
+Python 2.7
+Python virtualenv (pip install virtualenv)
+Postgres (only if using Postgres back-end)
 
-o cd cog-2.7.0
+>>> INSTALLATION
 
-o python setup.py install --user
---> installs all dependencies
---> installs CoG under /Users/cinquini/Library/Python/2.7/lib/python/site-packages/cog-2.7.0-py2.7.egg
+0) Create a parent directory under which all CoG-related software (Python, CoG installation, CoG configuration)
+will be installed. The directory can be located anywhere on the system. The user executing the installation
+must have write permissions to this directory.
 
+o export COG_DIR=/usr/local/cog
+o mkdir $COG_DIR (if not existing already)
+
+At the end of the installation process, the $COG_DIR will contain the following sub-directories:
+
+$COG_DIR/
+	|
+	|--> cog_config/ : site-specific configuration and media files
+	|--> cog_install/ : CoG source distribution
+	|--> venv/: Python virtula environment (Python executable and all needed dependencies) 
+	
+It is recommended to setup the necessary env variables in your ~/.bash_profile:
+
+export COG_DIR=/usr/local/cog
+export COG_CONFIG_DIR=$COG_DIR/cog_config
+export COG_INSTALL_DIR=$COG_DIR/cog_install
+
+
+1) Define Python virtual environment
+
+create a directory where to install a specific distribution of Python and all its dependencies
+needed by CoG:
+
+o cd $COG_DIR
+o virtualenv venv
+
+will create the sub-directory venv with:
+- copy of python executable in ./bin/python
+- location for installation of additional needed packages in ./lib/python2.7/site-packages
+
+o source venv/bin/activate
+o which python
+will show that the python installation used is located into the venv sub-directory
+
+to later de-activate the Python virtual environment:
+
+o deactivate
+
+2) Install CoG
+
+Create a directory to hold the CoG distribution,
+checkout CoG from the GitHub repository (using a specific branch or tag)
+
+o cd $COG_DIR
+o git clone https://github.com/EarthSystemCoG/COG cog_install
+or:
+o git clone git@github.com:EarthSystemCoG/COG.git cog_install
+o cd cog_install
+o git checkout -b devel origin/devel
+or for a specific tag:
+o git checkout v2.6.2
+o export COG_INSTALL_DIR=$COG_DIR/cog_install
+
+3) Configure CoG
+
+Create a directory to hold the local CoG configuration and all future CoG media
+
+o export COG_CONFIG_DIR=$COG_DIR/cog_config
+o mkdir $COG_CONFIG_DIR
+
+o cd $COG_INSTALL_DIR
+o python setup.py install
+
+will install all necessary CoG dependencies under the CoG python installation in the location
+$COG_DIR/venv/lib/python2.7/site-packages
 
 o python setup.py setup_cog
-o python setup.py setup_cog --esgf=False|True
+or to install CoG on an existing ESGF node:
+o python setup.py setup_cog --esgf=true
 
---> creates CoG configuration file cog_settings.cfg
---> creates, populates, upgrades the database
-		- test project TestProject
-		- admin user
---> if esgf=True will create associated openid: http://<hostname>/esgf-idp/openid/admin (or first available openid)
+will create the site configuration file under /usr/local/cog/cog_config/cog_settings.cfg
+will create a site_media directory under /usr/local/cog/cog_config/site_media
+will copy all CoG system media to /usr/local/cog/cog_install/static
+	
+if --esgf=false:
+	- will create a startup sqllite database under /usr/local/cog/cog_config/django.data
+	- if installing for the first time, it will create a "TestProject" and make that the CoG home project
+	- if installing for the first time, it will create a super-user "admin" with password "changeit"
+	
+if --esgf=true:
+	- will create a CoG database onto the ESGF Postgres installation
+	- if installing for the first time, it will create a "TestProject" and make that the CoG home project
+	- if installing for the first time, it will create a super-user "admin" with password "changeit" 
+	  and openid 'https://<hostname>/esgf-idp/openid/admin (or the first available openid if that is taken already)
 
-o Testing
-	python manage.py runserver
-	access http://localhost:8000/projects/testproject
-	log onto /admin
-	log with openid
+o rm -rf $COG_PYTHON/lib/python2.7/site-packages/cog*
 
-===========================================
+will remove CoG from the python site-packages library,
+to avoid conflicts with the source installation in $COG_DIR/cog_install
 
-COG WEB PORTAL INSTALLATION INSTRUCTIONS
+4) Run CoG
 
-The following instructions describe how to quickly install the CoG environment on a Unix-type server (Cent-OS, Linux, Mac-OSX)
-for the purpose of starting to use and test the web application. In a production environment, the CoG should really be front-ended
-by a separately installed Apache httpd server (not covered here).
+o cd $COG_INSTALL_DIR
+o python manage.py runserver
+o access URL at http://localhost:8000
+o login as administrator:
+	- if --esgf=true, use the standard login URL: http://<hostname>/login/ with the "admin" openid and password above
+	- if --esgf=false, use the hidden local login: http://<hostname>/login2/ with the "admin" password above
+	
+o immediately change the "admin" password by clicking on "My Profile" -> "Change Password" 
+  or directly accessing the URL "http://<hostname>/password/update/
+  Note: to fully test the password change, you need to COMPLETELY quit the browser and log-in as 'admin' again,
 
-PRE-REQUISITES
+o also change all other "admin" data to match a local user, 
+especially the email address where all site-level notifications will be sent
 
-The system must have the following Python packages installed:
+o start experimenting with creating other projects and registering new users.
 
-python 2.7.2
-django==1.6.5
-django-grappelli==2.4.5
-django-openid-auth==0.5
-django-pagination==1.0.7
-sqlalchemy==0.9.2
-south==1.0
-psycopg2==2.5.2
-python-openid==2.2.5
-passlib==1.6.2
-pil==1.1.7
-
-Note: CoG also depends on Django Filebrowser, but this application is shipped as part of the CoG source code because it had to be manually modified.
-
-DOWNLOAD
-
-Download the software from the SVN repository:
-
-cd <install directory>
-git clone git@github.com:EarthSystemCoG/COG.git
-cd COG
-
-DATABASE CONFIGURATION
-
-o Install latest version of Postgres
-
-o To run with a postgres database back-end (default), create a database 'cogdb' and a username, password to be access that database:
-
-createdb -U postgres cogdb cogdbadmin
-
-createuser -U postgres -P cogdbadmin
-        - username: cogdbadmin
-        - password: <your password>
-(answer "n" to all other questions)
-
-psql -U postgres --password
-password: <your postgres superuser password>
-
-postgres=#  GRANT ALL PRIVILEGES ON DATABASE cogdb TO cogdbadmin;
-GRANT
-postgres=# FLUSH
-postgres-# \q
-
-o Test that you can connect to the database with the new username and password:
-
-psql -U cogdbadmin --password cogdb
-
-COG CONFIGURATION
-
-o Create a file called cog_settings.cfg in the directory /usr/local/cog, or in any other directory referenced by the env variable
-COG_CONFIG_DIR
-The file must have the following content, with values replaced by the installation specific settings:
-
-cat cog_settings.cfg
-
-SITE_NAME=<a short human readable name identifying this specific CoG instance>
-SITE_DOMAIN=<the site domain name and optional port number, without any protocol. Example: lab.gov:8080>
-TIME_ZONE=<"America/Denver by default". See list of Django values for time zones>
-COG_MAILING_LIST=<"cog_info@list.woc.noaa.gov" by default. Mailing list where users subscribe to>
-SECRET_KEY=<the site specific key: an arbitrary string with lots of strange characters>
-DATABASE_USER=<username to access cogdb postgres database>
-DATABASE_PASSWORD=<password to access cogdb postgres database>
-DATABASE_PORT=<port used by postgres database>
-HOME_PROJECT=<short name of the project that serves as the site home (i.e. where requests to '/' are redirected)
+o test the email notification when new projects are created
 
 
-INITIALIZATION
+5) Post-installation configuration
 
-o python manage.py syncdb (initializes tables for all applications except 'CoG')
+o Review the file $COG_CONFIG_DIR/cog_settings.cfg and modify values to reflect the
+site specific configuration. Values set in this file will not be overridden by
+future upgrades. Refer to the file resources/config/cog_settings.cfg (included with the distribution)
+for description and example values of the configuration parameters.
 
-o python manage.py migrate cog (initializes and migrates tables for 'CoG' application)
+o Optionally, provide a custom header and footer by placing content in the directories
+$COG_CONFIG_DIR/mytemplates and $COG_CONFIG_DIR/mymedia
 
-o gather the static media files from the different applications into a single directory
+o If for any reason the name or domain of the current site needs to change, 
+the new values should be entered in cog_settings.cfg, then run the command:
 
-mkdir static
-python manage.py collectstatic
-
-o Update the current site object with the name and domain read from the local configuration file:
-
+cd $COG_INSTALL_DIR
 python manage.py init_site
 
-o By default, the CoG database comes configured with a single user "admin" with administrator privileges,
-with password "changeme". You must immediately change the password for this user by running the following command,
-which will also create a valid OpenID to login:
+o Setup federation with other CoG instances:
 
-python manage.py create_openid admin <new password>
-
-where 'admin' is the administrator username.
-
-RESTORE BACKUP
-
-To restore the database status from a SQL backup:
-
-psql -U postgres -p 5432 cogdb < cogdb_2014-03-12.sql
-
-
-STARTUP
-
-o Start the CoG application within the embedded Django development server:
-python manage.py runserver
-
-By default, the Django server is available on port 8000
-
-
-USAGE AND TESTING
-
-o Access the application home page at:
-http://localhost:8000/
-
-Please note that none of the project links contained in the right column will work because those projects do NOT exist in the local database.
-
-o Login as the site administrator in one of two possible ways:
-	
-	- by accessing the URL http://localhost:8000/login/ and entering the administrator openid
-	- by accessing the "secret" URL http://localhost:8000/admin/ which will trigger a standard username/password login
-
-o By default, the CoG database is configured with one single project called 'Test'. 
-Access the 'Test' project home page by visiting the following URL:
-
-http://localhost:8000/projects/test/
-
-Start experimenting with creating other projects and registering new users.
-
-FURTHER CONFIGURATION
-
-o IDP_REDIRECT
-
-If a CoG installation is NOT associated with any ESGF Identity Provider, 
-a user who wants to create an account should be redirected to a CoG installation that does have an associated IdP.
-This can be accomplished by inserting the following optional line in the [default] section of the file cog_settings.cfg:
-
-IDP_REDIRECT=https://<CoG with IdP base URL with no />
-
-For example:
-
-IDP_REDIRECT=https://www.earthsystemcog.org
-
-
-o CKEDITOR
-By default, the wiki pages (including any project home page) are editable through a simple text area widget.
-CoG can be easily configured to allow editing via the third-party CKEditor, which includes a WYSIWYG interface:
-
-Download the CKEditor version 3.6.4 and expand it to:
-<installation directory>/cog/static/cog/ckeditor
-
-Then run again:
-
-python manage.py collectstatic
-
-
-(NOTE: when running with an Apache httpd server, the CKEditor code must be located under: <installation directory>/COG/static/cog/ckeditor
-
-
-o EMAIL notifiication
-To enable email notification for project membership, create a file in the directory COG_CONFIG_DIR
-with name .cog.cfg and the following content:
-
-[email]
-email.server=<your email server hostname>
-email.username=<email server username>
-email.password=<email server password>
-
-For example, on the NOAA server:
-
-[apache@hydra ~]$ cat/usr/local/cog/cog.cfg
-[email]
-email.server=dmzmail.fsl.noaa.gov
-# leave port blank if default
-email.port=
-email.sender=earthsystemcog@noaa.gov
-email.username=
-email.password=
-email.security=
-
-o SSL SUPPORT
-
-To run CoG with SSL encryption, the following actions must be taken:
-
-- procure an SSL certificate, possibly from a recognized CA
-- modify the Apache httpd configuration file to redirect all requests on port 80 to port 443. Example configuration follows:
-
-LoadModule ssl_module modules/mod_ssl.so
-
-<VirtualHost 172.24.254.127:80>
-  ServerName dev-hydra-httpd.esrl.svc
-  Redirect / https://dev-hydra-httpd.esrl.svc/
-</VirtualHost>
-
-<VirtualHost 172.24.254.127:443>
-  ServerName dev-hydra-httpd.esrl.svc
-
-  SLEngine on
-  SSLCertificateFile /etc/httpd/conf/httpd.cert
-  SSLCertificateKeyFile /etc/httpd/conf/httpd.key
-  SetEnv SERVER_TYPE PROD
-
-Note: the last instruction on SERVER_TYPE is used in settings.py to enable cookies only for secure requests:
-it will prevent logging in from a non-secure HTTP request.
-
-o ESGF INTEGRATION
-
-To integrate the COG application with an existing ESGF Node, the file cog_settings.py must contain a section like the following:
-
-[esgf]
-ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
-ESGF_DBURL=postgresql://<ESGF_DATABASE_USERNAME>:<ESGF_DATABASE_PASSWORD>@localhost/esgcet
-
-where the database is either on the localhost, or it is on a remote host and it has been configured to allow read/write connections from the local COG instance.
-
-ESGF integration involves the following capability:
-
-1) A user with an existing ESGF account can log into COG with his/her openid.
-After the first login, a new COG account is created with that openid and a username that matches the openid.
-
-2) A user with an existing COG account can associate his/her account with one or more ESGF openids, and use those openids to log onto COG, if desired
-(as an alternative to their standard username and password).
-
-3) When a new COG account is created, a new ESGF account is created at the same time. The new ESGF openid is automatically associated with the COG account.
-
-o USER UPDATES
-
-If a CoG user with an ESGF openid from the local node (cases 2) and 3) above) updates his/her password, 
-the change is propagated to the ESGF database so the user can log onto its idP.
-
-PROJECTS FEDERATION
-
-The current COG site can be configured to federate with any number of remote COG sites. 
-The list of possible CoG peers must be seeded from the file cog/management/commands/sites.xml that is distributed with the CoG application.
+The list of possible CoG peers is seeded from the file cog/management/commands/sites.xml that is distributed with the CoG application.
 
 In order to load the most up-to-date list of peers into the local database, run the following django management command:
 
-cd <COG installation directory>
+cd $COG_INSTALL_DIR
 python manage.py sync_sites
 
 This command will insert any missing sites in the local database (and update their names if they have changed), but will not activate the sites by default.
@@ -284,24 +160,24 @@ on the 'Configure Peers' link in the 'Admin' menu in the lower left navigation b
 
 The local CoG application can be instructed to load the most recent list of projects from the other federated instances in one of three ways:
 
-o By visiting the page "Configure Peers" and clicking on the lower link "Synchronize with Peer CoGs Now "
+a) By visiting the page "Configure Peers" and clicking on the lower link "Synchronize with Peer CoGs Now "
 (or directly invoking the URL "http://<your cog domain name>/share/sync/projects/")
 
-o By invoking the following django management command:
+b) By invoking the following django management command:
 
-cd <COG installation directory>
+cd $COG_INSTALL_DIR
 python manage.py sync_projects
 
-o By setting up a cron job that executes the same command above. For example:
+c) By setting up a cron job that executes the same command above. For example:
 
 crontab -l
-0 * * * * source ~/.bashrc; python /usr/COG/manage.py sync_projects >> /tmp/crontab.log 2>&1
+0 * * * * source ~/.bashrc; python /usr/local/cog/cog_install/manage.py sync_projects >> /tmp/crontab.log 2>&1
 
 will parse the user environment, and run the command at minute 0 of every hour, appending the output to file.
 
 NOTES: 
 	- projects will be updated only from peer sites that are "enabled". 
-	- IMPORTANT: a site will only share projects correctly if its 'Site' domainname equals its real domain.
+	- IMPORTANT: a site will only share projects correctly if its 'Site' domain name equals its real domain.
 	  If its site domain has been recently updated, CoG must be restarted for that change to take effect, otherwise
 	  the other CoGs won't see its projects
 	- a site will only share those projects that are both 'active' and 'public'
@@ -313,24 +189,39 @@ NOTE: if a CoG peer site is disabled through the admin interface:
 	- Its data cart won't show up in the current data cart page
 	- The site will not be queried for user projects updates
 
+o If running the CoG application under a user other than the one executing the installation, 
+the directory $COG_CONFIG_DIR/site_media must be owned by that user. For example:
+
+cd $COG_CONFIG_DIR
+chown -R apache:apache site_media
+
+o To restore the CoG database from backup:
+
+Stop CoG, then:
+- if using postgres:
+psql -U postgres -p 5432 cogdb < cogdb_2014-03-12.sql
+- if using sqllite:
+simply copy the older django.data file to the DATABASE_PATH location 
+Finally restart CoG
+
 	
 PERIODIC ADMINISTRATION TASKS
 
 o Setup a cron job to periodically update the projects around the federation.
-An example such script is provided as scripts/sync_projects.sh - which might need to be customized to your environment.
+An example such script is provided as scripts/sync_projects.sh - which will need to be customized to your environment.
 
 For example, to synchronize the projects every hour and append the log to a file:
 
-0 * * * * /usr/COG/scripts/sync_projects.sh  >> /tmp/crontab.log 2>&1
+0 * * * * /usr/local/cog/cog_install/resources/scripts/sync_projects.sh  >> /tmp/crontab.log 2>&1
 
 
 o Setup a cron job to backup the postgres database content every night. 
 
-An example script is provided as 'scripts/cog_backup.sh' - which might need to be customized to your specific installation.
+An example script is provided as 'scripts/cog_backup.sh' - which will need to be customized to your specific installation.
 
 For example, to backup the database every day at midnight:
 
-0 0 * * * /usr/COG/scripts/cog_backup.sh
+0 0 * * * /usr/local/cog/cog_install/scripts/cog_backup.sh
 
 NOTE: to run as cron, the postgres database password must be located in file ~/.pgpass with the format:
 host_name:port:database_name:database_user:database_password
@@ -339,18 +230,30 @@ Also must set the file permissions as follows:
 
 chmod 0600 ~/.pgpass
 
-CUSTOMIZED HEADER AND FOOTER
+o Customize the header and footer
 
+<<<<<<< HEAD
 The default header and footer can be overridden by placing a custom template with the same name and system path under the
 root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, where by default COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
+=======
+The default header and footer can be overridden by placing a custom temaplate with the same name and system path under the
+root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, w
+here by default COG_CONFIG_DIR=/usr/local/cog/cog_config (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
+>>>>>>> devel
 
-For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html which come with the distribution, create the two custom files:
+For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html 
+which come with the distribution, create the two custom files:
 
+<<<<<<< HEAD
 <COG_CONFIG_DIR>/mytemplates/cog/templates/cog/common/cog_header_custom.html
 <COG_CONFIG_DIR>/mytemplates/cog/templates/cog/common/cog_footer_custom.html
+=======
+/usr/local/cog/cog_config/mytemplates/cog/templates/common/cog_header_custom.html
+/usr/local/cog/cog_config/mytemplates/cog/templates/common/cog_footer_custom.html
+>>>>>>> devel
 
 Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the template as "/mymedia/<image name>".
 
-For example, the file located at /usr/local/cog/mymedia/nasa.jpeg can be loaded by any template as src="/mymedia/nasa.jpeg" (please note the first leading '/').
+For example, the file located at /usr/local/cog/cog_config/mymedia/nasa.jpeg can be loaded by any template as src="/mymedia/nasa.jpeg" (please note the first leading '/').
 
 The directories resources/noaa/mytemplates and resources/noaa/mymedia contain some examples of custom header, footer and associated media.

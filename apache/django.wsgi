@@ -1,7 +1,7 @@
 import sys, os
-sys.path.insert(0, '/usr/COG')
+sys.path.insert(0, '/usr/local/cog/cog_install')
 
-# note: settings.py is located under '/usr/COG/settings.py'
+# note: settings.py is located under '/usr/local/cog/cog_install/settings.py'
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 from django.conf import settings
 

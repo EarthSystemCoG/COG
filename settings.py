@@ -7,16 +7,17 @@ rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 ''' 
 SITE SPECIFIC CONFIGURATION
 These parameters are read from file 'cog_settings.cfg' 
-located in directory COG_CONFIG_DIR (or by default '/usr/local/cog').
+located in directory COG_CONFIG_DIR (or by default '/usr/local/cog/cog_config').
 Each parameter has a default value.
 '''
 
 SECTION_DEFAULT = 'DEFAULT'
 SECTION_ESGF = 'ESGF'
+SECTION_EMAIL = 'EMAIL'
 
 from cog.site_manager import siteManager
 
-COG_CONFIG_DIR = os.environ.get('COG_CONFIG_DIR', '/usr/local/cog')
+COG_CONFIG_DIR = os.environ.get('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
@@ -193,7 +194,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     #os.path.join(os.path.basename(__file__), 'templates'),
     # IMPORTANT: no leading or trailing '/' for 'mytemplates'
-    # default: '/usr/local/cog/mytemplates'
+    # default: '/usr/local/cog/cog_config/mytemplates'
     MYTEMPLATES,
     rel('templates/'),
     rel('static/'),

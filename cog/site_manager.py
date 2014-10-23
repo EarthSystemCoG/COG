@@ -23,14 +23,24 @@ class SiteManager(object):
        # optional top-level URL to redirect user registration (no trailing '/')
        IDP_REDIRECT=https://www.earthsystemcog.org
 
-       [esgf]
+       [ESGF]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
        IDP_WHITELIST=/esg/config/esgf_idp_static.xml
+       
+       [EMAIL]
+       EMAIL_SERVER=smtp.gmail.com
+       # leave port blank if default
+       EMAIL_PORT=
+       EMAIL_SENDER=Earth System COG
+       EMAIL_USERNAME=........
+       EMAIL_PASSWORD=........
+       EMAIL_SECURITY=STARTTLS
+
     '''
     
     # location of site specific settigs configuration file
-    COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
+    COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
     CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
 
     def __init__(self):

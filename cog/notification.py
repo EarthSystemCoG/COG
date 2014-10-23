@@ -1,52 +1,38 @@
-import ConfigParser
 from email.mime.text import MIMEText
-import smtplib, os
-from email.mime.text import MIMEText
+import smtplib
 from threading import Thread
-
+from django.conf import settings
+from cog.site_manager import siteManager
 
 class EmailConfig:
-    '''Class that reads and stores the email server connection properties from a local configuration file.
-       
-       Example local configuration file cog.cfg:
-       
-       [email]
-       email.server=smtp.gmail.com
-       # leave port blank if default
-       email.port=
-       email.sender=notify_esmf.esrl@noaa.gov
-       email.username=<username>
-       email.password=<password>
-       # optional security, leave blank if not needed
-       email.security=STARTTLS
+    '''
+    Class that stores the email server connection properties from a local configuration file.
+    Site specific values are read from the cog_settings.cfg file through the SiteManager class.
     '''
     
     def __init__(self):
-        config = ConfigParser.RawConfigParser()
         
-        try:
+        self.init = False
+        
+        if siteManager.hasConfig(settings.SECTION_EMAIL):
+            self.server = siteManager.get('EMAIL_SERVER', section=settings.SECTION_EMAIL)
+            if self.server is not None and self.server.strip() != '':
+                self.port = siteManager.get('EMAIL_PORT', section=settings.SECTION_EMAIL)
+                self.sender = siteManager.get('EMAIL_SENDER', section=settings.SECTION_EMAIL)
+                self.username = siteManager.get('EMAIL_USERNAME', section=settings.SECTION_EMAIL)
+                self.password = siteManager.get('EMAIL_PASSWORD', section=settings.SECTION_EMAIL)
+                self.security = siteManager.get('EMAIL_SECURITY', section=settings.SECTION_EMAIL)
+                print 'Using email server=%s' %  self.server
+                print 'Using email port=%s' %  self.port
+                print 'Using email sender=%s' %  self.sender
+                print 'Using email username=%s' %  self.username
+                #print 'Using email password=%s' %  self.password
+                print 'Using email security=%s' %  self.security
+                self.init = True
             
-            cog_config_dir = os.getenv('COG_CONFIG_DIR', '/usr/local/cog')
-            CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog.cfg')
-    
-            config.read( CONFIGFILEPATH )
-            self.server = config.get('email','email.server')
-            self.port = config.get('email','email.port')
-            self.sender = config.get('email','email.sender')
-            self.username = config.get('email','email.username')
-            self.password = config.get('email','email.password')
-            self.security = config.get('email','email.security')
-            print 'Using email server=%s' %  self.server
-            print 'Using email port=%s' %  self.port
-            print 'Using email sender=%s' %  self.sender
-            print 'Using email username=%s' %  self.username
-            print 'Using email password=%s' %  self.password
-            print 'Using email security=%s' %  self.security
-            self.init = True
-        except Exception as e:
-            print "Email configuration file not found, email notification disabled"
-            print e
-            self.init = False
+        if not self.init:
+            print "Email configuration not found, email notification disabled"
+            
 
 # module scope email configuration
 emailConfig = EmailConfig()

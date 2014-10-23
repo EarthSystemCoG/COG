@@ -6,7 +6,6 @@ from django.contrib.sites.models import Site
 from cog.models import Project, ProjectTag
 from cog.utils import getJson
 
-from cog.site_manager import siteManager
 from cog.models import getPeerSites
 
 class ProjectManager(object):
