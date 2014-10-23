@@ -3,7 +3,7 @@
 
 >>> PRE-REQUISITES
 
-*-nix OS, including Cent-OS, linuc and MacOSX
+*-nix OS, including Cent-OS, linux and MacOSX
 Python 2.7
 Python virtualenv (pip install virtualenv)
 Postgres (only if using Postgres back-end)
@@ -17,13 +17,19 @@ must have write permissions to this directory.
 o export COG_DIR=/usr/local/cog
 o mkdir $COG_DIR (if not existing already)
 
-At the end of the installation process, the $COG_DIR will contain the follwing sub-directories:
+At the end of the installation process, the $COG_DIR will contain the following sub-directories:
 
 $COG_DIR/
 	|
 	|--> cog_config/ : site-specific configuration and media files
 	|--> cog_install/ : CoG source distribution
 	|--> venv/: Python virtula environment (Python executable and all needed dependencies) 
+	
+It is recommended to setup the necessary env variables in your ~/.bash_profile:
+
+export COG_DIR=/usr/local/cog
+export COG_CONFIG_DIR=$COG_DIR/cog_config
+export COG_INSTALL_DIR=$COG_DIR/cog_install
 
 
 1) Define Python virtual environment
@@ -42,7 +48,7 @@ o source venv/bin/activate
 o which python
 will show that the python installation used is located into the venv sub-directory
 
-to later disactivate the Python virtual environment:
+to later de-activate the Python virtual environment:
 
 o deactivate
 
@@ -72,7 +78,7 @@ o cd $COG_INSTALL_DIR
 o python setup.py install
 
 will install all necessary CoG dependencies under the CoG python installation in the location
-$COG_PYTHON/lib/python2.7/site-packages
+$COG_DIR/venv/lib/python2.7/site-packages
 
 o python setup.py setup_cog
 or to install CoG on an existing ESGF node:
@@ -183,6 +189,11 @@ NOTE: if a CoG peer site is disabled through the admin interface:
 	- Its data cart won't show up in the current data cart page
 	- The site will not be queried for user projects updates
 
+o If running the CoG application under a user other than the one executing the installation, 
+the directory $COG_CONFIG_DIR/site_media must be owned by that user. For example:
+
+cd $COG_CONFIG_DIR
+chown -R apache:apache site_media
 
 o To restore the CoG database from backup:
 
