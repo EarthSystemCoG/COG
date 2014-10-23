@@ -346,8 +346,8 @@ root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, 
 
 For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html which come with the distribution, create the two custom files:
 
-<COG_CONFIG_DIR>/mytemplates/cog/templates/common/cog_header_custom.html
-<COG_CONFIG_DIR>/mytemplates/cog/templates/common/cog_footer_custom.html
+<COG_CONFIG_DIR>/mytemplates/cog/templates/cog/common/cog_header_custom.html
+<COG_CONFIG_DIR>/mytemplates/cog/templates/cog/common/cog_footer_custom.html
 
 Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the template as "/mymedia/<image name>".
 
