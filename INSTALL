@@ -335,19 +335,19 @@ For example, to backup the database every day at midnight:
 NOTE: to run as cron, the postgres database password must be located in file ~/.pgpass with the format:
 host_name:port:database_name:database_user:database_password
 
-Also must set the file permissionss as follows:
+Also must set the file permissions as follows:
 
 chmod 0600 ~/.pgpass
 
 CUSTOMIZED HEADER AND FOOTER
 
-The default header and footer can be overridden by placing a custom temaplate with the same name and system path under the
+The default header and footer can be overridden by placing a custom template with the same name and system path under the
 root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, where by default COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
 
 For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html which come with the distribution, create the two custom files:
 
-/usr/local/cog/mytemplates/cog/templates/common/cog_header_custom.html
-/usr/local/cog/mytemplates/cog/templates/common/cog_footer_custom.html
+<COG_CONFIG_DIR>/mytemplates/cog/templates/common/cog_header_custom.html
+<COG_CONFIG_DIR>/mytemplates/cog/templates/common/cog_footer_custom.html
 
 Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the template as "/mymedia/<image name>".
 
