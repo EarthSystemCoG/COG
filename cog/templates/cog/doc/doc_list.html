@@ -28,7 +28,7 @@
 			      <td nowrap="nowrap">
 			      	{% if request.user|hasUserPermission:project %}
 			      	<a href="{% url 'doc_remove' doc.id %}?redirect={{ request.path }}" class="deletelink"
-                       onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document ?',this)">Delete</a>       
+                       onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document?',this)">Delete</a>
 			      	{% endif %}
 			      </td>
 			      <td nowrap="true">{{ comment_count }} Comment{{ comment_count|pluralize }} </td>

@@ -108,7 +108,7 @@
                        <td nowrap="nowrap">{{facet.label}}</td>
                        <td nowrap="nowrap"><a class="changelink" href="{% url 'search_facet_update' facet.id %}">Edit</a></td>
                        <td nowrap="nowrap"><a href="{% url 'search_facet_delete' facet.id %}" class="deletelink"
-                                              onclick="return urlConfirmationDialog('Delete Facet Confirmation', 'Are you sure you want to delete this facet ?', this)">Delete</a></td>
+                                              onclick="return urlConfirmationDialog('Delete Facet Confirmation', 'Are you sure you want to delete this facet?', this)">Delete</a></td>
                     </tr>
                 {% endfor %}   
             </table>

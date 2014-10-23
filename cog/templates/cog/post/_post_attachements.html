@@ -20,7 +20,7 @@
                        &nbsp;<a href="{% url 'doc_detail' doc.id %}" class="listlink"> Info</a>
                        {% if user|hasUserPermission:project %}
                             &nbsp;<a href="{% url 'post_remove_doc' post.id doc.id %}?redirect={{ request.path }}" class="deletelink"
-                                      onclick="return urlConfirmationDialog('Delete Attachment Confirmation','Are you sure you want to remove the attachment ?',this)">Delete</a>
+                                      onclick="return urlConfirmationDialog('Delete Attachment Confirmation','Are you sure you want to remove the attachment?',this)">Delete</a>
                        {% endif %}
                        {% if doc.description %}
                           <br/>

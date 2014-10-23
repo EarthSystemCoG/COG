@@ -11,9 +11,9 @@
             {% if project|hasUser:request.user or project|hasUserPending:request.user %}
             
                 {% if project|hasUser:request.user %}
-		            Are you sure you want to cancel your membership in project {{ project.short_name }} ?	            
+		            Are you sure you want to cancel your membership in project {{ project.short_name }}?
 	            {% else %}
-	               Are you sure you want to cancel your request for membership in project {{ project.short_name }} ?
+	               Are you sure you want to cancel your request for membership in project {{ project.short_name }}?
 	            {% endif %}
 	               <br/>Please remember that only project members can modify the content of the project workspace.
 	            

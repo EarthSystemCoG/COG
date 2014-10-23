@@ -112,7 +112,7 @@
                 <!-- only allow site administrators to change the active state of a project  -->
                 {% if request.user.is_staff and action == 'update' %}
 	                <tr>
-	                    <td style="width:15%;">Is Active ?</td>
+	                    <td style="width:15%;">Is Active?</td>
 	                    <td style="width:85%;vertical-align:middle;">
 	                        {{ form.active }} 
 	                        <span>
@@ -126,7 +126,7 @@
                 {% endif %}
                 <!--// Checkbox for private sites   \\-->			
                 <tr>
-	            <td nowrap="nowrap">Is Private ?</td>
+	            <td nowrap="nowrap">Is Private?</td>
 	            <td vertical-align:middle;">
 	                    {{ form.private }} 
 	                    <span>
@@ -185,7 +185,7 @@
                 	</td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap"><span style="margin-top:2px">Enable Data Search ?</span></td>
+                    <td nowrap="nowrap"><span style="margin-top:2px">Enable Data Search?</span></td>
                     <td class="long">{{ form.dataSearchEnabled }} 
                                      [ Check to display the Data Search among the right widgets. ]
                                      {{ form.dataSearchEnabled.errors }}

@@ -17,7 +17,7 @@
 		    		<td class="tophead" nowrap="nowrap">URL</td>
 		    		<td class="tophead" nowrap="nowrap">Logo</td>
 		    		<td nowrap="nowrap">(Maximum Size: 1MB)</td>
-		    		<td class="tophead" nowrap="nowrap">Delete ?</td>
+		    		<td class="tophead" nowrap="nowrap">Delete?</td>
 		    	</tr>
 		    {% for form in formset %}
 	        	{{ form.id }}
@@ -32,7 +32,7 @@
 		            	<!-- show option to remove current picture -->
 		            	{% if not 'notfound' in form.instance|getImage and form.image.errors|length == 0 %}
 		            		<span style="margin-top:2px">
-		            			{{ form.delete_image }} Delete current logo ? 
+		            			{{ form.delete_image }} Delete current logo?
 		            		</span>
 		            	{% endif %}
 			            <!-- image upload widget -->      					            	

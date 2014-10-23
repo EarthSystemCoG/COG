@@ -33,13 +33,13 @@
          </td>
     </tr>
     <tr>
-          <td nowrap="nowrap">Not Viewable ?</td>
+          <td nowrap="nowrap">Not Viewable?</td>
           <td>{{ form.is_private }} &nbsp; (<i>If checked, only project members will be able to view this page.</i>)
           </td>                      
     </tr>  
     {% if user|hasAdminPermission:project %}
 	    <tr>
-	          <td nowrap="nowrap">Not Editable ?</td>
+	          <td nowrap="nowrap">Not Editable?</td>
 	          <td>{{ form.is_restricted }} &nbsp; (<i>If checked, only project administrators will be able to edit this page. 
 	                                               If not checked, all project members can edit this page.</i>)</td>                      
 	    </tr>   

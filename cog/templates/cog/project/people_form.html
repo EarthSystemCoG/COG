@@ -22,7 +22,7 @@
 		    		<td nowrap="nowrap"><b>Interests</b> (max 60 chars)</td>
 		    		<td class="tophead" nowrap="nowrap">Picture</td>
 		    		<td nowrap="nowrap">(maximum size: 1MB)</td>
-		    		<td class="tophead" nowrap="nowrap">Delete ?</td>
+		    		<td class="tophead" nowrap="nowrap">Delete?</td>
 		    	</tr>
 		    {% for form in formset %}
 	        	{{ form.id }}
@@ -39,7 +39,7 @@
 		            	<!-- show option to remove current picture -->
 		            	{% if not 'unknown' in form.instance|getImage and form.image.errors|length == 0 %}		
 		            		<span style="margin-top:2px">	
-			                	{{ form.delete_image }} Delete current picture ? 		
+			                	{{ form.delete_image }} Delete current picture?
 			                </span>	  						                            		
 			            {% endif %} 
 			            <!-- image upload widget -->      					            	
