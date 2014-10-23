@@ -604,17 +604,17 @@ input[type=password] {
 	border:       1px solid #666666;
 	background:   #FFFFFF;
 	color:        #5D781D;
-        width:        99%; /* same width as all other types of inputs */
-        padding-left: 2px; /* space before text starts */
+    width:        99%; /* same width as all other types of inputs */
+    padding-left: 2px; /* space before text starts */
 	height:       16px;
 }
 
 input[type=url] {
-        border:       1px solid #666666;
+    border:       1px solid #666666;
 	background:   #FFFFFF;
 	color:        #5D781D;
-        width:        99%; /* same width as all other types of inputs */
-        padding-left: 2px; /* space before text starts */
+    width:        99%; /* same width as all other types of inputs */
+    padding-left: 2px; /* space before text starts */
 	height:       16px;
 }
 
@@ -628,7 +628,7 @@ textarea {
 	overflow:     auto;
 	border:       1px solid #666666;
 	width:        99%; /* not 100% because it provides a nice margin inside a table */
-        padding-left: 2px; /* space before text starts */
+    padding-left: 2px; /* space before text starts */
 }
 
 .required {
@@ -990,7 +990,7 @@ BEGIN SEARCH WIDGET
 
 /*login failure.*/ /*project registration notification*/
 .message-box {
-        background:  #fce79f; /* light yellow*/
+    background:  #fce79f; /* light yellow*/
 	padding:     5px; 
 	margin:      5px;
 	border:      1px solid #666;*/
@@ -1020,7 +1020,7 @@ BEGIN SEARCH WIDGET
 
 /* prevent error styles from affecting error content w/in search widget */
 .error-box {
-        background:  #FAC24A; /* dark yellow*/
+    background:  #FAC24A; /* dark yellow*/
 	padding:     5px; 
 	margin:      5px;
 	border:      1px solid #417690;
@@ -1233,9 +1233,9 @@ div.last {
 
 /* fine tune some of the spacing in IE */
 div.last div#top_nav_right li a {
-    padding-left: 3px;
+    padding-left:  3px;
     padding-right: 3px;
-}
+    }
 div.last div#top_nav {
     padding-top: 2px;
 }
@@ -1407,12 +1407,22 @@ img.project_logo{
 
 #top_nav_right {
 	width:            97%;
-	padding-top:      2px;
-	padding-left:     6px;
-	text-align:       right;
+	padding-top:      0px;
+    text-align:       center;
+	padding-left:     5px;     /* make yellow box line up with rest of the right widgets */
 	background-color: #FAC24A; /*dark yellow*/
 	float:            right;
+    height:           22px;
 }
+
+#top_nav_right a {
+	color: #000000;
+    padding: 0;
+    padding-top:4px;
+    padding-bottom:4px;
+	/* font-weight: bold; */
+}
+
 
 #top_subnav {
     width: 100%;
@@ -1465,10 +1475,6 @@ img.project_logo{
     border: none;
 }
 
-#top_nav_right a {
-	color: #000000;
-	/* font-weight: bold; */
-}
 
 .top_nav a:hover {
     /* background: #FFFFFF; */
