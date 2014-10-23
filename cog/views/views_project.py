@@ -247,7 +247,7 @@ def project_update(request, project_short_name):
             # save the project
             project = form.save()
             
-            # delete logo ?
+            # delete logo?
             if form.cleaned_data.get('delete_logo')==True:
                 project.logo.delete()
             

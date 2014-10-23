@@ -239,7 +239,7 @@ def _imageformset_update(request, project, tab,
         # validate formset
         if formset.is_valid():
 
-            # delete image ?
+            # delete image?
             for form in formset:
                 try:
                     # request to delete image or whole object
