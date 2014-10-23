@@ -133,7 +133,11 @@ This sets the styles for the defaults
 div.custom_header_bar {
     width:        100%;
     margin-top:   0px;
-    background-color: #E9F5F6;
+    margin-bottom: 2px;
+    height:       42px;
+    background-color: #E9F5F6; /*light blue*/
+
+    background-color:#e5e5e5;
 }
 
 
@@ -149,7 +153,7 @@ td.custom_header_esgf{
     vertical-align: middle;
     margin:         0px;
     padding:        0px;
-    padding-top:    1px;
+    padding-top:    3px;
     padding-bottom: 1px; /* Cecelia wanted this 1px larger than the top */
 }
 
@@ -168,13 +172,15 @@ td.custom_header_welcome{
     vertical-align: middle;
     font-size:      12px;  /* note this is in px and not pt */
     color:          #666;
+    /*color: black;*/
     font-style:     italic;
     line-height:    1.35;
     width:          249px; /*may need to make this larger if people have large names for their nodes */
-    text-align:     left;
+    text-align:     right;
     padding:        1px;
+    padding-top:    4px;
     padding-left:   6px;
-    padding-right:  4px;
+    padding-right:  6px;
 }
 
 hr.custom_header {
@@ -218,7 +224,6 @@ div.custom_footer {
    color:           white;
    text-decoration: underline;
 }
-
 
 
 /**********************************
@@ -265,12 +270,12 @@ BEGIN FIXES FOR IE
 /****************************/
 
 /* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, ie11 body{
-        margin-right:  auto; 
+.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body{
+    margin-right:  auto;
 	margin-left:   auto;
-        margin-top:    0px;
+    margin-top:    0px;
 	margin-bottom: 0px;
-        text-align:    left;
+    text-align:    left;
 	
 /* debug: are the IE conditionals even working? */
         /*background-color: pink;*/
@@ -993,19 +998,19 @@ BEGIN SEARCH WIDGET
     background:  #fce79f; /* light yellow*/
 	padding:     5px; 
 	margin:      5px;
-	border:      1px solid #666;*/
+	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
 }
 
 /*update openID box. This should be removed when no longer needed */
 .changeID-box {
-        background:  #fce79f; /* light yellow*/
+    background:  #fce79f; /* light yellow*/
 	padding:     10px; 
 	margin-left: auto;
-        margin-right:auto;
-        width:       80%;
-	border:      1px solid #666;*/
+    margin-right:auto;
+    width:       80%;
+	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1331,8 +1336,9 @@ BEGIN HEADER STYLES
 
 #right_cog_logo {
     position:absolute; bottom: 4px; right:0px; /* needs to have same bottom as #project_title or #project_logo */
-    height:         50px; 
+    height:         40px;
     padding-bottom: 0px;
+    padding-right:  4px;
     margin-bottom:  0px;
     width:          200px;
     /* debug onlyu...border: solid 2px green;*/
@@ -1342,7 +1348,7 @@ BEGIN HEADER STYLES
    }
 
 img.cog_logo{
-    height:48px;
+    height:40px;
     float: right;
 }
 
@@ -1408,9 +1414,9 @@ img.project_logo{
 #top_nav_right {
 	width:            97%;
 	padding-top:      0px;
-    text-align:       center;
+    text-align:       right;
 	padding-left:     5px;     /* make yellow box line up with rest of the right widgets */
-	background-color: #FAC24A; /*dark yellow*/
+    background-color: #FAC24A; /*dark yellow*/
 	float:            right;
     height:           22px;
 }
@@ -1420,6 +1426,8 @@ img.project_logo{
     padding: 0;
     padding-top:4px;
     padding-bottom:4px;
+    padding-right: 4px;
+
 	/* font-weight: bold; */
 }
 
