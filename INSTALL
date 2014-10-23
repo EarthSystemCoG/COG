@@ -108,6 +108,11 @@ to avoid conflicts with the source installation in $COG_DIR/cog_install
 
 o cd $COG_INSTALL_DIR
 o python manage.py runserver
+
+NOTE: to run CoG via the django development web server on a different hostname and port:
+
+python manage.py runserver esg-datanode.jpl.nasa.gov:8080
+
 o access URL at http://localhost:8000
 o login as administrator:
 	- if --esgf=true, use the standard login URL: http://<hostname>/login/ with the "admin" openid and password above
@@ -115,9 +120,9 @@ o login as administrator:
 	
 o immediately change the "admin" password by clicking on "My Profile" -> "Change Password" 
   or directly accessing the URL "http://<hostname>/password/update/
-  Note: to fully test the password change, you need to COMPLETELY quit the browser and log-in as 'admin' again,
+  Note: to fully test the password change, you need to log out of CoG AND quit the browser and log-in as 'admin' again,
 
-o also change all other "admin" data to match a local user, 
+o also change all other "admin" data to match the local administrator user, 
 especially the email address where all site-level notifications will be sent
 
 o start experimenting with creating other projects and registering new users.
