@@ -45,10 +45,18 @@ def search(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+        
+    # check permission
+    if project.private:
+        if request.user.is_anonymous():
+            return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path )
+        else:
+            if not userHasUserPermission(request.user, project):
+                return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+   
     config = getSearchConfig(request, project)
-
     if config:        
-        config.printme()
+        #config.printme()
         # pass on project as extra argument to search
         return search_config(request, config, extra = {'project' : project} )
     # search is not configured for this project
