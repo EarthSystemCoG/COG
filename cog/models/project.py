@@ -101,7 +101,7 @@ class Project(models.Model):
     tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='projects')
     
     # flag to disable the search widget
-    dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search ?')
+    dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
         
     class Meta:
         app_label= APPLICATION_LABEL
