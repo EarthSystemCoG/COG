@@ -101,7 +101,7 @@ class CoGInstall(object):
             logging.info("Creating project: %s" % DEFAULT_PROJECT_SHORT_NAME)
             project = Project.objects.create(short_name=DEFAULT_PROJECT_SHORT_NAME, 
                                              long_name='Test Project', 
-                                             description='This is a text project',
+                                             description='This is a test project',
                                              site=site, active=True)
             initProject(project)
             project.save()
