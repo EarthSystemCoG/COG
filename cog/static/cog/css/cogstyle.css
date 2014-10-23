@@ -150,17 +150,17 @@ td.custom_header_esgf{
     margin:         0px;
     padding:        0px;
     padding-top:    1px;
-    padding-bottom: 2px; /* Cecelia wanted this 1px larger than the top */
+    padding-bottom: 1px; /* Cecelia wanted this 1px larger than the top */
 }
 
 td.custom_header_cog{
-    width:          70px; /*width of cog logo*/
+    width:          66px; /*width of cog logo*/
     text-align:     right;
     vertical-align: middle;
     margin:         0px;
     padding:        0px;
     padding-top:    3px;
-    padding-bottom: 2px;
+    padding-bottom: 1px;
 
 
 }
@@ -172,8 +172,9 @@ td.custom_header_welcome{
     line-height:    1.35;
     width:          249px; /*may need to make this larger if people have large names for their nodes */
     text-align:     left;
-    padding:        2px;
-    padding-left:   4px;
+    padding:        1px;
+    padding-left:   6px;
+    padding-right:  4px;
 }
 
 hr.custom_header {
