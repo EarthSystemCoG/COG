@@ -161,6 +161,8 @@ DATA_ROOT = os.path.join(MEDIA_ROOT, "data/")
 MYTEMPLATES = os.path.join(siteManager.cog_config_dir, 'mytemplates')
 MYMEDIA = os.path.join(siteManager.cog_config_dir, 'mymedia')
 
+print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDIA)
+
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
 
