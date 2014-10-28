@@ -79,9 +79,9 @@ html {
 /*****************************
 BEGIN DJANGO and YUI CSS RESETS
 
-Django contains numerious CSS files that set many properties not 
-explicly covered in the areas below. These are reclaimed here so that we 
-can completly control in one file how things look 
+Django contains numerous CSS files that set many properties not
+explicitly covered in the areas below. These are reclaimed here so that we
+can completely control in one file how things look
 *******************************/
 body{
     /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
@@ -91,8 +91,8 @@ body{
 
     color:         #333;         /* text color...dark grey*/
     text-align:    left;         /*default alignment is left-justified */
-    margin:         0px;       /*remove all margins in the box model */
-    padding:        0px;
+    margin:         0;       /*remove all margins in the box model */
+    padding:        0;
     margin-right:   auto;
     margin-left:    auto;
     vertical-align: baseline; /* this is the default, be we want to control */
@@ -125,54 +125,52 @@ div.push{
 }
 
 /**********************************
-BEGIN: Custom header 
+BEGIN: Custom header
 This sets the styles for the defaults
 *********************************/
- 
+
 /* create white header bar that spans the entire browser window */
 div.custom_header_bar {
-    width:        100%;
-    margin-top:   0px;
-    margin-bottom: 2px;
-    height:       42px;
+    width:            100%;
+    margin-top:       0;
+    margin-bottom:    2px;
+    height:           42px;
     background-color: #E9F5F6; /*light blue*/
-
     /*background-color:#e5e5e5; /* grey that Cecelia wanted initially */
 }
-
 
 /* create a white header that is just slightly larger than the main cog site */
 div.custom_header{
     width:        950px; /* note span-24 = 950px */
     margin-left:  auto;
     margin-right: auto;
+    height:       42px; /* same height as the header_bar */
 }
 
 td.custom_header_esgf{
     width:          120px; /*width of logo*/
-    vertical-align: middle;
-    margin:         0px;
-    padding:        0px;
+    vertical-align: top;
+    margin:         0;
+    padding:        0;
     padding-top:    3px;
     padding-bottom: 1px; /* Cecelia wanted this 1px larger than the top */
 }
 
-td.custom_header_cog{
-    width:          66px; /*width of cog logo*/
-    text-align:     right;
-    vertical-align: middle;
-    margin:         0px;
-    padding:        0px;
-    padding-top:    3px;
-    padding-bottom: 1px;
-
-
-}
-td.custom_header_welcome{
-    vertical-align: middle;
+td.custom_header_location{
+    vertical-align: top;
     font-size:      12px;  /* note this is in px and not pt */
     color:          #666;
-    /*color: black;*/
+    line-height:    1.35;
+    text-align:     left;
+    padding:        1px;
+    padding-top:    4px;
+    padding-left:   6px;
+    padding-right:  6px;
+}
+td.custom_header_welcome{
+    vertical-align: top;
+    font-size:      12px;  /* note this is in px and not pt */
+    color:          #666;
     font-style:     italic;
     line-height:    1.35;
     width:          249px; /*may need to make this larger if people have large names for their nodes */
@@ -181,12 +179,6 @@ td.custom_header_welcome{
     padding-top:    4px;
     padding-left:   6px;
     padding-right:  6px;
-}
-
-hr.custom_header {
-   background-color: #666;
-   height: 2px;
-   margin-top: 0px; /*override the default margins on HRs*/
 }
 
 /**********************************
@@ -201,7 +193,7 @@ div.custom_footer_bar{
     position:           relative;
 }
 
-/* create a custom footer that is slightly larger than the main cog site */ 
+/* create a custom footer that is slightly larger than the main cog site */
 div.custom_footer {
     width:        950px; /* note span-24 = 950px */
     margin-left:  auto;
@@ -217,7 +209,7 @@ div.custom_footer {
 .custom_footer td{
     vertical-align: middle;
     font:           normal normal 8pt/1.231 Arial,sans-serif;
-    padding:        0px; /* ensure text lines up with left navigation bar */
+    padding:       0; /* ensure text lines up with left navigation bar */
 }
 
 .custom_footer td a:link, .custom_footer td a:hover, .custom_footer td a:visited{
@@ -238,7 +230,7 @@ div.footer_bar{
     clear:              both;     /*this puts the footer on top of any content that might be below it*/
 }
 
-/* gives the footer a margin below the content of the page */ 
+/* gives the footer a margin below the content of the page */
 div.footer_spacer{
       height:           10px;  /* value needs to be the same as "standard spacing" of the site, currently 10px */
       background-color: white;
@@ -256,7 +248,7 @@ div.footer{
     vertical-align: middle;
     font:           normal normal 8pt/1.231 Arial,sans-serif;
     color:          #666;
-    padding:        0px;  /*ensure the table lines up with the left navigation bar */
+    padding:       0;  /*ensure the table lines up with the left navigation bar */
     padding-top:    3px;  /* nice spacing in the div and between the two table rows */
 }
 
@@ -273,10 +265,10 @@ BEGIN FIXES FOR IE
 .ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body{
     margin-right:  auto;
 	margin-left:   auto;
-    margin-top:    0px;
-	margin-bottom: 0px;
+    margin-top:   0;
+	margin-bottom:0;
     text-align:    left;
-	
+
 /* debug: are the IE conditionals even working? */
         /*background-color: pink;*/
 }
@@ -288,8 +280,8 @@ img{
 
 /* adjust bullets which are outside by default in IE */
 .ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul, .ie10 ul, .ie11 ul{
-     margin:              0px;
-     padding:             0px;
+     margin:             0;
+     padding:            0;
      list-style-position: inside;
 }
 
@@ -317,8 +309,8 @@ h1 {
 	font-size:     16pt;
 	font-weight:   bold;
         line-height:   1;
-        margin:        0px;   /* we should not have to set these here */
-        padding:       0px;  /* we should not have to set these here */
+        margin:       0;   /* we should not have to set these here */
+        padding:      0;  /* we should not have to set these here */
         margin-bottom: 10px;
         text-align:    left;
 }
@@ -405,15 +397,15 @@ table {
         /* prevent nested cells' borders or spacing from accumulating */
 	border-collapse: collapse;
 	border-color: #ccc;
-	margin-bottom: 0px;
-	margin-left: 0px;
+	margin-bottom:0;
+	margin-left:0;
 }
 
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
 tbody tr:nth-child(even) td, tbody tr.even td {
-	background:       #B9E0E3;/*light-teal */
-        background-color: #eee /*light-gray */
+	/* background:       #B9E0E3;/*light-teal */
+    background-color: #eee /*light-gray */
 }
 
 /* additional styles were added to support tables swap the order of alternating row colors; */
@@ -424,8 +416,8 @@ tbody tr:nth-child(even) td, tbody tr.even td {
 /* style for cells in an even row */
 /* style for cells in an even row in an "even-first" colored table */
 table.even-color tbody tr:nth-child(even) td, tbody tr.even td {
-	background: #B9E0E3; /*light-teal */
-        background-color: #eee /*light-gray */
+	/* background: #B9E0E3; /*light-teal */
+    background-color: #eee /*light-gray */
 }
 
 /* style for cells in an odd row */
@@ -437,8 +429,8 @@ table.even-color tbody tr:nth-child(odd) td, tbody tr.odd td {
 /* style for cells in an odd row */
 /* style for cells in an odd row in an "odd-first" colored table */
 table.odd-color tbody tr:nth-child(odd) td, tbody tr.odd td {
-	background: #B9E0E3;/*light-teal */
-        background-color: #eee /*light-gray */
+	/*background: #B9E0E3;/*light-teal */
+    background-color: #eee /*light-gray */
 }
 
 /* style for cells in an even row */
@@ -463,8 +455,8 @@ table.gray td{
 
 /* set defaults for all tables and headers on the site. Make table data and table headers have the same size */
 td, th {
-    margin:         0px;
-    font-size:      9pt; 
+    margin:         0;
+    font-size:      9pt;
     padding:        4px;
     vertical-align: top;
 }
@@ -477,7 +469,7 @@ th {
 
 /* other CSS can alter the table header's size; this more specific CSS sets it to the proper value */
 #cog_post_body th {
-    padding: 5px; 
+    padding: 5px;
     font-size: 9pt;  /*this is different from the font on the page...will need to standardize */
 }
 
@@ -533,7 +525,7 @@ td.righttop {
 * used in lots of places outside of the wiki
 ***************/
 caption {
-	margin:        0px;
+	margin:        0;
 	padding:       2px 5px 3px 5px;
 	font-size:     9pt; /* this needs to be the same size as other headers on the site */
 	text-align:    left;
@@ -570,19 +562,18 @@ BEGIN FORM ELEMENTS
 
 input.right_go{
 	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
-        width:          28px;
-	margin-right:   0px;
-        margin-left:    5px;
-        height:         22px;
+    width:          28px;
+	margin-right:   0;
+    margin-left:    5px;
+    height:         22px;
 	padding-top:    2px;
-        padding-bottom: 2px;
-        padding-left:   3px;
-        padding-right:  3px;
+    padding-bottom: 2px;
+    padding-left:   3px;
+    padding-right:  3px;
 	color:          black;
-	border:         1px solid #bbb;
-	border-color:   #666666;
-        font-size:      8.5pt;
-    
+	border:         1px solid #666666;
+	font-size:      8.5pt;
+
 }
 /***************
 * NAME: text input
@@ -601,7 +592,7 @@ input[type=text] {
 
 input[type=checkbox]{
         vertical-align:baseline; /* default but want to make sure so we can do ie fixex */
-	margin-left:   0px; /* so they line up nicely in tables */
+	margin-left:  0; /* so they line up nicely in tables */
 }
 
 
@@ -730,24 +721,24 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 .vertical_menu {
 	border: 1px solid #358C92;
-	border-top: 0px;
+	border-top: 0;
 	margin-bottom: 10px;
-	margin-top: 0px;
+	margin-top: 0;
 	background: white;
 }
 
 .vertical_menu table {
-	margin: 0px;
+	margin: 0;
 }
 
 /* this is the upper section of the left nav bar */
 .vertical_menu table td {
 	/*font-size: 8pt;*/
-	font-size: 8pt; /* once we remove fonts-min from the left template, this should inherit from body  needs to be the same as <li> below*/
-	text-align: left;
-	vertical-align: top;
-        padding: 1px 0px 0px 1px;
-	margin: 0px;
+	font-size:        8pt; /* once we remove fonts-min from the left template, this should inherit from body  needs to be the same as <li> below*/
+	text-align:       left;
+	vertical-align:   top;
+    padding:          1px 0 0 1px;
+	margin:           0;
 	background-color: white;
 }
 
@@ -760,7 +751,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 /* These two items need to be the same except for the color */
 
 .right_widget_header {
-            margin:        0px;
+        margin:        0;
 	    padding-top:   2px;
 	    padding-bottom:2px;
 	    padding-right: 5px;
@@ -774,7 +765,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 }
 
 .left_widget_header {
-            margin:           0px;
+            margin:          0;
 	    padding-top:      2px;
 	    padding-bottom:   2px;
 	    padding-right:    5px;
@@ -790,7 +781,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 }
 /*first section of the left nav bar is in dark teal */
 .left_upper_widget_header {
-            margin:           0px;
+            margin:          0;
             padding-top:      2px;
 	    padding-bottom:   2px;
 	    padding-right:    5px;
@@ -808,7 +799,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 /* prevent body heading styles from affecting vertical_menu content */
 .vertical_menu h3 {
-	margin:      0px;
+	margin:     0;
 	padding:     2px 5px 3px 5px;
 	font-size:   9pt;
 	text-align:  left;
@@ -821,9 +812,9 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 /*lower section of the left nav bar */
 .vertical_menu ul {
-	margin:         0px;
+	margin:        0;
 	padding-left:   4px;
-	padding-bottom: 0px;
+	padding-bottom:0;
 	list-style:     none;
 }
 
@@ -834,19 +825,19 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 .vertical_menu li {
         /* line-height tweaked to match project browser elements */
 	line-height: 14pt;
-	padding:     0px;
-	margin:      0px;
+	padding:    0;
+	margin:     0;
 	list-style:  none;
 	font-size:   8pt; /* needs to be the same as the upper section which is a table */
 }
 
 .vertical_menu li li {
-	line-height: 0px;
+	line-height:0;
 	padding: 5px;
 }
 
 .vertical_menu li:first-child {
-	border-top: 0px;
+	border-top:0;
 }
 
 #vertical_menu li ul {
@@ -882,7 +873,7 @@ border: 1px solid #666;
     min-width:300px;              /*when there are no tags the box has no size*/
     border: 1px solid black;
     margin-bottom: 5px; /* some extra space before the help text */
-    required:false;
+    required:False;
 
 }
 
@@ -898,7 +889,7 @@ BEGIN NEWS WIDGET
 .news_box {
 	border: 1px solid #666666;
 	margin-bottom: 10px;
-        margin-top: 0px;
+        margin-top:0;
 	background: #FFFFFF;
 }
 
@@ -915,8 +906,8 @@ BEGIN NEWS WIDGET
 
 .news_box table td,th {
 	font-size: 8pt;
-	padding: 0px;
-	margin: 0px;
+	padding:0;
+	margin:0;
 }
 
 .news_box table hd {
@@ -927,14 +918,14 @@ BEGIN NEWS WIDGET
 	background: #FCF2CE;
 }
 .news_footer {
-	margin: 0px;
+	margin:0;
 	padding: 2px 5px 3px 5px;
 	font-size: 8pt;
 	text-align: left;
 	font-weight: bold;
 	background-color: #FCE79F;
 	color: #666666;
-	border: 0px solid #666666;
+	border: 0 solid #666666;
 	border-top: 1px solid #666666;
 	display: block;
 }
@@ -948,12 +939,12 @@ END NEWS WIDGET
 .box-comment {
 	padding: 5px;
 	margin: 2px;
-	border: 0px solid #417690;
+	border: 0 solid #417690;
 	background: #FFFFFF;
 }
 
 .box-comment .caption {
-	color: #417690; /*blueish color??*/
+	/* color: #417690; /*blueish color??*/
 	color: #358C92; /*dark teal*/
 	background: #B9E0E3;
 	/*border: 1px solid #417690;*/
@@ -974,7 +965,7 @@ BEGIN SEARCH WIDGET
 	border:        1px solid #666;
 	font-size:     8pt;
         margin-bottom: 10px;
-        margin-top:    0px;
+        margin-top:   0;
 }
 
 /* Data Text Search */
@@ -986,7 +977,7 @@ BEGIN SEARCH WIDGET
 
 .instruction-box {
         background:  #B9E0E3; /* dark-teal */
-	padding:     5px; 
+	padding:     5px;
 	/* margin: 5px; */
 	border:      1px solid #417690;
 	font-weight: bold;
@@ -996,7 +987,7 @@ BEGIN SEARCH WIDGET
 /*login failure.*/ /*project registration notification*/
 .message-box {
     background:  #fce79f; /* light yellow*/
-	padding:     5px; 
+	padding:     5px;
 	margin:      5px;
 	border:      1px solid #666;
 	font-weight: bold;
@@ -1006,7 +997,7 @@ BEGIN SEARCH WIDGET
 /*update openID box. This should be removed when no longer needed */
 .changeID-box {
     background:  #fce79f; /* light yellow*/
-	padding:     10px; 
+	padding:     10px;
 	margin-left: auto;
     margin-right:auto;
     width:       80%;
@@ -1026,7 +1017,7 @@ BEGIN SEARCH WIDGET
 /* prevent error styles from affecting error content w/in search widget */
 .error-box {
     background:  #FAC24A; /* dark yellow*/
-	padding:     5px; 
+	padding:     5px;
 	margin:      5px;
 	border:      1px solid #417690;
 	font-weight: bold;
@@ -1035,7 +1026,7 @@ BEGIN SEARCH WIDGET
 }
 
 .search_header {
-	margin: 0px;
+	margin:0;
 	padding: 2px 5px 3px 5px;
 	font-size: 9pt;
 	text-align: left;
@@ -1088,7 +1079,7 @@ END ADVANCED SEARCH PAGE
 
 
 .caption {
-	margin: 0px;
+	margin:0;
 	padding: 2px 5px 3px 5px;
 	font-size: 9pt;
 	text-align: left;
@@ -1104,7 +1095,7 @@ END ADVANCED SEARCH PAGE
 * DESCRIPTION: header_bar does not specify the actual page header, but rather the headings w/in boxes
 ***************/
 .header_bar {
-	margin: 0px;
+	margin:0;
 	padding: 2px 5px 3px 5px;
 	font-size: 9pt;
 	text-align: left;
@@ -1146,15 +1137,15 @@ BEGIN MESSAGES & ERRORS
 /* these are rendered as list elements within a div */
 
 ul.messagelist {
-	padding: 0px 0px 5px 0px;
-	margin: 0px;
+	padding: 0 0 5px;
+	margin:0;
 }
 
 ul.messagelist li {
 	font-size: 9pt;
 	display: block;
 	padding: 4px 5px 4px 25px;
-	margin: 0px 0px 3px 0px;
+	margin: 0 0 3px 0;
 	border-bottom: 1px solid #ddd;
 	color: #666;
 	background: #ffc url(/static/admin/img/icon_success.gif) 5px .3em no-repeat;
@@ -1199,13 +1190,13 @@ ul.errorlist {
 /* ensure the styles apply to errors even when they are w/in tables */
 td ul.errorlist {
         /* note the !important keyword to override the styles from the table section */
-	margin: 0px !important;
-	padding: 0px !important;
+	margin:  0 !important;
+	padding: 0 !important;
 }
 
 td ul.errorlist li {
         /* note the !important keyword to override the styles from the table section */
-	margin: 0px !important;
+	margin: 0 !important;
 }
 
 .errors {
@@ -1225,9 +1216,9 @@ END MESSAGES & ERRORS
 BEGIN SPECIFIC CSS FIXES FOR THIRD-PARTY ELEMENTS AND SOME IE
 ******************************/
 /*Some of these fixes are for Internet Explorer. If they are new classes, they live here, if they are hacks, they live near the
-* element they hack. 
-* These CSS elements fix bugs in third-party CSS (e.g. YUI, the embedded wiki). If those third party elements are removed, these 
-* need to be changed. */ 
+* element they hack.
+* These CSS elements fix bugs in third-party CSS (e.g. YUI, the embedded wiki). If those third party elements are removed, these
+* need to be changed. */
 
 /* there is a known ("dropped float") issue w/ IE where the last column contents appears at the bottom of the page */
 /* the following styles (x.last) prevents right overflows */
@@ -1276,7 +1267,7 @@ END SPECIFIC CSS FIXES
 
 .header-gray {
 	border-bottom: 1px solid #666666;
-	margin-bottom: 0px;
+	margin-bottom:0;
 	background: #EEEEEE;
 	text-align: left;
 	color: #666666;
@@ -1290,18 +1281,18 @@ BEGIN HEADER STYLES
     overflow: hidden;
     height: 85px;
     /*color: #ffc; yellow*/
-    /*margin: 0px;*/
+    /*margin:0;*/
     /* margin-top: 10px; */
-    /*padding-top: 0px;*/
+    /*padding-top:0;*/
     /*display:block;*/
     /* debug only... border: solid 2px yellow; */
 }
 
 /* note: the sum of the heights of user_menu, its margin-bottom, and right_logo must equal the height of right_header */
 #user_menu {
-    margin-top: 0px;
+    margin-top:0;
     padding-top:2px;
-    padding-bottom:0px;
+    padding-bottom:0;
     height: 8px;
     font-size: 12px;
     color: #333;
@@ -1313,11 +1304,11 @@ BEGIN HEADER STYLES
 
 #project_logo{
     position: absolute; bottom: 4px; left: 2px; /* must have same bottom as #cog_logo */
-    height:         70px; 
+    height:         70px;
     width:          300px; /* logos larger than this will have issues. May have to expand at some point */
     /*float:          left;*/
-    /*margin-top:     0px;*/
-    /*padding-top:    0px;*/
+    /*margin-top:    0;*/
+    /*padding-top:   0;*/
     /*clear: right;*/
     /* debug only...border: solid 2px pink; */
 
@@ -1335,16 +1326,16 @@ BEGIN HEADER STYLES
 }
 
 #right_cog_logo {
-    position:absolute; bottom: 4px; right:0px; /* needs to have same bottom as #project_title or #project_logo */
+    position:absolute; bottom: 4px; right:0; /* needs to have same bottom as #project_title or #project_logo */
     height:         40px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
     padding-right:  4px;
-    margin-bottom:  0px;
+    margin-bottom:  0;
     width:          200px;
     /* debug onlyu...border: solid 2px green;*/
     /*float:         right;*/
     /*margin-top:    38px;*/
-    /*padding-bottom:5px; */ 
+    /*padding-bottom:5px; */
    }
 
 img.cog_logo{
@@ -1375,7 +1366,7 @@ img.project_logo{
     width: 100%;
     height: 20px;
     margin: 0 auto;
-    padding:   0px;
+    padding:  0;
     /* padding-top: 2px; */
     /* COG STYLE: TOP NAV BACKGROUND COLOR */
     background: #FFFFFF;
@@ -1413,7 +1404,7 @@ img.project_logo{
 
 #top_nav_right {
 	width:            97%;
-	padding-top:      0px;
+	padding-top:     0;
     text-align:       right;
 	padding-left:     5px;     /* make yellow box line up with rest of the right widgets */
     background-color: #FAC24A; /*dark yellow*/
@@ -1436,7 +1427,7 @@ img.project_logo{
     width: 100%;
     height: 20px;
     margin: 0 auto;
-    padding: 0px;
+    padding:0;
     /* padding-top: 2px; */
     /* COG STYLE: TOP NAV BACKGROUND COLOR */
     background: #FFFFFF;
@@ -1460,8 +1451,8 @@ img.project_logo{
 
 
 .top_nav ul {
-    margin: 0px;
-    padding: 0px 0px 0px 0px;
+    margin:0;
+    padding: 0 0 0 0;
     list-style: none;
     line-height: normal;
 }
@@ -1473,9 +1464,9 @@ img.project_logo{
 
 .top_nav a {
     display: block;
-    margin-right: 3px;    
+    margin-right: 3px;
     /* COG STYLE: TOP NAV BAR TEXT */
-    text-decoration: none;   
+    text-decoration: none;
     /* padding: top-right-bottom-left */
     padding: 2px 6px 6px 6px;
     font-weight: bold;
@@ -1494,8 +1485,8 @@ img.project_logo{
 	display: inline;
 	color: #358C92;
 	font-weight: normal;
-	padding: 0px;
-	margin: 0px;
+	padding:0;
+	margin:0;
 	text-align: center;
 	font-size: 8.5pt;
 }
