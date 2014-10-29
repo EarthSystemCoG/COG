@@ -95,12 +95,12 @@ will create a site_media directory under $COG_CONFIG_DIR/site_media
 will copy all CoG system media to $COG_INSTALL_DIR/static
 	
 if --esgf=false:
-	- will create a startup sqllite database under /usr/local/cog/cog_config/django.data
+	- will create a startup sqllite database under $COG_CONFIG_DIR/django.data
 	- if installing for the first time, it will create a "TestProject" and make that the CoG home project
 	- if installing for the first time, it will create a super-user "admin" with password "changeit"
 	
 if --esgf=true:
-	- will create a CoG database onto the ESGF Postgres installation
+	- will create a CoG database onto the existing ESGF Postgres installation
 	- if installing for the first time, it will create a "TestProject" and make that the CoG home project
 	- if installing for the first time, it will create a super-user "admin" with password "changeit" 
 	  and openid 'https://<hostname>/esgf-idp/openid/admin (or the first available openid if that is taken already)
@@ -110,23 +110,26 @@ o rm -rf $COG_PYTHON/lib/python2.7/site-packages/cog*
 will remove CoG from the python site-packages library,
 to avoid conflicts with the source installation in $COG_DIR/cog_install
 
-4) Run CoG
+
+>>> TESTING
+
+Run CoG with the Django development server:
 
 o cd $COG_INSTALL_DIR
 o python manage.py runserver
+will run CoG on localhost and port 8000
 
-NOTE: to run CoG via the django development web server on a different hostname and port:
+NOTE: to run CoG with a different hostname and port:
+python manage.py runserver <hostname>:<port>
 
-python manage.py runserver esg-datanode.jpl.nasa.gov:8080
-
-o access URL at http://localhost:8000
+o access the top level URL at http://localhost:8000
 o login as administrator:
-	- if --esgf=true, use the standard login URL: http://<hostname>/login/ with the "admin" openid and password above
-	- if --esgf=false, use the hidden local login: http://<hostname>/login2/ with the "admin" password above
+	- if --esgf=true, use the standard login URL: http://<hostname>/login/ with the "admin" openid and password mentioned above
+	- if --esgf=false, use the hidden local login: http://<hostname>/login2/ with username "admin" and the password above
 	
 o immediately change the "admin" password by clicking on "My Profile" -> "Change Password" 
   or directly accessing the URL "http://<hostname>/password/update/
-  Note: to fully test the password change, you need to log out of CoG AND quit the browser and log-in as 'admin' again,
+  Note: to fully test the password change, you need to log out of CoG AND quit the browser and log-in as 'admin' again
 
 o also change all other "admin" data to match the local administrator user, 
 especially the email address where all site-level notifications will be sent
@@ -136,21 +139,26 @@ o start experimenting with creating other projects and registering new users.
 o test the email notification when new projects are created
 
 
-5) Post-installation configuration
+>>> POST INSTALLATION CONFIGURATION
 
-o Review the file $COG_CONFIG_DIR/cog_settings.cfg and modify values to reflect the
+o Review the file $COG_CONFIG_DIR/cog_settings.cfg and modify all values to reflect the
 site specific configuration. Values set in this file will not be overridden by
-future upgrades. Refer to the file resources/config/cog_settings.cfg (included with the distribution)
+future upgrades. Refer to the file resources/config/cog_settings.cfg (included with the CoG distribution)
 for description and example values of the configuration parameters.
 
-o Optionally, provide a custom header and footer by placing content in the directories
-$COG_CONFIG_DIR/mytemplates and $COG_CONFIG_DIR/mymedia
+o If running the CoG application under a user other than the one executing the installation, 
+the directory $COG_CONFIG_DIR/site_media must be owned by that user. For example:
+
+cd $COG_CONFIG_DIR
+chown -R apache:apache site_media
+
 
 o If for any reason the name or domain of the current site needs to change, 
 the new values should be entered in cog_settings.cfg, then run the command:
 
 cd $COG_INSTALL_DIR
 python manage.py init_site
+
 
 o Setup federation with other CoG instances:
 
@@ -200,25 +208,22 @@ NOTE: if a CoG peer site is disabled through the admin interface:
 	- Its data cart won't show up in the current data cart page
 	- The site will not be queried for user projects updates
 
-o If running the CoG application under a user other than the one executing the installation, 
-the directory $COG_CONFIG_DIR/site_media must be owned by that user. For example:
-
-cd $COG_CONFIG_DIR
-chown -R apache:apache site_media
 
 o To restore the CoG database from backup:
 
 Stop CoG, then:
 - if using postgres:
 psql -U postgres -p 5432 cogdb < cogdb_2014-03-12.sql
+
 - if using sqllite:
 simply copy the older django.data file to the DATABASE_PATH location 
-Finally restart CoG
+
+Finally restart CoG.
 
 	
-PERIODIC ADMINISTRATION TASKS
+o Setup cron jobs to execute periodic administration tasks
 
-o Setup a cron job to periodically update the projects around the federation.
+a) Setup a cron job to periodically update the projects around the federation.
 An example such script is provided as scripts/sync_projects.sh - which will need to be customized to your environment.
 
 For example, to synchronize the projects every hour and append the log to a file:
@@ -226,7 +231,7 @@ For example, to synchronize the projects every hour and append the log to a file
 0 * * * * /usr/local/cog/cog_install/resources/scripts/sync_projects.sh  >> /tmp/crontab.log 2>&1
 
 
-o Setup a cron job to backup the postgres database content every night. 
+b) Setup a cron job to backup the postgres database content every night. 
 
 An example script is provided as 'scripts/cog_backup.sh' - which will need to be customized to your specific installation.
 
@@ -241,7 +246,7 @@ Also must set the file permissions as follows:
 
 chmod 0600 ~/.pgpass
 
-6) Customize the header and footer
+o Optionally, customize the header and footer
 
 The default header and footer can be overridden by placing a custom version with the same name under the
 root level directory <COG_CONFIG_DIR>/mytemplates/cog/common/<file_name>, where by default
