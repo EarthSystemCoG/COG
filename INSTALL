@@ -235,30 +235,23 @@ Also must set the file permissions as follows:
 
 chmod 0600 ~/.pgpass
 
-o Customize the header and footer
+6) Customize the header and footer
 
-<<<<<<< HEAD
-The default header and footer can be overridden by placing a custom template with the same name and system path under the
-root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, where by default COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
-=======
-The default header and footer can be overridden by placing a custom temaplate with the same name and system path under the
-root level directory <COG_CONFIG_DIR>/mytemplates/<full path to template file>, w
-here by default COG_CONFIG_DIR=/usr/local/cog/cog_config (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
->>>>>>> devel
+The default header and footer can be overridden by placing a custom version with the same name under the
+root level directory <COG_CONFIG_DIR>/mytemplates/cog/common/<file_name>, where by default
+COG_CONFIG_DIR=/usr/local/cog (or COG_CONFIG_DIR can be set through an environment variable available to the CoG web container).
 
-For example, to override the template cog/templates/cog/common/cog_header_custom.html and cog/templates/common/cog_footer_custom.html 
+For example, to override the template /cog/templates/cog/common/cog_header_custom.html and /cog/templates/common/cog_footer_custom.html
 which come with the distribution, create the two custom files:
 
-<<<<<<< HEAD
-<COG_CONFIG_DIR>/mytemplates/cog/templates/cog/common/cog_header_custom.html
-<COG_CONFIG_DIR>/mytemplates/cog/templates/cog/common/cog_footer_custom.html
-=======
-/usr/local/cog/cog_config/mytemplates/cog/templates/common/cog_header_custom.html
-/usr/local/cog/cog_config/mytemplates/cog/templates/common/cog_footer_custom.html
->>>>>>> devel
+<COG_CONFIG_DIR>/mytemplates/cog/common/cog_header_custom.html
+<COG_CONFIG_DIR>/mytemplates/cog/common/cog_footer_custom.html
 
-Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the template as "/mymedia/<image name>".
+You will note that the path (/cog/templates/cog/common/<filename> to the default file is longer than the path (/cog/common/<filename>
+to the file that overrides the default. This is because Django already has within its known paths the first two directories (/cog/templates).
 
-For example, the file located at /usr/local/cog/cog_config/mymedia/nasa.jpeg can be loaded by any template as src="/mymedia/nasa.jpeg" (please note the first leading '/').
+Images and other media should be located under the directory <COG_CONFIG_DIR>/mymedia/ and referenced from within the custom override
+as "/mymedia/<image name>". For example, the file located at /usr/local/cog/cog_config/mymedia/nasa.jpeg can be loaded by any template
+as src="/mymedia/nasa.jpeg" (please note the first leading '/').
 
 The directories resources/noaa/mytemplates and resources/noaa/mymedia contain some examples of custom header, footer and associated media.
