@@ -104,6 +104,9 @@ if --esgf=true:
 	- if installing for the first time, it will create a "TestProject" and make that the CoG home project
 	- if installing for the first time, it will create a super-user "admin" with password "changeit" 
 	  and openid 'https://<hostname>/esgf-idp/openid/admin (or the first available openid if that is taken already)
+	  
+will also update the local site name as specified in the cog_settings.cfg file
+will also update the list of available CoG peer sites from the file cog/management/commands/sites.xml
 
 o rm -rf $COG_PYTHON/lib/python2.7/site-packages/cog*
 

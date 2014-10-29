@@ -56,9 +56,14 @@ class CoGInstall(object):
         else:
             raise Exception("Unknow database type: %s" % dbtype)
         
+        # django management commands
         management.call_command("syncdb", interactive=False)
         management.call_command("migrate", "cog")
         management.call_command("collectstatic", interactive=False)
+        
+        # custom management commands
+        management.call_command("init_site")
+        management.call_command("sync_sites")
         
     def _createPostgresDB(self):
         '''Method to create the Postgres database if not existing already.'''
