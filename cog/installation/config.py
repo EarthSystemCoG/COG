@@ -23,6 +23,7 @@ import ConfigParser
 import logging
 import collections
 import StringIO
+import time
 from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, ESGF_IDP_WHITELIST, 
                        DEFAULT_PROJECT_SHORT_NAME )
@@ -101,7 +102,7 @@ class CogConfig(object):
                 logging.info("Read ESGF database password from file: %s" % ESGF_PASSWORD_FILE)  
         except IOError:
             # file not found
-            logging.warn("ESGF database password file: %s not found" % ESGF_PASSWORD_FILE) 
+            logging.warn("ESGF database password file: %s could not found or could not be read" % ESGF_PASSWORD_FILE) 
                 
                 
     def _safeSet(self, key, value, section=SECTION_DEFAULT):
@@ -178,9 +179,7 @@ class CogConfig(object):
         
         # backup existing file
         if os.path.exists( CONFIGFILEPATH ):
-            # FIXME ?
-            #os.rename(self.cogConfigFilePath, self.cogConfigFilePath + "-backup-%s" % time.strftime('%Y-%m-%d_%H:%M:%S'))  
-            os.rename(CONFIGFILEPATH, CONFIGFILEPATH + "-backup")  
+            os.rename(self.cogConfigFilePath, self.cogConfigFilePath + "-backup-%s" % time.strftime('%Y-%m-%d_%H:%M:%S'))  
                 
         cfgfile = open(CONFIGFILEPATH,'w')
         self.cogConfig.write(cfgfile)
