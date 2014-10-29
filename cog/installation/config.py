@@ -18,15 +18,17 @@ The postgres database password is read from the file /esg/config/.esg_pg_pass
 
 '''
 
-import os
 import ConfigParser
-import logging
-import collections
 import StringIO
+import collections
+import logging
+import os
 import time
+
 from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
-                       ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, ESGF_IDP_WHITELIST, 
-                       DEFAULT_PROJECT_SHORT_NAME )
+                       ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, ESGF_IDP_WHITELIST,
+                       DEFAULT_PROJECT_SHORT_NAME)
+
 
 # location of site specific settigs configuration file
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
@@ -179,7 +181,7 @@ class CogConfig(object):
         
         # backup existing file
         if os.path.exists( CONFIGFILEPATH ):
-            os.rename(self.cogConfigFilePath, self.cogConfigFilePath + "-backup-%s" % time.strftime('%Y-%m-%d_%H:%M:%S'))  
+            os.rename(CONFIGFILEPATH, CONFIGFILEPATH + "-backup-%s" % time.strftime('%Y-%m-%d_%H:%M:%S'))  
                 
         cfgfile = open(CONFIGFILEPATH,'w')
         self.cogConfig.write(cfgfile)
