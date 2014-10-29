@@ -12,7 +12,7 @@
 	  {% for item in request.session.search_path %}
 	  	<a href='javascript:resetFacet("{{item.0}}")' class='deletelink'> </a> 
 	  	<a href='javascript:resetFromFacetIndex({{forloop.counter0}})'>{{ item.1 }}</a>
-	  	{% if not forloop.last %} &gt; {% endif %}
+	  	{% if not forloop.last %} | {% endif %}
 	  {% endfor %}
 	  </p>
   {% endif %}
