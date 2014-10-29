@@ -8,14 +8,14 @@ Python 2.7
 Python virtualenv (pip install virtualenv)
 Postgres (only if using Postgres back-end)
 
->>> INSTALLATION
 
-0) Create a parent directory under which all CoG-related software (Python, CoG installation, CoG configuration)
+>>> FIRST INITIAL SETUP (ONE TIME ONLY)
+
+Create a parent directory under which all CoG-related software (Python, CoG installation, CoG configuration)
 will be installed. The directory can be located anywhere on the system. The user executing the installation
-must have write permissions to this directory.
+must have write permissions to this directory. In this instructions, we will use /usr/local/cog as the CoG root directory.
 
-o export COG_DIR=/usr/local/cog
-o mkdir $COG_DIR (if not existing already)
+export COG_DIR=/usr/local/cog
 
 At the end of the installation process, the $COG_DIR will contain the following sub-directories:
 
@@ -25,17 +25,21 @@ $COG_DIR/
 	|--> cog_install/ : CoG source distribution
 	|--> venv/: Python virtula environment (Python executable and all needed dependencies) 
 	
-It is recommended to setup the necessary env variables in your ~/.bash_profile:
+It is recommended to setup the necessary env variables in your ~/.bash_profile or ~/.bashrc file 
+(whatever is parsed by your system at login):
 
 export COG_DIR=/usr/local/cog
 export COG_CONFIG_DIR=$COG_DIR/cog_config
 export COG_INSTALL_DIR=$COG_DIR/cog_install
 
+Create all the necessary directories, if not existing already:
 
-1) Define Python virtual environment
+mkdir $COG_DIR
+mkdir $COG_CONFIG_DIR
+mkdir $COG_INSTALL_DIR
 
-create a directory where to install a specific distribution of Python and all its dependencies
-needed by CoG:
+Also create a Python "virtual environment" - 
+a directory where to install a specific distribution of Python and all its dependencies needed by CoG:
 
 o cd $COG_DIR
 o virtualenv venv
@@ -44,35 +48,35 @@ will create the sub-directory venv with:
 - copy of python executable in ./bin/python
 - location for installation of additional needed packages in ./lib/python2.7/site-packages
 
+
+>>> INSTALLATION OR UPGRADE
+
+1) Activate the CoG Python virtual environment:
+
+o cd $COG_DIR
 o source venv/bin/activate
 o which python
 will show that the python installation used is located into the venv sub-directory
 
-to later de-activate the Python virtual environment:
-
+Note: to later de-activate the Python virtual environment:
 o deactivate
 
-2) Install CoG
+2) Checkout the CoG software stack
 
-Create a directory to hold the CoG distribution,
-checkout CoG from the GitHub repository (using a specific branch or tag)
+First time installation only: checkout CoG from the GitHub repository:
 
 o cd $COG_DIR
 o git clone https://github.com/EarthSystemCoG/COG cog_install
 or:
 o git clone git@github.com:EarthSystemCoG/COG.git cog_install
-o cd cog_install
+
+Every time (first time installation or upgrade): checkout a specific CoG tag or branch:
+o cd $COG_INSTALL_DIR
 o git checkout -b devel origin/devel
 or for a specific tag:
 o git checkout v2.6.2
-o export COG_INSTALL_DIR=$COG_DIR/cog_install
 
-3) Configure CoG
-
-Create a directory to hold the local CoG configuration and all future CoG media
-
-o export COG_CONFIG_DIR=$COG_DIR/cog_config
-o mkdir $COG_CONFIG_DIR
+3) Install and configure CoG
 
 o cd $COG_INSTALL_DIR
 o python setup.py install
@@ -80,13 +84,15 @@ o python setup.py install
 will install all necessary CoG dependencies under the CoG python installation in the location
 $COG_DIR/venv/lib/python2.7/site-packages
 
+To configure CoG WITHOUT an ESGF node:
 o python setup.py setup_cog
-or to install CoG on an existing ESGF node:
+
+or to install CoG as backed-up by an ESGF node:
 o python setup.py setup_cog --esgf=true
 
-will create the site configuration file under /usr/local/cog/cog_config/cog_settings.cfg
-will create a site_media directory under /usr/local/cog/cog_config/site_media
-will copy all CoG system media to /usr/local/cog/cog_install/static
+will create the site configuration file under $COG_CONFIG_DIR/cog_settings.cfg
+will create a site_media directory under $COG_CONFIG_DIR/site_media
+will copy all CoG system media to $COG_INSTALL_DIR/static
 	
 if --esgf=false:
 	- will create a startup sqllite database under /usr/local/cog/cog_config/django.data
