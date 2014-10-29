@@ -173,7 +173,7 @@ td.custom_header_welcome{
     color:          #666;
     font-style:     italic;
     line-height:    1.35;
-    width:          249px; /*may need to make this larger if people have large names for their nodes */
+    width:          350px; /*may need to make this larger if people have large names for their nodes */
     text-align:     right;
     padding:        1px;
     padding-top:    4px;
