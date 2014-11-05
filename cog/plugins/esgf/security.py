@@ -1,11 +1,14 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import func
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from passlib.hash import md5_crypt
 from uuid import uuid4
 from django_openid_auth.models import UserOpenID
+
+
+from cog.plugins.esgf.objects import ESGFGroup, ESGFRole, ESGFUser
+from cog.plugins.esgf.permissionDAO import PermissionDAO
 
 from django.conf import settings
 
@@ -28,10 +31,13 @@ class ESGFDatabaseManager():
 
             #engine = create_engine('postgresql://DBUSERNAME:DBPASSWORD@localhost/esgcet', echo=False)
             engine = create_engine(dburl, echo=False)
-            metadata = Base.metadata
+            #metadata = Base.metadata
 
             # session factory
             self.Session = sessionmaker(bind=engine)
+            
+            # DAOs
+            self.permissionDao = PermissionDAO(self.Session)
             
     def createOpenid(self, userProfile):
         '''Selects the first available ESGF openid starting from the CoG username, and saves it in the CoG database'''
@@ -64,6 +70,31 @@ class ESGFDatabaseManager():
         return None # openid not assigned
         
         
+    def createGroup(self, name, description='', visible=True, automatic_approval=False):
+        
+        created = False
+        
+        try:
+            session = self.Session()
+            
+            group = session.query(ESGFGroup).filter( func.lower(ESGFGroup.name) == func.lower(name) ).one()
+            print "Group with name=%s already exists" % group.name
+            created = False
+            
+            return group
+            
+        except NoResultFound:
+            group = ESGFGroup(name=name, description=description, visible=visible, automatic_approval=automatic_approval)
+            session.add(group)
+            session.commit()
+            created = True
+            
+            return group
+            
+        finally:
+            session.close()
+        
+        return created
             
     def insertUser(self, userProfile):
         
@@ -115,12 +146,42 @@ class ESGFDatabaseManager():
 
         try:
             session = self.Session()
-            esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==openid).one()
-            session.close()
+            esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==openid).one()        
             return esgfUser
         
         except NoResultFound:
             return None
+        
+        finally:
+            session.close()
+            
+    def getGroup(self, name):
+        '''Retrieves a group by name.'''
+        
+        try:
+            session = self.Session()
+            esgfGroup = session.query(ESGFGroup).filter(ESGFGroup.name==name).one()        
+            return esgfGroup
+        
+        except NoResultFound:
+            return None
+        
+        finally:
+            session.close()
+            
+    def getRole(self, name):
+        '''Retrieves a role by name.'''
+        
+        try:
+            session = self.Session()
+            esgfRole = session.query(ESGFRole).filter(ESGFRole.name==name).one()        
+            return esgfRole
+        
+        except NoResultFound:
+            return None
+        
+        finally:
+            session.close()            
         
     def listUsers(self):
         
@@ -135,6 +196,22 @@ class ESGFDatabaseManager():
             
         session.commit()
         session.close()
+        
+    def listGroups(self):
+        
+        session = self.Session()
+        groups = session.query(ESGFGroup)
+        session.close()
+        
+        return groups
+        
+    def listRoles(self):
+        
+        session = self.Session()
+        roles = session.query(ESGFRole)
+        session.close()
+        
+        return roles
         
     
     def getUsersByEmail(self, email):
@@ -163,32 +240,4 @@ class ESGFDatabaseManager():
                     session.commit()
                     session.close()
             
-
-
-Base = declarative_base()
-class ESGFUser(Base):
-    """ Class that represents the 'esgf_secitity.user' table in the ESGF database."""
-
-    __tablename__ = 'user'
-    #__table_args__ = { 'autoload':True, 'schema':'esgf_security' }
-    __table_args__ = { 'schema':'esgf_security' }
-
-    id = Column(Integer, primary_key=True)
-    firstname = Column(String)
-    middlename = Column(String)
-    lastname = Column(String)
-    email = Column(String)
-    username = Column(String)
-    password = Column(String)
-    dn = Column(String)
-    openid = Column(String)
-    organization = Column(String)
-    organization_type = Column(String)
-    city = Column(String)
-    state = Column(String)
-    country = Column(String)
-    status_code = Column(Integer)
-    verification_token = Column(String)
-    notification_code = Column(Integer)
-
 esgfDatabaseManager = ESGFDatabaseManager()
