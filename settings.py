@@ -38,7 +38,10 @@ HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % COG_CONFIG_DIR)
 DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
 DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
-DEBUG = bool( siteManager.get('DEBUG', default='False') )
+if siteManager.get('DEBUG', default='False').lower() == 'true':
+    DEBUG = True
+else:
+    DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
 print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
