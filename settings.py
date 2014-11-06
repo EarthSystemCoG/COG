@@ -38,6 +38,10 @@ HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % COG_CONFIG_DIR)
 DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
 DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
+DEBUG = bool( siteManager.get('DEBUG', default='False') )
+TEMPLATE_DEBUG = DEBUG
+#ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
+#print 'Using ALLOWED_HOSTS=%s' % ALLOWED_HOSTS
 
 # FIXME
 # ESGF specific settings
@@ -49,9 +53,6 @@ if ESGF_CONFIG:
 # FIXME
 
 #====================== standard django settings.py ======================
-
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 # DEV/PROD switch
 server_type = os.environ.get("SERVER_TYPE", "DEV")

@@ -158,6 +158,10 @@ class CogConfig(object):
         self._safeSet('PASSWORD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
         self._safeSet('IDP_REDIRECT','') # no redirect by default
+        # DEBUG setting: use False for production server to avoid broadcasting detailed system paths
+        self._safeSet('DEBUG', 'False')
+        # ALLOWED_HOSTS = [] must be included if DEBUG=False
+        self._safeSet('ALLOWED_HOSTS', hostName)
         
         #[ESGF]
         if self.esgf:
