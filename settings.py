@@ -40,8 +40,8 @@ DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra
 DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
 DEBUG = bool( siteManager.get('DEBUG', default='False') )
 TEMPLATE_DEBUG = DEBUG
-#ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
-#print 'Using ALLOWED_HOSTS=%s' % ALLOWED_HOSTS
+ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
+print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
 
 # FIXME
 # ESGF specific settings
