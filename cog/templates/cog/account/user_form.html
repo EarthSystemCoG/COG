@@ -199,32 +199,34 @@
                         <td class="optional" nowrap="nowrap">Do not list me among project members</td>
                         <td>{{ form.private }} {{ form.private.errors }}</td>
                     </tr>
-                    <tr>
-                        <td class="optional" nowrap="nowrap">Picture
-                        <br/>(Maximum Size: 1MB)
-                        <br/>(Format: 'jpg', 'png', or 'gif')
-                        </td>
-                        <td>
-                        <table>
-                        	<tr>
-                        	<td>
-                        	<img src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
-                        	</td>
-                        	<td align="left">
-			              <div style="margin-top:2px">
-			                  {% if not 'unknown' in form.instance|getImage %}
-			                      {{ form.delete_image }} Delete current picture?
-			                  {% endif %}
-			                  <br/>
-			                  {{ form.image }}
-			                  &nbsp;{{ form.image.errors }}
-			               </div>
-                                  </td>
-                        	</tr>
-                        </table>
-                        </td>
-                        </tr>
-              </table>
+                    {% if not request.user.is_anonymous %}
+	                    <tr>
+	                      <td class="optional" nowrap="nowrap">Picture
+	                        <br/>(Maximum Size: 1MB)
+	                        <br/>(Format: 'jpg', 'png', or 'gif')
+	                      </td>
+	                      <td>
+	                        <table>
+	                          <tr>
+	                        	<td>
+	                        	<img src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
+	                        	</td>
+	                        	<td align="left">
+				                  <div style="margin-top:2px">
+				                    {% if not 'unknown' in form.instance|getImage %}
+				                      {{ form.delete_image }} Delete current picture?
+				                    {% endif %}
+				                    <br/>
+				                    {{ form.image }}
+				                    &nbsp;{{ form.image.errors }}
+				                  </div>
+	                            </td>
+	                          </tr>
+	                        </table>
+	                      </td>
+	                    </tr>
+                    {% endif %}
+                </table>
 
 	     <!--this section is its own table in order to make the td
              		widths different from the one above-->
