@@ -12,6 +12,7 @@ from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 import os.path
 from django_openid_auth.models import UserOpenID
+import imghdr
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
@@ -171,8 +172,6 @@ class UserForm(ImageForm):
         cleaned_data = self.cleaned_data
 
         # new user only: validate 'password', 'confirm_password' fields
-        print 'user_id=%s' % user_id
-        #print 'profile=%s' % self.instance.profile
         if user_id is None:
             validate_password(self)
 
@@ -197,10 +196,20 @@ def validate_image(form):
     cleaned_data = form.cleaned_data
     image = cleaned_data.get("image", None)
     if image is not None:
-        print 'image name=%s' % image.name
+            
+        # enforce white-list of allowed extensions
         extension = (os.path.splitext(image.name)[1]).lower()
         if extension != '.jpg' and extension != '.png' and extension != '.gif' and extension != '.jpeg' :
             form._errors["image"] = form.error_class(["Invalid image format: %s"%extension])
+        
+        # validate image header
+        try:
+            image_type = imghdr.what(image)
+            print 'Validating image header: detected image type=%s' % image_type
+            if image_type is None:
+                form._errors["image"] = form.error_class(["Invalid image type: %s" % image_type])
+        except Exception as e:
+            form._errors["image"] = form.error_class(["Cannot validate image header: %s" % e.message])
 
 
 # method to validate the fields 'password" and 'confirm_password'
