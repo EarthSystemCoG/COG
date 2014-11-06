@@ -81,13 +81,14 @@ class UsernameReminderForm(Form):
 class PasswordChangeForm(Form):
 
     username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
-    old_password = CharField(required=True, widget=PasswordInput(render_value=True))
+    old_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }))
     password = CharField(required=True, 
                      # trigger javascript function when input field looses focus
-                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", }),
+                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", "autocomplete" : "off" }),
                      help_text = PASSWORD_INSTRUCTIONS
                      ) # not required for OpenID users
-    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
+    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }), 
+                                 help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
 
     # override __init__ method to store the user object
     #def __init__(self, user, *args,**kwargs):
