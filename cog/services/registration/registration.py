@@ -89,3 +89,21 @@ class RegistrationService(object):
         '''
         
         return False
+    
+    @abc.abstractmethod
+    def list(self, userOpenid, groupName):
+        '''
+        Method to list all permissions for a given user and group.
+        
+        :param userOpenid: the user openid (must exist)
+        :type userOpenid: string
+        :param groupName: the group name (must exist)
+        :type groupName: string
+
+        :returns: a dictionary containing the roles as keys, the corresponding boolean approved status as values 
+                  (or None if that permission does not exist)
+        :rtype: (string, boolean) dictionary
+        
+        '''
+        
+        return {}

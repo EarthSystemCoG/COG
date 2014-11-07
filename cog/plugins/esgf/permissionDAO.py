@@ -24,7 +24,7 @@ class PermissionDAO(object):
         try:
             session = self.Session()
             
-            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid, groupName, roleName)
+            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid=userOpenid, groupName=groupName, roleName=roleName)
                                
             # create and store a new  permission
             # will throw IntegrityError if the permission already exists
@@ -52,7 +52,7 @@ class PermissionDAO(object):
         try:
             session = self.Session()
             
-            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid, groupName, roleName)
+            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid=userOpenid, groupName=groupName, roleName=roleName)
                                            
             try:
                 # retrieve an existing permission
@@ -66,6 +66,27 @@ class PermissionDAO(object):
         finally:
             session.close()
             
+    def readPermissions(self, userOpenid, groupName):
+        '''
+        Method to read all permissions for a given user and group from the ESGF database.
+        Will return an empty dictionary if no permissions are found.
+        '''
+        
+        try:
+            permissions = {}
+            session = self.Session()
+            
+            (esgfUser, esgfGroup, _) = self._getPermissionObjects(session, userOpenid=userOpenid, groupName=groupName)
+                                           
+            # retrieve all existing permissions
+            ps = session.query(ESGFPermission).filter(ESGFPermission.user_id==esgfUser.id).filter(ESGFPermission.group_id==esgfGroup.id)
+            for p in ps:
+                permissions[p.role.name] = p.approved
+            return permissions
+                            
+        finally:
+            session.close()
+            
     def updatePermission(self, userOpenid, groupName, roleName, approved):
         '''
         Method to update the status of a user permission in the database.
@@ -75,7 +96,7 @@ class PermissionDAO(object):
         try:
             session = self.Session()
             
-            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid, groupName, roleName)
+            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid=userOpenid, groupName=groupName, roleName=roleName)
                         
             # retrieve and update an existing permission
             # will throw NoResultFound if not found
@@ -95,7 +116,7 @@ class PermissionDAO(object):
         try:
             session = self.Session()
             
-            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid, groupName, roleName)
+            (esgfUser, esgfGroup, esgfRole) = self._getPermissionObjects(session, userOpenid=userOpenid, groupName=groupName, roleName=roleName)
                         
             # retrieve and update an existing permission
             # will throw NoResultFound if not found
@@ -107,7 +128,7 @@ class PermissionDAO(object):
             session.close()
         
             
-    def _getPermissionObjects(self, session, userOpenid, groupName, roleName):
+    def _getPermissionObjects(self, session, userOpenid=None, groupName=None, roleName=None):
         '''
         Method to retrieve the database objects used by the Permission table.
         Throws exception if the objects don't exist in the database.
@@ -115,21 +136,30 @@ class PermissionDAO(object):
         '''
         
         # retrieve user
-        try:
-            esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==userOpenid).one()      
-        except NoResultFound:
-            raise Exception("User with openid=%s not found" % userOpenid)
+        if userOpenid is not None:
+            try:
+                esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==userOpenid).one()      
+            except NoResultFound:
+                raise Exception("User with openid=%s not found" % userOpenid)
+        else:
+            esgfUser = None
             
         # retrieve group
-        try:
-            esgfGroup = session.query(ESGFGroup).filter(ESGFGroup.name==groupName).one()   
-        except NoResultFound:
-            raise Exception("Group with name=%s not found" % groupName)
+        if groupName is not None:
+            try:
+                esgfGroup = session.query(ESGFGroup).filter(ESGFGroup.name==groupName).one()   
+            except NoResultFound:
+                raise Exception("Group with name=%s not found" % groupName)
+        else:
+            esgfGroup = None
             
         # retrieve role
-        try:
-            esgfRole = session.query(ESGFRole).filter(ESGFRole.name==roleName).one()   
-        except NoResultFound:
-            raise Exception("Role with name=%s not found" % roleName)
+        if roleName is not None:
+            try:
+                esgfRole = session.query(ESGFRole).filter(ESGFRole.name==roleName).one()   
+            except NoResultFound:
+                raise Exception("Role with name=%s not found" % roleName)
+        else:
+            esgfRole = None
 
         return (esgfUser, esgfGroup, esgfRole)

@@ -35,17 +35,6 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def _testCreateGroup(self):
-        
-        #name = TEST_GROUP
-        description = 'description'
-        visible = True
-        automatic_approval = False
-        
-        status = self.registrationService.createGroup(name, description=description, visible=visible, automatic_approval=automatic_approval)
-        print status
-        
-
     def testUserRegistration(self):
 
         # new permission
@@ -88,6 +77,19 @@ class Test(unittest.TestCase):
         approved = self.registrationService.subscribe(TEST_OPENID, TEST_GROUP_B, ROLE_ADMIN)
         self.assertFalse(approved)
         
+        # list permissions for automatic approval group
+        permissions = self.registrationService.list(TEST_OPENID, TEST_GROUP_A)
+        self.assertTrue(permissions[ROLE_USER])
+        self.assertFalse(permissions[ROLE_ADMIN])
+        self.assertFalse(permissions[ROLE_PUBLISHER])
+        self.assertFalse(permissions[ROLE_SUPERUSER])
+        
+        # list permissions for manual approval group
+        permissions = self.registrationService.list(TEST_OPENID, TEST_GROUP_B)
+        self.assertFalse(permissions[ROLE_USER])
+        self.assertFalse(permissions[ROLE_ADMIN])
+        self.assertRaises(KeyError, permissions.get(ROLE_PUBLISHER))
+        self.assertRaises(KeyError, permissions.get(ROLE_SUPERUSER))
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

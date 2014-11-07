@@ -36,6 +36,11 @@ class ESGFRegistrationServiceImpl(RegistrationService):
         return self.esgfDatabaseManager.permissionDao.readPermission(userOpenid, groupName, roleName) 
             
         
+    def list(self, userOpenid, groupName):
+        
+        return self.esgfDatabaseManager.permissionDao.readPermissions(userOpenid, groupName) 
+
+    
     def createGroup(self, name, description='', visible=True, automatic_approval=False):
         
         return self.esgfDatabaseManager.createGroup(name, description=description, visible=visible, automatic_approval=automatic_approval)

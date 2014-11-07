@@ -1,0 +1,50 @@
+{% extends "cog/common/layout_center_right.html" %}
+
+{% block main %}
+        
+   
+   {% if request.GET.message == 'saved' %}
+	   <div class="message-box">
+	   		Thank You. Your changes have been saved.
+	   		<br/>
+	   		The new user permissions are displayed below.
+	   </div>
+   {% endif %}
+   
+   <p>Please use the table below to assign "{{ group_name }}" data access permissions to user: {{ user }}. </p>
+   
+   <p/>
+	      
+	<!-- form -->
+	<div class="prepend-3 span-6">
+	   <form method="post" action="">
+	       {% csrf_token %}
+	        
+	      <div class="mybox">
+		      <table>
+		       	   <caption>{{ group_name }} Permissions</caption>
+				   <tr>		        
+				        <td align="right">{{ form.userPermissionCheckbox }}</td>
+				        <td><b>User</b></td>
+				    </tr>       
+				    <tr>		        
+				        <td align="right">{{ form.publisherPermissionCheckbox }}</td>
+				        <td><b>Publisher</b></td>
+				    </tr>    
+				    <tr>		        
+				        <td align="right">{{ form.superPermissionCheckbox }}</td>
+				        <td><b>Super User</b></td>
+				    </tr>           
+		            <tr>		        
+				        <td align="right">{{ form.adminPermissionCheckbox }}</td>
+				        <td><b>Administrator</b></td>
+				    </tr>       
+		       </table>
+	       </div>
+	              
+	       <input type="submit" value="Submit"/>
+	      
+	   </form>
+    </div>
+    
+{% endblock %}
