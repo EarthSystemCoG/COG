@@ -16,7 +16,7 @@ OLD_MEMBERSHIP = "old_membership"
 NO_MEMBERSHIP = "no_membership"
 
 
-# View to process a membership request, used for GET/POST requests
+# View to request a membership in a project, used for GET/POST requests
 @login_required
 def membership_request(request, project_short_name):
     

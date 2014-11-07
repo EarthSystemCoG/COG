@@ -6,6 +6,7 @@ Implementation of RegistrationService backed-up by the ESGF access control objec
 '''
 
 from cog.services.registration import RegistrationService
+from cog.plugins.esgf.security import esgfDatabaseManager
 
 class ESGFRegistrationServiceImpl(RegistrationService):
     '''Implementation of RegistrationService that is a thin wrapper around the ESGFDatabaseManager.'''
@@ -38,3 +39,5 @@ class ESGFRegistrationServiceImpl(RegistrationService):
     def createGroup(self, name, description='', visible=True, automatic_approval=False):
         
         return self.esgfDatabaseManager.createGroup(name, description=description, visible=visible, automatic_approval=automatic_approval)
+    
+esgfRegistrationServiceImpl = ESGFRegistrationServiceImpl(esgfDatabaseManager)

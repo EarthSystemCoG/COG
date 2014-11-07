@@ -1,0 +1,33 @@
+{% extends "cog/common/layout_center_right.html" %}
+
+{% block main %}
+    
+    <!-- display subscription form -->
+    {% if request.method == "GET" %}
+    
+    	<p>Please click on the button below to request "{{ group_name }}" data access.</p>
+           		
+	   <form method="post" action="">
+	      {% csrf_token %}
+	      <input type="submit" value="Subscribe"/>
+	   </form>
+    
+    <!-- display subscription outcome -->
+    {% else %}
+
+		<p/>
+		<div class="message-box" >
+			Thank you for requesting "{{ group_name }}" data access.
+			<br/>
+			
+			{% if approved == True %}
+				Your request has been approved automatically.
+			{% else %}
+				Your request is pending approval by the site administrator.
+			{% endif %}
+			
+		</div>
+	    
+    {% endif %}
+    
+{% endblock %}

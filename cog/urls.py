@@ -100,13 +100,16 @@ urlpatterns = patterns('',
     # signals
     url(r'^signal/list/(?P<project_short_name>.+)/$', 'cog.views.signal_list', name='signal_list'),
 
-    # group management
+    # project membership
     url(r'^membership/request/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_request', name='membership_request' ),
     url(r'^membership/list/enrolled/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_list_enrolled', name='membership_list_enrolled' ),
     url(r'^membership/list/requested/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_list_requested', name='membership_list_requested' ),
     url(r'^membership/list/all/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_list_all', name='membership_list_all' ),
     url(r'^membership/process/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_process', name='membership_process' ),
     url(r'^membership/remove/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_remove', name='membership_remove' ),
+    
+    # group membership (data access control)
+    url(r'^ac/subscribe/(?P<user_id>\d+)/(?P<group_name>[^/]+)/$', 'cog.views.subscribe', name='subscribe' ),
 
     # project tags
     url(r'^projects/(?P<project_short_name>[^/]+)/tags/update/$', 'cog.views.tags_update', name='tags_update'),
