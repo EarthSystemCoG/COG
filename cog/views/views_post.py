@@ -488,8 +488,8 @@ def getNotAuthorizedRedirect(request, post):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path)
         else:
-            messages = ['This page is restricted to member of project %s' % post.project.short_name,
-                         'Please contact support for any questions.'] 
+            messages = ['This page is only viewable to members of %s.' % post.project.short_name,
+                         '<a href="/membership/add"> Request to join this project</a>.']
             return render_to_response('cog/common/message.html', 
                               {'mytitle':'Page Access Restricted', 
                                'project':post.project,
