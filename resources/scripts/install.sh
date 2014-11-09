@@ -1,8 +1,7 @@
 #!/bin/sh
 
 # set installation flags
-#set COG_DIR=/usr/local/cog
-export COG_DIR=/Users/cinquini/tmp
+set COG_DIR=/usr/local/cog
 export ESGF=true
 export COG_TAG=v2.7.1
 
