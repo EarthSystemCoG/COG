@@ -1,18 +1,26 @@
 #!/bin/sh
 
+# set installation flags
+#set COG_DIR=/usr/local/cog
+export COG_DIR=/Users/cinquini/tmp
+export ESGF=true
+export COG_TAG=v2.7.1
+
+#===========================================
+
 # pre-requisites
 pip install virtualenv
 
-# define directory structure
-#export COG_DIR=/usr/local/cog
-export COG_DIR=/Users/cinquini/tmp/cog
+# root directory for installation
 mkdir -p $COG_DIR
 
+# directory for local settings
 export COG_CONFIG_DIR=$COG_DIR/cog_config
 mkdir -p $COG_CONFIG_DIR
 
+# installation directory
+# will be created during git checkout
 export COG_INSTALL_DIR=$COG_DIR/cog_install
-# note: the above directory will be created at initial checkout
 
 # use Python virtual environment
 cd $COG_DIR
@@ -29,14 +37,14 @@ fi
 # checkout a specific tag or version
 cd $COG_INSTALL_DIR
 git pull
-git checkout v2.7.0
+git checkout $COG_TAG
 
 # install CoG dependencies within Python virtual environment
 cd $COG_INSTALL_DIR
 python setup.py install
 
 # create or upgrade CoG installation
-python setup.py setup_cog --esgf=true
+python setup.py setup_cog --esgf=$ESGF
 
 # cleanup CoG egg
 cd $COG_INSTALL_DIR
