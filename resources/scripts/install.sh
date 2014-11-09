@@ -1,9 +1,17 @@
 #!/bin/sh
 
-# set installation flags
+# CoG software root directory
 export COG_DIR=/usr/local/cog
+
+# true if CoG is installed on ESGF node
 export ESGF=true
+
+# the specific CoG tag to install
 export COG_TAG=v2.7.1
+
+# the user and group running the CoG application
+export USER=tomcat
+export GROUP=tomcat
 
 #===========================================
 
@@ -48,3 +56,6 @@ python setup.py setup_cog --esgf=$ESGF
 # cleanup CoG egg
 cd $COG_INSTALL_DIR
 rm -rf venv/lib/python2.7/site-packages/cog*
+
+# change ownership of site_media
+chown -R $USER:$GROUP $COG_CONFIG_DIR
