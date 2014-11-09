@@ -30,10 +30,9 @@ from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        DEFAULT_PROJECT_SHORT_NAME)
 
 
-# location of site specific settigs configuration file
+# location of site specific settings configuration file
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
 CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
-
 
 class CogConfig(object):
     
@@ -140,14 +139,14 @@ class CogConfig(object):
         else:         # no ESGF: use sqllite3 by default
             self._safeSet('DJANGO_DATABASE','sqllite3')
         # if DJANGO_DATABASE=sqllite3
-        self._safeSet('DATABASE_PATH','/usr/local/cog/cog_config/django.data')
+        self._safeSet('DATABASE_PATH','%s/django.data' % COG_CONFIG_DIR)
         # if DJANGO_DATABASE=postgres
         self._safeSet('DATABASE_NAME', 'cogdb')
         self._safeSet('DATABASE_USER', self._safeGet("db.user") )
         self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
         self._safeSet('DATABASE_PORT', self._safeGet("db.port", default='5432'))
         
-        self._safeSet('MEDIA_ROOT','/usr/local/cog/cog_config/site_media')
+        self._safeSet('MEDIA_ROOT','%s/site_media' % COG_CONFIG_DIR)
         # default project to where '/' requests are redirected
         self._safeSet('HOME_PROJECT', DEFAULT_PROJECT_SHORT_NAME)
         # default search service URL, before any project customization
