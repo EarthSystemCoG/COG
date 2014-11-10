@@ -45,4 +45,8 @@ class ESGFRegistrationServiceImpl(RegistrationService):
         
         return self.esgfDatabaseManager.createGroup(name, description=description, visible=visible, automatic_approval=automatic_approval)
     
+    def listGroups(self):
+        
+        return self.esgfDatabaseManager.groupDao.readGroups()
+    
 esgfRegistrationServiceImpl = ESGFRegistrationServiceImpl(esgfDatabaseManager)
