@@ -36,8 +36,11 @@ def ac_subscribe(request, group_name):
     # display submission form
     if request.method=='GET':
         
+        status = registrationService.status(request.user.profile.openid(), group_name, ROLE_USER)
+        print 'status=%s' % status
+        
         return render_to_response(template, 
-                                  {'group_name': group_name, 'title': title}, 
+                                  {'title': title, 'group_name': group_name, 'status':status }, 
                                   context_instance=RequestContext(request))
         
     # process submission form
