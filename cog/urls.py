@@ -109,8 +109,9 @@ urlpatterns = patterns('',
     url(r'^membership/remove/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_remove', name='membership_remove' ),
     
     # group membership (data access control)
-    url(r'^ac/subscribe/(?P<user_id>\d+)/(?P<group_name>[^/]+)/$', 'cog.views.ac_subscribe', name='ac_subscribe' ),
-    url(r'^ac/process/(?P<user_id>\d+)/(?P<group_name>[^/]+)/$', 'cog.views.ac_process', name='ac_process' ),
+    url(r'^ac/subscribe/(?P<group_name>[^/]+)/$', 'cog.views.ac_subscribe', name='ac_subscribe' ),
+    url(r'^ac/process/(?P<group_name>[^/]+)/(?P<user_id>\d+)/$', 'cog.views.ac_process', name='ac_process' ),
+    url(r'^ac/list/$', 'cog.views.ac_list', name='ac_list' ),
 
     # project tags
     url(r'^projects/(?P<project_short_name>[^/]+)/tags/update/$', 'cog.views.tags_update', name='tags_update'),

@@ -14,22 +14,21 @@ from cog.models import User
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.plugins.esgf.objects import ROLE_USER, ROLE_PUBLISHER, ROLE_SUPERUSER, ROLE_ADMIN
 from cog.forms import PermissionForm
+from django.contrib.sites.models import Site
+from cog.models import getPeerSites
+from cog.utils import getJson
+from collections import OrderedDict
 
 from cog.notification import notify
 from constants import PERMISSION_DENIED_MESSAGE, SAVED
 
 @login_required
-def ac_subscribe(request, user_id, group_name):
+def ac_subscribe(request, group_name):
     '''
     View to request an access control permission.
     Currently, it can only be used to request ROLE_USER.
     '''
-    
-    # load user
-    user = get_object_or_404(User, pk=user_id)
-    if user.id != request.user.id:
-        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-        
+            
     title = '%s Data Access Request' % group_name
     template = 'cog/access_control/subscribe.html'
 
@@ -43,7 +42,7 @@ def ac_subscribe(request, user_id, group_name):
     # process submission form
     else:
         
-        approved = registrationService.subscribe(user.profile.openid(), group_name, ROLE_USER)
+        approved = registrationService.subscribe(request.user.profile.openid(), group_name, ROLE_USER)
         
         # notify site administrators
         # TODO
@@ -56,7 +55,7 @@ def ac_subscribe(request, user_id, group_name):
             
             
 @login_required
-def ac_process(request, user_id, group_name):
+def ac_process(request, group_name, user_id):
     '''
     View to process an access control permission request.
     This view can be used to assign any permissions to the user.
@@ -117,3 +116,35 @@ def ac_process(request, user_id, group_name):
             return render_to_response(template, 
                                       {'group_name': group_name, 'title': title, 'user':user, 'form':form }, 
                                       context_instance=RequestContext(request))
+            
+def ac_list(request):
+    '''
+    View to display all access control groups that may be used to restrict data access.
+    This view is intentionally open to the public (for now).
+    '''
+    
+    # loop over local site + peer sites
+    groups = {}
+    sites = [Site.objects.get_current()] + getPeerSites()
+    
+    for site in sites:
+        url = "http://%s/share/groups/" % site.domain
+        jobj = getJson(url)
+        if jobj is not None: # no error in fetching URL
+            site_name = jobj['site']['name']
+            site_domain =  jobj['site']['domain']
+
+            # loop over groups for this site
+            for group_name, group_dict in jobj['groups'].items():
+                # augment group dictionary
+                group_dict['site_name'] = site_name
+                group_dict['site_domain'] = site_domain
+                groups[group_name] = group_dict
+                
+    # order groups by name
+    _groups = OrderedDict(sorted(groups.items()))
+    
+    return render_to_response('cog/access_control/list.html', 
+                              {'groups': _groups, 'title': 'ESGF Data Access Control Groups' }, 
+                              context_instance=RequestContext(request))
+    
