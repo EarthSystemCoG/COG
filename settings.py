@@ -17,15 +17,13 @@ SECTION_EMAIL = 'EMAIL'
 
 from cog.site_manager import siteManager
 
-COG_CONFIG_DIR = os.environ.get('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
-
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
 TIME_ZONE = siteManager.get('TIME_ZONE', default='America/Denver')
 COG_MAILING_LIST = siteManager.get('COG_MAILING_LIST', default='cog_info@list.woc.noaa.gov')
 SECRET_KEY = siteManager.get('SECRET_KEY', default='ds4sjjj(76K=={%$HHH1@#b:l;')
 # for SQLLite back-end
-DATABASE_PATH = siteManager.get('DATABASE_PATH', default="%s/django.data" % COG_CONFIG_DIR)
+DATABASE_PATH = siteManager.get('DATABASE_PATH', default="%s/django.data" % siteManager.cog_config_dir)
 # for postgres back-end
 DATABASE_NAME = siteManager.get('DATABASE_NAME', default='cogdb')
 DATABASE_USER = siteManager.get('DATABASE_USER')
@@ -35,7 +33,7 @@ MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS',
 PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
-MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % COG_CONFIG_DIR)
+MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % siteManager.cog_config_dir)
 DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
 DJANGO_DATABASE = siteManager.get('DJANGO_DATABASE', default='sqllite3')
 if siteManager.get('DEBUG', default='False').lower() == 'true':
