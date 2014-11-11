@@ -37,7 +37,6 @@ def ac_subscribe(request, group_name):
     if request.method=='GET':
         
         status = registrationService.status(request.user.profile.openid(), group_name, ROLE_USER)
-        print 'status=%s' % status
         
         return render_to_response(template, 
                                   {'title': title, 'group_name': group_name, 'status':status }, 
@@ -51,12 +50,9 @@ def ac_subscribe(request, group_name):
         # notify site administrators
         if not approved:
             notifyAdmins(group_name, request.user.id, request)
-        
-        # return feedback to user
-        return render_to_response(template, 
-                                  {'group_name': group_name, 'title': title, 'approved':approved }, 
-                                  context_instance=RequestContext(request))
-
+            
+        # (GET-POST-REDIRECT)
+        return HttpResponseRedirect( reverse('ac_subscribe', kwargs={'group_name': group_name }) + "?approved=%s" % approved)            
             
             
 @login_required

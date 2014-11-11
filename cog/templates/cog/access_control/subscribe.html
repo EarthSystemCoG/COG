@@ -2,45 +2,49 @@
 
 {% block main %}
     
-    <!-- display subscription form -->
-    {% if request.method == "GET" %}
+    <!-- invocation after POST redirection -->
+    {% if request.GET.approved != None %}
     
-    	{% if status == None %}
-    		<!-- user never applied to group -->
-    
-	    	<p>Please click on the button below to request "{{ group_name }}" data access.</p>
-	           		
-		    <form method="post" action="">
-		      {% csrf_token %}
-		      <input type="submit" value="Subscribe"/>
-		    </form>
-	   
-	   {% else %}
-	   
-	   		{% if status %}
-	   			<p>You already have "{{ group_name }}" data access rights.</p>
-	   		{% else %}
-	   			<p>Your request for "{{ group_name }}" data access is pending approval by the site administrator.</p>
-	   		{% endif %}
-	   
-	   {% endif %}
-    
-    <!-- display subscription outcome -->
-    {% else %}
-
-		<p/>
+    	<p/>
 		<div class="message-box" >
 			Thank you for requesting "{{ group_name }}" data access.
 			<br/>
 			
-			{% if approved == True %}
+			{% if request.GET.approved == 'True' %}
 				Your request has been approved automatically.
 			{% else %}
 				Your request is pending approval by the site administrator.
 			{% endif %}
 			
 		</div>
+		
+	<!-- direct GET invocation -->
+	{% else %}
+	
+		<!-- display subscription form -->
+	    {% if status == None %}
 	    
+		    	<p>Please click on the button below to request "{{ group_name }}" data access.</p>
+		           		
+			    <form method="post" action="">
+			      {% csrf_token %}
+			      <input type="submit" value="Subscribe"/>
+			    </form>
+		   
+		 <!-- display subscription status -->
+		 {% else %}
+		   
+		   		{% if status %}
+		   			<p>You already have "{{ group_name }}" data access rights.</p>
+		   		{% else %}
+		   			<p>Your request for "{{ group_name }}" data access is pending approval by the site administrator.</p>
+		   		{% endif %}
+		   
+		 {% endif %}
+	
+    
     {% endif %}
+    
+    
     
 {% endblock %}
