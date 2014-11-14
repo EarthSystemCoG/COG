@@ -119,7 +119,10 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
 
         # display bookmarks
         project = folder.project
-        for bookmark in folder.bookmark_set.all():
+        bookmarks = folder.bookmark_set.all()
+        # ensure that the bookmarks are returned in descending order of creation (or id).
+        bookmarks_sorted = sorted(bookmarks, key=lambda bookmark:bookmark.id, reverse=True)
+        for bookmark in bookmarks_sorted:
             deleteurl = reverse('bookmark_delete', args=[project.short_name.lower(), bookmark.id])
             updateurl = reverse('bookmark_update', args=[project.short_name.lower(), bookmark.id])
             html += "<li><span class='bookmark'>"
