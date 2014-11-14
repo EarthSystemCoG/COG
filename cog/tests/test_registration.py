@@ -35,7 +35,12 @@ class Test(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testUserRegistration(self):
+    def testGroups(self):
+        groups = self.registrationService.listGroups()
+        g = {'visible': True, 'automatic_approval': False, 'name': u'TestGroup', 'description': u'Description'}
+        self.assertIn(g, groups)
+        
+    def _testUserRegistration(self):
 
         # new permission
         approved = self.registrationService.subscribe(TEST_OPENID, TEST_GROUP_A, ROLE_USER)

@@ -107,3 +107,14 @@ class RegistrationService(object):
         '''
         
         return {}
+    
+    @abc.abstractmethod
+    def listGroups(self):
+        '''
+        Method to list all access control groups managed by the current site.
+        
+        :returns: a dictionary containing the group names as keys, and the group specifications as a dictionary of values.
+        :rtype: (string, (string, string)) dictionary
+        '''
+        
+        return {}

@@ -9,6 +9,7 @@ from django_openid_auth.models import UserOpenID
 
 from cog.plugins.esgf.objects import ESGFGroup, ESGFRole, ESGFUser
 from cog.plugins.esgf.permissionDAO import PermissionDAO
+from cog.plugins.esgf.groupDao import GroupDAO
 
 from django.conf import settings
 
@@ -37,6 +38,7 @@ class ESGFDatabaseManager():
             self.Session = sessionmaker(bind=engine)
             
             # DAOs
+            self.groupDao = GroupDAO(self.Session)
             self.permissionDao = PermissionDAO(self.Session)
             
     def createOpenid(self, userProfile):
