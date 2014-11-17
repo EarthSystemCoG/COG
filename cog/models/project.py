@@ -169,6 +169,7 @@ class Project(models.Model):
         users = self.getUsers(exclude_superuser=False)
         pubUsers = []
         for user in users:
+            print 'Checking user=%s' % user # FIXME
             if not user.get_profile().private:
                 pubUsers.append(user)
         return pubUsers
