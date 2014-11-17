@@ -54,7 +54,7 @@ python setup.py install
 python setup.py setup_cog --esgf=$ESGF
 
 # cleanup CoG egg
-cd $COG_INSTALL_DIR
+cd $COG_DIR
 rm -rf venv/lib/python2.7/site-packages/cog*
 
 # change ownership of COG_CONFIG_DIR/site_media
