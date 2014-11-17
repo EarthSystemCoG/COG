@@ -994,6 +994,16 @@ BEGIN SEARCH WIDGET
 	text-align:  center;
 }
 
+/*access control license.*/
+.license-box {
+    background:  #fce79f; /* light yellow*/
+	padding:     10px;
+	margin:      10px;
+	border:      1px solid #666;
+	width: 720 px;
+	text-align:  left;
+}
+
 /*update openID box. This should be removed when no longer needed */
 .changeID-box {
     background:  #fce79f; /* light yellow*/

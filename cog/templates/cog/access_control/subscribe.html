@@ -24,12 +24,33 @@
 		<!-- display subscription form -->
 	    {% if status == None %}
 	    
+	    	{% if licenseTxt or licenseHtml %}
+	    		
+	    		<div class="license-box" >
+	    			{% if licenseTxt %}
+	    				{{ licenseTxt|urlizetrunc:50|linebreaksbr }}
+	    			{% else %}
+	    				{{ licenseHtml }}
+	    			{% endif %}
+	    		</div>
+	    		
+	    		<form method="post" action="">
+			      {% csrf_token %}
+			      <input type="button" value="Cancel" onclick="window.location.href='/'" />
+			      &nbsp; &nbsp;
+			      <input type="submit" value="I agree"/>
+			    </form>
+	    	
+	    	{% else %}
+	    
 		    	<p>Please click on the button below to request "{{ group_name }}" data access.</p>
 		           		
 			    <form method="post" action="">
 			      {% csrf_token %}
 			      <input type="submit" value="Subscribe"/>
 			    </form>
+			    
+			{% endif %}
 		   
 		 <!-- display subscription status -->
 		 {% else %}

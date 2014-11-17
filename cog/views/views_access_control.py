@@ -3,25 +3,28 @@ Module containing views for managing access control groups.
 
 @author: Luca Cinquini
 '''
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponseForbidden, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from sqlalchemy.orm.exc import NoResultFound
-
-from cog.models import User, UserProfile, getSiteAdministrators
-from cog.services.registration import esgfRegistrationServiceImpl as registrationService
-from cog.plugins.esgf.objects import ROLE_USER, ROLE_PUBLISHER, ROLE_SUPERUSER, ROLE_ADMIN
-from cog.forms import PermissionForm
-from django.contrib.sites.models import Site
-from cog.models import getPeerSites
-from cog.utils import getJson
-from django.core.urlresolvers import reverse
 from collections import OrderedDict
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse
+from django.http import HttpRequest, HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.template.loader import render_to_string
+from sqlalchemy.orm.exc import NoResultFound
+from django.template import TemplateDoesNotExist
+
+from cog.forms import PermissionForm
+from cog.models import User, UserProfile, getSiteAdministrators
+from cog.models import getPeerSites
 from cog.notification import notify
+from cog.plugins.esgf.objects import ROLE_USER, ROLE_PUBLISHER, ROLE_SUPERUSER, ROLE_ADMIN
+from cog.services.registration import esgfRegistrationServiceImpl as registrationService
+from cog.utils import getJson
 from constants import PERMISSION_DENIED_MESSAGE, SAVED
+
 
 @login_required
 def ac_subscribe(request, group_name):
@@ -38,8 +41,21 @@ def ac_subscribe(request, group_name):
         
         status = registrationService.status(request.user.profile.openid(), group_name, ROLE_USER)
         
+        licenseTxt = None
+        licenseHtml = None
+        try:
+            licenseFile = 'cog/access_control/licenses/%s.txt' % group_name
+            licenseTxt = render_to_string(licenseFile)
+        except TemplateDoesNotExist:
+            try:
+                licenseFile = 'cog/access_control/licenses/%s.html' % group_name
+                licenseHtml = render_to_string(licenseFile)
+            except TemplateDoesNotExist:
+                pass
+        
         return render_to_response(template, 
-                                  {'title': title, 'group_name': group_name, 'status':status }, 
+                                  {'title': title, 'group_name': group_name, 'status':status, 
+                                   'licenseTxt':licenseTxt, 'licenseHtml':licenseHtml }, 
                                   context_instance=RequestContext(request))
         
     # process submission form

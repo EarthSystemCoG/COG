@@ -202,8 +202,6 @@ TEMPLATE_DIRS = (
     MYTEMPLATES,
     rel('templates/'),
     rel('static/'),
-    #'/usr/COG/filebrowser/templates',
-    #'/Users/cinquini/Documents/workspace-python/django-projects/COG/templates',
 )
 
 INSTALLED_APPS = (
