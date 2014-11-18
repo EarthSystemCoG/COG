@@ -69,7 +69,7 @@
     <!-- display extra message if available -->
 	{% if request.GET.message %}
 	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
-	   <p/>
+	   <br>
 	{% endif %}
 	
     <div class="yui-skin-sam">
@@ -91,7 +91,7 @@
 	                   		<td>{{ form.instance.username }} {{ form.username.as_hidden }}</td>
 	                	{% else %}
 	                   		<td>{{ form.username }}
-	                        	<i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br/>{{ form.username.errors }}
+	                        	<i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br>{{ form.username.errors }}
 	                    	</td>
 	                   {% endif %}
 	                </tr>
@@ -141,7 +141,9 @@
 		                    <td>{{ form.password }}
 		                       <br/><i>[ {{ form.password.help_text }} ]</i>
 		                       {{ form.password.errors }}
-		                       <div id="password_check" style="display:none; margin-top:2px; text-align: middle;" />
+		                       <div id="password_check" style="display:none; margin-top:2px; vertical-align: middle;" >
+                                   &nbsp;
+		                       </div>
 		                    </td>
 		                </tr>
 		                <tr>
@@ -181,14 +183,14 @@
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Keywords</td>
                         <td>
-                        A short list of science fields you are involved with (60 characters maximum).
-                        <br/>Example: Software Engineering, Grid Computing, Climate Change.
+                        [A short list of science fields you are involved with (60 characters maximum).
+                        <br/>Example: Software Engineering, Grid Computing, Climate Change.]
                         <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap">Interest Statement</td>
                         <td>
-                        A short paragraph describing your professional interests (1000 characters maximum).
+                        [A short paragraph describing your professional interests (1000 characters maximum).]
                         <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
                     </tr>
                     <tr>
@@ -216,7 +218,7 @@
 				                    {% if not 'unknown' in form.instance|getImage %}
 				                      {{ form.delete_image }} Delete current picture?
 				                    {% endif %}
-				                    <br/>
+				                    <br>
 				                    {{ form.image }}
 				                    &nbsp;{{ form.image.errors }}
 				                  </div>
@@ -225,27 +227,41 @@
 	                        </table>
 	                      </td>
 	                    </tr>
+                    {% else %}
+                        <tr>
+                            <td>
+                                <img style="margin-top:4px;" src="/static/cog/img/unknown.thumbnail.jpeg">
+                            </td>
+                            <td colspan="2" class="optional" style="vertical-align: middle;">
+                                Note: You may upload a picture to your profile after your first authentication.
+                            </td>
+                        </tr>
                     {% endif %}
                 </table>
 
-	     <!--this section is its own table in order to make the td
-             		widths different from the one above-->
-	     <table class="odd-color">
+	     <!--this section is its own table in order to make the td widths different from the one above-->
+         <!--with the removal of the user image until after authentication, the color of this table now needs to vary
+         depending upon whether or not a user is authenticated-->
+         {% if not request.user.is_anonymous %}
+	        <table class="odd-color">
+         {% else %}
+            <table>
+         {% endif %}
 				
 		    	<!-- URLs -->
-		    		<tr>
-              			<td colspan="6">Optional web sites associated with this COG user account:('Home Page', 'My Blog', ...)</td>
-              		        </tr>
-                                 {% for urlform in formset1 %}{{ urlform.id }}
-				 <tr>
+		    	<tr>
+              	   <td colspan="6">[Optional web sites associated with this COG user account: (e.g. 'Home Page', 'My Blog') ]</td>
+                </tr>
+                {% for urlform in formset1 %}{{ urlform.id }}
+				    <tr>
 			           <td style="width:60px;vertical-align:middle;"><b>Web URL:</b></td>
-				   <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
+				       <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
 			           <td style="width:30px;vertical-align:middle;"><b>Title:</b></td>
-				   <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
+				       <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
 			           <td style="vertical-align:middle;">{{ urlform.DELETE }} Delete?</td>
-				  </tr>
-		    	 	 {% endfor %}
- 	            </table>
+				    </tr>
+		        {% endfor %}
+ 	        </table>
 
 	            <div style="text-align:right;">
 	                <hr/>
