@@ -28,7 +28,7 @@ def post_detail(request, post_id):
             
     # if page, redirect to page view
     if post.type==Post.TYPE_PAGE:
-        return HttpResponseRedirect( post.url )
+        return HttpResponseRedirect(post.url)
     
     # if blog or notes, render template
     else:              
@@ -204,7 +204,7 @@ def post_add(request, project_short_name, owner=None):
         
         # optionally assign parent Post
         parent_id = request.GET.get('parent_id', None)
-        if (parent_id):
+        if parent_id:
             ppost = get_object_or_404(Post, pk=parent_id)
             post.parent = ppost
             post.topic = ppost.topic
@@ -278,8 +278,8 @@ def getLostLockRedirect(request, project, post, lock):
                     "Your changes cannot be saved. Please start the update from most current version of the page." ] 
         return render_to_response('cog/common/message.html', 
                                   {'mytitle':'Changes cannot be saved', 
-                                   'project':project,
-                                   'messages':messages }, 
+                                   'project': project,
+                                   'messages': messages},
                                   context_instance=RequestContext(request))
         
 # function to return an error message if a user lost the lock on the object
@@ -488,8 +488,8 @@ def getNotAuthorizedRedirect(request, post):
         if not request.user.is_authenticated():
             return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path)
         else:
-            messages = ['This page is restricted to member of project %s' % post.project.short_name,
-                         'Please contact support for any questions.'] 
+            messages = ['This page is only viewable to members of %s.' % post.project.short_name,
+                         '<a href="/membership/request/%s">Request to join this project</a>.' % post.project.short_name]
             return render_to_response('cog/common/message.html', 
                               {'mytitle':'Page Access Restricted', 
                                'project':post.project,

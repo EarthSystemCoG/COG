@@ -16,4 +16,5 @@ from views_signal import *
 from views_aboutus import *
 from views_search import *
 from cog.views.views_share import *
+from cog.views.views_access_control import *
 from utils import *

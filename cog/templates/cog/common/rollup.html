@@ -1,13 +1,13 @@
 <!--//START: /cog/templates/cog/common/rollup.html //-->
 {% extends "cog/common/layout_sidebar_center_right.html" %}
 
-<!--// This template is used for any page that contains a rollup. It includes templated content and bookmarks //-->
+<!--// This template is used for any page that contains a rollup. It includes templated content and resources //-->
 
 {% load cog_utils %}
 
 {% block extrahead %}
 
-    <!--// styles and scripts for the resources/bookmarks page. Loaded from /cog/templates/cog/common/rollup.html //-->
+    <!--// styles and scripts for the resources page. Loaded from /cog/templates/cog/common/rollup.html //-->
     <!-- note: pixel styles must be adjusted to specific icons -->
     <!--// note: don't use scoped for this style because it is one level above the location where it is used //-->
     <style type="text/css"> 
@@ -18,7 +18,7 @@
     <script>
        //<![CDATA[
           
-       // function to initialize the bookmark tree object
+       // function to initialize the resource tree object
        var tree;
        function bookmarkTreeInit() {
            

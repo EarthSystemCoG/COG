@@ -34,11 +34,11 @@
 
 	<!-- THREDDS -->
 	{% if url.1 == 'application/html+thredds' %}
-	    &nbsp; [ <a href="{{url.0}}"><b>THREDDS Catalog</b></a> ]
+	    &nbsp; [ <a href="{{url.0}}" target="_blank"><b>THREDDS Catalog</b></a> ]
 
 	<!-- LAS -->
 	{% elif url.1 == 'application/las' %}
-	    <!-- FIXME &nbsp; [ <a href="{{url.0}}"><b>LAS Visualization</b></a> ] -->
+	    &nbsp; [ <a href="{{url.0}}" target="_blank"><b>LAS Visualization</b></a> ]
 
 	<!-- WGET -->
 	{% elif url.1 == 'application/wget' %}

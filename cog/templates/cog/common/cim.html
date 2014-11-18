@@ -5,8 +5,8 @@
 <script type="text/javascript">
 
         /* only load these links if the ES-DOC functionality is needed */
-        var JS_PATH     = "http://purl.org/org/es-doc/prod/plugins/jscim-min.js";
-        var CSS_PATH    = "http://purl.org/org/es-doc/prod/plugins/jscim-min.css";
+        var JS_PATH     = "http://static.es-doc.org/esdoc-min.js";
+        var CSS_PATH    = "http://static.es-doc.org/esdoc-min.css";
         var LOADED_EXTERNAL_LINKS = 0;
 
         /* loads the CIM libraries only once */
@@ -55,10 +55,10 @@
             
         }
 
-	// function triggered by clicking on a CIM dataset link
+	// function triggered by clicking on a ESDOC dataset link
 	function onDatasetClicked(project, dataset) {
             load_cim_libraries(function() {
-                cim.viewer.renderFromExternalID( {
+                ESDOC.viewer.renderFromExternalID( {
                     project : project,
                     externalID : dataset,
                     externalType : 'dataset'
@@ -66,25 +66,15 @@
             });
 	}
 
-	// function triggered by clicking on a CIM model link
+	// function triggered by clicking on a ESDOC model link
 	function onModelClicked(project, model) {
             load_cim_libraries(function() {
-                cim.viewer.renderFromName( {
+                ESDOC.viewer.renderFromName( {
                     project : project,
                     name : model,
                     type : 'model'
                 });
             });
 	}
-
-	<!-- FIXME -->
-	// function triggered by CIM link
-	function onCIMLinkClicked(project, institute, model, experiment) {
-            load_cim_libraries(function() {
-                var drs_components = {'project' : project, 'institute' : institute, 'model' : model, 'experiment' : experiment};
-                cim.viewer.renderFromDRS(drs_components);
-            });
-	}
-
 
 </script>

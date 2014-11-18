@@ -24,7 +24,7 @@ def bookmark_list(request, project_short_name):
         
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-        
+    
     # check project is active
     if project.active==False:
         return getProjectNotActiveRedirect(request, project)

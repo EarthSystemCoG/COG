@@ -65,6 +65,7 @@
             <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
             <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
         	<!-- <li><a href="/admin/filebrowser/browse?project={{project.short_name}}" class="listlink">&nbsp;Browse Project Uploads</a></li> -->
+        	<li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
         	
             <li><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project</a></li>
             <li><a href="{% url 'tags_update' project.short_name.lower %}" class="changelink">&nbsp;Tag Project</a></li>

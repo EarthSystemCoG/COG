@@ -12,6 +12,8 @@ from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
 import os.path
 from django_openid_auth.models import UserOpenID
+import imghdr
+from cog.forms.forms_utils import validate_image
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
@@ -80,13 +82,14 @@ class UsernameReminderForm(Form):
 class PasswordChangeForm(Form):
 
     username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
-    old_password = CharField(required=True, widget=PasswordInput(render_value=True))
+    old_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }))
     password = CharField(required=True, 
                      # trigger javascript function when input field looses focus
-                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", }),
+                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", "autocomplete" : "off" }),
                      help_text = PASSWORD_INSTRUCTIONS
                      ) # not required for OpenID users
-    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
+    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }), 
+                                 help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
 
     # override __init__ method to store the user object
     #def __init__(self, user, *args,**kwargs):
@@ -171,8 +174,6 @@ class UserForm(ImageForm):
         cleaned_data = self.cleaned_data
 
         # new user only: validate 'password', 'confirm_password' fields
-        print 'user_id=%s' % user_id
-        #print 'profile=%s' % self.instance.profile
         if user_id is None:
             validate_password(self)
 
@@ -180,7 +181,7 @@ class UserForm(ImageForm):
         validate_username(self, user_id)
 
         # additional validation on 'image' field
-        validate_image(self)
+        validate_image(self, 'image')
 
         # validate all other fields against injection attacks
         for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country',
@@ -191,17 +192,6 @@ class UserForm(ImageForm):
                 pass
 
         return cleaned_data
-
-def validate_image(form):
-
-    cleaned_data = form.cleaned_data
-    image = cleaned_data.get("image", None)
-    if image is not None:
-        print 'image name=%s' % image.name
-        extension = (os.path.splitext(image.name)[1]).lower()
-        if extension != '.jpg' and extension != '.png' and extension != '.gif' and extension != '.jpeg' :
-            form._errors["image"] = form.error_class(["Invalid image format: %s"%extension])
-
 
 # method to validate the fields 'password" and 'confirm_password'
 def validate_password(form):

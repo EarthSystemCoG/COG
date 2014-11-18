@@ -12,6 +12,7 @@ from django_openid_auth.models import UserOpenID
 from django.contrib.auth.decorators import user_passes_test
 from django.template import RequestContext
 
+from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 
 JSON = "application/json"
 
@@ -72,12 +73,11 @@ def share_projects(request):
         
         response_data = {}
         
-        # list sites
+        # current site
         current_site = Site.objects.get_current()
         response_data['site'] = serialize_site(current_site)
         
         # list projects from this site
-        current_site = Site.objects.get_current()
         projects = {}
         print 'Listing active, public projects for current site=%s' % current_site
         for project in Project.objects.filter(active=True).filter(private=False).filter(site=current_site):
@@ -89,6 +89,28 @@ def share_projects(request):
     else:
         return HttpResponseNotAllowed(['GET'])
     
+def share_groups(request):
+    '''Shares the site's access control groups as a JSON-formatted list.'''
+    
+    if (request.method=='GET'):
+        
+        response_data = {}
+        
+        # current site
+        current_site = Site.objects.get_current()
+        response_data['site'] = serialize_site(current_site)
+        
+        # list groups from this site, index by group name
+        print 'Listing visible groups for current site=%s' % current_site
+        groups = {}
+        for group in registrationService.listGroups():
+            if group['visible']:
+                groups[ group['name'] ] = group          
+        response_data["groups"] = groups
+        
+        return HttpResponse(json.dumps(response_data, indent=4), content_type=JSON)
+    else:
+        return HttpResponseNotAllowed(['GET'])
     
 def share_user(request):
     '''Shares the user's access control memberships as a JSON-formatted document.'''

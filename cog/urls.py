@@ -100,13 +100,18 @@ urlpatterns = patterns('',
     # signals
     url(r'^signal/list/(?P<project_short_name>.+)/$', 'cog.views.signal_list', name='signal_list'),
 
-    # group management
+    # project membership
     url(r'^membership/request/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_request', name='membership_request' ),
     url(r'^membership/list/enrolled/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_list_enrolled', name='membership_list_enrolled' ),
     url(r'^membership/list/requested/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_list_requested', name='membership_list_requested' ),
     url(r'^membership/list/all/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_list_all', name='membership_list_all' ),
     url(r'^membership/process/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_process', name='membership_process' ),
     url(r'^membership/remove/(?P<project_short_name>[^/]+)/$', 'cog.views.membership_remove', name='membership_remove' ),
+    
+    # group membership (data access control)
+    url(r'^ac/subscribe/(?P<group_name>[^/]+)/$', 'cog.views.ac_subscribe', name='ac_subscribe' ),
+    url(r'^ac/process/(?P<group_name>[^/]+)/(?P<user_id>\d+)/$', 'cog.views.ac_process', name='ac_process' ),
+    url(r'^ac/list/$', 'cog.views.ac_list', name='ac_list' ),
 
     # project tags
     url(r'^projects/(?P<project_short_name>[^/]+)/tags/update/$', 'cog.views.tags_update', name='tags_update'),
@@ -136,6 +141,7 @@ urlpatterns = patterns('',
     
     # information shared with other sites
     url(r'^share/projects/$', 'cog.views.share_projects', name='share_projects'),
+    url(r'^share/groups/$', 'cog.views.share_groups', name='share_groups'),
     url(r'^share/user/$', 'cog.views.share_user', name='share_user'),
     url(r'^share/sync/projects/$', 'cog.views.sync_projects', name='sync_projects'),
 

@@ -7,7 +7,7 @@
         <p/>
         <div class="message-box">
             {% for message in messages %}
-                {{ message }} <br/>
+                {% autoescape off %}{{ message}}{% endautoescape %} <br/>
             {% endfor %}
         </div>
     </div>
