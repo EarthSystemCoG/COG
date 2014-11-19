@@ -19,7 +19,8 @@ def validate_image(form, field_name):
             
         # enforce white-list of allowed extensions
         extension = (os.path.splitext(image.name)[1]).lower()
-        if extension != '.jpg' and extension != '.png' and extension != '.gif' and extension != '.jpeg' :
+        if (extension != '.jpg' and extension != '.png' and extension != '.gif' and extension != '.jpeg'
+            and extension != '.tif' and extension != '.tiff'):
             form._errors[field_name] = form.error_class(["Invalid image format: %s"%extension])
         
         # validate image header

@@ -3,6 +3,7 @@ from cog.models import *
 from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS
 from django.forms.models import BaseModelFormSet
+from cog.forms.forms_utils import validate_image
 
 class AboutusForm(ModelForm):
     
@@ -53,3 +54,14 @@ class CollaboratorForm(ImageForm):
             'image': FileInput(),
             }
         
+
+    # override form clean() method to execute image validation
+    def clean(self):
+
+        # invoke superclass cleaning method
+        super(CollaboratorForm, self).clean()
+        
+        # additional validation on 'image' field
+        validate_image(self, 'image')
+
+        return self.cleaned_data
