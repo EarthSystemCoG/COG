@@ -15,11 +15,11 @@
 		  <table>
 		    	<caption>{{ project.short_name }} Sponsors</caption>
 		    	<tr>
-		    		<td style="vertical-align: middle; font-weight: bold;" nowrap="nowrap">Name</td>
-		    		<td style="vertical-align: middle; font-weight: bold;" nowrap="nowrap">URL</td>
-		    		<td style="vertical-align: middle; font-weight: bold;" nowrap="nowrap">Logo</td>
-		    		<td style="vertical-align: middle; font-weight: bold;" nowrap="nowrap">(Maximum Size: 1MB)</td>
-		    		<td style="vertical-align: middle; font-weight: bold;" nowrap="nowrap">Delete?</td>
+		    		<td style="font-weight: bold;" nowrap="nowrap">Name</td>
+		    		<td style="font-weight: bold;" nowrap="nowrap">URL</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Logo</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">(Maximum Size: 1MB)</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Delete?</td>
 		    	</tr>
 		    {% for form in formset %}
 	        	{{ form.id }}
@@ -39,7 +39,7 @@
 		            	    {{ form.image.errors }}{{ form.image }}
 		            	{% endif %}
 		            </td>
-		            <td style="vertical-align: middle; text-align: center"> {{ form.DELETE }}
+		            <td style="vertical-align: middle; text-align: center;"> {{ form.DELETE }}
                     </td>
 		        </tr>
 			{% endfor %}
