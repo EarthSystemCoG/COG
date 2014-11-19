@@ -7,7 +7,7 @@
 
 	Use this form to update the project external collaborators. Project members are automatically listed.
 	
-	<p/>
+	<p>
 	<form method="post" action="" enctype="multipart/form-data">
 		
 		{% csrf_token %}
@@ -17,36 +17,35 @@
 		    <table>
 		    	<caption>{{ project.short_name }} External Collaborators</caption>
 		    	<tr>
-		    		<td class="tophead" nowrap="nowrap">First Name</td>
-		    		<td class="tophead" nowrap="nowrap">Last Name</td>
-		    		<td class="tophead" nowrap="nowrap">Institution</td>
-		    		<td nowrap="nowrap"><b>Interests</b> (max 60 chars)</td>
-		    		<td class="tophead" nowrap="nowrap">Picture</td>
-		    		<td nowrap="nowrap">(maximum size: 1MB)</td>
-		    		<td class="tophead" nowrap="nowrap">Delete?</td>
+		    		<td style="font-weight: bold;" nowrap="nowrap">First Name</td>
+		    		<td style="font-weight: bold;" nowrap="nowrap">Last Name</td>
+		    		<td style="font-weight: bold;" nowrap="nowrap">Institution</td>
+		    		<td style="font-weight: bold;" nowrap="nowrap"><b>Interests</b> (max 60 chars)</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Picture</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">(maximum size: 1MB)</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Delete?</td>
 		    	</tr>
 		    {% for form in formset %}
 	        	{{ form.id }}
 		        <tr>
-		            <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
-		            <td>{{ form.last_name }} {{ form.last_name.errors }}</td>
-		            <td>{{ form.institution }} {{ form.institution.errors }}</td>
-		            <td>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
-		            <td>
+		            <td style="vertical-align: middle;">{{ form.first_name }} {{ form.first_name.errors }}</td>
+		            <td style="vertical-align: middle;">{{ form.last_name }} {{ form.last_name.errors }}</td>
+		            <td style="vertical-align: middle;">{{ form.institution }} {{ form.institution.errors }}</td>
+		            <td style="vertical-align: middle;">{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
+		            <td style="vertical-align: middle;">
 		            	<!-- always show image on disk, not latest value from form -->
 		            	<img src="{{ form.instance.id|getThumbnailById:'Collaborator' }}" style="border: 1px solid #666666;" />
 		            </td>
-		            <td>
-		            	<!-- show option to remove current picture -->
-		            	{% if not 'unknown' in form.instance|getImage and form.image.errors|length == 0 %}		
-		            		<span style="margin-top:2px">	
-			                	{{ form.delete_image }} Delete current picture?
-			                </span>	  						                            		
-			            {% endif %} 
-			            <!-- image upload widget -->      					            	
-		            	{{ form.image }} &nbsp; {{ form.image.errors }}
+		            <td style="vertical-align: middle;">
+		            	{% if not 'unknown' in form.instance|getImage and form.image.errors|length == 0 %}
+		            	   <!-- if no image exists, show option to remove current picture -->
+			               {{ form.delete_image }} Delete current picture?
+			            {% else %}
+			                <!-- if image exists, show image upload widget -->
+		            	    {{ form.image }} {{ form.image.errors }}
+                        {% endif %}
 		            </td>
-		            <td>{{ form.DELETE }}</td>
+		            <td style="vertical-align: middle; text-align: center;">{{ form.DELETE }}</td>
 		        </tr>
 			{% endfor %}
 			</table>
