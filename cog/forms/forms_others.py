@@ -11,6 +11,7 @@ from cog.utils import *
 from django.db.models import Q
 from cog.models.constants import MAX_UPLOADES_BYTES
 import operator
+from cog.forms.forms_utils import validate_image
 
 # list of invalid characters in uploaded documents filenames
 INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/\s]"
@@ -81,3 +82,13 @@ class UploadImageForm(forms.Form):
     # note: field MUST be named 'upload' as this is the parameter named used by CKeditor
     upload  = forms.ImageField()
 
+    # override 'clean' method to validate the image field
+    def clean(self):
+        
+        # invoke superclass cleaning method
+        super(UploadImageForm, self).clean()
+        
+        # validate image
+        validate_image(self, 'upload')
+                
+        return self.cleaned_data
