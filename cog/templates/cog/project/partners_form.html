@@ -1,5 +1,6 @@
 {% extends "cog/common/layout_sidebar_center.html" %}
 <!-- Keep this form as left-center only. It is too long to have the right widgets. -->
+<!--/templates/cog/project/partners_form.html-->
 
 {% load cog_utils %}
 
@@ -13,33 +14,34 @@
 	    <div class="mybox">
 		    <table>
 		    	<caption>{{ project.short_name }} Partners</caption>
+            <!--table headers-->
 		    	<tr>
-		    		<td class="tophead" nowrap="nowrap">Name</td>
-		    		<td class="tophead" nowrap="nowrap">URL</td>
-		    		<td class="tophead" nowrap="nowrap">Logo</td>
-		    		<td nowrap="nowrap">(Maximum Size: 1MB)</td>
-		    		<td class="tophead" nowrap="nowrap">Delete?</td>
+		    		<td style="vertical-align: middle; font-weight: bold;" nowrap="nowrap"></b>Name</td>
+		    		<td style="vertical-align: middle; font-weight: bold;" nowrap="nowrap">URL</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Logo</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">(Maximum Size: 1MB)</td>
+		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Delete?</td>
 		    	</tr>
+            <!--populate the table-->
 		    {% for form in formset %}
 	        	{{ form.id }}
 		        <tr>
-		            <td>{{ form.name }} {{ form.name.errors }}</td>
-		            <td>{{ form.url }} {{ form.url.errors }}</td>
-		            <td>
+		            <td style="vertical-align: middle;">{{ form.name }} {{ form.name.errors }}</td>
+		            <td style="vertical-align: middle;">{{ form.url }} {{ form.url.errors }}</td>
+		            <td style="vertical-align: middle;text-align: center;">
 		            	<!-- always show picture on disk, not latest value from form -->
 		            	<img src="{{ form.instance|getImage }}" style="border: 1px solid #666666;" width="40px" />
 		            </td>
-		            <td>
-		            	<!-- show option to remove current picture -->
+		            <td style="vertical-align:middle;">
+		            	<!-- if picture exists show only option to remove it -->
 		            	{% if not 'notfound' in form.instance|getImage and form.image.errors|length == 0 %}
-		            		<span style="margin-top:2px">
 		            			{{ form.delete_image }} Delete current logo?
-		            		</span>
-		            	{% endif %}
-			            <!-- image upload widget -->      					            	
-		            	{{ form.image }} &nbsp; {{ form.image.errors }}
+                        {% else %}
+			                <!-- else, show the image upload widget -->
+		            	    {{ form.image }}{{ form.image.errors }}
+                        {% endif %}
 		            </td>
-		            <td>{{ form.DELETE }}</td>
+		            <td style="vertical-align: middle;text-align: center">{{ form.DELETE }}</td>
 		        </tr>
 			{% endfor %}
 			</table>
