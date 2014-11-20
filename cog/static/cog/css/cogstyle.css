@@ -854,13 +854,10 @@ END VERTICAL MENU (LEFT NAVBAR)
 /******************************/
 
 #id_tags{
-min-width:200px;              /*when there are no tags the box has no size*/
-border: 1px solid #666;
+   min-width:200px;              /*when there are no tags the box has no size*/
+   border: 1px solid #666;
+   margin-left: 0;              /* chrome actually adds a margin to all select boxes. Remove this. */
 }
-
-/******************************/
-/* BEGIN TAG SELECTION BOX */
-/******************************/
 
 
 /******************************/
