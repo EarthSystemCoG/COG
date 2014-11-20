@@ -151,7 +151,7 @@ def user_add(request):
     
     # redirect to another site if necessary
     if redirectToIdp():
-        return HttpResponseRedirect( settings.IDP_REDIRECT + request.path )
+        return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
 
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True, extra=2)
