@@ -251,9 +251,9 @@
                 </tr>
                 {% for urlform in formset1 %}{{ urlform.id }}
 				    <tr>
-			           <td style="width:60px;vertical-align:middle;"><b>Web URL:</b></td>
+			           <td style="width:60px;vertical-align:middle;">Web URL:/td>
 				       <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
-			           <td style="width:30px;vertical-align:middle;"><b>Title:</b></td>
+			           <td style="width:30px;vertical-align:middle;">Title:</td>
 				       <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
 			           <td style="vertical-align:middle;">{{ urlform.DELETE }} Delete?</td>
 				    </tr>
