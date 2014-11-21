@@ -165,6 +165,10 @@ def ac_list(request):
     # order groups by name
     _groups = OrderedDict(sorted(groups.items()))
     
+    # remove ESGF root group
+    if 'wheel' in _groups:
+        del _groups['wheel']
+    
     return render_to_response('cog/access_control/list.html', 
                               {'groups': _groups, 'title': 'ESGF Data Access Control Groups' }, 
                               context_instance=RequestContext(request))
