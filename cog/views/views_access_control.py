@@ -35,6 +35,10 @@ def ac_subscribe(request, group_name):
             
     title = '%s Data Access Request' % group_name
     template = 'cog/access_control/subscribe.html'
+    
+    # prevent requests to 'wheel' group
+    if group_name=='wheel':
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # display submission form
     if request.method=='GET':
