@@ -4,12 +4,11 @@
 
 	{% load cog_utils %}
 	
-	<p/>          
+	<p>
 	Select existing tags to use for this project, 
 	or create new tags using only letters, numbers, '_' or '-' (maximum of 20 characters per tag).	 
 	Tags not associated with any project are automatically deleted.   
-	<br/>
-	
+	</p>
 
 	<form action="" method="post">
 	        
@@ -19,12 +18,12 @@
 		<div class="mybox">	 
 			<table>	 
 				<tr>
-					<td nowrap="nowrap" class="righttop">Choose one or more existing tags:</td>
-					<td> {{ form.tags }} {{ form.tags.errors }}</td>
+					<td style="width:30%; vertical-align: top; text-align: right;" nowrap="nowrap">Choose one or more existing tags:</td>
+					<td>{{ form.tags }} {{ form.tags.errors }}</td>
 				</tr>		
 				<tr>
-					<td nowrap="nowrap" class="right">Or enter a new tag:</td>
-					<td class="long">{{ form.name }} {{ form.name.errors }}</td>
+					<td style="width:30%; text-align: right; vertical-align: middle;" nowrap="nowrap">Or enter a new tag:</td>
+					<td>{{ form.name }} {{ form.name.errors }}</td>
 				</tr>				 			
 			</table>
 		</div>

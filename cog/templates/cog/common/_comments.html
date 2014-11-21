@@ -1,4 +1,4 @@
-<!--// START: /cog/templates//cog/common/_comments.html //-->
+<!--// START: /cog/templates/cog/common/_comments.html //-->
 
 <!-- 
     Django template snippet to render comments for an object
@@ -16,8 +16,10 @@
 
 <hr class="white"/>
 <div class="header_bar"> 
-     <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">&nbsp;Comments ({{ comment_count }})</a>
-</div> <!--// end div.header_bar //-->
+     <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">
+         &nbsp; Comments ({{ comment_count }})</a>
+</div>
+<!--// end div.header_bar for comments //-->
 <!-- NOTE: open up comments when page is first loaded -->
 
 <div class="mybox" id="mycomments" style="display:none">
@@ -40,13 +42,13 @@
 		    {% csrf_token %} 
 		    <p style="display:none"><label for="id_honeypot">Leave blank</label>{{ form.honeypot }}</p>
 		    <input type="hidden" name="next" value="{{ next_view }}"/>
-		    
-		    &nbsp;<span class="addlink">&nbsp;</span><small>Post a New Comment &#187;</small>
-		    <textarea name="comment" id="id_comment" rows="6" cols="30"></textarea>
-		    <br/>
-		    <!-- <input type="submit" name="preview" value="Preview" />&nbsp; -->
-		    <input type="submit" name="post" value="Post" />
-		    
+		    <!--add the plus sign icon-->
+		    <lable for="id_comment">
+                <span style="margin-left:4px; font-size:11px; vertical-align: middle;" class="addlink"> New Comment:</span>
+            </lable>
+            <textarea style="margin-left:4px;margin-top:4px; width:98%;" name="comment" id="id_comment" rows="6" cols="30"></textarea>
+		    <br>
+		    <input style="margin-left:4px;" type="submit" name="post" value="Post" />
 		</form>
 	{% endif %}
 
