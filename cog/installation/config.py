@@ -173,7 +173,7 @@ class CogConfig(object):
         #[EMAIL]
         self._safeSet('EMAIL_SERVER', self._safeGet("mail.smtp.host"), section=SECTION_EMAIL)
         self._safeSet('EMAIL_PORT', '', section=SECTION_EMAIL)
-        self._safeSet('EMAIL_SENDER', '', section=SECTION_EMAIL)
+        self._safeSet('EMAIL_SENDER', 'CoG@%s' % hostName, section=SECTION_EMAIL)
         self._safeSet('EMAIL_USERNAME', '', section=SECTION_EMAIL)
         self._safeSet('EMAIL_PASSWORD', '', section=SECTION_EMAIL)
         self._safeSet('EMAIL_SECURITY', 'STARTTLS', section=SECTION_EMAIL)
