@@ -34,6 +34,7 @@ REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
 LOCAL_FLAG    = "local_flag"
 SEARCH_PATH   = "search_path"
+SEARCH_URL    = 'search_url'
 # constraints excluded from bread crums display
 SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type"]
                 
@@ -160,11 +161,12 @@ def search_get(request, searchInput, searchConfig, extra={}):
         searchInput.offset = 0
         
         try:
-            xml = searchService.search(searchInput)
+            (url, xml) = searchService.search(searchInput)
             searchOutput = deserialize(xml, facetProfile)
             
             data[SEARCH_INPUT] = searchInput
             data[SEARCH_OUTPUT] = searchOutput
+            data[SEARCH_URL] = url
             data[FACET_PROFILE] = facetProfile
             #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
             
@@ -225,7 +227,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
     
         # execute query for results, facets
         try:
-            xml = searchService.search(searchInput)
+            (url, xml) = searchService.search(searchInput)
             searchOutput = deserialize(xml, facetProfile)
             #searchOutput.printme()
             
@@ -233,6 +235,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
             data = extra
             data[SEARCH_INPUT] = searchInput
             data[SEARCH_OUTPUT] = searchOutput
+            data[SEARCH_URL] = url
             data[FACET_PROFILE] = facetProfile
             #data[FACET_PROFILE] = sorted( facetProfile.getKeys() ) # sort facets by key
             
@@ -300,7 +303,7 @@ def metadata_display(request, project_short_name):
         params.append( ('dataset_id', dataset_id) )
                 
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-    print 'Solr search URL=%s' % url
+    print 'Metadata Solr search URL=%s' % url
     fh = urllib2.urlopen( url )
     response = fh.read().decode("UTF-8")
 

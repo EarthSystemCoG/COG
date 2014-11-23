@@ -40,4 +40,5 @@ class SolrSearchService:
         fh = urllib2.urlopen( url )
         xml = fh.read().decode("UTF-8")
    
-        return xml
+        # return search URL and corresponding results as XML
+        return (url, xml)
