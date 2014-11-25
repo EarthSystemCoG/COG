@@ -7,7 +7,7 @@ export COG_DIR=/usr/local/cog
 export ESGF=true
 
 # the specific CoG tag to install
-export COG_TAG=v2.7.1
+export COG_TAG=master
 
 # the user and group running the CoG application
 export USER=tomcat
