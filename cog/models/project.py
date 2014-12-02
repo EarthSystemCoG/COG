@@ -40,10 +40,10 @@ class Project(models.Model):
     history = models.TextField(blank=True, help_text='A narrative describing the origination and evolution of the project.')
     external_homepage = models.URLField(max_length=200, blank=True, null=True, help_text='External Home Page')
     
-    governanceOverview = models.TextField(blank=False, null=True, verbose_name='Governance Overview', \
+    governanceOverview = models.TextField(blank=True, null=True, verbose_name='Governance Overview', \
                                           help_text='One or more paragraphs providing a general overview of the governance structure for the project.')
     
-    developmentOverview = models.TextField(blank=False, null=True, verbose_name='Development Overview', \
+    developmentOverview = models.TextField(blank=True, null=True, verbose_name='Development Overview', \
                                            help_text='One or more paragraphs providing a general overview of the development processes for the project.')
     
     taskPrioritizationStrategy = models.TextField(blank=True, null=True, verbose_name='Task Prioritization Strategy.', \
@@ -102,6 +102,8 @@ class Project(models.Model):
     
     # flag to disable the search widget
     dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
+    
+    maxUploadSize = models.IntegerField(default=50, blank=True, null=False, help_text='Maximum upload size in MB')
         
     class Meta:
         app_label= APPLICATION_LABEL
