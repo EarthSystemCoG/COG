@@ -194,8 +194,9 @@
                 
            </table>        
            
-           <!--  current site -->
+           <!--  hidden fields -->
            {{ form.site.as_hidden }}   
+           {{ form.maxUploadSize.as_hidden }}
                  
           <div style="text-align:right">
           	{% if project %}
