@@ -521,22 +521,35 @@ def tags_update(request, project_short_name):
             print 'Form is invalid  %s' % form.errors
             return render_tags_form(request, project, form)
         
+def project_empty_browser(request, tab):
+    '''View invoked when project browser is displayed outside of a project context.'''
+        
+    return project_browser(request, '', tab)
+    
 def project_browser(request, project_short_name, tab):
     
     # optional tag filter
     tag = request.GET.get('tag', None)
             
     # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    #print 'Project Browser project=%s tab=%s tag=%s user=%s' % (project.short_name, tab, tag, request.user)
+    #project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    try:
+        project = Project.objects.get(short_name__iexact=project_short_name)
+    except ObjectDoesNotExist:
+        project=None
+        
+    print 'Project Browser project=%s tab=%s tag=%s user=%s' % (project, tab, tag, request.user)
 
     html = ''    
     if tab == 'this':
-        # object that keeps track of successful invocations, if necessary
-        display = DisplayStatus(True) # open all sub-widgets by default
-        html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
-        html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
-        html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)
+        if project is not None:
+            # object that keeps track of successful invocations, if necessary
+            display = DisplayStatus(True) # open all sub-widgets by default
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)
+        else:
+            html += '<div id="this_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
     elif tab == 'all':
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':

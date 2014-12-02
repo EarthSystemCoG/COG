@@ -118,6 +118,7 @@ urlpatterns = patterns('',
 
     # project browser
     url(r'^projects/(?P<project_short_name>[^/]+)/browse/(?P<tab>[^/]+)/$', 'cog.views.project_browser', name='project_browser'),
+    url(r'^projects//browse/(?P<tab>[^/]+)/$', 'cog.views.project_empty_browser', name='project_empty_browser'),
 
     # NAVBAR URLs
     (r'', include('cog.urls_navbar')),
