@@ -87,7 +87,6 @@ def doc_add(request, project_short_name):
         if form.is_valid():
             doc = form.save(commit=False)
             doc.author = request.user
-            doc.project = project
             if doc.title is None or len(doc.title.strip())==0:
                 doc.title = basename(doc.file.name)
             # save the document so to assign path in project directory: 'projects/<this project>/<filename>'

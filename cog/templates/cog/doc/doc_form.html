@@ -9,6 +9,7 @@
 		
 		    <!-- extra hidden field to enable complex workflows (document creation + attachment) -->
 		    <input type="hidden" name="redirect" value="{{ request.GET.redirect }}"/>
+		    {{ form.project.as_hidden }}
 		    
 		    {% csrf_token %}
 		    

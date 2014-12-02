@@ -9,7 +9,6 @@ from os.path import basename
 import re
 from cog.utils import *
 from django.db.models import Q
-from cog.models.constants import MAX_UPLOADES_BYTES
 import operator
 from cog.forms.forms_utils import validate_image
 
@@ -61,7 +60,7 @@ class DocForm(ModelForm):
             so if error is thrown there is no need to remove it from disk.'''
         cleaned_data = self.cleaned_data
         file = cleaned_data.get("file")
-
+        
         if not file:
             self._errors["file"] = self.error_class(["Sorry, the file is empty."])
 	    return cleaned_data
@@ -69,14 +68,15 @@ class DocForm(ModelForm):
         if re.search(INVALID_CHARS, file.name):
             self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters.  It can only contain letters, numbers, spaces, and _ - . /"])
 
-        if file.size > MAX_UPLOADES_BYTES:
+        project = cleaned_data['project']
+        if file.size > project.maxUploadSize:
             self._errors["file"] = self.error_class(["Sorry, the file size exceeds the maximum allowed."])
 
         return cleaned_data
 
     class Meta:
         model = Doc
-        exclude = ('author','publication_date','update_date','project',)
+        exclude = ('author','publication_date','update_date',)
 
 class UploadImageForm(forms.Form):
     # note: field MUST be named 'upload' as this is the parameter named used by CKeditor
