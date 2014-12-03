@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Project.maxUploadSize'
         db.add_column(u'cog_project', 'maxUploadSize',
-                      self.gf('django.db.models.fields.IntegerField')(default=50, blank=True),
+                      self.gf('django.db.models.fields.IntegerField')(default=52428800, blank=True),
                       keep_default=False)
 
 
@@ -282,7 +282,7 @@ class Migration(SchemaMigration):
             'logo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'logo_url': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'long_name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '120'}),
-            'maxUploadSize': ('django.db.models.fields.IntegerField', [], {'default': '50', 'blank': 'True'}),
+            'maxUploadSize': ('django.db.models.fields.IntegerField', [], {'default': '52428800', 'blank': 'True'}),
             'meetingSupport': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'mission': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'parents': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'Parent Projects'", 'blank': 'True', 'to': "orm['cog.Project']"}),
