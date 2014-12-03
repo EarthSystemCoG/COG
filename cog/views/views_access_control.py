@@ -15,6 +15,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from sqlalchemy.orm.exc import NoResultFound
 from django.template import TemplateDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 
 from cog.forms import PermissionForm
 from cog.models import User, UserProfile, getSiteAdministrators
@@ -24,6 +25,7 @@ from cog.plugins.esgf.objects import ROLE_USER, ROLE_PUBLISHER, ROLE_SUPERUSER, 
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.utils import getJson
 from constants import PERMISSION_DENIED_MESSAGE, SAVED
+from cog.plugins.esgf.security import esgfDatabaseManager
 
 
 @login_required
@@ -43,7 +45,13 @@ def ac_subscribe(request, group_name):
     # display submission form
     if request.method=='GET':
         
-        status = registrationService.status(request.user.profile.openid(), group_name, ROLE_USER)
+        try:
+            status = registrationService.status(request.user.profile.openid(), group_name, ROLE_USER)
+        except ObjectDoesNotExist:
+            # user does not exist in ESGF database
+            print 'Inserting user into ESGF security database'
+            esgfDatabaseManager.insertUser(request.user.profile)
+            status = None
         
         licenseTxt = None
         licenseHtml = None

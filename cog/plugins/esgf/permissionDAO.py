@@ -6,6 +6,7 @@ Class to manage Permission objects in the ESGF database.
 
 from sqlalchemy.orm.exc import NoResultFound
 from cog.plugins.esgf.objects import ESGFGroup, ESGFRole, ESGFUser, ESGFPermission, ROLE_USER
+from django.core.exceptions import ObjectDoesNotExist
 
 class PermissionDAO(object):
     
@@ -140,7 +141,7 @@ class PermissionDAO(object):
             try:
                 esgfUser = session.query(ESGFUser).filter(ESGFUser.openid==userOpenid).one()      
             except NoResultFound:
-                raise Exception("User with openid=%s not found" % userOpenid)
+                raise ObjectDoesNotExist("User with openid=%s not found" % userOpenid)
         else:
             esgfUser = None
             
@@ -149,7 +150,7 @@ class PermissionDAO(object):
             try:
                 esgfGroup = session.query(ESGFGroup).filter(ESGFGroup.name==groupName).one()   
             except NoResultFound:
-                raise Exception("Group with name=%s not found" % groupName)
+                raise ObjectDoesNotExist("Group with name=%s not found" % groupName)
         else:
             esgfGroup = None
             
@@ -158,7 +159,7 @@ class PermissionDAO(object):
             try:
                 esgfRole = session.query(ESGFRole).filter(ESGFRole.name==roleName).one()   
             except NoResultFound:
-                raise Exception("Role with name=%s not found" % roleName)
+                raise ObjectDoesNotExist("Role with name=%s not found" % roleName)
         else:
             esgfRole = None
 
