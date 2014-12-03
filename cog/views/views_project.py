@@ -538,7 +538,7 @@ def project_browser(request, project_short_name, tab):
     except ObjectDoesNotExist:
         project=None
         
-    print 'Project Browser project=%s tab=%s tag=%s user=%s' % (project, tab, tag, request.user)
+    #print 'Project Browser project=%s tab=%s tag=%s user=%s' % (project, tab, tag, request.user)
 
     html = ''    
     if tab == 'this':
