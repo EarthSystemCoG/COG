@@ -118,6 +118,9 @@ urlpatterns = patterns('',
 
     # project browser
     url(r'^project_browser/(?P<project_short_name>[^/]+)/browse/(?P<tab>[^/]+)/$', 'cog.views.project_browser', name='project_browser'),
+    # the following matches on Apache httpd
+    url(r'^project_browser/browse/(?P<tab>[^/]+)/$', 'cog.views.project_empty_browser', name='project_empty_browser'),
+    # the following matches on django development server
     url(r'^project_browser//browse/(?P<tab>[^/]+)/$', 'cog.views.project_empty_browser', name='project_empty_browser'),
 
     # NAVBAR URLs
