@@ -105,8 +105,8 @@
     	   for (var i=0; i<tabs.length; i++) {
 
 	    	   // build request URL
-	    	   // example: /projects/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
-	    	   var url = "/projects/"+project_short_name+"/browse/"+tabs[i]+"/";
+	    	   // example: /project_browser/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
+	    	   var url = "/project_browser/"+project_short_name+"/browse/"+tabs[i]+"/";
 	    	   var tag = document.getElementById('projectBrowserText').value;
 	    	   if (tag != null && tag!="") url += "?tag="+tag;
 
