@@ -26,7 +26,7 @@
 	{% for comment in comment_list %}
 	   <div id="comment_{{ comment.id }}" class="box-comment">
 	       <div class="caption">
-	       		{{ comment.name|escape }}, on {{ comment.submit_date|date:"d M Y, H:m" }}
+	       		{{ comment.name|escape }}, on {{ comment.submit_date }}
 	       		<!-- comments can only be deleted by the original authors, or project administrators -->
 	       		{% if request.user == comment.user or request.user|hasAdminPermission:comment.content_object.project %}
 		       		<span style='float:right'>
