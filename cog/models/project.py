@@ -103,7 +103,7 @@ class Project(models.Model):
     # flag to disable the search widget
     dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
     
-    maxUploadSize = models.IntegerField(default=MAX_UPLOADES_BYTES, blank=True, null=False, help_text='Maximum upload size in bytes')
+    maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False, help_text='Maximum upload size in bytes')
         
     class Meta:
         app_label= APPLICATION_LABEL
