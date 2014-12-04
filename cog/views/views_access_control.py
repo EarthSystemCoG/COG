@@ -201,7 +201,7 @@ def notifyAdmins(group_name, user_id, incomingRequest):
     message += "\nEmail: %s" % user.email
     
     # openid
-    message += "\nOpenID is: %s" % user.profile.localOpenid()
+    message += "\nOpenID is: %s" % user.profile.openid()
 
     # user profile attributes
     profile = UserProfile.objects.get(user=user)

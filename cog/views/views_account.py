@@ -99,7 +99,7 @@ def notifyAdminsOfUserRegistration(user):
     message += "\nEmail: %s" % user.email
     
     # openid
-    message += "\nOpenID is: %s" % user.profile.localOpenid()
+    message += "\nOpenID is: %s" % user.profile.openid()
 
     # user profile attributes
     profile = UserProfile.objects.get(user=user)
@@ -119,7 +119,7 @@ def notifyUserOfRegistration(user):
     message = "Thank you for creating a new CoG account."
     message += "\n"
     message += "\nYour User Name is: %s" % user.username
-    message += "\nYour OpenID is: %s" % user.profile.localOpenid()
+    message += "\nYour OpenID is: %s" % user.profile.openid()
     message += "\n"
     message += "\nPlease note that you will need your OpenID to login."
     notify(user, subject, message)
@@ -232,7 +232,7 @@ def user_add(request):
             response = HttpResponseRedirect(reverse('login')+"?message=user_add")
             
             # set openid cookie
-            set_openid_cookie(response, userp.localOpenid())
+            set_openid_cookie(response, userp.openid())
 
             return response
 
@@ -473,7 +473,7 @@ def password_update(request):
                         
             # redirect to login page with special message
             response = HttpResponseRedirect(reverse('login')+"?message=password_update")
-            openid = user.profile.localOpenid()
+            openid = user.profile.openid()
             if openid is not None:
                 set_openid_cookie(response, openid)        
             return response
