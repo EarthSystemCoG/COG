@@ -4,7 +4,7 @@
 
 {% block main %}
    
-    {% if request.method = 'GET' %}
+    {% if request.method == 'GET' %}
         
         <div class="instruction-box">
         
@@ -19,14 +19,14 @@
 	            
 	            <form action="" method="post">
 	                {% csrf_token %}
-	                <input type="reset" value="No, I Changed My Mind" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/>
+	                <input type="reset" value="No, I Changed My Mind." onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/>
 	                &nbsp;
-	                <input type="submit" value="Yes, Cancel My Membership"/>
+	                <input type="submit" value="Yes, Cancel My Membership."/>
 	            </form>
             
             {% else %}
             
-                Sorry: you are not part of, nor have requested membership in, project {{ project.short_name }}.
+                Sorry: You are not part of, nor have requested membership in, project {{ project.short_name }}.
                 
             {% endif %}
         
