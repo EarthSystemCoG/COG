@@ -1,14 +1,14 @@
 {% load cog_utils %}
 
-<!--do not show openids for anoter user -->
-{% if request.user.id = user_profile.user.id or request.user.is_staff %}
+<!--do not show OpenIDs for another user -->
+{% if request.user.id == user_profile.user.id or request.user.is_staff %}
 	<div class="mybox">
 		 <table>
 		     <caption>My OpenID</caption>
 		     {% if user_profile.openids %}
 			     {% for openid in user_profile.openids %}
 		        	<tr>
-			            <td class="head" nowrap="nowrap"><b>OpenID</b></td>
+			            <td class="head" nowrap="nowrap">OpenID</td>
 			            <td class="long">{{ openid }}</td>
 			        </tr>
 		        {% endfor %}
