@@ -12,13 +12,15 @@
 	   </p>
    {% else %}
        <p class="instruction-box">
-            Use the check-boxes below to assign or change the role of a user in the project, 
-            <br/>click on <b>Cancel Membership</b> to remove a user from the project.
-            <p/>
-            The <b>Users Group</b> grants permissions to: create or edit any content in the project workspace (except for the home page),
+            Use the check-boxes below to assign or change the role of a user.
+            <br>
+            Click on Cancel Membership to remove a user from the project.
+       </p>
+       <p>
+            The <b>User Group</b> grants permissions to: create or edit any content in the project workspace (except for the home page),
             send news, and comment on any page.
             <br/> 
-            The <b>Admins Group</b> grants additional permissions to: change the project home page, 
+            The <b>Admin Group</b> grants additional permissions to: change the project home page,
             delete any page or blog in the project workspace (except for the predefined project pages),
             enroll users in the project, create a child project, or delete the project altogether.
        </p>
@@ -35,7 +37,7 @@
 	   <div class="mybox">
 	        <table>
 	            <caption>{{ list_title }}</caption>
-	            
+	            <!-- <br/> tags in table are to align text to the bottom -->
 	            <tr>
 	                <td class="tophead">&nbsp;<br/>Last Name</td>
 	                <td class="tophead">&nbsp;<br/>First Name</td>
@@ -74,7 +76,7 @@
                         <td style="text-align:center">
                             <a class="deletelink" 
                                href="{% url 'membership_process' project.short_name|lower %}?{{project.getUserGroup|noMembership:user}}=on&{{ project.getAdminGroup|noMembership:user}}=on&view_name={{view_name}}"
-                               onclick="return urlConfirmationDialog('Cancel Membership Confirmation','Are you sure you want to remove this user from the group ?',this)">Cancel</a>
+                               onclick="return urlConfirmationDialog('Cancel Membership Confirmation','Are you sure you want to remove this user from the group?',this)">Cancel</a>
                         </td>
 	                </tr>
 	            {% endfor %}
