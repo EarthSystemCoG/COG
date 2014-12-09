@@ -1,11 +1,11 @@
-{% extends "cog/common/layout_center_right.html" %}
+{% extends "cog/common/layout_center.html" %}
 
 {% block main %}
     
     <!-- invocation after POST redirection -->
     {% if request.GET.approved != None %}
     
-    	<p/>
+    	<p></p>
 		<div class="message-box" >
 			Thank you for requesting "{{ group_name }}" data access.
 			<br/>
