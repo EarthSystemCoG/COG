@@ -14,7 +14,7 @@
 		           Synchronization Report
 		        </caption>
 		        
-		        <!-- hedaer row -->
+		        <!-- header row -->
 		        <tr>
 	                <td class="tophead">Site Name</td>
 	                <td class="tophead">Domain</td>
@@ -28,12 +28,12 @@
 			           <td>{{ sitedict.domain }}</td>
 			           <td><a href='{{ sitedict.url }}'>Shared Projects</a></td>
 			           <td>
-			           		{% if sitedict.status = 'ERROR' %}
-			           			<span style="color:#FF0000">{{ sitedict.status }}</span></td>
+			           		{% if sitedict.status == 'ERROR' %}
+			           			<span style="color:#FF0000">{{ sitedict.status }}</span>
 			           	   	{% else %}
-			           	   		<span style="color:#358C92">{{ sitedict.status }}</span></td>
+			           	   		<span style="color:#358C92">{{ sitedict.status }}</span>
 			           		{% endif %}
-			           	</td>
+                       </td>
 			        </tr>
 			    {% endfor %}
 		    </table>
