@@ -83,22 +83,22 @@ class UserProfile(models.Model):
 
     # utility method to return the user openids
     def openids(self):
-        return [ x.claimed_id for x in self.user.useropenid_set.all() ]
+        return [x.claimed_id for x in self.user.useropenid_set.all()]
     
     # utility method to return openids that match the local node
     def localOpenids(self):
-        return [ x for x in self.openids() if settings.ESGF_HOSTNAME in x]
+        return [x for x in self.openids() if settings.ESGF_HOSTNAME in x]
     
     # utility method to return the user first openid
     def openid(self):
-        if len( self.user.useropenid_set.all() ) > 0:
+        if len(self.user.useropenid_set.all()) > 0:
             return self.user.useropenid_set.all()[0].claimed_id
         else:
             return None
         
     # returns the first local openid, if existing
     def localOpenid(self):
-        if len( self.localOpenids() ) > 0:
+        if len(self.localOpenids()) > 0:
             return self.localOpenids()[0]
         else:
             return None 
@@ -140,13 +140,13 @@ def isUserRemote(user):
 def discoverSiteForUser(openid):
     '''IMPORTANT: call this function ONLY at account creation as it makes requests to all peer sites.'''
         
-    for site in Site.objects.all(): # note: includes current site
+    for site in Site.objects.all():  # note: includes current site
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
         jobj = getJson(url)
         if jobj is not None:
             for key, value in jobj['users'].items():
-                if str( value['home_site_domain'] ) == site.domain:
-                    return site # site found
+                if str(value['home_site_domain']) == site.domain:
+                    return site  # site found
             
     # site not found
     return None

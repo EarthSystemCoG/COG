@@ -164,10 +164,10 @@ def listPeople(project):
     '''
     
     pubUsers = project.getPublicUsers()
-    collaborators = list( Collaborator.objects.filter(project=project) )
+    collaborators = list(Collaborator.objects.filter(project=project))
     
     people = pubUsers + collaborators
-    return sorted(people, key=lambda user: (user.last_name.lower(), user.first_name.lower()) )
+    return sorted(people, key=lambda user: (user.last_name.lower(), user.first_name.lower()))
     
 def delete_comments(object):
     '''Function to delete comments associated with a generic object.'''
@@ -185,7 +185,7 @@ def get_or_create_default_search_group(project):
         group = SearchGroup.objects.filter(profile=profile).filter(name=SearchGroup.DEFAULT_NAME)[0]
     except IndexError:
         print 'Creating default search group for project=%s' % project.short_name
-        group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=len(list(profile.groups.all())) )
+        group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=len(list(profile.groups.all())))
         group.save()
     return group    
 
@@ -202,7 +202,7 @@ def get_or_create_project_tabs(project, save=True):
             # default values for label, url
             label = page[0]
             url = project.home_page_url() + page[1]
-            if page[0]=="Home":
+            if page[0] == "Home":
                 # NESII Home
                 label = "%s Home" % project.short_name                
             try:
@@ -220,7 +220,7 @@ def get_or_create_project_tabs(project, save=True):
                     print "Creating tab= %s" % tab
                     tab.save() 
                     # assign parent tab
-                    if i>0:
+                    if i > 0:
                         tab.parent = tablist[0]
                         tab.save()
                         print "Assigned parent tab=%s to child tab=%s" % (tablist[0], tab)

@@ -236,7 +236,7 @@ def validate_username(form, user_id):
                 # perform case-insensitive lookup of username, compare with id from form instance
                 user =  User.objects.all().get(username__iexact=username)
                 if user!=None and user.id != user_id:
-                    form._errors["username"] = form.error_class(["Username already taken in database"])
+                    form._errors["username"] = form.error_class(["Username already taken in database."])
             except ObjectDoesNotExist:
                 pass
 

@@ -84,9 +84,9 @@ class EmailThread(Thread):
             msg['From'] = self.fromAddress
             msg['To'] = self.toAddress    
             if emailConfig.port is not None:
-                s = smtplib.SMTP( emailConfig.server, emailConfig.port )
+                s = smtplib.SMTP(emailConfig.server, emailConfig.port)
             else:
-                s = smtplib.SMTP( emailConfig.server )
+                s = smtplib.SMTP(emailConfig.server)
             if emailConfig.security=='STARTTLS':
                 s.starttls()
             if emailConfig.username and emailConfig.password:
