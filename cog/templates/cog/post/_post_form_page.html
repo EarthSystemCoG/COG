@@ -5,62 +5,79 @@
 <table>
     <tr>
 	<td class="col1">Author</td>
-	<td>{{ request.user }} </td>		          
+	<td>{{ request.user }}</td>
     </tr>
     <tr>
-        <td class="col1"><b>Title</b></td>
-        <td>{{ form.title }} {{ form.title.errors }}</td>
+        <td class="col1" style="vertical-align: middle;"><b>Title</b></td>
+        <td style="vertical-align: middle;">{{ form.title }}</td>
+        <td style="vertical-align: middle;">{{ form.title.errors }}</td>
     </tr>
 </table>
 <table>
    <tr>
-        <td class="col1">Label</td>
-        <td style="width=200px%;">{{ form.label }}</td>
+        <td class="col1" style="vertical-align: middle;">Label</td>
+        <td style="width:200px;">{{ form.label }}</td>
 	<td style="vertical-align:middle;">&nbsp; <i>Optional shorter label for left menu, max 25 characters, defaults to page title</i> {{ form.label.errors }}</td>
     </tr>
 </table>
 <table class="odd-color">
    <tr>
-         <td class="col1"><b>URL</b></td>
-         <td style="max-width:300px;vertical-align:middle;" nowrap="nowrap">/projects/{{project.short_name|lower }}/</td>
-         <td style="width:300px;">{{ form.url }}</td>
-	 <td style="width:400px;vertical-align:middle;"><i>Use only letters, numbers, '_', '-' and '/'</i>{{ form.url.errors }}</td>
+        <td class="col1" style="vertical-align: middle;">
+           <b>URL</b>
+        </td>
+        <td style="max-width:300px; vertical-align:middle;" nowrap="nowrap">
+             /projects/{{project.short_name|lower }}/
+        </td>
+        <td style="width:300px; vertical-align: middle;">
+            {{ form.url }}
+        </td>
+       {% if form.url.errors|length == 0 %}
+	       <td style="width:400px;vertical-align:middle;">
+              <i>Use only letters, numbers, '_', '-' and '/'</i>
+           </td>
+       {%  else %}
+           <td style="width:400px;vertical-align:middle;">
+              {{ form.url.errors }}
+           </td>
+       {% endif %}
    </tr>
 </table>
 <!--// Load list of templates from /cog/forms/forms_post.py //-->
 <table>
     <tr>
-         <td class="col1"><b>Template</b></td>
+         <td class="col1" style="vertical-align: middle;"><b>Template</b></td>
          <td class="long">{{ form.template }} {{ form.template.errors }}</td>
     </tr>
 </table>
 <table class="odd-color">
    <tr>
-          <td class="col1" nowrap="nowrap">Parent Page</td>
+          <td class="col1" nowrap="nowrap" style="vertical-align: middle;">Parent Page</td>
           <td>{{ form.parent }} </td>                
     </tr>
 </table>
 <table>
     <tr>
-          <td class="col1"><b>Topic</b></td>
+          <td class="col1" style="vertical-align: middle;"><b>Topic</b></td>
           <td style="width:80px; vertical-align:middle;" nowrap="nowrap">{{ form.topic }}</td>
-          <td style="width:80px; vertical-align:middle;" <b>or New Topic</b></td>
+          <td style="width:80px; vertical-align:middle;"><b>or New Topic</b></td>
 	  <td style="width:140px;vertical-align:middle;">{{ form.newtopic }}</td>
 	  <td>{{form.newtopic.errors }} {{ form.topic.errors }}</td>
    </tr>
  </table>
  <table class="odd-color">
     <tr>
-          <td nowrap="nowrap">Not Viewable?</td>
-          <td>{{form.is_private }} 
-               (<i>If checked, only project members will be able to view this page.</i>)</td>                   
+          <td class="col1" nowrap="nowrap" style="vertical-align: middle;">Not Viewable?</td>
+          <td style="vertical-align: middle;">{{form.is_private }}
+               (<i>If checked, only project members will be able to view this page.</i>)
+          </td>
     </tr>
     {% if user|hasAdminPermission:project %}
     	<tr>
-          <td nowrap="nowrap">Not Editable?</td>
-          <td>{{form.is_restricted}} 
+          <td class="col1" nowrap="nowrap" style="vertical-align: middle;">Not Editable?</td>
+          <td style="vertical-align: middle;">{{form.is_restricted}}
                (<i>If checked, only project administrators will be able to edit this page. 
-                    If not checked, all project members can edit this page.</i>)</td>                   
+                    If not checked, all project members can edit this page.</i>)
+          </td>
     	</tr>
     {% endif %}
 </table>
