@@ -1,80 +1,72 @@
 <!-- Template page to display user's profile -->
 {% extends "cog/common/layout_center.html" %}
+<!-- Location: /templates/datacart/datacart.html -->
 
 {% load cog_utils %}
 
 {% block main %}
 
   {% if user_profile.user|isRemote %}
-  
-    <div class="prepend-6 span-12 last">
+      <div class="prepend-6 span-12 last">
+           <!-- display a message and link to the user's Home Site -->
+           <h2>User Profile</h2>
+           <div class="message-box">
+               User Home Site: {{ user_profile.site.name }}
+    	   </div>
+           <br/>
+    	   <div style="text-align: center">
+    		  <a href="{{ user_profile.getAbsoluteUrl }}">View User Profile at {{ user_profile.site.name }}</a>
+    	   </div>
+      </div>
 
-        <h2>User Profile</h2>
-  
-  		<div class="message-box">
-    		User Home Site: {{ user_profile.site.name }}
-    	</div>
-    
-    	<br/>
-    	
-    	<div style="text-align: center">
-    		<a href="{{ user_profile.getAbsoluteUrl }}">View User Profile at {{ user_profile.site.name }}</a>    	
-    	</div>
-    	
   {% else %}
-  
-   	<!-- display extra message if available -->
-	{% if request.GET.message %}
-		<div class="prepend-6 span-12 last">
-	   		<div class="message-box"> {{ request.GET.message|showMessage }}</div>
-	   	</div>
-	   	<p/>
-	{% endif %}
-  
-    <div class="prepend-1 span-24">
+
+     <div class="prepend-1 span-24">
+
+        <!-- display extra message if it exists -->
+         {% if request.GET.message %}
+		    <div class="prepend-6 span-12 last">
+	   	      	<div class="message-box"> {{ request.GET.message|showMessage }}</div>
+	     	</div>
+	    	<p></p>
+         {%  endif %}
+
 
         <h2>User Profile</h2>
-        
-          <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
-         <div class="span-10"style="margin-bottom:5px;">
-		 {% include 'cog/account/_user_profile.html' %}
+        <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
+        <div class="span-10" style="margin-bottom:5px;">
+		   {% include 'cog/account/_user_profile.html' %}
 	    </div>
 		   
-  	   <div class="span-8" style="margin-bottom:5px;">
-             {% include 'cog/account/_user_projects.html' %}
-   	   </div>
+  	    <div class="span-8" style="margin-bottom:5px;">
+           {% include 'cog/account/_user_projects.html' %}
+   	    </div>
 
-	   <div class="span-5 last">
-	     <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" {% endif %}/>
-    	   </div>
+	    <div class="span-5 last">
+	       <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" {% endif %}/>
+    	</div>
 
 
-	 <div class="span-17 last" style="margin-bottom:5px;" >
-              {% include 'cog/account/_user_openids.html' %}
-	</div>
+	    <div class="span-17 last" style="margin-bottom:5px;" >
+           {% include 'cog/account/_user_openids.html' %}
+	    </div>
 
-	<div class="span-17 last" style="margin-bottom:5px;" >
+	    <div class="span-17 last" style="margin-bottom:5px;" >
 	      {% include 'cog/account/_user_research.html' %}
         </div>
 		  
-        <div class="span-17 last" style="margin-bottom:5px;" >
-		 {% if request.user.id = user_profile.user.id or request.user.is_staff %}
-		            <div style="text-align:center">
-		                <a href="{% url 'user_update' user_profile.user.id %}">Update my profile</a>
-		                {% if user_profile.isCogUser %}
-			                &nbsp; &nbsp;
-			                <a href="{% url 'password_update' %}">Change my password</a>
-		                {% endif %}
-		            </div>
-		        {% endif %}
-	   	   </div>
+        <div class="span-17 last" style="margin-bottom:40px;" >
+		   {% if request.user.id == user_profile.user.id or request.user.is_staff %}
+		       <div style="text-align:center;">
+		            <a href="{% url 'user_update' user_profile.user.id %}">Update my profile</a>
+		               {% if user_profile.isCogUser %}
+			               &nbsp; &nbsp;
+			               <a href="{% url 'password_update' %}">Change my password</a>
+		               {% endif %}
+		       </div>
+		   {% endif %}
+	   	</div>
 
-	    </div>
-
-	   
-
-     </div>
-  
+	 </div>
   {% endif %}
-
 {% endblock %}
