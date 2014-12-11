@@ -7,7 +7,7 @@
 
      <!-- display project membership -->
      {% if request.user.is_staff %}
-           | You are the <b>Site Administrator</b>
+           | You are a <b> {{ site.name }} Site Administrator</b>
      {% else %}
 	     {% if project %}
 	        {% if project|hasUserPending:request.user %}
