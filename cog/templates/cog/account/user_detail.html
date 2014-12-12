@@ -5,6 +5,49 @@
 {% load cog_utils %}
 
 {% block main %}
+<!-- Extra block for Site Admins to display key user info we don't show the public-->
+  {% if request.user.is_staff %}
+    <div class="prepend-6 span-12 last" style="margin-bottom:20px;">
+      <div class="mybox">
+        <table>
+        <caption>Extra User Information (Site Administrators Only)</caption>
+         <tr>
+            <td style="width:150px;">
+                <b>Email:</b>
+            </td>
+            <td>
+                {{ user_profile.user.email }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Subscribed to cog_info?</b>
+            </td>
+            <td>
+                {% if user_profile.subscribed %}
+                    Yes
+                {% else %}
+                    No
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Home Site:</b>
+            </td>
+            <td>{{ user_profile.site.name }}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Last Password Update:</b>
+            </td>
+            <td>{{ user_profile.last_password_update }}</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+  {% endif %}
 
   {% if user_profile.user|isRemote %}
       <div class="prepend-6 span-12 last">
