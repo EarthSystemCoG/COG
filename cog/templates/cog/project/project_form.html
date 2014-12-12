@@ -127,7 +127,7 @@
                 <!--// Checkbox for private sites   \\-->			
                 <tr>
 	            <td nowrap="nowrap">Is Private?</td>
-	            <td vertical-align:middle;">
+	            <td style="vertical-align:middle;">
 	                    {{ form.private }} 
 	                    <span>
 	                    [ A private project is only visible to project members - users and administrators. ]
@@ -153,8 +153,7 @@
                 	       <td>
 				 {% for tab in tablist %}
 				 <lable for="{{tab.label}}"> <input name="tab_{{tab.label}}"
-				 {% if tab.active %} checked="checked" {% endif %}
-				 type="checkbox" onclick="trigger(this)">
+				 {% if tab.active %} checked="checked" {% endif %} type="checkbox" onclick="trigger(this)">
 				 <span style="margin-top:2px;vertical-align:middle;">
 				 {% if forloop.counter == 1 %}
 				 <b>{{tab.label}}</b>
