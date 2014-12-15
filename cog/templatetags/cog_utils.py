@@ -20,15 +20,17 @@ from django.core.exceptions import ObjectDoesNotExist
 
 register = template.Library()
 
+
 @register.filter
 def concat(astring, bstring):
     return str(astring) + str(bstring)
+
 
 @register.filter
 def sortdict(the_dict):
     tuples = []
     for key, value in the_dict.iteritems():
-        tuples.append( (key,value) )
+        tuples.append((key,value))
     return sorted(tuples, key=lambda tuple: tuple[0])
 
 
@@ -36,6 +38,7 @@ def sortdict(the_dict):
 def dictKeyLookup(the_dict, key):
    # Try to fetch from the dict, and if it's not found return an empty string.
    return the_dict.get(key, '')
+
 
 # Utility function to set the "escape" function to be conditional_escape, or the identity function
 # depending on the auto-escape context currently in effect in the template.
@@ -141,7 +144,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         # display sub-folders
         for child in folder.children():
             # recursion (do not expand children)
-            html += _folder_tree(child, user, esc, expanded=True) # open by default all folders
+            html += _folder_tree(child, user, esc, expanded=True)  # open by default all folders
 
         html += "</ul>"
 
@@ -226,30 +229,37 @@ def hasUser(project, user):
 def hasUserPending(project, user):
   return project.hasUserPending(user)
 
+
 # filters to encode a membership HTTP parameter
 @register.filter
 def newMembership(group, user):
     return encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)
 
+
 @register.filter
 def oldMembership(group, user):
     return encodeMembershipPar(OLD_MEMBERSHIP, group.name, user.id)
+
 
 @register.filter
 def noMembership(group, user):
     return encodeMembershipPar(NO_MEMBERSHIP, group.name, user.id)
 
+
 @register.filter
 def hasUserPermission(user, project):
     return userHasUserPermission(user, project)
+
 
 @register.filter
 def hasAdminPermission(user, project):
     return userHasAdminPermission(user, project)
 
+
 @register.filter
 def canPost(user, post):
     return userCanPost(user, post)
+
 
 @register.filter
 def relatedPostCount(post, related_posts):
@@ -258,15 +268,15 @@ def relatedPostCount(post, related_posts):
         count += 1
     return count
 
-@register.filter
 
+@register.filter
 # function to sort Child Pages alphabetically by title
 def relatedPostSorted(post, related_posts):
     sorted_posts = sorted(related_posts, key=lambda x: x.title, reverse=False)
     return sorted_posts
 
-@register.filter
 
+@register.filter
 def numberOptions(lastNumber, selectedNumber):
     lastNumberPlusOne = int(lastNumber)
     selectedNumber = int(selectedNumber)
@@ -291,7 +301,7 @@ def getTopTabUrl(project, request):
     if homeurl in request.path:
         # request.path = "/projects/cog/aboutus/mission/" or "/projects/cog/nav/aboutus/update/"
         # subtaburl = "aboutus/mission/"
-        subtaburl = request.path[ len(homeurl) : ]
+        subtaburl = request.path[len(homeurl):]
         # disregard everything after the first '/'
         subtaburl = subtaburl[0:subtaburl.find('/')+1]
         # taburl = "/projects/cog/" + "aboutus/"
@@ -302,6 +312,7 @@ def getTopTabUrl(project, request):
             return taburl
     # default: no tab selected
     return None
+
 
 # Utility method to return a list of ACTIVE project tabs (top-tabs and sub-tabs).
 # Returns a list of list: [ [(tab1,False)], [(tab2,False)], [(tab3,True), (sub-tab3a,False), (subtab3b,True), (subtab3c,False),...], [(tab4,True)], [(tab5,True)], ...]
@@ -342,6 +353,7 @@ def getTopNav(project, request):
         tabs.append(tablist)
     return tabs
 
+
 @register.filter
 def getTopTabStyle(tablist, selected):
     """Method to return the top-tab CSS style, depending on whether it is selected, and it has sub-tabs."""
@@ -374,12 +386,14 @@ def getSubTabStyle(tablist, tab):
     else:
         return ""
 
+
 # Utility method to return the list of invalid characters
 @register.filter
 def getInvalidCharacters(project):
     return "!@#$%^&*[]/{}|\"\\<>"
     # remove leading [ and trailing \]
     #return INVALID_CHARS[1:len(INVALID_CHARS)-1]
+
 
 # filter that inserts a lock icon if the user can not view the URL
 @register.filter
@@ -401,20 +415,24 @@ def is_locked(post, request, autoescape=None):
     # mark the result as safe from further escaping
     return mark_safe(html)
 
+
 @register.filter
 def get_form_global_errors(form):
     errors = dict(form.errors)
     return list(errors.get("__all__", []))
+
 
 @register.filter
 def get_organizational_roles(project, category):
 
     return getOrganizationalRoles(project, category)
 
+
 @register.filter
 def get_management_bodies(project, category):
 
     return getManagementBodies(project, category)
+
 
 @register.filter
 def is_home_page(request, project):
@@ -424,9 +442,11 @@ def is_home_page(request, project):
     else:
         return False
 
+
 @register.filter
 def get_external_urls(project, external_url_type):
     return project.get_external_urls(external_url_type)
+
 
 @register.filter
 def roles(user, project):
@@ -438,6 +458,7 @@ def roles(user, project):
             roles.append(role)
 
     return roles
+
 
 @register.filter
 def getUserAttribute(user, attribute):
@@ -451,9 +472,11 @@ def getUserAttribute(user, attribute):
         profile = UserProfile.objects.get(user=user)
         return getattr(profile, attribute)
 
+
 @register.filter
 def tabs(label):
     return TABS[label]
+
 
 @register.filter
 def getTabLabel(tabkey):
@@ -461,16 +484,20 @@ def getTabLabel(tabkey):
     tabkey = tabkey[0:-1]
     return "tab_%s" % TAB_LABELS[tabkey]
 
+
 def parseBoolString(theString):
-    return theString[0].upper()=='T'
+    return theString[0].upper() == 'T'
+
 
 @register.filter
 def getCommunicationMeans(project, internal):
     return get_project_communication_means(project, parseBoolString(internal))
 
+
 @register.filter
 def getPeople(project):
     return listPeople(project)
+
 
 @register.filter
 def getImage(obj):
@@ -496,6 +523,7 @@ def getImage(obj):
         # if the image field has no associated file -> return default (no image found)
         return getattr(settings, "STATIC_URL") + DEFAULT_IMAGES['%s' % obj.__class__.__name__]
 
+
 @register.filter
 def getThumbnailById(id, type):
 
@@ -512,6 +540,7 @@ def getThumbnailById(id, type):
         imagepath = getattr(settings, "STATIC_URL") + DEFAULT_IMAGES[type]
         return getThumbnailPath(imagepath)
 
+
 @register.filter
 def getThumbnail(user):
 
@@ -519,25 +548,29 @@ def getThumbnail(user):
     thumbnailPath = getThumbnailPath(imagePath)
     return thumbnailPath
 
+
 @register.filter
 def doc_redirect(doc):
 
     if len(doc.post_set.all()) > 0:
         for doc in doc.post_set.all():
-            redirect = reverse('post_detail', kwargs={'post_id': doc.id })
+            redirect = reverse('post_detail', kwargs={'post_id': doc.id})
     else:
-        redirect = reverse('project_home', kwargs={'project_short_name': doc.project.short_name.lower() })
+        redirect = reverse('project_home', kwargs={'project_short_name': doc.project.short_name.lower()})
     return redirect
+
 
 @register.filter
 def partners(project):
-    organizations = list( project.organization_set.all() )
+    organizations = list(project.organization_set.all())
     return sorted(organizations, key=lambda org: org.name)
+
 
 @register.filter
 def sponsors(project):
-    fundingsources = list( project.fundingsource_set.all() )
+    fundingsources = list(project.fundingsource_set.all())
     return sorted(fundingsources, key=lambda fs: fs.name)
+
 
 @register.filter
 # filter that builds the content for the Javascript projectTags array
@@ -547,11 +580,13 @@ def projectTags(project):
     tagstring = ''
     for tag in tags:
         tagstring += '\"'+tag.name+'\",'
-    return mark_safe( tagstring[0:-1] ) # important: no escaping!
+    return mark_safe(tagstring[0:-1])  # important: no escaping!
+
 
 @register.filter
 def projectNews(project):
     return news(project)
+
 
 @register.filter
 def dataCartContains(user, item_identifier):
@@ -559,51 +594,55 @@ def dataCartContains(user, item_identifier):
     (datacart, _) = DataCart.objects.get_or_create(user=user)
     return datacart.contains(item_identifier)
 
+
 @register.filter
 def showMessage(message):
     '''Utility filter to translate message code into message strings.'''
 
-    if message=='password_reset':
+    if message == 'password_reset':
         return 'A new password has been e-mailed to you. Please use the new password to login and change it as soon as possible.'
 
-    elif message=='user_add':
+    elif message == 'user_add':
         return 'Thank you for creating an account. You can now login.'
 
-    elif message=='password_update':
+    elif message == 'password_update':
         return 'Your password has been changed. Please login again.'
         #return 'Thank you for changing your password.'
 
-    elif message=='user_reminder':
+    elif message == 'user_reminder':
         return 'Your UserName and OpenID have been emailed to the address you provided.<br/>Please check your email box.'
 
-    elif message=='incomplete_profile':
+    elif message == 'incomplete_profile':
         return 'Please update your profile to contain at least the mandatory information required by COG (the fields in bold).'
 
-    elif message=='invalid_idp':
+    elif message == 'invalid_idp':
         return 'Invalid Identity Provider (not trusted).'
 
-    elif message=='invalid_openid':
+    elif message == 'invalid_openid':
         return "Invalid OpenID (does it start with 'https' ?)"
 
-    elif message=='openid_discovery_error':
+    elif message == 'openid_discovery_error':
         return "OpenID Discovery Error: unrecognized by the Identity Provider."
 
-    elif message=="login_failed":
+    elif message == "login_failed":
         return "Error entering username and/or password."
 
-    elif message=="password_expired":
+    elif message == "password_expired":
         return "Your password has expired. Please choose a new password conforming to the requirements below."
 
     else:
         return message
 
+
 @register.filter
 def isValidUser(user):
     return isUserValid(user)
 
+
 @register.filter
 def isLocal(user):
     return isUserLocal(user)
+
 
 @register.filter
 def isRemote(user):
