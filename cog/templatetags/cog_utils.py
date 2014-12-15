@@ -70,7 +70,7 @@ def list_bookmarks(project, user, autoescape=None):
 
     # start recursion from this folder
     html += "<ul>"
-    html += _folder_tree(folder, user, esc, expanded=True, icon='folder') # expand this folder and its children
+    html += _folder_tree(folder, user, esc, expanded=True, icon='folder')  # expand this folder and its children
     html += "</ul>"
 
     html += "</div>"
@@ -121,7 +121,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         project = folder.project
         bookmarks = folder.bookmark_set.all()
         # ensure that the bookmarks are returned in descending order of creation (or id).
-        bookmarks_sorted = sorted(bookmarks, key=lambda bookmark:bookmark.id, reverse=True)
+        bookmarks_sorted = sorted(bookmarks, key=lambda bookmark: bookmark.id, reverse=True)
         for bookmark in bookmarks_sorted:
             deleteurl = reverse('bookmark_delete', args=[project.short_name.lower(), bookmark.id])
             updateurl = reverse('bookmark_update', args=[project.short_name.lower(), bookmark.id])
@@ -153,10 +153,14 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
 # The filter is composed of tuples of the form (folder object, folder hierarchy label)
 @register.filter
 def listFolders(project, user):
-
+    #get the list of folders associated with a project
     folders = []
     _listSubfolders(getTopFolder(project), '', folders)
-    return folders
+    #return folders
+
+    #sort the folders alphabetically
+    folders_sorted = sorted(folders, key=lambda folder: folder.name, reverse=True)
+    return folders_sorted
 
 def _listSubfolders(folder, hierarchy_label, folders):
     # add parent folder, append its name to hierarchy label
