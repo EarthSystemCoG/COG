@@ -64,19 +64,16 @@ def membership_list_all(request, project_short_name):
     
     # load all users
     if request.method == 'GET':
-    
-        users = User.objects.all().order_by('last_name')
-        title = 'List All System Users'
+        users = User.objects.all().order_by('last_name')    
     
     # lookup specific user
     else:
+        users = getUsersThatMatch(request.POST['match'])
         
-        match = request.POST['match']
-        users = User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match)))
-        title = 'Lookup System User'
-        
+    title = 'List System Users'
     view_name = 'membership_list_all'
-    return render_system_users_page(request, project, users, title, view_name)
+    return render_membership_page(request, project, users, title, view_name)
+    #return render_system_users_page(request, project, users, title, view_name)
 
 # View to list the memberships for all users enrolled in the project
 @login_required
@@ -91,11 +88,19 @@ def membership_list_enrolled(request, project_short_name):
     
     # load all project users
     # (must return a list for pagination)
-    users = list(project.getUsers())
+    if request.method == 'GET':
+        users = list(project.getUsers())
+        
+    # lookup specific user
+    else:
+        _users = getUsersThatMatch(request.POST['match'])
+        users = [user for user in _users if (user in project.getUserGroup().user_set.all() 
+                                             or user in project.getAdminGroup().user_set.all())]     
     
     title = '%s Current Users' % project.short_name
     view_name = 'membership_list_enrolled'
     return render_membership_page(request, project, users, title, view_name)
+
 
 # View to list all the users waiting approval to join the project
 @login_required
@@ -111,10 +116,20 @@ def membership_list_requested(request, project_short_name):
     # load user group
     group = project.getUserGroup()
     
-    # load users that have requested membership
+    # load all users that have requested membership
     # order by username
-    users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
+    if request.method == 'GET':
+        users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
     
+    # lookup specific user
+    else:
+        _users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
+        match = request.POST['match'].lower()
+        users = [ user for user in _users if (match in user.first_name.lower() 
+                                              or match in user.last_name.lower() 
+                                              or match in user.username.lower() 
+                                              or match in user.email.lower())]
+        
     title = '%s Pending Users' % project.short_name   
     view_name = 'membership_list_requested'
     return render_membership_page(request, project, users, title, view_name)
@@ -139,6 +154,11 @@ def render_system_users_page(request, project, users, title, view_name):
                               {'project': project, 'users': users,
                                'view_name': view_name, 'title': title},
                               context_instance=RequestContext(request))
+    
+def getUsersThatMatch(match):
+    '''Returns the list of users that match a given expression.'''
+    
+    return User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match)))
 
 # view to cancel user's own membership in a project
 # this view acts on the currently logged-in user
