@@ -63,9 +63,18 @@ def membership_list_all(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # load all users
-    users = User.objects.all().order_by('last_name')
+    if request.method=='GET':
     
-    title = 'All System Users'
+        users = User.objects.all().order_by('last_name')
+        title = 'List All System Users'
+    
+    # lookup specific user
+    else:
+        
+        match = request.POST['match']
+        users = User.objects.filter( ( Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match) ) )
+        title = 'Lookup System User'
+        
     view_name = 'membership_list_all'
     return render_membership_page(request, project, users, title, view_name)
 
