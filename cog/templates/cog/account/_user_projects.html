@@ -4,7 +4,7 @@
 	    <table>
 	       <caption>Project Affiliations</caption>
 	       {% for project in projects %}
-	         {% if not project.private %}
+	         {% if not project.private or request.user == user_profile.user %}
 	           <tr>
 	             <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
 	             {% comment %}       

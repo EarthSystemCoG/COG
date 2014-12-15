@@ -32,7 +32,7 @@ ofs = OverridingFileStorage()
 # A generic document that can be uploaded to the server and attached to a Post
 class Doc(models.Model):
     
-    author = models.ForeignKey(User, related_name='documents', verbose_name='Publisher', blank=False)
+    author = models.ForeignKey(User, related_name='documents', verbose_name='Publisher', blank=False, null=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=200, blank=True)
     # path == 'file.name' but stored in the database for searching
     path = models.CharField(max_length=400, blank=True)

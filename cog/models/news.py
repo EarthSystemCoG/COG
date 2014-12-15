@@ -8,7 +8,7 @@ class News(models.Model):
     
     title = models.CharField(max_length=100)
     text = models.TextField()
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
     project = models.ForeignKey(Project, verbose_name='About Project')

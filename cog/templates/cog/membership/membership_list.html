@@ -26,6 +26,14 @@
        </p>
    {% endif %}
    
+   <div style="text-align:center">
+	   <form name="lookupUserForm" action="" method="post">
+	   	    {% csrf_token %}
+	   		Lookup user by username, first name, last name or email: <input name="match" id="match" value="{{request.POST.match}}" />
+	   		<input type="submit" name="Go"/>
+	   </form>
+   </div>
+   
    {% paginate %}
     
    <form name="membershipForm" action="{% url 'membership_process' project.short_name|lower %}" method="post"> 
