@@ -15,7 +15,7 @@ def _hasBookmarks(project):
     """Function to determine whether a project has associated bookmarks."""
     
     bookmarks = Bookmark.objects.filter(folder__project=project)
-    if len(bookmarks.all())>0:
+    if len(bookmarks.all()) > 0:
         return True
     else:
         return False
@@ -26,7 +26,7 @@ def bookmark_list(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check project is active
-    if project.active==False:
+    if project.active == False:
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
@@ -53,8 +53,8 @@ def bookmark_list(request, project_short_name):
 
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':template_form_name,
-                               'children':children, 'peers':peers },
+                               'template_page': template_page, 'template_title': template_title, 'template_form_name': template_form_name,
+                               'children': children, 'peers': peers},
                                context_instance=RequestContext(request))
 
     
@@ -71,7 +71,7 @@ def bookmark_add(request, project_short_name):
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
-    if request.method=='GET':
+    if request.method == 'GET':
         
         # create unbounded form object
         form = BookmarkForm(project)
@@ -109,7 +109,7 @@ def bookmark_add2(request, project_short_name):
 
     response_data = {}
     response_data['errors'] = {}
-    if request.method=='POST':
+    if request.method == 'POST':
     
         # create form object from form data
         form = BookmarkForm(project, request.POST)
@@ -229,7 +229,7 @@ def folder_add(request, project_short_name):
             folder.save()
             
             # redirect to bookmark add page
-            return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()] ))
+            return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()]))
             
         else:
             # return to view
@@ -281,14 +281,14 @@ def folder_delete(request, project_short_name, folder_id):
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if folder.parent==None:
+    if folder.parent == None:
         return HttpResponseForbidden("Top-level folders cannot be deleted")
         
     # delete folder and all of its content
     delete_folder(folder)
     
     # redirect to project folder
-    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()] ))
+    return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
 
 # utility function to recursively delete each folder
 # together with its content
@@ -309,12 +309,12 @@ def delete_folder(folder):
 
 def render_folder_form(request, project, form):
     return render_to_response('cog/bookmarks/folder_form.html', 
-                               {'project':project, 'form':form, 'title':'Resource Folder Form' },
-                               context_instance=RequestContext(request))
+        {'project': project, 'form': form, 'title': 'Resource Folder Form'},
+        context_instance=RequestContext(request))
     
 def render_bookmark_form(request, project, form):
     return render_to_response('cog/bookmarks/bookmark_form.html', 
-                              {'project':project, 'form':form, 'title':'Resource Form' },
+                              {'project': project, 'form': form, 'title': 'Resource Form'},
                               context_instance=RequestContext(request))     
     
 @login_required
