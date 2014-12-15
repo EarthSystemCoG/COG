@@ -24,9 +24,9 @@ class PostForm(ModelForm):
     newtopic = forms.CharField(max_length=200, required=False)
 
     # override __init__ method to provide extra arguments to customize the query set
-    def __init__(self, type, project, *args,**kwargs):
+    def __init__(self, type, project, *args, **kwargs):
 
-        super(PostForm, self ).__init__(*args,**kwargs) # populates the post
+        super(PostForm, self).__init__(*args, **kwargs)  # populates the post
 
         # filter parent posts by project and type
         queryset = Q(project=project) & Q(type=type)
@@ -37,13 +37,13 @@ class PostForm(ModelForm):
             # exclude this post itself
             queryset = queryset & ~Q(id=instance.id)
         # get list of posts that can be a new post's parent page and alphabetize. Put the home page first.
-        self.fields['parent'].queryset =  Post.objects.filter( queryset ).order_by('-is_home','title')
+        self.fields['parent'].queryset = Post.objects.filter( queryset ).order_by('-is_home', 'title')
         print self.fields['parent'].queryset
 
         #self.fields['parent'].queryset[0]=Q(is_home="true")
         self.fields['parent'].empty_label = "Top Level Page (no parent)"
         # limit topic selection to current project and post type
-        self.fields['topic'].queryset = Topic.objects.filter( Q(post__project=project) & Q(post__type=type) ).distinct().order_by('name')
+        self.fields['topic'].queryset = Topic.objects.filter( Q(post__project=project) & Q(post__type=type)).distinct().order_by('name')
 
     # override form clean() method to execute combined validation on multiple fields
     def clean(self):
@@ -51,21 +51,21 @@ class PostForm(ModelForm):
         cleaned_data = self.cleaned_data
         topic = cleaned_data.get("topic")
         newtopic = cleaned_data.get("newtopic")
-        type  = cleaned_data.get("type")
+        type = cleaned_data.get("type")
 
         # validate URL
         # must be null for home page, not null for other pages
-        if type==Post.TYPE_PAGE:
+        if type == Post.TYPE_PAGE:
 
             url = cleaned_data.get("url")
             # only allows letters, numbers, '-', '_' and '/'
             if re.search("[^a-zA-Z0-9_\-/]", url):
                 self._errors["url"] = self.error_class(["Page URL contains invalid characters"])
             if self.instance.is_home:
-                if len(url)>0:
+                if len(url) > 0:
                     self._errors["url"] = self.error_class(["Invalid URL for project home: %s" % url])
             else:
-                if url=='':
+                if url == '':
                     self._errors["url"] = self.error_class(["Invalid URL for project page"])
                 else:
                     # verify uniqueness: URL not used by any other existing instance
@@ -81,9 +81,9 @@ class PostForm(ModelForm):
 
         # validate "template"
         # must be not null for every page
-        if type==Post.TYPE_PAGE:
+        if type == Post.TYPE_PAGE:
             template = cleaned_data.get("template")
-            if template=='':
+            if template == '':
                 self._errors["template"] = self.error_class(["Invalid template"])
 
         # validate "topic"
@@ -95,7 +95,7 @@ class PostForm(ModelForm):
             del cleaned_data["newtopic"]
 
         # create new topic - if not existing already
-        elif newtopic!='':
+        elif newtopic != '':
             try:
                 topic = Topic.objects.get(name__iexact=newtopic)
             except ObjectDoesNotExist :
@@ -108,14 +108,14 @@ class PostForm(ModelForm):
 
     class Meta:
         model = Post
-        exclude = ('author','publication_date','update_date',)
+        exclude = ('author', 'publication_date', 'update_date',)
 
         widgets = {
-            'title': TextInput(attrs={'size':'80'}),
-            'label': TextInput(attrs={'size':'22'}),
-            'url': TextInput(attrs={'size':'60'}),
+            'title': TextInput(attrs={'size': '80'}),
+            'label': TextInput(attrs={'size': '22'}),
+            'url': TextInput(attrs={'size': '60'}),
             'template': Select(choices=POST_TEMPLATES),
             #'body': Textarea(attrs={'rows': 20}),
             # IMPORTANT: USE CKeditor to edit this field.
-            'body': Textarea(attrs={'class':'ckeditor'}),
+            'body': Textarea(attrs={'class': 'ckeditor'}),
         }
