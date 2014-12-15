@@ -2,6 +2,7 @@ from django.forms import Form, ModelForm, CharField
 from cog.models import *
 from cog.utils import default_clean_field, clean_url_field
 
+
 class BookmarkForm(ModelForm):
     
     class Meta:
@@ -9,9 +10,9 @@ class BookmarkForm(ModelForm):
         exclude = ('type',)
         
     # override __init__ method to provide a filtered list of options for the bookmark folder
-    def __init__(self, project, *args,**kwargs):
+    def __init__(self, project, *args, **kwargs):
         
-        super(BookmarkForm, self ).__init__(*args,**kwargs)
+        super(BookmarkForm, self).__init__(*args, **kwargs)
         
         # filter folders by project and active state
         self.fields['folder'].queryset = Folder.objects.filter(project=project).filter(active=True).distinct().order_by('order')
@@ -28,15 +29,17 @@ class BookmarkForm(ModelForm):
     def clean_description(self):
         return default_clean_field(self, 'description')
 
+
 class FolderForm(ModelForm):
-    
+
     class Meta:
+
         model = Folder
         
     # override __init__ method to provide a filtered list of options for the bookmark folder
-    def __init__(self, project, *args,**kwargs):
+    def __init__(self, project, *args, **kwargs):
         
-        super(FolderForm, self ).__init__(*args,**kwargs)
+        super(FolderForm, self).__init__(*args, **kwargs)
                 
         # filter parent posts by project and type
         self.fields['parent'].queryset = Folder.objects.filter(project=project, active=True).exclude(id=self.instance.id).distinct().order_by('order')
@@ -45,3 +48,5 @@ class FolderForm(ModelForm):
         
     def clean_name(self):
         return default_clean_field(self, 'name')
+
+
