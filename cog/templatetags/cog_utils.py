@@ -30,7 +30,7 @@ def concat(astring, bstring):
 def sortdict(the_dict):
     tuples = []
     for key, value in the_dict.iteritems():
-        tuples.append((key,value))
+        tuples.append((key, value))
     return sorted(tuples, key=lambda tuple: tuple[0])
 
 
@@ -50,14 +50,17 @@ def get_escape_function(autoescape):
         esc = lambda x: x
     return esc
 
+
 @register.filter
 def index(project):
     return site_index(project)
+
 
 @register.filter
 def settings_value(key):
     '''Custom filter to access a settings value in a template.'''
     return getattr(settings, key, '')
+
 
 # filter to list the bookmarks folders for a user, project combination
 @register.filter
@@ -152,6 +155,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
 
     return html
 
+
 # Filter to return a simple list of bookmark folders for a project, user combination
 # The filter is composed of tuples of the form (folder object, folder hierarchy label)
 @register.filter
@@ -165,6 +169,7 @@ def listFolders(project, user):
     folders_sorted = sorted(folders, key=lambda folder: folder.name, reverse=True)
     return folders_sorted
 
+
 def _listSubfolders(folder, hierarchy_label, folders):
     # add parent folder, append its name to hierarchy label
     hierarchy_label = "%s %s" % (hierarchy_label, folder.name)
@@ -175,10 +180,12 @@ def _listSubfolders(folder, hierarchy_label, folders):
     for subFolder in folder.children():
         _listSubfolders(subFolder, "%s >" % hierarchy_label, folders)
 
+
 # Filter that returns the top-level folder for a given project.
 @register.filter
 def getTopFolderForProject(project):
     return getTopFolder(project)
+
 
 # recursive function to build the project hierarchy tree
 def _project_tree(user, project, esc, expanded=False, dopeers=False, dochildren=False, icon='child'):
@@ -211,6 +218,7 @@ def _project_tree(user, project, esc, expanded=False, dopeers=False, dochildren=
 
     return html
 
+
 # filter to determine whether a user is enrolled in a group
 @register.filter
 def isEnrolled(user, group):
@@ -219,15 +227,17 @@ def isEnrolled(user, group):
     else:
         return False
 
+
 # filter to determine whether a user belongs to a project
 @register.filter
 def hasUser(project, user):
     return project.hasUser(user)
 
+
 # filter to determine whether a user is pending approval in a project
 @register.filter
 def hasUserPending(project, user):
-  return project.hasUserPending(user)
+    return project.hasUserPending(user)
 
 
 # filters to encode a membership HTTP parameter
