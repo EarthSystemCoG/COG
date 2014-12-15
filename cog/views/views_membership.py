@@ -63,7 +63,7 @@ def membership_list_all(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # load all users
-    if request.method=='GET':
+    if request.method == 'GET':
     
         users = User.objects.all().order_by('last_name')
         title = 'List All System Users'
@@ -72,11 +72,11 @@ def membership_list_all(request, project_short_name):
     else:
         
         match = request.POST['match']
-        users = User.objects.filter( ( Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match) ) )
+        users = User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match)))
         title = 'Lookup System User'
         
     view_name = 'membership_list_all'
-    return render_membership_page(request, project, users, title, view_name)
+    return render_system_users_page(request, project, users, title, view_name)
 
 # View to list the memberships for all users enrolled in the project
 @login_required
@@ -125,9 +125,19 @@ def render_membership_page(request, project, users, title, view_name):
     groups = project.getGroups()
         
     return render_to_response('cog/membership/membership_list.html', 
-                              {'project':project, 'users':users, 'groups':groups, 
-                               'view_name':view_name,
-                               'title': title, 'list_title':'%s Membership' % project.short_name }, 
+                              {'project': project, 'users': users, 'groups': groups,
+                               'view_name': view_name,
+                               'title': title, 'list_title': '%s Membership' % project.short_name },
+                              context_instance=RequestContext(request))
+
+def render_system_users_page(request, project, users, title, view_name):
+
+    # load project groups
+    groups = project.getGroups()
+
+    return render_to_response('cog/membership/system_list.html',
+                              {'project': project, 'users': users,
+                               'view_name': view_name, 'title': title},
                               context_instance=RequestContext(request))
 
 # view to cancel user's own membership in a project
