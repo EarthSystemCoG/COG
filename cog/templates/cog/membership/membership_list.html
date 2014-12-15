@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_center.html" %}
 
 {% block main %}
 
@@ -25,14 +25,23 @@
             enroll users in the project, create a child project, or delete the project altogether.
        </p>
    {% endif %}
-   
-   <div style="text-align:center">
-	   <form name="lookupUserForm" action="" method="post">
-	   	    {% csrf_token %}
-	   		Lookup user by username, first name, last name or email: <input name="match" id="match" value="{{request.POST.match}}" />
-	   		<input type="submit" name="Go"/>
-	   </form>
-   </div>
+
+   {% csrf_token %}
+
+       <table style="margin-left:125px; width:700px;">
+           <tr>
+               <td>
+                   <form name="lookupUserForm" action="" method="post">
+                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <b>User Name</b>, <b>First Name</b>, <b>Last Name</b>, or <b>Email</b>:</label>
+                        <input style="vertical-align: middle; width:40%;" type="text" name="match" id="match" value="{{request.POST.match}}" />
+	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
+                   </form>
+               </td>
+           </tr>
+       </table>
+
+
+
    
    {% paginate %}
     
@@ -51,9 +60,10 @@
 	                <td class="tophead">&nbsp;<br/>First Name</td>
 	                <td class="tophead">&nbsp;<br/>User Name</td>
 	                <td class="tophead">&nbsp;<br/>Email</td>
-	                <td style="text-align:center"><b>User<br/>Group</b></td>
-	                <td style="text-align:center"><b>Admin<br/>Group</b></td>
-	                <td style="text-align:center"><b>Cancel<br/>Membership</b></td>
+                    <td style="text-align: center;"><b>User<br/>Group</b></td>
+	                <td style="text-align: center;"><b>Admin<br/>Group</b></td>
+	                <td style="text-align: center;"><b>Cancel<br/>Membership</b></td>
+
 	            </tr>
 	            {% for user in users %}
 	                <tr>
@@ -61,7 +71,7 @@
 	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
 	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
 	                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-	                    <!-- encode HTTP parameters for new and old membership in users group -->
+                        <!-- encode HTTP parameters for new and old membership in users group -->
 	                    <td style="text-align:center">
 	                       {% with user|isEnrolled:project.getUserGroup as isEnrolled %}
 	                           <input type='checkbox' name='{{ project.getUserGroup|newMembership:user}}' 
