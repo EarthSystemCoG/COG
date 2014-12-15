@@ -79,7 +79,7 @@ class Project(models.Model):
     peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects', symmetrical=False)
     
     # the initial requestor of the project, if any
-    author = models.ForeignKey(User, blank=True, null=True, default=None)
+    author = models.ForeignKey(User, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     
     # the workspace of an inactive project is not accessible
     active = models.BooleanField(default=False, blank=False, null=False)
