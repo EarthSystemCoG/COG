@@ -9,8 +9,23 @@ class AboutusForm(ModelForm):
     
     class Meta:
         model = Project
-        exclude = ('short_name','parent','peers','author','active','private','logo','logo_url', 'maxUploadSize',
-                   'topics','taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview',)
+        
+                
+        fields = ('long_name', 'description', 'external_homepage', # ABOUTUS
+                  'mission', # MISSION
+                  'vision',  # VISION
+                  'values',  # VALUES
+                  'history', # HISTORY
+                  'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved', # CONTACTUS   
+                  'site',
+                  )
+        
+        #exclude = ('short_name','parent','peers','author','active','private','logo','logo_url', 'maxUploadSize',
+        #           'getting_started', 
+        #           'software_features', 'system_requirements', 'license', 'implementationLanguage', 'bindingLanguage', 'supportedPlatforms', 'externalDependencies',
+        #           'topics', 'tags', 'dataSearchEnabled',
+        #           'taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview',)
+                    
         widgets = {
                    'description': Textarea(attrs={'rows':6}),
                    'mission':     Textarea(attrs={'rows':8}),
