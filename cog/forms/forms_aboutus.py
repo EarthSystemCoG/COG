@@ -9,7 +9,7 @@ class AboutusForm(ModelForm):
     
     class Meta:
         model = Project
-        exclude = ('short_name','parent','peers','author','active','private','logo','logo_url',
+        exclude = ('short_name','parent','peers','author','active','private','logo','logo_url', 'maxUploadSize',
                    'topics','taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview',)
         widgets = {
                    'description': Textarea(attrs={'rows':6}),
