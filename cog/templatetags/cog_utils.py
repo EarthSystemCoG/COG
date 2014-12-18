@@ -127,7 +127,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         project = folder.project
         bookmarks = folder.bookmark_set.all()
         # ensure that the bookmarks are returned in descending order of creation (or id).
-        bookmarks_sorted = sorted(bookmarks, key=lambda bookmark: bookmark.id, reverse=True)
+        bookmarks_sorted = sorted(bookmarks, key=lambda _bookmark: _bookmark.id, reverse=True)
         for bookmark in bookmarks_sorted:
             deleteurl = reverse('bookmark_delete', args=[project.short_name.lower(), bookmark.id])
             updateurl = reverse('bookmark_update', args=[project.short_name.lower(), bookmark.id])
@@ -136,7 +136,9 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             # display [Edit|Delete] links
             if hasUserPermission(user, folder.project):
                 html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
-                html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Bookmark Confirmation','Are you sure you want to delete this bookmark ?', this)\">Delete</a> ]"
+                html += "<a href='" + deleteurl + \
+                        "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Bookmark Confirmation'," \
+                        "'Are you sure you want to delete this bookmark ?', this)\">Delete</a> ]"
             # display "Notes" link
             if bookmark.notes:
                 html += "&nbsp;&nbsp;[ <img src='%scog/img/notes_16x16.png' style='vertical-align:bottom;' /><a href='%s'> Notes</a> ]" % (static_url, reverse('post_detail', args=[bookmark.notes.id]))
@@ -199,7 +201,9 @@ def _project_tree(user, project, esc, expanded=False, dopeers=False, dochildren=
         html = "<li class='expanded'>"
     else:
         html = "<li>"
-    html += "<span class='%s'><a href='%s'>%s</a></span>" % (icon, reverse('project_home', args=[project.short_name.lower()]), esc(project.short_name))
+    html += "<span class='%s'><a href='%s'>%s</a></span>" % (icon, reverse('project_home',
+                                                                           args=[project.short_name.lower()]),
+                                                             esc(project.short_name))
 
     # this project's children
     if project.children and dochildren:
@@ -324,8 +328,9 @@ def getTopTabUrl(project, request):
 
 
 # Utility method to return a list of ACTIVE project tabs (top-tabs and sub-tabs).
-# Returns a list of list: [ [(tab1,False)], [(tab2,False)], [(tab3,True), (sub-tab3a,False), (subtab3b,True), (subtab3c,False),...], [(tab4,True)], [(tab5,True)], ...]
-# where sub-tabs are returned only for the currently selected top-tab, and each 3-tuple has the form: (tab label, tab url, selected)
+# Returns a list of list: [ [(tab1,False)], [(tab2,False)], [(tab3,True), (sub-tab3a,False), (subtab3b,True), (
+# subtab3c,False),...], [(tab4,True)], [(tab5,True)], ...] where sub-tabs are returned only for the currently selected
+# top-tab, and each 3-tuple has the form: (tab label, tab url, selected)
 @register.filter
 def getTopNav(project, request):
 
@@ -459,7 +464,9 @@ def get_external_urls(project, external_url_type):
 
 @register.filter
 def roles(user, project):
-    '''Lists the roles of a user in a project. '''
+    """
+    Lists the roles of a user in a project.
+    """
 
     roles = []
     for role in ROLES:
@@ -471,10 +478,10 @@ def roles(user, project):
 
 @register.filter
 def getUserAttribute(user, attribute):
-    '''
+    """
     Utility to look for a named attribute in the User/Collaborator object first,
     or in the UserProfile object if not found.
-    '''
+    """
     try:
         return getattr(user, attribute)
     except AttributeError:
@@ -489,7 +496,11 @@ def tabs(label):
 
 @register.filter
 def getTabLabel(tabkey):
-    '''Transforms "download/" into "tab_Download'''
+    """
+    Transforms "download/" into "tab_Download
+    :param tabkey:
+    :return:
+    """
     tabkey = tabkey[0:-1]
     return "tab_%s" % TAB_LABELS[tabkey]
 
@@ -609,7 +620,8 @@ def showMessage(message):
     '''Utility filter to translate message code into message strings.'''
 
     if message == 'password_reset':
-        return 'A new password has been e-mailed to you. Please use the new password to login and change it as soon as possible.'
+        return 'A new password has been e-mailed to you. ' \
+               'Please use the new password to login and change it as soon as possible.'
 
     elif message == 'user_add':
         return 'Thank you for creating an account. You can now login.'
@@ -619,10 +631,12 @@ def showMessage(message):
         #return 'Thank you for changing your password.'
 
     elif message == 'user_reminder':
-        return 'Your UserName and OpenID have been emailed to the address you provided.<br/>Please check your email box.'
+        return 'Your UserName and OpenID have been emailed to the address you provided.' \
+               '<br/>Please check your email box.'
 
     elif message == 'incomplete_profile':
-        return 'Please update your profile to contain at least the mandatory information required by COG (the fields in bold).'
+        return 'Please update your profile to contain at least the mandatory information required by COG ' \
+               '(the fields in bold).'
 
     elif message == 'invalid_idp':
         return 'Invalid Identity Provider (not trusted).'
