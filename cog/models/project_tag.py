@@ -3,6 +3,7 @@ from constants import APPLICATION_LABEL
 
 MAX_PROJECT_TAG_LENGTH = 20
 
+
 class ProjectTag(models.Model):
         
     name = models.CharField(max_length=MAX_PROJECT_TAG_LENGTH, blank=True, null=False, unique=True)

@@ -471,7 +471,17 @@ def users_display(request, project_short_name):
 
 @login_required
 def tags_update(request, project_short_name):
-            
+    """
+    This creates the list of tags in the new tag form.
+
+    :param request: A request for something.
+    :type request: :class:`django.http.request.HttpRequest`
+    :param str project_short_name: The name of the project.
+    :returns: tags_sorted: Alphabetized list of the tags associated with the project.
+    :rtype: list
+    :raises: ...
+    """
+
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
@@ -480,10 +490,14 @@ def tags_update(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
             
     # GET request
-    if request.method=='GET':
-        
-        form = ProjectTagForm(initial={'tags':project.tags.all()})
-                        
+    if request.method == 'GET':
+        tags_sorted = sorted(project.tags.all(), key=lambda _tag: _tag.name, reverse=False)
+        for i in tags_sorted:
+            print i, i.id
+
+        #form = ProjectTagForm(initial={'tags':project.tags.all()})
+        form = ProjectTagForm(initial={'tags': tags_sorted})
+
         return render_tags_form(request, project, form)
         
     else:
@@ -520,12 +534,16 @@ def tags_update(request, project_short_name):
         else:
             print 'Form is invalid  %s' % form.errors
             return render_tags_form(request, project, form)
-        
+
+
 def project_empty_browser(request, tab):
-    '''View invoked when project browser is displayed outside of a project context.'''
+    """
+    View invoked when project browser is displayed outside of a project context.
+    """
         
     return project_browser(request, '', tab)
-    
+
+
 def project_browser(request, project_short_name, tab):
     
     # optional tag filter

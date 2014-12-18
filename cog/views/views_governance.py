@@ -17,22 +17,28 @@ from cog.views.views_templated import templated_page_display
 # management_body_update proj.short_name.lower category
 
 def governance_display(request, project_short_name, tab):
-    ''' Dispatcher for display of governance pages. '''
+    """
+    :param request:
+    :param project_short_name:
+    :param tab:
+    :return:
+    Dispatcher for display of governance pages.
+    """
     
     template_page = 'cog/governance/_governance.html'
     template_title = TAB_LABELS[tab]
     if tab == TABS["GOVERNANCE"]:
         template_title = 'Governance Overview'
-        template_form_pages = { reverse( "governance_overview_update", args=[project_short_name] ) : 'Governance Overview' }
+        template_form_pages = {reverse("governance_overview_update", args=[project_short_name]): 'Governance Overview'}
     elif tab == TABS["BODIES"]:
-        template_form_pages = { reverse( "management_body_update", args=[project_short_name, 'Strategic'] ) : 'Strategic Bodies',
-                                reverse( "management_body_update", args=[project_short_name, 'Operational'] ) : 'Operational Bodies' }
+        template_form_pages = {reverse("management_body_update", args=[project_short_name, 'Strategic']): 'Strategic Bodies',
+                                reverse("management_body_update", args=[project_short_name, 'Operational']): 'Operational Bodies'}
     elif tab == TABS["ROLES"]:
-        template_form_pages = { reverse( "organizational_role_update", args=[project_short_name] ) : 'Roles' }
+        template_form_pages = {reverse("organizational_role_update", args=[project_short_name]): 'Roles'}
     elif tab == TABS["PROCESSES"]:
-        template_form_pages = { reverse( "governance_processes_update", args=[project_short_name] ) : 'Processes' }
+        template_form_pages = {reverse("governance_processes_update", args=[project_short_name]): 'Processes'}
     elif tab == TABS["COMMUNICATION"]:
-        template_form_pages = { reverse( "communication_means_update", args=[project_short_name] ) : 'Communication' }
+        template_form_pages = {reverse("communication_means_update", args=[project_short_name]): 'Communication' }
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 
@@ -41,7 +47,7 @@ def governance_display(request, project_short_name, tab):
 def management_body_update(request, project_short_name, category):
     
     # initialize ManagementBodyPurpose choices
-    if len(ManagementBodyPurpose.objects.all())==0:
+    if len(ManagementBodyPurpose.objects.all()) == 0:
         initManagementBodyPurpose()
         
     # use different forms to limit selection of ManagementBodyPurpose
