@@ -1,0 +1,60 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+   {% load cog_utils %}
+   {% load pagination_tags %}
+   {% autopaginate users 50 %}
+
+<p>Below is the list of system users. Click on the name to visit their profile (includes home site). Click on the email to contact the user. </p>
+   
+       <table style="margin-left:125px; width:700px;">
+           <tr>
+               <td>
+                   <form name="lookupUserForm" action="" method="post">
+                   	    {% csrf_token %}
+                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <b>User Name</b>, <b>First Name</b>, <b>Last Name</b>, or <b>Email</b>:</label>
+                        <input style="vertical-align: middle; width:30%;" type="text" name="match" id="match" value="{{request.POST.match}}" />
+	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
+	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
+                   </form>
+               </td>
+           </tr>
+       </table>
+
+   {% paginate %}
+
+   <div class="mybox">
+        <table>
+            <caption>System Users</caption>
+            <!-- <br/> tags in table are to align text to the bottom -->
+            <tr>
+                <td class="tophead">Last Name</td>
+                <td class="tophead">First Name</td>
+                <td class="tophead">User Name</td>
+                <td class="tophead">Email</td>
+                <td class="tophead">Number Of Projects</td>
+                <td class="tophead">Last Login</td>
+
+
+
+            </tr>
+            {% for user in users %}
+                <tr>
+                    <td><a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a></td>
+                    <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
+                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
+                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                    <td>{{ projects|length }}</td>
+                    <td>{{ user.last_login }}</td>
+                    <!-- encode HTTP parameters for new and old membership in users group -->
+
+                </tr>
+            {% endfor %}
+
+        </table>
+   </div>
+   <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='/'"/></div>
+   <div id="myDialog" class="yui-skin-sam"></div>
+
+{% endblock %}

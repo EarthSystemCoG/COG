@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     # COG administration
     url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
     url(r'^cogadmin/peers/$', 'cog.views.admin_peers', name='admin_peers' ),
+    url(r'^cogadmin/users/$', 'cog.views.admin_users', name='admin_users' ),
 
     url(r'^search/(?P<project_short_name>.+)/$', 'cog.views.search', name='search' ),
     url(r'^search_profile/config/(?P<project_short_name>.+)/$', 'cog.views.search_profile_config', name='search_profile_config'),

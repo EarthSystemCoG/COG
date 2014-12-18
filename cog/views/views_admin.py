@@ -9,6 +9,7 @@ import ast
 from django.contrib.sites.models import Site  
 from cog.models import PeerSite
 from django.forms.models import modelformset_factory
+from utils import getUsersThatMatch
 
 
 def site_home(request):
@@ -43,6 +44,25 @@ def admin_projects(request):
                                'title':'COG Projects Administration' 
                               }, 
                               context_instance=RequestContext(request))    
+    
+# admin page for listing all system users
+@user_passes_test(lambda u: u.is_staff)
+def admin_users(request):
+    
+    
+    # load all users
+    if request.method == 'GET':
+        users = User.objects.all().order_by('last_name')    
+    
+    # lookup specific user
+    else:
+        users = getUsersThatMatch(request.POST['match'])
+        
+    title = 'List Site Users'
+    return render_to_response('cog/admin/admin_users.html',
+                              {'users': users, 'title': title},
+                              context_instance=RequestContext(request))
+
     
 # admin page for managing peers
 @user_passes_test(lambda u: u.is_staff)

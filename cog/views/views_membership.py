@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
+from utils import getUsersThatMatch
 
 from cog.notification import notify
 from constants import PERMISSION_DENIED_MESSAGE
@@ -70,7 +71,7 @@ def membership_list_all(request, project_short_name):
     else:
         users = getUsersThatMatch(request.POST['match'])
         
-    title = 'List System Users'
+    title = 'List All Users'
     view_name = 'membership_list_all'
     return render_membership_page(request, project, users, title, view_name)
     #return render_system_users_page(request, project, users, title, view_name)
@@ -155,11 +156,6 @@ def render_system_users_page(request, project, users, title, view_name):
                                'view_name': view_name, 'title': title},
                               context_instance=RequestContext(request))
     
-def getUsersThatMatch(match):
-    '''Returns the list of users that match a given expression.'''
-    
-    return User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match)))
-
 # view to cancel user's own membership in a project
 # this view acts on the currently logged-in user
 @login_required
