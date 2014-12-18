@@ -10,12 +10,10 @@ import re
 from cog.utils import *
 from django.db.models import Q
 
-POST_TEMPLATES = (
-                   ("cog/post/page_template_sidebar_center_right.html", "Left Menu, Main Content, Right Widgets"),
-                   ("cog/post/page_template_sidebar_center.html", "Left Menu, Main Content"),
-                   ("cog/post/page_template_center_right.html", "Main Content, Right Widgets"),
-                   ("cog/post/page_template_center.html", "Main Content Only"),
-                 )
+POST_TEMPLATES = (("cog/post/page_template_sidebar_center_right.html", "Left Menu, Main Content, Right Widgets"),
+                  ("cog/post/page_template_sidebar_center.html", "Left Menu, Main Content"),
+                  ("cog/post/page_template_center_right.html", "Main Content, Right Widgets"),
+                  ("cog/post/page_template_center.html", "Main Content Only"),)
 
 
 class PostForm(ModelForm):
@@ -37,13 +35,13 @@ class PostForm(ModelForm):
             # exclude this post itself
             queryset = queryset & ~Q(id=instance.id)
         # get list of posts that can be a new post's parent page and alphabetize. Put the home page first.
-        self.fields['parent'].queryset = Post.objects.filter( queryset ).order_by('-is_home', 'title')
-        print self.fields['parent'].queryset
+        self.fields['parent'].queryset = Post.objects.filter(queryset).order_by('-is_home', 'title')
 
         #self.fields['parent'].queryset[0]=Q(is_home="true")
         self.fields['parent'].empty_label = "Top Level Page (no parent)"
         # limit topic selection to current project and post type
-        self.fields['topic'].queryset = Topic.objects.filter( Q(post__project=project) & Q(post__type=type)).distinct().order_by('name')
+        self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project) &
+                                                             Q(post__type=type)).distinct().order_by('name')
 
     # override form clean() method to execute combined validation on multiple fields
     def clean(self):
@@ -98,7 +96,7 @@ class PostForm(ModelForm):
         elif newtopic != '':
             try:
                 topic = Topic.objects.get(name__iexact=newtopic)
-            except ObjectDoesNotExist :
+            except ObjectDoesNotExist:
                 topic = Topic.objects.create(name=newtopic)
 
             cleaned_data["topic"] = topic
