@@ -163,10 +163,9 @@ def listFolders(project, user):
     #get the list of folders associated with a project
     folders = []
     _listSubfolders(getTopFolder(project), '', folders)
-    #return folders
 
     #sort the folders alphabetically
-    folders_sorted = sorted(folders, key=lambda folder: folder.name, reverse=True)
+    folders_sorted = sorted(folders, key=lambda folder_tuple: folder_tuple[0].name, reverse=True)
     return folders_sorted
 
 
