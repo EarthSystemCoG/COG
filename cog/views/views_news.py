@@ -7,7 +7,8 @@ from django.core.urlresolvers import reverse
 from cog.models import *
 from cog.forms import *
 from constants import PERMISSION_DENIED_MESSAGE
-    
+
+
 def news_list(request, project_short_name):
     
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -15,9 +16,10 @@ def news_list(request, project_short_name):
     return render_to_response('cog/news/news_list.html', 
                               {'project': project, 
                                'title': '%s News' % project.short_name,
-                               'project_news': news(project) }, 
-                               context_instance=RequestContext(request))
-    
+                               'project_news': news(project)},
+                              context_instance=RequestContext(request))
+
+
 def news_detail(request, news_id):
     
     news = get_object_or_404(News, pk=news_id)
@@ -26,8 +28,9 @@ def news_detail(request, news_id):
                               {'project': news.project, 
                                'news': news,
                                'title': news.title },
-                               context_instance=RequestContext(request))
-    
+                              context_instance=RequestContext(request))
+
+
 @login_required
 def news_update(request, news_id):
     
@@ -38,34 +41,33 @@ def news_update(request, news_id):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # GET method pre-populates the form with the news properties    
-    if (request.method=='GET'):
+    if request.method == 'GET':
                                     
         # create form from instance
         form = NewsForm(news.project, request.user, instance=news)
         return render_news_form(request, request.GET, form, news.project)
     
     # POST method saves the modified instance    
-    elif (request.method=='POST'):
+    elif request.method == 'POST':
         
         # update existing database model with form data
         form = NewsForm(news.project, request.user, request.POST, instance=news)
-        if (form.is_valid()):
+        if form.is_valid():
             
             # save data from web
             news = form.save()
                         
             # assign related projects
             news.other_projects = []
-            for proj in (  list(form.cleaned_data['parent_projects'])
+            for proj in (list(form.cleaned_data['parent_projects'])
                          + list(form.cleaned_data['peer_projects'])
-                         + list(form.cleaned_data['child_projects']) ):
+                         + list(form.cleaned_data['child_projects'])):
                 if proj not in news.other_projects.all():
                     news.other_projects.add(proj)
             
             # save new m2m relations
             news.save()
 
-            
             # redirect to project home (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('project_home', args=[news.project.short_name.lower()]))
         
@@ -86,7 +88,7 @@ def news_add(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
         
     # GET method pre-populates the form from the request parameters    
-    if (request.method=='GET'):
+    if request.method == 'GET':
         
         # create empty News object
         news = News()
@@ -129,7 +131,8 @@ def news_add(request, project_short_name):
             print "Form is invalid: %s" % form.errors
             news = form.instance
             return render_news_form(request, request.POST, form, news.project)
-        
+
+
 @login_required
 def news_delete(request, news_id):
     
@@ -141,9 +144,11 @@ def news_delete(request, news_id):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # show confirmation form
-    if (request.method=='GET'):
+    if request.method == 'GET':
         return render_to_response('cog/news/news_delete.html', 
-                                  {'news': news, 'project':project, 'title': 'Delete News' },
+                                  {'news': news,
+                                   'project': project,
+                                   'title': 'Delete News'},
                                   context_instance=RequestContext(request))
         
     # execute, and redirect to project's home page
@@ -152,27 +157,25 @@ def news_delete(request, news_id):
         # redirect to project home (GET-POST-REDIRECT)
         return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
 
-        
-
             
 # function to extract the other projects from the GET/POST request parameters
 def get_other_projects(qdict, method):
-    other_projects_refs =  qdict.getlist('other_projects')
+    other_projects_refs = qdict.getlist('other_projects')
     other_projects = []
     for ref in other_projects_refs:
-        if (method=='GET'):
+        if method == 'GET':
             other_project = get_object_or_404(Project, short_name=ref)
         else:
             other_project = get_object_or_404(Project, id=ref)
         other_projects.append(other_project)
     return other_projects
-    
+
+
 def render_news_form(request, qdict, form, project):
  
     return render_to_response('cog/news/news_form.html', 
                               {'form': form, 'title': 
                                'Publish %s News' % project.short_name,
-                               'project' : project,
+                               'project': project,
                                'other_projects' : get_other_projects(qdict, request.method) }, 
-                               context_instance=RequestContext(request))
-    
+                              context_instance=RequestContext(request))
