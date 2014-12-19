@@ -19,10 +19,10 @@ from project_tab import ProjectTab
 import shutil
 import os
 
-# method to retrieve all news for a given project, ordered by date
+# method to retrieve all news for a given project, ordered by original publication date
 def news(project):
     qset = Q(project=project) | Q(other_projects=project)
-    return News.objects.filter(qset).distinct().order_by('-update_date')
+    return News.objects.filter(qset).distinct().order_by('-publication_date')
 
 # method to return a list of project pages, organized by topic, and ordered by topic order first, page order second
 def site_index(project):
