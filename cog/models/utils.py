@@ -19,10 +19,12 @@ from project_tab import ProjectTab
 import shutil
 import os
 
+
 # method to retrieve all news for a given project, ordered by original publication date
 def news(project):
     qset = Q(project=project) | Q(other_projects=project)
     return News.objects.filter(qset).distinct().order_by('-publication_date')
+
 
 # method to return a list of project pages, organized by topic, and ordered by topic order first, page order second
 def site_index(project):
@@ -34,18 +36,21 @@ def site_index(project):
     index = []
     
     # first pages with no topic
-    pages = Post.objects.filter(project=project).filter(parent=None).filter(type='page').filter(topic=None).order_by('order')
-    index.append( Project.IndexItem(None, 0, pages) )
+    pages = Post.objects.filter(project=project).filter(parent=None).filter(type='page').\
+        filter(topic=None).order_by('order')
+    index.append(Project.IndexItem(None, 0, pages))
     
     # then pages by topic, ordered
     projectTopics = ProjectTopic.objects.filter(project=project).order_by('order')
     for projectTopic in projectTopics:
-        pages = Post.objects.filter(project=project).filter(parent=None).filter(type='page').filter(topic=projectTopic.topic).order_by('order')
+        pages = Post.objects.filter(project=project).filter(parent=None).filter(type='page')\
+            .filter(topic=projectTopic.topic).order_by('order')
         # only display topics that have associated pages
         if pages.all():
-            index.append( Project.IndexItem(projectTopic.topic, projectTopic.order, pages) )
+            index.append(Project.IndexItem(projectTopic.topic, projectTopic.order, pages))
    
     return index
+
 
 # method to initialize the project index
 # this method will order all the existing pages and topics for this project
@@ -58,7 +63,8 @@ def init_site_index(project):
     project.topics.clear()
     
     # list all top-level project pages, order by topic first, then title
-    pages = Post.objects.filter(project=project).filter(parent=None).filter(type='page').order_by('topic__name','title')
+    pages = Post.objects.filter(project=project).filter(parent=None)\
+        .filter(type='page').order_by('topic__name', 'title')
 
     topic_name = ''
     page_order = 0
@@ -75,7 +81,8 @@ def init_site_index(project):
         page_order = page_order + 1
         page.order = page_order
         page.save()
-        
+
+
 # Function to create and configure the project search profile with the default settings
 def create_project_search_profile(project):
     
@@ -99,13 +106,14 @@ def create_project_search_profile(project):
         project.searchprofile = profile
         project.save()
         return profile
-        
+
+
 # function to create the project home page
 # the home page fields are initialized to values obtained from the project object
 def create_project_home(project, user):
     home = Post.objects.create(type=Post.TYPE_PAGE, 
                                author=user,
-                               url= project.home_page_url(),
+                               url=project.home_page_url(),
                                template="cog/post/page_template_sidebar_center_right.html",
                                title=project.long_name,
                                is_home=True,
@@ -114,16 +122,18 @@ def create_project_home(project, user):
                                project=project,
                                body=project.description,
                                is_private=False,
-                               is_restricted=True) # project home page is restricted by default
+                               is_restricted=True)  # project home page is restricted by default
     home.save()
     return home
+
 
 # Function to dynamically create a project page,
 # if the given URL is one of the pre-defined URLs for a project.
 # The new page is initialized to some properties (the template, content etc.) that can later be changed.
-# This method assumes that the project home page exists already - in fact, the new page is created as a child of the home page.
+# This method assumes that the project home page exists already
+# - in fact, the new page is created as a child of the home page.
 def create_project_page(url, project):
-    if project.active==True:
+    if project.active == True:
         home_url = project.home_page_url()
         home_page = Post.objects.get(url=home_url)
         if home_page:
@@ -131,8 +141,8 @@ def create_project_page(url, project):
                 for _page in _pages:
                     if url == home_url + _page[1]:
                         page = Post.objects.create(type=Post.TYPE_PAGE, 
-                                                   author=home_page.author, # same author as home page
-                                                   url= url,
+                                                   author=home_page.author,  # same author as home page
+                                                   url=url,
                                                    template="cog/post/page_template_sidebar_center_right.html",
                                                    title='%s %s' % (project.short_name, _page[0]),
                                                    is_home=False,
@@ -142,41 +152,49 @@ def create_project_page(url, project):
                                                    project=project,
                                                    body='')
                         # SPECIAL CASE
-                        if _page[0]=='Logistics':
+                        if _page[0] == 'Logistics':
                             page.title = '%s Agenda' % project.short_name
                             page.save()
                         print "Created project page: %s" % url
                         return page
     return None
 
+
 def get_project_communication_means(project, internal):
     return CommunicationMeans.objects.filter(project=project).filter(internal=internal)
+
 
 def get_project_internal_communication_means(project):
     return get_project_communication_means(project, True)
 
+
 def get_project_external_communication_means(project):
     return get_project_communication_means(project, False)
 
+
 def listPeople(project):
-    '''
+    """
     Function to return a merged list of project public users, and project external collaborators.
-    '''
+    """
     
     pubUsers = project.getPublicUsers()
     collaborators = list(Collaborator.objects.filter(project=project))
     
     people = pubUsers + collaborators
     return sorted(people, key=lambda user: (user.last_name.lower(), user.first_name.lower()))
-    
+
+
 def delete_comments(object):
-    '''Function to delete comments associated with a generic object.'''
+    """
+    Function to delete comments associated with a generic object.
+    """
     
     object_type = ContentType.objects.get_for_model(object)
-    comments =  Comment.objects.filter(object_pk=object.id).filter(content_type=object_type)
+    comments = Comment.objects.filter(object_pk=object.id).filter(content_type=object_type)
     for comment in comments:
         print 'Deleting associated comment=%s' % comment.comment
         comment.delete()
+
 
 def get_or_create_default_search_group(project):
     
@@ -188,6 +206,7 @@ def get_or_create_default_search_group(project):
         group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=len(list(profile.groups.all())))
         group.save()
     return group    
+
 
 # Function to retrieve the project tabs in the order to be displayed.
 # The tabs can be optionally created if not existing already.
@@ -229,6 +248,7 @@ def get_or_create_project_tabs(project, save=True):
         tabs.append(tablist)
     return tabs           
 
+
 # method to set the state of the project tabs from the HTTP request parameters
 # note: tabs is a list of tabs (not a list of lists of tabs)
 def setActiveProjectTabs(tabs, request, save=False):
@@ -250,21 +270,29 @@ def setActiveProjectTabs(tabs, request, save=False):
                         
     return tabs
 
+
 def getUnsavedProjectSubFolders(project, request):
-    '''Function to create the project top-level sub-folders, in the appropriate state,
-       WITHOUT PERSISTING THEM TO THE DATABASE.'''
+    """
+    Function to create the project top-level sub-folders, in the appropriate state,
+    WITHOUT PERSISTING THEM TO THE DATABASE.
+    """
     
     folders = []
     for key, value in TOP_SUB_FOLDERS.items():
         folder = Folder(name=value, project=project, active=False)
         if request is not None and ("folder_%s" % value) in request.REQUEST.keys():
             folder.active = True
-        folders.append( folder )
+        folders.append(folder)
     return folders
 
 
 def createOrUpdateProjectSubFolders(project, request=None):
-    '''Function to set the state of the top sub-folders, creating them if necessary.'''
+    """
+    Function to set the state of the top sub-folders, creating them if necessary.
+    :param project:
+    :param request:
+    :return:
+    """
     
     topFolder = getTopFolder(project)
     
@@ -277,9 +305,12 @@ def createOrUpdateProjectSubFolders(project, request=None):
         else:
             folder.active = False
         folder.save()
-        
+
+
 def deleteProject(project, dryrun=True, rmdir=False):
-    '''Utility method to delete a project and associated objects, media.'''
+    """
+    Utility method to delete a project and associated objects, media.
+    """
     
     print "Deleting project=%s" % project.short_name
            
