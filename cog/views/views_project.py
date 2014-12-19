@@ -29,7 +29,7 @@ from cog.views.views_templated import templated_page_display
 @login_required
 def project_add(request):
     
-    if (request.method=='GET'):
+    if request.method == 'GET':
         
         # associate project to current site
         current_site = Site.objects.get_current()
@@ -57,8 +57,8 @@ def project_add(request):
         
         form = ProjectForm(instance=project)
         return render_to_response('cog/project/project_form.html',
-                                  { 'form': form, 'title' : 'Register New Project', 'project': parent, 
-                                    'action':'add', 'tabs':tabs, 'folders':folders },
+                                  {'form': form, 'title': 'Register New Project', 'project': parent,
+                                   'action': 'add', 'tabs': tabs, 'folders': folders},
                                   context_instance=RequestContext(request))
         
     else:
@@ -107,10 +107,13 @@ def project_add(request):
             folders = getUnsavedProjectSubFolders(project, request)
 
             return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Register New Project', 'action':'add', 'tabs':tabs, "folders":folders },
+                                      {'form': form, 'title': 'Register New Project', 'action': 'add', 'tabs': tabs,
+                                       'folders': folders},
                                       context_instance=RequestContext(request))
             
-# method to reorganize the project index menu 
+# method to reorganize the project index menu
+
+
 @login_required
 def project_index(request, project_short_name):
     
@@ -132,10 +135,10 @@ def project_index(request, project_short_name):
     index = site_index(project)
     
     # GET
-    if (request.method=='GET'):
+    if request.method == 'GET':
         
         return render_to_response('cog/project/index_form.html', 
-                                  {'index': index, 'title': 'Update Site Index', 'project':project, 'errors':errors },
+                                  {'index': index, 'title': 'Update Site Index', 'project': project, 'errors': errors},
                                   context_instance=RequestContext(request))
     # POST
     else:
@@ -144,7 +147,7 @@ def project_index(request, project_short_name):
         index = site_index(project)
         # map (topic, new_order)
         topicMap = {} 
-        valid = True # form data validation flag
+        valid = True  # form data validation flag
         
         for ii in index:
             topic = ii.topic
@@ -199,10 +202,11 @@ def project_index(request, project_short_name):
         else:
             # return to form to fix validation errors
             return render_to_response('cog/project/index_form.html', 
-                                  {'index': index, 'title': 'Update Site Index', 'project':project, 'errors':errors },
-                                   context_instance=RequestContext(request))
+                                      {'index': index, 'title': 'Update Site Index', 'project': project,
+                                       'errors': errors},
+                                      context_instance=RequestContext(request))
 
-    
+
 # method to update an existing project
 @login_required
 def project_update(request, project_short_name):
@@ -218,11 +222,11 @@ def project_update(request, project_short_name):
     if not userHasAdminPermission(request.user, project) and not request.user.is_staff:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if (request.method=='GET'):
+    if request.method == 'GET':
         
         # create project tabs if not existing already
         # (because new tabs were added after the project was initialized)
-        tabs = get_or_create_project_tabs(project) # save=True
+        tabs = get_or_create_project_tabs(project)  # save=True
         
         # retrieve top-level subfolders
         folders = getTopSubFolders(project)
@@ -230,8 +234,8 @@ def project_update(request, project_short_name):
         # create form object from model
         form = ProjectForm(instance=project)
         return render_to_response('cog/project/project_form.html', 
-                                  {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs, 'folders':folders,
-                                   'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
+                                  {'form': form, 'title': 'Update Project', 'project': project, 'action': 'update',
+                                   'tabs': tabs, 'folders': folders, 'NAVMAP': NAVMAP, 'INVNAVMAP': INVNAVMAP},
                                   context_instance=RequestContext(request))
     
     else:
@@ -248,7 +252,7 @@ def project_update(request, project_short_name):
             project = form.save()
             
             # delete logo?
-            if form.cleaned_data.get('delete_logo')==True:
+            if form.cleaned_data.get('delete_logo') == True:
                 project.logo.delete()
             
             # initialize project ?
@@ -280,14 +284,16 @@ def project_update(request, project_short_name):
             folders = getTopSubFolders(project)
             
             return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Update Project', 'project': project, 'action':'update', 'tabs': tabs, "folders":folders,
-                                       'NAVMAP': NAVMAP, 'INVNAVMAP':INVNAVMAP }, 
-                                       context_instance=RequestContext(request))
+                                      {'form': form, 'title': 'Update Project', 'project': project, 'action': 'update',
+                                       'tabs': tabs, "folders": folders,
+                                       'NAVMAP': NAVMAP, 'INVNAVMAP': INVNAVMAP},
+                                      context_instance=RequestContext(request))
             
 # method to update an existing project
+
+
 @login_required
 def project_delete(request, project_short_name):
-    
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
@@ -299,9 +305,9 @@ def project_delete(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if (request.method=='GET'):
+    if (request.method == 'GET'):
         return render_to_response('cog/project/project_delete.html', 
-                                  {'project': project, 'title': 'Delete Project' },
+                                  {'project': project, 'title': 'Delete Project'},
                                   context_instance=RequestContext(request))
     else:
         
@@ -311,18 +317,28 @@ def project_delete(request, project_short_name):
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_home'))
 
+
 def contactus_display(request, project_short_name):
-    ''' View to display the project "Contact Us" page. '''
+    """
+    View to display the project "Contact Us" page.
+    :param request:
+    :param project_short_name:
+    :return:
+
+    """
         
     tab = TABS["CONTACTUS"]
     template_page = 'cog/project/_project_contactus.html'
     template_title = TAB_LABELS[tab]
-    template_form_pages = { reverse("contactus_update", args=[project_short_name]) : 'Contact Us' }
+    template_form_pages = {reverse("contactus_update", args=[project_short_name]): 'Contact Us'}
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)    
+
 
 @login_required
 def contactus_update(request, project_short_name):
-    '''View to update the project "Contact Us" metadata.'''
+    """
+    View to update the project "Contact Us" metadata.
+    """
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -332,7 +348,7 @@ def contactus_update(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # GET request
-    if (request.method=='GET'):
+    if request.method == 'GET':
         
         # create form object from model
         form = ContactusForm(instance=project)
@@ -361,7 +377,7 @@ def contactus_update(request, project_short_name):
 
 def render_contactus_form(request, project, form):
     return render_to_response('cog/project/contactus_form.html', 
-                              {'form': form, 'title': 'Update Project Contact Us', 'project': project }, 
+                              {'form': form, 'title': 'Update Project Contact Us', 'project': project},
                               context_instance=RequestContext(request))
     
 # method to delete a project and all its associated groups, permissions
@@ -383,7 +399,8 @@ def deleteProject(project):
             
     # delete project
     project.delete()
-            
+
+
 # function to notify the site administrators that a new project has been requested
 def notifySiteAdminsOfProjectRequest(project, request):
     
@@ -395,19 +412,23 @@ def notifySiteAdminsOfProjectRequest(project, request):
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
 
+
 # function to notify a project creator that the project has been enabled
 def notifyAuthorOfProjectApproval(project, request):
     if project.author:
         url = project.home_page_url()
         url = request.build_absolute_uri(url)
         subject = "New Project Registration Confirmation"
-        message = "Congratulations, the project you requested: %s has been approved by the site administrator(s).\nThe project home page is: %s" \
-                % (project.short_name, url)
+        message = "Congratulations, the project you requested: %s has been approved by the site administrator(s).\n" \
+                  "The project home page is: %s" \
+                  % (project.short_name, url)
         notify(project.author, subject, message)
     
 # method to initialize a project by creating all objects associated with a project
 # note that the project object has been already created (and persisted) from the form data
 # also, note that the project tabs have already been persisted according to the selection expressed at creation
+
+
 def initProject(project):
     
     print "Initializing project: %s" % project.short_name
@@ -441,33 +462,37 @@ def initProject(project):
     
     # create images upload directory
     create_upload_directory(project)        
-        
+
+
 def development_display(request, project_short_name):
    
     tab = TABS["DEVELOPERS"] 
     template_page = 'cog/project/_project_developers.html'
-    template_form_pages = { reverse('development_update', args=[project_short_name]) : "Development" }
+    template_form_pages = {reverse('development_update', args=[project_short_name]): "Development"}
     template_title = "Development Overview"
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
 
 def software_display(request, project_short_name):
    
     tab = TABS["SOFTWARE"] 
     template_page = 'cog/project/_project_software.html'
-    template_form_pages = { reverse('software_update', args=[project_short_name]) : "Software" }
+    template_form_pages = {reverse('software_update', args=[project_short_name]): "Software"}
     template_title = "Software"
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
 
 def users_display(request, project_short_name):
    
     tab = TABS["USERS"] 
     template_page = 'cog/project/_project_users.html'
-    template_form_pages = { reverse('users_update', args=[project_short_name]) : "Getting Started" }
+    template_form_pages = {reverse('users_update', args=[project_short_name]): "Getting Started"}
     template_title = "Getting Started"
    
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
+
 
 @login_required
 def tags_update(request, project_short_name):
@@ -477,8 +502,8 @@ def tags_update(request, project_short_name):
     :param request: A request for something.
     :type request: :class:`django.http.request.HttpRequest`
     :param str project_short_name: The name of the project.
-    :returns: tags_sorted: Alphabetized list of the tags associated with the project.
-    :rtype: list
+    :returns: a constructed ProjectTagForm populated with tags associated with the project.
+    :rtype: ProjectTagForm
     :raises: ...
     """
 
@@ -491,13 +516,11 @@ def tags_update(request, project_short_name):
             
     # GET request
     if request.method == 'GET':
-        tags_sorted = sorted(project.tags.all(), key=lambda _tag: _tag.name, reverse=False)
-        for i in tags_sorted:
-            print i, i.id
 
-        #form = ProjectTagForm(initial={'tags':project.tags.all()})
-        form = ProjectTagForm(initial={'tags': tags_sorted})
-
+        # sorting of the tags occurs in the form itself in the _init_ function
+        # populate the form with the list of tags associated with this project...they are highlighted.
+        # that is project.tags.all().  All tags in the system are ProjectTags.objects.all().
+        form = ProjectTagForm(initial={'tags': project.tags.all()})
         return render_tags_form(request, project, form)
         
     else:
@@ -511,7 +534,7 @@ def tags_update(request, project_short_name):
             # empty list of project tags                  
             project.tags = [] 
                         
-            # reassign selected tags
+            # fill list with tags from the DB
             for tag in form.cleaned_data['tags']:
                 project.tags.add(tag)            
                        
@@ -562,7 +585,7 @@ def project_browser(request, project_short_name, tab):
     if tab == 'this':
         if project is not None:
             # object that keeps track of successful invocations, if necessary
-            display = DisplayStatus(True) # open all sub-widgets by default
+            display = DisplayStatus(True)  # open all sub-widgets by default
             html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
             html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
             html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)
@@ -574,6 +597,7 @@ def project_browser(request, project_short_name, tab):
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
     
     return HttpResponse(html, content_type="text/html")
+
 
 # utility class to track the status of the browser widgets
 class DisplayStatus:
@@ -619,7 +643,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
             display = 'none'
 
     html += '<div id="'+widgetId+'" style="display:'+display+'">';  # height of individual project widgets
-    if len(projects)==0:
+    if len(projects) == 0:
         if tagError is not None:
             html += "<i>"+tagError+"</i>"
         else:
@@ -632,7 +656,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
         # loop over projects sorted by name
         for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):
             #project_url = "http://%s%s" % (prj.site.domain, reverse('project_home', args=[prj.short_name.lower()]))
-            html += '<a href="'+ prj.getAbsoluteUrl() +'">'+prj.short_name+'</a><br/>'
+            html += '<a href="' + prj.getAbsoluteUrl() + '">' + prj.short_name + '</a><br/>'
     html += '</div>'
 
     # return both the HTML and the 'open' status of the following widget
@@ -641,27 +665,27 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
 # Utility method to list the projects for the browse widget
 def listBrowsableProjects(project, tab, tag, user, widgetName):
             
-    if tab=='this':
-        if widgetName=='Parent projects':
+    if tab == 'this':
+        if widgetName == 'Parent projects':
             projects = projectManager.listAssociatedProjects(project, 'parents')
-        elif widgetName=='Peer projects':
+        elif widgetName == 'Peer projects':
             projects = projectManager.listAssociatedProjects(project, 'peers')
-        elif widgetName=='Child projects':
+        elif widgetName == 'Child projects':
             projects = projectManager.listAssociatedProjects(project, 'children')
             
-    elif tab=='all':
+    elif tab == 'all':
         #projects = Project.objects.filter(active=True)
         projects = projectManager.listAllProjects()
         
-    elif tab=='my':
+    elif tab == 'my':
         if not user.is_authenticated():
             projects = Project.objects.none()
         else:
             # retrieve all active projects for this user
-            projects = getProjectsForUser(user, False) # includePending==False
+            projects = getProjectsForUser(user, False)  # includePending==False
 
     # filter projects
-    _projects = [] # empty list
+    _projects = []  # empty list
     for prj in projects:
 
         prjtags = list(prj.tags.all())
@@ -683,12 +707,13 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
     
     return _projects
 
+
 def render_tags_form(request, project, form):
     
     return render_to_response('cog/project/project_tags_form.html', 
-                             {'form': form,
-                              'title': 'Update Tags for Project: %s' % project.short_name,
-                              'project': project }, 
+                              {'form': form,
+                               'title': 'Update Tags for Project: %s' % project.short_name,
+                               'project': project},
                               context_instance=RequestContext(request))
 
 
@@ -703,7 +728,7 @@ def development_update(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # GET request
-    if request.method=='GET':
+    if request.method == 'GET':
                 
         # create form object from model
         form = DevelopmentOverviewForm(instance=project)
@@ -730,7 +755,8 @@ def development_update(request, project_short_name):
         else:
             print 'Form is invalid %s' % form.errors
             return render_development_form(request, project, form)
-        
+
+
 @login_required
 def software_update(request, project_short_name):
     
@@ -738,7 +764,8 @@ def software_update(request, project_short_name):
     form_template = 'cog/project/software_form.html'
     form_template_title = 'Software Update'
     display_view = 'software_display'
-    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
+    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title,
+                                display_view)
 
 
 @login_required
@@ -748,7 +775,8 @@ def users_update(request, project_short_name):
     form_template = 'cog/project/users_form.html'
     form_template_title = 'Getting Started Update'
     display_view = 'users_display'
-    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title, display_view)
+    return _project_page_update(request, project_short_name, formClass, form_template, form_template_title,
+                                display_view)
 
 
 @login_required
@@ -764,14 +792,14 @@ def _project_page_update(request, project_short_name,
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # GET request
-    if request.method=='GET':
+    if request.method == 'GET':
                 
         # create form object from model
         form = formClass(instance=project)
 
         # render form    
         return render_to_response(form_template,
-                                  {'title' : form_template_title, 'project': project, 'form':form },
+                                  {'title': form_template_title, 'project': project, 'form': form},
                                   context_instance=RequestContext(request))
     
     # POST request
@@ -793,11 +821,11 @@ def _project_page_update(request, project_short_name,
         else:
             print 'Form is invalid %s' % form.errors
             return render_to_response(form_template,
-                                      {'title' : form_template_title, 'project': project, 'form':form },
+                                      {'title': form_template_title, 'project': project, 'form': form},
                                       context_instance=RequestContext(request))
 
         
 def render_development_form(request, project, form):
     return render_to_response('cog/project/development_form.html',
-                              {'title' : 'Development Overview Update', 'project': project, 'form':form },
+                              {'title' : 'Development Overview Update', 'project': project, 'form':form},
                                context_instance=RequestContext(request))

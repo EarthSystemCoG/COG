@@ -5,9 +5,10 @@
 	{% load cog_utils %}
 	
 	<p>
-	Select existing tags to use for this project, 
-	or create new tags using only letters, numbers, '_' or '-' (maximum of 20 characters per tag).	 
-	Tags not associated with any project are automatically deleted.   
+	    Select from the list of pre-existing tags or create a new tag.
+    </p>
+	<p>
+        Tags not associated with any project are automatically deleted from the system.
 	</p>
 
 	<form action="" method="post">
@@ -24,7 +25,12 @@
 				<tr>
 					<td style="width:30%; text-align: right; vertical-align: middle;" nowrap="nowrap">Or enter a new tag:</td>
 					<td>{{ form.name }} {{ form.name.errors }}</td>
-				</tr>				 			
+				</tr>
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                       <b>Use only letters, numbers, '_' or '-' (maximum of 20 characters per tag).</b>
+                    </td>
+                </tr>
 			</table>
 		</div>
 	
