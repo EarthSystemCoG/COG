@@ -1,4 +1,6 @@
-<!--LOCATION:/cog/templates/cog/search/_search_text.html-->
+
+
+<!--START:/cog/templates/cog/search/_search_text.html-->
 <!-- Title -->
 <h1 class="title">{{ project.short_name }} Data Search </h1>
 
@@ -32,12 +34,12 @@
         <table>
         <tr>
 	       <td style="width:50%;text-align:center;vertical-align:middle;">
-           &nbsp;<input type="submit" value="Search" return true;"/>
+           &nbsp; <input type="submit" value="Search" return true;"/>
 		   &nbsp; <input type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
 	      {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
 	      Display
 	      <select name="limit" id="limit">
-	      <option value="10" {% if search_input.limit = 10 %} selected="selected" {% endif %}>10</option>
+	      <option value="10" {% if search_input.limit == 10 %} selected="selected" {% endif %}>10</option>
 	      <option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
 	      <option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
 	      <option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
@@ -71,6 +73,7 @@ page. At some point we may want to move this into cogstyle.css //-->
 
 <!-- Form Errors -->
 {% if error_message %}
-	<p/><div class="error-box">{{ error_message }}</div>
+	<p></p><div class="error-box">{{ error_message }}</div>
 {% endif %}
 
+<!--END:/cog/templates/cog/search/_search_text.html-->

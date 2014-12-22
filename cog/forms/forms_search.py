@@ -4,17 +4,19 @@ import re
 from django import forms
 from cog.utils import default_clean_field, clean_url_field
 
+
 class SearchProfileForm(ModelForm):
     
     class Meta:
         model = SearchProfile
-        
+
     def clean_url(self):
         return clean_url_field(self, 'url')
     
     def clean_constraints(self):
         return clean_url_field(self, 'constraints')
-        
+
+
 class SearchFacetForm(ModelForm):
     
     class Meta:
