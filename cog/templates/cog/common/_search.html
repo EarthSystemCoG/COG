@@ -1,4 +1,6 @@
-<!-- 
+<!--START: /templates/cog/common/_search.html-->
+
+<!--
     Template snippet for search
     #@param object_type : mandatory results type
     @param url : mandatory search results url
@@ -7,6 +9,8 @@
     @param topic : optional currently selected topic
 -->
 <!--LOCATION:/cog/templates/cog/common/_search.html-->
+
+<!--File search-->
  
 <div class="box-colored">
     
@@ -17,16 +21,23 @@
         <!-- text box -->
         <table>
            <tr>
-            <td style="vertical-align:middle;" nowrap="nowrap"> <img src="{{STATIC_URL}}/cog/img/icon_listlink.gif"></td>
-	    <td style="vertical-align:middle;"><b>Search</b></td>
-            <td class="long" style="vertical-align:middle;" ><input type="text" name="query" value="{{ query|escape }}">
+            <td style="vertical-align:middle;" nowrap="nowrap">
+                <img src="{{STATIC_URL}}/cog/img/icon_listlink.gif">
             </td>
-            <td>
-            <!-- sub-select -->
-	        {% if topic_list %}
-	            <td sytle="vertical-align:middle;" nowrap="nowrap"><b>Select Topic</b></td> 
+	        <td style="vertical-align:middle;">
+                <label for="search_text"><b>Search</b></label>
+            </td>
+            <td class="long" style="vertical-align:middle;" >
+                <input id="search_text" type="text" name="query" value="{{ query|escape }}">
+            </td>
+
+             <!-- sub-select -->
+	         {% if topic_list %}
+	            <td style="vertical-align:middle;" nowrap="nowrap">
+                    <label for="topic"><b>Select Topic</b></label>
+                </td>
 	            <td style="vertical-align:middle;">
-		            <select name="topic">
+		            <select id="topic" name="topic">
 		                <option value="">-- Any --</option>
 		                {% for option in topic_list %}
 		                    {% if option.name == topic %}
@@ -36,29 +47,29 @@
 		                    {% endif %}
 		                {% endfor %}
 		            </select>
-	            </td> 
-	        {% endif %}  
-            </td>
+	            </td>
+	         {% endif %}
+
             <!-- filter by -->
             <td nowrap="nowrap" style="vertical-align:middle;">
-            	<b>Type</b>
-            	<select name="filter_by" onChange="document.getElementById('searchForm').submit()">
-            		<option value="All"           {% if filter_by = 'All' %}  selected="selected" {% endif %}>All Files
-            		<option value="Image"         {% if filter_by = 'Image' %} selected="selected" {% endif %}>Images
-            		<option value="Text"          {% if filter_by = 'Text' %} selected="selected" {% endif %}>Text
-            		<option value="Presentation"  {% if filter_by = 'Presentation' %} selected="selected" {% endif %}>Presentations
-            		<option value="Program"       {% if filter_by = 'Program' %} selected="selected" {% endif %}>Programs
+            	<label for="file_type"><b>Type</b></label>
+            	<select name="filter_by" id="file_type" onChange="document.getElementById('searchForm').submit()">
+            		<option label="All" value="All"           {% if filter_by == 'All' %}  selected="selected" {% endif %}>All Files
+            		<option label="Image" value="Image"         {% if filter_by == 'Image' %} selected="selected" {% endif %}>Images
+            		<option label="Text" value="Text"          {% if filter_by == 'Text' %} selected="selected" {% endif %}>Text
+            		<option label="Presentation" value="Presentation"  {% if filter_by == 'Presentation' %} selected="selected" {% endif %}>Presentations
+            		<option label="Program" value="Program"       {% if filter_by == 'Program' %} selected="selected" {% endif %}>Programs
             	</select>
             </td>
             
             <!-- order by -->
             <td nowrap="nowrap" style="vertical-align:middle;">
-            	<b>Order By</b>
-            	<select name="order_by" onChange="document.getElementById('searchForm').submit()">
-            		<option value="title"        {% if order_by = 'title' %}  selected="selected" {% endif %}>Title
-            		<option value="-title"       {% if order_by = '-title' %} selected="selected" {% endif %}>Title (reversed)
-            		<option value="-update_date" {% if order_by = '-update_date' %} selected="selected" {% endif %}>Last Update
-            		<option value="update_date"  {% if order_by = 'update_date' %} selected="selected" {% endif %}>Last Update (reversed)
+            	<label for="order"><b>Order By</b></label>
+            	<select name="order_by" id="order" onChange="document.getElementById('searchForm').submit()">
+            		<option value="title"        {% if order_by == 'title' %}  selected="selected" {% endif %}>Title
+            		<option value="-title"       {% if order_by == '-title' %} selected="selected" {% endif %}>Title (reversed)
+            		<option value="-update_date" {% if order_by == '-update_date' %} selected="selected" {% endif %}>Last Update
+            		<option value="update_date"  {% if order_by == 'update_date' %} selected="selected" {% endif %}>Last Update (reversed)
             	</select>
             </td>
             <td style="vertical-align:top;"><input type="submit" value="Search"></td>
@@ -67,3 +78,4 @@
     </form>
 </div>
 &nbsp;
+<!--END: /templates/cog/common/_search.html-->

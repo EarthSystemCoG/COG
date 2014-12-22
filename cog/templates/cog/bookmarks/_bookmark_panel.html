@@ -31,7 +31,8 @@
     function isFieldValid(fieldName, fieldValue) {
       for (var i = 0; i < fieldValue.length; i++) {
             if (iChars.indexOf(fieldValue.charAt(i)) != -1) {
-                showMessage("Validation Error", "The field: '"+fieldName+"' contains the illegal character: '"+fieldValue.charAt(i)+"'");
+                showMessage("Validation Error", "The field: '"+fieldName+"' contains the illegal character: '"
+                        +fieldValue.charAt(i)+"'");
                 return false;
             }
         }
@@ -134,17 +135,17 @@
 			            </td>
 			        </tr>
 			        <tr>
-			            <td valign="top" nowrap="nowrap"><b>Name</b></td>
-			            <td class="long"><input type="text" name="name" /><div id="name-error"></div></td>
+			            <td valign="top" nowrap="nowrap"><label for="name"><b>Name</b></label></td>
+			            <td class="long"><input type="text" id="name" name="name" /><div id="name-error"></div></td>
 			        </tr>
 			        <tr>
-                        <td valign="top" nowrap="nowrap"><b>Description</b></td>
-                        <td class="long"><input type="text" name="description" /><div id="description-error"></div></td>
+                        <td valign="top" nowrap="nowrap"><label for="description"><b>Description</b></label></td>
+                        <td class="long"><input type="text" id="description" name="description" /><div id="description-error"></div></td>
                     </tr>			        
 			        <tr>
-			            <td valign="top" nowrap="nowrap"><b>Folder</b></td>
+			            <td valign="top" nowrap="nowrap"><label for="folder"><b>Folder</b></label></td>
 			            <td class="long">
-			                <select name="folder">  
+			                <select name="folder" id="folder">
 							    {% for folder in project|listFolders:user %}
 							        <option value="{{ folder.0.id }}"> {{ folder.1 }}</option>
 							    {% endfor %}

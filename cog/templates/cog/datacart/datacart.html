@@ -13,7 +13,7 @@
 
 	<!-- custom spacing of datacart table -->
 	<style scoped type="text/css">
-		#datacart-table td,th { padding-bottom: 0px; padding-top:2px; margin:0px; }
+		#datacart-table td,th { padding-bottom: 0; padding-top:2px; margin:0; }
 	</style>
 	
 	<!-- function triggered on other datacart selection -->
@@ -27,7 +27,7 @@
 
 {% block main %}
 
-<!--pulldown menu of other data carts-->
+<!--pull down menu of other data carts-->
 	<div style="text-align:center; font-weight:bold">
 		
 		<!-- local data cart -->
@@ -36,6 +36,7 @@
 		<!-- remote data carts -->
 		{% if datacarts.items|length > 0 %}
 			&nbsp; &nbsp;
+            <label for="dataCartSelect">My Other Data Carts</label>
 			<select name="dataCartSelect" id="dataCartSelect" onchange="javascript:handleOtherDataCartSelect(this)">
 				<option id="other_datacart">My Other Data Carts</option>
 				{% for openid, dc in datacarts.items %}
@@ -88,20 +89,22 @@
 		</table>
 		<table class="no-color" id="datacart-table">
 			<tr >
-			<td colspan="4" >
-			<!-- wget scripts place-holder  -->
-			<div style="width:500px;display:none;margin-left:auto;margin-right:auto;" class="padded-box" id="wget-scripts"></div>
-			</td>
+			   <td colspan="4" >
+			   <!-- wget scripts place-holder  -->
+			      <div style="width:500px;display:none;margin-left:auto;margin-right:auto;" class="padded-box" id="wget-scripts"></div>
+			   </td>
 			</tr>
 			<tr id="item_{{ item.identifier }}_hr">
-			<td colspan="4"><hr/></td>
+			   <td colspan="4">
+                   <hr/>
+               </td>
 			</tr>
 			<tr>
-				<td style="text-align:left; width=10px;">
-					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"></input>
+				<td style="text-align:left; width:10px;">
+					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"/>
 				</td>
-				<td style="text-align:left; width:90%; vertical-align: middle;"><b>Select All Datasets</b></td>
-				<td style="text-align:left; width=100px" nowrap="nowrap">
+				<td style="text-align:left; width:90%; vertical-align: middle;"><label for="datacart-checkbox"><b>Select All Datasets</b></label></td>
+				<td style="text-align:left; width:100px;" nowrap="nowrap">
 				  <a href="javascript:document.forms['emptyDataCartForm'].submit();"
 				  onclick="return urlConfirmationDialog('Empty Data Cart Confirmation','Are you sure you want to remove ALL items from the cart ?', this)">
 				  <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
@@ -117,6 +120,7 @@
 				</tr>
 				<tr id="item_{{ item.identifier }}">
 					<td style="text-align:center;">
+                        <label style="display:none;" for="dataitem-checkbox_{{ item.identifier }}">dataset checkbox</label>
 						<input type="checkbox" id="dataitem-checkbox_{{ item.identifier }}" name="{{ item.identifier }}"/>
 					</td>
 					<td style="text-align:left;">
