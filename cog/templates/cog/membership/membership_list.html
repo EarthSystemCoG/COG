@@ -73,8 +73,9 @@
                         <!-- encode HTTP parameters for new and old membership in users group -->
 	                    <td style="text-align:center">
 	                       {% with user|isEnrolled:project.getUserGroup as isEnrolled %}
-	                           <input type='checkbox' name='{{ project.getUserGroup|newMembership:user}}' 
-	                                  {% if isEnrolled %} checked="checked" {% endif %} />
+                              <label style="display:none" for="user_group">user group</label>
+	                          <input type='checkbox' id="user_group" name='{{ project.getUserGroup|newMembership:user}}'
+                                      {% if isEnrolled %} checked="checked" {% endif %} />
 	                           {% if isEnrolled %}
 	                               <input type='hidden' name='{{ project.getUserGroup|oldMembership:user}}' value="on"/>
 	                           {% endif %}
@@ -83,7 +84,8 @@
 	                    <!-- encode HTTP parameters for new and old membership in admins group -->
                         <td style="text-align:center">
                            {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}
-                               <input type='checkbox' name='{{ project.getAdminGroup|newMembership:user}}' 
+                               <label for="admin_group">admin group</label>
+                               <input type='checkbox' id="admin_group" name='{{ project.getAdminGroup|newMembership:user}}'
                                       {% if isEnrolled %} checked="checked" {% endif %} />
                                {% if isEnrolled %}
                                    <input type='hidden' name='{{ project.getAdminGroup|oldMembership:user}}' value="on"/>
