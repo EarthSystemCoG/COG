@@ -1,28 +1,11 @@
 {% extends "cog/common/layout_center.html" %}
-<!--LOCATION: /cog/templates/cog/openid/login2.html-->
-
-{% block extrahead %}
-	<style scoped type="text/css">
-		input.openid {
-		    background: url({% url 'openid-logo' %}) no-repeat;
-		    background-position: 0 50%;
-		    padding-left: 16px;
-		    width:380px;
-		}
-
-		.th {
-			font-weight: bold;
-			vertical-align: middle;
-			text-align: right;
-		}
-	</style>
-{% endblock %}
+<!--START: /cog/templates/cog/openid/login2.html-->
 
 {% block main %}
 
   {% load cog_utils %}
   
-  <div class="prepend-4 span-14">
+ <div class="prepend-4 span-14">
   
 	<p><i>Some CoG projects allow you to search and download data archived on <a href="http://www.esgf.org">
 	Earth System Grid Federation (ESGF)</a> data nodes.  In order
@@ -41,15 +24,17 @@
 	<!-- display extra message if available -->
 	{% if request.GET.message %}
 	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
-	   <p/>
+	   <p></p>
 	{% endif %}
 
-	<i>
-	You can download ESGF data using your existing CoG login.
-	Once you are logged in, edit your CoG profile to insert one (or more) ESGF OpenIDs.
-	To obtain an ESGF OpenID, see <a href="https://hydra.fsl.noaa.gov/esgf-web-fe/createAccount">this page</a>.
-	To download data from ESGF, you will have to login again with your ESGF OpenID.</i>
-	<p/>
+	<p>
+    <i>
+	You can download ESGF data using your existing CoG login. Once you are logged in, edit your CoG profile to insert
+        one (or more) ESGF OpenIDs. To obtain an ESGF OpenID, see
+        <a href="https://hydra.fsl.noaa.gov/esgf-web-fe/createAccount">this page</a>. To download data from ESGF, you
+        will have to login again with your ESGF OpenID.
+    </i>
+	</p>
 
 	<!-- authentication form -->
 	<div style="font-style: italic; text-align:center;">
@@ -57,96 +42,103 @@
 	</div>
 
 	<form method="post" action="{% url 'login' %}" method="post">
-	   {% csrf_token %}
-		<div class="mybox">
+	  {% csrf_token %}
+      <div class="mybox">
 		<table>
 		<caption>CoG Login</caption>
 		<tr>
-	          <td style="width:10%;vertical-align:middle;text-align:right;"><b>Username</b></td>
-	          <td style="width:90%;vertical-align:middle;">
-		    <input type="text" id="username" name="username" value="{{ request.REQUEST.username }}" size="30" />
-	          </td>
+	        <td style="width:10%;vertical-align:middle;text-align:right;">
+                <label for="username"><b>Username</b></label>
+            </td>
+	        <td style="width:90%;vertical-align:middle;">
+		        <input type="text" id="username" name="username" value="{{ request.REQUEST.username }}" size="30"/>
+	        </td>
 		</tr>
 		<tr>
-		  <!--inline styles needed to override default table elements-->
-		  <td style="width:20%;vertical-align:middle;text-align:right"><b>Password</b></td>
-	          <td style="width:50%;vertical-align:middle;"><input type="password" id="password" name="password" size="30" /></td>
-		  <td style="width:30%;vertical-align:middle;"><input type="submit" value="Login" /></td>
+		     <!--inline styles needed to override default table elements-->
+		    <td style="width:20%;vertical-align:middle;text-align:right">
+              <label for="password"><b>Password</b></label>
+            </td>
+	        <td style="width:50%;vertical-align:middle;"><input type="password" id="password" name="password" size="30"/></td>
+		    <td style="width:30%;vertical-align:middle;"><input type="submit" value="Login"/></td>
 		</tr>
 		</table>
-                </div>
+      </div>
 
-         <!-- next page field -->
-         {% if next %}
+      <!-- next page field -->
+      {% if next %}
 		 	<input type="hidden" name="next" value="{{ next }}" />
-		 {% endif %}
+      {% endif %}
 
-         <!-- reminder links -->
-		 <div style="position: relative;">
-			<span style="position: absolute; right: 0px;">
+      <!-- reminder links -->
+	  <div style="position: relative;">
+			<span style="position: absolute; right: 0;">
 			  <a href="{% url 'user_reminder' %}">Forgot Username?</a>
 			  &nbsp;
 			  <a href="{% url 'password_reset' %}">Forgot Password?</a>
 			</span>
             <br/>&nbsp;
-		 </div>
-
+	  </div>
 	</form>
 
 
-<!-- 2) OpenID login -->
+    <!-- 2) OpenID login -->
 
-		<h2>ESGF Login</h2>
+	<h2>ESGF Login</h2>
 
-		<!-- display extra message if available -->
+	<!-- display extra message if available -->
 		{% if request.GET.message %}
 		   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
-		   <p/>
+		   <p></p>
 		{% endif %}
 
-		<p><i>
-		You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time.
-		This method is recommended if you plan on downloading data from ESGF, 
-		since you will not be asked to enter your password again.
-		If this is the first time you are using your ESGF OpenID on CoG, you will be asked to
-		provide some additional information to create a new CoG account.
+	<p>
+        <i>
+		You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time. This method is recommended if you
+            plan on downloading data from ESGF, since you will not be asked to enter your password again. If this is
+            the first time you are using your ESGF OpenID on CoG, you will be asked to provide some additional
+            information to create a new CoG account.
 		</i>
-		</p>
-		<p/>
+	</p>
+	<p></p>
 
-		<div style="font-style: italic; text-align:center;">
+	<div style="font-style: italic; text-align:center;">
 		Please note that ESGF OpenIDs are case-sensitive.
- 	        </div>
+ 	</div>
 
-		<form name="fopenid" action="{% url 'openid-login' %}" method="post">
-    		{% csrf_token %}
+	<form name="fopenid" action="{% url 'openid-login' %}" method="post">
+       {% csrf_token %}
 
-    		<div class="mybox">
+          <div class="mybox">
 	    	<table>
 	    	  <caption>ESGF Login</caption>
 	    	  <tr>
-	    	    <td style="width:10%;text-align:right; vertical-align:middle;"><b>OpenID</b></td>
-		    <td style="width:80%; vertical-align:middle;"><input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/></td>
-	    	    <td style="width:10%;"><input name="bsignin" type="submit" value="Login"></td>
-	    	</td>
-	    	</tr>
+	    	    <td style="width:10%;text-align:right; vertical-align:middle;">
+                    <label for="openid_identifier"><b>OpenID</b></label>
+                </td>
+		        <td style="width:80%; vertical-align:middle;">
+                    <input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/>
+                </td>
+	    	    <td style="width:10%;">
+                    <input name="bsignin" type="submit" value="Login">
+                </td>
+	    	  </tr>
 	    	</table>
-    		</div>
+    	  </div>
 
-    		<!-- next page field -->
-			{% if next %}
+    	  <!-- next page field -->
+		  {% if next %}
 				<input type="hidden" name="next" value="{{ next }}" />
-			{% endif %}
+		  {% endif %}
 
-			<!-- reminder links -->
-			<div style="position: relative;">
-				<span style="position: absolute; right: 0px;">
+		  <!-- reminder links -->
+		  <div style="position: relative; margin-bottom:40px;">
+				<span style="position: absolute; right: 0;">
 					<a href="{% url 'user_reminder' %}">Forgot OpenID?</a>
 				</span>
-	            <br/>&nbsp;
-			</div>
 
-		</form>
-
-	</div>
+		  </div>
+	</form>
+ </div>
+<!--END: /cog/templates/cog/openid/login2.html-->
 {% endblock %}

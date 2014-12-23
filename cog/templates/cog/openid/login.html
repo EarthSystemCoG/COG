@@ -1,22 +1,5 @@
 {% extends "cog/common/layout_center.html" %}
-<!--LOCATION:/cog/templates/cog/openid/login.html-->
-
-{% block extrahead %}
-	<style type="text/css">
-		input.openid {
-		    background: url({% url 'openid-logo' %}) no-repeat;
-		    background-position: 0 50%;
-		    padding-left: 16px;
-		    width:380px;
-		}
-
-		.th {
-			font-weight:bold;
-			vertical-align:middle;
-			text-align:right;
-		}
-	</style>
-{% endblock %}
+<!--START:/cog/templates/cog/openid/login.html-->
 
 {% block main %}
 
@@ -83,7 +66,7 @@
     	    <caption>ESGF-CoG Login</caption>
     	    <tr>
     	      <td style="width:10%;text-align:right; vertical-align:middle;">
-                  <b>OpenID</b>
+                  <label for="openid_identifier"><b>OpenID</b></label>
               </td>
 	    	  <td style="width:80%; vertical-align:middle;">
 	    			<input type="text" id="openid_identifier" name="openid_identifier" value="{{ request.COOKIES.openid }}" size="70"/>
@@ -102,7 +85,7 @@
 		{% endif %}
 
 		<!-- reminder links -->
-		<div style="position: relative;">
+		<div style="position: relative; margin-bottom:40px;">
 			<span style="position: absolute; right: 0;">
 				<a href="{% url 'user_reminder' %}">Forgot OpenID?</a>
 				&nbsp;
@@ -110,10 +93,9 @@
 				&nbsp;
 				<a href="{% url 'user_add' %}">Create Account</a>
 			</span>
-            <br/>&nbsp;
 		</div>
 
 	</form>
 
-</div>
+</div><!--END:/cog/templates/cog/openid/login.html-->
 {% endblock %}
