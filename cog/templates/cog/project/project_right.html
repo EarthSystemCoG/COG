@@ -1,4 +1,4 @@
-<!--LOCATION:/cog/templates/cog/project/project_right.html-->
+<!--START:/cog/templates/cog/project/project_right.html-->
 <!--HTML validations requires the css to be outside the block -->
 
 {% block right %}
@@ -7,14 +7,14 @@
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
 	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data</div> <!--// end div.right_widget_header //-->
-	       <div id="search_entry" style="padding:4px; padding-right:0px;margin:0px;">
+	       <div id="search_entry" style="padding:4px; padding-right:0;margin:0;">
 		       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
 		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
 		            <input type="hidden" name="type" value="Dataset" />
-	                <input type="text" name="query" size="24" value="" style="width:137px; font-size:8.5pt; padding:0px; margin:0px; padding-left:2px;" placeholder="Enter Text"/>
-                        <input class="right_go" type="submit" value="Go"/>
+	                <input type="text" name="query" size="24" value="" style="width:137px; font-size:8.5pt; padding:0; margin:0; padding-left:2px;" placeholder="Enter Text"/>
+                    <input class="right_go" type="submit" value="Go"/>
 
 
 	                <!--  <select name="type">
@@ -23,7 +23,7 @@
 	                    <option value="Document">Documents</option>
 	                </select> -->
 		       </form>
-	       <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
+	           <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
 	       </div> <!--// end div id=search_entry //-->
 	  </div> <!--//end div.search-box //-->
   {% endif %}
@@ -43,10 +43,6 @@
               <li class="selected">&nbsp;&nbsp;<a href="tab1"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="tab2"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="tab3"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
-              <!--TODO: remove following lines if 2.8 reveals they are not needed. SJM removed the # in front of the links.-->
-              <!--<li class="selected">&nbsp;&nbsp;<a href="#tab1"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="#tab2"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="#tab3"><em><b>My</b></em></a>&nbsp;&nbsp;</li>-->
           </ul>
           <div class="yui-content">
               <div id="thisProjectsBrowser">&nbsp;</div>
@@ -60,31 +56,43 @@
        changing the position back to static and display back to inline. -->
 
 	   <div id="project_browser_controls">
-	        <div id="tag_entry" style="padding:4px; padding-right:0px;margin:0px;">
-		      <div id="tagAutoComplete" style="margin:0px; padding:0px; margin-top:8px; width:137px; postion:static; display:inline; "> <!--class=yui-ac-->
-			 <!--class=yui-ac-input-->
-		         <input type="text" id="projectBrowserText" placeholder="Enter Tag" style="position:static; width:137px; font-size:8.5pt;padding:0px;padding-left:2px;margin:0px;"/>
-			 <!-- onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
-		         <div style="width:133px" id="tagContainer"></div> <!--class=yui-ac-container-->
-		     </div>
-	           <input class="right_go"  type="submit" value="Go" id="projectBrowserButton" onclick="javascript:loadProjectBrowser('{{project.short_name}}')"/>
-		</div>     
-	       <div style="text-align:center; font-style: italic;">Start typing, or use the 'Delete' key to show all available tags.</div>
-          </div><!--// end div id=project_browser_controls //-->
+	       <div id="tag_entry" style="padding:4px; padding-right:0;margin:0;">
+                <!--class=yui-ac-->
+		        <div id="tagAutoComplete" style="margin:0; padding:0; margin-top:8px; width:137px; position:static; display:inline;">
+			        <!--class=yui-ac-input-->
+                    <label for="projectBrowserText" style="display:none;">Enter Tag</label>
+		            <input type="text" id="projectBrowserText" placeholder="Enter Tag" style="position:static;
+		            width:137px; font-size:8.5pt; padding:0; padding-left:2px; margin:0;"/>
+			        <!--onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
+                    <!--class=yui-ac-container-->
+		            <div style="width:133px" id="tagContainer">
 
-      </div><!--end div id=project_widget //-->
-    </div><!--end div id=yui-skin-sam // -->
+		            </div>
+		        </div>
+	            <input class="right_go"  type="submit" value="Go" id="projectBrowserButton" onclick="loadProjectBrowser('{{project.short_name}}')"/>
+		   </div>
+	       <div style="text-align:center; font-style: italic;">
+                Start typing, or use the 'Delete' key to show all available tags.
+           </div>
+       </div><!--// end div id=project_browser_controls //-->
+
+     </div><!--end div id=project_widget //-->
+   </div><!--end div id=yui-skin-sam // -->
 
    <!-- render YUI tabs -->
-    <script type="text/javascript">var myTabs = new YAHOO.widget.TabView("project_views");</script>
-
-    <!-- populate project browser -->
-    <script type="text/javascript">loadProjectBrowser('{{ project.short_name }}')</script>
-
-    <!-- initialize tags autocompletion -->
-    <script type="text/javascript">initTags()</script>
-
+   <script type="text/javascript">
+       var myTabs = new YAHOO.widget.TabView("project_views");
+   </script>
+   <!-- populate project browser -->
+   <script type="text/javascript">
+       loadProjectBrowser('{{ project.short_name }}')
+   </script>
+   <!-- initialize tags autocompletion -->
+   <script type="text/javascript">
+       initTags()
+   </script>
+<!--//END: /cog/templates/cog/project/project_right.html //-->
 {% endblock %}
 
-<!--//END: /cog/templates/cog/project/projet_right.html //-->
+
     

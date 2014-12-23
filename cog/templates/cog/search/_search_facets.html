@@ -1,3 +1,4 @@
+<!-- START: /cog/templates/cog/search/_search_facets.html-->
 {% load search_utils %}
 
 {% if search_output.facets %}
@@ -22,57 +23,54 @@
         <!-- facets grouping -->
         {% if facet_group.name and facet_group.name != 'default' %}
           <fieldset class="fieldset_box">
-	        <legend class="fieldset_legend">{{ facet_group.name }}</legend>
+	      <legend class="fieldset_legend">{{ facet_group.name }}</legend>
 	    {% endif %}
 
-			{% for key in facet_group.getKeys %}
-			  {% with search_output.facets|hash:key as facet %}
+		{% for key in facet_group.getKeys %}
+		   {% with search_output.facets|hash:key as facet %}
 			  {% if facet %}
-				<div class="yui-cms-accordion multiple fast fixIE">
+				 <div class="yui-cms-accordion multiple fast fixIE">
 					{% with search_input.constraints|getSelectedState:key as selected %}
 						<!-- if facet has been selected > open the accordion -->
 						<div class="yui-cms-item yui-panel {{ selected }} ">
-				            <div class="hd"><span class="facet-category">{{ facet.label }}</span></div>
-
+                            <!--text associated with each facet-->
+				            <div class="hd">
+                                <label for="checkbox_{{key}}_{{value_counts.0}}"><span class="facet-category">{{ facet.label }}</span></label>
+                            </div>
 				            <!-- only show the +/- button if there are options available -->
 				            {% if facet.getValues %}
 					            <div class="bd">
 				              		<div class="fixed">
-				              						              		  
 				              		  	{% for value_counts in facet.getSortedValues %}
 					              			{% if value_counts.1 > 0 and value_counts.0.lower != 'none' %}
 		              			    			<li class="facet-option">
+
 		              			    				<input type="checkbox" id="checkbox_{{key}}_{{value_counts.0}}" 
 		              			    				       name="{{value_counts.0}}"
 		              			    				       {% if value_counts.0 in search_input.constraints|getConstraints:key %}
 		              			    				         	checked='checked'
 		              			    				       {% endif %}
-		              			    				       onclick="javascript:setFacet('{{ key }}','{{ value_counts.0 }}');">
+		              			    				       onclick="setFacet('{{ key }}','{{ value_counts.0 }}');"/>
 		              			    				       {{ key|getFacetOptionLabel:value_counts.0 }} ({{value_counts.1}})
 		              			    			</li>
 					              			{% endif %}
 					              		{% endfor %}
-
 						      		</div>
 								</div>
 					            <div class="actions">
-							      <a href="#" class="accordionToggleItem">&nbsp;</a>
+							        <a href="#" class="accordionToggleItem">&nbsp;</a>
 							    </div>
 				            {% endif %}
-
 			        	</div>
 			        {% endwith %}
-				</div>
+				 </div>
 				{% endif %}
 			  {% endwith %}
 			{% endfor %}
-
 	    {% if facet_group.name %}
 	      </fieldset>
 	    {% endif %}
-
 	  {% endfor %}
-
 	</div>
-
 {% endif %}
+<!-- END: /cog/templates/cog/search/_search_facets.html-->

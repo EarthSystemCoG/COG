@@ -1,5 +1,3 @@
-
-
 <!--START:/cog/templates/cog/search/_search_text.html-->
 <!-- Title -->
 <h1 class="title">{{ project.short_name }} Data Search </h1>
@@ -21,9 +19,9 @@
         <table>
 	      <tr>
 	      <!--Safari requires the middle alignment. We may want to consolidate this style-->
-	       <td style="width:20%;text-align:center;vertical-align:middle;">Enter Text:</td>
+	       <td style="width:20%;text-align:center;vertical-align:middle;"><label for="search_query">Enter Text:</label></td>
 	       <td style="width:50%;vertical-align:middle;">
-               <input style="padding-top:1px;padding-bottom:1px;margin-bottom: 7px; margin-top:7px;" type="text" name="query" size="30" value="{{search_input.query}}"/>
+               <input style="padding-top:1px;padding-bottom:1px;margin-bottom: 7px; margin-top:7px;" type="text" id="search_query" name="query" size="30" value="{{search_input.query}}"/>
            </td>
           </tr>
         </table>
@@ -34,16 +32,17 @@
         <table>
         <tr>
 	       <td style="width:50%;text-align:center;vertical-align:middle;">
-           &nbsp; <input type="submit" value="Search" return true;"/>
+           &nbsp; <input type="submit" value="Search" return=true />
 		   &nbsp; <input type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
 	      {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
 	      Display
 	      <select name="limit" id="limit">
-	      <option value="10" {% if search_input.limit == 10 %} selected="selected" {% endif %}>10</option>
-	      <option value="20" {% if search_input.limit = 20 %} selected="selected" {% endif %}>20</option>
-	      <option value="50" {% if search_input.limit = 50 %} selected="selected" {% endif %}>50</option>
-	      <option value="100" {% if search_input.limit = 100 %} selected="selected" {% endif %}>100</option>
-	      </select> results per page
+	         <option value="10" {% if search_input.limit == 10 %} selected="selected" {% endif %}>10</option>
+	         <option value="20" {% if search_input.limit == 20 %} selected="selected" {% endif %}>20</option>
+	         <option value="50" {% if search_input.limit == 50 %} selected="selected" {% endif %}>50</option>
+	         <option value="100" {% if search_input.limit == 100 %} selected="selected" {% endif %}>100</option>
+	      </select>
+          <label for="limit">results per page</label>
 	     </td>
         </tr>
         </table>
@@ -53,27 +52,30 @@
 </table>
 
 <!-- optional checkbox flags -->
-<br/>
+<br>
 <!--//note: the style on the span below is to ensure the text lines up with the bottom of the checkbox. This needs to be the same style as on the update project
 page. At some point we may want to move this into cogstyle.css //-->
 <div style="text-align:center">
-	{% if replica_flag = True %}
-		&nbsp; <input type="checkbox" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />
-                       <span style="margin-top:2px;vertical-align:middle;"> Show All Replicas &nbsp;</span>
+	{% if replica_flag == True %}
+		&nbsp; <input type="checkbox" id="replica" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />
+                    <label for="replica"><span style="margin-top:2px;vertical-align:middle;"> Show All Replicas &nbsp;</span></label>
 	{% endif %}
-	{% if latest_flag = True %}
-		&nbsp; <input type="checkbox" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />
-                       <span style="margin-top:2px;vertical-align:middle;"> Show All Versions &nbsp;</span>
+	{% if latest_flag == True %}
+		&nbsp; <input type="checkbox" id="latest" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />
+                    <label for="latest"><span style="margin-top:2px;vertical-align:middle;"> Show All Versions &nbsp;</span></label>
 	{% endif %}
-	{% if local_flag = True %}
-		&nbsp; <input type="checkbox" name="local" {% if search_input.local %} checked="checked" {% endif %} />
-                       <span style="margin-top:2px;vertical-align:middle;"> Search Local Site Only</span>
+	{% if local_flag == True %}
+		&nbsp; <input type="checkbox" id="local" name="local" {% if search_input.local %} checked="checked" {% endif %} />
+                    <label for="local"><span style="margin-top:2px;vertical-align:middle;"> Search Local Site Only</span></label>
 	{% endif %}
 </div>
 
 <!-- Form Errors -->
 {% if error_message %}
-	<p></p><div class="error-box">{{ error_message }}</div>
+	<p></p>
+    <div class="error-box">{
+        { error_message }}
+    </div>
 {% endif %}
 
 <!--END:/cog/templates/cog/search/_search_text.html-->
