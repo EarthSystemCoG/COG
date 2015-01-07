@@ -6,14 +6,15 @@ export COG_DIR=/usr/local/cog
 # true if CoG is installed on ESGF node
 export ESGF=true
 
-# the specific CoG tag to install
-export COG_TAG=master
-
 # the user and group running the CoG application
 export USER=tomcat
 export GROUP=tomcat
 
 #===========================================
+
+# the specific CoG branch to install
+# the version installed is specified in the file setup.py of that branch
+export COG_TAG=master
 
 # pre-requisites
 pip install virtualenv
