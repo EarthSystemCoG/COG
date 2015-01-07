@@ -84,7 +84,7 @@
 	                    <!-- encode HTTP parameters for new and old membership in admins group -->
                         <td style="text-align:center">
                            {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}
-                               <label for="admin_group">admin group</label>
+                               <label style="display:none" for="admin_group">admin group</label>
                                <input type='checkbox' id="admin_group" name='{{ project.getAdminGroup|newMembership:user}}'
                                       {% if isEnrolled %} checked="checked" {% endif %} />
                                {% if isEnrolled %}
