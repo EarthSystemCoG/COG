@@ -1,0 +1,30 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %}
+
+    {% load comments %}
+    {% load pagination_tags %}
+    {% autopaginate threads 10 %}
+    
+     <div class="mybox">
+	    <table>
+	        <caption>{{ project.short_name }} Forum Discussions</caption>
+    
+    		<!-- loop over forum threads -->
+    		{% for thread in threads %}
+    			<tr>
+    				<td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
+    				<td>
+    					<b><a href="{% url 'thread_display' project.short_name thread.id %}">{{ thread.title }}</a></b>
+    					<hr/>
+    					Started by {{ thread.author }} on {{ thread.create_date }}, N comments, last comment on ... by ...
+    				</td>
+    			</tr>
+    		{% endfor %}
+    
+		</table>
+	</div>
+
+	{% paginate %}
+
+{% endblock %}

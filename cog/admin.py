@@ -59,3 +59,7 @@ admin.site.register(DataCart, admin.ModelAdmin)
 admin.site.register(Permission, admin.ModelAdmin)
 
 admin.site.register(ManagementBodyPurpose, admin.ModelAdmin)
+
+admin.site.register(Forum, admin.ModelAdmin)
+
+admin.site.register(ForumThread, admin.ModelAdmin)

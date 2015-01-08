@@ -112,5 +112,9 @@ urlpatterns = patterns('',
     # "CONTACT US"
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/update/$', 'cog.views.contactus_update', name='contactus_update'),   
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
+    
+    # "FORUM"
+    url(r'^projects/(?P<project_short_name>[^/]+)/forum/$', 'cog.views.forum_display', name='forum_display'),  
+    url(r'^projects/(?P<project_short_name>[^/]+)/thread/(?P<thread_id>[^/]+)/$', 'cog.views.thread_display', name='thread_display'),  
              
 )

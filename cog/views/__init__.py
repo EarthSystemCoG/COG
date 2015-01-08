@@ -17,5 +17,6 @@ from views_aboutus import *
 from views_search import *
 from cog.views.views_share import *
 from cog.views.views_access_control import *
+from cog.views.views_forum import *
 from cog.views.views_common import *
 from utils import *
