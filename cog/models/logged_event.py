@@ -40,7 +40,7 @@ def log_comment_event(sender, **kwargs):
 
     comment = kwargs['comment']
     instance = comment.content_object
-    project = instance.project
+    project = instance.getProject()
     user = comment.user
     classname = instance.__class__.__name__
     title = 'New comment on %s' % get_display_name(instance,classname)

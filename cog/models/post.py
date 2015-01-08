@@ -66,6 +66,9 @@ class Post(models.Model):
                 return self.label
             else:
                 return self.title
+            
+        def getProject(self):
+            return self.project
         
         def __unicode__(self):
             return self.title

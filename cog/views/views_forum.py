@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404, render_to_response
 from cog.models.project import Project
 from cog.models.forum import Forum, ForumThread
 from django.template import RequestContext
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 def forum_display(request, project_short_name):
     '''View to display a forum index of threads.'''
@@ -39,4 +41,14 @@ def thread_display(request, project_short_name, thread_id):
                                'title': '%s: %s' % (project.short_name, thread.title),
                                'project': project },
                               context_instance=RequestContext(request))
- 
+
+def forumthread_detail(request, forumthread_id):
+    '''This view is needed to support a common implementation for log_comment_event.
+       It redirects to the project-aware thread view.'''
+    
+    # retrieve requested thread
+    thread = get_object_or_404(ForumThread, id=forumthread_id)
+    
+    url = reverse('thread_display', kwargs={ 'thread_id':thread.id, 'project_short_name':thread.getProject().short_name })
+    
+    return HttpResponseRedirect( url )

@@ -12,12 +12,14 @@
     
     		<!-- loop over forum threads -->
     		{% for thread in threads %}
+    			{% get_comment_count for thread as comment_count %}
     			<tr>
     				<td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
     				<td>
     					<b><a href="{% url 'thread_display' project.short_name thread.id %}">{{ thread.title }}</a></b>
     					<hr/>
-    					Started by {{ thread.author }} on {{ thread.create_date }}, N comments, last comment on ... by ...
+    					Started by {{ thread.author }} on {{ thread.create_date }}, 
+    					           {{ comment_count }} comments, last comment on ... by ...
     				</td>
     			</tr>
     		{% endfor %}

@@ -40,6 +40,9 @@ class ForumThread(models.Model):
     # restricted flag: restricted posts can only be edited by project administrators
     #is_restricted = models.BooleanField(verbose_name='Restricted?', default=False, null=False)
     
+    def getProject(self):
+        return self.forum.project
+    
     def __unicode__(self):
         return self.title
 

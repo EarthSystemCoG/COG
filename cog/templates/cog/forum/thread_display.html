@@ -2,9 +2,10 @@
 
 {% block main %}
 
-    {% load comments %}
-    {% load pagination_tags %}
-
-    Here go the comments.
+    <!-- Comments -->
+    {% with thread as object %}
+        {% url 'thread_display' project.short_name thread.id as next_view %}
+        {% include 'cog/common/_comments.html' %}
+    {% endwith %}        
 
 {% endblock %}
