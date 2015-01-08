@@ -2,7 +2,7 @@ from django.db import models
 from constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from django.contrib.comments.signals import comment_was_posted
+from django_comments.signals import comment_was_posted
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver

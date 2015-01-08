@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
         
     # Comments
-    (r'^comments/', include('django.contrib.comments.urls')),
+    (r'^comments/', include('django_comments.urls')),
     
     # OpenID URLs included within CoG URLs
     #(r'^openid/', include('django_openid_auth.urls')),

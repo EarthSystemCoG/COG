@@ -6,7 +6,7 @@ Module containing common views.
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-from django.contrib.comments.models import Comment
+from django_comments.models import Comment
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from constants import PERMISSION_DENIED_MESSAGE
 from cog.models.project import userHasAdminPermission

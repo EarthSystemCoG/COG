@@ -11,7 +11,7 @@ from django.conf import settings
 from django.utils.timezone import now
 from news import News
 from django.db.models import Q
-from django.contrib.comments import Comment
+from django_comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from folder import Folder, getTopFolder, TOP_SUB_FOLDERS
 from cog.models.constants import DEFAULT_SEARCH_FACETS

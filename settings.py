@@ -214,7 +214,7 @@ INSTALLED_APPS = (
     'grappelli',
     'filebrowser',
     'django.contrib.admin',
-    'django.contrib.comments',
+    'django_comments',
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'pagination',
