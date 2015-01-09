@@ -114,7 +114,7 @@
 		   {% if request.user.id == user_profile.user.id or request.user.is_staff %}
 		       <div style="text-align:center;">
 		            <a href="{% url 'user_update' user_profile.user.id %}">Update my profile</a>
-		               {% if user_profile.isCogUser %}
+		               {% if user_profile.canChangePassword %}
 			               &nbsp; &nbsp;
 			               <a href="{% url 'password_update' %}">Change my password</a>
 		               {% endif %}

@@ -52,6 +52,13 @@ class UserProfile(models.Model):
     def isCogUser(self):
         ''' Utility method to detect a user with CoG login type.'''
         return self.type == 1
+    
+    def canChangePassword(self):
+        '''Utility method to detect whether a user change the password in the local CoG, ESGCET database.'''
+        
+        # no openid, or openid from local IdP
+        return self.type==1 or self.localOpenid() is not None
+        
 
     def isOpenidUser(self):
         ''' Utility method to detect a user with OpenID login type.'''
