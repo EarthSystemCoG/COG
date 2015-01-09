@@ -25,7 +25,7 @@
    {% paginate %}
 
    <div class="mybox">
-        <table>
+        <table style="width:800px; float:left; clear:right;">
             <caption>System Users</caption>
             <!-- <br/> tags in table are to align text to the bottom -->
             <tr>
@@ -33,10 +33,7 @@
                 <td class="tophead">First Name</td>
                 <td class="tophead">User Name</td>
                 <td class="tophead">Email</td>
-                <td class="tophead">Number Of Projects</td>
                 <td class="tophead">Last Login</td>
-
-
 
             </tr>
             {% for user in users %}
@@ -45,14 +42,25 @@
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
                     <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-                    <td>{{ projects|length }}</td>
                     <td>{{ user.last_login }}</td>
-                    <!-- encode HTTP parameters for new and old membership in users group -->
-
                 </tr>
             {% endfor %}
-
         </table>
+        <!--extra table listing the number of projects per user. Since this number is not attached to the user object,
+        but just a separate list[] in the same order, we need two tables. This design makes them look like one -->
+        <table style="width: 148px;">
+            <caption>&nbsp;</caption>
+            <tr>
+                <td class="tophead">Number Of Projects</td>
+            </tr>
+            {% for number in num_projects %}
+                <tr>
+                    <td>{{ number }}</td> <!--value in views_admins.py-->
+                </tr>
+            {%  endfor %}
+            </table>
+
+
    </div>
    <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='/'"/></div>
    <div id="myDialog" class="yui-skin-sam"></div>
