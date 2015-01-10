@@ -231,7 +231,8 @@ AUTHENTICATION_BACKENDS = (
 
 OPENID_CREATE_USERS = True
 
-OPENID_UPDATE_DETAILS_FROM_SREG = True
+# do NOT keep updating the user profile from the IdP
+OPENID_UPDATE_DETAILS_FROM_SREG = False
 
 # login page URL (default: '/accounts/login')
 LOGIN_URL = '/login'

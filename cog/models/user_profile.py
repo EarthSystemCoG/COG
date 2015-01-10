@@ -51,7 +51,8 @@ class UserProfile(models.Model):
 
     def isCogUser(self):
         ''' Utility method to detect a user with CoG login type.'''
-        return self.type == 1
+        
+        return self.type == 1        
 
     def isOpenidUser(self):
         ''' Utility method to detect a user with OpenID login type.'''
