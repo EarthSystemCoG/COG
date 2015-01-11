@@ -40,7 +40,7 @@
 	   </div><!--// end div id=comment_ //-->
 	{% endfor %}
 	{% paginate %}
-	
+		
 	<!-- only authenticated users can comment -->
 	{% if request.user|hasUserPermission:project %}
 		{% get_comment_form for object as form %}
