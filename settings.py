@@ -137,24 +137,6 @@ MEDIA_URL = '/site_media/'
 STATIC_URL = '/static/'
 STATIC_ROOT = rel('static/')
 
-# Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have traiing slash)
-FILEBROWSER_DIRECTORY = "projects/"
-
-# versions generated when browsing images
-FILEBROWSER_VERSIONS = {
-    'admin_thumbnail': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
-    'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
-    #'small': {'verbose_name': 'Small (2 col)', 'width': 140, 'height': '', 'opts': ''},
-    #'medium': {'verbose_name': 'Medium (4col )', 'width': 300, 'height': '', 'opts': ''},
-    #'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': ''},
-    #'large': {'verbose_name': 'Large (8 col)', 'width': 680, 'height': '', 'opts': ''},
-}
-
-# versions selectable through admin interface
-FILEBROWSER_ADMIN_VERSIONS = ['thumbnail']
-
-# absolute path to directory containing project specific media
-PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
 
 # absolute path to root directory containing projects data
 DATA_ROOT = os.path.join(MEDIA_ROOT, "data/")
@@ -229,11 +211,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-OPENID_CREATE_USERS = True
-
-# do NOT keep updating the user profile from the IdP
-OPENID_UPDATE_DETAILS_FROM_SREG = False
-
 # login page URL (default: '/accounts/login')
 LOGIN_URL = '/login'
 
@@ -271,3 +248,38 @@ if server_type=='PROD':
 
 # FIXME: necessary for openid-auth since django 1.6.5 otherwise session is not serialized correctly
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+#=== django-comments-contrib settings ======================================
+
+# The maximum length of the comment field, in characters. Comments longer than this will be rejected. Defaults to 3000.
+COMMENT_MAX_LENGTH = 10000
+
+#=== django filebrowser settings =========================
+
+# Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have traiing slash)
+FILEBROWSER_DIRECTORY = "projects/"
+
+# versions generated when browsing images
+FILEBROWSER_VERSIONS = {
+    'admin_thumbnail': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    #'small': {'verbose_name': 'Small (2 col)', 'width': 140, 'height': '', 'opts': ''},
+    #'medium': {'verbose_name': 'Medium (4col )', 'width': 300, 'height': '', 'opts': ''},
+    #'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': ''},
+    #'large': {'verbose_name': 'Large (8 col)', 'width': 680, 'height': '', 'opts': ''},
+}
+
+# versions selectable through admin interface
+FILEBROWSER_ADMIN_VERSIONS = ['thumbnail']
+
+# absolute path to directory containing project specific media
+PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
+
+#=== django_openid_auth settings =========================
+
+# create user account after first openid authentication
+OPENID_CREATE_USERS = True
+
+# do NOT keep updating the user profile from the IdP
+OPENID_UPDATE_DETAILS_FROM_SREG = False
+
