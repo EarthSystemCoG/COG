@@ -14,65 +14,67 @@
 <!--[if IE 11 ]>     <html class="ie11"> <![endif]--> 
 
  <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=9"> <!--required to get IE out of quirks mode-->
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+     <meta http-equiv="X-UA-Compatible" content="IE=9"> <!--required to get IE out of quirks mode-->
 
-        <!--// add meta-tag "title" //-->
-        <title>{% block head_title %} {{ title|removetags:"h2"|safe }} | Earth System CoG {% endblock %} </title>
+     <!--// add meta-tag "title" //-->
+     <title>{% block head_title %} {{ title|removetags:"h2"|safe }} | Earth System CoG {% endblock %} </title>
             
-        <!--// consider removing these all together //-->
-        <!--// <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/screen.css"/> //-->
-        <!--// <link type="text/css" rel="stylesheet"  media="print" href="{{STATIC_URL}}css/blueprint/print.css"/> //-->
+     <!--// consider removing these all together //-->
+     <!--// <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/screen.css"/> //-->
+     <!--// <link type="text/css" rel="stylesheet"  media="print" href="{{STATIC_URL}}css/blueprint/print.css"/> //-->
 
-        <!--// CSS for grid layout //-->
-        <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/reset.css"/> 
-        <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/grid.css"/>
-        <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/typography.css" />
+     <!--// CSS for grid layout //-->
+     <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/reset.css"/>
+     <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/grid.css"/>
+     <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/typography.css" />
 
-        <!-- [if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/><![endif] -->
+     !-- [if lt IE 8]>
+         <link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"/>
+     <![endif] -->
 
-        <!--// Load head section from template. Contains CSS //-->
-        {% block head %}{% endblock %}
+     <!--// Load head section from template. Contains CSS //-->
+     {% block head %}{% endblock %}
 
-        <!--// loading CoG-specific styles. Needs to be last //-->
-        <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
+     <!--// loading CoG-specific styles. Needs to be last //-->
+     <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
 
-       <!--// hooks for page-specific head content. Both style statements and javascript need to be loaded in the header only. //-->
-        {% block extrahead %}{% endblock %}
-        {% block extrastyle %}{% endblock %}
+     <!--// hooks for page-specific head content. Both style statements and javascript need to be loaded in the header only. //-->
+     {% block extrahead %}{% endblock %}
+     {% block extrastyle %}{% endblock %}
  </head>
     
  <body>
    <div class="content_wrapper"><!--// makes the footers always at the bottom of the window //-->
-     
-      <div class="custom_header_bar">
-         {% block custom_header %}  {% include 'cog/common/cog_header_custom.html' %} {% endblock %}
-     </div> <!--// end div.custom_header //-->
-
-
-      
-
-      <div class="container"> <!--// django class //-->
-	  
-	    {% block header %} {% include 'cog/common/cog_header.html' %} {% endblock %}
+       <div class="custom_header_bar">
+           {% block custom_header %}
+               {% include 'cog/common/cog_header_custom.html' %}
+           {% endblock %}
+       </div> <!--// end div.custom_header //-->
+       <div class="container"> <!--// django class //-->
+           <!-- load cog upper navigation bar and user menu -->
+  	       {% block header %}
+               {% include 'cog/common/cog_header.html' %}
+           {% endblock %}
 	 
             <!--Load block body from various templates -->
             {% block body %} {% endblock %}
-	    
-      </div> <!--// end div.container //-->
-      
-      <div class="push"></div> <!--// pushes the content wrapper down enough to hold the footer //-->
-
-  </div> <!--// end div.content_wrapper //-->
-
-
-      <div class="footer_bar">
-         <div class="footer_spacer"></div> <!--adds a margin above the footer-->
-	  {% block footer %}  {% include 'cog/common/cog_footer_bar_only.html' %} {% endblock %}
-      </div>
-      <div class="custom_footer_bar">
-          {% block custom_footer %}  {% include 'cog/common/cog_footer_custom.html' %} {% endblock %}
-      </div> <!--// end div.custom_footer_bar //-->
+       </div> <!--// end div.container //-->
+       <!--// pushes the content wrapper down enough to hold the footer //-->
+       <div class="push"></div> <!--// end div.push //-->
+   </div> <!--// end div.content_wrapper //-->
+   <div class="footer_bar">
+       <!--adds a margin above the footer-->
+       <div class="footer_spacer"></div> <!--// end footer spacer //-->
+	   {% block footer %}
+           {% include 'cog/common/cog_footer_bar_only.html' %}
+       {% endblock %}
+   </div> <!--// end footer_bar //-->
+   <div class="custom_footer_bar">
+       {% block custom_footer %}
+           {% include 'cog/common/cog_footer_custom.html' %}
+       {% endblock %}
+   </div> <!--// end div.custom_footer_bar //-->
+ <!--END: /layouts/templates/layouts/layout_base.html-->
 </body>
 </html>
-<!--END: /layouts/templates/layouts/layout_base.html-->	

@@ -2,12 +2,11 @@
 <!--This is the default custom footer for ESGF-COG-->
 <!--It contains space for the node URL address and institutional links-->
 <!--Maintaining the style will make ESGF consistent across nodes.-->
-  <div class="custom_footer">
-       <table class="custom_footer">
-       <tr>
-       <td style="width:30%;">{% if request.is_secure %}https{% else %}http{% endif %}://{{ site.domain }}</td>
-       <td style="width:70%;text-align:right;">&lt; Insert organizational links here &gt;</td>
-	</tr>
+<div class="custom_footer">
+    <table class="custom_footer">
+        <tr>
+           <td style="width:30%;">{% if request.is_secure %}https{% else %}http{% endif %}://{{ site.domain }}</td>
+           <td style="width:70%;text-align:right;">&lt; Insert organizational links here &gt;</td>
+        </tr>
 	</table>
-    </div>	
-<!--// end div.custom_footer //-->
+</div><!--// end div.custom_footer //-->
