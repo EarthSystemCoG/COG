@@ -70,41 +70,6 @@ def _render_forum_template(threads, project, form, request):
                                'form':form },
                               context_instance=RequestContext(request))
     
-    
-
-    
-@login_required
-def thread_add(request, project_short_name):
-        
-    # check permissions
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    if not userHasUserPermission(request.user, project):
-        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
-    if request.method=='POST':
-        
-        form = ForumThreadForm(request.POST)
-        if form.is_valid():
-            
-            # create a new thread object but don't save it to the database yet
-            thread = form.save(commit=False)
-            # modify the thread object
-            thread.author = request.user
-            thread.update_date = now()
-            thread.forum = project.forum
-            # save thread to database
-            thread.save()
-            
-            print 'private=%s' % thread.is_private
-                        
-            return HttpResponseRedirect( reverse('thread_detail', 
-                                                 kwargs={'project_short_name':project.short_name, 'thread_id':thread.id}) )
-            
-        else:
-            url =  reverse('forum_detail', kwargs={'project_short_name':project.short_name})
-            return HttpResponseRedirect( "%s?error=INVALID_TITLE" % url)
-
-    
 def thread_detail(request, project_short_name, thread_id):
     '''View to display all comments associated with a given forum thread.'''
     
@@ -122,7 +87,9 @@ def thread_detail(request, project_short_name, thread_id):
     
 @login_required
 def thread_update(request, project_short_name, thread_id):
-    print 'thread'
+    
+    
+    
     pass
 
 @login_required
