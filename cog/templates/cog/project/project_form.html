@@ -43,8 +43,8 @@
                <td style="width:15%;">
                    <b>Short Name</b>
                </td>
-               <td style="width:85%;">{
-                   { form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
+               <td style="width:85%;">
+                   {{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
                     <br/>WARNING: the project's 'Short Name' CANNOT be changed after project registration.
                </td>
                <!-- project already existing - cannot change short name -->
@@ -230,6 +230,15 @@
                     {{ form.dataSearchEnabled }}
                     [ Check to display the Data Search among the right widgets. ]
                     {{ form.dataSearchEnabled.errors }}
+                </td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">
+                    <span style="margin-top:2px">Enable forum notifications?</span>
+                </td>
+                <td class="long">
+                    {{ form.forumNotificationEnabled }}
+                    [ Check to email project administrators about forum postings (requires 'Forum' tab). ]
                 </td>
             </tr>
         </table>

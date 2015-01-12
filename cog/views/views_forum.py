@@ -18,8 +18,11 @@ def forum_detail(request, project_short_name):
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
+    # get or create project forum
+    (forum, created) = Forum.objects.get_or_create(project=project)
+    
     # retrieve all threads for this project
-    threads = ForumThread.objects.filter(forum=project.forum).order_by('-create_date')
+    threads = ForumThread.objects.filter(forum=forum).order_by('-create_date')
     
     return render_to_response('cog/forum/forum_detail.html',
                               {'threads': threads,

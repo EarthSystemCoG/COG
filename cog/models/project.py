@@ -100,8 +100,11 @@ class Project(models.Model):
     # list of project tags
     tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='projects')
     
-    # flag to disable the search widget
+    # flag to enable the search widget
     dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
+    
+    # flag to enable forum notifications
+    forumNotificationEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable forum notifications to project administrators ?')    
     
     maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False, help_text='Maximum upload size in bytes')
         
