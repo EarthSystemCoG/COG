@@ -10,23 +10,51 @@
 	    <table>
 	        <caption>{{ project.short_name }} Forum Discussions</caption>
     
-    		<!-- loop over forum threads -->
-    		{% for thread in threads %}
-    			{% get_comment_count for thread as comment_count %}
-    			<tr>
-    				<td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
-    				<td>
-    					<b><a href="{% url 'thread_detail' project.short_name thread.id %}">{{ thread.title }}</a></b>
-    					<hr/>
-    					Started by {{ thread.author }} on {{ thread.create_date }}, 
-    					           {{ comment_count }} comments, last comment on ... by ...
-    				</td>
-    			</tr>
-    		{% endfor %}
+    		{% if threads %}
+	    		<!-- loop over forum threads -->
+	    		{% for thread in threads %}
+	    			{% get_comment_count for thread as comment_count %}
+	    			<tr>
+	    				<td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
+	    				<td>
+	    					<b><a href="{% url 'thread_detail' project.short_name thread.id %}">{{ thread.title }}</a></b>
+	    					<hr/>
+	    					Started by {{ thread.author }} on {{ thread.create_date }}, 
+	    					           {{ comment_count }} comments, last comment on ... by ...
+	    				</td>
+	    			</tr>
+	    		{% endfor %}
+	    	{% else %}
+	    		<tr>
+	    			<td>This forum has no threads yet.</td>
+	    		</tr>
+	    	{% endif %}
     
 		</table>
 	</div>
 
 	{% paginate %}
+	
+	<hr/>		
+	<!-- new forum thread form -->
+	<form action="{% url 'thread_add' project.short_name %}" method="post">
+	{% csrf_token %}	
+		<table>
+			<tr>
+				<td>
+						<span style="vertical-align: middle;"><b>Start a new thread:</b></span>
+						<input style="width:75%; vertical-align: middle;" name="title" type="text" value="{{ request.POST.title }}" />
+						<input style="vertical-align: middle;" type="submit" value="Submit"/>
+						<br/>
+						{% if request.GET.error %}<span style="color:#FF0000; font-variant:bold">{% endif %}
+						Title must be non-empty and must not contain special characters.
+						{% if request.GET.error %}</span>{% endif %}
+						&nbsp; &nbsp;
+						<input type="checkbox" name="is_private">This thread is private (can only be viewed by project members)
+				<td>
+			</tr>
+		</table>
+	</form>
+	
 
 {% endblock %}
