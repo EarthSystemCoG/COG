@@ -24,43 +24,56 @@ def site_home(request):
     #return render_to_response('cog/index.html', 
     #                          {'title':'Welcome to COG' }, 
     #                          context_instance=RequestContext(request))
-    
+
+
 # admin page for managing projects
 @user_passes_test(lambda u: u.is_staff)
 def admin_projects(request):
-    '''Only lists local projects.'''
+    """
+    Only lists local projects.
+    :param request:
+    :return:
+    """
     
     # optional active=True|False filter
     active = request.GET.get('active', None)
     if active != None:
-        project_list = Project.objects.filter(site=Site.objects.get_current()).filter(active=ast.literal_eval(active)).order_by('short_name')
+        project_list = Project.objects.filter(site=Site.objects.get_current()).filter(active=ast.literal_eval(active))\
+            .order_by('short_name')
     else:
         project_list = Project.objects.filter(site=Site.objects.get_current()).order_by('short_name')
     
     return render_to_response('cog/admin/admin_projects.html',
-                              { 
-                               # retrieve top-level projects, ordered alphabetically
-                               'project_list': project_list, 
-                               'title':'COG Projects Administration' 
+                              {
+                              # retrieve top-level projects, ordered alphabetically
+                              'project_list': project_list,
+                              'title': 'COG Projects Administration'
                               }, 
                               context_instance=RequestContext(request))    
-    
+
+
 # admin page for listing all system users
 @user_passes_test(lambda u: u.is_staff)
 def admin_users(request):
-    
-    
+
     # load all users
     if request.method == 'GET':
-        users = User.objects.all().order_by('last_name')    
-    
+        users = User.objects.all().order_by('last_name')
     # lookup specific user
     else:
         users = getUsersThatMatch(request.POST['match'])
-        
+
+    # create a separate list to hold the number of projects each user is a member of. This is passed sparately to the
+    # template. Since the value is not associated with the User object, there is some risk of the values not being
+    # correct if the user list is ordered outside of this method.
+    _num_projects = list()
+    for user in users:
+        #print 'user is:', user, ' projects are:', len(getProjectsForUser(user, True))
+        _num_projects.append(len(getProjectsForUser(user, True)))
+
     title = 'List Site Users'
     return render_to_response('cog/admin/admin_users.html',
-                              {'users': users, 'title': title},
+                              {'users': users, 'title': title, 'num_projects': _num_projects},
                               context_instance=RequestContext(request))
 
     
@@ -70,10 +83,10 @@ def admin_peers(request):
     
     PeerSiteFormSet = modelformset_factory(PeerSite, extra=0, can_delete=False)
     
-    if request.method=='GET':
+    if request.method == 'GET':
         
         formset = PeerSiteFormSet(queryset=PeerSite.objects.exclude(site=Site.objects.get_current()))
-        return render_to_response('cog/admin/admin_peers.html', {'formset':formset },
+        return render_to_response('cog/admin/admin_peers.html', {'formset': formset},
                                   context_instance=RequestContext(request))
         
     else:
@@ -82,11 +95,9 @@ def admin_peers(request):
         
         if formset.is_valid():
             instances = formset.save()
-            return HttpResponseRedirect( reverse('admin_peers')+"?status=success" )
+            return HttpResponseRedirect(reverse('admin_peers')+"?status=success")
         
         else:
             print formset.errors
-            return render_to_response('cog/admin/admin_peers.html', {'formset':formset},
+            return render_to_response('cog/admin/admin_peers.html', {'formset': formset},
                                       context_instance=RequestContext(request))
-
-
