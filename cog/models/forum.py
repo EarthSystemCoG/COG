@@ -1,7 +1,7 @@
 '''
 CoG forum models.
 
-@author: cinquini
+@author: Luca Cinquini
 '''
 
 from django.db import models
@@ -9,6 +9,9 @@ from constants import APPLICATION_LABEL
 from project import Project
 from django.contrib.auth.models import User
 from topic import Topic
+from django_comments.moderation import CommentModerator, moderator
+from cog.notification import notify
+from django.core.urlresolvers import reverse
 
 class Forum(models.Model):
     '''Top-level forum specific to each project, contains one or more Discussion.'''
@@ -48,3 +51,27 @@ class ForumThread(models.Model):
 
     class Meta:
         app_label= APPLICATION_LABEL    
+        
+class ForumModerator(CommentModerator):
+    '''Custom comment moderator class that sends email to project administrators.'''
+    
+    email_notification = True
+    
+    def email(self, comment, content_object, request):
+        
+        # build emai    
+        user = comment.user
+        thread = comment.content_object
+        project = thread.getProject()
+        subject = "[%s] Forum posting" % project.short_name
+        # thread url: http://localhost:8000/projects/TestProject/thread/2/
+        url = reverse('thread_display', kwargs={ 'project_short_name':project.short_name.lower(), 'thread_id':thread.id })
+        url = request.build_absolute_uri(url)        
+        # specific comment url: http://localhost:8000/projects/TestProject/thread/2/?c=17
+        message = "User: %s\n Thread: %s\n Comment: %s\n" % (user, url, comment.comment)
+
+        # send email                
+        for admin in project.getAdminGroup().user_set.all():
+            notify(admin, subject, message)
+
+moderator.register(ForumThread, ForumModerator)    
