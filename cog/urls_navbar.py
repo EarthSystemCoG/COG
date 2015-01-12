@@ -114,8 +114,8 @@ urlpatterns = patterns('',
     url(r'^projects/(?P<project_short_name>[^/]+)/contactus/$', 'cog.views.contactus_display', name='contactus_display'),
     
     # "FORUM"
-    url(r'^projects/(?P<project_short_name>[^/]+)/forum/$', 'cog.views.forum_display', name='forum_display'),  
-    url(r'^projects/(?P<project_short_name>[^/]+)/thread/(?P<thread_id>[^/]+)/$', 'cog.views.thread_display', name='thread_display'),  
+    url(r'^projects/(?P<project_short_name>[^/]+)/forum/$', 'cog.views.forum_detail', name='forum_detail'),  
+    url(r'^projects/(?P<project_short_name>[^/]+)/thread/(?P<thread_id>[^/]+)/$', 'cog.views.thread_detail', name='thread_detail'),  
     url(r'^forumthread/detail/(?P<forumthread_id>\d+)/$', 'cog.views.forumthread_detail', name='forumthread_detail'),         
              
 )

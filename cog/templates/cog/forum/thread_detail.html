@@ -4,7 +4,7 @@
 
     <!-- Comments -->
     {% with thread as object %}
-        {% url 'thread_display' project.short_name thread.id as next_view %}
+        {% url 'thread_detail' project.short_name thread.id as next_view %}
         {% include 'cog/common/_comments.html' %}
     {% endwith %}        
 

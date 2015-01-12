@@ -65,7 +65,7 @@ class ForumModerator(CommentModerator):
         project = thread.getProject()
         subject = "[%s] Forum posting" % project.short_name
         # thread url: http://localhost:8000/projects/TestProject/thread/2/
-        url = reverse('thread_display', kwargs={ 'project_short_name':project.short_name.lower(), 'thread_id':thread.id })
+        url = reverse('thread_detail', kwargs={ 'project_short_name':project.short_name.lower(), 'thread_id':thread.id })
         url = request.build_absolute_uri(url)        
         # specific comment url: http://localhost:8000/projects/TestProject/thread/2/?c=17
         message = "User: %s\n Thread: %s\n Comment: %s\n" % (user, url, comment.comment)
