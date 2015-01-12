@@ -2,6 +2,8 @@
 
 {% block main %}
 
+	{% load cog_utils %}
+	
     <!-- Comments -->
     {% with thread as object %}
         {% url 'thread_detail' project.short_name thread.id as next_view %}
@@ -10,8 +12,10 @@
     
     {% if user.is_staff or user == thread.author %}
 	    <br/>
+	    {{ thread|is_locked:request }} 
+	    &nbsp;
 	    <a href="{% url 'thread_update' project.short_name.lower thread.id %}" class="changelink">&nbsp;Update Thread</a>
-	    &nbsp; &nbsp;
+	    &nbsp;
 	    <a href="{% url 'thread_delete' project.short_name.lower thread.id %}" class="deletelink"
 	        onclick="return urlConfirmationDialog('Delete Thread Confirmation','Are you sure you want to delete this forum thread ?',this)">&nbsp;Delete Thread ?</a>
 	

@@ -88,9 +88,46 @@ def thread_detail(request, project_short_name, thread_id):
 @login_required
 def thread_update(request, project_short_name, thread_id):
     
+    # retrieve requested thread
+    thread = get_object_or_404(ForumThread, id=thread_id)
     
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
-    pass
+    # thread can be updated only by original author, or site administrator
+    if request.user != thread.author and not request.user.is_staff:
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+
+    if request.method=='GET':
+        
+        form = ForumThreadForm(instance=thread)
+        
+        return render_to_response('cog/forum/thread_form.html',
+                                  {'thread': thread, 
+                                   'title': 'Update Forum Thread %s: %s' % (project.short_name, thread.title),
+                                   'project':project, 
+                                   'form':form },
+                                  context_instance=RequestContext(request))
+        
+    else:
+    
+        form = ForumThreadForm(request.POST, instance=thread)
+        
+        if form.is_valid():
+            
+            thread = form.save()
+            
+            return HttpResponseRedirect( reverse('thread_detail', kwargs={ 'thread_id':thread.id, 'project_short_name':project.short_name }) )
+            
+            
+        else:
+            return render_to_response('cog/forum/thread_form.html',
+                          {'thread': thread, 
+                           'title': 'Update Forum Thread %s: %s' % (project.short_name, thread.title),
+                           'project':project, 
+                           'form':form },
+                          context_instance=RequestContext(request))
+
 
 @login_required
 def thread_delete(request, project_short_name, thread_id):
