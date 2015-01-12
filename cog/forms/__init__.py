@@ -8,3 +8,4 @@ from forms_project import *
 from forms_aboutus import *
 from forms_search import *
 from forms_access_control import *
+from forms_forum import *
