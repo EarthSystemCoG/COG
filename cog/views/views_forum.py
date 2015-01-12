@@ -17,7 +17,8 @@ from cog.forms.forms_forum import ForumThreadForm
 from django.utils.timezone import now
 
 def forum_detail(request, project_short_name):
-    '''View to display a forum index of threads.'''
+    '''View to display a list of all forum threads.
+       This view is also used to shortcut the creation of a new forum thread.'''
 
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -28,26 +29,49 @@ def forum_detail(request, project_short_name):
     # retrieve all threads for this project
     threads = ForumThread.objects.filter(forum=forum).order_by('-create_date')
     
+    # GET request to list all threads
+    if request.method=='GET':
+        
+        # create new empty form
+        form = ForumThreadForm()
+        
+        # display forum index
+        return _render_forum_template(threads, project, form, request)
+                
+    # POST request to create new thread
+    else:
+        
+        form = ForumThreadForm(request.POST)
+        if form.is_valid():
+            
+            # create a new thread object but don't save it to the database yet
+            thread = form.save(commit=False)
+            # modify the thread object
+            thread.author = request.user
+            thread.update_date = now()
+            thread.forum = project.forum
+            # save thread to database
+            thread.save()
+                        
+            return HttpResponseRedirect( reverse('thread_detail', 
+                                                 kwargs={'project_short_name':project.short_name, 'thread_id':thread.id}) )
+
+        else:
+            
+            # display forum index with errors
+            return _render_forum_template(threads, project, form, request)
+            
+def _render_forum_template(threads, project, form, request):
+    
     return render_to_response('cog/forum/forum_detail.html',
                               {'threads': threads,
                                'title': '%s Forum' % project.short_name,
-                               'project': project },
+                               'project': project,
+                               'form':form },
                               context_instance=RequestContext(request))
-
-def thread_detail(request, project_short_name, thread_id):
-    '''View to display all comments associated with a given forum thread.'''
     
-    # retrieve project from database
-    project = get_object_or_404(Project, short_name__iexact=project_short_name)
-
-    # retrieve requested thread
-    thread = get_object_or_404(ForumThread, id=thread_id)
     
-    return render_to_response('cog/forum/thread_detail.html',
-                              {'thread': thread,
-                               'title': '%s: %s' % (project.short_name, thread.title),
-                               'project': project },
-                              context_instance=RequestContext(request))
+
     
 @login_required
 def thread_add(request, project_short_name):
@@ -80,6 +104,21 @@ def thread_add(request, project_short_name):
             url =  reverse('forum_detail', kwargs={'project_short_name':project.short_name})
             return HttpResponseRedirect( "%s?error=INVALID_TITLE" % url)
 
+    
+def thread_detail(request, project_short_name, thread_id):
+    '''View to display all comments associated with a given forum thread.'''
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+
+    # retrieve requested thread
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    
+    return render_to_response('cog/forum/thread_detail.html',
+                              {'thread': thread,
+                               'title': '%s: %s' % (project.short_name, thread.title),
+                               'project': project },
+                              context_instance=RequestContext(request))
     
 @login_required
 def thread_update(request, project_short_name, thread_id):
