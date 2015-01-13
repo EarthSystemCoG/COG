@@ -948,6 +948,30 @@ END NEWS WIDGET
 	font-weight: bold;
 	font-style: italic;
 }
+
+.box-comment2 {
+	padding:    0px;
+	margin:     0px;
+	border:     0 solid #417690;
+	background: #FFFFFF;
+}
+
+.box-comment2 .caption {
+	/* color: #417690; /*blueish color??*/
+	color: #358C92; /*dark teal*/
+	background: #B9E0E3;
+	/*border: 1px solid #417690;*/
+	border-bottom: 1px solid #666;
+	margin-bottom: 3px;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.box-comment2 .body {
+	padding: 2px;
+	margin: 2px;
+}
+
 /****** END COMMENTS ****/
 
 

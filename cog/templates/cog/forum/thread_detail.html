@@ -7,7 +7,7 @@
     <!-- Comments -->
     {% with thread as object %}
         {% url 'thread_detail' project.short_name thread.id as next_view %}
-        {% include 'cog/common/_comments.html' %}
+        {% include 'cog/common/_comments2.html' %}
     {% endwith %}        
     
     {% if user.is_staff or user == thread.author %}
