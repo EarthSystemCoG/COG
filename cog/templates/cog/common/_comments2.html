@@ -23,8 +23,10 @@
 		       <div class="caption">
 		       		{{ comment.name|escape }}, on {{ comment.submit_date }}
 		       		<!-- comments can only be deleted by the original authors, or project administrators -->
-		       		{% if request.user == comment.user or request.user|hasAdminPermission:comment.content_object.project %}
+		       		{% if request.user == comment.user or request.user|hasAdminPermission:project %}
 			       		<span style='float:right'>
+			       			<a class='changelink' href='{% url 'comment_update' comment.id %}'>Edit</a>
+			       			&nbsp; &nbsp;
 			       			<a class="deletelink" 
 			       				onclick="return urlConfirmationDialog('Delete Comment Confirmation','Are you sure you want to delete this comment ?',this)"
 			       				href="{% url 'delete_comment' comment.id %}?next={{request.path}}">Delete</a>
@@ -80,7 +82,3 @@
 	<a href="{% url 'membership_request' project.short_name|lower %}">join the {{ project.short_name }} project</a>
 	to post to this thread.
 {% endif %}
-
-</div> <!--// end div id=mycomments //-->
-
-<!--// END: /cog/templates//cog/common/_comments.html //-->

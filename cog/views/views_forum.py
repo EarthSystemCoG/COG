@@ -6,15 +6,17 @@ Views for CoG Forum.
 
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasUserPermission
+from cog.models.project import Project, userHasAdminPermission
 from cog.models.forum import Forum, ForumThread
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from constants import PERMISSION_DENIED_MESSAGE
-from cog.forms.forms_forum import ForumThreadForm
+from cog.forms.forms_forum import ForumThreadForm, MyCommentForm
 from django.utils.timezone import now
+from django_comments.models import Comment
+from django_comments.forms import CommentForm
 
 def forum_detail(request, project_short_name):
     '''View to display a list of all forum threads.
@@ -86,6 +88,49 @@ def thread_detail(request, project_short_name, thread_id):
                               context_instance=RequestContext(request))
     
 @login_required
+def comment_update(request, comment_id):
+    
+    # retrieve requested comment
+    comment = get_object_or_404(Comment, id=comment_id)
+    
+    # comments can be updated only by original author or project administrator
+    project = comment.content_object.getProject()
+    if not userHasAdminPermission(request.user, project) and comment.user!=request.user:
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    if request.method=='GET':
+        
+        form = MyCommentForm(initial={ 'text':comment.comment } )
+        
+        return render_to_response('cog/forum/comment_form.html',
+                                  { 'title': 'Update Comment',
+                                    'project':project, 
+                                    'comment':comment,
+                                    'form':form },
+                                  context_instance=RequestContext(request))
+    else:
+        
+        form = MyCommentForm(request.POST)
+        
+        if form.is_valid():
+            # update comment text from form
+            text = form.cleaned_data['text']
+            comment.comment = text
+            comment.save()
+            
+            return HttpResponseRedirect( reverse('thread_detail', kwargs={ 'thread_id':comment.content_object.id, 
+                                                                          'project_short_name':project.short_name }) )
+
+            
+        else:
+            return render_to_response('cog/forum/comment_form.html',
+                                  { 'title': 'Update Comment',
+                                    'project':project, 
+                                    'comment':comment,
+                                    'form':form },
+                                  context_instance=RequestContext(request))
+    
+@login_required
 def thread_update(request, project_short_name, thread_id):
     
     # retrieve requested thread
@@ -94,8 +139,8 @@ def thread_update(request, project_short_name, thread_id):
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
-    # thread can be updated only by original author, or site administrator
-    if request.user != thread.author and not request.user.is_staff:
+    # thread can be updated only by original author, or project administrator
+    if not userHasAdminPermission(request.user, project) and thread.author!=request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     if request.method=='GET':
@@ -135,8 +180,8 @@ def thread_delete(request, project_short_name, thread_id):
     # retrieve requested thread
     thread = get_object_or_404(ForumThread, id=thread_id)
     
-    # thread can be deleted only by original author, or site administrator
-    if request.user != thread.author and not request.user.is_staff:
+    # thread can be deleted only by original author, or project administrator
+    if not userHasAdminPermission(request.user, thread.getProject()) and thread.author!=request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # delete thread (and associated comments)

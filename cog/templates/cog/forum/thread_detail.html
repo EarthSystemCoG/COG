@@ -4,6 +4,7 @@
 
 	{% load cog_utils %}
 	
+
     <!-- Comments -->
     {% if not thread.is_private or user|hasUserPermission:project %}
 	    {% with thread as object %}
@@ -19,8 +20,8 @@
 		<a href="{% url 'membership_request' project.short_name|lower %}">join the {{ project.short_name }} project</a>
 		to view this thread.
     {% endif %}
-    
-    {% if user.is_staff or user == thread.author %}
+            
+    {% if user|hasAdminPermission:project or user == thread.author %}
 	    <br/>
 	    {{ thread|is_locked:request }} 
 	    &nbsp;

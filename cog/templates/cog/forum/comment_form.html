@@ -1,0 +1,20 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %}
+
+	<form method="post" action="">
+		{% csrf_token %}
+
+		{{ form.text }} 
+		{{ form.text.errors }}
+		
+		<!-- form buttons -->
+		<div style="text-align:right">
+	    	<input type="button" value="Cancel" onclick="window.location='{% url 'thread_detail' project.short_name|lower comment.content_object.id %}'"/>
+			&nbsp;
+	        <input type="submit" value="Submit" />
+		</div>
+	
+	</form>
+
+{% endblock %}
