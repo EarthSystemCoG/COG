@@ -15,7 +15,7 @@ class BookmarkForm(ModelForm):
         super(BookmarkForm, self).__init__(*args, **kwargs)
         
         # filter folders by project and active state
-        self.fields['folder'].queryset = Folder.objects.filter(project=project).filter(active=True).distinct().order_by('order')
+        self.fields['folder'].queryset = Folder.objects.filter(project=project).filter(active=True).distinct().order_by('name')
                 
         # remove the empty option
         self.fields['folder'].empty_label = None
