@@ -4,7 +4,6 @@
 
 	{% load cog_utils %}
 	
-
     <!-- Comments -->
     {% if not thread.is_private or user|hasUserPermission:project %}
 	    {% with thread as object %}
