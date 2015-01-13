@@ -18,7 +18,7 @@ def deleteComment(request, id):
     redirect_url = request.REQUEST['next']
     
     # comments can only be deleted by the original authors, or project administrators
-    project = comment.content_object.project
+    project = comment.content_object.getProject()
     if comment.user != request.user and not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
