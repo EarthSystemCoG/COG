@@ -21,8 +21,10 @@
 	    					<b><a href="{% url 'thread_detail' project.short_name thread.id %}">{{ thread.title }}</a></b>
 	    					{{ thread|is_locked:request }} 
 	    					<hr/>
-	    					Started by {{ thread.author }} on {{ thread.create_date }}, 
-	    					           {{ comment_count }} comments, last comment on ... by ...
+	    					Started by {{ thread.author }} on {{ thread.create_date }}, {{ comment_count }} comments.
+	    					{% if comment_count > 0 %}
+	    						Last comment on {{ thread.get_last_comment.submit_date }} by {{ thread.get_last_comment.user }}.
+	    					{% endif %}
 	    				</td>
 	    			</tr>
 	    		{% endfor %}

@@ -9,6 +9,7 @@ from constants import APPLICATION_LABEL
 from project import Project
 from django.contrib.auth.models import User
 from topic import Topic
+from django_comments.models import Comment
 from django_comments.moderation import CommentModerator, moderator
 from cog.notification import notify
 from django.core.urlresolvers import reverse
@@ -45,6 +46,13 @@ class ForumThread(models.Model):
     
     def getProject(self):
         return self.forum.project
+    
+    def get_last_comment(self):
+        
+        try:
+            return Comment.objects.filter(object_pk=self.id).order_by("-submit_date")[0]
+        except IndexError:
+            return None
     
     def __unicode__(self):
         return self.title
