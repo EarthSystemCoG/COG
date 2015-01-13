@@ -5,10 +5,20 @@
 	{% load cog_utils %}
 	
     <!-- Comments -->
-    {% with thread as object %}
-        {% url 'thread_detail' project.short_name thread.id as next_view %}
-        {% include 'cog/common/_comments2.html' %}
-    {% endwith %}        
+    {% if not thread.is_private or user|hasUserPermission:project %}
+	    {% with thread as object %}
+	        {% url 'thread_detail' project.short_name thread.id as next_view %}
+	        {% include 'cog/common/_comments2.html' %}
+	    {% endwith %}        
+    {% else %}
+    	{{ thread|is_locked:request }} 
+    	You must 
+		{% if user.is_anonymous %}
+		<a href="{% url 'login' %}?next={{ request.path }}">login</a> and
+		{% endif %}
+		<a href="{% url 'membership_request' project.short_name|lower %}">join the {{ project.short_name }} project</a>
+		to view this thread.
+    {% endif %}
     
     {% if user.is_staff or user == thread.author %}
 	    <br/>
