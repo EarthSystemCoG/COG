@@ -28,7 +28,7 @@ def forum_detail(request, project_short_name):
     (forum, created) = Forum.objects.get_or_create(project=project)
     
     # retrieve all topics for this project
-    _topics = ForumTopic.objects.filter(forum=forum).order_by('-title')
+    _topics = ForumTopic.objects.filter(forum=forum).order_by('title')
     
     # filter by privacy settings
     topics = [t for t in _topics if not t.is_private or userHasUserPermission(request.user, project) ]
@@ -107,6 +107,23 @@ def topic_detail(request, project_short_name, topic_id):
             
             # display forum index with errors
             return _render_forum_template(threads, project, form, request)
+        
+@login_required
+def topic_delete(request, project_short_name, topic_id):
+    
+    # retrieve database objects
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    topic = get_object_or_404(ForumTopic, id=topic_id)
+    
+    # topics can be deleted only by project administrators
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # delete thread (and associated comments)
+    topic.delete()
+    
+    # redirect to forum
+    return HttpResponseRedirect( reverse('forum_detail', kwargs={'project_short_name':project.short_name}) )
 
 def _render_topic_template(project, topic, threads, form, request):
     
@@ -145,7 +162,7 @@ def _render_thread_template(request, project, thread):
     
     return render_to_response('cog/forum/thread_detail.html',
                               {'thread': thread,
-                               'title': '%s: %s' % (project.short_name, thread.subtitle),
+                               'title': '%s: %s' % (project.short_name, thread.title),
                                'project': project },
                               context_instance=RequestContext(request))
     
@@ -191,6 +208,46 @@ def comment_update(request, comment_id):
                                     'comment':comment,
                                     'form':form },
                                   context_instance=RequestContext(request))
+ 
+@login_required
+def topic_update(request, project_short_name, topic_id):
+    
+    # retrieve objects from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    topic = get_object_or_404(ForumTopic, id=topic_id)
+    
+    # topics can be updated only by project administrators
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+
+    if request.method=='GET':
+        
+        form = ForumTopicForm(instance=topic)
+        
+        return _render_topic_form(request, project, topic, form)
+        
+    else:
+    
+        form = ForumTopicForm(request.POST, instance=topic)
+        
+        if form.is_valid():
+            
+            topic = form.save()
+            return HttpResponseRedirect( reverse('topic_detail', kwargs={ 'topic_id':topic.id, 'project_short_name':project.short_name }) )
+            
+        else:
+            return _render_topic_form(request, project, topic, form)
+
+def _render_topic_form(request, project, topic, form):
+
+    return render_to_response('cog/forum/topic_form.html',
+                              {'topic': topic, 
+                               'title': '%s: %s Update' % (project.short_name, topic.title),
+                               'project':project, 
+                               'form':form },
+                              context_instance=RequestContext(request))
+
+
     
 @login_required
 def thread_update(request, project_short_name, thread_id):
