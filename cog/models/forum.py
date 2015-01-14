@@ -56,7 +56,7 @@ class ForumThread(models.Model):
     
     topic = models.ForeignKey(ForumTopic, blank=False, related_name='threads')
     author = models.ForeignKey(User, related_name='threads', verbose_name='Author', blank=False, null=True, on_delete=models.SET_NULL)
-    subtitle = models.CharField(max_length=200, verbose_name='SubTitle', blank=False)
+    title = models.CharField(max_length=200, verbose_name='SubTitle', blank=False)
     create_date = models.DateTimeField('Date Created', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
     
@@ -71,7 +71,7 @@ class ForumThread(models.Model):
             return None
     
     def __unicode__(self):
-        return self.subtitle
+        return self.title
 
     class Meta:
         app_label= APPLICATION_LABEL    

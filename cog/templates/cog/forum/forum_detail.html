@@ -16,16 +16,17 @@
     		{% for topic in topics %}
     			<tr>
     				<td>
-    					{{ topic|is_locked:request }} <b>{{ topic.title }}</b>
+    					{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>
     				</td>
     			</tr>
     			<tr>
     				<td>
 						{% for thread in topic.get_threads %}
-							{{ thread.subtitle }}
+							{{ thread.title }}
 						{% empty %}
 							<i>This topic has no threads yet.</i>
 						{% endfor %}
+						<br/>
     				</td>
     			</tr>
     		{% empty %}

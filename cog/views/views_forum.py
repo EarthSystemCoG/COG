@@ -6,7 +6,7 @@ Views for CoG Forum.
 
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasAdminPermission
+from cog.models.project import Project, userHasAdminPermission, userHasUserPermission
 from cog.models.forum import Forum, ForumThread, ForumTopic
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -27,8 +27,11 @@ def forum_detail(request, project_short_name):
     # get or create project forum
     (forum, created) = Forum.objects.get_or_create(project=project)
     
-    # retrieve all threads for this project
-    topics = ForumTopic.objects.filter(forum=forum).order_by('-title')
+    # retrieve all topics for this project
+    _topics = ForumTopic.objects.filter(forum=forum).order_by('-title')
+    
+    # filter by privacy settings
+    topics = [t for t in _topics if not t.is_private or userHasUserPermission(request.user, project) ]
     
     # GET request to list all threads
     if request.method=='GET':
@@ -66,27 +69,23 @@ def forum_detail(request, project_short_name):
             # display forum index with errors
             return _render_forum_template(topics, project, form, request)
 
-def topic_detail(request, project_short_name):
-    '''View to display a list of all forum threads.
-       This view is also used to shortcut the creation of a new forum thread.'''
+def topic_detail(request, project_short_name, topic_id):
+    '''View to display a list of all threads for a given forum topic.
+       This view is also used to shortcut the creation of a new thread.'''
 
-    # retrieve project from database
+    # retrieve objects from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
-    # get or create project forum
-    (forum, created) = Forum.objects.get_or_create(project=project)
-    
-    # retrieve all threads for this project
-    threads = ForumThread.objects.filter(forum=forum).order_by('-create_date')
+    topic = get_object_or_404(ForumTopic, id=topic_id)
+    threads = ForumThread.objects.filter(topic=topic).order_by('-create_date')
     
     # GET request to list all threads
     if request.method=='GET':
         
         # create new empty form
-        form = ForumThreadForm()
+        form = ForumThreadForm(initial={'topic':topic})
         
         # display forum index
-        return _render_forum_template(threads, project, form, request)
+        return _render_topic_template(project, topic, threads, form, request)
                 
     # POST request to create new thread
     else:
@@ -98,19 +97,28 @@ def topic_detail(request, project_short_name):
             thread = form.save(commit=False)
             # modify the thread object
             thread.author = request.user
-            thread.update_date = now()
-            thread.forum = project.forum
             # save thread to database
             thread.save()
                         
-            return HttpResponseRedirect( reverse('thread_detail', 
-                                                 kwargs={'project_short_name':project.short_name, 'thread_id':thread.id}) )
+            return HttpResponseRedirect( reverse('topic_detail', 
+                                                 kwargs={'project_short_name':project.short_name, 'topic_id':topic.id}) )
 
         else:
             
             # display forum index with errors
             return _render_forum_template(threads, project, form, request)
 
+def _render_topic_template(project, topic, threads, form, request):
+    
+    return render_to_response('cog/forum/topic_detail.html',
+                              {'title': '%s Forum: %s' % (project.short_name, topic.title),
+                               'project': project,
+                               'topic': topic,
+                               'threads':threads,
+                               'form':form },
+                              context_instance=RequestContext(request))
+
+    
             
 def _render_forum_template(topics, project, form, request):
     
@@ -129,10 +137,15 @@ def thread_detail(request, project_short_name, thread_id):
 
     # retrieve requested thread
     thread = get_object_or_404(ForumThread, id=thread_id)
+                    
+    return _render_thread_template(request, project, thread) 
+            
+    
+def _render_thread_template(request, project, thread):
     
     return render_to_response('cog/forum/thread_detail.html',
                               {'thread': thread,
-                               'title': '%s: %s' % (project.short_name, thread.title),
+                               'title': '%s: %s' % (project.short_name, thread.subtitle),
                                'project': project },
                               context_instance=RequestContext(request))
     

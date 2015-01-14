@@ -1,0 +1,67 @@
+{% extends "cog/common/layout_sidebar_center.html" %}
+
+{% block main %}
+
+	{% load cog_utils %}
+	{% load comments %}
+	
+	<!-- table of topic threads -->
+    <div class="mybox">
+	    <table>
+	        <caption>Threads</caption>
+    
+    		<!-- loop over threads -->
+    		{% for thread in threads %}
+    			{% get_comment_count for thread as comment_count %}
+    			<tr>
+    				<td>
+    					<a href="{% url 'thread_detail' project.short_name thread.id %}"><b>{{ thread.title }}</b></a>
+    					<br/>
+    					Started by {{ thread.author }} on {{ thread.create_date }}, {{ comment_count }} comments.
+	    				{% if comment_count > 0 %}
+	    					Last comment on {{ thread.get_last_comment.submit_date }} by {{ thread.get_last_comment.user }}.
+	    				{% endif %}
+    				</td>
+    			</tr>
+    		{% empty %}
+    			<tr>
+    				<td><i>No topics found.</i></td>
+    			</tr>
+    		{% endfor %}
+    
+		</table>
+	</div>
+	
+	<hr/>		
+	<!-- new thread form -->
+	{% if user|hasUserPermission:project %}
+		<form action="" method="post">
+			{% csrf_token %}
+			{{ form.topic.as_hidden }}
+			
+			<table>
+				<tr>
+					<td nowrap="nowrap" style="vertical-align: middle;">
+						<span style="vertical-align: middle;">Start a new <b>Thread</b>:</span>
+					</td>
+					<td class="long" style="vertical-align: middle;">
+						{{ form.title }} {{ form.title.errors }}
+					</td>
+					<td style="vertical-align: middle;">
+						<input  type="submit" value="Submit" />
+					</td>
+				</tr>
+			</table>
+			
+		</form>
+	{% else %}
+    	You must 
+		{% if user.is_anonymous %}
+		<a href="{% url 'login' %}?next={{ request.path }}">login</a> and
+		{% endif %}
+		<a href="{% url 'membership_request' project.short_name|lower %}">join the {{ project.short_name }} project</a>
+		to start a new thread.
+	{% endif %}
+	
+	
+{% endblock %}

@@ -5,7 +5,7 @@
 	{% load cog_utils %}
 	
     <!-- Comments -->
-    {% if not thread.is_private or user|hasUserPermission:project %}
+    {% if not thread.topic.is_private or user|hasUserPermission:project %}
 	    {% with thread as object %}
 	        {% url 'thread_detail' project.short_name thread.id as next_view %}
 	        {% include 'cog/forum/_comments.html' %}
@@ -22,7 +22,7 @@
             
     {% if user|hasAdminPermission:project or user == thread.author %}
 	    <br/>
-	    {{ thread|is_locked:request }} 
+	    {{ thread.topic|is_locked:request }} 
 	    &nbsp;
 	    <a href="{% url 'thread_update' project.short_name.lower thread.id %}" class="changelink">&nbsp;Update Thread</a>
 	    &nbsp;

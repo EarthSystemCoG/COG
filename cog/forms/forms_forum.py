@@ -24,12 +24,12 @@ class ForumTopicForm(ModelForm):
 
 class ForumThreadForm(ModelForm):
     
-    def clean_subtitle(self):
-        return default_clean_field(self, 'subtitle')
+    def clean_title(self):
+        return default_clean_field(self, 'title')
     
     class Meta:
         model = ForumThread
-        fields = ('subtitle',)
+        fields = ('topic','title',)
         
 class MyCommentForm(Form):
     
