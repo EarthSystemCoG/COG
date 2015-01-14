@@ -7,18 +7,66 @@ Views for CoG Forum.
 from django.shortcuts import get_object_or_404, render_to_response
 
 from cog.models.project import Project, userHasAdminPermission
-from cog.models.forum import Forum, ForumThread
+from cog.models.forum import Forum, ForumThread, ForumTopic
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from constants import PERMISSION_DENIED_MESSAGE
-from cog.forms.forms_forum import ForumThreadForm, MyCommentForm
+from cog.forms.forms_forum import ForumThreadForm, MyCommentForm, ForumTopicForm
 from django.utils.timezone import now
 from django_comments.models import Comment
-from django_comments.forms import CommentForm
 
 def forum_detail(request, project_short_name):
+    '''View to display a list of all forum topics.
+       This view is also used to shortcut the creation of a new forum topic.'''
+
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # get or create project forum
+    (forum, created) = Forum.objects.get_or_create(project=project)
+    
+    # retrieve all threads for this project
+    topics = ForumTopic.objects.filter(forum=forum).order_by('-title')
+    
+    # GET request to list all threads
+    if request.method=='GET':
+        
+        # create new empty form
+        form = ForumTopicForm()
+        
+        # display forum index
+        return _render_forum_template(topics, project, form, request)
+                
+    # POST request to create new thread
+    else:
+        
+        # topics can only be created by project administrators
+        if not userHasAdminPermission(request.user, project):
+            return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+        
+        form = ForumTopicForm(request.POST)
+        if form.is_valid():
+            
+            # create a new thread object but don't save it to the database yet
+            topic = form.save(commit=False)
+            # modify the topic object
+            topic.author = request.user
+            topic.forum = project.forum
+            # save topic to database
+            topic.save()
+                        
+            # FIXME: redirect to topic page instead ?
+            return HttpResponseRedirect( reverse('forum_detail', 
+                                                 kwargs={'project_short_name':project.short_name}) )
+
+        else:
+            
+            # display forum index with errors
+            return _render_forum_template(topics, project, form, request)
+
+def topic_detail(request, project_short_name):
     '''View to display a list of all forum threads.
        This view is also used to shortcut the creation of a new forum thread.'''
 
@@ -62,11 +110,12 @@ def forum_detail(request, project_short_name):
             
             # display forum index with errors
             return _render_forum_template(threads, project, form, request)
+
             
-def _render_forum_template(threads, project, form, request):
+def _render_forum_template(topics, project, form, request):
     
     return render_to_response('cog/forum/forum_detail.html',
-                              {'threads': threads,
+                              {'topics': topics,
                                'title': '%s Forum' % project.short_name,
                                'project': project,
                                'form':form },

@@ -15,27 +15,49 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('cog', ['Forum'])
 
+        # Adding model 'ForumTopic'
+        db.create_table(u'cog_forumtopic', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('forum', self.gf('django.db.models.fields.related.ForeignKey')(related_name='topics', to=orm['cog.Forum'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(related_name='forum_topics', null=True, on_delete=models.SET_NULL, to=orm['auth.User'])),
+            ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('is_private', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('order', self.gf('django.db.models.fields.IntegerField')(default=0, blank=True)),
+        ))
+        db.send_create_signal('cog', ['ForumTopic'])
+
         # Adding model 'ForumThread'
         db.create_table(u'cog_forumthread', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('forum', self.gf('django.db.models.fields.related.ForeignKey')(related_name='threads', to=orm['cog.Forum'])),
+            ('topic', self.gf('django.db.models.fields.related.ForeignKey')(related_name='threads', to=orm['cog.ForumTopic'])),
             ('author', self.gf('django.db.models.fields.related.ForeignKey')(related_name='threads', null=True, on_delete=models.SET_NULL, to=orm['auth.User'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
+            ('subtitle', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')()),
-            ('order', self.gf('django.db.models.fields.IntegerField')(default=0, blank=True)),
-            ('topic', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['cog.Topic'], null=True, on_delete=models.SET_NULL, blank=True)),
-            ('is_private', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
         ))
         db.send_create_signal('cog', ['ForumThread'])
+
+        # Adding field 'Project.forumNotificationEnabled'
+        db.add_column(u'cog_project', 'forumNotificationEnabled',
+                      self.gf('django.db.models.fields.BooleanField')(default=False),
+                      keep_default=False)
 
 
     def backwards(self, orm):
         # Deleting model 'Forum'
         db.delete_table(u'cog_forum')
 
+        # Deleting model 'ForumTopic'
+        db.delete_table(u'cog_forumtopic')
+
         # Deleting model 'ForumThread'
         db.delete_table(u'cog_forumthread')
+
+        # Deleting field 'Project.forumNotificationEnabled'
+        db.delete_column(u'cog_project', 'forumNotificationEnabled')
 
 
     models = {
@@ -170,13 +192,22 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'ForumThread'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'threads'", 'null': 'True', 'on_delete': 'models.SET_NULL', 'to': u"orm['auth.User']"}),
             'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'forum': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'threads'", 'to': "orm['cog.Forum']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'subtitle': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
+            'topic': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'threads'", 'to': "orm['cog.ForumTopic']"}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+        },
+        'cog.forumtopic': {
+            'Meta': {'object_name': 'ForumTopic'},
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'forum_topics'", 'null': 'True', 'on_delete': 'models.SET_NULL', 'to': u"orm['auth.User']"}),
+            'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'forum': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'topics'", 'to': "orm['cog.Forum']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_private': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'order': ('django.db.models.fields.IntegerField', [], {'default': '0', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
-            'topic': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['cog.Topic']", 'null': 'True', 'on_delete': 'models.SET_NULL', 'blank': 'True'}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {})
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
         'cog.fundingsource': {
             'Meta': {'object_name': 'FundingSource'},
@@ -308,6 +339,7 @@ class Migration(SchemaMigration):
             'developmentOverview': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'externalDependencies': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'external_homepage': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'forumNotificationEnabled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'getInvolved': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'getting_started': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'governanceOverview': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),

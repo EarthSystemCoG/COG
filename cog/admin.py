@@ -62,4 +62,6 @@ admin.site.register(ManagementBodyPurpose, admin.ModelAdmin)
 
 admin.site.register(Forum, admin.ModelAdmin)
 
+admin.site.register(ForumTopic, admin.ModelAdmin)
+
 admin.site.register(ForumThread, admin.ModelAdmin)

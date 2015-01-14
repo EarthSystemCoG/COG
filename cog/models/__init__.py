@@ -44,7 +44,7 @@ from organizational_role import OrganizationalRole, getLeadOrganizationalRoles, 
 from organizational_role_member import OrganizationalRoleMember
 
 # Forum
-from forum import Forum, ForumThread
+from forum import Forum, ForumThread, ForumTopic
 
 # Search
 from search import *

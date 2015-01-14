@@ -25,27 +25,40 @@ class Forum(models.Model):
     class Meta:
         app_label= APPLICATION_LABEL
         
+class ForumTopic(models.Model):
+    '''Categories to group forum threads.'''
+    
+    forum = models.ForeignKey(Forum, blank=False, related_name='topics')
+    title = models.CharField(max_length=200, verbose_name='Title', blank=False)
+    description = models.TextField(verbose_name='Description', blank=True)
+    author = models.ForeignKey(User, related_name='forum_topics', verbose_name='Author', blank=False, null=True, on_delete=models.SET_NULL)
+    create_date = models.DateTimeField('Date Created', auto_now_add=True)
+    update_date = models.DateTimeField('Date Updated', auto_now=True)
+    # public/private flag: discussion can only be viewed by project members
+    is_private = models.BooleanField(verbose_name='Private?', default=False, null=False)
+    # order of topic within forum (for later reordering)
+    order = models.IntegerField(blank=True, null=False, default=0)
+    
+    def get_threads(self):
+        return ForumThread.objects.filter(topic=self).order_by("-create_date")
+    
+    def __unicode__(self):
+        return self.title
+    
+    class Meta:
+        app_label= APPLICATION_LABEL
+        
 class ForumThread(models.Model):
     '''Group of forum posting about a specified topic.'''
     
-    forum = models.ForeignKey(Forum, blank=False, related_name='threads')
+    topic = models.ForeignKey(ForumTopic, blank=False, related_name='threads')
     author = models.ForeignKey(User, related_name='threads', verbose_name='Author', blank=False, null=True, on_delete=models.SET_NULL)
-    title = models.CharField(max_length=200, verbose_name='Title', blank=False)
+    subtitle = models.CharField(max_length=200, verbose_name='SubTitle', blank=False)
     create_date = models.DateTimeField('Date Created', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
-    # order of discussion within forum (for later reordering)
-    order = models.IntegerField(blank=True, null=False, default=0)
-    # optional topic
-    topic = models.ForeignKey(Topic, blank=True, null=True, on_delete=models.SET_NULL)
-    # optional attached documents - must specify both blank=True (form validation) and null=True (model)
-    #docs = models.ManyToManyField(Doc, verbose_name='Attachments', blank=True, null=True)    
-    # public/private flag: discussion can only be viewed by project members
-    is_private = models.BooleanField(verbose_name='Private?', default=False, null=False)
-    # restricted flag: restricted posts can only be edited by project administrators
-    #is_restricted = models.BooleanField(verbose_name='Restricted?', default=False, null=False)
     
     def getProject(self):
-        return self.forum.project
+        return self.topic.forum.project
     
     def get_last_comment(self):
         
@@ -55,7 +68,7 @@ class ForumThread(models.Model):
             return None
     
     def __unicode__(self):
-        return self.title
+        return self.subtitle
 
     class Meta:
         app_label= APPLICATION_LABEL    

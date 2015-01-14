@@ -5,18 +5,31 @@ Module containing forms for CoG forum.
 '''
 
 from django.forms import ModelForm
-from cog.models.forum import ForumThread
+from cog.models.forum import ForumThread, ForumTopic
 from cog.utils import default_clean_field
 from django.forms import Form, TextInput, Textarea, CharField
 
-class ForumThreadForm(ModelForm):
+class ForumTopicForm(ModelForm):
     
     def clean_title(self):
         return default_clean_field(self, 'title')
     
+    def clean_description(self):
+        return default_clean_field(self, 'description')
+    
+    class Meta:
+        model = ForumTopic
+        fields = ('title', 'description', 'is_private')
+        widgets = {'description': Textarea(attrs={'rows':3}) }
+
+class ForumThreadForm(ModelForm):
+    
+    def clean_subtitle(self):
+        return default_clean_field(self, 'subtitle')
+    
     class Meta:
         model = ForumThread
-        fields = ('title', 'is_private')
+        fields = ('subtitle',)
         
 class MyCommentForm(Form):
     
