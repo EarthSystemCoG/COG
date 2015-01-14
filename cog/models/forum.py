@@ -39,6 +39,9 @@ class ForumTopic(models.Model):
     # order of topic within forum (for later reordering)
     order = models.IntegerField(blank=True, null=False, default=0)
     
+    def getProject(self):
+        return self.forum.project
+    
     def get_threads(self):
         return ForumThread.objects.filter(topic=self).order_by("-create_date")
     

@@ -12,40 +12,35 @@
 	    <table>
 	        <caption>{{ project.short_name }} Forum Topics</caption>
     
-    		{% if topics %}
-	    		<!-- loop over forum topics -->
-	    		{% for topic in topics %}
-	    			<tr>
-	    				<td>
-	    					<b>{{ topic.title  }}</b>
-	    					<br/>{{ topic.description  }}
-	    				</td>
-	    				<td>
-	    					{% if topic.threads %}
-	    						{% for thread in topic.get_threads %}
-	    							{{ thread.subtitle }}
-	    						{% endfor %}
-	    					{% else %}
-	    						<i>This topic has no threads yet.</i>
-	    					{% endif %}
-	    				</td>
-	    			</tr>
-	    		{% endfor %}
-	    	{% else %}
-	    		<tr>
-	    			<td><i>This forum has no topics yet.</i></td>
-	    		</tr>
-	    	{% endif %}
+    		<!-- loop over forum topics -->
+    		{% for topic in topics %}
+    			<tr>
+    				<td>
+    					{{ topic|is_locked:request }} <b>{{ topic.title }}</b>
+    				</td>
+    			</tr>
+    			<tr>
+    				<td>
+						{% for thread in topic.get_threads %}
+							{{ thread.subtitle }}
+						{% empty %}
+							<i>This topic has no threads yet.</i>
+						{% endfor %}
+    				</td>
+    			</tr>
+    		{% empty %}
+    			<i>No topics found.</i>
+    		{% endfor %}
     
 		</table>
 	</div>
 
 	{% paginate %}
 		
-	&nbsp;
-	<hr/>
 	<!-- new forum topic form -->
 	{% if user|hasAdminPermission:project %}
+		&nbsp;
+		<hr/>
 	  	<form action="" method="post">
 		    {% csrf_token %}	
 			<table>
@@ -53,24 +48,19 @@
 					<td nowrap="nowrap">
 						<span style="vertical-align: middle">Start a new <b>Topic</b>:</span>
 					</td>
-					<td class="long">{{ form.title }} {{ form.title.errors }}</td>
-				</tr>
-				<tr>
-					<td nowrap="nowrap">Optional description:</td>
-					<td> {{ form.description }} {{ form.description.errors }}</td>
-				</tr>
-				<tr>
-					<td>&nbsp;</td>
-					<td style="vertical-align: middle">
-						{{ form.is_private }} This topic is private (can only be viewed by project members)
-						&nbsp;<input type="submit" value="Submit"/>
+					<td class="long">
+						<span style="vertical-align: middle">
+							{{ form.title }} 
+							<br/>{{ form.title.errors }}
+							{{ form.is_private }} This topic is private (can only be viewed by project members)
+							&nbsp;<input type="submit" value="Submit"/>
+						</span>
 					</td>
 				</tr>
 			</table>
 	  	</form>
-	  	
 	  	Forum topics can only be created by project administrators. 
-		The topic title and description must not contain special characters.
+		The topic title must be non empty and must not contain special characters.
 	{% endif %}
 	
 {% endblock %}
