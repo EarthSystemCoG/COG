@@ -4,6 +4,14 @@
 
 	{% load cog_utils %}
 	
+	<!-- thread header -->
+	<div id="trail" style="text-aligh:left; padding-bottom:4px;">
+		<a href="{% url 'forum_detail' project.short_name %}">Forum: {{ project.short_name }}</a> 
+		> {{ thread.topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name thread.topic.id %}">Topic: {{ thread.topic.title }}</a>
+		> Thread: {{ thread.title }}
+		{% include 'cog/forum/_thread_links.html' %}
+	</div>
+	
     <!-- Comments -->
     {% if not thread.topic.is_private or user|hasUserPermission:project %}
 	    {% with thread as object %}
@@ -20,18 +28,5 @@
 		to view this thread.
     {% endif %}
             
-    {% if user|hasAdminPermission:project or user == thread.author %}
-	    <br/>
-	    {{ thread.topic|is_locked:request }} 
-	    &nbsp;
-	    <a href="{% url 'thread_update' project.short_name.lower thread.id %}" class="changelink">&nbsp;Update Thread</a>
-	    &nbsp;
-	    <a href="{% url 'thread_delete' project.short_name.lower thread.id %}" class="deletelink"
-	        onclick="return urlConfirmationDialog('Delete Thread Confirmation','Are you sure you want to delete this forum thread ?',this)">&nbsp;Delete Thread?</a>
-	
-		<!-- anchor for delete confirmation dialog -->
-		<div id="myDialog" class="yui-skin-sam"></div>
-	
-	{% endif %}
 	
 {% endblock %}

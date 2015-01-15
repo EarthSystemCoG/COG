@@ -5,6 +5,13 @@
 	{% load cog_utils %}
 	{% load comments %}
 	
+	<!-- topic header -->
+	<div id="trail" style="text-aligh:left; padding-bottom:4px;">
+		<a href="{% url 'forum_detail' project.short_name %}">Forum: {{ project.short_name }}</a> 
+		> {{ topic|is_locked:request }} Topic: {{ topic.title }}
+		{% include 'cog/forum/_topic_links.html' %}
+	</div>
+	
 	<!-- table of topic threads -->
     <div class="mybox">
 	    <table>
@@ -25,7 +32,7 @@
     			</tr>
     		{% empty %}
     			<tr>
-    				<td><i>No topics found.</i></td>
+    				<td><i>No threads found.</i></td>
     			</tr>
     		{% endfor %}
     

@@ -128,7 +128,7 @@ def topic_delete(request, project_short_name, topic_id):
 def _render_topic_template(project, topic, threads, form, request):
     
     return render_to_response('cog/forum/topic_detail.html',
-                              {'title': '%s Forum: %s' % (project.short_name, topic.title),
+                              {'title': topic.title,
                                'project': project,
                                'topic': topic,
                                'threads':threads,
@@ -162,7 +162,7 @@ def _render_thread_template(request, project, thread):
     
     return render_to_response('cog/forum/thread_detail.html',
                               {'thread': thread,
-                               'title': '%s: %s' % (project.short_name, thread.title),
+                               'title': thread.title,
                                'project': project },
                               context_instance=RequestContext(request))
     
