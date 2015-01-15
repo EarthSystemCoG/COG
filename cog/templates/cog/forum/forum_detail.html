@@ -7,36 +7,41 @@
     {% autopaginate topics 10 %}
     {% load cog_utils %}
     
-    <!-- table of forum topics/threads -->
-    <div class="mybox">
-	    <table>
-	        <caption>Topics</caption>
-    
-    		<!-- loop over forum topics -->
-    		{% for topic in topics %}
-    			<tr>
-    				<td>
-    					{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>		 			
-    				</td>
-    			</tr>
-    			<tr>
-    				<td>
-    					{% for thread in topic.get_threads %}
-							&nbsp; &nbsp; &nbsp; <a href="{% url 'thread_detail' project.short_name thread.id %}">{{ thread.title }}</a><br/>
-    					{% empty %}
+    <!-- one table per topic -->
+    {% for topic in topics %}
+   		<div class="mybox">
+	    	<table>
+	        	<caption>
+	        		{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>		 			
+	        	</caption>
+    			<!-- one row per thread -->
+    			{% for thread in topic.get_threads %}
+    				{% get_comment_count for thread as comment_count %}
+					<tr>
+						<td>
+							<a href="{% url 'thread_detail' project.short_name thread.id %}">{{ thread.title }}</a>
+							<br/>
+	    					Started by {{ thread.author }} on {{ thread.create_date }}, {{ comment_count }} comments.
+		    				{% if comment_count > 0 %}
+		    					Last comment on {{ thread.get_last_comment.submit_date }} by {{ thread.get_last_comment.user }}.
+		    				{% endif %}							
+						</td>
+					</tr>
+    			{% empty %}
+    				<tr>
+    					<td>
     						<i>This topic has no threads yet.</i>
-    					{% endfor %}
-    				</td>
-    			</tr>
-    		{% empty %}
-    			<tr>
-    				<td><i>No topics found.</i></td>
-    			</tr>
-    		{% endfor %}
+    					</td>
+    				</tr>
+    			{% endfor %}
+    			
+    			
+    		</table>
+    	</div>
+    {% empty %}
+    	<i>This forum has no topics yet.</i>
+    {% endfor %}
     
-		</table>
-	</div>
-
 	{% paginate %}
 		
 	<!-- new forum topic form -->
