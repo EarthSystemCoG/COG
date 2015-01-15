@@ -44,7 +44,7 @@ class ForumTopic(models.Model):
         return self.forum.project
     
     def get_threads(self):
-        return ForumThread.objects.filter(topic=self).order_by("-create_date")
+        return ForumThread.objects.filter(topic=self).order_by("title")
     
     def __unicode__(self):
         return self.title
