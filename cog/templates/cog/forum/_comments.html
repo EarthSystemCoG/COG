@@ -28,7 +28,7 @@
 			       			<a class='changelink' href='{% url 'comment_update' comment.id %}'>Edit Post</a>
 			       			&nbsp; &nbsp;
 			       			<a class="deletelink" 
-			       				onclick="return urlConfirmationDialog('Delete Comment Confirmation','Are you sure you want to delete this Post ?',this)"
+			       				onclick="return urlConfirmationDialog('Delete Comment Confirmation','Are you sure you want to delete this Post?',this)"
 			       				href="{% url 'delete_comment' comment.id %}?next={{request.path}}">Delete Post</a>
 			       		</span>
 		       		{% endif %}
