@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from constants import PERMISSION_DENIED_MESSAGE
 from cog.forms.forms_forum import ForumThreadForm, MyCommentForm, ForumTopicForm
 from django_comments.models import Comment
+from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 
 def forum_detail(request, project_short_name):
     '''View to display a list of all forum topics.
@@ -25,6 +26,12 @@ def forum_detail(request, project_short_name):
     
     # get or create project forum
     (forum, created) = Forum.objects.get_or_create(project=project)
+    
+    # check project is active and visible to user
+    if project.active==False:
+        return getProjectNotActiveRedirect(request, project)
+    elif project.isNotVisible(request.user):
+        return getProjectNotVisibleRedirect(request, project)
     
     # retrieve all topics for this project
     _topics = ForumTopic.objects.filter(forum=forum).order_by('title')
@@ -75,6 +82,12 @@ def topic_detail(request, project_short_name, topic_id):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     topic = get_object_or_404(ForumTopic, id=topic_id)
     threads = ForumThread.objects.filter(topic=topic).order_by('-create_date')
+    
+    # check project is active and visible to user
+    if project.active==False:
+        return getProjectNotActiveRedirect(request, project)
+    elif project.isNotVisible(request.user):
+        return getProjectNotVisibleRedirect(request, project)
     
     # GET request to list all threads
     if request.method=='GET':
@@ -154,6 +167,12 @@ def thread_detail(request, project_short_name, thread_id):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # check project is active and visible to user
+    if project.active==False:
+        return getProjectNotActiveRedirect(request, project)
+    elif project.isNotVisible(request.user):
+        return getProjectNotVisibleRedirect(request, project)
 
     # retrieve requested thread
     thread = get_object_or_404(ForumThread, id=thread_id)
