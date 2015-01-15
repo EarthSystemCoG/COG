@@ -15,7 +15,6 @@ from django.contrib.auth.decorators import login_required
 from constants import PERMISSION_DENIED_MESSAGE
 from cog.forms.forms_forum import ForumThreadForm, MyCommentForm, ForumTopicForm
 from django_comments.models import Comment
-from django.contrib.contenttypes.models import ContentType
 
 def forum_detail(request, project_short_name):
     '''View to display a list of all forum topics.
@@ -310,7 +309,6 @@ def thread_delete(request, project_short_name, thread_id):
     
     # must explicitly delete comments
     for comment in thread.get_comments():
-        print 'deleting comment=%s' % comment
         comment.delete()
     
     # delete this thread
@@ -318,8 +316,6 @@ def thread_delete(request, project_short_name, thread_id):
     
     # redirect to forum
     return HttpResponseRedirect( reverse('forum_detail', kwargs={'project_short_name':thread.getProject().short_name}) )
-    
-    
 
 def forumthread_detail(request, forumthread_id):
     '''This view is needed to support a common implementation for log_comment_event.

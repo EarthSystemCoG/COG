@@ -94,11 +94,11 @@ class ForumModerator(CommentModerator):
         
         thread = comment.content_object
         project = thread.getProject()
-        
+                
         # check project forum notification flag
         if project.forumNotificationEnabled:
         
-            # build emai 
+            # build email
             user = comment.user
             
             subject = "[%s] Forum posting" % project.short_name
