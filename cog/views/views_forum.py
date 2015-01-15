@@ -263,7 +263,7 @@ def thread_add(request, project_short_name, topic_id):
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    title = '%s: new Thread' % topic.title
+    title = '%s: New Thread' % topic.title
     if request.method=='GET':
         
         form = ForumThreadForm(initial={'topic':topic})
@@ -296,7 +296,7 @@ def thread_update(request, project_short_name, thread_id):
     if not userHasAdminPermission(request.user, project) and thread.author!=request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
-    title = '%s: update Thread' % thread.title
+    title = '%s: Update Thread' % thread.title
 
     if request.method=='GET':
         
