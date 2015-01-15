@@ -7,7 +7,7 @@
 	<!-- thread header -->
 	<div id="trail" style="text-aligh:left; padding-bottom:4px;">
 		<a href="{% url 'forum_detail' project.short_name %}">Forum: {{ project.short_name }}</a> 
-		> {{ thread.topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name thread.topic.id %}">Topic: {{ thread.topic.title }}</a>
+		> {{ thread.topic|is_locked:request }} Topic: {{ thread.topic.title }}
 		> Thread: {{ thread.title }}
 		{% include 'cog/forum/_thread_links.html' %}
 	</div>

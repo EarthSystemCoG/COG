@@ -11,11 +11,11 @@ from django.forms import Form, TextInput, Textarea, CharField
 
 class ForumTopicForm(ModelForm):
     
-    def clean_title(self):
-        return default_clean_field(self, 'title')
+    #def clean_title(self):
+    #    return default_clean_field(self, 'title')
     
-    def clean_description(self):
-        return default_clean_field(self, 'description')
+    #def clean_description(self):
+    #    return default_clean_field(self, 'description')
     
     class Meta:
         model = ForumTopic
@@ -24,8 +24,8 @@ class ForumTopicForm(ModelForm):
 
 class ForumThreadForm(ModelForm):
     
-    def clean_title(self):
-        return default_clean_field(self, 'title')
+    #def clean_title(self):
+    #    return default_clean_field(self, 'title')
     
     class Meta:
         model = ForumThread

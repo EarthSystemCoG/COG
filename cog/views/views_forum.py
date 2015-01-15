@@ -59,7 +59,6 @@ def forum_detail(request, project_short_name):
             # save topic to database
             topic.save()
                         
-            # FIXME: redirect to topic page instead ?
             return HttpResponseRedirect( reverse('forum_detail', 
                                                  kwargs={'project_short_name':project.short_name}) )
 
@@ -237,7 +236,8 @@ def topic_update(request, project_short_name, topic_id):
         if form.is_valid():
             
             topic = form.save()
-            return HttpResponseRedirect( reverse('topic_detail', kwargs={ 'topic_id':topic.id, 'project_short_name':project.short_name }) )
+            #return HttpResponseRedirect( reverse('topic_detail', kwargs={ 'topic_id':topic.id, 'project_short_name':project.short_name }) )
+            return HttpResponseRedirect( reverse('forum_detail', kwargs={ 'project_short_name':project.short_name }) )
             
         else:
             return _render_topic_form(request, project, topic, form)
@@ -251,6 +251,36 @@ def _render_topic_form(request, project, topic, form):
                                'form':form },
                               context_instance=RequestContext(request))
 
+
+@login_required
+def thread_add(request, project_short_name, topic_id):
+    
+    # retrieve objects from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    topic = get_object_or_404(ForumTopic, id=topic_id)
+    
+    # threads can be updated only by project members
+    if not userHasUserPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    title = '%s: new Thread' % topic.title
+    if request.method=='GET':
+        
+        form = ForumThreadForm(initial={'topic':topic})
+        return _render_thread_form(request, project, None, form, title)
+        
+    else:
+        
+        form = ForumThreadForm(request.POST)
+        if form.is_valid():
+            
+            thread = form.save()
+            return HttpResponseRedirect( reverse('forum_detail', 
+                                         kwargs={'project_short_name':project.short_name}) )
+
+            
+        else:
+            return _render_thread_form(request, project, None, form, title)
 
     
 @login_required
@@ -266,36 +296,32 @@ def thread_update(request, project_short_name, thread_id):
     if not userHasAdminPermission(request.user, project) and thread.author!=request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
+    title = '%s: update Thread' % thread.title
+
     if request.method=='GET':
         
         form = ForumThreadForm(instance=thread)
-        
-        return render_to_response('cog/forum/thread_form.html',
-                                  {'thread': thread, 
-                                   'title': 'Update Forum Thread %s: %s' % (project.short_name, thread.title),
-                                   'project':project, 
-                                   'form':form },
-                                  context_instance=RequestContext(request))
+        return _render_thread_form(request, project, thread, form, title)
         
     else:
     
         form = ForumThreadForm(request.POST, instance=thread)
         
         if form.is_valid():
-            
             thread = form.save()
-            
             return HttpResponseRedirect( reverse('thread_detail', kwargs={ 'thread_id':thread.id, 'project_short_name':project.short_name }) )
             
-            
         else:
-            return render_to_response('cog/forum/thread_form.html',
+            return _render_thread_form(request, project, thread, form, title)
+            
+def _render_thread_form(request, project, thread, form, title):
+
+    return render_to_response('cog/forum/thread_form.html',
                           {'thread': thread, 
-                           'title': 'Update Forum Thread %s: %s' % (project.short_name, thread.title),
+                           'title': title,
                            'project':project, 
                            'form':form },
                           context_instance=RequestContext(request))
-
 
 @login_required
 def thread_delete(request, project_short_name, thread_id):

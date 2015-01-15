@@ -23,7 +23,13 @@
 		</div>
 	
 		<div style="text-align:right">
-	    	<input type="button" value="Cancel" onclick="window.location='{% url 'thread_detail' project.short_name|lower thread.id %}'"/>
+			{% if thread %}
+				<!-- return to thread page -->
+	    		<input type="button" value="Cancel" onclick="window.location='{% url 'thread_detail' project.short_name|lower thread.id %}'"/>
+			{% else %}
+				<!-- return to forum page -->
+				<input type="button" value="Cancel" onclick="window.location='{% url 'forum_detail' project.short_name|lower %}'"/>
+			{% endif %}
 			&nbsp;
 	        <input type="submit" value="Submit" />
 		</div>

@@ -12,7 +12,8 @@
    		<div class="mybox">
 	    	<table>
 	        	<caption>
-	        		{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>		 			
+	        		{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>	
+	        		{% include 'cog/forum/_topic_links.html' %} 			
 	        	</caption>
     			<!-- one row per thread -->
     			{% for thread in topic.get_threads %}
@@ -21,28 +22,38 @@
 						<td>
 							<a href="{% url 'thread_detail' project.short_name thread.id %}">{{ thread.title }}</a>
 							<br/>
-	    					Started by {{ thread.author }} on {{ thread.create_date }}, {{ comment_count }} comments.
+	    					Started by {{ thread.author }} on {{ thread.create_date }}, {{ comment_count }} post{{comment_count|pluralize}}.
 		    				{% if comment_count > 0 %}
-		    					Last comment on {{ thread.get_last_comment.submit_date }} by {{ thread.get_last_comment.user }}.
+		    					Last post on {{ thread.get_last_comment.submit_date }} by {{ thread.get_last_comment.user }}.
 		    				{% endif %}							
 						</td>
 					</tr>
     			{% empty %}
     				<tr>
     					<td>
-    						<i>This topic has no threads yet.</i>
+    						<i>This Topic has no Threads yet.</i>
     					</td>
     				</tr>
     			{% endfor %}
     			
+    			<!-- link to start new thread -->
+    			{% if user|hasUserPermission:project %}
+	    			<tr>
+	    				<td>Start a <a href="{% url 'thread_add' project.short_name topic.id %}" class="changelink">new Thread</a> about this Topic.</td>
+	    			</tr>
+    			{% endif %}	
     			
     		</table>
     	</div>
     {% empty %}
-    	<i>This forum has no topics yet.</i>
+    	<i>This forum has no Topics yet.</i>
     {% endfor %}
     
 	{% paginate %}
+	
+	<br/>
+	Forum Topics can only be created by project administrators. Project members can create new Threads for each Topic, after they <a href="{% url 'login' %}?next={{ request.path }}"> login</a>.
+	<br/>
 		
 	<!-- new forum topic form -->
 	{% if user|hasAdminPermission:project %}
@@ -59,15 +70,13 @@
 						<span style="vertical-align: middle">
 							{{ form.title }} 
 							<br/>{{ form.title.errors }}
-							{{ form.is_private }} This topic is private (can only be viewed by project members)
+							{{ form.is_private }} This Topic is private (can only be viewed by project members)
 							&nbsp;<input type="submit" value="Submit"/>
 						</span>
 					</td>
 				</tr>
 			</table>
 	  	</form>
-	  	Forum topics can only be created by project administrators. 
-		The topic title must be non empty and must not contain special characters.
 	{% endif %}
 	
 	
