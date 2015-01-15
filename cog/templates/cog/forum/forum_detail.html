@@ -16,8 +16,7 @@
     		{% for topic in topics %}
     			<tr>
     				<td>
-    					{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>
-						{% include 'cog/forum/_topic_links.html' %}    					
+    					{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>		 			
     				</td>
     			</tr>
     			<tr>

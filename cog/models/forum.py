@@ -13,6 +13,7 @@ from django_comments.models import Comment
 from django_comments.moderation import CommentModerator, moderator
 from cog.notification import notify
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
 
 class Forum(models.Model):
     '''Top-level forum specific to each project, contains one or more Discussion.'''
@@ -62,11 +63,19 @@ class ForumThread(models.Model):
     
     def getProject(self):
         return self.topic.forum.project
+            
+    def get_comments(self):
+        '''Method to retrieve all comments for this object.
+           Needed to because comments must be explicitly deleted.'''
+        
+        content_type = ContentType.objects.get_for_model(ForumThread)
+        return Comment.objects.filter(content_type=content_type).filter(object_pk=self.id).order_by('-submit_date')
     
     def get_last_comment(self):
+        '''Returns the last comment for this object.'''
         
         try:
-            return Comment.objects.filter(object_pk=self.id).order_by("-submit_date")[0]
+            return self.get_comments()[0]
         except IndexError:
             return None
     

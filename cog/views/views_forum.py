@@ -14,8 +14,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from constants import PERMISSION_DENIED_MESSAGE
 from cog.forms.forms_forum import ForumThreadForm, MyCommentForm, ForumTopicForm
-from django.utils.timezone import now
 from django_comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
 
 def forum_detail(request, project_short_name):
     '''View to display a list of all forum topics.
@@ -119,7 +119,12 @@ def topic_delete(request, project_short_name, topic_id):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    # delete thread (and associated comments)
+    # must explicitly delete comments for all threads
+    for thread in topic.threads.all():
+        for comment in thread.get_comments():
+            comment.delete()
+  
+    # delete thread
     topic.delete()
     
     # redirect to forum
@@ -303,7 +308,12 @@ def thread_delete(request, project_short_name, thread_id):
     if not userHasAdminPermission(request.user, thread.getProject()) and thread.author!=request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    # delete thread (and associated comments)
+    # must explicitly delete comments
+    for comment in thread.get_comments():
+        print 'deleting comment=%s' % comment
+        comment.delete()
+    
+    # delete this thread
     thread.delete()
     
     # redirect to forum
