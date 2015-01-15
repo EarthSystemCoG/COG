@@ -104,8 +104,8 @@ def topic_detail(request, project_short_name, topic_id):
 
         else:
             
-            # display forum index with errors
-            return _render_forum_template(threads, project, form, request)
+            # display topic page with errors
+            return _render_topic_template(project, topic, threads, form, request)
         
 @login_required
 def topic_delete(request, project_short_name, topic_id):
