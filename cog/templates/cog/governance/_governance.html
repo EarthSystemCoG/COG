@@ -3,28 +3,28 @@
 <!-- IMPORTANT: style used to allign all governance tables across pages -->
 
 
-{% if tab = "GOVERNANCE"|tabs %}
+{% if tab == "GOVERNANCE"|tabs %}
 	{% include 'cog/governance/_governance_overview.html' %}
 {% endif %}
 
-{% if tab = "BODIES"|tabs %}
+{% if tab == "BODIES"|tabs %}
 	{% include 'cog/governance/_governance_strategic_management_bodies.html' %}
 	{% include 'cog/governance/_governance_operational_management_bodies.html' %}
 {% endif %}
 
-{% if tab = "ROLES"|tabs %}
+{% if tab == "ROLES"|tabs %}
 	{% include 'cog/governance/_governance_lead_organizational_roles.html' %}
 	{% include 'cog/governance/_governance_member_organizational_roles.html' %}
 {% endif %}
 
-{% if tab = "COMMUNICATION"|tabs %}
+{% if tab == "COMMUNICATION"|tabs %}
 	{% with 'True' as internal %}
 		{% include 'cog/governance/_governance_communication_means.html' %}
 	{% endwith %}
 {% endif %}
-{% if tab = "PROCESSES"|tabs %}
+{% if tab == "PROCESSES"|tabs %}
 	{% include 'cog/governance/_governance_processes.html' %}
 {% endif %}
-{% if tab = "POLICIES"|tabs %}
+{% if tab == "POLICIES"|tabs %}
 	{% include 'cog/governance/_governance_policies.html' %}
 {% endif %}
