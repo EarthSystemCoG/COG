@@ -33,4 +33,4 @@ class ForumThreadForm(ModelForm):
         
 class MyCommentForm(Form):
     
-    text = CharField(required=True, widget=Textarea(attrs={'rows':'10'}))
+    text = CharField(required=True, widget=Textarea(attrs={'class': 'ckeditor'}))
