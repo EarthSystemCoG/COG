@@ -106,10 +106,13 @@ class ForumModerator(CommentModerator):
             url = reverse('thread_detail', kwargs={ 'project_short_name':project.short_name.lower(), 'thread_id':thread.id })
             url = request.build_absolute_uri(url)        
             # specific comment url: http://localhost:8000/projects/TestProject/thread/2/?c=17
-            message = "User: %s\n Thread: %s\n Comment: %s\n" % (user, url, comment.comment)
+            # plain text email
+            #message = "User: %s\n Thread: %s\n Comment: %s\n" % (user, url, comment.comment)
+            # html formatted email
+            message = "User: %s<br/>Forum Thread: %s<p/>New Comment: %s" % (user, url, comment.comment)
     
             # send email                
             for admin in project.getAdminGroup().user_set.all():
-                notify(admin, subject, message)
+                notify(admin, subject, message, mime_type='html')
 
 moderator.register(ForumThread, ForumModerator)    
