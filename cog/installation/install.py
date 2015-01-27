@@ -15,7 +15,7 @@ from cog.models import Project
 from cog.models import UserProfile
 from cog.views.views_project import initProject
 
-from cog.installation.constants import DEFAULT_PROJECT_SHORT_NAME
+from cog.installation.constants import DEFAULT_PROJECT_SHORT_NAME, ESGF_ROOTADMIN_PASSWORD_FILE, DEFAULT_ROOTADMIN_PASSWORD
 
 from django.core import management
 import sqlalchemy
@@ -117,13 +117,31 @@ class CoGInstall(object):
             logging.info("Creating admin user")
             user = User(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
                         is_staff=True, is_superuser=True)
-            user.set_password('changeit')
+            password = self._getRootAdminPassword()
+            user.set_password(password)
             user.save()
             userp = UserProfile(user=user, institution='Institution', city='City', state='State', country='Country',
                                 site=site,
                                 last_password_update=datetime.datetime.now())
-            userp.clearTextPassword='changeit' # needed by esgfDatabaseManager, NOT saved as clear text in any database
+            userp.clearTextPassword=password # needed by esgfDatabaseManager, NOT saved as clear text in any database
             userp.save()
+            
+    def _getRootAdminPassword(self):
+        '''Tries to read the rootAdmin password from the ESGF standard location '/esg/config/.esgf_pass',
+        if not found it uses 'changeit'.'''
+    
+        # /esg/config/.esgf_pass
+        try:
+            with open(ESGF_ROOTADMIN_PASSWORD_FILE, 'r') as f:
+                password = f.read().strip()
+                logging.info("Read ESGF database password from file: %s" % ESGF_ROOTADMIN_PASSWORD_FILE)  
+                return password
+        except IOError:
+            # file not found
+            logging.warn("ESGF database password file: %s could not found or could not be read" % ESGF_ROOTADMIN_PASSWORD_FILE) 
+            logging.warn("Using standard rootAdmin password, please change it right away.")
+            return DEFAULT_ROOTADMIN_PASSWORD
+
             
 if __name__ == '__main__':
 
