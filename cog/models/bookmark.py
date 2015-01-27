@@ -3,6 +3,7 @@ from constants import APPLICATION_LABEL
 from folder import Folder
 from cog.models import Post
 
+
 class Bookmark(models.Model):   
     
     url = models.URLField('URL', blank=False, max_length=1000)
@@ -14,7 +15,7 @@ class Bookmark(models.Model):
     notes = models.ForeignKey(Post, blank=True, null=True, on_delete=models.SET_NULL)
     
     class Meta:
-        app_label= APPLICATION_LABEL
+        app_label = APPLICATION_LABEL
         
     # method to assign a Notes object
     def setPost(self, post):
