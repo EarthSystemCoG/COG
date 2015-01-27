@@ -14,6 +14,7 @@ from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS
 from cog.models.external_url_conf import externalUrlManager
 
+
 # Generic view to display a given type of external URLs.
 def external_urls_display(request, project_short_name, suburl):
                           #external_url_type, 
@@ -22,7 +23,7 @@ def external_urls_display(request, project_short_name, suburl):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check project is active
-    if project.active==False:
+    if project.active == False:
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
@@ -35,7 +36,7 @@ def external_urls_display(request, project_short_name, suburl):
     external_url_type = externalUrlConf.type
     template_title = externalUrlConf.label
     template_form_page = "%s_update" % suburl
-    template_form_pages = { reverse(template_form_page, args=[project_short_name, suburl]) : template_title }
+    template_form_pages = {reverse(template_form_page, args=[project_short_name, suburl]): template_title}
         
     # build list of children with external urls of this type
     children = _subSelectProjects(project.children(), externalUrlConf, request.user)
@@ -48,11 +49,12 @@ def external_urls_display(request, project_short_name, suburl):
                                'title': '%s %s' % (project.short_name, template_title), 
                                'template_page': 'cog/project/_external_urls_list.html', 
                                'template_title': template_title, 
-                               'template_form_pages':template_form_pages,
-                               'children':children, 'peers':peers,
-                               'external_url_type':external_url_type },
+                               'template_form_pages': template_form_pages,
+                               'children': children, 'peers': peers,
+                               'external_url_type': external_url_type},
                               context_instance=RequestContext(request))
-    
+
+
 # method to sub-select related projects to display in external URL rollup
 def _subSelectProjects(projects, externalUrlConf, user):
     
@@ -69,8 +71,9 @@ def _subSelectProjects(projects, externalUrlConf, user):
             # no tab for project found
             else:
                 _projects.append(proj)
-    return _projects    
-    
+    return _projects
+
+
 # Generic view to update external URLs
 @login_required
 def external_urls_update(request, project_short_name, suburl):
@@ -94,28 +97,30 @@ def external_urls_update(request, project_short_name, suburl):
     # exclude fields 'project', 'type' so they don't get validated
     # allow for instances to be deleted
     nextras = 1
-    ExternalUrlFormSet = modelformset_factory(ExternalUrl, extra=nextras, exclude=('project','type'), can_delete=True,
+    ExternalUrlFormSet = modelformset_factory(ExternalUrl, extra=nextras, exclude=('project', 'type'), can_delete=True,
                                               #widgets={'description': Textarea(attrs={'rows': 4})} ) # not working
                                               formfield_callback=custom_field_callback)
     
     # GET
-    if request.method=='GET':
+    if request.method == 'GET':
         
         # create formset instance backed by current saved instances
         # must provide the initial data to all the extra instances, 
         # which come in the list after the database instances
         #queryset = ExternalUrl.objects.filter(project=project, type=type)
         #initial_data = [ {'project':project, 'type':type } for count in xrange(len(queryset)+nextras)]
-        #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)   
-        formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type))
+        #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)
+
+        # external_urls are ordered by title when editing to match the order when just viewing.
+        formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).order_by('title'))
         
         return render_external_urls_form(request, project, formset, externalUrlConf, redirect)
     
     # POST
     else:
-        
+
         formset = ExternalUrlFormSet(request.POST)
-        
+
         if formset.is_valid():
             # select instances that have changed, don't save to database yet
             instances = formset.save(commit=False)
@@ -129,15 +134,17 @@ def external_urls_update(request, project_short_name, suburl):
             print formset.errors
             return render_external_urls_form(request, project, formset, externalUrlConf, redirect)
 
+
 # function to customize the widget used by specific formset fields
 def custom_field_callback(field):
     if field.name == 'description':
         return field.formfield(widget=Textarea(attrs={'rows': 4}))
     else:
         return field.formfield()
-     
+
+
 def render_external_urls_form(request, project, formset, externalUrlConf, redirect):
      return render_to_response('cog/project/external_urls_form.html',
                               {'project':project, 'formset':formset, 'title' : '%s Update' % externalUrlConf.label, 
-                               'type' : externalUrlConf.type, 'redirect':redirect },
+                               'type' : externalUrlConf.type, 'redirect': redirect },
                                 context_instance=RequestContext(request))

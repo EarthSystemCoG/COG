@@ -103,7 +103,7 @@ class Project(models.Model):
     # The attribute peers_set contains the inverse relationship
     peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects', symmetrical=False)
     
-    # the initial requestor of the project, if any
+    # the initial requester of the project, if any
     author = models.ForeignKey(User, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     
     # the workspace of an inactive project is not accessible
@@ -129,7 +129,8 @@ class Project(models.Model):
     dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
     
     # flag to enable forum notifications
-    forumNotificationEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable forum notifications to project administrators ?')    
+    forumNotificationEnabled = models.BooleanField(default=False, blank=False, null=False,
+                                                   help_text='Enable forum notifications to project administrators ?')
     
     maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
@@ -260,9 +261,11 @@ class Project(models.Model):
             # the pages for this topic, with their order
             self.pages = pages
         
-    # generic method to return a list of the project's external URLs of a given type
+    # generic method to return a list of the project's external URLs of a given type, ordered by their title.
+    # unfortunately, external_url has no date created function or other field we can order by. Before 2.10, modification
+    # of an external_url could result in random ordering. This at least forces them to be alphabetical.
     def get_external_urls(self, type):
-        return self.externalurl_set.filter(project=self, type=type)
+        return self.externalurl_set.filter(project=self, type=type).order_by('title')
         
     # method to return the project home page URL
     def home_page_url(self):
