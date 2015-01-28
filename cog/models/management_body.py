@@ -105,4 +105,4 @@ def initManagementBodyPurpose():
         except ManagementBodyPurpose.DoesNotExist:
             mbp = ManagementBodyPurpose(purpose=purpose, order=order, category=MANAGEMENT_BODY_CATEGORY_OPERATIONAL)
             mbp.save()
-            print "Created management body purpose: %s" % mbp            
+            print "Created management body purpose: %s" % mbp
