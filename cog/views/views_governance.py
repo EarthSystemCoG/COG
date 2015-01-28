@@ -78,7 +78,7 @@ def communication_means_update(request, project_short_name):
 
     # delegate to view for generic governance object
     return governance_object_update(request, project_short_name, tab, CommunicationMeans, CommunicationMeansForm,
-                                    formsetType, 'Communication and Coordination Update',
+                                    formsetType, 'Communications Update',
                                     'cog/governance/communication_means_form.html', redirect)
 
     
