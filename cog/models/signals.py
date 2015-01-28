@@ -21,10 +21,11 @@ def account_created_receiver(sender, **kwargs):
     userp = kwargs['instance']
     created = kwargs['created']
 
-    print 'Signal received: UserProfile post_save: user=%s created=%s openids=%s' % (userp.user.get_full_name(), created, userp.openids())
+    print 'Signal received: UserProfile post_save: username=%s created=%s openids=%s' % (userp.user.username, created, userp.openids())
 
     # create ESGF user: only when user profile is first created
-    # from a COG registration, not as a result of an OpenID login
+    # from a COG registration, and only if the user does NOT have an openid already
+    # (as a result of logging in with an ESGF openid)
     if settings.ESGF_CONFIG and created and len(userp.openids())==0:
         print 'Inserting user into ESGF security database'
         esgfDatabaseManager.insertUser(userp)

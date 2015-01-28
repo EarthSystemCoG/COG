@@ -6,6 +6,7 @@ It uses the configuration settings from $COG_CONFIG_DIR/cog_settings.cfg
 import os
 import cog
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from django.conf import settings
         
 from django.contrib.auth.models import User
 
@@ -15,7 +16,10 @@ from cog.models import Project
 from cog.models import UserProfile
 from cog.views.views_project import initProject
 
-from cog.installation.constants import DEFAULT_PROJECT_SHORT_NAME, ESGF_ROOTADMIN_PASSWORD_FILE, DEFAULT_ROOTADMIN_PASSWORD
+from cog.installation.constants import (DEFAULT_PROJECT_SHORT_NAME, ESGF_ROOTADMIN_PASSWORD_FILE, 
+                                        DEFAULT_ROOTADMIN_PASSWORD, ROOTADMIN_USERNAME)
+from cog.plugins.esgf.security import esgfDatabaseManager
+from django_openid_auth.models import UserOpenID
 
 from django.core import management
 import sqlalchemy
@@ -111,18 +115,32 @@ class CoGInstall(object):
             initProject(project)
             project.save()
         
-        # Administrator user
+        # create Administrator user - one time only
         if User.objects.count() == 0:
-        #if not User.objects.filter(username='admin').exists():
+            
+            # create User object
             logging.info("Creating admin user")
-            user = User(first_name='Admin', last_name='User', username='admin', email='adminuser@test.com', 
-                        is_staff=True, is_superuser=True)
-            password = self._getRootAdminPassword()
+            user = User(first_name='Admin', last_name='User', username=ROOTADMIN_USERNAME, 
+                        email='adminuser@test.com', is_staff=True, is_superuser=True)
+            if settings.ESGF_CONFIG:
+                password = self._getRootAdminPassword()
+            else:
+                password = DEFAULT_ROOTADMIN_PASSWORD
             user.set_password(password)
             user.save()
+            
+            # if this openid already exists in ESGF database, simply associate it with the User object
+            # later, this will prevent creating a new openid for this same user (see account_created_receiver)
+            # if not, creating the UserProfile object will trigger the creation of the same openid (in CoG and ESGF)
+            if settings.ESGF_CONFIG:
+                openid = esgfDatabaseManager.buildOpenid(ROOTADMIN_USERNAME)
+                if esgfDatabaseManager.checkOpenid(openid):
+                    UserOpenID.objects.create(user=user, claimed_id=openid, display_id=openid)
+                    logging.info("Openid=%s already exists in ESGF database, assigning it to CoG administrator" % openid)
+            
+            # create UserProfile object
             userp = UserProfile(user=user, institution='Institution', city='City', state='State', country='Country',
-                                site=site,
-                                last_password_update=datetime.datetime.now())
+                                site=site, last_password_update=datetime.datetime.now())
             userp.clearTextPassword=password # needed by esgfDatabaseManager, NOT saved as clear text in any database
             userp.save()
             
@@ -134,12 +152,12 @@ class CoGInstall(object):
         try:
             with open(ESGF_ROOTADMIN_PASSWORD_FILE, 'r') as f:
                 password = f.read().strip()
-                logging.info("Read ESGF database password from file: %s" % ESGF_ROOTADMIN_PASSWORD_FILE)  
+                logging.info("Read ESGF administrator password from file: %s" % ESGF_ROOTADMIN_PASSWORD_FILE)  
                 return password
         except IOError:
             # file not found
-            logging.warn("ESGF database password file: %s could not found or could not be read" % ESGF_ROOTADMIN_PASSWORD_FILE) 
-            logging.warn("Using standard rootAdmin password, please change it right away.")
+            logging.warn("ESGF administrator password file: %s could not found or could not be read" % ESGF_ROOTADMIN_PASSWORD_FILE) 
+            logging.warn("Using standard administrator password, please change it right away.")
             return DEFAULT_ROOTADMIN_PASSWORD
 
             
