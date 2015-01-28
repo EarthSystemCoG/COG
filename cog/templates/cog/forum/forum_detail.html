@@ -12,7 +12,7 @@
    		<div class="mybox">
 	    	<table>
 	        	<caption>
-	        		{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><b>{{ topic.title }}</b></a>	
+	        		{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}">{{ topic.title }}</a>
 	        		{% include 'cog/forum/_topic_links.html' %} 			
 	        	</caption>
     			<!-- one row per thread -->
