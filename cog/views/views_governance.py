@@ -16,6 +16,7 @@ from cog.views.views_templated import templated_page_display
 
 # management_body_update proj.short_name.lower category
 
+
 def governance_display(request, project_short_name, tab):
     """
     :param request:
@@ -31,14 +32,15 @@ def governance_display(request, project_short_name, tab):
         template_title = 'Governance Overview'
         template_form_pages = {reverse("governance_overview_update", args=[project_short_name]): 'Governance Overview'}
     elif tab == TABS["BODIES"]:
-        template_form_pages = {reverse("management_body_update", args=[project_short_name, 'Strategic']): 'Strategic Bodies',
-                                reverse("management_body_update", args=[project_short_name, 'Operational']): 'Operational Bodies'}
+        template_form_pages = {reverse("management_body_update", args=[project_short_name, 'Strategic']):
+                               'Strategic Bodies', reverse("management_body_update", args=[project_short_name,
+                               'Operational']): 'Operational Bodies'}
     elif tab == TABS["ROLES"]:
         template_form_pages = {reverse("organizational_role_update", args=[project_short_name]): 'Roles'}
     elif tab == TABS["PROCESSES"]:
         template_form_pages = {reverse("governance_processes_update", args=[project_short_name]): 'Processes'}
     elif tab == TABS["COMMUNICATION"]:
-        template_form_pages = {reverse("communication_means_update", args=[project_short_name]): 'Communication' }
+        template_form_pages = {reverse("communication_means_update", args=[project_short_name]): 'Communications'}
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
 
@@ -51,7 +53,7 @@ def management_body_update(request, project_short_name, category):
         initManagementBodyPurpose()
         
     # use different forms to limit selection of ManagementBodyPurpose
-    if category==MANAGEMENT_BODY_CATEGORY_STRATEGIC:
+    if category == MANAGEMENT_BODY_CATEGORY_STRATEGIC:
         objectTypeForm = StrategicManagementBodyForm
         formsetType = StrategicManagementBodyInlineFormset
     else:
@@ -62,8 +64,9 @@ def management_body_update(request, project_short_name, category):
     tab = TABS["BODIES"]
     redirect = HttpResponseRedirect(reverse('governance_display', args=[project_short_name.lower(), tab]))
     return governance_object_update(request, project_short_name, tab, ManagementBody, objectTypeForm, formsetType,
-                                    '%s Management Bodies Update' % category, 'cog/governance/management_body_form.html',
-                                    redirect)
+                                    '%s Management Bodies Update' % category, 'cog/governance/management_body_form.html'
+                                    , redirect)
+
 
 # view to update the project Communication Means objects
 @login_required
@@ -74,9 +77,9 @@ def communication_means_update(request, project_short_name):
     redirect = HttpResponseRedirect(reverse('governance_display', args=[project_short_name.lower(), tab]))
 
     # delegate to view for generic governance object
-    return governance_object_update(request, project_short_name, tab, 
-                                    CommunicationMeans, CommunicationMeansForm, formsetType,
-                                   'Communication and Coordination Update', 'cog/governance/communication_means_form.html', redirect)
+    return governance_object_update(request, project_short_name, tab, CommunicationMeans, CommunicationMeansForm,
+                                    formsetType, 'Communication and Coordination Update',
+                                    'cog/governance/communication_means_form.html', redirect)
 
     
 @login_required
@@ -90,7 +93,7 @@ def governance_overview_update(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # GET request
-    if request.method=='GET':
+    if request.method == 'GET':
                 
         # create form object from model
         form = GovernanceOverviewForm(instance=project)
@@ -129,12 +132,14 @@ class StrategicManagementBodyInlineFormset(BaseInlineFormSet):
         querySet = super(StrategicManagementBodyInlineFormset, self).get_queryset() 
         # additionally sub-select by category='Strategic'
         return querySet.filter(category='Strategic')
-    
+
+
 class OperationalManagementBodyInlineFormset(BaseInlineFormSet):
         
     def get_queryset(self):
-        return  super(OperationalManagementBodyInlineFormset, self).get_queryset().filter(category='Operational')
-    
+        return super(OperationalManagementBodyInlineFormset, self).get_queryset().filter(category='Operational')
+
+
 class InternalCommunicationMeansInlineFormset(BaseInlineFormSet):
     
     def get_queryset(self):
@@ -146,7 +151,8 @@ class InternalCommunicationMeansInlineFormset(BaseInlineFormSet):
 # The object must have the following attributes and methods:
 # obj.project
 # obj.__unicode__
-def governance_object_update(request, project_short_name, tab, objectType, objectTypeForm, formsetType, title, template, redirect):
+def governance_object_update(request, project_short_name, tab, objectType, objectTypeForm, formsetType, title, template,
+                             redirect):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -156,10 +162,10 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # initialize formset factory for this governance object
-    ObjectFormSet  = inlineformset_factory(Project, objectType, extra=1, form=objectTypeForm, formset=formsetType)
+    ObjectFormSet = inlineformset_factory(Project, objectType, extra=1, form=objectTypeForm, formset=formsetType)
 
     # GET request
-    if (request.method=='GET'):
+    if request.method == 'GET':
         
         # create formset instance associated to current project
         formset = ObjectFormSet(instance=project)
@@ -173,7 +179,7 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
         
         if formset.is_valid():
             
-            # save changes to databaase
+            # save changes to database
             instances = formset.save()
                         
             # set additional object flags
@@ -194,7 +200,7 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
 
 def render_governance_object_form(request, project, formset, title, template):
     return render_to_response(template,
-                              {'title' : title, 'project':project, 'formset':formset },
+                              {'title': title, 'project': project, 'formset': formset},
                               context_instance=RequestContext(request))
 
 # view to update a Management Body object members
@@ -210,8 +216,10 @@ def management_body_members(request, project_short_name, object_id):
     # delegate to generic view with specific object types
     tab = TABS["BODIES"]
     redirect = reverse('governance_display', args=[managementBody.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm, redirect)
-  
+    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm,
+                          redirect)
+
+
 # view to update a Communication Means object members  
 @login_required
 def communication_means_members(request, object_id):
@@ -223,7 +231,9 @@ def communication_means_members(request, object_id):
     # delegate to generic view with specific object types
     tab = TABS["COMMUNICATION"]
     redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, communicationMeansMemberForm, redirect)
+    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember,
+                          communicationMeansMemberForm, redirect)
+
 
 # view to update an Organizational Role object members  
 @login_required
@@ -237,7 +247,9 @@ def organizational_role_members(request, object_id):
     # delegate to generic view with specific object types
     tab = TABS["ROLES"]
     redirect = reverse('governance_display', args=[organizationalRole.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, organizationalRoleMemberForm, redirect)
+    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember,
+                          organizationalRoleMemberForm, redirect)
+
 
 # 
 # Generic view to update members for:
@@ -258,13 +270,12 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # formset factory
-    ObjectFormSet  = inlineformset_factory(objectType, objectMemberType, extra=3)
+    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, extra=3)
     # set the formset form to custom class that includes the current project
     ObjectFormSet.form = objectForm
-    
-    
+
     # GET request
-    if request.method=='GET':
+    if request.method == 'GET':
         
         # retrieve current members
         formset = ObjectFormSet(instance=obj)
@@ -289,15 +300,17 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
             
             # redirect to form view
             return render_members_form(request, obj, formset, redirect)
-        
+
+
 def render_members_form(request, object, formset, redirect):
         
     return render_to_response('cog/governance/members_form.html',
-                              {'title' : '%s Members Update' % object, 
+                              {'title': '%s Members Update' % object,
                                'project': object.project,
-                               'formset':formset, 'redirect':redirect },
-                               context_instance=RequestContext(request))
-    
+                               'formset': formset, 'redirect': redirect},
+                              context_instance=RequestContext(request))
+
+
 @login_required
 def processes_update(request, project_short_name):
     
@@ -309,7 +322,7 @@ def processes_update(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # GET request
-    if request.method=='GET':
+    if request.method == 'GET':
                 
         # create form object from model
         form = GovernanceProcessesForm(instance=project)
@@ -340,15 +353,16 @@ def processes_update(request, project_short_name):
 
 def render_governance_processes_form(request, form, project):
     return render_to_response('cog/governance/governance_processes_form.html',
-                              {'title' : 'Governance Processes Update', 'project': project, 'form':form },
-                               context_instance=RequestContext(request))
+                              {'title': 'Governance Processes Update', 'project': project, 'form': form},
+                              context_instance=RequestContext(request))
     
 def render_governance_overview_form(request, form, project):
     return render_to_response('cog/governance/governance_overview_form.html',
-                              {'title' : 'Governance Overview Update', 'project': project, 'form':form },
-                               context_instance=RequestContext(request))
-    
-# Method to update an organizationl role
+                              {'title': 'Governance Overview Update', 'project': project, 'form': form},
+                              context_instance=RequestContext(request))
+
+
+# Method to update an organizational role
 @login_required
 def organizational_role_update(request, project_short_name):
     
@@ -360,10 +374,11 @@ def organizational_role_update(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # must build the formset via non-traditional means to pass the current project as a class attribute
-    OrganizationalRoleFormSet  = inlineformset_factory(Project, OrganizationalRole, extra=1, can_delete=True, form=OrganizationalRoleForm)
+    OrganizationalRoleFormSet = inlineformset_factory(Project, OrganizationalRole, extra=1, can_delete=True,
+                                                      form=OrganizationalRoleForm)
     
     # GET request
-    if request.method=='GET':
+    if request.method == 'GET':
         # create formset backed up by current saved instances
         organizational_role_formset = OrganizationalRoleFormSet(instance=project)
         
@@ -394,8 +409,9 @@ def organizational_role_update(request, project_short_name):
             
             # redorect to form
             return render_organizational_role_form(request, project, organizational_role_formset)
-    
+
+
 def render_organizational_role_form(request, project, formset):
     return render_to_response('cog/governance/organizational_role_form.html',
-                              {'title' : 'Organizational Roles Update', 'project':project, 'formset':formset },
+                              {'title': 'Organizational Roles Update', 'project': project, 'formset': formset},
                               context_instance=RequestContext(request))
