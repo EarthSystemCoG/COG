@@ -1,9 +1,9 @@
-<!-- project details page -->
+<!--about_us sub-navigation-->
 
 {% load cog_utils %}
 
 <table>
-	{% if tab = "ABOUTUS"|tabs %}
+	{% if tab == "ABOUTUS"|tabs %}
 	    <tr>
 			<td nowrap="nowrap"><b>Long Name</b></td>
 			<td class="long">{{proj.long_name}}</td>
@@ -22,25 +22,25 @@
 		{% endif %}
 	{% endif %}
 	
-	{% if tab = "MISSION"|tabs and proj.mission %}
+	{% if tab == "MISSION"|tabs and proj.mission %}
 		<tr>
 			<td class="long" colspan="2">{{proj.mission|urlizetrunc:50|linebreaksbr}}</td>
 		</tr>
 	{% endif %}
 	
-	{% if tab = "VISION"|tabs and proj.vision %}
+	{% if tab == "VISION"|tabs and proj.vision %}
 		<tr>
 			<td class="long" colspan="2">{{proj.vision|urlizetrunc:50|linebreaksbr}}</td>
 		</tr>
 	{% endif %}
 		
-	{% if tab = "VALUES"|tabs and proj.values %}
+	{% if tab == "VALUES"|tabs and proj.values %}
 	<tr>
 		<td class="long" class="long" colspan="2">{{proj.values|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% endif %}
 	
-	{% if tab = "HISTORY"|tabs %}
+	{% if tab == "HISTORY"|tabs %}
 		{% if proj.history %}
 		<tr>
 			<td class="long" colspan="2">{{proj.history|urlizetrunc:50|linebreaksbr}}</td>
@@ -48,18 +48,18 @@
 		{% endif %}
 	{% endif %}
 	
-	{% if tab = "IMPACTS"|tabs %}
+	{% if tab == "IMPACTS"|tabs %}
 		{% for impact in proj.impacts.all %}
 			<tr>
 				<td class="long">
 					<b>{{impact.title}}</b>
-					<p/>{{impact.description|urlizetrunc:50|linebreaksbr}}
+					<p></p>{{impact.description|urlizetrunc:50|linebreaksbr}}
 				</td>
 			</tr>
 		{% endfor %}
 	{% endif %}
 	
-	{% if tab = "PARTNERS"|tabs %}
+	{% if tab == "PARTNERS"|tabs %}
 		<tr>
 			<td align="center">
 				{% include 'cog/project/_partners_display.html' %}
@@ -67,7 +67,7 @@
 		</tr>
 	{% endif %}
 	
-	{% if tab = "SPONSORS"|tabs %}
+	{% if tab == "SPONSORS"|tabs %}
 		<tr>
 			<td align="center">
 				{% include 'cog/project/_sponsors_display.html' %}
@@ -75,7 +75,7 @@
 		</tr>
 	{% endif %}
 	
-	{% if tab = "PEOPLE"|tabs %}	
+	{% if tab == "PEOPLE"|tabs %}
 		<tr>
 			<td align="center">
 				{% include 'cog/project/_people_display.html' %}
