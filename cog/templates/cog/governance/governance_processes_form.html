@@ -11,30 +11,42 @@
 	        <div class="mybox">
 				<table>
 	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Task Prioritization Strategy</td>
+	            		<td>
+                            <b>Task Prioritization Strategy:</b><br>
+                            {{ form.taskPrioritizationStrategy.help_text }}
+                        </td>
+                    </tr>
+                    <tr>
 	            		<td class="long">
-	            			{{ form.taskPrioritizationStrategy.help_text }}
-	            			{{ form.taskPrioritizationStrategy }} 
+	            			{{ form.taskPrioritizationStrategy }}
 	            			{{ form.taskPrioritizationStrategy.errors }}
 	            		</td>
 	            	</tr>
+                </table>
+            </div>
+            <p></p>
+            <div class="mybox">
+                <table>
 	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Requirements Identification Process</td>
+	            		<td>
+                            <b>Requirements Identification Process:</b><br>
+                            {{ form.requirementsIdentificationProcess.help_text }}
+                        </td>
+                    </tr>
+                    <tr>
 	            		<td class="long">
-	            			{{ form.requirementsIdentificationProcess.help_text }}
-	            			{{ form.requirementsIdentificationProcess }} 
+	            			{{ form.requirementsIdentificationProcess }}
 	            			{{ form.requirementsIdentificationProcess.errors }}
 	            		</td>
 	            	</tr>
 				</table>
-		</div>	
-		{{ form.project.as_hidden }}
+		    </div>
+		 {{ form.project.as_hidden }}
 	     
 	    <div style="text-align:right">
 	         <input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'processes' %}'"/>
 	         <input type="submit" value="Submit" />
         </div>
-
 	</form>
 	
 {% endblock %}

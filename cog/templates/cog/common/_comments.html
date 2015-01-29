@@ -15,9 +15,19 @@
 {% autopaginate comment_list 10 %}
 
 <hr class="white"/>
-<div class="header_bar"> 
-     <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">
-         &nbsp; Comments ({{ comment_count }})</a>
+<div class="header_bar">
+    {% if request.user|hasUserPermission:project %}
+         <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">
+             &nbsp; Comments ({{ comment_count }})</a>
+    {% else %}
+        <!--no comments and not logged in results in a static bar w/o link. This removed empty flash below the bar-->
+        {% if comment_count == 0 %}
+              No Comments
+        {% else %}
+            <a href="" onclick="javascript:toggle_visibility('mycomments'); return false;" class="listlink">
+             &nbsp; Comments ({{ comment_count }})</a>
+        {% endif %}
+    {% endif %}
 </div>
 <!--// end div.header_bar for comments //-->
 <!-- NOTE: open up comments when page is first loaded -->

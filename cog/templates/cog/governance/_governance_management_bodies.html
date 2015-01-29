@@ -34,11 +34,11 @@
 								<td>{{mb.termsOfReference|urlizetrunc:50|linebreaksbr}}</td>
 							</tr>
 							{% endif %}
-							{% if mb.members.all %}
+							{% if mb.members %}
 							<tr>
 								<td class="leftcolumn">Members</td>
 								<td>
-									{% for member in mb.members.all %}{% if forloop.counter > 1 %}, {% endif %}
+									{% for member in mb.members %}{% if forloop.counter > 1 %}, {% endif %}
 										{{member.user.get_full_name}}{% endfor %}
 								</td>
 							</tr>
