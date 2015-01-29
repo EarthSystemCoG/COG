@@ -37,10 +37,10 @@ class EmailConfig:
 # module scope email configuration
 emailConfig = EmailConfig()
 
-def notify(toUser, subject, message):
+def notify(toUser, subject, message, mime_type='plain'):  # send 'plain' email by default
     
-    # send email in separate thread, do not wait
-    emailThread = EmailThread(toUser.email, subject, message)
+    # send email in separate thread, do not wait   
+    emailThread = EmailThread(toUser.email, subject, message, mime_type=mime_type)
     emailThread.start()
 
 def sendEmail(fromAddress, toAddress, subject, message):
@@ -53,7 +53,7 @@ def sendEmail(fromAddress, toAddress, subject, message):
 class EmailThread(Thread):
     '''Class that sends an email in a separate thread.'''
     
-    def __init__ (self, toAddress, subject, message, fromAddress=None):
+    def __init__ (self, toAddress, subject, message, fromAddress=None, mime_type='plain'):
         Thread.__init__(self)
         self.toAddress = toAddress
         self.subject = subject
@@ -64,6 +64,7 @@ class EmailThread(Thread):
             self.fromAddress = emailConfig.sender
         else:
             self.fromAddress = None
+        self.mime_type=mime_type
         
     def run(self):
         
@@ -71,6 +72,7 @@ class EmailThread(Thread):
         print "To: %s" % self.toAddress
         print "Subject: %s" % self.subject
         print "Message: %s" % self.message
+        print "Mime Type: %s" % self.mime_type
         
         # use local mail server
         #toUser.email_user(subject, message, from_email=fromAddress)
@@ -79,7 +81,7 @@ class EmailThread(Thread):
         if emailConfig.init == True:
     
             # use email relay server
-            msg = MIMEText(self.message)
+            msg = MIMEText(self.message, self.mime_type)
             msg['Subject'] = self.subject
             msg['From'] = self.fromAddress
             msg['To'] = self.toAddress    

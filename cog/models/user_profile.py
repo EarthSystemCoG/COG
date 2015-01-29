@@ -49,15 +49,6 @@ class UserProfile(models.Model):
     # datetime when password was last updated, used to trigger mandatory resets
     last_password_update = models.DateTimeField('Date and Time when Password was Last Updated', blank=True, null=True)
 
-    def isCogUser(self):
-        ''' Utility method to detect a user with CoG login type.'''
-        
-        return self.type == 1        
-
-    def isOpenidUser(self):
-        ''' Utility method to detect a user with OpenID login type.'''
-        return self.type == 2
-
     def __unicode__(self):
         return "%s" % self.user.get_full_name()
     
@@ -90,6 +81,11 @@ class UserProfile(models.Model):
     def localOpenids(self):
         return [x for x in self.openids() if settings.ESGF_HOSTNAME in x]
     
+    def isOpenidLocal(self, openid):
+        '''Utility method to determine wether the given openid is issued by this site.'''
+        
+        return settings.ESGF_HOSTNAME in openid
+    
     # utility method to return the user first openid
     def openid(self):
         if len(self.user.useropenid_set.all()) > 0:
@@ -116,16 +112,18 @@ def isUserValid(user):
 
     return True
 
-# Method to determine whether a user home site is the current site
 def isUserLocal(user):
+    '''Method to determine whether a user home site is the current site.'''
     
     (profile, _) = UserProfile.objects.get_or_create(user=user)
     return profile.site == Site.objects.get_current()
 
-# Method to identify remote users as users that:
-# a) do NOT have their home site as their current site
-# b) do have an OpenID
 def isUserRemote(user):
+    '''
+    Method to identify remote users as users that:
+    a) do NOT have their home site as their current site
+    b) do have an OpenID
+    '''
     
     (profile, _) = UserProfile.objects.get_or_create(user=user)
     if profile.site == Site.objects.get_current():

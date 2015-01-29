@@ -14,6 +14,7 @@ from django_comments.moderation import CommentModerator, moderator
 from cog.notification import notify
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
+import re
 
 class Forum(models.Model):
     '''Top-level forum specific to each project, contains one or more Discussion.'''
@@ -106,10 +107,28 @@ class ForumModerator(CommentModerator):
             url = reverse('thread_detail', kwargs={ 'project_short_name':project.short_name.lower(), 'thread_id':thread.id })
             url = request.build_absolute_uri(url)        
             # specific comment url: http://localhost:8000/projects/TestProject/thread/2/?c=17
-            message = "User: %s\n Thread: %s\n Comment: %s\n" % (user, url, comment.comment)
+           
+            # a) send plain text email
+            #message = "User: %s\n Thread: %s\n Comment: %s\n" % (user, url, comment.comment)
+            
+            # b) send html formatted email
+            # parse comment content to build images full URLs
+            message = comment.comment
+            # src="/site_media/projects/testproject/Unknown.jpeg"
+            groups = list( re.finditer('src=\"[^\"]+\"', message) )
+            paths = [] # list of (relpath, abspath) to replace after the full message is parsed
+            for group in groups:
+                relpath = message[group.start()+5:group.end()-1]
+                abspath = request.build_absolute_uri(relpath)
+                paths.append( (relpath, abspath) )
+            # replace all
+            for path in paths:
+                message = message.replace(path[0], path[1])
+            
+            message = "User: %s<br/>Forum Thread: %s<p/>New Comment: %s" % (user, url, message)
     
             # send email                
             for admin in project.getAdminGroup().user_set.all():
-                notify(admin, subject, message)
+                notify(admin, subject, message, mime_type='html')
 
 moderator.register(ForumThread, ForumModerator)    

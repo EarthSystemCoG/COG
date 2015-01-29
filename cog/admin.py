@@ -50,7 +50,9 @@ admin.site.register(Lock, admin.ModelAdmin)
 
 admin.site.register(ProjectTag, admin.ModelAdmin)
 
-admin.site.register(UserProfile, admin.ModelAdmin)
+class UserProfileAdmin(admin.ModelAdmin):
+    search_fields = ['user__username', 'user__first_name', 'user__last_name', 'user__email']
+admin.site.register(UserProfile, UserProfileAdmin)
 
 admin.site.register(PeerSite, admin.ModelAdmin)
 

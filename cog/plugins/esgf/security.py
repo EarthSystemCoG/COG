@@ -41,10 +41,15 @@ class ESGFDatabaseManager():
             self.groupDao = GroupDAO(self.Session)
             self.permissionDao = PermissionDAO(self.Session)
             
+    def buildOpenid(self, username):
+        '''Builds an ESGF openid from a given username.'''
+        return ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", username)        
+        
+        
     def createOpenid(self, userProfile):
         '''Selects the first available ESGF openid starting from the CoG username, and saves it in the CoG database'''
         
-        openid = ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", userProfile.user.username)        
+        openid = self.buildOpenid(userProfile.user.username)
         session = self.Session()
         
         try:
@@ -63,14 +68,28 @@ class ESGFDatabaseManager():
                 except NoResultFound:    
                     # this openid is available
                     userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
-                    print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user)
+                    print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user.username)
                     return userOpenID.claimed_id
                 
         finally:
             session.close()
             
         return None # openid not assigned
+    
+    def checkOpenid(self, openid):
+        '''Returns true if the given openid exists in the ESGF database, false otherwise.'''
         
+        session = self.Session()
+        try:
+            
+            if session.query(ESGFUser).filter(ESGFUser.openid==openid).first() is not None:
+                return True
+            else:
+                return False
+            
+        finally:
+            session.close()
+
         
     def createGroup(self, name, description='', visible=True, automatic_approval=False):
         
