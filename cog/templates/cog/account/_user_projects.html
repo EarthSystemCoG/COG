@@ -4,7 +4,7 @@
 	    <table>
 	       <caption>Project Affiliations</caption>
 	       {% for project in projects %}
-	         {% if not project.private or request.user == user_profile.user %}
+	         {% if not project.private or request.user == user_profile.user or request.user.is_staff == True || request.user|hasAdminPermission:project %}
 	           <tr>
 	             <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
 	             {% comment %}       
