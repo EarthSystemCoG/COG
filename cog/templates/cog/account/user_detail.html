@@ -7,7 +7,7 @@
 {% block main %}
 <!-- Extra block for Site Admins to display key user info we don't show the public-->
   {% if request.user.is_staff %}
-    <div class="prepend-6 span-12 last" style="margin-bottom:20px;">
+    <div class="prepend-4 span-14 last" style="margin-bottom:20px;">
       <div class="mybox">
         <table>
         <caption>Extra User Information (Site Administrators Only)</caption>
@@ -51,11 +51,11 @@
             <td>{{ user_profile.user.last_login }}</td>
         </tr>
         <tr>
-            <td>
-                <b>Number of Projects</b>
+            <td colspan="2" style="text-align: center;">
+                Note: CoG keeps users logged in via a cookie. Last Login may be different from last access.
             </td>
-            <td>{{ projects|length }}</td>
         </tr>
+
         </table>
       </div>
     </div>
