@@ -5,7 +5,6 @@
    {% load cog_utils %}
    {% load pagination_tags %}
    {% autopaginate users 50 %}
-   {% autopaginate num_projects 50 %}
 
 <p>Below is the list of system users. Click on the name to visit their profile (includes home site). Click on the email to contact the user. </p>
    
@@ -26,7 +25,7 @@
    {% paginate %}
 
    <div class="mybox">
-        <table style="width:800px; float:left; clear:right;">
+        <table>
             <caption>System Users</caption>
             <!-- <br/> tags in table are to align text to the bottom -->
             <tr>
@@ -35,7 +34,6 @@
                 <td class="tophead">User Name</td>
                 <td class="tophead">Email</td>
                 <td class="tophead">Last Login</td>
-
             </tr>
             {% for user in users %}
                 <tr>
@@ -47,21 +45,6 @@
                 </tr>
             {% endfor %}
         </table>
-        <!--extra table listing the number of projects per user. Since this number is not attached to the user object,
-        but just a separate list[] in the same order, we need two tables. This design makes them look like one -->
-        <table style="width: 148px;">
-            <caption>&nbsp;</caption>
-            <tr>
-                <td class="tophead">Number Of Projects</td>
-            </tr>
-            {% for number in num_projects %}
-                <tr>
-                    <td>{{ number }}</td> <!--value in views_admins.py-->
-                </tr>
-            {%  endfor %}
-            </table>
-
-
    </div>
    <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='/'"/></div>
    <div id="myDialog" class="yui-skin-sam"></div>

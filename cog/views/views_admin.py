@@ -63,17 +63,9 @@ def admin_users(request):
     else:
         users = getUsersThatMatch(request.POST['match'])
 
-    # create a separate list to hold the number of projects each user is a member of. This is passed sparately to the
-    # template. Since the value is not associated with the User object, there is some risk of the values not being
-    # correct if the user list is ordered outside of this method.
-    _num_projects = list()
-    for user in users:
-        #print 'user is:', user, ' projects are:', len(getProjectsForUser(user, True))
-        _num_projects.append(len(getProjectsForUser(user, True)))
-
     title = 'List Site Users'
     return render_to_response('cog/admin/admin_users.html',
-                              {'users': users, 'title': title, 'num_projects': _num_projects},
+                              {'users': users, 'title': title},
                               context_instance=RequestContext(request))
 
     
