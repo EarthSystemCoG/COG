@@ -184,13 +184,13 @@ def listPeople(project):
     return sorted(people, key=lambda user: (user.last_name.lower(), user.first_name.lower()))
 
 
-def delete_comments(object):
+def delete_comments(obj):
     """
     Function to delete comments associated with a generic object.
     """
     
-    object_type = ContentType.objects.get_for_model(object)
-    comments = Comment.objects.filter(object_pk=object.id).filter(content_type=object_type)
+    object_type = ContentType.objects.get_for_model(obj)
+    comments = Comment.objects.filter(object_pk=obj.id).filter(content_type=object_type)
     for comment in comments:
         print 'Deleting associated comment=%s' % comment.comment
         comment.delete()
@@ -305,6 +305,39 @@ def createOrUpdateProjectSubFolders(project, request=None):
         else:
             folder.active = False
         folder.save()
+
+def delete_doc(doc):
+    '''
+    Utility method to properly delete a Doc object.
+    '''
+    
+    # delete associated comments
+    delete_comments(doc)
+    
+    # remove from possible associated posts
+    posts = Post.objects.filter(docs__id=doc.id)
+    for post in posts:
+        post.docs.remove(doc)
+        
+    # obtain document full path
+    fullpath = os.path.join(settings.MEDIA_ROOT, doc.path)
+
+    # delete document from database
+    doc.delete()
+    
+    # delete document from file sysytem
+    print 'Deleting document=%s' % fullpath
+    os.remove(fullpath)
+    
+    # also delete possible thumbnail files (created by File Browser)
+    # canberra_hero_image.jpg
+    # canberra_hero_image_admin_thumbnail.jpg
+    # canberra_hero_image_thumbnail.jpg
+    (path, ext) = os.path.splitext(fullpath)
+    for suffix in ['_thumbnail', '_admin_thumbnail']:
+        auxpath = "%s%s%s" % (path, suffix, ext)
+        if os.path.isfile(auxpath):
+            os.remove(auxpath)
 
 
 def deleteProject(project, dryrun=True, rmdir=False):

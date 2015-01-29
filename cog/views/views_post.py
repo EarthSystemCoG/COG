@@ -15,7 +15,9 @@ from constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.models.constants import SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from django.utils.timezone import now
-from cog.models.utils import delete_comments
+from cog.models.utils import delete_doc
+from django.conf import settings
+import os
  
 # view to render a generic post
 def post_detail(request, post_id):
@@ -422,11 +424,7 @@ def post_remove_doc(request, post_id, doc_id):
     
     # check doc is attached to post
     if post.docs.get(id=doc_id):
-        # remove doc from post
-        post.docs.remove(doc)
-        post.save()
-        # delete doc
-        doc.delete()
+        delete_doc(doc)
     
     return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id': post.id}) )
         
