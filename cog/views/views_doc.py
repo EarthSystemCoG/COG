@@ -15,7 +15,7 @@ from django.views.static import serve
 from cog.models.project import userHasUserPermission
 from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
-from cog.models.utils import delete_comments
+from cog.models.utils import delete_doc
 import os
 
 @csrf_exempt
@@ -168,7 +168,7 @@ def doc_download_private(request, path, doc):
     
 @login_required
 def doc_remove(request, doc_id):
-    
+        
     # retrieve document from database
     doc = get_object_or_404(Doc, pk=doc_id)
     project = doc.project
@@ -177,12 +177,9 @@ def doc_remove(request, doc_id):
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    # delete associated comments
-    delete_comments(doc)
-
-    # delete document from database
-    doc.delete()
-    
+    # delete doc altogether
+    delete_doc(doc)
+        
     # redirect to original page, or to project home if not found
     redirect = request.REQUEST.get('redirect', None)
     if redirect is None:
