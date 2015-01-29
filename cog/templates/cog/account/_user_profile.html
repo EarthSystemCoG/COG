@@ -49,7 +49,7 @@
         {% endfor %}
         {% if request.user.is_staff or user_profile.user == request.user %}
 	        <tr>
-	            <td nowrap="nowrap"><b>COG Email List</b></td>
+	            <td nowrap="nowrap"><b>CoG Email List</b></td>
 	            <td class="long">{% if user_profile.subscribed %}Subscribed{% else %}Not Subscribed{% endif %}</td>
 	        </tr>
 	        <tr>
