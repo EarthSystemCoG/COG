@@ -124,7 +124,7 @@
 	                <!-- existing COG users: the encrypted passwords are resubmitted as hidden fields -->
 	                {% if form.instance.id %}
 
-	                	{% if form.instance.profile.isCogUser %}
+	                	{% if form.instance.profile.type == 1 %}
 			            	<!-- existing user: include encoded password, confirm_password as hidden fields -->
 		                	{{ form.password.as_hidden }}
 		                    {{ form.confirm_password.as_hidden }}

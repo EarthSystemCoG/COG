@@ -17,6 +17,7 @@ from cog.models.constants import DEFAULT_IMAGES
 from cog.util.thumbnails import getThumbnailPath
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
+import urlparse
 
 register = template.Library()
 
@@ -671,10 +672,8 @@ def isLocal(user):
 def isRemote(user):
     return isUserRemote(user)
 
-#@register.filter
-#def dataCartItemValues(item, key):
-#    return item.getValues(key)
-
-#@register.filter
-#def dataCartItemValue(item, key):
-#    return item.getValue(key)
+@register.filter
+def get_domain(url):
+    '''Returns the domain part of a URL'''
+    
+    return urlparse.urlparse(url)[1]
