@@ -34,7 +34,7 @@
                    <form name="lookupUserForm" action="" method="post">
                    	    {% csrf_token %}
                         <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <b>User Name</b>, <b>First Name</b>, <b>Last Name</b>, or <b>Email</b>:</label>
-                        <input style="vertical-align: middle; width:30%;" type="text" name="match" id="match" value="{{request.POST.match}}" />
+                        <input style="vertical-align: middle; width:30%;" type="text" name="match" alt="match" id="match" value="{{request.POST.match}}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
 	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
                    </form>
