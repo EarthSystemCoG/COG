@@ -1,7 +1,9 @@
 {% load cog_utils %}
 <!--// START: /cog/templates/cog/post/_post_actions.html //-->
 {% if post %}
-	<div id="last_update_text" style="font-size: 8pt; font-style: italic; text-align:center;">
+    <!--clear:both added to move the last update down if any elements above are floated.-->
+    <!--clear:both means no floating elements allowed on either the left or the right side-->
+	<div id="last_update_text" style="font-size: 8pt; font-style: italic; text-align:center; clear:both;">
 	     Last Update: {{ post.update_date }} by {{ post.author.get_full_name }}
 	</div> <!--// end div id="last_update_text" //-->
         {% if request.user|canPost:post %}
