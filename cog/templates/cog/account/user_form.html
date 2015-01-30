@@ -83,7 +83,7 @@
 
 	            <table>
 	                <tr>
-	                    <td class="required" nowrap="nowrap">User Name</td>
+	                    <td class="required" nowrap="nowrap"><label for="id_username">User Name</label></td>
 	                    {% if form.instance.id %}
 	                   		<td>{{ form.instance.username }} {{ form.username.as_hidden }}</td>
 	                	{% else %}
@@ -98,7 +98,7 @@
               			{% for openidform in formset2 %}
 	              			<tr>
 	              				{{ openidform.id }}
-	              				<td class="required" nowrap="nowrap">ESGF OpenID</td>
+	              				<td class="required" nowrap="nowrap"><label for="id_claimed_id">ESGF OpenID</label></td>
 	              				<td style="width:500px;vertical-align:middle;">
 	              					{{ openidform.instance.claimed_id }} 
 	              					{{ openidform.claimed_id.as_hidden }}
@@ -108,15 +108,15 @@
 		    		{% endif %}
 	            
 	             	<tr>
-	                    <td class="required" nowrap="nowrap">First Name</td>
+	                    <td class="required" nowrap="nowrap"><label for="id_first_name">First Name</label></td>
 	                    <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
 	                </tr>
 	                <tr>
-	                    <td class="required" nowrap="nowrap">Last Name</td>
+	                    <td class="required" nowrap="nowrap"><label for="id_last_name">Last Name</label></td>
 	                    <td >{{ form.last_name }} {{ form.last_name.errors }}</td>
 	                </tr>
 	                <tr>
-	                    <td class="required" nowrap="nowrap">Email</td>
+	                    <td class="required" nowrap="nowrap"><label for="id_email">Email</label></td>
 	                    <td>{{ form.email }} {{ form.email.errors }}</td>
 	                </tr>
 	                
@@ -134,7 +134,7 @@
 	                {% else %}
 		                <!-- otherwise, the user must submit a password -->
 		                <tr>
-		                    <td class="required" nowrap="nowrap">Password</td>
+		                    <td class="required" nowrap="nowrap"><label for="id_password">Password</label></td>
 		                    <td>{{ form.password }}
 		                       <br/><i>[ {{ form.password.help_text }} ]</i>
 		                       {{ form.password.errors }}
@@ -144,7 +144,7 @@
 		                    </td>
 		                </tr>
 		                <tr>
-		                    <td class="required" nowrap="nowrap">Confirm Password</td>
+		                    <td class="required" nowrap="nowrap"><label for="id_confirm_password">Confirm Password</label></td>
 		                    <td>{{ form.confirm_password }}
 		                        <br/><i>[ {{ form.confirm_password.help_text }} ]</i>
 		                        <br/>{{ form.confirm_password.errors }}
@@ -152,50 +152,50 @@
 		                </tr>
 	                {% endif %}
 	                <tr>
-                        <td class="required" nowrap="nowrap">Institution</td>
+                        <td class="required" nowrap="nowrap"><label for="id_institution">Institution</label></td>
                         <td>{{ form.institution }} {{ form.institution.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">Department</td>
+                        <td class="optional" nowrap="nowrap"><label for="id_department">Department</label></td>
                         <td class="long">{{ form.department }} {{ form.department.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="required" nowrap="nowrap">City</td>
+                        <td class="required" nowrap="nowrap"><label for="id_city">City</label></td>
                         <td class="long">{{ form.city }} {{ form.city.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">State</td>
+                        <td class="optional" nowrap="nowrap"><label for="id_state">State</label></td>
                         <td>
                             <div id="stateAutoComplete">
                             {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}
                         </td>
                     </tr>
                     <tr>
-                        <td class="required" nowrap="nowrap">Country</td>
+                        <td class="required" nowrap="nowrap"><label for="id_country">Country</label></td>
                         <td>
                             <div id="countryAutoComplete">
                             {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}
                         </td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">Interest Keywords</td>
+                        <td class="optional" nowrap="nowrap"><label for="id_researchKeywords">Interest Keywords</label></td>
                         <td>
                         [A short list of science fields you are involved with (60 characters maximum).
                         <br/>Example: Software Engineering, Grid Computing, Climate Change.]
                         <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">Interest Statement</td>
+                        <td class="optional" nowrap="nowrap"><label for="id_researchInterests">Interest Statement</label></td>
                         <td>
                         [A short paragraph describing your professional interests (1000 characters maximum).]
                         <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">Subscribe to COG Email List?</td>
+                        <td class="optional" nowrap="nowrap"><label for="id_subscribed">Subscribe to COG Email List?</label></td>
                         <td>{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
                     </tr>
                     <tr>
-                        <td class="optional" nowrap="nowrap">Do not list me among project members</td>
+                        <td class="optional" nowrap="nowrap"><label for="id_private">Do not list me among project members</label></td>
                         <td>{{ form.private }} {{ form.private.errors }}</td>
                     </tr>
                     {% if not request.user.is_anonymous %}
@@ -208,7 +208,7 @@
 	                        <table>
 	                          <tr>
 	                        	<td>
-	                        	<img src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
+	                        	<img alt="user_image" src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
 	                        	</td>
 	                        	<td align="left">
 				                  <div style="margin-top:2px">
@@ -251,11 +251,11 @@
                 </tr>
                 {% for urlform in formset1 %}{{ urlform.id }}
 				    <tr>
-			           <td style="width:60px;vertical-align:middle;">Web URL:</td>
+			           <td style="width:60px;vertical-align:middle;"><label for="id_url">Web URL:</label></td>
 				       <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
-			           <td style="width:30px;vertical-align:middle;">Title:</td>
+			           <td style="width:30px;vertical-align:middle;"><label for="id_name">Title:</label></td>
 				       <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
-			           <td style="vertical-align:middle;">{{ urlform.DELETE }} Delete?</td>
+			           <td style="vertical-align:middle;">{{ urlform.DELETE }} <label for="id_delete">Delete?</label></td>
 				    </tr>
 		        {% endfor %}
  	        </table>
