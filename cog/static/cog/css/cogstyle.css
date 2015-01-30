@@ -1003,9 +1003,19 @@ BEGIN SEARCH WIDGET
 	text-align:  center;
 }
 
-/*login failure.*/ /*project registration notification*/
+/*project registration notification*/
 .message-box {
     background:  #fce79f; /* light yellow*/
+	padding:     5px;
+	margin:      5px;
+	border:      1px solid #666;
+	font-weight: bold;
+	text-align:  center;
+}
+
+/*bad openid, bad IDP, failed login etc*/
+.error-box {
+    background:  red;
 	padding:     5px;
 	margin:      5px;
 	border:      1px solid #666;
