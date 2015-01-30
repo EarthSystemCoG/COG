@@ -11,8 +11,8 @@
     <!-- note: pixel styles must be adjusted to specific icons -->
     <!--// note: don't use scoped for this style because it is one level above the location where it is used //-->
     <style type="text/css"> 
-         .folder { display:block; height:24px; padding-left: 28px; background: transparent url({{STATIC_URL}}cog/img/folder_24x24.png) 0 -4px no-repeat; font-weight: bold; }        
-         .bookmark { margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0px no-repeat;  } 
+         .folder {display:table-cell; height:27px;  vertical-align:middle; padding-left:28px; font-weight:bold; background: url({{STATIC_URL}}cog/img/folder_24x24.png) no-repeat; }
+         .bookmark {margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0 no-repeat;}
     </style>
 
     <script>
@@ -75,7 +75,7 @@
 	
     <!-- children projects-->    
  	{% if children %}
-		<p/>
+		<p></p>
 		<div class="header_bar"> 
 		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;View Child Project {{ template_title}} ({{ children|length }})</a>
 		</div>
@@ -83,7 +83,7 @@
 		    {% for child in children %}
 	    		{% with child as proj %}
 	    			<br/>
-	    			<div class="mybox" style="padding:0px;">
+	    			<div class="mybox" style="padding:0;">
 	    				<div class="header-gray">
 	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}}</div>
 	    				</div>
@@ -98,7 +98,7 @@
  
     <!-- peer projects-->    
  	{% if peers %}
-		<p/>
+		<p></p>
 		<div class="header_bar"> 
 		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;View Peer Project {{ template_title}} ({{ peers|length }})</a>
 		</div>
@@ -106,7 +106,7 @@
 		    {% for peer in peers %}
 	    		{% with peer as proj %}
 	    			<br/>
-	    			<div class="mybox" style="padding:0px;">
+	    			<div class="mybox" style="padding:0;">
 	    				<div class="header-gray">
 	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}} </div>
 	    				</div>
