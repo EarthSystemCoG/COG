@@ -55,6 +55,7 @@ def update_user_projects(user):
                 for site in getPeerSites():
                                 
                     url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+                    print 'querying URL=%s' % url
                     jobj = getJson(url)
                     if jobj is not None and openid in jobj['users']:
                         
