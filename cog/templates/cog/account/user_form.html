@@ -227,7 +227,7 @@
                     {% else %}
                         <tr>
                             <td>
-                                <img style="margin-top:4px;" src="/static/cog/img/unknown.thumbnail.jpeg">
+                                <img alt="user_image" style="margin-top:4px;" src="/static/cog/img/unknown.thumbnail.jpeg">
                             </td>
                             <td colspan="2" class="optional" style="vertical-align: middle;">
                                 Note: You may upload a picture to your profile after you login for the first time.
@@ -251,11 +251,11 @@
                 </tr>
                 {% for urlform in formset1 %}{{ urlform.id }}
 				    <tr>
-			           <td style="width:60px;vertical-align:middle;"><label for="id_url">Web URL:</label></td>
+			           <td style="width:60px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-url">Web URL:</label></td>
 				       <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
-			           <td style="width:30px;vertical-align:middle;"><label for="id_name">Title:</label></td>
+			           <td style="width:30px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-name">Title:</label></td>
 				       <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
-			           <td style="vertical-align:middle;">{{ urlform.DELETE }} <label for="id_delete">Delete?</label></td>
+			           <td style="vertical-align:middle;">{{ urlform.DELETE }} <label for="id_url-{{forloop.counter0}}-DELETE">Delete?</label></td>
 				    </tr>
 		        {% endfor %}
  	        </table>
