@@ -30,7 +30,7 @@ def redirectToIdp():
 
 def custom_login(request, **kwargs):
     """
-    Over rides standard login view that checks whether the authenticated user has any missing information.
+    Overrides standard login view that checks whether the authenticated user has any missing information.
     :param request:
     :param kwargs:
     :return:
@@ -83,12 +83,7 @@ def _custom_login(request, response):
 
     # successful login
     if not request.user.is_anonymous():
-        
-        # FIXME
-        print 'USER TYPE=%s' % request.user.profile.type
-        print 'isUserLocal=%s' % isUserLocal(request.user)
-        print 'isUserValid=%s' % isUserValid(request.user)
-        
+                
         # missing information
         if isUserLocal(request.user) and not isUserValid(request.user):
             return HttpResponseRedirect(reverse('user_update', kwargs={'user_id': request.user.id}) +
