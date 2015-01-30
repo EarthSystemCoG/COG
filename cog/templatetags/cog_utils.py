@@ -657,7 +657,7 @@ def showMessage(message):
     else:
         return message
 
-
+@register.filter
 def is_error_msg(message):
     words = ["Invalid", "Error"]
     for word in words:
