@@ -7,6 +7,7 @@ from django.http import HttpRequest, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from utils import getUsersThatMatch
+from django.contrib.sites.models import Site
 
 from cog.notification import notify
 from constants import PERMISSION_DENIED_MESSAGE
@@ -163,6 +164,11 @@ def membership_remove(request, project_short_name):
     
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # redirect to project home site?
+    if project.site != Site.objects.get_current():
+        url = 'http://%s%s' % (project.site.domain, reverse('membership_remove', kwargs={'project_short_name': project.short_name}) ) 
+        return HttpResponseRedirect( url )
     
     template = 'cog/membership/membership_cancel.html'
     # display submission form
