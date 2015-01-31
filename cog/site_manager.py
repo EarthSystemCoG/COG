@@ -17,7 +17,7 @@ class SiteManager(object):
        DATABASE_USER=database_user
        DATABASE_PORT=database_port
        DATABASE_PORT=5432
-       MY_PROJECTS_REFRESH_SECONDS=10
+       MY_PROJECTS_REFRESH_SECONDS=3600
        # optional number of days after which password expire
        PASSWORD_EXPIRATION_DAYS=0
        # optional top-level URL to redirect user registration (no trailing '/')

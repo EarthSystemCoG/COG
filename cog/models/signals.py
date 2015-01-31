@@ -7,11 +7,11 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
 from django.contrib.auth.signals import user_logged_in
-from django.contrib.sites.models import Site
 
 from cog.models import UserProfile, Project
 from cog.utils import getJson
 from cog.models.peer_site import getPeerSites
+from cog.views.utils import get_all_projects_for_user
 
 # callback receiver function for UserProfile post_save events
 @receiver(post_save, sender=UserProfile, dispatch_uid="user_profile_post_save")
@@ -34,50 +34,37 @@ def update_user_projects_at_login(sender, user, request, **kwargs):
     '''Updates the user projects every time the user logs in.'''
     
     update_user_projects(user)
-    
-def update_user_projects_from_session(user):
-    '''Updates the user projects every time the session is too old.'''
-    
-    update_user_projects(user)
-    
+        
 def update_user_projects(user):
-    '''Function to update the user projects across the federation.'''
-    
+    '''
+    Function to update the user projects across the federation.
+    Will query all remote sites 
+    (but NOT the current site, since that information should already be up-to-date) 
+    and save the updated information in the local database.
+    '''
+
     if user.is_authenticated():
-    
-        try:
-            if user.profile.openid() is not None:
+        
+        # retrieve map of (project, groups) for this user
+        projTuples = get_all_projects_for_user(user, includeCurrentSite=False)
+        
+        # update information in local database
+        for (project, roles) in projTuples:
+            print 'Updating membership for user: %s project: %s' % (user.profile.openid(), project.short_name)   
+                    
+            # remove all current memberships for this user, project
+            for group in project.getGroups():
+                user.groups.remove( group )
                 
-                openid = user.profile.openid()
-                print 'Updating projects for user with openid=%s' % openid
-                
-                # loop over remote (enabled) sites
-                for site in getPeerSites():
-                                
-                    url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
-                    print 'querying URL=%s' % url
-                    jobj = getJson(url)
-                    if jobj is not None and openid in jobj['users']:
-                        
-                        # remove all current groups for this site projects
-                        for project in Project.objects.filter(site=site):
-                            for group in project.getGroups():
-                                user.groups.remove( group )
-                        
-                        # loop over remote projects, roles for this user
-                        for projname, roles in jobj['users'][openid]['projects'].items():
-                            
-                            # match remote project to local project, if existing
-                            for project in  Project.objects.filter(short_name__iexact=projname).all():
-                                for role in roles:
-                                    group = project.getGroup(role)
-                                    if not group in user.groups.all():
-                                        user.groups.add(group) 
-                                        
-                        # persist changes to user groups (site by site)
-                        user.save()
-                        
-        except UserProfile.DoesNotExist:
-            pass # user profile not yet created
+            # insert new memberships for this user, project
+            for role in roles:
+                group = project.getGroup(role)
+                if not group in user.groups.all():
+                    user.groups.add(group) 
+                                   
+        # persist changes to local database
+        user.save()
     
-user_logged_in.connect(update_user_projects_at_login)
+# NOTE: connecting the login signal is not needed because every time the user logs in,
+# the session is refreshed and updating of projects is triggered already by the CoG session middleware
+#user_logged_in.connect(update_user_projects_at_login)

@@ -43,7 +43,7 @@ def getUsersThatMatch(match):
     
     return User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match)))
 
-def get_all_projects_for_user(user):
+def get_all_projects_for_user(user, includeCurrentSite=True):
     '''Queries all nodes (including local node) for projects the user belongs to.
        Returns a list of dictionaries but does NOT update the local database.
        Example of JSON data retrieved from each site:
@@ -80,8 +80,11 @@ def get_all_projects_for_user(user):
             openid = user.profile.openid()
             print 'Updating projects for user with openid=%s' % openid
             
-            # loop over remote (enabled) sites
-            for site in list(getPeerSites()) + [Site.objects.get_current()]:
+            # loop over remote (enabled) sites, possibly add current site
+            sites = list(getPeerSites())
+            if includeCurrentSite:
+                sites = sites + [Site.objects.get_current()]
+            for site in sites:
                             
                 url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
                 print 'Querying URL=%s' % url
