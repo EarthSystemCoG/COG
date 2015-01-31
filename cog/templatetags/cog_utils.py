@@ -109,7 +109,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             html += "<li class='expanded'>"
         else:
             html += "<li>"
-        html += "<span class='%s'>%s" % (icon, folder.name)
+        html += "<div class='%s'>%s" % (icon, folder.name) #changed to a div, better behaved than span
 
         # add edit/delete links, but not for pre-defined folders
         if not folder.isPredefined():
@@ -118,8 +118,8 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             if hasUserPermission(user, folder.project):
                 html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
                 html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
-                     + "'Are you sure you want to delete this folder (including all the bookmarks and folders it contains) ?', this)\">Delete</a> ]"
-        html += "</span> "
+                     + "'Are you sure you want to delete this folder (including all the bookmarks and folders it contains)?', this)\">Delete</a> ]"
+        html += "</div> "
 
         # this folder's children
         html += "<ul>"
@@ -656,6 +656,13 @@ def showMessage(message):
 
     else:
         return message
+
+@register.filter
+def is_error_msg(message):
+    words = ["Invalid", "Error"]
+    for word in words:
+        if word in message:
+            return True
 
 
 @register.filter
