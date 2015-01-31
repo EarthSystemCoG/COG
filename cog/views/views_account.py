@@ -18,7 +18,7 @@ from django_openid_auth.models import UserOpenID
 from django.contrib.sites.models import Site
 from cog.plugins.esgf.security import esgfDatabaseManager
 import datetime
-from cog.views.utils import set_openid_cookie
+from cog.views.utils import set_openid_cookie, get_all_projects_for_user
 
 
 def redirectToIdp():
@@ -278,10 +278,14 @@ def user_detail(request, user_id):
         user_profile = UserProfile(user=user)
         user_profile.save()
         print "Created empty profile for user=%s" % user
-
+        
     # retrieve map of (project, groups) for this user
-    projects = getProjectsForUser(user, True)  # include pending projects
-
+    projTuples = get_all_projects_for_user(user)
+    # ignore roles
+    _projects = [p[0] for p in projTuples]
+    # sort projects alphabetically
+    projects = sorted(_projects, key=lambda x: x.short_name)
+            
     return render_to_response('cog/account/user_detail.html',
                               {'user_profile': user_profile, 'projects': projects},
                               context_instance=RequestContext(request))

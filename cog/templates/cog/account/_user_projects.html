@@ -7,7 +7,8 @@
 	         {% if not project.private or request.user == user_profile.user or request.user.is_staff == True or request.user|hasAdminPermission:project %}
 	           <tr>
 	             <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
-	             {% comment %}       
+	             {% comment %}    
+	             <!-- note that we could use the information from the view directly, no need to query the database again -->   
 	             <td nowrap="nowrap">
 	                   {% if user_profile.user|hasAdminPermission:project %}
 	                       Administrator

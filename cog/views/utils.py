@@ -1,8 +1,13 @@
-from django.shortcuts import get_object_or_404, render_to_response, redirect
+from django.shortcuts import render_to_response
 from django.db.models import Q
 from django.template import RequestContext
 from django.contrib.auth.models import User
 import datetime
+from cog.models import UserProfile, Project
+from cog.utils import getJson
+from cog.models.peer_site import getPeerSites
+from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 
 # function to return an error message if a project is not active
 def getProjectNotActiveRedirect(request, project):
@@ -38,3 +43,64 @@ def getUsersThatMatch(match):
     
     return User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) | Q(last_name__icontains=match) | Q(email__icontains=match)))
 
+def get_all_projects_for_user(user):
+    '''Queries all nodes (including local node) for projects the user belongs to.
+       Returns a list of dictionaries but does NOT update the local database.
+       Example of JSON data retrieved from each site:
+      {
+        "users": {
+            "https://hydra.fsl.noaa.gov/esgf-idp/openid/rootAdmin": {
+                "home_site_domain": "cog-esgf.esrl.noaa.gov", 
+                "openid": "https://hydra.fsl.noaa.gov/esgf-idp/openid/rootAdmin", 
+                "datacart": {
+                    "size": 0
+                }, 
+                "home_site_name": "NOAA ESRL ESGF-CoG", 
+                "projects": {
+                    "AlaskaSummerSchool": [
+                        "admin", 
+                        "user"
+                    ], 
+                    "CF-Grids": [
+                        "admin"
+                    ], 
+                    "CFSS": [
+                        "admin", 
+                        "user"
+                    ], 
+                .....
+    '''
+    
+    # dictionary of information retrieved from each site, including current site
+    projDict = {} # site --> dictionary
+    
+    try:
+        if user.profile.openid() is not None:
+            
+            openid = user.profile.openid()
+            print 'Updating projects for user with openid=%s' % openid
+            
+            # loop over remote (enabled) sites
+            for site in list(getPeerSites()) + [Site.objects.get_current()]:
+                            
+                url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
+                print 'Querying URL=%s' % url
+                jobj = getJson(url)
+                if jobj is not None and openid in jobj['users']:
+                    projDict[site] = jobj['users'][openid] 
+                                                            
+    except UserProfile.DoesNotExist:
+        pass # user profile not yet created
+    
+    # restructure information as list of (project object, user roles) tuples
+    projects = []
+    for psite, pdict in projDict.items():
+        for pname, proles in pdict["projects"].items():
+            try:
+                proj = Project.objects.get(short_name__iexact=pname)
+                projects.append( (proj, proles) )
+            except ObjectDoesNotExist:
+                pass
+
+    # sort by project short name
+    return projects
