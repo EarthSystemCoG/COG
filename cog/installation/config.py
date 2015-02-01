@@ -26,8 +26,8 @@ import os
 import time
 
 from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
-                       ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, ESGF_IDP_WHITELIST,
-                       DEFAULT_PROJECT_SHORT_NAME)
+                       ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, 
+                       IDP_WHITELIST, DEFAULT_PROJECT_SHORT_NAME)
 
 
 # location of site specific settings configuration file
@@ -161,6 +161,8 @@ class CogConfig(object):
         self._safeSet('DEBUG', 'True')
         # ALLOWED_HOSTS = [] must be included if DEBUG=False
         self._safeSet('ALLOWED_HOSTS', hostName)
+        # IDP_WHITELIST = /esg/config/esgf_idp_static.xml
+        self._safeSet('IDP_WHITELIST', IDP_WHITELIST)
         
         #[ESGF]
         if self.esgf:
@@ -168,7 +170,6 @@ class CogConfig(object):
             self._safeSet('ESGF_DBURL', 
                           "postgresql://%s:%s@localhost/esgcet" % (self._safeGet("db.user"), self._safeGet("db.password")),
                           section=SECTION_ESGF)
-            self._safeSet('IDP_WHITELIST', ESGF_IDP_WHITELIST, section=SECTION_ESGF)
             
         #[EMAIL]
         self._safeSet('EMAIL_SERVER', self._safeGet("mail.smtp.host"), section=SECTION_EMAIL)

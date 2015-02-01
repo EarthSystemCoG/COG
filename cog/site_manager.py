@@ -22,11 +22,12 @@ class SiteManager(object):
        PASSWORD_EXPIRATION_DAYS=0
        # optional top-level URL to redirect user registration (no trailing '/')
        IDP_REDIRECT=https://www.earthsystemcog.org
+       # whitelist of trusted Identity Providers
+       IDP_WHITELIST=/esg/config/esgf_idp_static.xml
 
        [ESGF]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
-       IDP_WHITELIST=/esg/config/esgf_idp_static.xml
        
        [EMAIL]
        EMAIL_SERVER=smtp.gmail.com

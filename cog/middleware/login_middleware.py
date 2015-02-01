@@ -25,8 +25,11 @@ class LoginMiddleware(object):
             self.init= True
             
         except AttributeError:
+            # no entry in $COG_CONFIG_DIR/cog_settings.cfg
             self.init = False
-
+        except OSError:
+            # OSError: [Errno 2] No such file or directory: '/esg/config/esgf_idp_static.xml'
+            self.init = False
 
     def process_request(self, request):
         '''

@@ -43,6 +43,8 @@ else:
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
 print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
+IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
+print 'Using IdP whitelist: %s' % IDP_WHITELIST
 
 # FIXME
 # ESGF specific settings
@@ -50,7 +52,6 @@ ESGF_CONFIG = siteManager.hasConfig(SECTION_ESGF)
 if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=SECTION_ESGF, default='')
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=SECTION_ESGF)
-    IDP_WHITELIST = siteManager.get('IDP_WHITELIST', section=SECTION_ESGF)
 # FIXME
 
 #====================== standard django settings.py ======================
