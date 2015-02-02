@@ -119,8 +119,10 @@
 		               {% if user_profile.localOpenid %}
 			               &nbsp; &nbsp;
 			               <a href="{% url 'password_update' %}">Change my password</a>
-			           {% else %}		           
-			           	   <a href="http://{{ user_profile.openid|get_domain }}/esgf-web-fe/login">Change my password</a> (at the site that issued your OpenID)
+			           {% else %}		
+			           		{% if user_profile.openid %}           
+			           	    	<a href="http://{{ user_profile.openid|get_domain }}/esgf-web-fe/login">Change my password</a> (at the site that issued your OpenID)
+		               		{% endif %}
 		               {% endif %}
 		       </div>
 		   {% endif %}
