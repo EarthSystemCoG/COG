@@ -8,6 +8,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 # settings for django-tinymce
+#FIXME: remove the tinymce content, we no longer use it.
 try:
     import tinymce.settings
     DEFAULT_URL_TINYMCE = tinymce.settings.JS_BASE_URL + '/'
@@ -19,7 +20,8 @@ except ImportError:
 # PATH AND URL SETTINGS
 # Main Media Settings 
 # WARNING: FILEBROWSER_MEDIA_ROOT and FILEBROWSER_MEDIA_URL will be removed in the next major release of Filebrowser.
-# Read the documentation on FileBrowser's storages (http://readthedocs.org/docs/django-filebrowser/en/latest/file_storages.html)
+# Read the documentation on FileBrowser's storages
+# (http://readthedocs.org/docs/django-filebrowser/en/latest/file_storages.html)
 MEDIA_ROOT = getattr(settings, "FILEBROWSER_MEDIA_ROOT", settings.MEDIA_ROOT)
 MEDIA_URL = getattr(settings, "FILEBROWSER_MEDIA_URL", settings.MEDIA_URL)
 # Main FileBrowser Directory. This has to be a directory within MEDIA_ROOT.
@@ -27,29 +29,34 @@ MEDIA_URL = getattr(settings, "FILEBROWSER_MEDIA_URL", settings.MEDIA_URL)
 # DO NOT USE A SLASH AT THE BEGINNING, DO NOT FORGET THE TRAILING SLASH AT THE END.
 DIRECTORY = getattr(settings, "FILEBROWSER_DIRECTORY", 'uploads/')
 # The URL/PATH to your filebrowser media-files.
-URL_FILEBROWSER_MEDIA = getattr(settings, "FILEBROWSER_URL_FILEBROWSER_MEDIA", os.path.join(settings.STATIC_URL, 'filebrowser/'))
-PATH_FILEBROWSER_MEDIA = getattr(settings, "FILEBROWSER_PATH_FILEBROWSER_MEDIA", os.path.join(settings.STATIC_ROOT, 'filebrowser/'))
+URL_FILEBROWSER_MEDIA = getattr(settings, "FILEBROWSER_URL_FILEBROWSER_MEDIA", os.path.join(settings.STATIC_URL,
+                                                                                            'filebrowser/'))
+PATH_FILEBROWSER_MEDIA = getattr(settings, "FILEBROWSER_PATH_FILEBROWSER_MEDIA", os.path.join(settings.STATIC_ROOT,
+                                                                                              'filebrowser/'))
 # The URL/PATH to your TinyMCE Installation.
 URL_TINYMCE = getattr(settings, "FILEBROWSER_URL_TINYMCE", DEFAULT_URL_TINYMCE)
 PATH_TINYMCE = getattr(settings, "FILEBROWSER_PATH_TINYMCE", DEFAULT_PATH_TINYMCE)
 
 # EXTENSIONS AND FORMATS
 # Allowed Extensions for File Upload. Lower case is important.
+# Types that are coded as Image, have a size selector in the File Browser.
 EXTENSIONS = getattr(settings, "FILEBROWSER_EXTENSIONS", {
     'Folder': [''],
-    'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff','.pdf'],
-    'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
-    'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
-    'Audio': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
+    'Image': ['.jpg', '.jpeg', '.gif', '.png', '.tif', '.tiff', '.pdf'],
+    'Document': ['.pdf', '.pptx', '.ppt', '.rtf', '.txt', '.xls', '.xlsx', '.doc', '.docx', '.csv'],
+    'Video': ['.mov', '.wmv', '.mpeg', '.mpg', '.avi', '.rm'],
+    'Audio': ['.mp3', '.mp4', '.wav', '.aiff', '.midi', '.m4p']
 })
 # Define different formats for allowed selections.
 # This has to be a subset of EXTENSIONS.
 # e.g., add ?type=image to the browse-URL ...
+
+# including Document as an image enables them to be uploaded via the Link Browser->File Browser in the wiki.
 SELECT_FORMATS = getattr(settings, "FILEBROWSER_SELECT_FORMATS", {
-    'file': ['Folder','Image','Document','Video','Audio'],
-    'image': ['Image'],
+    'file': ['Folder', 'Image', 'Document', 'Video', 'Audio'],
+    'image': ['Image', 'Document'],
     'document': ['Document'],
-    'media': ['Video','Audio'],
+    'media': ['Video', 'Audio'],
 })
 
 # VERSIONS
@@ -92,7 +99,8 @@ IMAGE_MAXBLOCK = getattr(settings, 'FILEBROWSER_IMAGE_MAXBLOCK', 1024*1024)
 EXTENSION_LIST = []
 for exts in EXTENSIONS.values():
     EXTENSION_LIST += exts
-EXCLUDE = getattr(settings, 'FILEBROWSER_EXCLUDE', (r'_(%(exts)s)_.*_q\d{1,3}\.(%(exts)s)' % {'exts': ('|'.join(EXTENSION_LIST))},))
+EXCLUDE = getattr(settings, 'FILEBROWSER_EXCLUDE', (r'_(%(exts)s)_.*_q\d{1,3}\.(%(exts)s)'
+                                                    % {'exts': ('|'.join(EXTENSION_LIST))},))
 # Max. Upload Size in Bytes.
 MAX_UPLOAD_SIZE = getattr(settings, "FILEBROWSER_MAX_UPLOAD_SIZE", 10485760)
 # Normalize filename and remove all non-alphanumeric characters
