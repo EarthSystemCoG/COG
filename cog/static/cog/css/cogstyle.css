@@ -1012,16 +1012,6 @@ BEGIN SEARCH WIDGET
 	text-align:  center;
 }
 
-/*bad openid, bad IDP, failed login etc*/
-.error-box {
-    background:  red;
-	padding:     5px;
-	margin:      5px;
-	border:      1px solid #666;
-	font-weight: bold;
-	text-align:  center;
-}
-
 /*access control license.*/
 .license-box {
     background:  #fce79f; /* light yellow*/
@@ -1053,6 +1043,7 @@ BEGIN SEARCH WIDGET
 }
 
 /* prevent error styles from affecting error content w/in search widget */
+/*bad openid, bad IDP, failed login etc*/
 .error-box {
     background:  #FAC24A; /* dark yellow*/
 	padding:     5px;
@@ -1060,7 +1051,7 @@ BEGIN SEARCH WIDGET
 	border:      1px solid #417690;
 	font-weight: bold;
 	text-align:  center;
-	color:       #FF0000;
+	color:       #FF0000; /*red*/
 }
 
 .search_header {
