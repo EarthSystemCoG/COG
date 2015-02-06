@@ -205,6 +205,7 @@ INSTALLED_APPS = (
     'layouts',
     #'kronos',
     'cog',
+    'cog.templatetags',
 )
 
 AUTHENTICATION_BACKENDS = (
