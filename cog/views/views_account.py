@@ -381,9 +381,14 @@ def user_update(request, user_id):
             # update user
             user = form.save()
 
-            # update user profile
+            # old user profile
             user_profile = get_object_or_404(UserProfile, user=user)
+            
+            # capture user profile status before t is updated
+            oldValidFlag = isUserValid(user)
             oldSubscribed = user_profile.subscribed
+            
+            # new user profile
             user_profile.institution = form.cleaned_data['institution']
             user_profile.city = form.cleaned_data['city']
             user_profile.state = form.cleaned_data['state']
@@ -438,7 +443,9 @@ def user_update(request, user_id):
 
             # subscribe/unsubscribe user if mailing list selection changed
             if oldSubscribed == True and form.cleaned_data['subscribed'] == False:
-                unSubscribeUserToMailingList(user, request)
+                if oldValidFlag: # send email only for non-new users
+                    unSubscribeUserToMailingList(user, request)
+                    
             elif oldSubscribed == False and form.cleaned_data['subscribed'] == True:
                 subscribeUserToMailingList(user, request)
 
