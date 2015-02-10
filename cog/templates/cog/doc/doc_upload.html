@@ -4,7 +4,11 @@
 
 	<script type="text/javascript" src="{{ MEDIA_URL }}ckeditor/ckeditor.js"></script>
 	<script type="text/javascript">
-	window.parent.CKEDITOR.tools.callFunction( '{{ request.REQUEST.CKEditorFuncNum }}' , '{{ url }}' );
+		{% if error %}
+			// show the error message
+			alert("{{error}}");
+		{% endif %}
+		window.parent.CKEDITOR.tools.callFunction( '{{ request.REQUEST.CKEditorFuncNum }}' , '{{ url }}' );
 	</script>
 
 {% endblock %}

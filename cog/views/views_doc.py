@@ -41,6 +41,7 @@ def doc_upload(request, project_short_name):
             # retrieve the file URL (after it has been saved!), 
             # pass it on to the view for use by CKeditor
             url = instance.file.url
+            error = ''
             
             # create thumbnail
             # NOTE: already executed automatic when browsing through django-browser
@@ -53,10 +54,11 @@ def doc_upload(request, project_short_name):
 
         else:
             print 'Form errors:%s' % form.errors
-            form = UploadImageForm()
+            error = 'The file uploaded is not a valid image'
+            url = "%s%s" % (settings.STATIC_URL, 'cog/img/error.jpeg')
     
         return render_to_response('cog/doc/doc_upload.html', 
-                                  { 'title': 'File Upload', 'url':url }, 
+                                  { 'title': 'File Upload', 'url':url, 'error':error }, 
                                   context_instance=RequestContext(request) )    
 
 @login_required   
