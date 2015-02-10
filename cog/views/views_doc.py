@@ -18,12 +18,13 @@ from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
 import os
 
+
 @csrf_exempt
 @login_required
 def doc_upload(request, project_short_name):
-    '''
+    """
     View to support upload of documents (images) from CKeditor
-    '''
+    """
         
     # retrieve project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -54,23 +55,23 @@ def doc_upload(request, project_short_name):
 
         else:
             print 'Form errors:%s' % form.errors
-            error = 'The file uploaded is not a valid image'
+            error = 'The file uploaded is not an image. Valid files include PNG, JPG, and PDF.'
             url = "%s%s" % (settings.STATIC_URL, 'cog/img/error.jpeg')
     
         return render_to_response('cog/doc/doc_upload.html', 
-                                  { 'title': 'File Upload', 'url':url, 'error':error }, 
-                                  context_instance=RequestContext(request) )    
+                                  {'title': 'File Upload', 'url': url, 'error': error},
+                                  context_instance=RequestContext(request))
+
 
 @login_required   
 def doc_add(request, project_short_name):
-    
-     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
      
-     # check permission
-     if not userHasUserPermission(request.user, project):
+    # check permission
+    if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-     if (request.method=='GET'):
+    if request.method == 'GET':
          
         # create empty document
         doc = Doc()
@@ -83,51 +84,55 @@ def doc_add(request, project_short_name):
         
         return render_doc_form(request, form, project)
     
-     else:
+    else:
         form = DocForm(request.POST, request.FILES)
 
         if form.is_valid():
             doc = form.save(commit=False)
             doc.author = request.user
-            if doc.title is None or len(doc.title.strip())==0:
+            if doc.title is None or len(doc.title.strip()) == 0:
                 doc.title = basename(doc.file.name)
             # save the document so to assign path in project directory: 'projects/<this project>/<filename>'
             doc.save()
-            # store path explicitely in the database so it can be used for searching
+            # store path explicitly in the database so it can be used for searching
             doc.path = doc.file.name
             # must save again
             doc.save()
             
             # optional redirect
             redirect = form.cleaned_data['redirect']
-            if (redirect):
+            if redirect:
                 # add newly created doc id to redirect URL (GET-POST-REDIRECT)
-                return HttpResponseRedirect( redirect + "?doc_id=%i"%doc.id )
+                return HttpResponseRedirect(redirect + "?doc_id=%i" % doc.id)
             else:
                 # (GET-POST-REDIRECT)
-                return HttpResponseRedirect( reverse('doc_detail', kwargs={'doc_id': doc.id}) )
+                return HttpResponseRedirect(reverse('doc_detail', kwargs={'doc_id': doc.id}))
         else:
             #print form.errors
             return render_doc_form(request, form, project)
 
+
 def doc_detail(request, doc_id):
     doc = get_object_or_404(Doc, pk=doc_id)
     return render_to_response('cog/doc/doc_detail.html', 
-                              { 'doc': doc, 'project':doc.project, 'title': doc.title }, 
-                               context_instance=RequestContext(request) )    
-    
+                              {'doc': doc, 'project': doc.project, 'title': doc.title},
+                              context_instance=RequestContext(request))
+
+
 def doc_download(request, path):
-    ''' Method to serve project media. 
-        This is a wrapper around the standard django media view to enable CoG access control.'''
+    """
+    Method to serve project media.
+    This is a wrapper around the standard django media view to enable CoG access control.
+    """
     
-    # extract project path from downlaod request
-    #print 'Download document path=%s' % path
+    # extract project path from download request
+    # print 'Download document path=%s' % path
     # example: path='nesii/myimage.jpg'
     project_short_name_lower = path.split("/")[0]
     
     # media in legacy storage locations
-    if project_short_name_lower==SYSTEM_DOCS or project_short_name_lower==SYSTEM_IMAGES:
-        return serve(request, path, document_root=settings.PROJECTS_ROOT )
+    if project_short_name_lower == SYSTEM_DOCS or project_short_name_lower == SYSTEM_IMAGES:
+        return serve(request, path, document_root=settings.PROJECTS_ROOT)
         
     # load document by path
     #print 'looking for doc ending in path=%s' % path
@@ -135,13 +140,13 @@ def doc_download(request, path):
     
     # public documents
     if not doc.is_private and not doc.project.private:
-        return serve(request, path, document_root=settings.PROJECTS_ROOT )
+        return serve(request, path, document_root=settings.PROJECTS_ROOT)
     else:
         return doc_download_private(request, path, doc)
 
 
 def data_download(request, path):
-    '''Method to serve project data to authorized users.'''
+    """Method to serve project data to authorized users."""
     
     project_short_name = path.split("/")[0]
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -149,25 +154,28 @@ def data_download(request, path):
     
     # TODO: check if data is public before forcing login
     return secure_data_download(request, path, project)
-    
+
+
 @login_required   
 def secure_data_download(request, path, project):
     
     # TODO: generalize authorization by looking up regular expressions matching path
     if userHasUserPermission(request.user, project):
-        return serve(request, path, document_root=settings.DATA_ROOT )
+        return serve(request, path, document_root=settings.DATA_ROOT)
     else:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)    
-     
+
+
 @login_required   
 def doc_download_private(request, path, doc):
-    '''Download view that requires user to login, then checks authorization.'''
+    """Download view that requires user to login, then checks authorization."""
     
     if userHasUserPermission(request.user, doc.project):
         return serve(request, path, document_root=settings.PROJECTS_ROOT)
     else:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
+
+
 @login_required
 def doc_remove(request, doc_id):
         
@@ -185,11 +193,11 @@ def doc_remove(request, doc_id):
     # redirect to original page, or to project home if not found
     redirect = request.REQUEST.get('redirect', None)
     if redirect is None:
-        redirect = reverse('project_home', kwargs={'project_short_name': project.short_name.lower() })
+        redirect = reverse('project_home', kwargs={'project_short_name': project.short_name.lower()})
     
     # redirect to project home page
     #return HttpResponseRedirect( reverse('doc_list', kwargs={'project_short_name': project.short_name.lower() } ) ) 
-    return HttpResponseRedirect( redirect ) 
+    return HttpResponseRedirect(redirect)
     
 
 @login_required
@@ -202,7 +210,7 @@ def doc_update(request, doc_id):
     if not userHasUserPermission(request.user, doc.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if (request.method=='GET'):
+    if request.method == 'GET':
         # create form from model
         form = DocForm(instance=doc)
         return render_doc_form(request, form, doc.project)
@@ -210,12 +218,13 @@ def doc_update(request, doc_id):
     else:
         # update existing database model with form data
         form = DocForm(request.POST, request.FILES, instance=doc)
-        if (form.is_valid()):
+        if form.is_valid():
             doc = form.save()
             # redirect to document detail (GET-POST-REDIRECT)
-            return HttpResponseRedirect( reverse('doc_detail', kwargs={'doc_id':doc.id}) )
+            return HttpResponseRedirect(reverse('doc_detail', kwargs={'doc_id': doc.id}))
         else:
             return render_doc_form(request, form, doc.project)
+
 
 def doc_list(request, project_short_name):
     
@@ -253,14 +262,16 @@ def doc_list(request, project_short_name):
     #list_title += ", order by %s" % order_by
         
     # execute query, order by descending update date
-    results = Doc.objects.filter(qset).distinct().order_by( order_by )
+    results = Doc.objects.filter(qset).distinct().order_by(order_by)
     list_title = "Total Number of Matching Documents: %d" % len(results)
    
     return render_to_response('cog/doc/doc_list.html', 
-                              {"object_list": results, 'project': project, 'title':'%s Files' % project.short_name, 
-                               "query": query, "order_by":order_by, "filter_by":filter_by, "list_title":list_title }, 
+                              {"object_list": results, 'project': project, 'title': '%s Files' % project.short_name,
+                               "query": query, "order_by": order_by, "filter_by": filter_by, "list_title":
+                                  list_title},
                               context_instance=RequestContext(request))
-    
+
+
 def render_doc_form(request, form, project):
     title = 'Upload %s File' % project.short_name
     return render_to_response('cog/doc/doc_form.html', 
