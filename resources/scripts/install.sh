@@ -56,7 +56,10 @@ export VERSION=$COG_TAG
 export INSTALLPATH=$COG_INSTALL_DIR
 
 # ESGF common installation script
-source $INSTALLPATH/resources/scripts/installarg.sh
+export INSTALLARG_SCRIPT=$INSTALLPATH/resources/scripts/installarg.sh
+if [ -e "$INSTALLARG_SCRIPT" ]; then
+  source $INSTALLARG_SCRIPT
+fi
 
 # install CoG dependencies within Python virtual environment
 cd $COG_INSTALL_DIR
