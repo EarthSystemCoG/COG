@@ -16,17 +16,6 @@ export GROUP=tomcat
 #export COG_TAG=master
 export COG_TAG=v2.9.1
 
-#=== ESGF INSTALLATION LOGIC - DO NOT CHANGE ========
-
-# the CoG version to install
-export VERSION=1.0
-
-# the directory where this script is located
-export INSTALLPATH=$COG_DIR/cog_install/resources/scripts
-
-# installarg.sh is supposed to be located in teh same directory as this script
-source $INSTALLPATH/installarg.sh
-
 #=== CoG INSTALLATION LOGIC - DO NOT CHANGE ==========
 
 # pre-requisites
@@ -59,6 +48,15 @@ fi
 cd $COG_INSTALL_DIR
 git pull
 git checkout $COG_TAG
+
+# ESGF version
+export VERSION=$COG_TAG
+
+# ESGF installation path
+export INSTALLPATH=$COG_INSTALL_DIR
+
+# ESGF common installation script
+source $INSTALLPATH/installarg.sh
 
 # install CoG dependencies within Python virtual environment
 cd $COG_INSTALL_DIR
