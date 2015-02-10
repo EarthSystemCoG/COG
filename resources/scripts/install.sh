@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#==== SITE SPECIFIC PARAMETERS - CHANGE AS NEEDED =====
+
 # CoG software root directory
 export COG_DIR=/usr/local/cog
 
@@ -10,11 +12,22 @@ export ESGF=true
 export USER=tomcat
 export GROUP=tomcat
 
-#===========================================
+# the specific CoG branch OR version to install
+#export COG_TAG=master
+export COG_TAG=v2.9.0
 
-# the specific CoG branch to install
-# the version installed is specified in the file setup.py of that branch
-export COG_TAG=master
+#=== ESGF INSTALLATION LOGIC - DO NOT CHANGE ========
+
+# the CoG version to install
+export VERSION=1.0
+
+# the directory where this script is located
+export INSTALLPATH=$COG_DIR/cog_install/resources/scripts
+
+# installarg.sh is supposed to be located in teh same directory as this script
+source $INSTALLPATH/installarg.sh
+
+#=== CoG INSTALLATION LOGIC - DO NOT CHANGE ==========
 
 # pre-requisites
 pip install virtualenv
