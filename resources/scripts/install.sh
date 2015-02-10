@@ -76,3 +76,4 @@ rm -rf venv/lib/python2.7/site-packages/cog*
 
 # change ownership of COG_CONFIG_DIR/site_media
 chown -R $USER:$GROUP $COG_CONFIG_DIR
+chown -R $USER:$GROUP $COG_INSTALL_DIR
