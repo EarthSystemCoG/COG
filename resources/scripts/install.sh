@@ -14,7 +14,7 @@ export GROUP=tomcat
 
 # the specific CoG branch OR version to install
 #export COG_TAG=master
-export COG_TAG=v2.9.0
+export COG_TAG=v2.9.1
 
 #=== ESGF INSTALLATION LOGIC - DO NOT CHANGE ========
 
