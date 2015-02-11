@@ -10,8 +10,10 @@
     <!--// styles and scripts for the resources page. Loaded from /cog/templates/cog/common/rollup.html //-->
     <!-- note: pixel styles must be adjusted to specific icons -->
     <!--// note: don't use scoped for this style because it is one level above the location where it is used //-->
-    <style type="text/css"> 
-         .folder {display:table-cell; height:27px;  vertical-align:middle; padding-left:28px; font-weight:bold; background: url({{STATIC_URL}}cog/img/folder_24x24.png) no-repeat; }
+    <style type="text/css">
+    /** the padding-left controls how far the text is from the icon **/
+    /** the background size controls the size of the image. We are starting with a 22x22 image that can be shrunk slightly. **/
+         .folder {display:table-cell; height:22px;  vertical-align:middle; padding-left:27px; font-weight:bold; background: url({{STATIC_URL}}cog/img/folder_icon.png) no-repeat; background-size: 22px 22px; }
          .bookmark {margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0 no-repeat;}
     </style>
 
