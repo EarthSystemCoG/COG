@@ -179,7 +179,7 @@ def membership_remove(request, project_short_name):
         
     # process submission form
     else:
-            
+        
         for group in [project.getAdminGroup(), project.getUserGroup()]:
             # user is enrolled in group
             if group in request.user.groups.all():
@@ -193,8 +193,11 @@ def membership_remove(request, project_short_name):
         # just send one email for the project
         notifyAdminsOfMembershipCanceled(project, request.user)
         
-        title = 'Cancel %s Membership Confirmation' % project.short_name
-        return render_to_response(template, {'project':project,'title': title }, context_instance=RequestContext(request))   
+        # redirect to confirmation page
+        #title = 'Cancel %s Membership Confirmation' % project.short_name
+        #return render_to_response(template, {'project':project,'title': title }, context_instance=RequestContext(request))   
+        # redirect to user profile (on proper site)
+        return HttpResponseRedirect( reverse('user_profile_redirect', kwargs={'user_id': request.user.id }) )
     
 # view to bulk-process group membership operations
 # this view can be invoked as either GET or POST,  following a GET request to a membership listing

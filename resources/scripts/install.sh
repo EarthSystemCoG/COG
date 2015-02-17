@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#==== SITE SPECIFIC PARAMETERS - CHANGE AS NEEDED =====
+
 # CoG software root directory
 export COG_DIR=/usr/local/cog
 
@@ -10,11 +12,25 @@ export ESGF=true
 export USER=tomcat
 export GROUP=tomcat
 
-#===========================================
+# the specific CoG branch OR version to install
+#export COG_TAG=master
+export COG_TAG=v2.10.0
 
-# the specific CoG branch to install
-# the version installed is specified in the file setup.py of that branch
-export COG_TAG=master
+#=== ESGF INSTALLATION LOGIC - DO NOT CHANGE =========
+
+# ESGF version
+export VERSION=$COG_TAG
+
+# ESGF installation path
+export INSTALLPATH=$COG_DIR/cog_install
+
+# ESGF common installation script
+export INSTALLARG_SCRIPT=$INSTALLPATH/resources/scripts/installarg.sh
+if [ -e "$INSTALLARG_SCRIPT" ]; then
+  source $INSTALLARG_SCRIPT
+fi
+
+#=== CoG INSTALLATION LOGIC - DO NOT CHANGE ==========
 
 # pre-requisites
 pip install virtualenv
@@ -60,3 +76,4 @@ rm -rf venv/lib/python2.7/site-packages/cog*
 
 # change ownership of COG_CONFIG_DIR/site_media
 chown -R $USER:$GROUP $COG_CONFIG_DIR
+chown -R $USER:$GROUP $COG_INSTALL_DIR
