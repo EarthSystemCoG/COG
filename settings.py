@@ -44,7 +44,7 @@ TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
 print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
 IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
-print 'Using IdP whitelist: %s' % IDP_WHITELIST
+print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
 
 # FIXME
 # ESGF specific settings

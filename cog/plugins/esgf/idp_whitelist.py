@@ -28,32 +28,41 @@ class WhiteList(object):
 
 class LocalWhiteList(WhiteList):
     '''Whitelist implementation that reads the list of trusted IdPs
-       from a file on the local file system.'''
+       from one or more files on the local file system.'''
 
-    def __init__(self, filepath):
+    def __init__(self, filepath_string):
+        
+        # split into one or more file paths
+        filepaths = filepath_string.replace(' ','').split(",")
 
         # internal fields
-        self.idps = []
-        self.filepath = filepath
-        self.modtime = file_modification_datetime(self.filepath)
+        self.filepaths = filepaths
+        self.modtimes = {}  # keyed by file path
+        self.idps = {}      # keyed by file spath
+        
+        # loop over whitelist files
+        for filepath in self.filepaths:
+            
+            # record last modification time
+            self.modtimes[filepath] = file_modification_datetime(filepath)
 
-        # load white list for the first time
-        self._reload(force=True)
+            # load this white list for the first time
+            self._reload(filepath, force=True)
 
 
-    def _reload(self, force=False):
-        '''Internal method to reload the IdP white list if it has changed since it was last read'''
+    def _reload(self, filepath, force=False):
+        '''Internal method to reload an IdP white list if it has changed since it was last read'''
 
-        modtime = file_modification_datetime(self.filepath)
+        modtime = file_modification_datetime(filepath)
 
-        if force or modtime > self.modtime:
+        if force or modtime > self.modtimes[filepath]:
 
-            print 'Loading IdP white list: %s, last modified: %s' % (self.filepath, modtime)
-            self.modtime = modtime
+            print 'Loading IdP white list: %s, last modified: %s' % (filepath, modtime)
+            self.modtimes[filepath] = modtime
             idps = []
 
             # read whitelist
-            with open (self.filepath, "r") as myfile:
+            with open (filepath, "r") as myfile:
                 xml=myfile.read().replace('\n', '')
 
             # <idp_whitelist xmlns="http://www.esgf.org/whitelist">
@@ -66,19 +75,23 @@ class LocalWhiteList(WhiteList):
                     idps.append(idp.lower())
                     print 'Using trusted IdP: %s' % idp
 
-            # switch the list
-            self.idps = idps
+            # switch the list for this file path
+            self.idps[filepath] = idps
 
     def trust(self, openid):
 
-        # reload the white list ?
-        self._reload()
-
-        # loop over trusted IdPs
-        for idp in self.idps:
-            # trust this openid
-            if openid.lower().startswith(idp):
-                return True
+        # loop over trusted lists
+        for filepath in self.filepaths:
+            
+            # reload the list ?
+            self._reload(filepath)
+            
+            # loop over IdPs in this white list
+            for idp in self.idps[filepath]:
+                
+                # trust this openid
+                if openid.lower().startswith(idp):
+                    return True
 
         # don't trust this openid
         return False

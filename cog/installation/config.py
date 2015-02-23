@@ -161,7 +161,7 @@ class CogConfig(object):
         self._safeSet('DEBUG', 'True')
         # ALLOWED_HOSTS = [] must be included if DEBUG=False
         self._safeSet('ALLOWED_HOSTS', hostName)
-        # IDP_WHITELIST = /esg/config/esgf_idp_static.xml
+        # IDP_WHITELIST = /esg/config/esgf_idp.xml, /esg/config/esgf_idp_static.xml
         self._safeSet('IDP_WHITELIST', IDP_WHITELIST)
         
         #[ESGF]
