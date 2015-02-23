@@ -10,8 +10,10 @@ from cog.config.search import config_project_search
 print 'Upgrading COG'
 
 # read search configurations
-configs = { 'NCPP': 'cog/config/search/ncpp.cfg',
-            'Downscaling-2013': 'cog/config/search/ncpp.cfg' }
+configs = { 'StandardDistribution': 'cog/config/search/standard_distribution.cfg',
+            #'NCPP': 'cog/config/search/ncpp.cfg',
+            #'Downscaling-2013': 'cog/config/search/ncpp.cfg',
+          }
 
 for key in configs:
     config_project_search(key, configs[key])
