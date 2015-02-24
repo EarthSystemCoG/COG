@@ -120,8 +120,10 @@ class CoGInstall(object):
             
             # create User object
             logging.info("Creating admin user")
-            user = User(first_name='Admin', last_name='User', username=ROOTADMIN_USERNAME, 
-                        email='adminuser@test.com', is_staff=True, is_superuser=True)
+            user = User(first_name='Admin', last_name='User', 
+                        username=ROOTADMIN_USERNAME, 
+                        email=self.siteManager.get('EMAIL_SENDER'), 
+                        is_staff=True, is_superuser=True)
             if settings.ESGF_CONFIG:
                 password = self._getRootAdminPassword()
             else:
