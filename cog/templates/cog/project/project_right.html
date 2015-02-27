@@ -69,7 +69,9 @@
 
 		            </div>
 		        </div>
-	            <input class="right_go"  type="submit" value="Go" id="projectBrowserButton" onclick="loadProjectBrowser('{{project.short_name}}')"/>
+	            <input class="right_go"  
+	                   type="submit" value="Go" id="projectBrowserButton" 
+	                   onclick="javascript:gotoTab(1); loadProjectBrowser('{{project.short_name}}');"/>
 		   </div>
 	       <div style="text-align:center; font-style: italic;">
                 Start typing, or use the 'Delete' key to show all available tags.
@@ -89,7 +91,10 @@
    </script>
    <!-- initialize tags autocompletion -->
    <script type="text/javascript">
-       initTags()
+       initTags();
+       function gotoTab(itab) {
+       	  myTabs.set('activeIndex', itab);
+	   }
    </script>
 <!--//END: /cog/templates/cog/project/project_right.html //-->
 {% endblock %}
