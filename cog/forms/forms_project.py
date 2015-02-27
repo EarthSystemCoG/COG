@@ -192,8 +192,8 @@ class ProjectTagForm(ModelForm):
             if tag is not None and tag.id != self.instance.id:  # not this tag
                 self._errors["name"] = self.error_class(["Tag with this name already exist: %s" % tag.name])
         except ObjectDoesNotExist:
-            # capitalize the tag name
-            self.cleaned_data['name'] = self.cleaned_data['name'].capitalize()
+            # capitalize the tag name - NOT ANY MORE SINCE WE WANT TO CONSERVE CASE
+            #self.cleaned_data['name'] = self.cleaned_data['name'].capitalize()
             # only allow letters, numbers, '-' and '_'
             if re.search("[^a-zA-Z0-9_\-\s]", name):
                 self._errors["name"] = self.error_class(["Tag name contains invalid characters"])
