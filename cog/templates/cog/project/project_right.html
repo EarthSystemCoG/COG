@@ -85,6 +85,19 @@
 
      </div><!--end div id=project_widget //-->
    </div><!--end div id=yui-skin-sam // -->
+   
+   <!-- display project tags -->
+   {% if project.tags %}
+   	   <br/>
+   	   <div class="mybox">
+   	   	<div class="right_widget_header" style="border-bottom:1px solid black;">This Project Tags</div>
+   	   	<div id="this_project_tags" style="padding:4px; margin:0;">
+		   {% for tag in project.tags.all %}
+		   		{{ tag }}</br/>
+		   {% endfor %}
+		</div>
+	   </div>
+   {% endif %}
 
    <!-- render YUI tabs -->
    <script type="text/javascript">
