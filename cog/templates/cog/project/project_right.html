@@ -71,7 +71,12 @@
 		        </div>
 	            <input class="right_go"  
 	                   type="submit" value="Go" id="projectBrowserButton" 
-	                   onclick="javascript:gotoTab(1); loadProjectBrowser('{{project.short_name}}');"/>
+	                   onclick="gotoTab(1); loadProjectBrowser('{{project.short_name}}');"/>
+	            <input class="right_go" style="width:40px"
+	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
+	                   onclick="document.getElementById('projectBrowserText').value=''; gotoTab(0); loadProjectBrowser('{{project.short_name}}');"/>
+	                   
+	            
 		   </div>
 	       <div style="text-align:center; font-style: italic;">
                 Start typing, or use the 'Delete' key to show all available tags.
