@@ -56,30 +56,33 @@
        changing the position back to static and display back to inline. -->
 
 	   <div id="project_browser_controls">
-	       <div id="tag_entry" style="padding:4px; padding-right:0;margin:0;">
+	       <div id="tag_entry" style="padding:4px; padding-right:0; margin:0;">
                 <!--class=yui-ac-->
 		        <div id="tagAutoComplete" style="margin:0; padding:0; margin-top:8px; width:137px; position:static; display:inline;">
 			        <!--class=yui-ac-input-->
                     <label for="projectBrowserText" style="display:none;">Enter Tag</label>
 		            <input type="text" id="projectBrowserText" placeholder="Enter Tag" style="position:static;
-		            width:137px; font-size:8.5pt; padding:0; padding-left:2px; margin:0;" alt="projectBrowserText" />
+		            width:176px; font-size:8.5pt; padding:0; padding-left:2px; margin:0;" alt="projectBrowserText" />
 			        <!--onkeydown="if (event.keyCode == 13) document.getElementById('projectBrowserButton').click()" -->
                     <!--class=yui-ac-container-->
-		            <div style="width:133px" id="tagContainer">
+		            <div style="width:176px" id="tagContainer">
 
 		            </div>
 		        </div>
-	            <input class="right_go"  
+                <div style="text-align: left;width:176px; margin:0;">
+	                <input class="right_go" style="margin:0;"
 	                   type="submit" value="Go" id="projectBrowserButton" 
 	                   onclick="gotoTab(1); loadProjectBrowser('{{project.short_name}}');"/>
-	            <input class="right_go" style="width:40px"
+
+	                <input class="right_go" style="width:45px"
 	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
 	                   onclick="document.getElementById('projectBrowserText').value=''; gotoTab(0); loadProjectBrowser('{{project.short_name}}');"/>
+                </div>
 	                   
 	            
 		   </div>
 	       <div style="text-align:center; font-style: italic;">
-                Start typing, or use the 'Delete' key to show all available tags.
+                Start typing, or use the 'Delete' key to show all available tags. Click 'Reset' to start a new search.
            </div>
        </div><!--// end div id=project_browser_controls //-->
 
@@ -90,13 +93,24 @@
    {% if project.tags %}
    	   <br/>
    	   <div class="mybox">
-   	   	<div class="right_widget_header" style="border-bottom:1px solid black;">This Project Tags</div>
-   	   	<div id="this_project_tags" style="padding:4px; margin:0;">
-		   {% for tag in project.tags.all %}
-		   		{{ tag }}</br/>
-		   {% endfor %}
-		</div>
-	   </div>
+           <!-- display tags -->
+   	   	   <div class="right_widget_header" style="border-bottom:1px solid black;">Read Tags</div>
+   	   	   <div id="this_project_tags" style="padding:4px; margin:0;">
+		      {% for tag in project.tags.all %}
+		   		{{ tag }} <br>
+		      {% endfor %}
+		   </div>
+           <!--display instructions and save button -->
+           <div style="background-color:#fce79f; border-top:1px solid #666666;">
+              <div style="text-align:left;">
+                  <input class="right_go" style="width:43px;" type="submit" value="Save" id="saveProjectTag"
+	                   onclick="FIXME;"/>
+              </div>
+              <div style="text-align:center; font-style:italic; font-size:8pt; color:#666666; margin:0; padding: 0; padding-left:1px; padding-right:1px;">
+                  Click on one of the tags associated with this project to save it to your profile.
+              </div>
+           </div>
+	   </div><!--//end id="mybox" //-->
    {% endif %}
 
    <!-- render YUI tabs -->
