@@ -66,6 +66,46 @@ def search(request, project_short_name):
                     'Please contact the project administrators for further assistance.']
         return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
 
+def _buildSearchInput(request, searchConfig):
+    '''Assembles the search input from the HTTP request and the project specific configuration.'''
+    
+    # populate input with search constraints from HTTP request
+    searchInput = SearchInput()
+    for facetGroup in searchConfig.facetProfile.facetGroups:
+        for key in facetGroup.getKeys():
+            if (request.REQUEST.get(key, None)):
+                for value in request.REQUEST.getlist(key):
+                    if value:
+                        searchInput.addConstraint(key, value)
+    
+    # add fixed constraints - override previous values
+    for key, values in searchConfig.fixedConstraints.items():
+            searchInput.setConstraint(key, values)
+            
+    # text
+    if request.REQUEST.get('query', None):
+        searchInput.query = request.REQUEST['query']
+    # type
+    if request.REQUEST.get('type', None):
+        searchInput.type = request.REQUEST['type']
+    # replica=True/False
+    if request.REQUEST.get('replica', None) == 'on':
+        searchInput.replica = True
+    # latest=True/False
+    if request.REQUEST.get('latest', None) == 'on':
+        searchInput.latest = False
+    # local=True/False
+    if request.REQUEST.get('local', None) == 'on':
+        searchInput.local = True
+
+    # offset, limit
+    if request.REQUEST.get('offset', 0):
+        searchInput.offset = int(request.REQUEST['offset'])
+    if request.REQUEST.get('limit', 0):
+        searchInput.limit = int(request.REQUEST['limit'])
+
+    return searchInput
+    
 def search_config(request, searchConfig, extra={}):
     """
     Project-specific search view that processes all GET/POST requests.
@@ -78,40 +118,8 @@ def search_config(request, searchConfig, extra={}):
     for key, value in extra.items():
         print 'extra key=%s value=%s' % (key,value)
     
-    # populate input with search constraints from HTTP request
-    input = SearchInput()
-    for facetGroup in searchConfig.facetProfile.facetGroups:
-        for key in facetGroup.getKeys():
-            if (request.REQUEST.get(key, None)):
-                for value in request.REQUEST.getlist(key):
-                    if value:
-                        input.addConstraint(key, value)
-    
-    # add fixed constraints - override previous values
-    for key, values in searchConfig.fixedConstraints.items():
-            input.setConstraint(key, values)
-            
-    # text
-    if request.REQUEST.get('query', None):
-        input.query = request.REQUEST['query']
-    # type
-    if request.REQUEST.get('type', None):
-        input.type = request.REQUEST['type']
-    # replica=True/False
-    if request.REQUEST.get('replica', None) == 'on':
-        input.replica = True
-    # latest=True/False
-    if request.REQUEST.get('latest', None) == 'on':
-        input.latest = False
-    # local=True/False
-    if request.REQUEST.get('local', None) == 'on':
-        input.local = True
-
-    # offset, limit
-    if request.REQUEST.get('offset', 0):
-        input.offset = int(request.REQUEST['offset'])
-    if request.REQUEST.get('limit', 0):
-        input.limit = int(request.REQUEST['limit'])
+    # create search input object
+    searchInput = _buildSearchInput(request, searchConfig)
         
     # GET/POST switch
     print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
@@ -120,11 +128,11 @@ def search_config(request, searchConfig, extra={}):
     if (request.method=='GET'):
         if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: 
             # GET pre-seeded search URL -> redirect to POST immediately
-            return search_post(request, input, searchConfig, extra)
+            return search_post(request, searchInput, searchConfig, extra)
         else:
-            return search_get(request, input, searchConfig, extra)
+            return search_get(request, searchInput, searchConfig, extra)
     else:
-        return search_post(request, input, searchConfig, extra)
+        return search_post(request, searchInput, searchConfig, extra)
         
 def search_get(request, searchInput, searchConfig, extra={}):
     '''
