@@ -55,7 +55,7 @@ def search(request, project_short_name):
             if not userHasUserPermission(request.user, project):
                 return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
    
-    config = getSearchConfig(request, project)
+    config = _getSearchConfig(request, project)
     if config:        
         #config.printme()
         # pass on project as extra argument to search
@@ -303,7 +303,7 @@ def metadata_display(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    config = getSearchConfig(request, project)
+    config = _getSearchConfig(request, project)
 
     # retrieve result metadata
     params = [ ('type', type), ('id', id), ("format", "application/solr+json"), ("distrib", "false") ]
@@ -390,7 +390,7 @@ def _processDoc(doc):
     return metadoc
     
 # method to configure the search on a per-request basis
-def getSearchConfig(request, project):
+def _getSearchConfig(request, project):
     
     # configure project search profile, if not existing already
     try:
@@ -475,7 +475,18 @@ def search_profile_config(request, project_short_name):
             print 'Form is invalid: %s' % form
             return render_search_profile_form(request, project, form)
             
-
+def _queryFacets(request, project):
+    '''Executes a query for all available facets for a given project.'''
+    
+    searchConfig = _getSearchConfig(request, project)
+    searchInput = _buildSearchInput(request, searchConfig)
+    searchInput.limit = 0 # no results
+    searchService = searchConfig.searchService
+    (url, xml) = searchService.search(searchInput, allFacets=True) # uses facets='*'
+    searchOutput = deserialize(xml, searchConfig.facetProfile)
+    #searchOutput.printme()
+    
+    return searchOutput.facets
     
 # method to add a new facet
 def search_facet_add(request, project_short_name):
@@ -489,6 +500,9 @@ def search_facet_add(request, project_short_name):
     
     if request.method=='GET': 
         
+        # retrieve list of available facets by executing project-specific query
+        facets = _queryFacets(request, project)
+        
         # create default search group, if not existing already
         group = get_or_create_default_search_group(project)
         
@@ -497,7 +511,7 @@ def search_facet_add(request, project_short_name):
         facet = SearchFacet(order=order, group=group)
         form = SearchFacetForm(instance=facet)    
         
-        return render_search_facet_form(request, project, form)
+        return render_search_facet_form(request, project, form, facets)
         
     else:
         form = SearchFacetForm(request.POST)
@@ -508,7 +522,11 @@ def search_facet_add(request, project_short_name):
         
         else:     
             print 'Form is invalid: %s' % form.errors
-            return render_search_facet_form(request, project, form)
+            
+            # must retrieve facets again
+            facets = _queryFacets(request, project)
+            
+            return render_search_facet_form(request, project, form, facets)
         
 # method to update an existing facet
 def search_facet_update(request, facet_id):
@@ -593,7 +611,7 @@ def render_search_profile_form(request, project, form):
                               {'project' : project, 'form':form, 'title':'Project Search Configuration' }, 
                                context_instance=RequestContext(request))
     
-def render_search_facet_form(request, project, form):
+def render_search_facet_form(request, project, form, facets):
     return render_to_response('cog/search/search_facet_form.html', 
-                              {'project' : project, 'form':form, 'title':'Search Facet Configuration' }, 
+                              {'project' : project, 'form':form, 'title':'Search Facet Configuration', 'facets':facets }, 
                               context_instance=RequestContext(request))

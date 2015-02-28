@@ -130,9 +130,9 @@ class FacetProfile:
         """Returns a list of keys over all its facet groups."""
         return self.keys
     
-    # this method will raise a KeyError if the key is not found
     def getLabel(self, key):
-        return self.map[key]
+        '''Returns the facet label for the given key, or None if the key is not found.'''
+        return self.map.get(key, None)
     
 class FacetGroup:
     """
