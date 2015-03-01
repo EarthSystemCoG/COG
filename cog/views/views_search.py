@@ -484,7 +484,7 @@ def _queryFacets(request, project):
     searchService = searchConfig.searchService
     (url, xml) = searchService.search(searchInput, allFacets=True) # uses facets='*'
     searchOutput = deserialize(xml, searchConfig.facetProfile)
-    #searchOutput.printme()
+    searchOutput.printme()
     
     return searchOutput.facets
     

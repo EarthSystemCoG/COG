@@ -37,8 +37,8 @@ def sortdict(the_dict):
 
 @register.filter
 def dictKeyLookup(the_dict, key):
-   # Try to fetch from the dict, and if it's not found return an empty string.
-   return the_dict.get(key, '')
+    # Try to fetch from the dict, and if it's not found return an empty string.
+    return the_dict.get(key, '')
 
 
 # Utility function to set the "escape" function to be conditional_escape, or the identity function
