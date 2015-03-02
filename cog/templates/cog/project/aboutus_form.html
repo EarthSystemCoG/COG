@@ -8,7 +8,7 @@
 	         
 	     {% csrf_token %}
 	          
-		 {% if tab = "ABOUTUS"|tabs %}	
+		 {% if tab == "ABOUTUS"|tabs %}
 		 <div class="mybox">
 		 	<table>	     
 		     	 <!-- Update "About Us" tab -->
@@ -38,7 +38,7 @@
 		 </div>		
 		 {% endif %}	
 					     
-         {% if tab = "MISSION"|tabs %}
+         {% if tab == "MISSION"|tabs %}
          <div class="mybox">
 	         <table>
 	         	 <tr>
@@ -51,7 +51,7 @@
 		 </div>
 		 {% endif %}
 			     
-	     {% if tab = "VISION"|tabs %}
+	     {% if tab == "VISION"|tabs %}
 	     <div class="mybox">
 	         <table>
 	         	 <tr>
@@ -64,7 +64,7 @@
 		     </div>	     			         
 	     {% endif %}
 			     
-		 {% if tab = "VALUES"|tabs %}
+		 {% if tab == "VALUES"|tabs %}
 		 <div class="mybox">
 	         <table>
 	         	 <tr>
@@ -77,7 +77,7 @@
 		 </div>
 		 {% endif %}
 		 
-		 {% if tab = "IMPACTS"|tabs %}		 
+		 {% if tab == "IMPACTS"|tabs %}
 		 	{{ formset.management_form }}
 		    {% for form in formset.forms %}
 		    	{{ form.id }}
@@ -113,7 +113,7 @@
 		 {% endif %}
 		 
 		 
-		 {% if tab = "HISTORY"|tabs %}
+		 {% if tab == "HISTORY"|tabs %}
 		 <div class="mybox">
 	         <table>
 	         	 <tr>
