@@ -91,6 +91,7 @@ def external_urls_update(request, project_short_name, suburl):
     except KeyError:
         raise Exception("URL: %s is not properly configured" % request.path)
     type = externalUrlConf.type
+
     redirect = reverse('%s_display' % suburl, args=[project_short_name, suburl])
     
     # number of empty instances to be displayed
@@ -103,7 +104,8 @@ def external_urls_update(request, project_short_name, suburl):
     
     # GET
     if request.method == 'GET':
-        
+        print type
+
         # create formset instance backed by current saved instances
         # must provide the initial data to all the extra instances, 
         # which come in the list after the database instances
@@ -111,9 +113,17 @@ def external_urls_update(request, project_short_name, suburl):
         #initial_data = [ {'project':project, 'type':type } for count in xrange(len(queryset)+nextras)]
         #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)
 
-        # external_urls are ordered by title when editing to match the order when just viewing.
-        formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).order_by('title'))
-        
+        # if template is release schedules, which are dates, reverse order of the urls
+        # sorting of the main view occurs in project.py
+        if type == 'release_schedule':
+            formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
+                                        order_by('-title'))
+        else:
+
+            # external_urls are ordered by title when editing to match the order when just viewing.
+            formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
+                                         order_by('title'))
+
         return render_external_urls_form(request, project, formset, externalUrlConf, redirect)
     
     # POST

@@ -265,7 +265,10 @@ class Project(models.Model):
     # unfortunately, external_url has no date created function or other field we can order by. Before 2.10, modification
     # of an external_url could result in random ordering. This at least forces them to be alphabetical.
     def get_external_urls(self, type):
-        return self.externalurl_set.filter(project=self, type=type).order_by('title')
+        if type == 'release_schedule':
+            return self.externalurl_set.filter(project=self, type=type).order_by('-title')
+        else:
+            return self.externalurl_set.filter(project=self, type=type).order_by('title')
         
     # method to return the project home page URL
     def home_page_url(self):
