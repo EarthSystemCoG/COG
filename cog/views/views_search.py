@@ -55,7 +55,7 @@ def search(request, project_short_name):
             if not userHasUserPermission(request.user, project):
                 return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
    
-    config = getSearchConfig(request, project)
+    config = _getSearchConfig(request, project)
     if config:        
         #config.printme()
         # pass on project as extra argument to search
@@ -66,6 +66,46 @@ def search(request, project_short_name):
                     'Please contact the project administrators for further assistance.']
         return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
 
+def _buildSearchInput(request, searchConfig):
+    '''Assembles the search input from the HTTP request and the project specific configuration.'''
+    
+    # populate input with search constraints from HTTP request
+    searchInput = SearchInput()
+    for facetGroup in searchConfig.facetProfile.facetGroups:
+        for key in facetGroup.getKeys():
+            if (request.REQUEST.get(key, None)):
+                for value in request.REQUEST.getlist(key):
+                    if value:
+                        searchInput.addConstraint(key, value)
+    
+    # add fixed constraints - override previous values
+    for key, values in searchConfig.fixedConstraints.items():
+            searchInput.setConstraint(key, values)
+            
+    # text
+    if request.REQUEST.get('query', None):
+        searchInput.query = request.REQUEST['query']
+    # type
+    if request.REQUEST.get('type', None):
+        searchInput.type = request.REQUEST['type']
+    # replica=True/False
+    if request.REQUEST.get('replica', None) == 'on':
+        searchInput.replica = True
+    # latest=True/False
+    if request.REQUEST.get('latest', None) == 'on':
+        searchInput.latest = False
+    # local=True/False
+    if request.REQUEST.get('local', None) == 'on':
+        searchInput.local = True
+
+    # offset, limit
+    if request.REQUEST.get('offset', 0):
+        searchInput.offset = int(request.REQUEST['offset'])
+    if request.REQUEST.get('limit', 0):
+        searchInput.limit = int(request.REQUEST['limit'])
+
+    return searchInput
+    
 def search_config(request, searchConfig, extra={}):
     """
     Project-specific search view that processes all GET/POST requests.
@@ -78,40 +118,8 @@ def search_config(request, searchConfig, extra={}):
     for key, value in extra.items():
         print 'extra key=%s value=%s' % (key,value)
     
-    # populate input with search constraints from HTTP request
-    input = SearchInput()
-    for facetGroup in searchConfig.facetProfile.facetGroups:
-        for key in facetGroup.getKeys():
-            if (request.REQUEST.get(key, None)):
-                for value in request.REQUEST.getlist(key):
-                    if value:
-                        input.addConstraint(key, value)
-    
-    # add fixed constraints - override previous values
-    for key, values in searchConfig.fixedConstraints.items():
-            input.setConstraint(key, values)
-            
-    # text
-    if request.REQUEST.get('query', None):
-        input.query = request.REQUEST['query']
-    # type
-    if request.REQUEST.get('type', None):
-        input.type = request.REQUEST['type']
-    # replica=True/False
-    if request.REQUEST.get('replica', None) == 'on':
-        input.replica = True
-    # latest=True/False
-    if request.REQUEST.get('latest', None) == 'on':
-        input.latest = False
-    # local=True/False
-    if request.REQUEST.get('local', None) == 'on':
-        input.local = True
-
-    # offset, limit
-    if request.REQUEST.get('offset', 0):
-        input.offset = int(request.REQUEST['offset'])
-    if request.REQUEST.get('limit', 0):
-        input.limit = int(request.REQUEST['limit'])
+    # create search input object
+    searchInput = _buildSearchInput(request, searchConfig)
         
     # GET/POST switch
     print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
@@ -120,11 +128,11 @@ def search_config(request, searchConfig, extra={}):
     if (request.method=='GET'):
         if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: 
             # GET pre-seeded search URL -> redirect to POST immediately
-            return search_post(request, input, searchConfig, extra)
+            return search_post(request, searchInput, searchConfig, extra)
         else:
-            return search_get(request, input, searchConfig, extra)
+            return search_get(request, searchInput, searchConfig, extra)
     else:
-        return search_post(request, input, searchConfig, extra)
+        return search_post(request, searchInput, searchConfig, extra)
         
 def search_get(request, searchInput, searchConfig, extra={}):
     '''
@@ -295,7 +303,7 @@ def metadata_display(request, project_short_name):
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    config = getSearchConfig(request, project)
+    config = _getSearchConfig(request, project)
 
     # retrieve result metadata
     params = [ ('type', type), ('id', id), ("format", "application/solr+json"), ("distrib", "false") ]
@@ -382,7 +390,7 @@ def _processDoc(doc):
     return metadoc
     
 # method to configure the search on a per-request basis
-def getSearchConfig(request, project):
+def _getSearchConfig(request, project):
     
     # configure project search profile, if not existing already
     try:
@@ -467,7 +475,18 @@ def search_profile_config(request, project_short_name):
             print 'Form is invalid: %s' % form
             return render_search_profile_form(request, project, form)
             
-
+def _queryFacets(request, project):
+    '''Executes a query for all available facets for a given project.'''
+    
+    searchConfig = _getSearchConfig(request, project)
+    searchInput = _buildSearchInput(request, searchConfig)
+    searchInput.limit = 0 # no results
+    searchService = searchConfig.searchService
+    (url, xml) = searchService.search(searchInput, allFacets=True) # uses facets='*'
+    searchOutput = deserialize(xml, searchConfig.facetProfile)
+    searchOutput.printme()
+    
+    return searchOutput.facets
     
 # method to add a new facet
 def search_facet_add(request, project_short_name):
@@ -481,6 +500,9 @@ def search_facet_add(request, project_short_name):
     
     if request.method=='GET': 
         
+        # retrieve list of available facets by executing project-specific query
+        facets = _queryFacets(request, project)
+        
         # create default search group, if not existing already
         group = get_or_create_default_search_group(project)
         
@@ -489,7 +511,7 @@ def search_facet_add(request, project_short_name):
         facet = SearchFacet(order=order, group=group)
         form = SearchFacetForm(instance=facet)    
         
-        return render_search_facet_form(request, project, form)
+        return render_search_facet_form(request, project, form, facets)
         
     else:
         form = SearchFacetForm(request.POST)
@@ -500,7 +522,11 @@ def search_facet_add(request, project_short_name):
         
         else:     
             print 'Form is invalid: %s' % form.errors
-            return render_search_facet_form(request, project, form)
+            
+            # must retrieve facets again
+            facets = _queryFacets(request, project)
+            
+            return render_search_facet_form(request, project, form, facets)
         
 # method to update an existing facet
 def search_facet_update(request, facet_id):
@@ -585,7 +611,7 @@ def render_search_profile_form(request, project, form):
                               {'project' : project, 'form':form, 'title':'Project Search Configuration' }, 
                                context_instance=RequestContext(request))
     
-def render_search_facet_form(request, project, form):
+def render_search_facet_form(request, project, form, facets):
     return render_to_response('cog/search/search_facet_form.html', 
-                              {'project' : project, 'form':form, 'title':'Search Facet Configuration' }, 
+                              {'project' : project, 'form':form, 'title':'Search Facet Configuration', 'facets':facets }, 
                               context_instance=RequestContext(request))

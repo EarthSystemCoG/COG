@@ -43,4 +43,32 @@
 	  </form>
 	</div>
 	
+	<!-- table of available facets table -->
+    {% if facets %}
+	    
+	    <!-- list search facets  -->
+	    <div class="mybox">
+            <table>
+                <caption>Available Search Facet Keys, Values</caption>
+                {% for keyAndFacet in facets|sortdict %}
+                	<!-- only display facets that have some values -->
+                	{% if keyAndFacet.1.values %}
+	                    <tr>
+	                       <td nowrap="nowrap">{{ keyAndFacet.0 }}</td>
+	                       <td>     
+	                       	<!-- limit display to first 20 values -->     
+	                       	{% for value in keyAndFacet.1.values.keys|slice:":20" %}
+	                       		{% if forloop.counter > 1 %}, {% endif %}
+	                       		{{ value|truncatechars:50 }} ({{ keyAndFacet.1.values|dictKeyLookup:value }})
+	                       	{% endfor %}
+	                       	<!-- there are more values -->
+	                       	{% if keyAndFacet.1.values.keys|length > 20 %}, ...... {% endif %}
+	                       </td>
+	                    </tr>
+                    {% endif %}
+                {% endfor %}   
+            </table>
+         </div>       
+    {% endif %}
+		
 {% endblock %}
