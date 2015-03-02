@@ -21,36 +21,50 @@ from cog.util.thumbnails import *
 
 from constants import PERMISSION_DENIED_MESSAGE
 
+
 def aboutus_display(request, project_short_name, tab):
-    ''' View to display an project tab page. '''
+    """
+    View to display an project tab page.
+    :param request:
+    :param project_short_name:
+    :param tab:
+    :return:
+    """
 
     template_page = 'cog/project/_project_aboutus.html'
     if tab == TABS["MISSION"]:
-        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Mission' }
+        template_form_pages = {reverse('aboutus_update', args=[project_short_name, tab]): 'Mission'}
     elif tab == TABS["VISION"]:
-        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Vision' }
+        template_form_pages = {reverse('aboutus_update', args=[project_short_name, tab]): 'Vision'}
     elif tab == TABS["VALUES"]:
-        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'Values' }
+        template_form_pages = {reverse('aboutus_update', args=[project_short_name, tab]): 'Values'}
     elif tab == TABS["IMPACTS"]:
-        template_form_pages = { reverse('impacts_update', args=[project_short_name, tab]) : 'Impacts' }
+        template_form_pages = {reverse('impacts_update', args=[project_short_name, tab]): 'Impacts'}
     elif tab == TABS["HISTORY"]:
-        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'History' }
+        template_form_pages = {reverse('aboutus_update', args=[project_short_name, tab]): 'History'}
     elif tab == TABS["PARTNERS"]:
-        template_form_pages = { reverse('partners_update', args=[project_short_name, tab]) : 'Partners' }
+        template_form_pages = {reverse('partners_update', args=[project_short_name, tab]): 'Partners'}
     elif tab == TABS["SPONSORS"]:
-        template_form_pages = { reverse('sponsors_update', args=[project_short_name, tab]) : 'Sponsors' }
+        template_form_pages = {reverse('sponsors_update', args=[project_short_name, tab]): 'Sponsors'}
     elif tab == TABS["PEOPLE"]:
-        template_form_pages = { reverse('people_update', args=[project_short_name, tab]) : 'People' }
+        template_form_pages = {reverse('people_update', args=[project_short_name, tab]): 'People'}
     else:
-        template_form_pages = { reverse('aboutus_update', args=[project_short_name, tab]) : 'About Us' }
+        template_form_pages = {reverse('aboutus_update', args=[project_short_name, tab]): 'About Us'}
     template_title = TAB_LABELS[tab]
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 
+
 @login_required
 def aboutus_update(request, project_short_name, tab):
-    '''View to update the project "About Us" metadata.'''
+    """
+    View to update the project "About Us" metadata.
+    :param request:
+    :param project_short_name:
+    :param tab:
+    :return:
+    """
 
-    # retrieve project from database
+    # retrieve Project from database with the given short_name
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
 
     # check permission
@@ -58,8 +72,7 @@ def aboutus_update(request, project_short_name, tab):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # GET request
-    if request.method=='GET':
-
+    if request.method == 'GET':
         # create form object from model
         form = AboutusForm(instance=project)
 
@@ -83,12 +96,14 @@ def aboutus_update(request, project_short_name, tab):
                 print 'Form is invalid  %s' % form.errors
             return render_aboutus_form(request, project, tab, form)
 
+
 def render_aboutus_form(request, project, tab, form):
     return render_to_response('cog/project/aboutus_form.html',
-                          {'form': form, 'tab':tab,
-                           'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
-                           'project': project },
-                          context_instance=RequestContext(request))
+                              {'form': form, 'tab': tab,
+                               'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
+                               'project': project},
+                              context_instance=RequestContext(request))
+
 
 @login_required
 def impacts_update(request, project_short_name, tab):
@@ -110,7 +125,7 @@ def impacts_update(request, project_short_name, tab):
     queryset = ProjectImpact.objects.filter(project=project)
 
     # GET
-    if request.method=='GET':
+    if request.method == 'GET':
 
         # create formset instance backed by current saved instances
         # must provide the initial data to all the extra instances,
@@ -142,12 +157,14 @@ def impacts_update(request, project_short_name, tab):
             print formset.errors
             return render_impacts_form(request, project, formset, tab)
 
+
 def render_impacts_form(request, project, formset, tab):
     return render_to_response('cog/project/aboutus_form.html',
-                              {'formset': formset, 'tab':tab,
+                              {'formset': formset, 'tab': tab,
                                'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
-                               'project': project },
-                                context_instance=RequestContext(request))
+                               'project': project},
+                              context_instance=RequestContext(request))
+
 
 # function to customize the widget used by specific formset fields
 def custom_field_callback(field):
@@ -155,6 +172,7 @@ def custom_field_callback(field):
         return field.formfield(widget=Textarea(attrs={'rows': 4}))
     else:
         return field.formfield()
+
 
 @login_required
 def people_update(request, project_short_name, tab):
@@ -164,9 +182,10 @@ def people_update(request, project_short_name, tab):
 
     # Collaborator specific parameters
     clazz = Collaborator
-    formset_factory =  modelformset_factory(Collaborator,
-                                            form=CollaboratorForm, # explicit reference to form to use custom text widgets
-                                            extra=5, can_delete=True, exclude=('project',) )
+    # explicit reference "CollaboratorForm to form to use custom text widgets
+    formset_factory = modelformset_factory(Collaborator,
+                                           form=CollaboratorForm,
+                                           extra=5, can_delete=True, exclude=('project',))
     queryset = Collaborator.objects.filter(project=project).order_by('last_name')
 
     form_template = 'cog/project/people_form.html'
@@ -176,6 +195,7 @@ def people_update(request, project_short_name, tab):
     return _imageformset_update(request, project, tab,
                                 clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size)
 
+
 @login_required
 def sponsors_update(request, project_short_name, tab):
 
@@ -184,9 +204,10 @@ def sponsors_update(request, project_short_name, tab):
 
     # FundingSource specific parameters
     clazz = FundingSource
+    # explicit reference to form FundingSourceForm to use custom text widgets
     formset_factory = modelformset_factory(FundingSource,
-                                            form=FundingSourceForm, # explicit reference to form to use custom text widgets
-                                            extra=3, can_delete=True, exclude=('project',) )
+                                           form=FundingSourceForm,
+                                           extra=3, can_delete=True, exclude=('project',))
     queryset = FundingSource.objects.filter(project=project).order_by('name')
     form_template = 'cog/project/sponsors_form.html'
     upload_dir = UPLOAD_DIR_LOGOS
@@ -194,6 +215,7 @@ def sponsors_update(request, project_short_name, tab):
 
     return _imageformset_update(request, project, tab,
                                 clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size)
+
 
 @login_required
 def partners_update(request, project_short_name, tab):
@@ -203,9 +225,9 @@ def partners_update(request, project_short_name, tab):
 
     # Organization specific parameters
     clazz = Organization
-    formset_factory =  modelformset_factory(Organization,
-                                            form=OrganizationForm, # explicit reference to form to use custom text widgets
-                                            extra=3, can_delete=True, exclude=('project',) )
+    formset_factory = modelformset_factory(Organization,
+                                            form=OrganizationForm,  # explicit reference to form to use custom text widgets
+                                            extra=3, can_delete=True, exclude=('project',))
     queryset = Organization.objects.filter(project=project).order_by('name')
 
     form_template = 'cog/project/partners_form.html'
@@ -215,16 +237,17 @@ def partners_update(request, project_short_name, tab):
     return _imageformset_update(request, project, tab,
                                 clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size)
 
+
 # generic view to update many objects (formsets) containing an image
 def _imageformset_update(request, project, tab,
-                        clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size):
+                         clazz, formset_factory, queryset, form_template, upload_dir, thumbnail_size):
 
     # check permission
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # GET request
-    if request.method=='GET':
+    if request.method == 'GET':
 
         # select object instances associated with current project
         formset = formset_factory(queryset=queryset)
@@ -243,8 +266,7 @@ def _imageformset_update(request, project, tab,
             for form in formset:
                 try:
                     # request to delete image or whole object
-                    if (form.cleaned_data.get('delete_image', False)
-                        or form.cleaned_data.get('DELETE', False) ):
+                    if form.cleaned_data.get('delete_image', False) or form.cleaned_data.get('DELETE', False):
                             deleteImageAndThumbnail(form.instance)
 
                 except ValueError as error:
@@ -259,15 +281,15 @@ def _imageformset_update(request, project, tab,
 
                 # replace current image BEFORE the new image is persisted to disk
                 # newly uploaded images are characterized by the fact that 'upload_dir' is not present in the path
-                if (instance.id is not None                     # instance is not new (i.e. it's already in database)
-                    and instance.image is not None              # instance contains an image
+                if (instance.id is not None                      # instance is not new (i.e. it's already in database)
+                    and instance.image is not None               # instance contains an image
                     and instance.image.name is not None
                     and not upload_dir in instance.image.name): # image has been newly selected
                     obj = clazz.objects.get(pk=instance.id)
                     try:
                         deleteImageAndThumbnail(obj)
                     except ValueError as error:
-                        pass # "The 'image' attribute has no file associated with it"
+                        pass  # "The 'image' attribute has no file associated with it"
 
                 instance.project = project
                 instance.save()
@@ -278,7 +300,7 @@ def _imageformset_update(request, project, tab,
                         generateThumbnail(instance.image.path, thumbnail_size)
                     except ValueError as e:
                         print e
-                        pass # no image supplied
+                        pass  # no image supplied
 
             # redirect to people display (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower(), tab]))
@@ -286,6 +308,7 @@ def _imageformset_update(request, project, tab,
         else:
             print 'Formset is invalid  %s' % formset.errors
             return render_formset(form_template, request, project, tab, formset)
+
 
 def render_formset(template, request, project, tab, formset):
 
