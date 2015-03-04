@@ -123,6 +123,9 @@ urlpatterns = patterns('',
     url(r'^project_browser/browse/(?P<tab>[^/]+)/$', 'cog.views.project_empty_browser', name='project_empty_browser'),
     # the following matches on django development server
     url(r'^project_browser//browse/(?P<tab>[^/]+)/$', 'cog.views.project_empty_browser', name='project_empty_browser'),
+    # save/delete user tags
+    url(r'^project_browser/(?P<project_short_name>[^/]+)/save_user_tag/', 'cog.views.save_user_tag', name='save_user_tag'),
+    url(r'^project_browser/(?P<project_short_name>[^/]+)/delete_user_tag/', 'cog.views.delete_user_tag', name='delete_user_tag'),
 
     # NAVBAR URLs
     (r'', include('cog.urls_navbar')),

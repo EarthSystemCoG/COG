@@ -96,6 +96,11 @@
 
 <script type="text/javascript">
     //<![CDATA[
+    
+       // function to select a project browser tab
+       function gotoTab(itab) { // itab=0,1,2,3,...
+       	  myTabs.set('activeIndex', itab);
+	   }
 
        // function to populate the project widget via ajax call
        function loadProjectBrowser(project_short_name) {
@@ -128,6 +133,30 @@
     	   }
 
        }
+              
+       // function that saves the currently selected project tag into the user preferences
+
+       function handleSaveProjectTagSuccess(o) {
+       		loadProjectBrowser("{{ project.short_name }}".toLowerCase());
+       		gotoTab(3);
+       }
+       var saveProjectTagCallback  = {
+       		success:handleSaveProjectTagSuccess,
+	 		failure: handleFailure,
+	 		cache:false,
+	 		timeout:5000,
+	 		argument: []
+       }
+       function saveProjectTag(project_short_name, tag) {
+         		    	   
+	    	var tag = document.getElementById('projectBrowserText').value;
+	    	if (tag != null && tag!="") {
+	   			var url = "/project_browser/"+project_short_name+"/save_user_tag/?tag="+tag
+	   			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, saveProjectTagCallback, null);
+	   		}
+	   		
+       }
+       
 
 		// function called if the ajax request failed
 		var handleFailure = function(o) {

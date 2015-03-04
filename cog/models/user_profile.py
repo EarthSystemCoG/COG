@@ -8,6 +8,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from cog.utils import getJson
 from cog.models.peer_site import getPeerSites
+from cog.models.project_tag import ProjectTag
 import datetime
 
 class UserProfile(models.Model):
@@ -48,6 +49,10 @@ class UserProfile(models.Model):
     
     # datetime when password was last updated, used to trigger mandatory resets
     last_password_update = models.DateTimeField('Date and Time when Password was Last Updated', blank=True, null=True)
+    
+    # list of user-selected project tags
+    tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='users')
+
 
     def __unicode__(self):
         return "%s" % self.user.get_full_name()

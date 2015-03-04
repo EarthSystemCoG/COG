@@ -597,12 +597,40 @@ def project_browser(request, project_short_name, tab):
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
     elif tab == 'tags':
         display = DisplayStatus(True)  # open all sub-widgets by default
-        # loop over user tags # FIXME
-        for utag in ProjectTag.objects.all():
+        # loop over user tags (sorted by name)
+        utags = request.user.profile.tags.all()
+        for utag in sorted(utags, key=lambda x: x.name):
+            #if tag==None or utag.name==tag:
             html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display)
     
     return HttpResponse(html, content_type="text/html")
 
+@login_required
+def save_user_tag(request, project_short_name):
+    
+    tagName = request.GET['tag']
+
+    try:
+        tag = ProjectTag.objects.get(name=tagName)
+        utags = request.user.profile.tags
+        if not tag in utags.all():
+            utags.add(tag)
+            request.user.profile.save()
+    
+    except ObjectDoesNotExist:
+        print 'Invalid tag name: %s' % tagName
+    
+    return HttpResponse("<html></html>", content_type="text/html")
+    
+@login_required
+def delete_user_tag(request, project_short_name):
+    
+    tag = request.GET['tag']
+    
+    print "Saving user tag=%s" % tag
+    
+    return HttpResponse(json.dumps({}), content_type="application/json") 
+    
 
 # utility class to track the status of the browser widgets
 class DisplayStatus:
