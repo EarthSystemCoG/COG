@@ -626,14 +626,17 @@ def save_user_tag(request, project_short_name):
     if isUserLocal(request.user):
         try:
             tag = ProjectTag.objects.get(name__iexact=tagName)
-            utags = request.user.profile.tags
-            if not tag in utags.all():
-                utags.add(tag)
-                request.user.profile.save()
-                response_data['message'] = 'Tag: %s added to user: %s' % (tagName, request.user)
     
         except ObjectDoesNotExist:
-            response_data['message'] = 'Invalid tag name: %s' % tagName
+            # create this tag on this server
+            tag = ProjectTag.objects.create(name=tagName)
+
+        # add this tag to the user preferences
+        utags = request.user.profile.tags
+        if not tag in utags.all():
+            utags.add(tag)
+            request.user.profile.save()
+            response_data['message'] = 'Tag: %s added to user: %s' % (tagName, request.user)
 
     # redirect to user home site
     else:
