@@ -644,6 +644,7 @@ def save_user_tag(request, project_short_name):
         resp = getJson(url)
         print 'Received JSON response=%s' % json
     
+    print 'response=%s' % resp
     return HttpResponse(resp, content_type="application/json")
     
 @login_required
