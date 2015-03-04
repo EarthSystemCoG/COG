@@ -618,29 +618,33 @@ def project_browser(request, project_short_name, tab):
 @login_required
 def save_user_tag(request, project_short_name):
     
+    # retrive tag
     tagName = request.GET['tag']
-    
-    profile = request.user.profile
-    print 'User home site=%s' % profile.site
-    url = "http://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
-    
-    # mae request to user home site
-    if not isUserLocal(request.user):
-        print 'URL=%s' % url
-        json = getJson(url)
-        print 'GOT BACK JSON=%s' % json
 
-    try:
-        tag = ProjectTag.objects.get(name=tagName)
-        utags = request.user.profile.tags
-        if not tag in utags.all():
-            utags.add(tag)
-            request.user.profile.save()
+    # redirect user to home site ?
+    profile = request.user.profile
+   
+    if isUserLocal(request.user):
+        try:
+            tag = ProjectTag.objects.get(name=tagName)
+            utags = request.user.profile.tags
+            if not tag in utags.all():
+                utags.add(tag)
+                request.user.profile.save()
     
-    except ObjectDoesNotExist:
-        print 'Invalid tag name: %s' % tagName
+        except ObjectDoesNotExist:
+            print 'Invalid tag name: %s' % tagName
+            
+        resp = json.dumps({})
+
+    # redirect to user home site
+    else:
+        url = "http://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
+        print 'Redirecting to URL=%s' % url
+        resp = getJson(url)
+        print 'Received JSON response=%s' % json
     
-    return HttpResponse(json.dumps({}), content_type="application/json")
+    return HttpResponse(resp, content_type="application/json")
     
 @login_required
 def delete_user_tag(request, project_short_name):
