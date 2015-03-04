@@ -23,6 +23,7 @@ from cog.services.membership import addMembership
 from cog.utils import *
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.views.views_templated import templated_page_display
+from cog.utils import getJson
 
 
 # method to add a new project, with optional parent project
@@ -603,9 +604,12 @@ def project_browser(request, project_short_name, tab):
             display = DisplayStatus(True)  # open all sub-widgets by default
             # loop over user tags (sorted by name)
             utags = request.user.profile.tags.all()
-            for utag in sorted(utags, key=lambda x: x.name):
-                #if tag==None or utag.name==tag:
-                html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display, addDeleteLink=True)
+            if len(utags)>0:
+                for utag in sorted(utags, key=lambda x: x.name):
+                    #if tag==None or utag.name==tag:
+                    html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display, addDeleteLink=True)
+            else:
+                html += '<div id="tags_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
         else:
             html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your projects.</i></div>'
             
@@ -620,8 +624,10 @@ def save_user_tag(request, project_short_name):
     print 'User home site=%s' % profile.site
     url = "http://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
     print 'URL=%s' % url
+    # mae request to user home site
     if not profile.isUserLocal():
-        pass
+        json = getJson(url)
+        print 'GOT BACK JSON=%s' % json
 
     try:
         tag = ProjectTag.objects.get(name=tagName)
@@ -633,7 +639,7 @@ def save_user_tag(request, project_short_name):
     except ObjectDoesNotExist:
         print 'Invalid tag name: %s' % tagName
     
-    return HttpResponse("<html></html>", content_type="text/html")
+    return HttpResponse("{}", content_type="application/json")
     
 @login_required
 def delete_user_tag(request, project_short_name):
@@ -665,7 +671,7 @@ class DisplayStatus:
 # example: project='cog', tab='tags', tagName=None, user=..., 
 # widgetName='MIP', widgetId='MIP_projects', displayStatus='open'
 def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus, addDeleteLink=False):
-       
+           
     # retrieve tag, if requested
     tag = None
     tagError = None # keeps track of error in retrieving tag
