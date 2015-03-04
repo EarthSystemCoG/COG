@@ -586,9 +586,9 @@ def project_browser(request, project_short_name, tab):
         if project is not None:
             # object that keeps track of successful invocations, if necessary
             display = DisplayStatus(True)  # open all sub-widgets by default
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Parent', 'parent_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Peer', 'peer_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Child', 'child_projects', display)
         else:
             html += '<div id="this_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
     elif tab == 'all':
@@ -596,18 +596,23 @@ def project_browser(request, project_short_name, tab):
     elif tab == 'my':
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
     elif tab == 'tags':
-        html += makeProjectBrowser(project, tab, tag, request.user, None, 'tags_projects', None)
+        display = DisplayStatus(True)  # open all sub-widgets by default
+        # loop over user tags # FIXME
+        for utag in ProjectTag.objects.all():
+            html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display)
     
     return HttpResponse(html, content_type="text/html")
 
 
 # utility class to track the status of the browser widgets
 class DisplayStatus:
-    def __init__(self, open):
-        self.open = open
+    def __init__(self, _open):
+        self.open = _open
 
     
 # Utility method to create the HTML for the browse widget
+# example: project='cog', tab='tags', tagName=None, user=..., 
+# widgetName='MIP', widgetId='MIP_projects', displayStatus='open'
 def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus):
        
     # retrieve tag, if requested
@@ -623,18 +628,20 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     # list projects to include in widget
     if tagError is None:
         projects = listBrowsableProjects(project, tab, tag, user, widgetName)
+    # list no projects if the tag is invalid
     else:
         projects = Project.objects.none()
-        
-    print '\nwidgetId=%s projects=%s' % (widgetId, projects)
-        
+                
     # build accordion header
     html = ""
     #if len(projects)>0:
     #    widgetDisplay = 'block'
     if widgetName is not None:
         html += '<div class="project_browser_bar" id="%s_bar">' % widgetId
-        html += widgetName+' ('+str(len(projects))+')'
+        if widgetName in ['Parent', 'Child', 'Peer']:
+            html += '%s (%s) projects' % (widgetName, str(len(projects)) )
+        else:
+            html += '%s (%s)' % (widgetName, str(len(projects)) ) # shorter title
         html += '</div>'
     
     # determine widget status (depending on previous invocations)
@@ -646,7 +653,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
         else:
             display = 'none'
 
-    html += '<div id="'+widgetId+'" style="display:'+display+'">';  # height of individual project widgets
+    html += '<div id="'+widgetId+'" style="display:'+display+'; margin-left:4px;">';  # height of individual project widgets
     if len(projects) == 0:
         if tagError is not None:
             html += "<i>"+tagError+"</i>"
@@ -670,24 +677,32 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
 def listBrowsableProjects(project, tab, tag, user, widgetName):
             
     if tab == 'this':
-        if widgetName == 'Parent projects':
+        # note: reserved values for widget names
+        if widgetName == 'Parent':
             projects = projectManager.listAssociatedProjects(project, 'parents')
-        elif widgetName == 'Peer projects':
+        elif widgetName == 'Peer':
             projects = projectManager.listAssociatedProjects(project, 'peers')
-        elif widgetName == 'Child projects':
+        elif widgetName == 'Child':
             projects = projectManager.listAssociatedProjects(project, 'children')
             
     elif tab == 'all':
         #projects = Project.objects.filter(active=True)
         projects = projectManager.listAllProjects()
         
-    elif tab == 'my' or tab == 'tags':
+    elif tab == 'my':
         if not user.is_authenticated():
             projects = Project.objects.none()
         else:
             # retrieve all active projects for this user
             projects = getProjectsForUser(user, False)  # includePending==False
-
+    elif tab == 'tags':
+        if not user.is_authenticated():
+            projects = Project.objects.none()
+        else:
+            # widgetName==user tag name
+            utag = ProjectTag.objects.get(name=widgetName)
+            projects = utag.projects.all()
+            
     # filter projects
     _projects = []  # empty list
     for prj in projects:
