@@ -601,7 +601,7 @@ def project_browser(request, project_short_name, tab):
         utags = request.user.profile.tags.all()
         for utag in sorted(utags, key=lambda x: x.name):
             #if tag==None or utag.name==tag:
-            html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display)
+            html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display, addDeleteLink=True)
     
     return HttpResponse(html, content_type="text/html")
 
@@ -625,9 +625,19 @@ def save_user_tag(request, project_short_name):
 @login_required
 def delete_user_tag(request, project_short_name):
     
-    tag = request.GET['tag']
+    tagName = request.GET['tag']
+    print "Deleting user tag=%s" % tagName
     
-    print "Saving user tag=%s" % tag
+    try:
+        tag = ProjectTag.objects.get(name=tagName)
+        utags = request.user.profile.tags
+        if tag in utags.all():
+            utags.remove(tag)
+            request.user.profile.save()
+
+    except ObjectDoesNotExist:
+        print 'Invalid tag name: %s' % tagName
+        
     
     return HttpResponse(json.dumps({}), content_type="application/json") 
     
@@ -641,7 +651,7 @@ class DisplayStatus:
 # Utility method to create the HTML for the browse widget
 # example: project='cog', tab='tags', tagName=None, user=..., 
 # widgetName='MIP', widgetId='MIP_projects', displayStatus='open'
-def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus):
+def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus, addDeleteLink=False):
        
     # retrieve tag, if requested
     tag = None
@@ -666,10 +676,13 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     #    widgetDisplay = 'block'
     if widgetName is not None:
         html += '<div class="project_browser_bar" id="%s_bar">' % widgetId
+        if addDeleteLink:
+            html += "<a href='javascript:deleteUserTag(\"%s\",\"%s\");' class='deletelink'>&nbsp;</a>" \
+                  % (project.short_name.lower(), widgetName)
         if widgetName in ['Parent', 'Child', 'Peer']:
             html += '%s (%s) projects' % (widgetName, str(len(projects)) )
         else:
-            html += '%s (%s)' % (widgetName, str(len(projects)) ) # shorter title
+            html += '%s (%s)' % (widgetName, str(len(projects)) ) # shorter title            
         html += '</div>'
     
     # determine widget status (depending on previous invocations)
@@ -746,7 +759,8 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         elif prj.isNotVisible(user):
             # do not add
             pass
-        elif tag is not None and tag not in prjtags:
+        # don't apply the additional 'tag' filter to the 'tags' tab
+        elif tab != 'tags' and tag is not None and tag not in prjtags:
             # do not add
             pass
         else:

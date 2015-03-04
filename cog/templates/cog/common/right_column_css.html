@@ -135,26 +135,42 @@
        }
               
        // function that saves the currently selected project tag into the user preferences
-
-       function handleSaveProjectTagSuccess(o) {
+       function handleSaveUserTagSuccess(o) {
        		loadProjectBrowser("{{ project.short_name }}".toLowerCase());
        		gotoTab(3);
        }
-       var saveProjectTagCallback  = {
-       		success:handleSaveProjectTagSuccess,
+       var saveUserTagCallback  = {
+       		success:handleSaveUserTagSuccess,
 	 		failure: handleFailure,
 	 		cache:false,
 	 		timeout:5000,
 	 		argument: []
        }
-       function saveProjectTag(project_short_name, tag) {
+       function saveUserTag(project_short_name, tag) {
          		    	   
 	    	var tag = document.getElementById('projectBrowserText').value;
 	    	if (tag != null && tag!="") {
 	   			var url = "/project_browser/"+project_short_name+"/save_user_tag/?tag="+tag
-	   			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, saveProjectTagCallback, null);
+	   			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, saveUserTagCallback, null);
 	   		}
 	   		
+       }
+       
+       // function that removes the named tag from the user preferences
+       function handleDeleteUserTagSuccess(o) {
+       		loadProjectBrowser("{{ project.short_name }}".toLowerCase());
+       		gotoTab(3);
+       }
+       var deleteUserTagCallback  = {
+       		success:handleDeleteUserTagSuccess,
+	 		failure: handleFailure,
+	 		cache:false,
+	 		timeout:5000,
+	 		argument: []
+       }
+       function deleteUserTag(project_short_name, tag) {
+	   		var url = "/project_browser/"+project_short_name+"/delete_user_tag/?tag="+tag
+	   		var transaction = YAHOO.util.Connect.asyncRequest('GET', url, deleteUserTagCallback, null);
        }
        
 
