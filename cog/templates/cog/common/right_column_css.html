@@ -146,11 +146,11 @@
 	 		timeout:5000,
 	 		argument: []
        }
-       function saveUserTag(project_short_name, tag) {
+       function saveUserTag() {
          		    	   
 	    	var tag = document.getElementById('projectBrowserText').value;
 	    	if (tag != null && tag!="") {
-	   			var url = "/project_browser/"+project_short_name+"/save_user_tag/?tag="+tag
+	   			var url = "/project_browser/"+ "{{ project.short_name }}".toLowerCase() +"/save_user_tag/?tag="+tag
 	   			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, saveUserTagCallback, null);
 	   		}
 	   		

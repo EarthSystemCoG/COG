@@ -615,6 +615,13 @@ def project_browser(request, project_short_name, tab):
 def save_user_tag(request, project_short_name):
     
     tagName = request.GET['tag']
+    
+    profile = request.user.profile
+    print 'User home site=%s' % profile.site
+    url = "http://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
+    print 'URL=%s' % url
+    if not profile.isUserLocal():
+        pass
 
     try:
         tag = ProjectTag.objects.get(name=tagName)
