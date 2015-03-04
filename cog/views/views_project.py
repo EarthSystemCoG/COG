@@ -640,7 +640,7 @@ def save_user_tag(request, project_short_name):
     except ObjectDoesNotExist:
         print 'Invalid tag name: %s' % tagName
     
-    return HttpResponse("{}", content_type="application/json")
+    return HttpResponse(json.dumps({}), content_type="application/json")
     
 @login_required
 def delete_user_tag(request, project_short_name):
