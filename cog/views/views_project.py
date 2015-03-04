@@ -623,9 +623,10 @@ def save_user_tag(request, project_short_name):
     profile = request.user.profile
     print 'User home site=%s' % profile.site
     url = "http://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
-    print 'URL=%s' % url
+    
     # mae request to user home site
-    if not profile.isUserLocal():
+    if not isUserLocal(request.user):
+        print 'URL=%s' % url
         json = getJson(url)
         print 'GOT BACK JSON=%s' % json
 
