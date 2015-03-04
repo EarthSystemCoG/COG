@@ -101,11 +101,11 @@
        function loadProjectBrowser(project_short_name) {
 
     	   // loop over YUI tab identifiers, execute separate ajax requests
-    	   var tabs = ['this', 'all', 'my']
+    	   var tabs = ['this', 'all', 'my', 'tags']
     	   for (var i=0; i<tabs.length; i++) {
 
 	    	   // build request URL
-	    	   // example: /project_browser/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
+	    	   // example: /project_browser/<project_short_name>/browse/<this|all|my|tags>/[?tag=<tag>]
 	    	   var url = "/project_browser/"+project_short_name+"/browse/"+tabs[i]+"/";
 	    	   var tag = document.getElementById('projectBrowserText').value;
 	    	   if (tag != null && tag!="") url += "?tag="+tag;

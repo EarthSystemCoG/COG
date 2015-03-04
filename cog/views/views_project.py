@@ -595,6 +595,8 @@ def project_browser(request, project_short_name, tab):
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
+    elif tab == 'tags':
+        html += makeProjectBrowser(project, tab, tag, request.user, None, 'tags_projects', None)
     
     return HttpResponse(html, content_type="text/html")
 
@@ -623,6 +625,8 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
         projects = listBrowsableProjects(project, tab, tag, user, widgetName)
     else:
         projects = Project.objects.none()
+        
+    print '\nwidgetId=%s projects=%s' % (widgetId, projects)
         
     # build accordion header
     html = ""
@@ -677,7 +681,7 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         #projects = Project.objects.filter(active=True)
         projects = projectManager.listAllProjects()
         
-    elif tab == 'my':
+    elif tab == 'my' or tab == 'tags':
         if not user.is_authenticated():
             projects = Project.objects.none()
         else:
