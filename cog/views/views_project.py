@@ -640,7 +640,7 @@ def save_user_tag(request, project_short_name):
 
     # redirect to user home site
     else:
-        url = "http://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
+        url = "https://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
         print 'Redirecting to URL=%s' % url
         response_data = getJson(url)
     
