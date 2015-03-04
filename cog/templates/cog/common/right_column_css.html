@@ -134,24 +134,15 @@
 
        }
               
-       // function that saves the currently selected project tag into the user preferences
-       function handleSaveUserTagSuccess(o) {
-       		loadProjectBrowser("{{ project.short_name }}".toLowerCase());
-       		gotoTab(3);
-       }
-       var saveUserTagCallback  = {
-       		success:handleSaveUserTagSuccess,
-	 		failure: handleFailure,
-	 		cache:false,
-	 		timeout:5000,
-	 		argument: []
-       }
+       // function that submits the form to save the currently selected project tag into the user preferences
        function saveUserTag() {
          		    	   
 	    	var tag = document.getElementById('projectBrowserText').value;
+	    	var form = document.getElementById('save-user-tag-form');
 	    	if (tag != null && tag!="") {
-	   			var url = "/project_browser/"+ "{{ project.short_name }}".toLowerCase() +"/save_user_tag/?tag="+tag
-	   			var transaction = YAHOO.util.Connect.asyncRequest('GET', url, saveUserTagCallback, null);
+	    		form.tag.value = tag;
+	    		form.submit();
+	    		return True;
 	   		}
 	   		
        }

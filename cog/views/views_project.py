@@ -616,36 +616,40 @@ def project_browser(request, project_short_name, tab):
     return HttpResponse(html, content_type="text/html")
 
 @login_required
-def save_user_tag(request, project_short_name):
+def save_user_tag(request):
     
-    # retrive tag
-    tagName = request.GET['tag']
-    profile = request.user.profile
+    if request.method=='POST' or request.method=='GET':
+        
+        # retrive tag
+        tagName = request.REQUEST['tag']
+        redirect = request.REQUEST['redirect']
+        profile = request.user.profile
+        print 'tagName=%s' % tagName
+        print 'redirect=%s' % redirect
+        
+        if isUserLocal(request.user):
+            try:
+                tag = ProjectTag.objects.get(name__iexact=tagName)
+                
+                # add this tag to the user preferences
+                utags = request.user.profile.tags
+                if not tag in utags.all():
+                    utags.add(tag)
+                    request.user.profile.save()
+                    print 'Tag: %s added to user: %s' % (tagName, request.user)
+        
+            except ObjectDoesNotExist:
+                print "Invalid project tag: %s" % tag
+                
+            return HttpResponseRedirect(redirect)
     
-    response_data = {}
-    if isUserLocal(request.user):
-        try:
-            tag = ProjectTag.objects.get(name__iexact=tagName)
-    
-        except ObjectDoesNotExist:
-            # create this tag on this server
-            tag = ProjectTag.objects.create(name=tagName)
-
-        # add this tag to the user preferences
-        utags = request.user.profile.tags
-        if not tag in utags.all():
-            utags.add(tag)
-            request.user.profile.save()
-            response_data['message'] = 'Tag: %s added to user: %s' % (tagName, request.user)
-
-    # redirect to user home site
-    else:
-        url = "https://%s/project_browser/%s/save_user_tag/?tag=%s" % (profile.site.domain, project_short_name, tagName)
-        print 'Redirecting to URL=%s' % url
-        response_data = getJson(url)
-    
-    print 'response_data=%s' % response_data
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+        # redirect POST request to user home site
+        else:
+            url = "http://%s%s?tag=%s&redirect=%s" % (profile.site.domain, reverse('save_user_tag'), tagName, redirect)
+            print 'Redirecting to URL=%s' % url
+            return HttpResponseRedirect(url)
+         
+        
     
 @login_required
 def delete_user_tag(request, project_short_name):

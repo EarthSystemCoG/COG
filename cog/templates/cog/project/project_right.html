@@ -8,7 +8,7 @@
 	  <div class="search-box">
 	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data</div> <!--// end div.right_widget_header //-->
 	       <div id="search_entry" style="padding:4px; padding-right:0;margin:0;">
-		       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
+		       <form action="{% url 'search' project.short_name.lower %}" method="post" id="search-form">
 		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
@@ -73,9 +73,11 @@
 		        </div>
                <!-- add buttons -->
                 <div style="text-align: left; width:181px; margin:0; padding:0; margin-top:4px;">
+                
                 	{% if not request.user.is_anonymous %}
-                    <input class="right_go" style="width:60px; margin:0" type="submit" value="Save Tag" id="saveUserTag"
-	                   onclick="saveUserTag();"/>
+                     <input class="right_go" style="width:60px; margin:0" type="submit" value="Save Tag" id="saveUserTag"
+	                         onclick="saveUserTag();"/>	                   
+	                   
 	                {% endif %}
 
 	                <input class="right_go" style="width:45px; margin:0; margin-left:1px;"
@@ -85,6 +87,14 @@
                     <input class="right_go" style="float:right; margin:0;"
 	                   type="submit" value="Go" id="projectBrowserButton"
 	                   onclick="gotoTab(1); loadProjectBrowser('{{project.short_name}}');"/>
+	                   
+	                <!-- form to save a user tag -->
+	                <form action="{% url 'save_user_tag' %}" method="post" id="save-user-tag-form">
+	            		{% csrf_token %}
+			            <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
+			            <input type="hidden" name="tag" value="" />
+		       		</form>
+	                   
                 </div>
 		   </div>
            <!-- add help text-->
