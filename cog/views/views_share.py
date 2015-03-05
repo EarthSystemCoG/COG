@@ -55,7 +55,8 @@ def serialize_user(user):
     
     udict = { 'openid': user.profile.openid(),
               'home_site_name': user.profile.site.name,
-              'home_site_domain': user.profile.site.domain }
+              'home_site_domain': user.profile.site.domain,
+              'project_tags': user.profile.tags }
     
     # only include local projects
     udict['projects'] = getProjectsAndRolesForUsers(user, includeRemote=False)
