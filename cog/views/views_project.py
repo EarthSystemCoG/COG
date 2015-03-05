@@ -640,7 +640,9 @@ def save_user_tag(request):
         
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
-                
+
+            # set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3                
             return HttpResponseRedirect(redirect)
     
         # redirect request to user home site
@@ -677,6 +679,8 @@ def delete_user_tag(request):
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
                 
+            # set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3
             return HttpResponseRedirect(redirect)
                 
         # redirect request to user home site

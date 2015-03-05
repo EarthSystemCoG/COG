@@ -82,11 +82,11 @@
 
 	                <input class="right_go" style="width:45px; margin:0; margin-left:1px;"
 	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
-	                   onclick="document.getElementById('projectBrowserText').value=''; gotoTab(0); loadProjectBrowser('{{project.short_name}}');"/>
+	                   onclick="document.getElementById('projectBrowserText').value=''; loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
 
                     <input class="right_go" style="float:right; margin:0;"
 	                   type="submit" value="Go" id="projectBrowserButton"
-	                   onclick="gotoTab(1); loadProjectBrowser('{{project.short_name}}');"/>
+	                   onclick="loadProjectBrowser('{{project.short_name}}'); gotoTab(1); "/>
 	                   
 	                <!-- form to save a user tag -->
 	                <form action="{% url 'save_user_tag' %}" method="post" id="save-user-tag-form">
