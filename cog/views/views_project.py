@@ -642,7 +642,7 @@ def save_user_tag(request):
                 print "Invalid project tag: %s" % tag
                 
             url = add_get_parameter(redirect, 'LAST_ACCESSED', '0')
-            return HttpResponseRedirect(redirect)
+            return HttpResponseRedirect(url)
     
         # redirect request to user home site
         else:
@@ -675,7 +675,7 @@ def delete_user_tag(request):
                 print "Invalid project tag: %s" % tag
                 
             url = add_get_parameter(redirect, 'LAST_ACCESSED', '0')
-            return HttpResponseRedirect(redirect)
+            return HttpResponseRedirect(url)
                 
         # redirect request to user home site
         else:
