@@ -23,7 +23,7 @@ from cog.services.membership import addMembership
 from cog.utils import *
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.views.views_templated import templated_page_display
-from cog.utils import getJson
+from cog.views.utils import add_get_parameter
 
 
 # method to add a new project, with optional parent project
@@ -641,10 +641,8 @@ def save_user_tag(request):
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
                 
-            response = HttpResponseRedirect(redirect)
-            response['LAST_ACCESSED'] = "0"
-            print 'setting LAST_ACCESSED in response'
-            return response
+            url = add_get_parameter(redirect, 'LAST_ACCESSED', '0')
+            return HttpResponseRedirect(redirect)
     
         # redirect request to user home site
         else:
@@ -676,9 +674,8 @@ def delete_user_tag(request):
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
                 
-            response = HttpResponseRedirect(redirect)
-            response['LAST_ACCESSED'] = "0"
-            return response
+            url = add_get_parameter(redirect, 'LAST_ACCESSED', '0')
+            return HttpResponseRedirect(redirect)
                 
         # redirect request to user home site
         else:

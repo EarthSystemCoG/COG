@@ -8,6 +8,7 @@ from cog.utils import getJson
 from cog.models.peer_site import getPeerSites
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
+import urllib
 
 # function to return an error message if a project is not active
 def getProjectNotActiveRedirect(request, project):
@@ -107,3 +108,11 @@ def get_all_projects_for_user(user, includeCurrentSite=True):
 
     # sort by project short name
     return projects
+
+def add_get_parameter(url, key, value):
+    '''Utility method to add an HTTP request parameter to a GET request'''
+    
+    if '?' in url:
+        return url +"&%s" % urllib.urlencode(key, value)
+    else:
+        return url +"?%s" % urllib.urlencode(key, value)

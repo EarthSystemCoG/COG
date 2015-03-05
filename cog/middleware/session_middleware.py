@@ -24,9 +24,9 @@ class SessionMiddleware(object):
                 
                 # check for 'LAST_ACCESSED' parameter in request - if found, store it in session
                 # this mechanism allows to force a reloading of the user settings
-                #last_accessed_seconds = request.REQUEST.get('LAST_ACCESSED', None)
-                #if last_accessed_seconds:
-                #    s['LAST_ACCESSED'] = last_accessed_seconds
+                last_accessed_seconds = request.REQUEST.get('LAST_ACCESSED', None)
+                if last_accessed_seconds:
+                    s['LAST_ACCESSED'] = last_accessed_seconds
              
                 # now retrieve the value back from the session
                 last_accessed_seconds = s.get('LAST_ACCESSED', 0) # defaults to Unix Epoch
@@ -52,10 +52,9 @@ class SessionMiddleware(object):
         return None
 
 
+    '''
     def process_response(self, request, response):
-        '''
         Method called before response is returned to the browser.
-        '''
         
         try:
             if request.user.is_authenticated() and request.user.profile.openid() is not None:
@@ -72,3 +71,4 @@ class SessionMiddleware(object):
             pass
                 
         return response
+    '''
