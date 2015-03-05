@@ -649,6 +649,8 @@ def save_user_tag(request):
             print 'Redirecting save request to URL=%s' % url
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
+            # also set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3
             request.session.save()
             return HttpResponseRedirect(url)
         
@@ -683,6 +685,8 @@ def delete_user_tag(request):
             print 'Redirecting delete request to URL=%s' % url    
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
+            # also set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3
             request.session.save()
             return HttpResponseRedirect(url)
     

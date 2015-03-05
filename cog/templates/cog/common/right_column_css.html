@@ -131,6 +131,13 @@
 			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
 
     	   }
+    	   
+    	   // check session flag to preselect a tab
+    	   {% if request.session.PROJECT_BROWSER_TAB %}
+    	   		gotoTab( parseInt( "{{ request.session.PROJECT_BROWSER_TAB }}") );
+    	   		// always delete the session flag after using it
+    	   		var x = {{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }}
+    	   {% endif %}
 
        }
               

@@ -684,3 +684,11 @@ def get_domain(url):
     '''Returns the domain part of a URL'''
     
     return urlparse.urlparse(url)[1]
+
+@register.filter
+def delete_from_session(session, key):
+    '''Deletes a named key from the user HTTP session.'''
+    
+    if session.get(key, None):
+        del session[key]
+        session.save()
