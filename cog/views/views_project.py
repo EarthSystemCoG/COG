@@ -647,13 +647,10 @@ def save_user_tag(request):
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'), tagName, redirect)
             print 'Redirecting save request to URL=%s' % url
-            response = HttpResponseRedirect(url)
-            # set cookie to force eventual reloading of user properties
-            response.set_cookie('LAST_ACCESSED', '0',
-                                expires = (datetime.datetime.now() + datetime.timedelta(days=3650)),
-                                httponly=True)
-            print 'set cookie'
-            return response
+            # set session flag to eventually force reloading of user tags
+            request.session['LAST_ACCESSED'] = 0
+            request.session.save()
+            return HttpResponseRedirect(url)
         
     
 @login_required
@@ -683,15 +680,11 @@ def delete_user_tag(request):
         # redirect request to user home site
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'), tagName, redirect)
-            print 'Redirecting delete request to URL=%s' % url
-            response = HttpResponseRedirect(url)
-            # set cookie to force eventual reloading of user properties
-            print 'set cookie'
-            response.set_cookie('LAST_ACCESSED', '0',
-                    expires = (datetime.datetime.now() + datetime.timedelta(days=3650)),
-                    httponly=True)
-
-            return response
+            print 'Redirecting delete request to URL=%s' % url    
+            # set session flag to eventually force reloading of user tags
+            request.session['LAST_ACCESSED'] = 0
+            request.session.save()
+            return HttpResponseRedirect(url)
     
 
 # utility class to track the status of the browser widgets

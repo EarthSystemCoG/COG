@@ -42,29 +42,3 @@ class SessionMiddleware(object):
                 
         # keep on processing this request
         return None
-
-
-    def process_response(self, request, response):
-        '''
-        Method called before response is returned to the browser.
-        '''
-        
-        try:
-            if request.user.is_authenticated() and request.user.profile.openid() is not None:
-                
-                # check for 'LAST_ACCESSED' cookie - if found, store it in session
-                # this mechanism allows to force a reloading of the user settings
-                print 'looking at cookie=%s' % request.COOKIES.get('LAST_ACCESSED', None)
-                #for key, value in request.COOKIES.items():
-                #    print 'found cookie=%s value=%s' % (key, value)
-                if request.COOKIES.get('LAST_ACCESSED', None):
-                    print 'Found LAST_ACCESSED in request'
-                    s = request.session
-                    s['LAST_ACCESSED'] = int( request.COOKIES['LAST_ACCESSED'] )
-                    
-                    response.delete_cookie('LAST_ACCESSED')
-                    
-        except AttributeError:
-            pass
-                
-        return response
