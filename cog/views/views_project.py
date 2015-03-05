@@ -643,6 +643,7 @@ def save_user_tag(request):
                 
             response = HttpResponseRedirect(redirect)
             response['LAST_ACCESSED'] = "0"
+            print 'setting LAST_ACCESSED in response'
             return response
     
         # redirect request to user home site
