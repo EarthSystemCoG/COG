@@ -70,7 +70,7 @@ def update_user_tags(user):
         
         openid = user.profile.openid()
         url = "http://%s/share/user/?openid=%s" % (user.profile.site.domain, user.profile.openid())
-        print 'Querying URL=%s' % url
+        print 'Updating user tags: querying URL=%s' % url
         jobj = getJson(url)
         
         if jobj is not None and openid in jobj['users']:

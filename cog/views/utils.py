@@ -88,7 +88,7 @@ def get_all_projects_for_user(user, includeCurrentSite=True):
             for site in sites:
                             
                 url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
-                print 'Querying URL=%s' % url
+                print 'Updating user projects: querying URL=%s' % url
                 jobj = getJson(url)
                 if jobj is not None and openid in jobj['users']:
                     projDict[site] = jobj['users'][openid] 
