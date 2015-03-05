@@ -648,8 +648,10 @@ def save_user_tag(request):
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'), tagName, redirect)
             print 'Redirecting save request to URL=%s' % url
-            return HttpResponseRedirect(url)
-         
+            response = HttpResponseRedirect(url)
+            # set cookie to force eventual reloading of user properties
+            response.set_cookie('LAST_ACCESSED','0',max_age=0,httponly=True)
+            return response
         
     
 @login_required
@@ -674,18 +676,16 @@ def delete_user_tag(request):
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
                 
-            url = add_get_parameter(redirect, 'LAST_ACCESSED', '0')
-            return HttpResponseRedirect(url)
+            return HttpResponseRedirect(redirect)
                 
         # redirect request to user home site
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'), tagName, redirect)
             print 'Redirecting delete request to URL=%s' % url
-            return HttpResponseRedirect(url)
-
-        
-    
-    return HttpResponse(json.dumps({}), content_type="application/json") 
+            response = HttpResponseRedirect(url)
+            # set cookie to force eventual reloading of user properties
+            response.set_cookie('LAST_ACCESSED','0',max_age=0,httponly=True)
+            return response
     
 
 # utility class to track the status of the browser widgets

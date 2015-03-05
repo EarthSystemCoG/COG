@@ -22,11 +22,11 @@ class SessionMiddleware(object):
             
                 s = request.session
                 
-                # check for 'LAST_ACCESSED' parameter in request - if found, store it in session
+                # check for 'LAST_ACCESSED' cookie - if found, store it in session
                 # this mechanism allows to force a reloading of the user settings
-                last_accessed_seconds = request.REQUEST.get('LAST_ACCESSED', None)
-                if last_accessed_seconds:
-                    s['LAST_ACCESSED'] = int(last_accessed_seconds)
+                if request.COOKIES.get('LAST_ACCESSED', None):
+                    s['LAST_ACCESSED'] = int( request.COOKIES['LAST_ACCESSED'] )
+                    print 'Found LAST_ACCESSED in request'
              
                 # now retrieve the value back from the session
                 last_accessed_seconds = s.get('LAST_ACCESSED', 0) # defaults to Unix Epoch
