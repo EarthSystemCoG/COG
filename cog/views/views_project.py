@@ -618,14 +618,14 @@ def project_browser(request, project_short_name, tab):
 @login_required
 def save_user_tag(request):
     
+    # POST: when local user submits form, GET: when remote user is redirected to this site
     if request.method=='POST' or request.method=='GET':
         
-        # retrive tag
+        # retrieve tag
         tagName = request.REQUEST['tag']
         redirect = request.REQUEST['redirect']
-        profile = request.user.profile
-        print 'tagName=%s' % tagName
-        print 'redirect=%s' % redirect
+        print 'Saving user tag: %s' % tagName
+        print 'Eventually redirecting to: %s' % redirect
         
         if isUserLocal(request.user):
             try:
@@ -643,29 +643,44 @@ def save_user_tag(request):
                 
             return HttpResponseRedirect(redirect)
     
-        # redirect POST request to user home site
+        # redirect request to user home site
         else:
-            url = "http://%s%s?tag=%s&redirect=%s" % (profile.site.domain, reverse('save_user_tag'), tagName, redirect)
-            print 'Redirecting to URL=%s' % url
+            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'), tagName, redirect)
+            print 'Redirecting save request to URL=%s' % url
             return HttpResponseRedirect(url)
          
         
     
 @login_required
-def delete_user_tag(request, project_short_name):
+def delete_user_tag(request):
     
-    tagName = request.GET['tag']
-    print "Deleting user tag=%s" % tagName
-    
-    try:
-        tag = ProjectTag.objects.get(name=tagName)
-        utags = request.user.profile.tags
-        if tag in utags.all():
-            utags.remove(tag)
-            request.user.profile.save()
+    # POST: when local user submits form, GET: when remote user is redirected to this site
+    if request.method=='POST' or request.method=='GET':
 
-    except ObjectDoesNotExist:
-        print 'Invalid tag name: %s' % tagName
+        tagName = request.REQUEST['tag']
+        redirect = request.REQUEST['redirect']
+        print 'Deleting user tag: %s' % tagName
+        print 'Eventually redirecting to: %s' % redirect
+        
+        if isUserLocal(request.user):
+            try:
+                tag = ProjectTag.objects.get(name__iexact=tagName)
+                utags = request.user.profile.tags
+                if tag in utags.all():
+                    utags.remove(tag)
+                    request.user.profile.save()
+                    
+            except ObjectDoesNotExist:
+                print "Invalid project tag: %s" % tag
+                
+            return HttpResponseRedirect(redirect)
+                
+        # redirect request to user home site
+        else:
+            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'), tagName, redirect)
+            print 'Redirecting delete request to URL=%s' % url
+            return HttpResponseRedirect(url)
+
         
     
     return HttpResponse(json.dumps({}), content_type="application/json") 
@@ -706,8 +721,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     if widgetName is not None:
         html += '<div class="project_browser_bar" id="%s_bar">' % widgetId
         if addDeleteLink:
-            html += "<a href='javascript:deleteUserTag(\"%s\",\"%s\");' class='deletelink'>&nbsp;</a>" \
-                  % (project.short_name.lower(), widgetName)
+            html += "<a href='javascript:deleteUserTag(\"%s\");' class='deletelink'>&nbsp;</a>" % widgetName
         if widgetName in ['Parent', 'Child', 'Peer']:
             html += '%s (%s) projects' % (widgetName, str(len(projects)) )
         else:

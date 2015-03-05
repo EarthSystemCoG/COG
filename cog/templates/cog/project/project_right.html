@@ -94,6 +94,13 @@
 			            <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
 			            <input type="hidden" name="tag" value="" />
 		       		</form>
+		       		                   
+	                <!-- form to delete a user tag -->
+	                <form action="{% url 'delete_user_tag' %}" method="post" id="delete-user-tag-form">
+	            		{% csrf_token %}
+			            <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
+			            <input type="hidden" name="tag" value="" />
+		       		</form>
 	                   
                 </div>
 		   </div>

@@ -147,21 +147,17 @@
 	   		
        }
        
-       // function that removes the named tag from the user preferences
-       function handleDeleteUserTagSuccess(o) {
-       		loadProjectBrowser("{{ project.short_name }}".toLowerCase());
-       		gotoTab(3);
-       }
-       var deleteUserTagCallback  = {
-       		success:handleDeleteUserTagSuccess,
-	 		failure: handleFailure,
-	 		cache:false,
-	 		timeout:5000,
-	 		argument: []
-       }
-       function deleteUserTag(project_short_name, tag) {
-	   		var url = "/project_browser/"+project_short_name+"/delete_user_tag/?tag="+tag
-	   		var transaction = YAHOO.util.Connect.asyncRequest('GET', url, deleteUserTagCallback, null);
+       // function that submits the form to remove the named tag from the user preferences
+       function deleteUserTag(tag) {
+	   		
+	   		var url = "/project_browser/delete_user_tag/?tag="+tag
+	   		var form = document.getElementById('delete-user-tag-form');
+	    	if (tag != null && tag!="") {
+	    		form.tag.value = tag;
+	    		form.submit();
+	    		return True;
+	   		}
+	   		
        }
        
 
