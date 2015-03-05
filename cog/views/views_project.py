@@ -641,8 +641,7 @@ def save_user_tag(request):
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
                 
-            url = add_get_parameter(redirect, 'LAST_ACCESSED', '0')
-            return HttpResponseRedirect(url)
+            return HttpResponseRedirect(redirect)
     
         # redirect request to user home site
         else:
@@ -650,7 +649,10 @@ def save_user_tag(request):
             print 'Redirecting save request to URL=%s' % url
             response = HttpResponseRedirect(url)
             # set cookie to force eventual reloading of user properties
-            response.set_cookie('LAST_ACCESSED','0',max_age=0,httponly=True)
+            response.set_cookie('LAST_ACCESSED', '0',
+                                expires = (datetime.datetime.now() + datetime.timedelta(days=3650)),
+                                httponly=True)
+            print 'set cookie'
             return response
         
     
@@ -684,7 +686,11 @@ def delete_user_tag(request):
             print 'Redirecting delete request to URL=%s' % url
             response = HttpResponseRedirect(url)
             # set cookie to force eventual reloading of user properties
-            response.set_cookie('LAST_ACCESSED','0',max_age=0,httponly=True)
+            print 'set cookie'
+            response.set_cookie('LAST_ACCESSED', '0',
+                    expires = (datetime.datetime.now() + datetime.timedelta(days=3650)),
+                    httponly=True)
+
             return response
     
 

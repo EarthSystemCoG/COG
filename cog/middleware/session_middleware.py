@@ -21,14 +21,6 @@ class SessionMiddleware(object):
             if request.user.is_authenticated() and request.user.profile.openid() is not None:
             
                 s = request.session
-                
-                # check for 'LAST_ACCESSED' cookie - if found, store it in session
-                # this mechanism allows to force a reloading of the user settings
-                if request.COOKIES.get('LAST_ACCESSED', None):
-                    s['LAST_ACCESSED'] = int( request.COOKIES['LAST_ACCESSED'] )
-                    print 'Found LAST_ACCESSED in request'
-             
-                # now retrieve the value back from the session
                 last_accessed_seconds = s.get('LAST_ACCESSED', 0) # defaults to Unix Epoch
                 now_seconds = int(datetime.now().strftime("%s"))
                 
@@ -52,23 +44,27 @@ class SessionMiddleware(object):
         return None
 
 
-    '''
     def process_response(self, request, response):
+        '''
         Method called before response is returned to the browser.
+        '''
         
         try:
             if request.user.is_authenticated() and request.user.profile.openid() is not None:
                 
-                # check special response header
-                last_accessed_seconds = response.get('LAST_ACCESSED', None)
-                print 'last_accessed_seconds LAST_ACCESSED=%s' % last_accessed_seconds
-            
-                # set openid cookie if not found already
-                #if request.COOKIES.get('openid', None) is None or len(request.COOKIES['openid'])==0:
-                #    set_openid_cookie(response, request.user.profile.openid())
+                # check for 'LAST_ACCESSED' cookie - if found, store it in session
+                # this mechanism allows to force a reloading of the user settings
+                print 'looking at cookie=%s' % request.COOKIES.get('LAST_ACCESSED', None)
+                #for key, value in request.COOKIES.items():
+                #    print 'found cookie=%s value=%s' % (key, value)
+                if request.COOKIES.get('LAST_ACCESSED', None):
+                    print 'Found LAST_ACCESSED in request'
+                    s = request.session
+                    s['LAST_ACCESSED'] = int( request.COOKIES['LAST_ACCESSED'] )
+                    
+                    response.delete_cookie('LAST_ACCESSED')
                     
         except AttributeError:
             pass
                 
         return response
-    '''
