@@ -641,7 +641,9 @@ def save_user_tag(request):
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
                 
-            return HttpResponseRedirect(redirect)
+            response = HttpResponseRedirect(redirect)
+            response['LAST_ACCESSED'] = "0"
+            return response
     
         # redirect request to user home site
         else:
@@ -673,7 +675,9 @@ def delete_user_tag(request):
             except ObjectDoesNotExist:
                 print "Invalid project tag: %s" % tag
                 
-            return HttpResponseRedirect(redirect)
+            response = HttpResponseRedirect(redirect)
+            response['LAST_ACCESSED'] = "0"
+            return response
                 
         # redirect request to user home site
         else:

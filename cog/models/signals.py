@@ -6,12 +6,10 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
-from django.contrib.auth.signals import user_logged_in
-
-from cog.models import UserProfile, Project
+from cog.models import UserProfile, ProjectTag
 from cog.utils import getJson
-from cog.models.peer_site import getPeerSites
 from cog.views.utils import get_all_projects_for_user
+from django.core.exceptions import ObjectDoesNotExist
 
 # callback receiver function for UserProfile post_save events
 @receiver(post_save, sender=UserProfile, dispatch_uid="user_profile_post_save")
@@ -37,7 +35,7 @@ def update_user_projects_at_login(sender, user, request, **kwargs):
         
 def update_user_projects(user):
     '''
-    Function to update the user projects across the federation.
+    Function to update the user projects from across the federation.
     Will query all remote sites 
     (but NOT the current site, since that information should already be up-to-date) 
     and save the updated information in the local database.
@@ -64,6 +62,31 @@ def update_user_projects(user):
                                    
         # persist changes to local database
         user.save()
+        
+def update_user_tags(user):
+    '''Function to update the user tags from their home site.'''
+    
+    if user.profile.openid() is not None:
+        
+        openid = user.profile.openid()
+        url = "http://%s/share/user/?openid=%s" % (user.profile.site.domain, user.profile.openid())
+        print 'Querying URL=%s' % url
+        jobj = getJson(url)
+        
+        if jobj is not None and openid in jobj['users']:
+            
+            # loop over tags found on user home site
+            tags = []
+            for tagName in jobj['users'][openid] ['project_tags']:
+                try:
+                    tags.append( ProjectTag.objects.get(name__iexact=tagName) )
+                except ObjectDoesNotExist:
+                    pass # tag not found in local database
+            
+            # store tags in local user profile
+            user.profile.tags = tags
+            user.profile.save()
+            print 'User: %s updated for tags: %s' % (user, tags)
     
 # NOTE: connecting the login signal is not needed because every time the user logs in,
 # the session is refreshed and updating of projects is triggered already by the CoG session middleware

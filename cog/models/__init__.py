@@ -59,4 +59,4 @@ from lock import Lock, getLock, createLock, deleteLock, isLockedOut
 from utils import *
 
 # model signals
-from signals import account_created_receiver, update_user_projects
+from signals import account_created_receiver, update_user_projects, update_user_tags
