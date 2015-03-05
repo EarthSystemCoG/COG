@@ -113,6 +113,6 @@ def add_get_parameter(url, key, value):
     '''Utility method to add an HTTP request parameter to a GET request'''
     
     if '?' in url:
-        return url +"&%s" % urllib.urlencode(key, value)
+        return url +"&%s" % urllib.urlencode([(key, value)])
     else:
-        return url +"?%s" % urllib.urlencode(key, value)
+        return url +"?%s" % urllib.urlencode([(key, value)])
