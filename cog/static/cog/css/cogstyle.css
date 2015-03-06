@@ -145,13 +145,37 @@ div.custom_header{
     margin-right: auto;
 }
 
-td.custom_header_esgf{
-    width:          120px; /*width of logo*/
+td.custom_header_esgf_cog{
+    width:          180px; /*width of logo*/
     vertical-align: top;
     margin:         0;
     padding:        0;
     padding-top:    3px;
     padding-bottom: 1px; /* Cecelia wanted this 1px larger than the top */
+}
+
+td.powered_by{
+    width:          60px;
+    font-size:      10px;
+    font-weight:    bold;
+    font-style:     italic;
+    vertical-align: top;
+    color:          #666;
+    text-align:     right;
+    padding-right:  0;
+    padding-top:    4px;
+}
+
+td.hosted_by{
+    width:          60px;
+    font-size:      10px;
+    font-weight:    bold;
+    font-style:     italic;
+    vertical-align: top;
+    color:          #666;
+    text-align:     left;
+    padding-right:  0;
+    padding-top:    4px;
 }
 
 td.custom_header_location{
