@@ -29,8 +29,8 @@ DATABASE_NAME = siteManager.get('DATABASE_NAME', default='cogdb')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
-MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600)) # one hour 
-PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0)) # 0: no expiration
+MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600))  # one hour
+PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0))  # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % siteManager.cog_config_dir)
@@ -72,7 +72,7 @@ MANAGERS = ADMINS
 DATABASES = {
     # SQLite database
     'sqllite3': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2','postgresql','mysql','sqlite3' or 'oracle'.
         'NAME':   DATABASE_PATH,
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -91,10 +91,10 @@ DATABASES = {
 
 }
 
-DATABASES['default'] = DATABASES[ DJANGO_DATABASE ]
+DATABASES['default'] = DATABASES[DJANGO_DATABASE]
 
 logging.info('Using Django Database=%s' % DJANGO_DATABASE)
-if DJANGO_DATABASE=='sqllite3':
+if DJANGO_DATABASE == 'sqllite3':
     logging.info("Database path=%s" % DATABASE_PATH)
 
 # Local time zone for this installation. Choices can be found here:
@@ -155,7 +155,7 @@ print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDI
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -219,25 +219,24 @@ LOGIN_URL = '/login'
 # OpenID login page
 #LOGIN_URL = '/openid/login/'
 
-# page to redirect after successfull authentication, if 'next' parameter is not provided
+# page to redirect after successful authentication, if 'next' parameter is not provided
 #LOGIN_REDIRECT_URL='/cog/' # COG projects index
-LOGIN_REDIRECT_URL='/' # welcome page
+LOGIN_REDIRECT_URL = '/'  # welcome page
 
 # Custom user profile
 AUTH_PROFILE_MODULE = "cog.UserProfile"
 
 # makes 'request' object available in templates
 TEMPLATE_CONTEXT_PROCESSORS += (
-     'django.core.context_processors.request',
-     'cog.context_processors.cog_settings'
+    'django.core.context_processors.request',
+    'cog.context_processors.cog_settings'
 )
 
 # HTTPS support: can only send cookies via SSL connections
-if server_type=='PROD':
+if server_type == 'PROD':
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
 
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"
@@ -258,7 +257,7 @@ COMMENT_MAX_LENGTH = 10000
 
 #=== django filebrowser settings =========================
 
-# Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have traiing slash)
+# Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have trailing slash)
 FILEBROWSER_DIRECTORY = "projects/"
 
 # versions generated when browsing images
@@ -284,4 +283,3 @@ OPENID_CREATE_USERS = True
 
 # do NOT keep updating the user profile from the IdP
 OPENID_UPDATE_DETAILS_FROM_SREG = False
-
