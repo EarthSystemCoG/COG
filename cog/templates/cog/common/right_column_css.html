@@ -96,16 +96,21 @@
 
 <script type="text/javascript">
     //<![CDATA[
+    
+       // function to select a project browser tab
+       function gotoTab(itab) { // itab=0,1,2,3,...
+       	  myTabs.set('activeIndex', itab);
+	   }
 
        // function to populate the project widget via ajax call
        function loadProjectBrowser(project_short_name) {
 
     	   // loop over YUI tab identifiers, execute separate ajax requests
-    	   var tabs = ['this', 'all', 'my']
+    	   var tabs = ['this', 'all', 'my', 'tags']
     	   for (var i=0; i<tabs.length; i++) {
 
 	    	   // build request URL
-	    	   // example: /project_browser/<project_short_name>/browse/<this|all|my>/[?tag=<tag>]
+	    	   // example: /project_browser/<project_short_name>/browse/<this|all|my|tags>/[?tag=<tag>]
 	    	   var url = "/project_browser/"+project_short_name+"/browse/"+tabs[i]+"/";
 	    	   var tag = document.getElementById('projectBrowserText').value;
 	    	   if (tag != null && tag!="") url += "?tag="+tag;
@@ -126,8 +131,42 @@
 			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
 
     	   }
+    	   
+    	   // check session flag to preselect a tab
+    	   {% if request.session.PROJECT_BROWSER_TAB %}
+    	   		gotoTab( parseInt( "{{ request.session.PROJECT_BROWSER_TAB }}") );
+    	   {% endif %}
+    	   // always delete the session flag after using it
+    	   var x = "{{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }}";
 
        }
+              
+       // function that submits the form to save the currently selected project tag into the user preferences
+       function saveUserTag() {
+         		    	   
+	    	var tag = document.getElementById('projectBrowserText').value;
+	    	var form = document.getElementById('save-user-tag-form');
+	    	if (tag != null && tag!="") {
+	    		form.tag.value = tag;
+	    		form.submit();
+	    		return True;
+	   		}
+	   		
+       }
+       
+       // function that submits the form to remove the named tag from the user preferences
+       function deleteUserTag(tag) {
+	   		
+	   		var url = "/project_browser/delete_user_tag/?tag="+tag
+	   		var form = document.getElementById('delete-user-tag-form');
+	    	if (tag != null && tag!="") {
+	    		form.tag.value = tag;
+	    		form.submit();
+	    		return True;
+	   		}
+	   		
+       }
+       
 
 		// function called if the ajax request failed
 		var handleFailure = function(o) {

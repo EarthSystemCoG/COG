@@ -55,10 +55,12 @@ def serialize_user(user):
     
     udict = { 'openid': user.profile.openid(),
               'home_site_name': user.profile.site.name,
-              'home_site_domain': user.profile.site.domain }
+              'home_site_domain': user.profile.site.domain,
+              'project_tags': [x.name for x in user.profile.tags.all()] }
     
     # only include local projects
     udict['projects'] = getProjectsAndRolesForUsers(user, includeRemote=False)
+    
     
     # data cart
     (dc, created) = DataCart.objects.get_or_create(user=user)

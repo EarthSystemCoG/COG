@@ -23,6 +23,7 @@ from cog.services.membership import addMembership
 from cog.utils import *
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.views.views_templated import templated_page_display
+from cog.views.utils import add_get_parameter
 
 
 # method to add a new project, with optional parent project
@@ -586,28 +587,125 @@ def project_browser(request, project_short_name, tab):
         if project is not None:
             # object that keeps track of successful invocations, if necessary
             display = DisplayStatus(True)  # open all sub-widgets by default
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Parent projects', 'parent_projects', display)
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Peer projects', 'peer_projects', display)
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Child projects', 'child_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Parent', 'parent_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Peer', 'peer_projects', display)
+            html += makeProjectBrowser(project, tab, tag, request.user, 'Child', 'child_projects', display)
         else:
             html += '<div id="this_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
     elif tab == 'all':
         html += makeProjectBrowser(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':
-        html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
-    
+        if not request.user.is_anonymous():
+            html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
+        else:
+            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your projects.</i></div>'
+    elif tab == 'tags':
+        if not request.user.is_anonymous():
+            display = DisplayStatus(True)  # open all sub-widgets by default
+            # loop over user tags (sorted by name)
+            utags = request.user.profile.tags.all()
+            if len(utags)>0:
+                for utag in sorted(utags, key=lambda x: x.name):
+                    #if tag==None or utag.name==tag:
+                    html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display, addDeleteLink=True)
+            else:
+                html += '<div id="tags_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
+        else:
+            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your projects.</i></div>'
+            
     return HttpResponse(html, content_type="text/html")
 
+@login_required
+def save_user_tag(request):
+    
+    # POST: when local user submits form, GET: when remote user is redirected to this site
+    if request.method=='POST' or request.method=='GET':
+        
+        # retrieve tag
+        tagName = request.REQUEST['tag']
+        redirect = request.REQUEST['redirect']
+        print 'Saving user tag: %s' % tagName
+        print 'Eventually redirecting to: %s' % redirect
+        
+        if isUserLocal(request.user):
+            try:
+                tag = ProjectTag.objects.get(name__iexact=tagName)
+                
+                # add this tag to the user preferences
+                utags = request.user.profile.tags
+                if not tag in utags.all():
+                    utags.add(tag)
+                    request.user.profile.save()
+                    print 'Tag: %s added to user: %s' % (tagName, request.user)
+        
+            except ObjectDoesNotExist:
+                print "Invalid project tag: %s" % tag
+
+            # set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3                
+            return HttpResponseRedirect(redirect)
+    
+        # redirect request to user home site
+        else:
+            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'), tagName, redirect)
+            print 'Redirecting save request to URL=%s' % url
+            # set session flag to eventually force reloading of user tags
+            request.session['LAST_ACCESSED'] = 0
+            # also set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3
+            request.session.save()
+            return HttpResponseRedirect(url)
+        
+    
+@login_required
+def delete_user_tag(request):
+    
+    # POST: when local user submits form, GET: when remote user is redirected to this site
+    if request.method=='POST' or request.method=='GET':
+
+        tagName = request.REQUEST['tag']
+        redirect = request.REQUEST['redirect']
+        print 'Deleting user tag: %s' % tagName
+        print 'Eventually redirecting to: %s' % redirect
+        
+        if isUserLocal(request.user):
+            try:
+                tag = ProjectTag.objects.get(name__iexact=tagName)
+                utags = request.user.profile.tags
+                if tag in utags.all():
+                    utags.remove(tag)
+                    request.user.profile.save()
+                    
+            except ObjectDoesNotExist:
+                print "Invalid project tag: %s" % tag
+                
+            # set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3
+            return HttpResponseRedirect(redirect)
+                
+        # redirect request to user home site
+        else:
+            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'), tagName, redirect)
+            print 'Redirecting delete request to URL=%s' % url    
+            # set session flag to eventually force reloading of user tags
+            request.session['LAST_ACCESSED'] = 0
+            # also set session flag to preselect a tab
+            request.session['PROJECT_BROWSER_TAB'] = 3
+            request.session.save()
+            return HttpResponseRedirect(url)
+    
 
 # utility class to track the status of the browser widgets
 class DisplayStatus:
-    def __init__(self, open):
-        self.open = open
+    def __init__(self, _open):
+        self.open = _open
 
     
 # Utility method to create the HTML for the browse widget
-def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus):
-       
+# example: project='cog', tab='tags', tagName=None, user=..., 
+# widgetName='MIP', widgetId='MIP_projects', displayStatus='open'
+def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus, addDeleteLink=False):
+           
     # retrieve tag, if requested
     tag = None
     tagError = None # keeps track of error in retrieving tag
@@ -621,16 +719,22 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     # list projects to include in widget
     if tagError is None:
         projects = listBrowsableProjects(project, tab, tag, user, widgetName)
+    # list no projects if the tag is invalid
     else:
         projects = Project.objects.none()
-        
+                
     # build accordion header
     html = ""
     #if len(projects)>0:
     #    widgetDisplay = 'block'
     if widgetName is not None:
         html += '<div class="project_browser_bar" id="%s_bar">' % widgetId
-        html += widgetName+' ('+str(len(projects))+')'
+        if addDeleteLink:
+            html += "<a href='javascript:deleteUserTag(\"%s\");' class='deletelink'>&nbsp;</a>" % widgetName
+        if widgetName in ['Parent', 'Child', 'Peer']:
+            html += '%s (%s) projects' % (widgetName, str(len(projects)) )
+        else:
+            html += '%s (%s)' % (widgetName, str(len(projects)) ) # shorter title            
         html += '</div>'
     
     # determine widget status (depending on previous invocations)
@@ -642,13 +746,13 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
         else:
             display = 'none'
 
-    html += '<div id="'+widgetId+'" style="display:'+display+'">';  # height of individual project widgets
+    html += '<div id="'+widgetId+'" style="display:'+display+'; margin-left:4px;">';  # height of individual project widgets
     if len(projects) == 0:
         if tagError is not None:
             html += "<i>"+tagError+"</i>"
         else:
             # special case: cannot retrieve list of projects for guest user
-            if tab=='my' and not user.is_authenticated():
+            if (tab=='my' or tab=='tags') and not user.is_authenticated():
                 html += "<i>Please login to display your projects.</i>"
             else:
                 html += "<i>No projects found.</i>"
@@ -666,11 +770,12 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
 def listBrowsableProjects(project, tab, tag, user, widgetName):
             
     if tab == 'this':
-        if widgetName == 'Parent projects':
+        # note: reserved values for widget names
+        if widgetName == 'Parent':
             projects = projectManager.listAssociatedProjects(project, 'parents')
-        elif widgetName == 'Peer projects':
+        elif widgetName == 'Peer':
             projects = projectManager.listAssociatedProjects(project, 'peers')
-        elif widgetName == 'Child projects':
+        elif widgetName == 'Child':
             projects = projectManager.listAssociatedProjects(project, 'children')
             
     elif tab == 'all':
@@ -678,12 +783,16 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         projects = projectManager.listAllProjects()
         
     elif tab == 'my':
+        # retrieve all active projects for this user
+        projects = getProjectsForUser(user, False)  # includePending==False
+    elif tab == 'tags':
         if not user.is_authenticated():
             projects = Project.objects.none()
         else:
-            # retrieve all active projects for this user
-            projects = getProjectsForUser(user, False)  # includePending==False
-
+            # widgetName==user tag name
+            utag = ProjectTag.objects.get(name=widgetName)
+            projects = utag.projects.all()
+            
     # filter projects
     _projects = []  # empty list
     for prj in projects:
@@ -699,7 +808,8 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         elif prj.isNotVisible(user):
             # do not add
             pass
-        elif tag is not None and tag not in prjtags:
+        # don't apply the additional 'tag' filter to the 'tags' tab
+        elif tab != 'tags' and tag is not None and tag not in prjtags:
             # do not add
             pass
         else:

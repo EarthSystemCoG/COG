@@ -8,7 +8,7 @@
 	  <div class="search-box">
 	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data</div> <!--// end div.right_widget_header //-->
 	       <div id="search_entry" style="padding:4px; padding-right:0;margin:0;">
-		       <form action='{% url 'search' project.short_name.lower %}' method="post" id="search-form">
+		       <form action="{% url 'search' project.short_name.lower %}" method="post" id="search-form">
 		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
@@ -43,11 +43,13 @@
               <li class="selected">&nbsp;&nbsp;<a href="tab1"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="tab2"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
               <li>&nbsp;&nbsp;<a href="tab3"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="tab3"><em><b>Tags</b></em></a>&nbsp;&nbsp;</li>
           </ul>
           <div class="yui-content">
               <div id="thisProjectsBrowser">&nbsp;</div>
               <div id="allProjectsBrowser">&nbsp;</div>
               <div id="myProjectsBrowser">&nbsp;</div>
+              <div id="tagsProjectsBrowser">&nbsp;</div>
           </div>
        </div> <!--// end div id=project_views //-->
 
@@ -71,16 +73,35 @@
 		        </div>
                <!-- add buttons -->
                 <div style="text-align: left; width:181px; margin:0; padding:0; margin-top:4px;">
-                    <input class="right_go" style="width:60px; margin:0" type="submit" value="Save Tag" id="saveProjectTag"
-	                   onclick="FIXME;"/>
+                
+                	{% if not request.user.is_anonymous %}
+                     <input class="right_go" style="width:60px; margin:0" type="submit" value="Save Tag" id="saveUserTag"
+	                         onclick="saveUserTag();"/>	                   
+	                   
+	                {% endif %}
 
 	                <input class="right_go" style="width:45px; margin:0; margin-left:1px;"
 	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
-	                   onclick="document.getElementById('projectBrowserText').value=''; gotoTab(0); loadProjectBrowser('{{project.short_name}}');"/>
+	                   onclick="document.getElementById('projectBrowserText').value=''; loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
 
                     <input class="right_go" style="float:right; margin:0;"
 	                   type="submit" value="Go" id="projectBrowserButton"
-	                   onclick="gotoTab(1); loadProjectBrowser('{{project.short_name}}');"/>
+	                   onclick="loadProjectBrowser('{{project.short_name}}'); gotoTab(1); "/>
+	                   
+	                <!-- form to save a user tag -->
+	                <form action="{% url 'save_user_tag' %}" method="post" id="save-user-tag-form">
+	            		{% csrf_token %}
+			            <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
+			            <input type="hidden" name="tag" value="" />
+		       		</form>
+		       		                   
+	                <!-- form to delete a user tag -->
+	                <form action="{% url 'delete_user_tag' %}" method="post" id="delete-user-tag-form">
+	            		{% csrf_token %}
+			            <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
+			            <input type="hidden" name="tag" value="" />
+		       		</form>
+	                   
                 </div>
 		   </div>
            <!-- add help text-->
@@ -119,9 +140,6 @@
    <!-- initialize tags autocompletion -->
    <script type="text/javascript">
        initTags();
-       function gotoTab(itab) {
-       	  myTabs.set('activeIndex', itab);
-	   }
    </script>
 <!--//END: /cog/templates/cog/project/project_right.html //-->
 {% endblock %}

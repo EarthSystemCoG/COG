@@ -31,9 +31,10 @@ def log_instance_event(sender, **kwargs):
     classname = instance.__class__.__name__
     if (kwargs['created']==True): title = 'New %s created' % get_display_name(instance,classname)
     else: title = '%s updated' % get_display_name(instance,classname)
-    event = LoggedEvent.objects.create(user=user, project=project, title=title, description=instance.title, sender='%s' % sender,
-                                       url = reverse('%s_detail' % classname.lower(), kwargs={'%s_id' % classname.lower():instance.id}) )
-    event.save()
+    if user is not None:
+        event = LoggedEvent.objects.create(user=user, project=project, title=title, description=instance.title, sender='%s' % sender,
+                                           url = reverse('%s_detail' % classname.lower(), kwargs={'%s_id' % classname.lower():instance.id}) )
+        event.save()
 
 # Handler for comment creation
 def log_comment_event(sender, **kwargs):
@@ -44,9 +45,10 @@ def log_comment_event(sender, **kwargs):
     user = comment.user
     classname = instance.__class__.__name__
     title = 'New comment on %s' % get_display_name(instance,classname)
-    event = LoggedEvent.objects.create(user=user, project=project, title=title, description=instance.title, sender='%s' % sender,
-                                       url = reverse('%s_detail' % classname.lower(), kwargs={'%s_id' % classname.lower():instance.id}))
-    event.save()
+    if user is not None:
+        event = LoggedEvent.objects.create(user=user, project=project, title=title, description=instance.title, sender='%s' % sender,
+                                           url = reverse('%s_detail' % classname.lower(), kwargs={'%s_id' % classname.lower():instance.id}))
+        event.save()
 
 def get_display_name(instance, classname):
     if (classname=='Doc'):
@@ -82,7 +84,8 @@ def post_signal_receiver(sender, **kwargs):
     else:
         title = 'Unknown action for %s' % get_display_name(instance, classname)
 
-    event = LoggedEvent.objects.create(user=user, project=project, title=title, description=instance.title, sender='%s' % sender,
-                                       url = reverse('%s_detail' % classname.lower(), kwargs={'%s_id' % classname.lower():instance.id}))
-    event.save()
+    if user is not None:
+        event = LoggedEvent.objects.create(user=user, project=project, title=title, description=instance.title, sender='%s' % sender,
+                                           url = reverse('%s_detail' % classname.lower(), kwargs={'%s_id' % classname.lower():instance.id}))
+        event.save()
 
