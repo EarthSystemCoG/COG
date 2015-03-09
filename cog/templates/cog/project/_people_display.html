@@ -5,7 +5,7 @@
 
 	{% autopaginate users 50 %}	
 			
-	<table>
+	<table class="no-color">
 	    <tr>
 	    	<td class="tophead" width="40px">&nbsp;</td>
 	        <td class="tophead" width="80px">Last Name</td>
@@ -14,7 +14,12 @@
 	        <td class="tophead">Interest Keywords</td>
 	    </tr>
 	    {% for user in users %}
-			<tr>               				
+            {% if forloop.last %}
+               <tr>
+            {% else %}
+			   <tr style="border-bottom:1px solid #999;">
+            {% endif %}
+
 				{% if user.username %}
 					<!-- User -->
 					<td>

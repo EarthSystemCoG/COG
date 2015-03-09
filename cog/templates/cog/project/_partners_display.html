@@ -1,10 +1,15 @@
 
 {% load cog_utils %}
 
-<table>
+<table class="no-color">
 	<!-- loop over partners -->
 	{% for organization in proj|partners %}
-		<tr>
+		{% if forloop.last %}
+            <tr>
+        {% else %}
+			<tr style="border-bottom:1px solid #999;">
+        {% endif %}
+
 			<td>
 				<img src="{{ organization|getImage }}" width="60px" />
 			</td>

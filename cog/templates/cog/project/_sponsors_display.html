@@ -1,9 +1,13 @@
 {% load cog_utils %}
 
-<table>
+<table class="no-color">
 	<!-- loop over sponsors -->
 	{% for sponsor in proj|sponsors %}
-		<tr>
+		{% if forloop.last %}
+            <tr>
+        {% else %}
+			<tr style="border-bottom:1px solid #999;">
+        {% endif %}
 			<td>
 				<img src="{{ sponsor|getImage }}" width="60px" />
 			</td>
@@ -13,7 +17,6 @@
 					{% else %}
 						{{ sponsor.name }}
 					{% endif %}	
-				</div>
 			</td>			
 		</tr>    	
 	{% endfor %}
