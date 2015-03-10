@@ -328,7 +328,6 @@ def delete_doc(doc):
     
     # delete document from file system
     for fp in [fullpath, fullpath2]:
-        print 'Deleting document=%s' % fp
         if os.path.exists(fp):
             print 'Deleting document=%s' % fp
             os.remove(fullpath)
