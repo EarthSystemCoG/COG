@@ -1,30 +1,42 @@
 <!--// START: /cog/templates/common/cog_header.html //-->
 {% load cog_utils %}
-<!--cog-utils is a full page "span-24 last" width-->
-<div class="span-24 last">
-   <!--// header with user links, project logo and cog logo //-->
-   <div id="header">
-     <!--load top-right user menu from cog/common/_user_menu.html-->
-     <div id="user_menu">
-	      {% include 'cog/common/_user_menu.html' %}
-     </div> <!--// end div id=user_menu //-->
-     <!--project title or uploaded project logo-->
-     {% if project.logo %}
-	     <div id="project_logo"><!-- project logo -->
-	    	 {% if project.logo_url %}
-	    	     <a href="{{ project.logo_url }}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/></a>
-	    	 {% else %}
-	    	     <a href="{% url 'project_home' project.short_name|lower %}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo" /></a>
-	    	 {% endif %}
-	     </div> <!--// end div id=project_logo //-->
-	 {% else %}
-	    <!-- project title -->
-        <div id="project_title">
-			{{ project.long_name|capfirst }}
-	    </div> <!--//end div id=project_title //-->
-     {% endif %}
 
-   </div><!--// end div id=header //-->
+
+<div class="span-24 last" style="clear:both;">
+   <!--// first row of the header with user links-->
+   <!--load top-right user menu from cog/common/_user_menu.html-->
+   <div id="user_menu">
+	   {% include 'cog/common/_user_menu.html' %}
+   </div>
+</div> <!--// end div id=user_menu //-->
+
+
+<div class="span-24 last">
+
+       <!--project title or uploaded project logo-->
+       {% if project.logo %}
+	       <div><!-- project logo -->
+	    	   {% if project.logo_url %}
+	    	       <a href="{{ project.logo_url }}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/></a>
+	    	   {% else %}
+	    	       <a href="{% url 'project_home' project.short_name|lower %}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo" /></a>
+	    	   {% endif %}
+	       </div> <!--// end div id=project_logo //-->
+	   {% else %}
+	       <!-- project title -->
+           <div class="header">
+           <div id="project_title">
+			   {{ project.long_name|capfirst }}
+	       </div> <!--//end div id=project_title //-->
+           </div><!--// end div id=header //-->
+       {% endif %}
+
+       <!--// site domain //-->
+       <div id="site_location">
+           You are at the <b>{{site.name}}</b> node
+       </div>
+
+
 </div><!--// end div.span-24 last //-->
 
 
@@ -52,13 +64,6 @@
 	<div  class="span-5 last">
 		<div id="top_nav_right">
             <a href="https://www.earthsystemcog.org/projects/cog/contactus/">Technical Support</a>
-            <!--
-			<ul>
-            <li><a href="https://www.earthsystemcog.org/projects/cog/">What is CoG?</a></li>
-			<li><a href="https://www.earthsystemcog.org/projects/cog/contactus/">Site Support</a></li>
-            </ul>
-            -->
-
 		</div> <!--//end div id=top_nav_right //-->
 	</div> <!--// end div.span-5 last //-->
    </div><!--// end div.top_nav -->

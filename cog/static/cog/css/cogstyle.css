@@ -494,7 +494,6 @@ th {
     font-size: 9pt;  /*this is different from the font on the page...will need to standardize */
 }
 
-
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
 
 .long {
@@ -973,8 +972,8 @@ END NEWS WIDGET
 }
 
 .box-comment2 {
-	padding:    0px;
-	margin:     0px;
+	padding:    0;
+	margin:     0;
 	border:     0 solid #417690;
 	background: #FFFFFF;
 }
@@ -1330,75 +1329,60 @@ END SPECIFIC CSS FIXES
 /***********************************
 BEGIN HEADER STYLES
 ************************************/
-#header {
-    overflow: hidden;
-    height: 85px;
-    /*color: #ffc; yellow*/
-    /*margin:0;*/
-    /* margin-top: 10px; */
-    /*padding-top:0;*/
-    /*display:block;*/
-    /* debug only... border: solid 2px yellow; */
+#user_menu {
+    margin:         0;
+    padding:        0;
+    padding-top:    2px;
+    padding-bottom: 4px;
+    font-size:      12px;
+    color:          #333;
+    float:          right;
 }
 
-/* note: the sum of the heights of user_menu, its margin-bottom, and right_logo must equal the height of right_header */
-#user_menu {
-    margin-top:0;
-    padding-top:2px;
-    padding-bottom:0;
-    height: 8px;
-    font-size: 12px;
-    color: #333;
-    float: right;
-    display:block;
-    /* padding-right: 10px; padding-left: 10px; */
-    /* margin-bottom:8px; */
+div.header {
+    /*overflow:      hidden;*/
+    height:        30px;
+    margin-bottom: 30px;
+}
+
+img.project_logo{
+    max-height:     100px; /* using max-height vice height means images won't get stretched beyond their size */
+    width:          auto;
+    float:          left;
+    clear:          right;
+    padding-bottom: 15px;
 }
 
 #project_logo{
-    position: absolute; bottom: 4px; left: 2px; /* must have same bottom as #cog_logo */
-    height:         70px;
-    width:          300px; /* logos larger than this will have issues. May have to expand at some point */
-    /*float:          left;*/
-    /*margin-top:    0;*/
-    /*padding-top:   0;*/
-    /*clear: right;*/
-    /* debug only...border: solid 2px pink; */
-
-
+    /*position: absolute; bottom: 4px; left: 2px; /* must have same bottom as #cog_logo */
+    /*height:         200px;*/
+    /*width:          300px; /* logos larger than this will have issues. May have to expand at some point */
+    vertical-align: baseline;
+    margin:         0;
+    padding:        0;
+    clear:          right;
 }
 /* The title and logo need to be aligned. Since different properties are used to place them */
 #project_title{
-    position: absolute; bottom: 4px; left: 2px;  /* needs to be identical to #project_logo */
+    position:       absolute; bottom: 5px; left: 2px;  /* needs to be identical to #project_logo */
     font-weight:    bold;
     font-style:     italic;
     font-size:      18pt;
     color:          #666;
     vertical-align: bottom;
+    clear:          right;
+
     /* debug only ... border: solid 2px brown; */
 }
 
-#right_cog_logo {
-    position:absolute; bottom: 4px; right:0; /* needs to have same bottom as #project_title or #project_logo */
-    height:         40px;
-    padding-bottom: 0;
-    padding-right:  4px;
-    margin-bottom:  0;
-    width:          200px;
-    /* debug onlyu...border: solid 2px green;*/
-    /*float:         right;*/
-    /*margin-top:    38px;*/
-    /*padding-bottom:5px; */
-   }
-
-img.cog_logo{
-    height:40px;
-    float: right;
+#site_location{
+    float:right;
+    color: #666;
+    font-style: italic;
+    position:absolute; bottom: 3px; right: 2px;
 }
 
-img.project_logo{
-    height:70px;
-}
+
 
 #right_sentence {
 	margin-top:35px;
