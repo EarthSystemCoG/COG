@@ -95,6 +95,7 @@ def page_detail(request, project_short_name):
     url = quote(request.path)
 
     #page = get_object_or_404(Post, url=quote(request.path))
+    #TODO: add another case...if project description or long_name has changed.
     try:
         page = Post.objects.get(url=url)
     except Post.DoesNotExist:
@@ -109,7 +110,7 @@ def page_detail(request, project_short_name):
     if redirect is not None:
         return redirect
     
-    dict = {"title": page.title, "post": page, "project" : project }
+    dict = {"title": page.title, "post": page, "project": project }
     
     related_pages = []
     for post in page.post_set.all():
