@@ -73,11 +73,11 @@ def update_user_tags(user):
         print 'Updating user tags: querying URL=%s' % url
         jobj = getJson(url)
         
-        if jobj is not None and openid in jobj['users']:
+        if jobj is not None and openid in jobj['users'] and 'project_tags' in jobj['users'][openid]:
             
             # loop over tags found on user home site
             tags = []
-            for tagName in jobj['users'][openid] ['project_tags']:
+            for tagName in jobj['users'][openid]['project_tags']:
                 try:
                     tags.append( ProjectTag.objects.get(name__iexact=tagName) )
                 except ObjectDoesNotExist:

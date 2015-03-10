@@ -319,15 +319,18 @@ def delete_doc(doc):
     for post in posts:
         post.docs.remove(doc)
         
-    # obtain document full path
+    # obtain document full path (before deleting object from database)
     fullpath = os.path.join(settings.MEDIA_ROOT, doc.path)
+    fullpath2= os.path.join(settings.MEDIA_ROOT, 'projects/%s' % doc.path) # missing 'projects' in file path
 
     # delete document from database
     doc.delete()
     
-    # delete document from file sysytem
-    print 'Deleting document=%s' % fullpath
-    os.remove(fullpath)
+    # delete document from file system
+    for fp in [fullpath, fullpath2]:
+        if os.path.exists(fp):
+            print 'Deleting document=%s' % fp
+            os.remove(fullpath)
     
     # also delete possible thumbnail files (created by File Browser)
     # canberra_hero_image.jpg
