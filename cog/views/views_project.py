@@ -90,7 +90,7 @@ def project_add(request):
                         'Your request will be reviewed by the site administrators as soon as possible,',
                         'and you will be notified of the outcome by email.']
             return render_to_response('cog/common/message.html',
-                                      {'mytitle': 'New Project Confirmation', 'messages':messages},
+                                      {'mytitle': 'New Project Confirmation', 'messages': messages},
                                       context_instance=RequestContext(request))
                     
         # invalid data
@@ -306,7 +306,7 @@ def project_delete(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if (request.method == 'GET'):
+    if request.method == 'GET':
         return render_to_response('cog/project/project_delete.html', 
                                   {'project': project, 'title': 'Delete Project'},
                                   context_instance=RequestContext(request))
@@ -376,11 +376,13 @@ def contactus_update(request, project_short_name):
                 print 'Form is invalid  %s' % form.errors
             return render_contactus_form(request, project, form)
 
+
 def render_contactus_form(request, project, form):
     return render_to_response('cog/project/contactus_form.html', 
                               {'form': form, 'title': 'Update Project Contact Us', 'project': project},
                               context_instance=RequestContext(request))
     
+
 # method to delete a project and all its associated groups, permissions
 def deleteProject(project):
     
@@ -405,11 +407,11 @@ def deleteProject(project):
 # function to notify the site administrators that a new project has been requested
 def notifySiteAdminsOfProjectRequest(project, request):
     
-    url = reverse('project_update', kwargs={ 'project_short_name':project.short_name.lower() })
+    url = reverse('project_update', kwargs={'project_short_name': project.short_name.lower()})
     url = request.build_absolute_uri(url)
     subject = "New Project Registration Request"
-    message = "User: %s has requested to register the new project: %s.\nPlease process the registration request at: %s ." \
-            % (request.user.username, project.short_name, url)
+    message = "User: %s has requested to register the new project: %s." \
+              "\nPlease process the registration request at: %s ." % (request.user.username, project.short_name, url)
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
 
@@ -578,7 +580,7 @@ def project_browser(request, project_short_name, tab):
     try:
         project = Project.objects.get(short_name__iexact=project_short_name)
     except ObjectDoesNotExist:
-        project=None
+        project = None
         
     #print 'Project Browser project=%s tab=%s tag=%s user=%s' % (project, tab, tag, request.user)
 
@@ -598,28 +600,32 @@ def project_browser(request, project_short_name, tab):
         if not request.user.is_anonymous():
             html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
         else:
-            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your projects.</i></div>'
+            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your ' \
+                    'projects.</i></div>'
     elif tab == 'tags':
         if not request.user.is_anonymous():
             display = DisplayStatus(True)  # open all sub-widgets by default
             # loop over user tags (sorted by name)
             utags = request.user.profile.tags.all()
-            if len(utags)>0:
+            if len(utags) > 0:
                 for utag in sorted(utags, key=lambda x: x.name):
                     #if tag==None or utag.name==tag:
-                    html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name, display, addDeleteLink=True)
+                    html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name,
+                                               display, addDeleteLink=True)
             else:
                 html += '<div id="tags_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
         else:
-            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your projects.</i></div>'
+            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your ' \
+                    'projects.</i></div>'
             
     return HttpResponse(html, content_type="text/html")
+
 
 @login_required
 def save_user_tag(request):
     
     # POST: when local user submits form, GET: when remote user is redirected to this site
-    if request.method=='POST' or request.method=='GET':
+    if request.method == 'POST' or request.method == 'GET':
         
         # retrieve tag
         tagName = request.REQUEST['tag']
@@ -647,7 +653,8 @@ def save_user_tag(request):
     
         # redirect request to user home site
         else:
-            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'), tagName, redirect)
+            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'),
+                                                      tagName, redirect)
             print 'Redirecting save request to URL=%s' % url
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
@@ -661,7 +668,7 @@ def save_user_tag(request):
 def delete_user_tag(request):
     
     # POST: when local user submits form, GET: when remote user is redirected to this site
-    if request.method=='POST' or request.method=='GET':
+    if request.method == 'POST' or request.method == 'GET':
 
         tagName = request.REQUEST['tag']
         redirect = request.REQUEST['redirect']
@@ -685,7 +692,8 @@ def delete_user_tag(request):
                 
         # redirect request to user home site
         else:
-            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'), tagName, redirect)
+            url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'),
+                                                      tagName, redirect)
             print 'Redirecting delete request to URL=%s' % url    
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
@@ -732,27 +740,28 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
         if addDeleteLink:
             html += "<a href='javascript:deleteUserTag(\"%s\");' class='deletelink'>&nbsp;</a>" % widgetName
         if widgetName in ['Parent', 'Child', 'Peer']:
-            html += '%s (%s) projects' % (widgetName, str(len(projects)) )
+            html += '%s (%s) projects' % (widgetName, str(len(projects)))
         else:
-            html += '%s (%s)' % (widgetName, str(len(projects)) ) # shorter title            
+            html += '%s (%s)' % (widgetName, str(len(projects)))  # shorter title
         html += '</div>'
     
     # determine widget status (depending on previous invocations)
     display = 'block'
     if displayStatus is not None:
-        if displayStatus.open and len(projects)>0:
+        if displayStatus.open and len(projects) > 0:
             display = 'block'
             #displayStatus.open = False # close all following widgets
         else:
             display = 'none'
 
-    html += '<div id="'+widgetId+'" style="display:'+display+'; margin-left:4px;">';  # height of individual project widgets
+    # height of individual project widgets
+    html += '<div id="'+widgetId+'" style="display:'+display+'; margin-left:4px;">'
     if len(projects) == 0:
         if tagError is not None:
             html += "<i>"+tagError+"</i>"
         else:
             # special case: cannot retrieve list of projects for guest user
-            if (tab=='my' or tab=='tags') and not user.is_authenticated():
+            if (tab == 'my' or tab == 'tags') and not user.is_authenticated():
                 html += "<i>Please login to display your projects.</i>"
             else:
                 html += "<i>No projects found.</i>"
@@ -765,6 +774,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
 
     # return both the HTML and the 'open' status of the following widget
     return html
+
 
 # Utility method to list the projects for the browse widget
 def listBrowsableProjects(project, tab, tag, user, widgetName):
