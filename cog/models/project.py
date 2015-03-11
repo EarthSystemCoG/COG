@@ -203,9 +203,12 @@ class Project(models.Model):
         users = self.getUsers(exclude_superuser=False)
         pubUsers = []
         for user in users:
-            print 'Checking user=%s' % user  # TODO:FixME
-            if not user.get_profile().private:
-                pubUsers.append(user)
+            try:
+                print 'Checking user=%s' % user  # TODO:FixME
+                if not user.get_profile().private:
+                    pubUsers.append(user)
+            except ObjectDoesNotExist:
+                pass # non user profile
         return pubUsers
 
     def getGroups(self):

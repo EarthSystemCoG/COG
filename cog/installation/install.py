@@ -5,6 +5,7 @@ It uses the configuration settings from $COG_CONFIG_DIR/cog_settings.cfg
 
 import os
 import cog
+from settings import SECTION_EMAIL
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
         
@@ -122,7 +123,7 @@ class CoGInstall(object):
             logging.info("Creating admin user")
             user = User(first_name='Admin', last_name='User', 
                         username=ROOTADMIN_USERNAME, 
-                        email=self.siteManager.get('EMAIL_SENDER'), 
+                        email=self.siteManager.get('EMAIL_SENDER', section=SECTION_EMAIL), 
                         is_staff=True, is_superuser=True)
             if settings.ESGF_CONFIG:
                 password = self._getRootAdminPassword()
