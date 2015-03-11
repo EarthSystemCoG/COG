@@ -2,43 +2,46 @@
 {% load cog_utils %}
 
 
-<div class="span-24 last" style="clear:both;">
+<div class="span-24 last" >
    <!--// first row of the header with user links-->
    <!--load top-right user menu from cog/common/_user_menu.html-->
-   <div id="user_menu">
-	   {% include 'cog/common/_user_menu.html' %}
-   </div>
-</div> <!--// end div id=user_menu //-->
-
-
-<div class="span-24 last">
-
-       <!--project title or uploaded project logo-->
+   <table class="no-color">
+       <tr>
+           <td style="text-align: right; padding:0; padding-right:2px; padding-bottom: 2px;">
+	           {% include 'cog/common/_user_menu.html' %}
+           </td>
+       </tr>
+       <tr>
        {% if project.logo %}
-	       <div><!-- project logo -->
-	    	   {% if project.logo_url %}
-	    	       <a href="{{ project.logo_url }}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/></a>
-	    	   {% else %}
-	    	       <a href="{% url 'project_home' project.short_name|lower %}"><img class="project_logo" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo" /></a>
-	    	   {% endif %}
-	       </div> <!--// end div id=project_logo //-->
+           <td style="height: 70px; vertical-align: bottom;  padding:0; padding-left:2px; margin:0;"> <!--must use vertical-align: bottom-->
+                <span>
+                {% if project.logo_url %}
+	    	         <a  href="{{ project.logo_url }}">
+	    	    {% else %}
+	    	         <a style="padding:0; margin:0;" href="{% url 'project_home' project.short_name|lower %}">
+	    	    {% endif %}
+                <img style="max-height: 150px; vertical-align: bottom;" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/>
+                </a>
+                </span>
+           </td>
 	   {% else %}
-	       <!-- project title -->
-           <div class="header">
-           <div id="project_title">
-			   {{ project.long_name|capfirst }}
-	       </div> <!--//end div id=project_title //-->
-           </div><!--// end div id=header //-->
+           <!-- project title -->
+           <!-- height must be same as logo td -->
+           <!-- the negative bottom takes the text below the level of the table cell -->
+           <td style="height: 70px; vertical-align: bottom; padding:0; padding-left: 2px; position:relative; font-weight: bold; font-size: 20pt; font-style: italic; color: #666666;">
+			   <span style="position:absolute; bottom: -10px;">
+                   {{ project.long_name|capfirst }}
+               </span>
+           </td>
        {% endif %}
-
-       <!--// site domain //-->
-       <div id="site_location">
+   </tr>
+   <tr>
+       <td style="padding:0; padding-bottom: 1px; padding-right: 2px; font-size: 12px; color: #666; text-align: right; font-style: italic;">
            You are at the <b>{{site.name}}</b> node
-       </div>
-
-
-</div><!--// end div.span-24 last //-->
-
+       </td>
+   </tr>
+   </table>
+</div>
 
  <div class="span-24 last">
   

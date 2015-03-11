@@ -136,6 +136,7 @@ div.custom_header_bar {
     margin-bottom:    2px;
     background-color: #E9F5F6; /*light blue*/
     /*background-color:#e5e5e5; /* grey that Cecelia wanted initially */
+
 }
 
 /* create a white header that is just slightly larger than the main cog site */
@@ -1306,8 +1307,6 @@ div.last ol {
 /* this forces it to remain white */
 #project_views .yui-content td { background-color: #ffffff !important; }
 
-
-
 /******************************
 END SPECIFIC CSS FIXES
 ******************************/
@@ -1327,64 +1326,10 @@ END SPECIFIC CSS FIXES
 }
 
 /***********************************
-BEGIN HEADER STYLES
+BEGIN non-CUSTOMIZABLE HEADER STYLES
 ************************************/
-#user_menu {
-    margin:         0;
-    padding:        0;
-    padding-top:    2px;
-    padding-bottom: 4px;
-    font-size:      12px;
-    color:          #333;
-    float:          right;
-}
 
-div.header {
-    /*overflow:      hidden;*/
-    height:        30px;
-    margin-bottom: 30px;
-}
-
-img.project_logo{
-    max-height:     150px; /* using max-height vice height means images won't get stretched beyond their size */
-    width:          auto;
-    float:          left;
-    clear:          right;
-    padding-bottom: 15px;
-}
-
-#project_logo{
-    /*position: absolute; bottom: 4px; left: 2px; /* must have same bottom as #cog_logo */
-    /*height:         200px;*/
-    /*width:          300px; /* logos larger than this will have issues. May have to expand at some point */
-    vertical-align: baseline;
-    margin:         0;
-    padding:        0;
-    clear:          right;
-}
-/* The title and logo need to be aligned. Since different properties are used to place them */
-#project_title{
-    position:       absolute; bottom: 5px; left: 2px;  /* needs to be identical to #project_logo */
-    font-weight:    bold;
-    font-style:     italic;
-    font-size:      18pt;
-    color:          #666;
-    vertical-align: bottom;
-    clear:          right;
-
-    /* debug only ... border: solid 2px brown; */
-}
-
-#site_location{
-    float:right;
-    color: #666;
-    font-size: 12px; /* must be the same as the user_menu */
-    font-style: italic;
-    position:absolute; bottom: 3px; right: 2px;
-}
-
-
-
+/* TODO: is this used? */
 #right_sentence {
 	margin-top:35px;
 	font-weight: bold;
@@ -1405,15 +1350,10 @@ img.project_logo{
     height: 20px;
     margin: 0 auto;
     padding:  0;
-    /* padding-top: 2px; */
-    /* COG STYLE: TOP NAV BACKGROUND COLOR */
     background: #FFFFFF;
-    /*background: #CC3300;*/
-    /*background: #84000;*/
     color: #FFFFFF;
     font-size: 9pt;
     font-weight: bold;
-    /* font-family: Arial, Helvetica, sans-serif;  */
     font-style: normal;
 }
 
@@ -1424,7 +1364,7 @@ img.project_logo{
 	width:        100%;
 	background:   #358C92;
 	float:        left;
-        height:       20px;
+    height:       20px;
 }
 
 #top_subnav_left {
@@ -1439,12 +1379,11 @@ img.project_logo{
     color: #666;
 }
 
-
 #top_nav_right {
 	width:            97%;
-	padding-top:     0;
+	padding-top:      0;
     text-align:       right;
-	padding-left:     5px;     /* make yellow box line up with rest of the right widgets */
+	padding-left:     5px;      /* make yellow box line up with rest of the right widgets */
     background-color: #FAC24A; /*dark yellow*/
 	float:            right;
     height:           22px;
@@ -1456,25 +1395,17 @@ img.project_logo{
     padding-top:4px;
     padding-bottom:4px;
     padding-right: 4px;
-
-	/* font-weight: bold; */
 }
-
 
 #top_subnav {
     width: 100%;
     height: 20px;
     margin: 0 auto;
     padding:0;
-    /* padding-top: 2px; */
-    /* COG STYLE: TOP NAV BACKGROUND COLOR */
     background: #FFFFFF;
-    /*background: #CC3300;*/
-    /*background: #84000;*/
     color: #FFFFFF;
     font-size: 9pt;
     font-weight: bold;
-    /* font-family: Arial, Helvetica, sans-serif;  */
     font-style: normal;
 }
 
@@ -1486,7 +1417,6 @@ img.project_logo{
 	/* background: #FCE79F; */
 	color: #666;
 }
-
 
 .top_nav ul {
     margin:0;
@@ -1512,11 +1442,8 @@ img.project_logo{
     border: none;
 }
 
-
 .top_nav a:hover {
-    /* background: #FFFFFF; */
     text-decoration: underline;
-    /* color: 417690; */
 }
 
 #top_subnav_right a {
