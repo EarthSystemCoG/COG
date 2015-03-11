@@ -1346,7 +1346,7 @@ div.header {
 }
 
 img.project_logo{
-    max-height:     100px; /* using max-height vice height means images won't get stretched beyond their size */
+    max-height:     150px; /* using max-height vice height means images won't get stretched beyond their size */
     width:          auto;
     float:          left;
     clear:          right;
@@ -1378,6 +1378,7 @@ img.project_logo{
 #site_location{
     float:right;
     color: #666;
+    font-size: 12px; /* must be the same as the user_menu */
     font-style: italic;
     position:absolute; bottom: 3px; right: 2px;
 }

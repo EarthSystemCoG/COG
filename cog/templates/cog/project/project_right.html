@@ -114,8 +114,10 @@
    </div><!--end div id=yui-skin-sam // -->
 
    <!--display project tags-->
-   <div style="font-size: 8pt; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
-       {% if project.tags %}
+    <!-- font size has to be the same as the #user_menu -->
+   <div style="font-size: 12px; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
+
+       {% if project.tags.all|length > 0 %}
            <b>{{ project.short_name }} Tags:</b>
            {% for tag in project.tags.all %}
                {% if forloop.last %}
@@ -124,6 +126,8 @@
                    {{ tag }},
                {% endif %}
            {% endfor %}
+       {% else %}
+           <b>{{ project.short_name }} Tags:</b> None
        {% endif %}
    </div>
 
