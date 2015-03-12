@@ -466,6 +466,11 @@ table.no-color td {
 	background-color: #FFFFFF !important;
 }
 
+/* for use in the custom header for JPL */
+table.transparent tbody tr:nth-child(even) td, tbody tr.even td{
+    background-color: inherit;
+}
+
 /* for tables that are entirely gray. Used when a table is imbedded in another table with a dark row */
 table.gray td{
         background-color: #eee !important;
