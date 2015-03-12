@@ -1,66 +1,61 @@
 <!--START: /mytemplates/cog/common/cog_header_custom.html-->
 <!-- NASA/JPL custom header -->
 
-<div style="height:65px;" class="custom_header">
-  <table style="height:65px; padding:0; margin:0;" class="no_color">
+<div class="custom_header">
+<table class="transparent" style="padding:0; margin:0;">
     <tr>
-	  <td>
-	     <table>
-	       <tr>
-	         <td>
-	           <a href="http://www.nasa.gov/" id="nasa" title="NASA" target="_blank">
-	               <img style="height:64px;" src="/mymedia/nasa_logo.png" alt="NASA logo"/> <!-- must have alt for 508 -->
-	           </a>
-	         </td>
-	         <td>
-	           <div style="color: #666; font-size: 12pt; font-weight: bold; margin-top:10px;">
-	             <a href="http://www.jpl.nasa.gov" id="jplhome0" title="JPL Home Page" target="_blank">
-                     Jet Propulsion Laboratory
-                 </a>
-	             <br/>
-	             <a href="http://www.caltech.edu/" id="caltech" title="California Institute of Technology" target="_blank">
-		           California Institute of Technology
-		         </a>
-	           </div>
-	         </td>
-	     </table>
-	  </td>
-	  <td>
-	    <table>
-	      <tr>
-	        <td colspan="3">
-	           <div style="float:right">
-		         <a href="http://www.jpl.nasa.gov/index.cfm" title="JPL Home" target="_blank">JPL HOME</a>&nbsp;|
-	             <a href="http://www.jpl.nasa.gov/earth/index.cfm" title="Earth" target="_blank">EARTH</a>&nbsp;|
-		         <a href="http://www.jpl.nasa.gov/solar-system/index.cfm" title="Solar System" target="_blank">SOLAR SYSTEM</a>&nbsp;|
-		         <a href="http://www.jpl.nasa.gov/stars-galaxies/index.cfm" title="Stars &amp; Galaxies" target="_blank">STARS &amp; GALAXIES</a>&nbsp;|
-	             <a href="http://scienceandtechnology.jpl.nasa.gov/" title="Science &amp; Tech" target="_blank">SCIENCE &amp; TECHNOLOGY</a>
-	           </div>
-	           <br/>
-	           <div style="float:right">
-	             <a href="http://www.jpl.nasa.gov/email/signup.cfm" target="_blank">Email</a>&nbsp;|
-		         <a href="http://www.jpl.nasa.gov/rss/index.cfm" target="_blank">RSS</a>&nbsp;|
-		         <a href="http://itunes.apple.com/podcast/hd-nasa-jet-propulsion-laboratory/id262254981" target="_blank">Podcast</a>&nbsp;|
-		         <a href="http://www.youtube.com/user/JPLnews" target="_blank">Youtube</a>
-	           </div>
-	        </td>
-	      </tr>
-	      <tr>
-	        <td style="text-align:left; vertical-align:middle; color:#666; background-color:#E9F5F6;">
+       <td class="hosted_by" style="width:52px; font-size:10px; font-weight:bold; font-style:italic; padding-right:0; vertical-align: middle">
+            Hosted by
+       </td>
 
-	        </td>
-	        <td class="custom_header_welcome" style="background-color:#E9F5F6;">
-	     	   Welcome to the Earth System Grid Federation.<br>
-	           You are at the <b>{{ site.name }} node.</b>
-	        </td>
-	        <td class="custom_header_esgf" style="background-color:#E9F5F6;">
-	     	   <a href="http://esgf.llnl.gov"><img style="vertical-align:middle;height:35px;" src="/static/cog/img/esgf_transparent_notext_39.png" alt="ESGF logo"/></a>
-	        </td>
-	      </tr>
-	    </table>
-	  </td>
+       <td style="width:30px; padding:0; vertical-align:middle;">
+           <a href="http://www.nasa.gov/" id="nasa" title="NASA" target="_blank">
+	           <img style="height:64px;" src="/mymedia/nasa_logo.png" alt="NASA logo"/> <!-- must have alt for 508 -->
+	       </a>
+       </td>
+       <td class="custom_header_location" style="width:275px; vertical-align: middle;">
+	       <div style="color: #666; font-size: 12pt; font-weight: bold; margin-top:0;">
+	           <a href="http://www.jpl.nasa.gov" id="jplhome0" title="JPL Home Page" target="_blank">
+                     Jet Propulsion Laboratory
+               </a>
+	           <br/>
+	           <a href="http://www.caltech.edu/" id="caltech" title="California Institute of Technology" target="_blank">
+		           California Institute of Technology
+		       </a>
+	       </div>
+	   </td>
+       <td style="padding:0;">
+           <table class="transparent">
+               <tr>
+                   <td colspan="3" style="text-align: right;">
+   		               <a href="http://www.jpl.nasa.gov/index.cfm" title="JPL Home" target="_blank">JPL HOME</a>&nbsp;|
+	                   <a href="http://www.jpl.nasa.gov/earth/index.cfm" title="Earth" target="_blank">EARTH</a>&nbsp;|
+		               <a href="http://www.jpl.nasa.gov/solar-system/index.cfm" title="Solar System" target="_blank">SOLAR SYSTEM</a>&nbsp;|
+		               <a href="http://www.jpl.nasa.gov/stars-galaxies/index.cfm" title="Stars &amp; Galaxies" target="_blank">STARS &amp; GALAXIES</a>&nbsp;|
+	                   <a href="http://scienceandtechnology.jpl.nasa.gov/" title="Science &amp; Tech" target="_blank">SCIENCE &amp; TECHNOLOGY</a>
+	                    <br/>
+   	                   <a href="http://www.jpl.nasa.gov/email/signup.cfm" target="_blank">Email</a>&nbsp;|
+		               <a href="http://www.jpl.nasa.gov/rss/index.cfm" target="_blank">RSS</a>&nbsp;|
+		               <a href="http://itunes.apple.com/podcast/hd-nasa-jet-propulsion-laboratory/id262254981" target="_blank">Podcast</a>&nbsp;|
+		               <a href="http://www.youtube.com/user/JPLnews" target="_blank">Youtube</a>
+	               </td>
+               </tr>
+
+               <tr>
+                   <td>&nbsp;</td>
+                   <td class="powered_by" style="text-align: right;">
+                       Powered by
+                   </td>
+                   <td class="custom_header_esgf_cog" style="text-align: right; width:110px;">
+                       <a href="https://www.earthsystemcog.org">
+                           <img style="vertical-align:middle; height:36px; margin:0;" src="/static/cog/img/cog_esgf_small.png" alt="ESGF-CoG logo"/>
+                       </a>
+                   </td>
+               </tr>
+           </table>
+       </td>
     </tr>
-  </table>
+</table>
 </div>
 
 <!--END: JPL header_custom.html-->
