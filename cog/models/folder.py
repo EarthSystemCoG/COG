@@ -7,19 +7,20 @@ from collections import OrderedDict
 TOP_FOLDER = "Bookmarks"
 
 # dictionary of pre-defined (folder key, folder name)
-TOP_SUB_FOLDERS = OrderedDict([ ('PRESENTATIONS', 'Presentations'),
-                                ('PUBLICATIONS', 'Publications'),
-                                ('MINUTES', 'Minutes'),
-                                ('NEWSLETTERS', 'Newsletters'),
-                                ('PROPOSALS', 'Proposals'),
-                                ('FIGURES', 'Figures'),
-                                ('TESTCASES', 'Test Cases'),
-                                ('EVALUATIONS', 'Evaluations') ])
+TOP_SUB_FOLDERS = OrderedDict([('PRESENTATIONS', 'Presentations'),
+                               ('PUBLICATIONS', 'Publications'),
+                               ('MINUTES', 'Minutes'),
+                               ('NEWSLETTERS', 'Newsletters'),
+                               ('PROPOSALS', 'Proposals'),
+                               ('FIGURES', 'Figures'),
+                               ('TESTCASES', 'Test Cases'),
+                               ('EVALUATIONS', 'Evaluations')])
+
 
 class Folder(models.Model):
 
     project = models.ForeignKey(Project, blank=False)
-    name =  models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=200, blank=False)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='Parent Folder')
     active = models.BooleanField(default=True, blank=False, null=False)
     order = models.IntegerField(blank=True, default=0)
@@ -28,26 +29,33 @@ class Folder(models.Model):
         return self.name
 
     def children(self):
-        '''NOTE: returns ONLY to active children.'''
+        """
+        NOTE: returns ONLY to active children.
+        """
         return Folder.objects.filter(parent=self, active=True).order_by('order')
 
     def topParent(self):
-        '''Returns the top-level parent of this folder.'''
+        """
+        Returns the top-level parent of this folder.
+        """
 
-        if self.parent==None:
+        if self.parent is None:
             return self
         else:
-            return self.parent.topParent() # recursion
+            return self.parent.topParent()  # recursion
 
     def isPredefined(self):
-        return self.parent==None or self.name in TOP_SUB_FOLDERS.values()
+        return self.parent is None or self.name in TOP_SUB_FOLDERS.values()
 
     class Meta:
         unique_together = (("project", "name"),)
-        app_label= APPLICATION_LABEL
+        app_label = APPLICATION_LABEL
+
 
 def getTopFolder(project):
-    ''' Function to return the top bookmarks folder for a project, creating it if not existing.'''
+    """
+    Function to return the top bookmarks folder for a project, creating it if not existing.
+    """
 
     # get or create top-level folder
     #name = "%s %s" % (project.short_name, TOP_FOLDER)
@@ -58,7 +66,9 @@ def getTopFolder(project):
 
 
 def getTopSubFolders(project):
-    '''Function to return the pre-defined level-1 sub-folders for a project.'''
+    """
+    Function to return the pre-defined level-1 sub-folders for a project.
+    """
 
     # get or create level-0 folder
     topFolder = getTopFolder(project)
