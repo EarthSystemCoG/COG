@@ -12,11 +12,10 @@
 	   in tabview.css */
 
 	.project_widget {
-	    margin:     0px;
-	    padding:    0px;
+	    margin:     0;
+	    padding:    0;
 	    font-size:  8pt;
 	    text-align: left;
-	    /* font-weight: bold; */
 	    background-color: #FFFFFF;
 	    border: 1px solid #666666;
 	    color:   #666;
@@ -29,14 +28,36 @@
 		padding: 4px 5px 3px 3px;
 		font-size: 8pt;
 		text-align: left;
-		/* COG STYLE: PROJECT BROWSER BAR */
-		font-weight: bold;
+	    font-weight: bold;
 		background-color: #FDF3CF;
 		color: #666;
 		display: block;
-		border-top: 0px solid #666;
-		border-bottom: 0px solid #666;
+		border-top: 0 solid #666;
+		border-bottom: 0 solid #666;
 	}
+
+    #project_browser_controls {
+		border-top: 1px solid #666;
+		background-color: #FCE79F;
+		padding: 0;
+		margin: 0;
+	}
+
+    #parent_projects, #peer_projects, #child_projects {
+		margin-left: 0.3em;
+		margin-right: 0.3em;
+	}
+
+    #all_projects, #my_projects {
+		max-height: 265px;
+		margin: 0.3em;
+	}
+
+
+	#tagAutoComplete {
+           width: 138px;
+           padding-bottom: 20px;
+    }
 
 	.project_browser_bar a:link,
 	.project_browser_bar a:visited {
@@ -44,41 +65,16 @@
 		text-decoration: none;
 	}
 
-	#project_browser_controls {
-		border-top: 1px solid #666;
-		background-color: #FCE79F;
-		padding: 0px;
-		margin: 0px;
-	}
 
-
-	#parent_projects, #peer_projects, #child_projects {
-		overflow-y: auto; /* NOTE: scrollbar on containing div is controlled by tabview.css:yui-content */
-		margin-left: 0.3em;
-		margin-right: 0.3em;
-		/* max-height: 80px;*/ /* PROJECT BROWSER HEIGHT: height of individual widgets */
-	}
-
-	#all_projects, #my_projects {
-		/* overflow-y: auto; */ /* PROJECT BROWSER: disable inner scrollbar on these two widgets */
-		max-height: 265px; /* PROJECT BROWSER HEIGHT: must be less than overall widget height set in tabview.css */
-		margin: 0.3em;
-	}
-
-        #parent_projects a, #peer_projects a, #child_projects a, #all_projects a, #my_projects a {
-            line-height: 1.3;
-        }
+    #parent_projects a, #peer_projects a, #child_projects a, #all_projects a, #my_projects a {
+        line-height: 1.3;
+    }
 
 	.project_widget table td {
 	    /* important: must align project labels with middle of checkbox */
 		vertical-align: middle;
 	}
 
-       /* autocomplete widget must be styled otherwise it will expand to take all available room */
-	#tagAutoComplete {
-           width: 138px;
-           padding-bottom: 20px;
-    }
 
     /* enable vertical scrollbar if large number of items needs to be displayed (in conjunction with large autoComp.maxResultsDisplayed) */
     .yui-skin-sam .yui-ac-content { /* set scrolling */
@@ -106,7 +102,7 @@
        function loadProjectBrowser(project_short_name) {
 
     	   // loop over YUI tab identifiers, execute separate ajax requests
-    	   var tabs = ['this', 'all', 'my', 'tags']
+    	   var tabs = ['this', 'all', 'my', 'tags'];
     	   for (var i=0; i<tabs.length; i++) {
 
 	    	   // build request URL
@@ -123,8 +119,8 @@
 	 				  cache:false,
 	 				  timeout:5000,
 	 				  argument: []
-	    	   }
-			   // pass in target tab identifier as extra argument to ajax callback
+	    	   };
+			   // pass in target tab identifier as extra argument to ajax callback (e.g. thisProjectBrowser)
 			   callback.argument[0] = tabs[i]+"ProjectsBrowser";
 
 			   // execute asynchronous GET request
@@ -157,7 +153,7 @@
        // function that submits the form to remove the named tag from the user preferences
        function deleteUserTag(tag) {
 	   		
-	   		var url = "/project_browser/delete_user_tag/?tag="+tag
+	   		var url = "/project_browser/delete_user_tag/?tag="+tag;
 	   		var form = document.getElementById('delete-user-tag-form');
 	    	if (tag != null && tag!="") {
 	    		form.tag.value = tag;
@@ -166,25 +162,24 @@
 	   		}
 	   		
        }
-       
 
 		// function called if the ajax request failed
 		var handleFailure = function(o) {
 			// do nothing
 			//showMessage("An Error Occurred",
 			//		    "HTTP Status Code: "+o.status+"<br/>Message: "+o.statusText);
-		}
+		};
 
-		// function called if the ajax request succeded
+		// function called if the ajax request succeeded
 		var handleSuccess = function(o) {
 
 			// retrieve target tab id from callback extra argument
-			tabId = o.argument[0]
+			tabId = o.argument[0];
 
 			// replace browser window with new content
 			document.getElementById(tabId).innerHTML = o.responseText;
 
-		}
+		};
     //]]>
 </script>
 
