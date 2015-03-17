@@ -49,7 +49,7 @@
 	    <!-- list search facets  -->
 	    <div class="mybox">
             <table>
-                <caption>Available search facet keys, their associated values and periodicity.</caption>
+                <caption>Available search facet keys, their associated values.</caption>
                 {% for keyAndFacet in facets|sortdict %}
                 	<!-- only display facets that have some values -->
                 	{% if keyAndFacet.1.values %}
