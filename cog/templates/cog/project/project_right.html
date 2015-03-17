@@ -65,7 +65,7 @@
 
 			        <!--class=yui-ac-input-->
                     <label for="projectBrowserText" style="display:none;">Enter Tag</label>
-		            <input type="text" id="projectBrowserText" placeholder="Enter Tag" style="width:178px; position:static;
+		            <input type="text" onclick="gotoTab(1);" id="projectBrowserText" placeholder="Enter Tag" style="width:178px; position:static;
 		             font-size:8.5pt; padding:0; padding-left:2px; margin:0;" alt="projectBrowserText" />
 
 		            <div style="width:177px" id="tagContainer"> <!-- make size 1px smaller than input above -->
@@ -88,7 +88,7 @@
 
                     <input class="right_go" style="float:right; margin:0;"
 	                   type="submit" value="Go" id="projectBrowserButton"
-	                   onclick="gotoTab(1); loadProjectBrowser('{{project.short_name}}');  "/>
+	                   onclick="document.getElementById('projectBrowserText'); loadProjectBrowser('{{project.short_name}}');  "/>
 	                   
 	                <!-- form to save a user tag -->
 	                <form action="{% url 'save_user_tag' %}" method="post" id="save-user-tag-form">

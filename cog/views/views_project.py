@@ -574,7 +574,6 @@ def project_browser(request, project_short_name, tab):
     
     # optional tag filter
     tag = request.GET.get('tag', None)
-    print tag
             
     # retrieve project from database
     #project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -781,7 +780,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
 
 # Utility method to list the projects for the browse widget
 def listBrowsableProjects(project, tab, tag, user, widgetName):
-            
+    projects = []    #empty list
     if tab == 'this':
         # note: reserved values for widget names
         if widgetName == 'Parent':
