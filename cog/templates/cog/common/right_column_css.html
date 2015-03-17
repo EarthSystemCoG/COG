@@ -107,6 +107,7 @@
 
 	    	   // build request URL
 	    	   // example: /project_browser/<project_short_name>/browse/<this|all|my|tags>/[?tag=<tag>]
+               // the tag is pulled from the request URL by the project_browser function in views_project.py
 	    	   var url = "/project_browser/"+project_short_name+"/browse/"+tabs[i]+"/";
 	    	   var tag = document.getElementById('projectBrowserText').value;
 	    	   if (tag != null && tag!="") url += "?tag="+tag;
@@ -116,7 +117,7 @@
 	    	   var callback = {
 	 				  success:handleSuccess,
 	 				  failure: handleFailure,
-	 				  cache:true,
+	 				  cache:false,
 	 				  timeout:5000,
 	 				  argument: []
 	    	   };
@@ -124,8 +125,8 @@
 			   callback.argument[0] = tabs[i]+"ProjectsBrowser";
 
 			   // execute asynchronous GET request
-			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
-
+			   //var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+                 YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
     	   }
     	   
     	   // check session flag to preselect a tab
@@ -133,7 +134,10 @@
     	   		gotoTab( parseInt( "{{ request.session.PROJECT_BROWSER_TAB }}") );
     	   {% endif %}
     	   // always delete the session flag after using it
-    	   var x = "{{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }}";
+
+            //TODO: var x is not used. this may not be the right syntax. Tried just invoking it.
+    	   //var x = "{{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }}";
+             {{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }};
 
        }
               

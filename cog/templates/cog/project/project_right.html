@@ -38,12 +38,14 @@
           <div class="right_widget_header">Browse Projects</div>
 
           <ul class="yui-nav">
-
-              <li class="selected">&nbsp;&nbsp;<a href="tab1"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="tab2"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="tab3"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="tab3"><em><b>Tags</b></em></a>&nbsp;&nbsp;</li>
+              <!--// urls in the list below don't go anywhere. Some sort of link is required to get the javascript
+              to work, but it can be anything. It shows up in the hover, so it is made descriptive. -->
+              <li class="selected">&nbsp;&nbsp;<a href="/project_browser/this/"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/all/"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/my/"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/tags/"><em><b>Tags</b></em></a>&nbsp;&nbsp;</li>
           </ul>
+           <!-- actual list of projects under their accordions -->
           <div class="yui-content">
               <div id="thisProjectsBrowser">&nbsp;</div>
               <div id="allProjectsBrowser">&nbsp;</div>
@@ -81,7 +83,8 @@
 
 	                <input class="right_go" style="width:45px; margin:0; margin-left:1px;"
 	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
-	                   onclick="document.getElementById('projectBrowserText').value=''; loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
+	                   onclick="document.getElementById('projectBrowserText').value='';
+                               loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
 
                     <input class="right_go" style="float:right; margin:0;"
 	                   type="submit" value="Go" id="projectBrowserButton"
