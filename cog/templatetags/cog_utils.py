@@ -18,6 +18,7 @@ from cog.util.thumbnails import getThumbnailPath
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 import urlparse
+import string
 
 register = template.Library()
 
@@ -59,7 +60,11 @@ def index(project):
 
 @register.filter
 def settings_value(key):
-    '''Custom filter to access a settings value in a template.'''
+    """
+    Custom filter to access a settings value in a template.
+    :param key:
+    :return:
+    """
     return getattr(settings, key, '')
 
 
@@ -92,16 +97,13 @@ def list_bookmarks(project, user, autoescape=None):
 list_bookmarks.needs_autoescape = True
 
 
-# recursive function to build the folder hierarchy tree
+# recursive function to build the folder hierarchy tree for the current project and the project network (rollup)
 def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
 
     html = ""
     static_url = getattr(settings, "STATIC_URL", "static/")
 
-    # do NOT show folders that are empty (no bookmarks or no-sub-folders)
-    # always show the top-level folder
-    #if folder.name == TOP_FOLDER or folder.children() or folder.bookmark_set.all():
-    # only show active folders, always show the top-level folder
+    # always show the top-level folder and active folders
     if folder.name == TOP_FOLDER or folder.active:
 
         # this folder
@@ -109,7 +111,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             html += "<li class='expanded'>"
         else:
             html += "<li>"
-        html += "<div class='%s'>%s" % (icon, folder.name) #changed to a div, better behaved than span
+        html += "<div class='%s'>%s" % (icon, folder.name)  # changed to a div, better behaved than span
 
         # add edit/delete links, but not for pre-defined folders
         if not folder.isPredefined():
@@ -117,8 +119,10 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             updateurl = reverse('folder_update', args=[folder.project.short_name.lower(), folder.id])
             if hasUserPermission(user, folder.project):
                 html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
-                html += "<a href='" + deleteurl + "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
-                     + "'Are you sure you want to delete this folder (including all the bookmarks and folders it contains)?', this)\">Delete</a> ]"
+                html += "<a href='" + deleteurl + \
+                        "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
+                        + "'Are you sure you want to delete this folder (including all the bookmarks and folders it " \
+                          "contains)?', this)\">Delete</a> ]"
         html += "</div> "
 
         # this folder's children
@@ -127,6 +131,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         # display bookmarks
         project = folder.project
         bookmarks = folder.bookmark_set.all()
+
         # ensure that the bookmarks are returned in descending order of creation (or id).
         bookmarks_sorted = sorted(bookmarks, key=lambda _bookmark: _bookmark.id, reverse=True)
         for bookmark in bookmarks_sorted:
@@ -142,18 +147,32 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
                         "'Are you sure you want to delete this bookmark ?', this)\">Delete</a> ]"
             # display "Notes" link
             if bookmark.notes:
-                html += "&nbsp;&nbsp;[ <img src='%scog/img/notes_16x16.png' style='vertical-align:bottom;' /><a href='%s'> Notes</a> ]" % (static_url, reverse('post_detail', args=[bookmark.notes.id]))
+                html += "&nbsp;&nbsp;[ <img src='%scog/img/notes_16x16.png' style='vertical-align:bottom;' />" \
+                        "<a href='%s'> Notes</a> ]" % (static_url, reverse('post_detail', args=[bookmark.notes.id]))
             if bookmark.description:
                 html += "<br/>%s<br/>" % bookmark.description
             html += "</span></li>"
 
         # display sub-folders
-        for child in folder.children():
-            # recursion (do not expand children)
-            html += _folder_tree(child, user, esc, expanded=True)  # open by default all folders
+        # treat presentations and minutes differently. If any child folders are digital (e.g. years), we want to sort
+        #   its child folders in reverse order to keep the most recent folder on top.
+        # closing child folders by default
+        if (folder.name == "Presentations") or (folder.name == "Minutes"):
+            year = False
+            for child in folder.children():
+                if child.name.isdigit():
+                    year = True
+            if year:
+                for child in folder.children().order_by('-name'):  # sort folders reverse alphabetically
+                    html += _folder_tree(child, user, esc, expanded=False)  # closed by default
+            else:
+                for child in folder.children().order_by('name'):
+                    html += _folder_tree(child, user, esc, expanded=False)  # close by default
+        else:
+            for child in folder.children().order_by('name'):  # sort folders alphabetically
+                html += _folder_tree(child, user, esc, expanded=True)  # open by default all folders
 
         html += "</ul>"
-
         html += "</li>"
 
     return html
@@ -305,8 +324,10 @@ def numberOptions(lastNumber, selectedNumber):
 
 
 def getTopTabUrl(project, request):
-    ''' Returns the full URL of the top tab for the current request.
-        Example: request.path = "/projects/cog/aboutus/mission/" --> "/projects/cog/aboutus/". '''
+    """
+    Returns the full URL of the top tab for the current request.
+    Example: request.path = "/projects/cog/aboutus/mission/" --> "/projects/cog/aboutus/".
+    """
 
     # "/projects/cog/"
     homeurl = project.home_page_url()
@@ -380,6 +401,7 @@ def getTopTabStyle(tablist, selected):
             return mark_safe("style='color:#358C92; background-color: #FFFFFF'")
     else:
         return ""
+
 
 @register.filter
 def getSubTabStyle(tablist, tab):
@@ -618,7 +640,9 @@ def dataCartContains(user, item_identifier):
 
 @register.filter
 def showMessage(message):
-    '''Utility filter to translate message code into message strings.'''
+    """
+    Utility filter to translate message code into message strings.
+    """
 
     if message == 'password_reset':
         return 'A new password has been e-mailed to you. ' \
@@ -629,7 +653,6 @@ def showMessage(message):
 
     elif message == 'password_update':
         return 'Your password has been changed. Please login again.'
-        #return 'Thank you for changing your password.'
 
     elif message == 'user_reminder':
         return 'Your UserName and OpenID have been emailed to the address you provided.' \
@@ -657,6 +680,7 @@ def showMessage(message):
     else:
         return message
 
+
 @register.filter
 def is_error_msg(message):
     words = ["Invalid", "Error"]
@@ -679,15 +703,21 @@ def isLocal(user):
 def isRemote(user):
     return isUserRemote(user)
 
+
 @register.filter
 def get_domain(url):
-    '''Returns the domain part of a URL'''
+    """
+    Returns the domain part of a URL
+    """
     
     return urlparse.urlparse(url)[1]
 
+
 @register.filter
 def delete_from_session(session, key):
-    '''Deletes a named key from the user HTTP session.'''
+    """
+    Deletes a named key from the user HTTP session.
+    """
     
     if session.get(key, None):
         del session[key]

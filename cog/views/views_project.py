@@ -589,16 +589,16 @@ def project_browser(request, project_short_name, tab):
         if project is not None:
             # object that keeps track of successful invocations, if necessary
             display = DisplayStatus(True)  # open all sub-widgets by default
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Parent', 'parent_projects', display)
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Peer', 'peer_projects', display)
-            html += makeProjectBrowser(project, tab, tag, request.user, 'Child', 'child_projects', display)
+            html += render_project_list(project, tab, tag, request.user, 'Parent', 'parent_projects', display)
+            html += render_project_list(project, tab, tag, request.user, 'Peer', 'peer_projects', display)
+            html += render_project_list(project, tab, tag, request.user, 'Child', 'child_projects', display)
         else:
             html += '<div id="this_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
     elif tab == 'all':
-        html += makeProjectBrowser(project, tab, tag, request.user, None, 'all_projects', None)
+        html += render_project_list(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':
         if not request.user.is_anonymous():
-            html += makeProjectBrowser(project, tab, tag, request.user, None, 'my_projects', None)
+            html += render_project_list(project, tab, tag, request.user, None, 'my_projects', None)
         else:
             html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your ' \
                     'projects.</i></div>'
@@ -610,8 +610,8 @@ def project_browser(request, project_short_name, tab):
             if len(utags) > 0:
                 for utag in sorted(utags, key=lambda x: x.name):
                     #if tag==None or utag.name==tag:
-                    html += makeProjectBrowser(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name,
-                                               display, addDeleteLink=True)
+                    html += render_project_list(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name,
+                                               display, add_delete_link=True)
             else:
                 html += '<div id="tags_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
         else:
@@ -712,21 +712,22 @@ class DisplayStatus:
 # Utility method to create the HTML for the browse widget
 # example: project='cog', tab='tags', tagName=None, user=..., 
 # widgetName='MIP', widgetId='MIP_projects', displayStatus='open'
-def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displayStatus, addDeleteLink=False):
+def render_project_list(project, tab, tag_name, user, widget_name, widget_id, display_status, add_delete_link=False):
            
     # retrieve tag, if requested
     tag = None
-    tagError = None # keeps track of error in retrieving tag
-    if tagName is not None:
+    tag_error = None  # keeps track of error in retrieving tag
+    if tag_name is not None:
         try:
-            tag = ProjectTag.objects.get(name__iexact=tagName)
+            tag = ProjectTag.objects.get(name__iexact=tag_name)
+            print "tag in render_project_list = ", tag
         except ObjectDoesNotExist:
             # store error associated with non-existing tag
-            tagError = "Tag does not exist"
+            tag_error = "Tag does not exist"
     
     # list projects to include in widget
-    if tagError is None:
-        projects = listBrowsableProjects(project, tab, tag, user, widgetName)
+    if tag_error is None:
+        projects = listBrowsableProjects(project, tab, tag, user, widget_name)
     # list no projects if the tag is invalid
     else:
         projects = Project.objects.none()
@@ -735,30 +736,31 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
     html = ""
     #if len(projects)>0:
     #    widgetDisplay = 'block'
-    if widgetName is not None:
-        html += '<div class="project_browser_bar" id="%s_bar">' % widgetId
-        if addDeleteLink:
-            html += "<a href='javascript:deleteUserTag(\"%s\");' class='deletelink'>&nbsp;</a>" % widgetName
-        if widgetName in ['Parent', 'Child', 'Peer']:
-            html += '%s (%s) projects' % (widgetName, str(len(projects)))
+    if widget_name is not None:
+        html += '<div class="project_browser_bar" id="%s_bar">' % widget_id
+        # add the ability to delete an accordion/tag
+        if add_delete_link:
+            html += "<a href='javascript:deleteUserTag(\"%s\");' class='deletelink'>&nbsp;</a>" % widget_name
+        if widget_name in ['Parent', 'Child', 'Peer']:
+            html += '%s (%s) projects' % (widget_name, str(len(projects)))
         else:
-            html += '%s (%s)' % (widgetName, str(len(projects)))  # shorter title
+            html += '%s (%s)' % (widget_name, str(len(projects)))  # shorter title
         html += '</div>'
     
     # determine widget status (depending on previous invocations)
     display = 'block'
-    if displayStatus is not None:
-        if displayStatus.open and len(projects) > 0:
+    if display_status is not None:
+        if display_status.open and len(projects) > 0:
             display = 'block'
-            #displayStatus.open = False # close all following widgets
+            #display_status.open = False # close all following widgets
         else:
             display = 'none'
 
     # height of individual project widgets
-    html += '<div id="'+widgetId+'" style="display:'+display+'; margin-left:4px;">'
+    html += '<div id="'+widget_id+'" style="display:'+display+'; margin-left:4px;">'
     if len(projects) == 0:
-        if tagError is not None:
-            html += "<i>"+tagError+"</i>"
+        if tag_error is not None:
+            html += "<i>"+tag_error+"</i>"
         else:
             # special case: cannot retrieve list of projects for guest user
             if (tab == 'my' or tab == 'tags') and not user.is_authenticated():
@@ -780,7 +782,7 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
 
 # Utility method to list the projects for the browse widget
 def listBrowsableProjects(project, tab, tag, user, widgetName):
-            
+    projects = []    #empty list
     if tab == 'this':
         # note: reserved values for widget names
         if widgetName == 'Parent':

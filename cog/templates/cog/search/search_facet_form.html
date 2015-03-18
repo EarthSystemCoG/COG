@@ -16,7 +16,7 @@
 	        </tr>
             <tr>
                 <td valign="top" nowrap="nowrap">&nbsp;</td>
-                <td class="long"><i>The metadata key used by the search engine</i></td>
+                <td class="long"><i>The metadata key used by the search engine. Available keys and associated values are listed below. </i></td>
             </tr>	        
 	        <tr>
 	            <td valign="top" nowrap="nowrap"><b>Facet Label</b></td>
@@ -24,7 +24,7 @@
 	        </tr>
 	        <tr>
                 <td valign="top" nowrap="nowrap">&nbsp;</td>
-                <td class="long"><i>The facet label displayed in the user interface</i></td>
+                <td class="long"><i>The facet label displayed in the user interface.</i></td>
             </tr>           
             <tr>
                 <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
@@ -49,7 +49,7 @@
 	    <!-- list search facets  -->
 	    <div class="mybox">
             <table>
-                <caption>Available Search Facet Keys, Values</caption>
+                <caption>Available search facet keys, their associated values.</caption>
                 {% for keyAndFacet in facets|sortdict %}
                 	<!-- only display facets that have some values -->
                 	{% if keyAndFacet.1.values %}

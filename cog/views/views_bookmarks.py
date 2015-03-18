@@ -11,6 +11,7 @@ from constants import PERMISSION_DENIED_MESSAGE, BAD_REQUEST
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from views_post import post_add
 
+
 def _hasBookmarks(project):
     """Function to determine whether a project has associated bookmarks."""
     
@@ -19,8 +20,11 @@ def _hasBookmarks(project):
         return True
     else:
         return False
-    
+
+
 def bookmark_list(request, project_short_name):
+
+    #order of bookmarks occurs in /forms_bookmarks.py
         
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -53,9 +57,10 @@ def bookmark_list(request, project_short_name):
 
     return render_to_response('cog/common/rollup.html', 
                               {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name': template_form_name,
+                               'template_page': template_page, 'template_title': template_title, 'template_form_name':
+                                  template_form_name,
                                'children': children, 'peers': peers},
-                               context_instance=RequestContext(request))
+                              context_instance=RequestContext(request))
 
     
 # View to add a bookmark via a standard web form
@@ -93,7 +98,8 @@ def bookmark_add(request, project_short_name):
         else:
             print 'Form is invalid: %s' % form.errors
             return render_bookmark_form(request, project, form) 
-                            
+
+
 # View to add a bookmark via an ajax call through a pop-up window
 @login_required
 def bookmark_add2(request, project_short_name):
@@ -133,6 +139,7 @@ def bookmark_add2(request, project_short_name):
                 
     return HttpResponse(json.dumps(response_data), content_type='application/json')    
 
+
 # View to delete a bookmark
 @login_required
 def bookmark_delete(request, project_short_name, bookmark_id):
@@ -155,6 +162,7 @@ def bookmark_delete(request, project_short_name, bookmark_id):
     # redirect to bookmarks view
     return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
 
+
 # View to update a bookmark
 @login_required
 def bookmark_update(request, project_short_name, bookmark_id):
@@ -166,7 +174,7 @@ def bookmark_update(request, project_short_name, bookmark_id):
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
         
-    if request.method=='GET':
+    if request.method == 'GET':
         # create form object from model
         form = BookmarkForm(project, instance=bookmark)
         # return to view
@@ -182,7 +190,7 @@ def bookmark_update(request, project_short_name, bookmark_id):
             bookmark = form.save()
             
             # redirect to bookmarks listing
-            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()] ))
+            return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
             
         else:
             print "Form is invalid: %s" % form.errors
@@ -201,7 +209,7 @@ def folder_add(request, project_short_name):
     if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if request.method=='GET':
+    if request.method == 'GET':
         
         # create empty Folder object, pre-populate project and user
         folder = Folder()
@@ -236,6 +244,7 @@ def folder_add(request, project_short_name):
             print "Form is invalid: %s" % form.errors
             return render_folder_form(request, project, form) 
 
+
 @login_required
 def folder_update(request, project_short_name, folder_id):
     
@@ -246,7 +255,7 @@ def folder_update(request, project_short_name, folder_id):
     if not userHasUserPermission(request.user, folder.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
-    if request.method=='GET':
+    if request.method == 'GET':
         form = FolderForm(folder.project, instance=folder)
         return render_folder_form(request, folder.project, form)
     
@@ -269,6 +278,7 @@ def folder_update(request, project_short_name, folder_id):
             print "Form is invalid: %s" % form.errors
             return render_folder_form(request, folder.project, form) 
 
+
 @login_required
 def folder_delete(request, project_short_name, folder_id):
     
@@ -290,6 +300,7 @@ def folder_delete(request, project_short_name, folder_id):
     # redirect to project folder
     return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
 
+
 # utility function to recursively delete each folder
 # together with its content
 def delete_folder(folder):
@@ -307,11 +318,13 @@ def delete_folder(folder):
     print 'Deleting folder=%s' % folder
     folder.delete()
 
+
 def render_folder_form(request, project, form):
-    return render_to_response('cog/bookmarks/folder_form.html', 
-        {'project': project, 'form': form, 'title': 'Resource Folder Form'},
-        context_instance=RequestContext(request))
-    
+    return render_to_response('cog/bookmarks/folder_form.html',
+                              {'project': project, 'form': form, 'title': 'Resource Folder Form'},
+                              context_instance=RequestContext(request))
+
+
 def render_bookmark_form(request, project, form):
     return render_to_response('cog/bookmarks/bookmark_form.html', 
                               {'project': project, 'form': form, 'title': 'Resource Form'},
