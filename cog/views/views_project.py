@@ -772,7 +772,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
         for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):
             #project_url = "http://%s%s" % (prj.site.domain, reverse('project_home', args=[prj.short_name.lower()]))
             html += '<a href="' + prj.getAbsoluteUrl() 
-            html += '" onmouseover="tooltip.show(\'' + prj.long_name + '\', 200);" onmouseout="tooltip.hide();">' 
+            html += '" onmouseover="tooltip.show(this,\'' + prj.long_name + '\', 200);" onmouseout="tooltip.hide();">' 
             html +=  prj.short_name + '</a><br/>'
     html += '</div>'
 

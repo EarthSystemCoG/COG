@@ -133,11 +133,9 @@
     	   {% if request.session.PROJECT_BROWSER_TAB %}
     	   		gotoTab( parseInt( "{{ request.session.PROJECT_BROWSER_TAB }}") );
     	   {% endif %}
+    	   
     	   // always delete the session flag after using it
-
-            //TODO: var x is not used. this may not be the right syntax. Tried just invoking it.
-    	   //var x = "{{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }}";
-             {{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }};
+    	   var x = "{{ request.session|delete_from_session:'PROJECT_BROWSER_TAB' }}";
 
        }
               
