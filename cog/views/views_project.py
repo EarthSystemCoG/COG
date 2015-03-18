@@ -769,7 +769,9 @@ def makeProjectBrowser(project, tab, tagName, user, widgetName, widgetId, displa
         # loop over projects sorted by name
         for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):
             #project_url = "http://%s%s" % (prj.site.domain, reverse('project_home', args=[prj.short_name.lower()]))
-            html += '<a href="' + prj.getAbsoluteUrl() + '">' + prj.short_name + '</a><br/>'
+            html += '<a href="' + prj.getAbsoluteUrl() 
+            html += '" onmouseover="tooltip.show(\'' + prj.long_name + '\', 200);" onmouseout="tooltip.hide();">' 
+            html +=  prj.short_name + '</a><br/>'
     html += '</div>'
 
     # return both the HTML and the 'open' status of the following widget
