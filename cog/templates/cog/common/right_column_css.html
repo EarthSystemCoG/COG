@@ -125,8 +125,8 @@
 			   callback.argument[0] = tabs[i]+"ProjectsBrowser";
 
 			   // execute asynchronous GET request
-			   //var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
-                 YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+			   var transaction = YAHOO.util.Connect.asyncRequest('GET', url, callback, null);
+
     	   }
     	   
     	   // check session flag to preselect a tab
