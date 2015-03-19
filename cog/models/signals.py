@@ -48,22 +48,22 @@ def update_user_projects(user):
         
         # update information in local database
         for (project, roles) in projTuples:
-            print 'Updating membership for user: %s project: %s' % (user.profile.openid(), project.short_name)   
-            print '\tproject=%s' % project.short_name
-            for role in roles:
-                print '\t\tnew role=%s' % role
+            #print 'Updating membership for user: %s project: %s' % (user.profile.openid(), project.short_name)   
+            #print '\tproject=%s' % project.short_name
+            #for role in roles:
+            #    print '\t\tnew role=%s' % role
                     
             # remove all current memberships for this user, project
             for group in project.getGroups():
-                print '\tremoving group=%s' % group
+                #print '\tremoving group=%s' % group
                 user.groups.remove( group )
                 
             # insert new memberships for this user, project
             for role in roles:
                 group = project.getGroup(role)
-                print '\tchecking role=%s group=%s' % (role, group)
+                #print '\tchecking role=%s group=%s' % (role, group)
                 if not group in user.groups.all():
-                    print '\\tassigning role=%s group=%s' % (role, group)
+                    #print '\tassigning role=%s group=%s' % (role, group)
                     user.groups.add(group) 
                                    
         # persist changes to local database
