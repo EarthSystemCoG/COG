@@ -4,16 +4,21 @@
     <!--clear:both added to move the last update down if any elements above are floated.-->
     <!--clear:both means no floating elements allowed on either the left or the right side-->
 	<div id="last_update_text" style="font-size: 8pt; font-style: italic; text-align:center; clear:both;">
-	     Last Update: {{ post.update_date }} by {{ post.author.get_full_name }}
+	     Last Update: {{ post.update_date }} by
+         {% if post.author.id %}
+             <a href="{% url 'user_detail' post.author.id %}">{{ post.author.get_full_name }}</a>
+         {% else %}
+             {{ post.author.get_full_name }}
+         {% endif %}
 	</div> <!--// end div id="last_update_text" //-->
-        {% if request.user|canPost:post %}
+
+    {% if request.user|canPost:post %}
         <div id="page_actions_box" style="text-align:center">
-	   <hr/>
-	   <a href="{% url 'post_update' post.id %}" class="changelink">&nbsp;Update {{ post.type|capfirst }}</a>&nbsp;&nbsp;
-	   <a href="{% url 'doc_add' post.project.short_name.lower %}?redirect={% url 'post_add_doc' post.id %}" class="addlink">Add File</a>&nbsp;&nbsp;
-           <a href="{% url 'post_add' post.project.short_name.lower %}?type={{ post.type }}&amp;parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }}</a>&nbsp;&nbsp;
-           
-           {% if user|hasUserPermission:post.project %}
+	    <hr/>
+	    <a href="{% url 'post_update' post.id %}" class="changelink">&nbsp;Update {{ post.type|capfirst }}</a>&nbsp;&nbsp;
+	    <a href="{% url 'doc_add' post.project.short_name.lower %}?redirect={% url 'post_add_doc' post.id %}" class="addlink">Add File</a>&nbsp;&nbsp;
+        <a href="{% url 'post_add' post.project.short_name.lower %}?type={{ post.type }}&amp;parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }}</a>&nbsp;&nbsp;
+            {% if user|hasUserPermission:post.project %}
                 {% if not post.is_predefined %}
                     <a href="{% url 'post_delete' post.id %}" class="deletelink">Delete {{ post.type|capfirst }}</a>&nbsp;&nbsp;
                 {% endif %}  
@@ -22,8 +27,7 @@
             {% if post.is_private %}
 	        	<span class='privatelink'>&nbsp;This page is not publicly viewable</span>
 	      	{% endif %}      
-	      	
-        </div> <!--// end div id="page_actions_box" //-->          
+        </div> <!--// end div id="page_actions_box" //-->
     {% endif %}
 {% endif %}
 <!--// END: /cog/templates/cog/post/_post_actions.html //-->
