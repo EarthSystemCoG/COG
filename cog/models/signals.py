@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
-from cog.models import UserProfile, ProjectTag
+from cog.models import UserProfile, ProjectTag, getProjectForGroup
 from cog.utils import getJson
 from cog.views.utils import get_all_projects_for_user
 from django.core.exceptions import ObjectDoesNotExist
@@ -43,32 +43,39 @@ def update_user_projects(user):
 
     if user.is_authenticated():
         
+        # current user groups in local database
+        ugroups = user.groups.all()
+         
         # retrieve map of (project, groups) for this user
         projTuples = get_all_projects_for_user(user, includeCurrentSite=False)
         
-        # update information in local database
+        # add new memberships for remote projects
+        remoteGroups = [] # updated list of remote groups
         for (project, roles) in projTuples:
-            #print 'Updating membership for user: %s project: %s' % (user.profile.openid(), project.short_name)   
-            #print '\tproject=%s' % project.short_name
-            #for role in roles:
-            #    print '\t\tnew role=%s' % role
-                    
-            # remove all current memberships for this user, project
-            for group in project.getGroups():
-                #print '\tremoving group=%s' % group
-                user.groups.remove( group )
-                
-            # insert new memberships for this user, project
+            print 'Updating membership for user: %s project: %s roles: %s' % (user.profile.openid(), project.short_name, roles)
+            
             for role in roles:
                 group = project.getGroup(role)
-                #print '\tchecking role=%s group=%s' % (role, group)
-                if not group in user.groups.all():
-                    #print '\tassigning role=%s group=%s' % (role, group)
-                    user.groups.add(group) 
-                                   
+                remoteGroups.append(group)
+                if not group in ugroups:
+                    print 'Adding group: %s to user: %s' % (group, user)
+                    user.groups.add(group)
+                   
+        # persist changes to local database 
+        user.save()
+                    
+        # remove old memberships for remote projects
+        for group in user.groups.all():
+            project = getProjectForGroup(group)
+            # do not change local projects
+            if not project.isLocal():
+                if not group in remoteGroups:
+                    print 'Removing group: %s from user: %s' % (group, user)
+                    user.groups.remove( group )
+            
         # persist changes to local database
         user.save()
-        
+                                                   
 def update_user_tags(user):
     '''Function to update the user tags from their home site.'''
     
