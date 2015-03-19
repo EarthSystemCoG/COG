@@ -1,13 +1,18 @@
 {% extends "cog/common/layout_sidebar_center.html" %}
 
 {% block main %}
-
-	{% load cog_utils %}
+    {% load cog_utils %}
 	
-    <p/>   
+    <p>
     <div align="center" class="mybox">
         <table>
-            <caption>Uploaded by {{ doc.author }} on {{ doc.publication_date|date:"d M Y, H:m" }}, last update: {{ doc.update_date|timesince }} ago.</caption>
+            <caption>Uploaded by
+                {% if doc.author.username %}
+                    <a href="{% url 'user_detail' doc.author.id %}">{{ doc.author }}</a>
+                {% else %}
+                    {{ doc.author }}
+                {% endif %}
+                on {{ doc.publication_date|date:"d M Y, H:m" }}, last update: {{ doc.update_date|timesince }} ago.</caption>
             <tr>
                 <td class="head">Title</td>
                 <td>{{ doc.title }}</td>
