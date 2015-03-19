@@ -8,65 +8,59 @@
 	{% if organizational_roles %}
 
 		<!-- header -->
-		<hr/>
+		<hr style="background-color:#D3D3D3"/>
 		<b>{{category}} Organizational Roles</b>
 
-		<table>
+		<table class="no-color">
 			{% for role in organizational_roles %}
-				<tr>
+                <tr>
 					<td>
 						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
 							<tr>
 								<td style="text-align: right; width: 150px;">
-                                       <b>{{role.type}}</b>
+                                    <b>{{role.type}}</b> <!-- controlled vocab -->
                                 <td>
-                                       {% if role.title %}   <!-- optional text -->
-                                               {{role.title}}:
-                                       {% endif %}
-                                </td>
-
-                            </tr>
-
-
-
-									{% if role.members.all %}
-                                    <tr>
-                                    <td style="text-align: right;">
-                                        Members:
-                                    </td>
-                                    <td>
-                                            <table>
-										        {% for member in role.members.all %}
-                                                     <tr>
-                                                           {% if member.user.username %}
-                                                               <td style="width:35px;">
-
-                                                                   <img src="{{ member.user|getThumbnail }}" style="width:35px;" />
-                                                               </td>
-                                                               <td style="vertical-align: middle;">
-                                                                   <a href="{% url 'user_detail' member.user.id %}">{{member.user.get_full_name}}</a>
-                                                               </td>
-                                                           {% else %}
-                                                               <td>
-                                                                  {{member.user.get_full_name}}
-                                                               </td>
-                                                           {% endif %}
-                                                        </td>
-                                                     </tr>
-                                                {% endfor %}
-                                            </table>
-                                    </td>
-                                    </tr>
+                                    {% if role.title %}   <!-- optional text -->
+                                        {{role.title}}
                                     {% endif %}
                                 </td>
-							{% if role.description %}
-							<tr>
-								<td class="leftcolumn">Description</td>
-								<td colspan="2">{{role.description|urlizetrunc:50|linebreaksbr}}</td>
-							</tr>
-							{% endif %}
-						</table>
+                            </tr>
 
+                            {% if role.description %}
+							    <tr>
+								    <td class="leftcolumn">Description</td>
+								    <td colspan="2">{{role.description|urlizetrunc:50|linebreaksbr}}</td>
+							    </tr>
+							{% endif %}
+
+						    {% if role.members.all %}
+                                <tr>
+                                    <td style="text-align: right;">
+                                        Personnel:
+                                    </td>
+                                    <td>
+                                        <table>
+										    {% for member in role.members.all %}
+                                                <tr>
+                                                    {% if member.user.username %}
+                                                        <td style="width:35px;">
+                                                            <img src="{{ member.user|getThumbnail }}" style="width:35px;" />
+                                                        </td>
+                                                        <td style="vertical-align: top;">
+                                                            <a href="{% url 'user_detail' member.user.id %}">{{member.user.get_full_name}}</a>
+                                                        </td>
+                                                    {% else %}
+                                                        <td>
+                                                            {{member.user.get_full_name}}
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </td>
+                                </tr>
+                            {% endif %}
+						</table>
 					</td>
 				</tr>
 			{% endfor %}
