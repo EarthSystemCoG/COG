@@ -466,6 +466,13 @@ def get_organizational_roles(project, category):
 
 
 @register.filter
+def get_profile_image_url(obj):
+    getThumbnailById(obj,type=type)
+    profile_img_url = UserProfile.objects.get(id=obj).image
+    return profile_img_url
+
+
+@register.filter
 def get_management_bodies(project, category):
 
     return getManagementBodies(project, category)
@@ -589,6 +596,7 @@ def getThumbnail(user):
 
     imagePath = getImage(user)
     thumbnailPath = getThumbnailPath(imagePath)
+    print thumbnailPath
     return thumbnailPath
 
 

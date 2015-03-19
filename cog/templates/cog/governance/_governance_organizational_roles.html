@@ -17,18 +17,52 @@
 					<td>
 						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
 							<tr>
-								<td class="leftcolumn"><b>{{role.type}}</b></td>
-								<td>
-									{% if role.title %} {{role.title}}: {% endif %}
+								<td style="text-align: right; width: 150px;">
+                                       <b>{{role.type}}</b>
+                                <td>
+                                       {% if role.title %}   <!-- optional text -->
+                                               {{role.title}}:
+                                       {% endif %}
+                                </td>
+
+                            </tr>
+
+
+
 									{% if role.members.all %}
-										{% for member in role.members.all %}{% if forloop.counter > 1 %}, {% endif %}{{member.user.get_full_name}}{% endfor %}
-									{% endif %}
-								</td>
-							</tr>
+                                    <tr>
+                                    <td style="text-align: right;">
+                                        Members:
+                                    </td>
+                                    <td>
+                                            <table>
+										        {% for member in role.members.all %}
+                                                     <tr>
+                                                           {% if member.user.username %}
+                                                               <td style="width:35px;">
+
+                                                                   <img src="{{ member.user|getThumbnail }}" style="width:35px;" />
+                                                               </td>
+                                                               <td style="vertical-align: middle;">
+                                                                   <a href="{% url 'user_detail' member.user.id %}">{{member.user.get_full_name}}</a>
+                                                               </td>
+                                                           {% else %}
+                                                               <td>
+                                                                  {{member.user.get_full_name}}
+                                                               </td>
+                                                           {% endif %}
+                                                        </td>
+                                                     </tr>
+                                                {% endfor %}
+                                            </table>
+                                    </td>
+                                    </tr>
+                                    {% endif %}
+                                </td>
 							{% if role.description %}
 							<tr>
 								<td class="leftcolumn">Description</td>
-								<td>{{role.description|urlizetrunc:50|linebreaksbr}}</td>
+								<td colspan="2">{{role.description|urlizetrunc:50|linebreaksbr}}</td>
 							</tr>
 							{% endif %}
 						</table>
