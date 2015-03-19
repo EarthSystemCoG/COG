@@ -26,7 +26,12 @@
     					<br/>
     					Started by {{ thread.author }} on {{ thread.create_date }}, {{ comment_count }} comments.
 	    				{% if comment_count > 0 %}
-	    					Last comment on {{ thread.get_last_comment.submit_date }} by {{ thread.get_last_comment.user }}.
+	    					Last comment on {{ thread.get_last_comment.submit_date }} by
+                            {% if thread.get_last_comment.user %}
+                                <a href="{% url 'user_detail' thread.get_last_comment.user.id %}">{{ thread.get_last_comment.user }}</a>
+                            {% else %}
+                                {{ thread.get_last_comment.user }}
+                            {% endif %}
 	    				{% endif %}
     				</td>
     			</tr>
