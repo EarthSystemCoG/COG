@@ -21,7 +21,12 @@
 		<div class="mybox">
 		   <div id="comment_{{ comment.id }}" class="box-comment2">
 		       <div class="caption">
-		       		{{ comment.name|escape }}, on {{ comment.submit_date }}
+                   {% if comment.user_name %}
+                       <a href="{% url 'user_detail' comment.user.id %}">{{ comment.name|escape }}</a>,
+                   {% else %}
+                       {{ comment.name|escape }},
+                   {% endif %}
+                   on {{ comment.submit_date }}
 		       		<!-- comments can only be deleted by the original authors, or project administrators -->
 		       		{% if request.user == comment.user or request.user|hasAdminPermission:project %}
 			       		<span style='float:right'>

@@ -589,6 +589,7 @@ def getThumbnail(user):
 
     imagePath = getImage(user)
     thumbnailPath = getThumbnailPath(imagePath)
+    print thumbnailPath
     return thumbnailPath
 
 

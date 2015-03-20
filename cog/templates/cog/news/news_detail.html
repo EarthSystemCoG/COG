@@ -9,11 +9,17 @@
 		    <table>
 		       <caption>{{news.project.short_name}}: {{ news.title }}</caption>
 		        <tr>
-		           <td class="long"> {{ news.text|urlizetrunc:100|linebreaksbr }} </td>
+		            <td class="long"> {{ news.text|urlizetrunc:100|linebreaksbr }} </td>
 		        </tr>	        
 		        <tr>
-		          <td>
-		          	<i>{{news.update_date|date:"SHORT_DATETIME_FORMAT"}} by {{ news.author }}</i>
+		            <td>
+		          	    <i>{{news.update_date|date:"SHORT_DATETIME_FORMAT"}} by
+                            {% if news.author.username %}
+                                <a href="{% url 'user_detail' news.author.id %}">{{ news.author }}</a>
+                            {% else %}
+                                {{ news.author }}
+                            {% endif %}
+                    </i>
 		          	<!-- links to update, delete the news -->
                     {% if user|hasUserPermission:news.project %}
                   		<div style="float:right">
@@ -25,8 +31,7 @@
 		        </tr>
 		    </table>
 	    </div>
-  
-        <p/>
+        <p>
         <a href="{% url 'news_list' project.short_name.lower %}">More Project News &raquo;</a>    
 
 {% endblock %}
