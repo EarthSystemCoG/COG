@@ -8,6 +8,7 @@ import abc
 #import pycurl
 #import certifi
 from cog.utils import file_modification_datetime
+from django.conf import settings
 
 NS = "http://www.esgf.org/whitelist"
 
@@ -38,34 +39,51 @@ class KnownProvidersDict(object):
 class LocalKnownProvidersDict(KnownProvidersDict):
     '''Implementation of KnownProvidersDict based on a local XML configuration file.'''
     
-    def __init__(self, filepath):
-        
-        # store filepath and its last access time
-        self.filepath = filepath
-        self.modtime = file_modification_datetime(self.filepath)
+    def __init__(self):
         
         # internal dictionary of known identity providers
         self.idps = {} # (IdP name, IdP url)
         
-        # first load dictionary at startup
-        self._reload(self.filepath, force=True)
+        try:
+            
+            # store filepath and its last access time
+            self.filepath = settings.KNOWN_PROVIDERS
+            self.modtime = file_modification_datetime(self.filepath)
+            
+            # first load dictionary at startup
+            self._reload(force=True)
+            
+            # file of known providers is found
+            self.init = True
+            
+        except AttributeError:
+            # no entry in $COG_CONFIG_DIR/cog_settings.cfg
+            self.init = False
+            
+        except OSError:
+            # OSError: [Errno 2] No such file or directory: '/esg/config/esgf_known_providers.xml'
+            self.init = False
         
     def idpDict(self):
+        
+        # reload dictionary from file ?
+        self._reload()
+        
         return self.idps
         
-    def _reload(self, filepath, force=False):
+    def _reload(self, force=False):
         '''Internal method to reload the dictionary of known IdPs if it has changed since it was last read'''
 
-        modtime = file_modification_datetime(filepath)
+        modtime = file_modification_datetime(self.filepath)
 
         if force or modtime > self.modtime:
 
-            print 'Loading known IdPs from file: %s, last modified: %s' % (filepath, modtime)
+            print 'Loading known IdPs from file: %s, last modified: %s' % (self.filepath, modtime)
             self.modtime = modtime
             idps = {}
 
             # read whitelist
-            with open (filepath, "r") as myfile:
+            with open (self.filepath, "r") as myfile:
                 xml=myfile.read().replace('\n', '')
 
             # <OPS>
