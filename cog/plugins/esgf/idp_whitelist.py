@@ -25,6 +25,64 @@ class WhiteList(object):
     def trust(self, openid):
         '''Returns true if an openid can be trusted, false otherwise.'''
         pass
+    
+class KnownProvidersDict(object):
+    
+    __metaclass__ = abc.ABCMeta
+    
+    @abc.abstractmethod
+    def idpDict(self):
+        '''Returns a dictionary of (IdP name, IdP URL) pairs.''' 
+        pass
+    
+class LocalKnownProvidersDict(KnownProvidersDict):
+    '''Implementation of KnownProvidersDict based on a local XML configuration file.'''
+    
+    def __init__(self, filepath):
+        
+        # store filepath and its last access time
+        self.filepath = filepath
+        self.modtime = file_modification_datetime(self.filepath)
+        
+        # internal dictionary of known identity providers
+        self.idps = {} # (IdP name, IdP url)
+        
+        # first load dictionary at startup
+        self._reload(self.filepath, force=True)
+        
+    def idpDict(self):
+        return self.idps
+        
+    def _reload(self, filepath, force=False):
+        '''Internal method to reload the dictionary of known IdPs if it has changed since it was last read'''
+
+        modtime = file_modification_datetime(filepath)
+
+        if force or modtime > self.modtime:
+
+            print 'Loading known IdPs from file: %s, last modified: %s' % (filepath, modtime)
+            self.modtime = modtime
+            idps = {}
+
+            # read whitelist
+            with open (filepath, "r") as myfile:
+                xml=myfile.read().replace('\n', '')
+
+            # <OPS>
+            root = fromstring(xml)
+            
+            #  <OP>
+            #    <NAME>NASA Jet Propulsion Laboratory (JPL)</NAME>
+            #    <URL>https://esg-datanode.jpl.nasa.gov/esgf-idp/openid/</URL>
+            #  </OP>
+            for idp in root.findall("OP"):
+                name = idp.find('NAME').text
+                url = idp.find('URL').text
+                idps[name] = url
+                print 'Using known IdP: name=%s url=%s' % (name, url)
+
+            # switch the dictionary of knwon providers
+            self.idps = idps
 
 class LocalWhiteList(WhiteList):
     '''Whitelist implementation that reads the list of trusted IdPs

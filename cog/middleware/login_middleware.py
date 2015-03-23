@@ -8,15 +8,19 @@ and redirect to the authentication page with informative error messages.
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from cog.plugins.esgf.idp_whitelist import LocalWhiteList
+from cog.plugins.esgf.idp_whitelist import LocalWhiteList, LocalKnownProvidersDict
 
 class LoginMiddleware(object):
 
     def __init__(self):
 
-        # initialize the white list service
+        
         try:
+            # initialize the white list service
             self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
+            
+            # initialize the dictionary of known identity providers
+            self.knownProviders = LocalKnownProvidersDict(settings.KNOWN_PROVIDERS)
     
             # login URLs
             self.url1 = "/login/"

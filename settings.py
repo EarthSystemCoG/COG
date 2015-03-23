@@ -45,6 +45,8 @@ ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
 print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
 IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
 print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
+KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
+print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
 
 # FIXME
 # ESGF specific settings

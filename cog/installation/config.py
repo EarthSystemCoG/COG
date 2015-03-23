@@ -30,7 +30,8 @@ import time
 
 from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, 
-                       IDP_WHITELIST, DEFAULT_PROJECT_SHORT_NAME)
+                       IDP_WHITELIST, KNOWN_PROVIDERS,
+                       DEFAULT_PROJECT_SHORT_NAME)
 
 
 # location of site specific settings configuration file
@@ -166,6 +167,8 @@ class CogConfig(object):
         self._safeSet('ALLOWED_HOSTS', hostName)
         # IDP_WHITELIST = /esg/config/esgf_idp.xml, /esg/config/esgf_idp_static.xml
         self._safeSet('IDP_WHITELIST', IDP_WHITELIST)
+        # KNOWN_PROVIDERS = /esg/config/esgf_known_providers.xml
+        self._safeSet('KNOWN_PROVIDERS', KNOWN_PROVIDERS)
         
         #[ESGF]
         if self.esgf:
