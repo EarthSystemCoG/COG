@@ -9,6 +9,7 @@ import abc
 #import certifi
 from cog.utils import file_modification_datetime
 from django.conf import settings
+import os
 
 NS = "http://www.esgf.org/whitelist"
 
@@ -41,28 +42,27 @@ class LocalKnownProvidersDict(KnownProvidersDict):
     
     def __init__(self):
         
-        # internal dictionary of known identity providers
+        # internal dictionary of known identity providers (empty by default)
         self.idps = {} # (IdP name, IdP url)
+        self.init = False
         
         try:
             
             # store filepath and its last access time
-            self.filepath = settings.KNOWN_PROVIDERS
-            self.modtime = file_modification_datetime(self.filepath)
+            self.filepath = str(settings.KNOWN_PROVIDERS)
             
-            # first load dictionary at startup
-            self._reload(force=True)
-            
-            # file of known providers is found
-            self.init = True
+            if os.path.exists(self.filepath):
+                
+                self.init = True # file of known providers is found
+                self.modtime = file_modification_datetime(self.filepath)
+                
+                # load dictionary at startup
+                self._reload(force=True)
             
         except AttributeError:
             # no entry in $COG_CONFIG_DIR/cog_settings.cfg
-            self.init = False
+            pass
             
-        except OSError:
-            # OSError: [Errno 2] No such file or directory: '/esg/config/esgf_known_providers.xml'
-            self.init = False
         
     def idpDict(self):
         
@@ -73,33 +73,35 @@ class LocalKnownProvidersDict(KnownProvidersDict):
     def _reload(self, force=False):
         '''Internal method to reload the dictionary of known IdPs if it has changed since it was last read'''
 
-        modtime = file_modification_datetime(self.filepath)
-
-        if force or modtime > self.modtime:
-
-            print 'Loading known IdPs from file: %s, last modified: %s' % (self.filepath, modtime)
-            self.modtime = modtime
-            idps = {}
-
-            # read whitelist
-            with open (self.filepath, "r") as myfile:
-                xml=myfile.read().replace('\n', '')
-
-            # <OPS>
-            root = fromstring(xml)
+        if self.init: # file exists
             
-            #  <OP>
-            #    <NAME>NASA Jet Propulsion Laboratory (JPL)</NAME>
-            #    <URL>https://esg-datanode.jpl.nasa.gov/esgf-idp/openid/</URL>
-            #  </OP>
-            for idp in root.findall("OP"):
-                name = idp.find('NAME').text
-                url = idp.find('URL').text
-                idps[name] = url
-                print 'Using known IdP: name=%s url=%s' % (name, url)
-
-            # switch the dictionary of knwon providers
-            self.idps = idps
+            modtime = file_modification_datetime(self.filepath)
+    
+            if force or modtime > self.modtime:
+    
+                print 'Loading known IdPs from file: %s, last modified: %s' % (self.filepath, modtime)
+                self.modtime = modtime
+                idps = {}
+    
+                # read whitelist
+                with open (self.filepath, "r") as myfile:
+                    xml=myfile.read().replace('\n', '')
+    
+                # <OPS>
+                root = fromstring(xml)
+                
+                #  <OP>
+                #    <NAME>NASA Jet Propulsion Laboratory (JPL)</NAME>
+                #    <URL>https://esg-datanode.jpl.nasa.gov/esgf-idp/openid/</URL>
+                #  </OP>
+                for idp in root.findall("OP"):
+                    name = idp.find('NAME').text
+                    url = idp.find('URL').text
+                    idps[name] = url
+                    print 'Using known IdP: name=%s url=%s' % (name, url)
+    
+                # switch the dictionary of knwon providers
+                self.idps = idps
 
 class LocalWhiteList(WhiteList):
     '''Whitelist implementation that reads the list of trusted IdPs
