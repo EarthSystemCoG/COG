@@ -19,10 +19,6 @@ from django.contrib.sites.models import Site
 from cog.plugins.esgf.security import esgfDatabaseManager
 import datetime
 from cog.views.utils import set_openid_cookie, get_all_projects_for_user
-from cog.plugins.esgf.idp_whitelist import LocalKnownProvidersDict
-
-esgf_known_providers = LocalKnownProvidersDict()
-
 
 def redirectToIdp():
     if settings.IDP_REDIRECT is not None and len(settings.IDP_REDIRECT.strip()) > 0:

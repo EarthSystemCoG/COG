@@ -68,7 +68,6 @@ class LocalKnownProvidersDict(KnownProvidersDict):
         
         # reload dictionary from file ?
         self._reload()
-        
         return self.idps
         
     def _reload(self, force=False):

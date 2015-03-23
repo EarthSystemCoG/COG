@@ -19,9 +19,13 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 import urlparse
 import string
+from cog.views.utils import getKnownIdentityProviders
 
 register = template.Library()
 
+@register.filter
+def knownIdentityProviders(request):
+    return getKnownIdentityProviders().items()
 
 @register.filter
 def concat(astring, bstring):

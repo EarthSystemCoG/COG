@@ -24,13 +24,16 @@
 
 {% block extrahead %}
 
+  {% load cog_utils %}
+
   <script type="text/javascript">
   
-	var known_providers = {
-	 "NASA Jet Propulsion Laboratory": "https://esg-datanode.jpl.nasa.gov/esgf-idp/openid/", 
-	 "Test NASA Jet Propulsion Laboratory": "https://test-datanode.jpl.nasa.gov/esgf-idp/openid/", 
-	 "Centre for Environmental Data Archival (CEDA)": "https://ceda.ac.uk/openid/"
-	};  
+    // dictionary of known ESGF identity providers, loaded from local file
+    var known_providers = {}
+  
+	{% for idp_name, idp_url in request|knownIdentityProviders %}
+		known_providers['{{idp_name}}'] = '{{ idp_url }}'
+	{% endfor %}
   
 	function setIdP() {
 		var idp = document.getElementById('openid_identifier').value.trim();
@@ -46,17 +49,6 @@
 	
 	function init() {
 				
-		YAHOO.example.Data = {
-		
-			menu: {
-			    breakfasts: [
-			        "donuts",
-			        "yogurt"
-			    ],
-	
-			},
-		};
-		
 		YAHOO.example.Combobox = function() {
 		
 		    // Instantiate DataSources
