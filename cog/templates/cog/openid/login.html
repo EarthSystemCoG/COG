@@ -6,8 +6,8 @@
 	<style type="text/css">
 	
 		/* custom styles for inline instances */
-		.yui-skin-sam .yui-ac-input { position:static;width:20em; vertical-align:middle;}
-		.yui-skin-sam .yui-ac-container { width:20em;left:0px;}
+		.yui-skin-sam .yui-ac-input { position:static;width:33em; vertical-align:middle;}
+		.yui-skin-sam .yui-ac-container { width:33em;left:0px;}
 		
 		/* needed for stacked instances for ie & sf z-index bug of absolute inside relative els */
 		#bAutoComplete { z-index:9001; } 
@@ -54,7 +54,7 @@
 		        minQueryLength: 0,
 		        animVert: .01
 		    }
-		    var bAC = new YAHOO.widget.AutoComplete("bInput", "bContainer", bDS, oConfigs);
+		    var bAC = new YAHOO.widget.AutoComplete("openid_identifier", "bContainer", bDS, oConfigs);
 		    
 		    // Breakfast combobox
 		    var bToggler = YAHOO.util.Dom.get("toggleB");
@@ -159,7 +159,8 @@
 	<div style="font-style: italic; text-align:center;">
 		Please note that ESGF OpenIDs are case-sensitive.
  	</div>
-
+ 	
+	
 	<form name="fopenid" action="{% url 'openid-login' %}" method="post">
 		{% csrf_token %}
 
@@ -171,7 +172,12 @@
                   <label for="openid_identifier"><b>OpenID</b></label>
               </td>
 	    	  <td style="width:80%; vertical-align:middle;">
-	    			<input type="text" id="openid_identifier" alt="openid_identifier" name="openid_identifier" value="{{ request.COOKIES.openid }}" size="70"/>
+	    	  	<div id="bAutoComplete">
+	    	  		<span id="toggleB"></span>
+	    			<div id="bContainer"></div>
+	    			<input type="text" id="openid_identifier" alt="openid_identifier" 
+	    			       name="openid_identifier" value="{{ request.COOKIES.openid }}" size="33em"/>
+              	</div>
               </td>
     	      <td style="width:10%;">
                 <input name="bsignin" type="submit" value="Login"
@@ -200,14 +206,7 @@
 
 	</form>
 	
-	
-	<!-- FIXME -->
-	<label for="bInput">What would you like for breakfast?</label>
-	<div id="bAutoComplete">
-	    <input id="bInput" type="text"> <span id="toggleB"></span>
-		<div id="bContainer"></div>
-	</div>
-	
+		
   </div>
 </div><!--END:/cog/templates/cog/openid/login.html-->
 
