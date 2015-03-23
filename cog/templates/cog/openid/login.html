@@ -6,8 +6,8 @@
 	<style type="text/css">
 	
 		/* custom styles for inline instances */
-		.yui-skin-sam .yui-ac-input { position:static;width:33em; vertical-align:middle;}
-		.yui-skin-sam .yui-ac-container { width:33em;left:0px;}
+		.yui-skin-sam .yui-ac-input { position:static;width:32em; vertical-align:middle;}
+		.yui-skin-sam .yui-ac-container { width:32em;left:0px;}
 		
 		/* needed for stacked instances for ie & sf z-index bug of absolute inside relative els */
 		#bAutoComplete { z-index:9001; } 
@@ -25,16 +25,31 @@
 {% block extrahead %}
 
   <script type="text/javascript">
+  
+	var known_providers = {
+	 "NASA Jet Propulsion Laboratory": "https://esg-datanode.jpl.nasa.gov/esgf-idp/openid/", 
+	 "Centre for Environmental Data Archival (CEDA)": "https://ceda.ac.uk/openid/"
+	};  
+  
+	function setIdP() {
+		var idp = document.getElementById('openid_identifier').value.trim();
+		if (known_providers[idp]==null) {
+			// simply sanitize the entered openid
+			document.getElementById('openid_identifier').value = idp;
+		} else {
+			// replace IdP name with its URL 
+			document.getElementById('openid_identifier').value = known_providers[idp];
+		}
+		return true;
+	};
 	
 	function init() {
-	
+				
 		YAHOO.example.Data = {
 		
 			menu: {
 			    breakfasts: [
 			        "donuts",
-			        "omelette",
-			        "pancakes",
 			        "yogurt"
 			    ],
 	
@@ -44,7 +59,7 @@
 		YAHOO.example.Combobox = function() {
 		
 		    // Instantiate DataSources
-		    var bDS = new YAHOO.util.LocalDataSource(YAHOO.example.Data.menu.breakfasts);
+		    var bDS = new YAHOO.util.LocalDataSource(Object.keys(known_providers));
 		
 		    // Instantiate AutoCompletes
 		    var oConfigs = {
@@ -180,8 +195,7 @@
               	</div>
               </td>
     	      <td style="width:10%;">
-                <input name="bsignin" type="submit" value="Login"
-                       onclick="document.getElementById('openid_identifier').value=document.getElementById('openid_identifier').value.trim(); return true;">
+                <input name="bsignin" type="submit" value="Login" onclick="setIdP()">
               </td>
 
     	    </tr>
