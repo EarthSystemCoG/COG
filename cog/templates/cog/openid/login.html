@@ -4,6 +4,7 @@
 {% block extrastyle %}
 
 	<style type="text/css">
+	
 		/* custom styles for inline instances */
 		.yui-skin-sam .yui-ac-input { position:static;width:20em; vertical-align:middle;}
 		.yui-skin-sam .yui-ac-container { width:20em;left:0px;}
@@ -16,6 +17,7 @@
 		.yui-ac .yui-button {vertical-align:middle;}
 		.yui-ac .yui-button button {background: url({{ STATIC_URL}}/js/yui/examples/autocomplete/assets/img/ac-arrow-rt.png) center center no-repeat }
 		.yui-ac .open .yui-button button {background: url({{ STATIC_URL}}/js/yui/examples/autocomplete/assets/img/ac-arrow-dn.png) center center no-repeat}
+	
 	</style>
 
 {% endblock %}
@@ -28,34 +30,21 @@
 	
 		YAHOO.example.Data = {
 		
-		menu: {
-		    breakfasts: [
-		        "donuts",
-		        "omelette",
-		        "pancakes",
-		        "yogurt"
-		    ],
-		    lunches: [
-		        "burrito",
-		        "hamburger",
-		        "salad",
-		        "turkey sandwich"
-		    ],
-		    dinners: [
-		        "meatloaf",
-		        "spaghetti",
-		        "pot roast",
-		        "roast chicken",
-		        "steak"
-		    ]
-		},
+			menu: {
+			    breakfasts: [
+			        "donuts",
+			        "omelette",
+			        "pancakes",
+			        "yogurt"
+			    ],
+	
+			},
 		};
 		
 		YAHOO.example.Combobox = function() {
+		
 		    // Instantiate DataSources
 		    var bDS = new YAHOO.util.LocalDataSource(YAHOO.example.Data.menu.breakfasts);
-		    var lDS = new YAHOO.util.LocalDataSource(YAHOO.example.Data.menu.lunches);
-		    var dDS = new YAHOO.util.LocalDataSource(YAHOO.example.Data.menu.dinners);
 		
 		    // Instantiate AutoCompletes
 		    var oConfigs = {
@@ -66,8 +55,6 @@
 		        animVert: .01
 		    }
 		    var bAC = new YAHOO.widget.AutoComplete("bInput", "bContainer", bDS, oConfigs);
-		    var lAC = new YAHOO.widget.AutoComplete("lInput", "lContainer", lDS, oConfigs);
-		    var dAC = new YAHOO.widget.AutoComplete("dInput", "dContainer", dDS, oConfigs);
 		    
 		    // Breakfast combobox
 		    var bToggler = YAHOO.util.Dom.get("toggleB");
@@ -91,67 +78,15 @@
 		        }
 		    }
 		    oPushButtonB.on("click", toggleB);
-		    bAC.containerCollapseEvent.subscribe(function(){YAHOO.util.Dom.removeClass(bToggler, "open")});
-		    
-		    // Lunch combobox
-		    var lToggler = YAHOO.util.Dom.get("toggleL");
-		    var oPushButtonL = new YAHOO.widget.Button({container:lToggler});
-		    var toggleL = function(e) {
-		        //YAHOO.util.Event.stopEvent(e);
-		        if(!YAHOO.util.Dom.hasClass(lToggler, "open")) {
-		            YAHOO.util.Dom.addClass(lToggler, "open")
-		        }
-		        
-		        // Is open
-		        if(lAC.isContainerOpen()) {
-		            lAC.collapseContainer();
-		        }
-		        // Is closed
-		        else {
-		            lAC.getInputEl().focus(); // Needed to keep widget active
-		            setTimeout(function() { // For IE
-		                lAC.sendQuery("");
-		            },0);
-		        }
-		    }
-		    oPushButtonL.on("click", toggleL);
-		    lAC.containerCollapseEvent.subscribe(function(){YAHOO.util.Dom.removeClass(lToggler, "open")});
-		
-		    // Dinner combobox
-		    var dToggler = YAHOO.util.Dom.get("toggleD");
-		    var oPushButtonD = new YAHOO.widget.Button({container:dToggler});
-		    var toggleD = function(e) {
-		        //YAHOO.util.Event.stopEvent(e);
-		        if(!YAHOO.util.Dom.hasClass(dToggler, "open")) {
-		            YAHOO.util.Dom.addClass(dToggler, "open")
-		        }
-		        
-		        // Is open
-		        if(dAC.isContainerOpen()) {
-		            dAC.collapseContainer();
-		        }
-		        // Is closed
-		        else {
-		            dAC.getInputEl().focus(); // Needed to keep widget active
-		            setTimeout(function() { // For IE
-		                dAC.sendQuery("");
-		            },0);
-		        }
-		    }
-		    oPushButtonD.on("click", toggleD);
-		    dAC.containerCollapseEvent.subscribe(function(){YAHOO.util.Dom.removeClass(dToggler, "open")});
+		    bAC.containerCollapseEvent.subscribe(function(){YAHOO.util.Dom.removeClass(bToggler, "open")});		    
 		
 		    return {
 		        bDS: bDS,
-		        bAC: bAC,
-		        lDS: lDS,
-		        lAC: lAC,
-		        dDS: dDS,
-		        dAC: dAC
+		        bAC: bAC
 		    };
 		}();
 		
-		};
+	};
 		
 	YAHOO.util.Event.onDOMReady(init);
 	
@@ -273,19 +208,6 @@
 		<div id="bContainer"></div>
 	</div>
 	
-	<label for="lInput">What would you like for lunch?</label>
-	<div id="lAutoComplete">
-		<input id="lInput" type="text"> <span id="toggleL"></span>
-		<div id="lContainer"></div>
-	</div>
-	
-	<label for="dInput">What would you like for dinner?</label>
-	<div id="dAutoComplete">
-		<input id="dInput" type="text"> <span id="toggleD"></span>
-		<div id="dContainer"></div>
-	</div>
-
-
   </div>
 </div><!--END:/cog/templates/cog/openid/login.html-->
 
