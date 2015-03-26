@@ -84,7 +84,10 @@ class UserProfile(models.Model):
     
     # utility method to return openids that match the local node
     def localOpenids(self):
-        return [x for x in self.openids() if settings.ESGF_HOSTNAME in x]
+        try:
+            return [x for x in self.openids() if settings.ESGF_HOSTNAME in x]
+        except AttributeError: # no 'ESGF_HOSTNAME' in settings
+            return []
     
     def isOpenidLocal(self, openid):
         '''Utility method to determine wether the given openid is issued by this site.'''
