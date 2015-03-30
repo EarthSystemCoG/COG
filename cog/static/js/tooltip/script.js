@@ -2,10 +2,10 @@ var tooltip=function(){
 
 	// global variables that specifies tooltip attributes
 	var id = 'tt';
-	var top = -12; // vertical position above project short name
+	var top = -14; // vertical position above project short name
 	var left = 0;
     var size = "198px";
-	var maxw = 210;  // take width below (w) + whatever padding is wanted to take outside the project browser
+	var maxw = 209;  // = size (w) + whatever padding is wanted to take outside the project browser
 	var speed = 10;
 	var timer = 20;
 	var endalpha = 95;
@@ -30,8 +30,11 @@ var tooltip=function(){
                     row = document.createElement('tr');
                     cell_1 = document.createElement('td');
                     cell_1.style.verticalAlign = 'middle';
-                    cell_1.style.background = '#f2e886';
+                    //cell_1.style.background = '#f2e886';
+                    cell_1.style.background = '#666666';
+                    cell_1.style.color='white';
                     cell_1.style.width = size;
+                    cell_1.style.paddingLeft = "8px"; // no idea what default is. This is large but look like less when rendered
                     row.appendChild(cell_1);
                     tblBody.appendChild(row);
 
@@ -57,7 +60,6 @@ var tooltip=function(){
                     cell_2.appendChild(sjm);
                     cell_2.style.verticalAlign = 'bottom';
                     cell_2.style.padding = "0";
-                    cell_2.style.paddingBottom = "2px";
                     row.appendChild(cell_2); // append arrow to row
 
                     tblBody.appendChild(row); // append row to tbody

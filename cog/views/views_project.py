@@ -774,7 +774,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             html += '<a href="' + prj.getAbsoluteUrl()
             # (widget, inner_text, width)
             html += '" onmouseover="tooltip.show(this,' \
-                    '\'' + 'Project Full Name: ' + prj.long_name + '\', 200);" onmouseout="tooltip.hide();">'
+                    '\'' + prj.long_name + '\', 200);" onmouseout="tooltip.hide();">'
             html += prj.short_name + '</a><br/>'
     html += '</div>'
 

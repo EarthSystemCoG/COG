@@ -20,11 +20,10 @@ body {font:11px/1.5 Verdana, Arial, Helvetica, sans-serif; background:#FFF}
 
 */
 
-
 .arrow-right {
 	width:         0; /* must stay 0 */
 	height:        0;
 	border-top:    8px solid transparent;
 	border-bottom: 8px solid transparent;
-	border-left:   12px solid #f2e886;  /* making this item longer makes the pointer grow towards the left */
+    border-left:   8px solid #666666;
 }
