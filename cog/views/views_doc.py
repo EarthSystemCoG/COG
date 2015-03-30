@@ -139,10 +139,11 @@ def doc_download(request, path):
     doc = Doc.objects.get(path__endswith=path)
     
     # public documents
-    if not doc.is_private and not doc.project.private:
-        return serve(request, path, document_root=settings.PROJECTS_ROOT)
-    else:
+    if doc.is_private:
         return doc_download_private(request, path, doc)
+    else:
+        return serve(request, path, document_root=settings.PROJECTS_ROOT)
+        
 
 
 def data_download(request, path):
