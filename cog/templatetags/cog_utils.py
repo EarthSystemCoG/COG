@@ -154,23 +154,32 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             html += "</span></li>"
 
         # display sub-folders
-        # treat presentations and minutes differently. If any child folders are digital (e.g. years), we want to sort
+        # predefined folders differently. If any child folders are digital (e.g. years), we want to sort
         #   its child folders in reverse order to keep the most recent folder on top.
-        # closing child folders by default
-        if (folder.name == "Presentations") or (folder.name == "Minutes"):
-            year = False
+        # closing upper-level child folders by default (e.g. folders under Presentations)
+
+        years = reversed(range(2000, 2025))  # create list of reversed integers representing years
+        years_str = [str(_year) for _year in years]  # convert that list to a list of strings
+
+        if folder.name == "Bookmarks":
+            # all first level folders, pre-defined or not are open by default and listed alphabetically
+            # does not check for years. Folders with year names will be first in the list
+            for child in folder.children().order_by('name'):  # sort folders alphabetically
+                html += _folder_tree(child, user, esc, expanded=True)  # upper-level pre-defined folders open
+        else:
+            # loop thru all children of upper-level folders to check if any of them are years, if so set is_year to True
+            is_year = False
             for child in folder.children():
-                if child.name.isdigit():
-                    year = True
-            if year:
+                name = child.name.encode("utf-8")  # convert folder name fm unicode to string so it can be compared
+                if any(_name == name for _name in years_str):
+                    is_year = True
+                # if any of the child folders are years, then reverse order them.
+            if is_year:
                 for child in folder.children().order_by('-name'):  # sort folders reverse alphabetically
-                    html += _folder_tree(child, user, esc, expanded=False)  # closed by default
+                    html += _folder_tree(child, user, esc, expanded=False)  # child folder closed by default
             else:
                 for child in folder.children().order_by('name'):
-                    html += _folder_tree(child, user, esc, expanded=False)  # close by default
-        else:
-            for child in folder.children().order_by('name'):  # sort folders alphabetically
-                html += _folder_tree(child, user, esc, expanded=True)  # open by default all folders
+                    html += _folder_tree(child, user, esc, expanded=False)  # child folder closed by default
 
         html += "</ul>"
         html += "</li>"
