@@ -33,6 +33,7 @@ var tooltip=function(){
                     //cell_1.style.background = '#f2e886';
                     cell_1.style.background = '#666666';
                     cell_1.style.color='white';
+                    cell_1.style.fontSize="12px";
                     cell_1.style.width = size;
                     cell_1.style.paddingLeft = "8px"; // no idea what default is. This is large but look like less when rendered
                     row.appendChild(cell_1);
