@@ -78,6 +78,10 @@ def doc_add(request, project_short_name):
         
         # assign project
         doc.project = project
+
+        # change form such that if a project is private, the Private? checkbox is checked by default
+        if doc.project.private:
+            doc.is_private = True
         
         # create form from instance
         form = DocForm(instance=doc)
