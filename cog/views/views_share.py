@@ -28,6 +28,9 @@ def serialize_project(project):
     pdict["peers"]   = _serialize_associated_projects( project.peers.all() )
     pdict["children"] = _serialize_associated_projects( project.children() )
     
+    # public or private
+    pdict["private"] = str(project.private)
+    
     # tags
     tags = []
     for tag in project.tags.all():
