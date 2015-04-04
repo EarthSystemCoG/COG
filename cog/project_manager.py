@@ -89,7 +89,7 @@ class ProjectManager(object):
                     short_name = pdict['short_name']
                     long_name = pdict['long_name']
                     site_domain = pdict['site_domain']
-                    private = pdict.get('private', False)
+                    private = pdict.get('private', 'False')
                     
                     # check site
                     if site_domain==remote_site.domain: # check project belongs to remote site
