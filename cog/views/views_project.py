@@ -821,9 +821,9 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
             # do not add
             pass
         # only display projects that are visible to the user ?
-        elif prj.isNotVisible(user):
+        #elif prj.isNotVisible(user):
             # do not add
-            pass
+            # pass
         # don't apply the additional 'tag' filter to the 'tags' tab
         elif tab != 'tags' and tag is not None and tag not in prjtags:
             # do not add
