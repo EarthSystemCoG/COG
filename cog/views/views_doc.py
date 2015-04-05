@@ -78,6 +78,10 @@ def doc_add(request, project_short_name):
         
         # assign project
         doc.project = project
+
+        # change form such that if a project is private, the Private? checkbox is checked by default
+        if doc.project.private:
+            doc.is_private = True
         
         # create form from instance
         form = DocForm(instance=doc)
@@ -139,10 +143,11 @@ def doc_download(request, path):
     doc = Doc.objects.get(path__endswith=path)
     
     # public documents
-    if not doc.is_private and not doc.project.private:
-        return serve(request, path, document_root=settings.PROJECTS_ROOT)
-    else:
+    if doc.is_private:
         return doc_download_private(request, path, doc)
+    else:
+        return serve(request, path, document_root=settings.PROJECTS_ROOT)
+        
 
 
 def data_download(request, path):

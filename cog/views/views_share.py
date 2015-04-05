@@ -28,6 +28,9 @@ def serialize_project(project):
     pdict["peers"]   = _serialize_associated_projects( project.peers.all() )
     pdict["children"] = _serialize_associated_projects( project.children() )
     
+    # public or private
+    pdict["private"] = str(project.private)
+    
     # tags
     tags = []
     for tag in project.tags.all():
@@ -82,7 +85,7 @@ def share_projects(request):
         # list projects from this site
         projects = {}
         print 'Listing active, public projects for current site=%s' % current_site
-        for project in Project.objects.filter(active=True).filter(private=False).filter(site=current_site):
+        for project in Project.objects.filter(active=True).filter(site=current_site):
             projects[project.short_name] = serialize_project(project)
             
         response_data["projects"] = projects   

@@ -35,16 +35,33 @@
 							</tr>
 							{% endif %}
 							{% if mb.members %}
-							<tr>
-								<td class="leftcolumn">Members</td>
-								<td>
-									{% for member in mb.members %}{% if forloop.counter > 1 %}, {% endif %}
-										{{member.user.get_full_name}}{% endfor %}
-								</td>
-							</tr>
+							    <tr>
+							        <td class="leftcolumn">
+                                        Members
+                                    </td>
+                                    <td>
+                                        <table>
+                                            {% for member in mb.members %}
+                                                <tr>
+                                                    {% if member.user.username %}
+                                                        <td style="width:35px;">
+                                                                <img src="{{ member.user|getThumbnail }}" style="width:35px;" />
+                                                        </td>
+                                                        <td style="vertical-align: top;">
+                                                                <a href="{% url 'user_detail' member.user.id %}">{{member.user.get_full_name}}</a>
+                                                        </td>
+                                                    {% else %}
+                                                            <td>
+                                                                {{member.user.get_full_name}}
+                                                            </td>
+                                                    {% endif %}
+                                                </tr>
+								            {% endfor %}
+								        </table>
+                                    </td>
+							    </tr>
 							{% endif %}
 						</table>
-
 					</td>
 				</tr>
 			{% endfor %}
