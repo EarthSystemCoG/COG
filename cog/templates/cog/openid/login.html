@@ -121,8 +121,8 @@
 	        <div class="message-box">
 	     	{{ request.GET.message|showMessage|safe }}
 
-	     	{% if request.COOKIES.openid %}
-	   		    <br/>Your assigned OpenID is: <b> {{ request.COOKIES.openid }} </b>
+	     	{% if request|get_openid %}
+	   		    <br/>Your assigned OpenID is: <b> {{ request|get_openid }} </b>
 	   	    {% endif %}
 
 	        </div>
@@ -185,7 +185,7 @@
 	    	  		<span id="toggleB"></span>
 	    			<div id="bContainer"></div>
 	    			<input type="text" id="openid_identifier" alt="openid_identifier" 
-	    			       name="openid_identifier" value="{{ request.COOKIES.openid }}" size="33em"/>
+	    			       name="openid_identifier" value="{{ request|get_openid }}" size="33em"/>
               	</div>
               </td>
     	      <td style="width:10%;">

@@ -268,8 +268,8 @@ def user_add(request):
             
             response = HttpResponseRedirect(login_url)
             
-            # set openid cookie
-            #set_openid_cookie(response, userp.openid())
+            # set openid cookie on this host
+            set_openid_cookie(response, userp.openid())
 
             print 'New user account created: redirecting to login url: %s' % login_url
             return response
