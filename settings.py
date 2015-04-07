@@ -285,3 +285,6 @@ OPENID_CREATE_USERS = True
 
 # do NOT keep updating the user profile from the IdP
 OPENID_UPDATE_DETAILS_FROM_SREG = False
+
+# FIXME: list of allowed external hosts to redirect to after successful openid login
+ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = ['dev-hydra.esrl.svc','localhost','www.earthsystemcog.org','cog-esgf.esrl.noaa.gov']

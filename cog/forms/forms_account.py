@@ -146,11 +146,9 @@ class UserForm(ImageForm):
 
     # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
     image = ImageField(required=False, widget=FileInput)
-
-    # extra field not present in model, used for deletion of previously uploaded image
-    # inherited from ImageForm
-    #delete_image = BooleanField(required=False)
-
+    
+    # field that stores redirection URL after account creation
+    next = CharField(required=False)
 
     class Meta:
         # note: use User model, not UserProfile
@@ -159,7 +157,7 @@ class UserForm(ImageForm):
         fields = ('first_name', 'last_name', 'username', 'password', 'email',
                   'institution','city','state','country','department',
                   'subscribed','private',
-                  'image', 'delete_image', 'researchInterests', 'researchKeywords')
+                  'image', 'delete_image', 'researchInterests', 'researchKeywords', 'next')
 
     # override form clean() method to execute custom validation on fields,
     # including combined validation on multiple fields

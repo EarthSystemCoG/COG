@@ -260,18 +260,21 @@
 		        {% endfor %}
  	        </table>
 
-	            <div style="text-align:right;">
-	                <hr/>
-	                {% if request.user.is_anonymous %}
-	                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_home' %}'"/>
-	                {% else %}
-	                   <!-- prevent user with non-complete data to hit 'cancel' button -->
-	                   {% if request.user|isValidUser and form.instance.id %}
-	                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
-	                   {% endif %}
-	                {% endif %}
-	                <input type="submit" value="Submit" />
-	            </div>
+            <div style="text-align:right;">
+                <hr/>
+                {% if request.user.is_anonymous %}
+                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_home' %}'"/>
+                {% else %}
+                   <!-- prevent user with non-complete data to hit 'cancel' button -->
+                   {% if request.user|isValidUser and form.instance.id %}
+                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
+                   {% endif %}
+                {% endif %}
+                <input type="submit" value="Submit" />
+            </div>
+
+			<!-- optional URL for eventual redirection -->
+			{{ form.next.as_hidden }}
 
 	        </form>
 	    </div>

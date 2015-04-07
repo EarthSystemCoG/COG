@@ -38,6 +38,6 @@
      Welcome, <strong>Guest</strong>.
      | <a href="{% url 'login' %}?next={{ request.path }}"> Login</a>
      <!-- | <a href="{% url 'openid-login' %}?next={{ request.path }}">OpenID Login</a> -->
-     | <a href="{% url 'user_add' %}">Create Account</a>
+     | <a href="{% url 'user_add' %}?next={{ request.build_absolute_uri }}">Create Account</a>
 {% endif %}
 <!--//END: /cog/templates/cog/common/_user_menu.html //-->

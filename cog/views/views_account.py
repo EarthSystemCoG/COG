@@ -19,6 +19,7 @@ from django.contrib.sites.models import Site
 from cog.plugins.esgf.security import esgfDatabaseManager
 import datetime
 from cog.views.utils import set_openid_cookie, get_all_projects_for_user
+import urllib
 
 def redirectToIdp():
     if settings.IDP_REDIRECT is not None and len(settings.IDP_REDIRECT.strip()) > 0:
@@ -164,6 +165,7 @@ def user_add(request):
     
     # redirect to another site if necessary
     if redirectToIdp():
+        print 'Redirecting account creation to: %s' % (settings.IDP_REDIRECT + request.path)
         return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
 
     # create URLs formset
@@ -171,9 +173,12 @@ def user_add(request):
                                                  extra=2)
     UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2)
 
+    # redirection URL
+    _next = request.REQUEST.get('next', None)
+            
     if request.method == 'GET':
 
-        form = UserForm()  # unbound form
+        form = UserForm( initial={'next':_next} )  # initialize form with redirect URL
         formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')           # empty formset
         # NOTE: currently openid formset is not really used when first creating COG users
         formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.none(), prefix='openid')  # empty formset
@@ -245,7 +250,11 @@ def user_add(request):
                 subscribeUserToMailingList(user, request)
 
             # redirect to login page with special message
-            response = HttpResponseRedirect(reverse('login')+"?message=user_add")
+            # FIXME: redirect to login at first site ?
+            login_url = reverse('login')+"?message=user_add"
+            if _next is not None:
+                login_url += "&next=%s" % urllib.urlencode(_next))
+            response = HttpResponseRedirect(login_url)
             
             # set openid cookie
             set_openid_cookie(response, userp.openid())
