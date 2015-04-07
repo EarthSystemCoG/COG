@@ -19,7 +19,6 @@ from django.contrib.sites.models import Site
 from cog.plugins.esgf.security import esgfDatabaseManager
 import datetime
 from cog.views.utils import set_openid_cookie, get_all_projects_for_user
-import urllib
 
 def redirectToIdp():
     if settings.IDP_REDIRECT is not None and len(settings.IDP_REDIRECT.strip()) > 0:
@@ -163,18 +162,22 @@ def notifyAdminsOfUserSubscription(user, request, action):
 # view to create a user account
 def user_add(request):
     
+    # redirection URL
+    _next = request.REQUEST.get('next', None)
+    
     # redirect to another site if necessary
     if redirectToIdp():
-        print 'Redirecting account creation to: %s' % (settings.IDP_REDIRECT + request.path)
-        return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
+        redirect_url = settings.IDP_REDIRECT + request.path
+        if _next is not None:
+            print 'next=%s' % _next
+            redirect_url += ("?next=%s" % _next)
+        print 'Redirecting account creation to: %s' % redirect_url
+        return HttpResponseRedirect(redirect_url)
 
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
                                                  extra=2)
     UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2)
-
-    # redirection URL
-    _next = request.REQUEST.get('next', None)
             
     if request.method == 'GET':
 
@@ -253,7 +256,7 @@ def user_add(request):
             # FIXME: redirect to login at first site ?
             login_url = reverse('login')+"?message=user_add"
             if _next is not None:
-                login_url += "&next=%s" % urllib.urlencode(_next)
+                login_url += ("&next=%s" % _next)
             response = HttpResponseRedirect(login_url)
             
             # set openid cookie
