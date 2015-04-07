@@ -257,7 +257,7 @@ def user_add(request):
 
             # redirect to login page with special message
             login_url = reverse('login')+"?message=user_add"
-            if _next is not None and len(_next.trim())>0:
+            if _next is not None and len(_next.strip())>0:
                 login_url += ("&next=%s" % urllib.quote_plus(_next) )
                 # redirect to absolute URL (possibly at an another site)
                 if 'http' in _next:
