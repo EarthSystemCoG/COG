@@ -1,3 +1,5 @@
+from urlparse import urlparse
+
 from cog.forms.forms_account import *
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -257,11 +259,17 @@ def user_add(request):
             login_url = reverse('login')+"?message=user_add"
             if _next is not None:
                 login_url += ("&next=%s" % _next)
+                # redirect to absolute URL (possibly at an another site)
+                if 'http' in _next:
+                    url = urlparse('_next')
+                    login_url = url.scheme + '//' + url.netloc + "/" + login_url
+            
             response = HttpResponseRedirect(login_url)
             
             # set openid cookie
             set_openid_cookie(response, userp.openid())
 
+            print 'New user account created: redirecting to login url: %s' % login_url
             return response
 
         else:
