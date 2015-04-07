@@ -253,7 +253,7 @@ def user_add(request):
             # FIXME: redirect to login at first site ?
             login_url = reverse('login')+"?message=user_add"
             if _next is not None:
-                login_url += "&next=%s" % urllib.urlencode(_next))
+                login_url += "&next=%s" % urllib.urlencode(_next)
             response = HttpResponseRedirect(login_url)
             
             # set openid cookie
