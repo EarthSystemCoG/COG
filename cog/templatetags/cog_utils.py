@@ -726,6 +726,19 @@ def get_domain(url):
     
     return urlparse.urlparse(url)[1]
 
+@register.filter
+def get_openid(request):
+    """
+    Retrieves the user openid from either the request query string,
+    or the request cookies.
+    """
+    
+    if request.REQUEST.get('openid', None):
+        return request.REQUEST['openid']
+    elif request.COOKIES.get('openid', None):
+        return request.COOKIES['openid']
+    else:
+        return ''
 
 @register.filter
 def delete_from_session(session, key):

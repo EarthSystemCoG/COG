@@ -1,24 +1,28 @@
-from cog.forms.forms_account import *
+import datetime
+import urllib
+from urlparse import urlparse
+
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import is_password_usable
+from django.contrib.auth.views import login
+from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.forms.models import modelformset_factory
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from cog.models import *
-from cog.util.thumbnails import *
-from django.forms.models import modelformset_factory
-
-from cog.notification import notify, sendEmail
-from django.contrib.auth.views import login
-from django_openid_auth.views import login_complete
-from django.contrib.auth.hashers import is_password_usable
-from django.core.exceptions import ObjectDoesNotExist
 from django_openid_auth.models import UserOpenID
-from django.contrib.sites.models import Site
+from django_openid_auth.views import login_complete
+
+from cog.forms.forms_account import *
+from cog.models import *
+from cog.notification import notify, sendEmail
 from cog.plugins.esgf.security import esgfDatabaseManager
-import datetime
+from cog.util.thumbnails import *
 from cog.views.utils import set_openid_cookie, get_all_projects_for_user
+
 
 def redirectToIdp():
     if settings.IDP_REDIRECT is not None and len(settings.IDP_REDIRECT.strip()) > 0:
@@ -162,18 +166,25 @@ def notifyAdminsOfUserSubscription(user, request, action):
 # view to create a user account
 def user_add(request):
     
+    # redirection URL
+    _next = request.REQUEST.get('next', None)
+    
     # redirect to another site if necessary
     if redirectToIdp():
-        return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
+        redirect_url = settings.IDP_REDIRECT + request.path
+        if _next is not None:
+            redirect_url += ("?next=%s" % urllib.quote_plus(_next))
+        print 'Redirecting account creation to: %s' % redirect_url
+        return HttpResponseRedirect(redirect_url)
 
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
                                                  extra=2)
     UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2)
-
+            
     if request.method == 'GET':
 
-        form = UserForm()  # unbound form
+        form = UserForm( initial={'next':_next} )  # initialize form with redirect URL
         formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')           # empty formset
         # NOTE: currently openid formset is not really used when first creating COG users
         formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.none(), prefix='openid')  # empty formset
@@ -245,11 +256,22 @@ def user_add(request):
                 subscribeUserToMailingList(user, request)
 
             # redirect to login page with special message
-            response = HttpResponseRedirect(reverse('login')+"?message=user_add")
+            login_url = reverse('login')+"?message=user_add"
+            if _next is not None and len(_next.strip())>0:
+                login_url += ("&next=%s" % urllib.quote_plus(_next) )
+                # redirect to absolute URL (possibly at an another site)
+                if 'http' in _next:
+                    url = urlparse(_next)
+                    login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
+            # append openid to initial login_url
+            login_url += "&openid=%s" % urllib.quote_plus( userp.openid() )
             
-            # set openid cookie
+            response = HttpResponseRedirect(login_url)
+            
+            # set openid cookie on this host
             set_openid_cookie(response, userp.openid())
 
+            print 'New user account created: redirecting to login url: %s' % login_url
             return response
 
         else:
