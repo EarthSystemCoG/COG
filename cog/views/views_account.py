@@ -262,7 +262,7 @@ def user_add(request):
                 # redirect to absolute URL (possibly at an another site)
                 if 'http' in _next:
                     url = urlparse(_next)
-                    login_url = url.scheme + '//' + url.netloc + "/" + login_url
+                    login_url = url.scheme + '://' + url.netloc + "/" + login_url
             
             response = HttpResponseRedirect(login_url)
             
