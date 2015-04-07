@@ -309,7 +309,7 @@ img{
 }
 
 /*force IE to behave the same as other browsers */
-.ie9 hr, {
+.ie9 hr {
         background:   #358C92;
 	border:       none;
 	height:        1px;
@@ -561,6 +561,23 @@ caption {
 	color:         #666;
 }
 
+
+/*****************************
+* TEST code for Gerhard to
+* format code snippets
+*****************************/
+td.numbers{
+padding-right:10px;
+color:#A0A0A0;
+text-align:right;
+padding-top:0;}
+
+
+td.code{
+padding-top:0;
+background-color:#EFEFFF;
+border:1px solid #C0C0D0;
+padding-right:50px;}
 /******************************
 END TABLE ELEMENTS
 ******************************/
