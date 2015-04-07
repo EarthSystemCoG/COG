@@ -1,10 +1,15 @@
 from django.conf.urls import patterns, url, include
 from cog.models import *
 from cog.views.views_account import custom_login, custom_login_complete
+from django.views.generic import TemplateView
+
 
 urlpatterns = patterns('',
 
-    # top-level index
+    # FIXME: top-level index
+    #url(r'^index/$', TemplateView.as_view(template_name="cog/index.html")),
+    
+    # site home
     url(r'^$', 'cog.views.site_home', name='site_home' ) ,
     
     # COG administration

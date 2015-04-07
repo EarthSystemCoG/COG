@@ -147,7 +147,7 @@ def isUserRemote(user):
 def discoverSiteForUser(openid):
     '''IMPORTANT: call this function ONLY at account creation as it makes requests to all peer sites.'''
         
-    for site in Site.objects.all():  # note: includes current site
+    for site in getPeerSites():  # loop over enabled peer sites
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
         jobj = getJson(url)
         if jobj is not None:
@@ -163,7 +163,8 @@ def getDataCartsForUser(openid):
         
     dcs = {} # dictionary of (site_name, datacart_size) items
     
-    for site in getPeerSites():
+    #for site in Site.objects.all():  # loop over all sites in database. Note: includes current site
+    for site in getPeerSites(): # loop over sites that are federates
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
         print 'Querying for datacart: url=%s' % url
         jobj = getJson(url)

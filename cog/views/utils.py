@@ -10,6 +10,15 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 import urllib
 
+from cog.plugins.esgf.idp_whitelist import LocalKnownProvidersDict
+
+# module-scope object that holds list of known ESGF Identity Providers
+# included here because login view is part of django-openid-auth module
+esgf_known_providers = LocalKnownProvidersDict()
+
+def getKnownIdentityProviders():
+    return esgf_known_providers.idpDict()
+
 # function to return an error message if a project is not active
 def getProjectNotActiveRedirect(request, project):
         messages = ['Access to all pages of project %s is currently forbidden.' % project.short_name,

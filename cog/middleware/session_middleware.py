@@ -26,16 +26,16 @@ class SessionMiddleware(object):
                 
                 if now_seconds - last_accessed_seconds > settings.MY_PROJECTS_REFRESH_SECONDS:
                     
+                    # update session stamp BEFORE querying remote sites
+                    s['LAST_ACCESSED'] = now_seconds
+                    s.save()
+                    
                     # update the user's projects across the federation                
                     update_user_projects(request.user)
                     
                     # update the user tags from their home site
                     if isUserRemote(request.user):
                         update_user_tags(request.user)
-                    
-                    # refresh session stamp
-                    s['LAST_ACCESSED'] = now_seconds
-                    s.save()
                     
         except ObjectDoesNotExist:
             pass # no profile

@@ -8,6 +8,6 @@
 	<site name="NOAA ESRL ESGF-CoG" domain="cog-esgf.esrl.noaa.gov" />
 
 	<!--  NOAA/ESRL development server -->	
-	<!--  <site name="CoG @ dev-hydra" domain="dev-hydra-httpd.esrl.svc" /> -->
+	<!-- <site name="CoG @ dev-hydra" domain="dev-hydra-httpd.esrl.svc" /> -->
 
 </sites>

@@ -54,6 +54,7 @@ class Command(BaseCommand):
                 name = site.attrib['name']
                 domain = site.attrib['domain']
                 domains.append(domain)
+                self.stdout.write('Updating site domain: %s name: %s' % (domain, name) )
                 
                 # update Site objects
                 try:
@@ -62,7 +63,7 @@ class Command(BaseCommand):
                         # update site
                         _site.name = name
                         _site.save()
-                        self.stdout.write('Update site: %s' % _site)
+                        self.stdout.write('Updated site: %s' % _site)
                 except ObjectDoesNotExist:
                     _site = Site.objects.create(name=name, domain=domain)
                     self.stdout.write('Created site: %s' % _site)

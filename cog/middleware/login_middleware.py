@@ -14,10 +14,11 @@ class LoginMiddleware(object):
 
     def __init__(self):
 
-        # initialize the white list service
+        
         try:
+            # initialize the white list service
             self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
-    
+                
             # login URLs
             self.url1 = "/login/"
             self.url2 = "/openid/login/"

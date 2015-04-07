@@ -14,6 +14,7 @@ IDP_WHITELIST = "%s/esgf_idp.xml, %s/esgf_idp_static.xml" % (ESG_CONFIG_DIR, ESG
 ESGF_ROOTADMIN_PASSWORD_FILE = '%s/.esgf_pass' % ESG_CONFIG_DIR
 ROOTADMIN_USERNAME = "rootAdmin"
 DEFAULT_ROOTADMIN_PASSWORD = "changeit"
+KNOWN_PROVIDERS = "%s/esgf_known_providers.xml" % ESG_CONFIG_DIR
 
 # some default parameter values
 DEFAULT_PROJECT_SHORT_NAME = 'TestProject'
