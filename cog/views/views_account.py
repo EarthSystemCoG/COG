@@ -263,11 +263,13 @@ def user_add(request):
                 if 'http' in _next:
                     url = urlparse(_next)
                     login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
+            # append openid to initial login_url
+            login_url += "&openid=%s" % userp.openid()
             
             response = HttpResponseRedirect(login_url)
             
             # set openid cookie
-            set_openid_cookie(response, userp.openid())
+            #set_openid_cookie(response, userp.openid())
 
             print 'New user account created: redirecting to login url: %s' % login_url
             return response
