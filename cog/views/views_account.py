@@ -1,26 +1,28 @@
+import datetime
+import urllib
 from urlparse import urlparse
 
-from cog.forms.forms_account import *
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import is_password_usable
+from django.contrib.auth.views import login
+from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.forms.models import modelformset_factory
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from cog.models import *
-from cog.util.thumbnails import *
-from django.forms.models import modelformset_factory
-
-from cog.notification import notify, sendEmail
-from django.contrib.auth.views import login
-from django_openid_auth.views import login_complete
-from django.contrib.auth.hashers import is_password_usable
-from django.core.exceptions import ObjectDoesNotExist
 from django_openid_auth.models import UserOpenID
-from django.contrib.sites.models import Site
+from django_openid_auth.views import login_complete
+
+from cog.forms.forms_account import *
+from cog.models import *
+from cog.notification import notify, sendEmail
 from cog.plugins.esgf.security import esgfDatabaseManager
-import datetime
+from cog.util.thumbnails import *
 from cog.views.utils import set_openid_cookie, get_all_projects_for_user
+
 
 def redirectToIdp():
     if settings.IDP_REDIRECT is not None and len(settings.IDP_REDIRECT.strip()) > 0:
@@ -171,8 +173,7 @@ def user_add(request):
     if redirectToIdp():
         redirect_url = settings.IDP_REDIRECT + request.path
         if _next is not None:
-            print 'next=%s' % _next
-            redirect_url += ("?next=%s" % _next)
+            redirect_url += ("?next=%s" % urllib.quote_plus(_next))
         print 'Redirecting account creation to: %s' % redirect_url
         return HttpResponseRedirect(redirect_url)
 
@@ -258,13 +259,13 @@ def user_add(request):
             # FIXME: redirect to login at first site ?
             login_url = reverse('login')+"?message=user_add"
             if _next is not None:
-                login_url += ("&next=%s" % _next)
+                login_url += ("&next=%s" % urllib.quote_plus(_next) )
                 # redirect to absolute URL (possibly at an another site)
                 if 'http' in _next:
                     url = urlparse(_next)
                     login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
             # append openid to initial login_url
-            login_url += "&openid=%s" % userp.openid()
+            login_url += "&openid=%s" % urllib.quote_plus( userp.openid() )
             
             response = HttpResponseRedirect(login_url)
             
