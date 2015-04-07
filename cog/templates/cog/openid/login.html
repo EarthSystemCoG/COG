@@ -208,7 +208,7 @@
 				&nbsp;
 				<a href="{% url 'password_reset' %}">Forgot Password?</a>
 				&nbsp;
-				<a href="{% url 'user_add' %}">Create Account</a>
+				<a href="{% url 'user_add' %}?next={{ request.build_absolute_uri }}">Create Account</a>
 			</span>
 		</div>
 
