@@ -1,6 +1,7 @@
 import os
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 import logging
+import re
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -289,4 +290,4 @@ OPENID_UPDATE_DETAILS_FROM_SREG = False
 # list of allowed hosts to redirect to after successful openid login
 # this is because django-openid-auth does not allow redirection to full URLs by default,
 # unless the host is specifically enabled
-ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = [SITE_DOMAIN]
+ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = [re.sub(':\d+','', SITE_DOMAIN) ]
