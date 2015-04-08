@@ -162,7 +162,7 @@
 	<br/>
 	<p>
 		If you already have an ESGF OpenID, you can use it to log onto ESGF-CoG below.
-		However, if your openid contains "/myopenid/" it is likely an older version that is no longer supported.
+		However, if your OpenID contains "/myopenid/" it is likely an older version that is no longer supported.
 	</p>
 	
 
@@ -209,6 +209,8 @@
 				&nbsp;
 				<a href="{% url 'password_reset' %}">Forgot Password?</a>
 				&nbsp;
+                <a href="{% url 'password_update'%}">Password Update</a>
+                &nbsp;
 				<a href="{% url 'user_add' %}?next={{ request.GET.next }}">Create Account</a>
 			</span>
 		</div>
