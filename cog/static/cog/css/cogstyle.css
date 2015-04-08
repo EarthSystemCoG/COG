@@ -25,6 +25,7 @@
 * light teal   = #B9E0E3
 * dark yellow  = #FAC24A
 * light yellow = #FCE79F
+* lightest yellow = #FCF2CE;
 * dark gray    = #666666
 * middle gray  = #666
 * light gray   = #333
@@ -955,7 +956,7 @@ BEGIN NEWS WIDGET
 }
 
 .news_box table.even-color tbody tr:nth-child(even) td,tbody tr.even td {
-	background: #FCF2CE;
+	background: #FCF2CE; /* lightest yellow */
 }
 .news_footer {
 	margin:0;
@@ -1066,7 +1067,8 @@ BEGIN SEARCH WIDGET
 
 /*update openID box. This should be removed when no longer needed */
 .changeID-box {
-    background:  #fce79f; /* light yellow*/
+
+    background:  #FCF2CE; /* lightest yellow*/
 	padding:     10px;
 	margin-left: auto;
     margin-right:auto;
