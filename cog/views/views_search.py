@@ -59,12 +59,12 @@ def search(request, project_short_name):
     if config:        
         #config.printme()
         # pass on project as extra argument to search
-        return search_config(request, config, extra = {'project' : project} )
+        return search_config(request, config, extra = {'project' : project, 'title':'%s Data Search' % project.short_name} )
     # search is not configured for this project
     else:
         messages = ['Searching is not enabled for this project.',
                     'Please contact the project administrators for further assistance.']
-        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
+        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages, 'title':'Data Search' }, context_instance=RequestContext(request))
 
 def _buildSearchInput(request, searchConfig):
     '''Assembles the search input from the HTTP request and the project specific configuration.'''
