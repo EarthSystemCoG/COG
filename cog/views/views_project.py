@@ -742,7 +742,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
         if add_delete_link:
             html += "<a href='javascript:deleteUserTag(\"%s\");' class='deletelink'>&nbsp;</a>" % widget_name
         if widget_name in ['Parent', 'Child', 'Peer']:
-            html += '%s (%s) projects' % (widget_name, str(len(projects)))
+            html += '%s projects (%s)' % (widget_name, str(len(projects)))
         else:
             html += '%s (%s)' % (widget_name, str(len(projects)))  # shorter title
         html += '</div>'
