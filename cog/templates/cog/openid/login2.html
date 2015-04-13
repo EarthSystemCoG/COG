@@ -7,15 +7,15 @@
   
  <div class="prepend-4 span-14">
   
-	<p><i>Some CoG projects allow you to search and download data archived on <a href="http://www.esgf.org">
+	<p><em class="message">Some CoG projects allow you to search and download data archived on <a href="http://www.esgf.org">
 	Earth System Grid Federation (ESGF)</a> data nodes.  In order
 	to access this data, you will need to have a valid ESGF
 	OpenID. If you don't wish to access any data, and you have a CoG username and
-	password, use the CoG Login option below.</i></p>
+	password, use the CoG Login option below.</em></p>
 
-	<p><i>To get a CoG login, see <a href="{% url 'user_add' %}">this page</a>.
+	<p><em class="message">To get a CoG login, see <a href="{% url 'user_add' %}">this page</a>.
 	New CoG accounts will generate ESGF OpenIDs.
-	If you would like to access ESGF data, the options are explained below.</i>
+	If you would like to access ESGF data, the options are explained below.</em>
 
 	<!-- 1) username+password login -->
 
@@ -28,12 +28,12 @@
 	{% endif %}
 
 	<p>
-    <i>
+    <em class="message">
 	You can download ESGF data using your existing CoG login. Once you are logged in, edit your CoG profile to insert
         one (or more) ESGF OpenIDs. To obtain an ESGF OpenID, see
         <a href="https://hydra.fsl.noaa.gov/esgf-web-fe/createAccount">this page</a>. To download data from ESGF, you
         will have to login again with your ESGF OpenID.
-    </i>
+    </em>
 	</p>
 
 	<!-- authentication form -->
@@ -48,7 +48,7 @@
 		<caption>CoG Login</caption>
 		<tr>
 	        <td style="width:10%;vertical-align:middle;text-align:right;">
-                <label for="username"><b>Username</b></label>
+                <label for="username"><strong>Username</strong></label>
             </td>
 	        <td style="width:90%;vertical-align:middle;">
 		        <input type="text" id="username" name="username" alt="username" value="{{ request.REQUEST.username }}" size="30"/>
@@ -57,7 +57,7 @@
 		<tr>
 		     <!--inline styles needed to override default table elements-->
 		    <td style="width:20%;vertical-align:middle;text-align:right">
-              <label for="password"><b>Password</b></label>
+              <label for="password"><strong>Password</strong></label>
             </td>
 	        <td style="width:50%;vertical-align:middle;"><input type="password" id="password" name="password" alt="password" size="30"/></td>
 		    <td style="width:30%;vertical-align:middle;"><input type="submit" value="Login"/></td>
@@ -93,12 +93,12 @@
 		{% endif %}
 
 	<p>
-        <i>
+        <em class="message">
 		You can use any valid ESGF OpenID to log onto CoG and ESGF at the same time. This method is recommended if you
             plan on downloading data from ESGF, since you will not be asked to enter your password again. If this is
             the first time you are using your ESGF OpenID on CoG, you will be asked to provide some additional
             information to create a new CoG account.
-		</i>
+		</em>
 	</p>
 	<p></p>
 
@@ -114,7 +114,7 @@
 	    	  <caption>ESGF Login</caption>
 	    	  <tr>
 	    	    <td style="width:10%;text-align:right; vertical-align:middle;">
-                    <label for="openid_identifier"><b>OpenID</b></label>
+                    <label for="openid_identifier"><strong>OpenID</strong></label>
                 </td>
 		        <td style="width:80%; vertical-align:middle;">
                     <input type="text" id="openid_identifier" alt="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/>

@@ -11,23 +11,23 @@
 	    {% csrf_token %}
 	    <table>
 	        <tr>
-	            <td valign="top" nowrap="nowrap"><b>Facet Key</b></td>
+	            <td valign="top" nowrap="nowrap"><strong>Facet Key</strong></td>
 	            <td class="long">{{ form.key }} {{ form.key.errors }}</td>
 	        </tr>
             <tr>
                 <td valign="top" nowrap="nowrap">&nbsp;</td>
-                <td class="long"><i>The metadata key used by the search engine. Available keys and associated values are listed below. </i></td>
+                <td class="long"><em class="message">The metadata key used by the search engine. Available keys and associated values are listed below. </em></td>
             </tr>	        
 	        <tr>
-	            <td valign="top" nowrap="nowrap"><b>Facet Label</b></td>
+	            <td valign="top" nowrap="nowrap"><strong>Facet Label</strong></td>
 	            <td class="long">{{ form.label }} {{ form.label.errors }}</td>
 	        </tr>
 	        <tr>
                 <td valign="top" nowrap="nowrap">&nbsp;</td>
-                <td class="long"><i>The facet label displayed in the user interface.</i></td>
+                <td class="long"><em class="message">The facet label displayed in the user interface.</em></td>
             </tr>           
             <tr>
-                <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
+                <td class="long" colspan="2"><em class="message">Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</em></td>
             </tr>           	        
 	    </table> 
 	    

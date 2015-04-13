@@ -40,10 +40,10 @@
           <ul class="yui-nav">
               <!--// urls in the list below don't go anywhere. Some sort of link is required to get the javascript
               to work, but it can be anything. It shows up in the hover, so it is made descriptive. -->
-              <li class="selected">&nbsp;&nbsp;<a href="/project_browser/this/"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/all/"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/my/"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/tags/"><em><b>Tags</b></em></a>&nbsp;&nbsp;</li>
+              <li class="selected">&nbsp;&nbsp;<a href="/project_browser/this/"><em><strong>This</strong></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/all/"><em><strong>All</strong></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/my/"><em><strong>My</strong></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/tags/"><em><strong>Tags</strong></em></a>&nbsp;&nbsp;</li>
           </ul>
            <!-- actual list of projects under their accordions -->
           <div class="yui-content">
@@ -121,7 +121,7 @@
    <div style="font-size: 12px; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
 
        {% if project.tags.all|length > 0 %}
-           <b>{{ project.short_name }} Tags:</b>
+           <strong>{{ project.short_name }} Tags:</strong>
            {% for tag in project.tags.all %}
                {% if forloop.last %}
                    {{ tag }}
@@ -130,7 +130,7 @@
                {% endif %}
            {% endfor %}
        {% else %}
-           <b>{{ project.short_name }} Tags:</b> None
+           <strong>{{ project.short_name }} Tags:</strong> None
        {% endif %}
    </div>
 

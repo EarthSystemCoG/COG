@@ -25,7 +25,7 @@
                 <img src="{{STATIC_URL}}/cog/img/icon_listlink.gif" alt="search">
             </td>
 	        <td style="vertical-align:middle;">
-                <label for="search_text"><b>Search</b></label>
+                <label for="search_text"><strong>Search</strong></label>
             </td>
             <td class="long" style="vertical-align:middle;" >
                 <input id="search_text" type="text" alt="search_text" name="query" value="{{ query|escape }}">
@@ -34,7 +34,7 @@
              <!-- sub-select -->
 	         {% if topic_list %}
 	            <td style="vertical-align:middle;" nowrap="nowrap">
-                    <label for="topic"><b>Select Topic</b></label>
+                    <label for="topic"><strong>Select Topic</strong></label>
                 </td>
 	            <td style="vertical-align:middle;">
 		            <select id="topic" name="topic">
@@ -52,7 +52,7 @@
 
             <!-- filter by -->
             <td nowrap="nowrap" style="vertical-align:middle;">
-            	<label for="file_type"><b>Type</b></label>
+            	<label for="file_type"><strong>Type</strong></label>
             	<select name="filter_by" id="file_type" onChange="document.getElementById('searchForm').submit()">
             		<option label="All" value="All"           {% if filter_by == 'All' %}  selected="selected" {% endif %}>All Files
             		<option label="Image" value="Image"         {% if filter_by == 'Image' %} selected="selected" {% endif %}>Images
@@ -64,7 +64,7 @@
             
             <!-- order by -->
             <td nowrap="nowrap" style="vertical-align:middle;">
-            	<label for="order"><b>Order By</b></label>
+            	<label for="order"><strong>Order By</strong></label>
             	<select name="order_by" id="order" onChange="document.getElementById('searchForm').submit()">
             		<option value="title"        {% if order_by == 'title' %}  selected="selected" {% endif %}>Title
             		<option value="-title"       {% if order_by == '-title' %} selected="selected" {% endif %}>Title (reversed)

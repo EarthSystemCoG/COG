@@ -5,18 +5,18 @@
 <table>
 	{% if tab == "ABOUTUS"|tabs %}
 	    <tr>
-			<td nowrap="nowrap"><b>Long Name</b></td>
+			<td nowrap="nowrap"><strong>Long Name</strong></td>
 			<td class="long">{{proj.long_name}}</td>
 		</tr>
 		{% if proj.description %}
 		<tr>
-			<td nowrap="nowrap"><b>Description</b></td>
+			<td nowrap="nowrap"><strong>Description</strong></td>
 			<td class="long">{{proj.description|urlizetrunc:50|linebreaksbr}}</td>
 		</tr>
 		{% endif %}
 		{% if proj.external_homepage %}
 		<tr>
-			<td nowrap="nowrap"><b>Home Page</b></td>
+			<td nowrap="nowrap"><strong>Home Page</strong></td>
 			<td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage|urlizetrunc:50}}</a></td>
 		</tr>
 		{% endif %}
@@ -52,7 +52,7 @@
 		{% for impact in proj.impacts.all %}
 			<tr>
 				<td class="long">
-					<b>{{impact.title}}</b>
+					<strong>{{impact.title}}</strong>
 					<p></p>{{impact.description|urlizetrunc:50|linebreaksbr}}
 				</td>
 			</tr>

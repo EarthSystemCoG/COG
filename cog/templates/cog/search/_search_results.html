@@ -8,7 +8,7 @@
   <!-- display search path (aka bread-crumbing) -->
   {% if request.session.search_path|length > 0 %}
 	  <p>
-	  <b>Search Constraints</b>: &nbsp;
+	  <strong>Search Constraints</strong>: &nbsp;
 	  {% for item in request.session.search_path %}
 	  	<a href='javascript:resetFacet("{{item.0}}")' class='deletelink'> </a> 
 	  	<a href='javascript:resetFromFacetIndex({{forloop.counter0}})'>{{ item.1 }}</a>
@@ -49,7 +49,7 @@
 					{% endif %}
 
 				{% else %}
-					<i>Please login to add search results to your Data Cart</i>
+					<em class="message">Please login to add search results to your Data Cart</em>
 				{% endif %}
 			
 				<br/>

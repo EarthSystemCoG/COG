@@ -122,7 +122,7 @@
 	     	{{ request.GET.message|showMessage|safe }}
 
 	     	{% if request|get_openid %}
-	   		    <br/>Your assigned OpenID is: <b> {{ request|get_openid }} </b>
+	   		    <br/>Your assigned OpenID is: <strong> {{ request|get_openid }} </strong>
 	   	    {% endif %}
 
 	        </div>
@@ -179,7 +179,7 @@
     	    <caption>ESGF-CoG Login</caption>
     	    <tr>
     	      <td style="width:10%;text-align:right; vertical-align:middle;">
-                  <label for="openid_identifier"><b>OpenID</b></label>
+                  <label for="openid_identifier"><strong>OpenID</strong></label>
               </td>
 	    	  <td style="width:80%; vertical-align:middle;">
 	    	  	<div id="bAutoComplete">

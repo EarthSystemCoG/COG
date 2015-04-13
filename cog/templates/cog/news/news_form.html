@@ -49,23 +49,23 @@
             {% csrf_token %}
             <table>
                 <tr>
-                    <td><b>Title</b></td>
+                    <td><strong>Title</strong></td>
                     <td>{{ form.title }} {{ form.title.errors }}</td>
                 </tr>
                 <tr>
-                    <td><b>Text</b></td>
+                    <td><strong>Text</strong></td>
                     <td>{{ form.text }} {{ form.text.errors }}</td>
                 </tr>
 
                 <tr>
-                    <td><b>Author</b></td>
+                    <td><strong>Author</strong></td>
                     <td>
                         {{ request.user }}
                         <input type="hidden" name="author" value="{{request.user.id}}"/>
                     </td>
                 </tr>
                  <tr>
-                    <td style="vertical-align:top;"><b>Publish to</b></td>
+                    <td style="vertical-align:top;"><strong>Publish to</strong></td>
                     <td>
                     	<!-- this project -->
                         {{ form.instance.project }}
@@ -74,17 +74,17 @@
                         <!-- parent projects -->
 
                         <input type="checkbox" id="parent_project" name="parent_project" onclick="toggle_projects(this)">
-                            <label for="parent_project"><b>Parent Projects</b></label>
+                            <label for="parent_project"><strong>Parent Projects</strong></label>
                         <div id="parent_projects">{{ form.parent_projects }}</div>
 
                         <!-- peer projects -->
                         <input type="checkbox" id="peer_project" name="peer_project" onclick="toggle_projects(this)">
-                             <label for="peer_project"><b>Peer Projects</b></label>
+                             <label for="peer_project"><strong>Peer Projects</strong></label>
                         <div id="peer_projects">{{ form.peer_projects }}</div>
 
                         <!-- child projects -->
                         <input type="checkbox" id="child project" name="child_project" onclick="toggle_projects(this)">
-                             <label for="child project"><b>Child Projects</b></label>
+                             <label for="child project"><strong>Child Projects</strong></label>
                         <div id="child_projects">{{ form.child_projects }}</div>
 
                     </td>
