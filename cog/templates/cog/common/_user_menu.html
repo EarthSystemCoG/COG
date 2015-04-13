@@ -7,17 +7,17 @@
 
      <!-- display project membership -->
      {% if request.user.is_staff %}
-           | You are a <b> {{ site.name }} Site Administrator</b>
+           | You are a <strong> {{ site.name }} Site Administrator</strong>
      {% else %}
 	     {% if project %}
 	        {% if project|hasUserPending:request.user %}
-	            | Your membership in project {{ project.short_name }} is <b>waiting for approval</b>
+	            | Your membership in project {{ project.short_name }} is <strong>waiting for approval</strong>
 	        {% else %}
 		        {% if request.user|isEnrolled:project.getAdminGroup %}
-                            | You are a <b>project administrator</b>
+                            | You are a <strong>project administrator</strong>
 		        {% else %}
 		            {% if request.user|isEnrolled:project.getUserGroup %}
-		                | You are a <b>project member</b>
+		                | You are a <strong>project member</strong>
 		            {% else %}
 		                | <a href="{% url 'membership_request' project.short_name|lower %}">Join the {{ project.short_name }} project</a>
 		            {% endif %}
