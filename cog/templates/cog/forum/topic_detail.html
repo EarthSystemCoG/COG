@@ -22,7 +22,7 @@
     			{% get_comment_count for thread as comment_count %}
     			<tr>
     				<td>
-    					<a href="{% url 'thread_detail' project.short_name thread.id %}"><b>{{ thread.title }}</b></a>
+    					<a href="{% url 'thread_detail' project.short_name thread.id %}"><strong>{{ thread.title }}</strong></a>
     					<br/>
     					Started by {{ thread.author }} on {{ thread.create_date }}, {{ comment_count }} comments.
 	    				{% if comment_count > 0 %}
@@ -37,7 +37,7 @@
     			</tr>
     		{% empty %}
     			<tr>
-    				<td><i>No threads found.</i></td>
+    				<td><em class="message">No threads found.</em></td>
     			</tr>
     		{% endfor %}
     
@@ -54,7 +54,7 @@
 			<table>
 				<tr>
 					<td nowrap="nowrap" style="vertical-align: middle;">
-						<span style="vertical-align: middle;">Start a new <b>Thread</b>:</span>
+						<span style="vertical-align: middle;">Start a new <strong>Thread</strong>:</span>
 					</td>
 					<td class="long" style="vertical-align: middle;">
 						{{ form.title }} {{ form.title.errors }}
