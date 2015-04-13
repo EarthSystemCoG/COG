@@ -7,10 +7,10 @@
     <table>
       
       <tr style="background:#B9E0E3; border-bottom: 1px solid #666666;">
-        <td nowrap="nowrap"><b>Name</b></td>
-        <td><b>Description</b></td>
-        <td nowrap="nowrap"><b>Site</b></td>
-        <td nowrap="nowrap"><b>Registration URL</b></td>
+        <td nowrap="nowrap"><em class="bold">Name</em></td>
+        <td><em class="bold">Description</em></td>
+        <td nowrap="nowrap"><em class="bold">Site</em></td>
+        <td nowrap="nowrap"><em class="bold">Registration URL</em></td>
       </tr>
       {% for group_name, group_dict in groups.items %}
       	{% with 'http://'|add:group_dict.site_domain|add:'/ac/subscribe/'|add:group_name|add:'/' as url %}

@@ -409,6 +409,16 @@ END PAGE-LEVEL ELEMENTS
 
 
 /******************************
+BEGIN EMPHASIS ELEMENTS
+******************************/
+
+/* for 508 compliance, bold tags and italics tags must be replaced by emphasis tags */
+
+em.italics {font-style: italic;}
+
+em.bold {font-weight: 700; font-style:normal;}
+
+/******************************
 BEGIN TABLE ELEMENTS
 ******************************/
 
