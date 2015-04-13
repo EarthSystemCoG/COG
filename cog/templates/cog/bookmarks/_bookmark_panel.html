@@ -128,22 +128,22 @@
 	
 			    <table>
 			        <tr>
-			            <td valign="top" nowrap="nowrap"><b>URL</b></td>
+			            <td valign="top" nowrap="nowrap"><strong>URL</strong></td>
 			            <td class="long">
 			               <span id="urlid"></span>
 			               <input type="hidden" name="url"/><div id="url-error"></div>
 			            </td>
 			        </tr>
 			        <tr>
-			            <td valign="top" nowrap="nowrap"><label for="name"><b>Name</b></label></td>
+			            <td valign="top" nowrap="nowrap"><label for="name"><strong>Name</strong></label></td>
 			            <td class="long"><input type="text" id="name" alt="name" name="name" /><div id="name-error"></div></td>
 			        </tr>
 			        <tr>
-                        <td valign="top" nowrap="nowrap"><label for="description"><b>Description</b></label></td>
+                        <td valign="top" nowrap="nowrap"><label for="description"><strong>Description</strong></label></td>
                         <td class="long"><input type="text" id="description" alt="description" name="description" /><div id="description-error"></div></td>
                     </tr>			        
 			        <tr>
-			            <td valign="top" nowrap="nowrap"><label for="folder"><b>Folder</b></label></td>
+			            <td valign="top" nowrap="nowrap"><label for="folder"><strong>Folder</strong></label></td>
 			            <td class="long">
 			                <select name="folder" id="folder">
 							    {% for folder in project|listFolders:user %}
@@ -154,7 +154,7 @@
 			        </tr>
 			        <tr>
 			           <td colspan="2">
-			             <i>Please note: the characters {{ project|getInvalidCharacters }}  are not allowed in the 'name' or 'description' fields.</i>
+			             <em class="message">Please note: the characters {{ project|getInvalidCharacters }}  are not allowed in the 'name' or 'description' fields.</em>
 			           </td>
 			        </tr>
 			    </table>

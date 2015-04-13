@@ -13,7 +13,7 @@
                <td>
                    <form name="lookupUserForm" action="" method="post">
                    	    {% csrf_token %}
-                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <b>User Name</b>, <b>First Name</b>, <b>Last Name</b>, or <b>Email</b>:</label>
+                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email:</strong></label>
                         <input style="vertical-align: middle; width:30%;" type="text" alt="text" name="match" id="match" value="{{request.POST.match}}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
 	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
@@ -29,11 +29,11 @@
             <caption>System Users</caption>
             <!-- <br/> tags in table are to align text to the bottom -->
             <tr>
-                <td class="tophead">Last Name</td>
-                <td class="tophead">First Name</td>
-                <td class="tophead">User Name</td>
-                <td class="tophead">Email</td>
-                <td class="tophead">Last Login</td>
+                <th scope="col" class="white">Last Name</th>
+                <th scope="col" class="white">First Name</th>
+                <th scope="col" class="white">User Name</th>
+                <th scope="col" class="white">Email</th>
+                <th scope="col" class="white">Last Login</th>
             </tr>
             {% for user in users %}
                 <tr>
