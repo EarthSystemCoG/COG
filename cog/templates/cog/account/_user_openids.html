@@ -4,17 +4,17 @@
 {% if request.user.id == user_profile.user.id or request.user.is_staff %}
 	<div class="mybox">
 		 <table>
-		     <caption>My OpenID</caption>
-		     {% if user_profile.openids %}
+             {% if user_profile.openids %}
+		         <caption>My OpenID</caption> <!-- only show caption if data is present...508-->
 			     {% for openid in user_profile.openids %}
 		        	<tr>
-			            <td class="head" nowrap="nowrap">OpenID</td>
+			            <th scope="row" class="white" nowrap="nowrap">OpenID</th>
 			            <td class="long">{{ openid }}</td>
 			        </tr>
 		        {% endfor %}
 	        {% else %}
 				<tr>
-					<td class="long"><i>No OpenIDs found</i></td>
+					<td class="long"><em class="message">No OpenIDs found</em></td>
 				</tr>
 	        {% endif %}
 		 </table>

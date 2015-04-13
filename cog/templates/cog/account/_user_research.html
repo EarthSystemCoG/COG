@@ -4,11 +4,11 @@
 	 <table>
 	     <caption>User Interests</caption>
 		 <tr>
-		 		<td nowrap="nowrap"><b>Interest Keywords</b></td>
+		 		<th scope="row" class="white" nowrap="nowrap">Interest Keywords</th>
 		 		<td class="long">{{ user_profile.researchKeywords }}</td>
 		 </tr>
 		 <tr>
-		 		<td nowrap="nowrap"><b>Interest Statement</b></td>
+		 		<th scope="row" class="gray" nowrap="nowrap">Interest Statement</th>
 		 		<td class="long">{{ user_profile.researchInterests|urlizetrunc:50|linebreaksbr }}</td>
 		 </tr>		   
 	 </table>

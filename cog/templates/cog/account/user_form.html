@@ -59,7 +59,7 @@
   <div class="prepend-1 span-22">
 
     <h2>{{ mytitle }}</h2>
-    <p>Please provide the information below to request a CoG account. Required fields are in <b>bold</b>. 
+    <p>Please provide the information below to request a CoG account. Required fields are in <strong>bold</strong>.
     <br/>Upon submission, an OpenID will be automatically assigned to you: you will need that OpenID to login. 
     <br/>The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ </p>
 
@@ -88,7 +88,7 @@
 	                   		<td>{{ form.instance.username }} {{ form.username.as_hidden }}</td>
 	                	{% else %}
 	                   		<td>{{ form.username }}
-	                        	<i>[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</i><br>{{ form.username.errors }}
+	                        	<em class="message">[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</em><br>{{ form.username.errors }}
 	                    	</td>
 	                   {% endif %}
 	                </tr>
@@ -136,7 +136,7 @@
 		                <tr>
 		                    <td class="required" nowrap="nowrap"><label for="id_password">Password</label></td>
 		                    <td>{{ form.password }}
-		                       <br/><i>[ {{ form.password.help_text }} ]</i>
+		                       <br/><em class="message">[ {{ form.password.help_text }} ]</em>
 		                       {{ form.password.errors }}
 		                       <div id="password_check" style="display:none; margin-top:2px; vertical-align: middle;" >
                                    &nbsp;
@@ -146,7 +146,7 @@
 		                <tr>
 		                    <td class="required" nowrap="nowrap"><label for="id_confirm_password">Confirm Password</label></td>
 		                    <td>{{ form.confirm_password }}
-		                        <br/><i>[ {{ form.confirm_password.help_text }} ]</i>
+		                        <br/><em class="message">[ {{ form.confirm_password.help_text }} ]</em>
 		                        <br/>{{ form.confirm_password.errors }}
 		                    </td>
 		                </tr>
@@ -192,7 +192,7 @@
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap"><label for="id_subscribed">Subscribe to COG Email List?</label></td>
-                        <td>{{ form.subscribed }} <i>[ 'cog_info', low traffic list ]</i> {{ form.subscribed.errors }}</td>
+                        <td>{{ form.subscribed }} <em class="message">[ 'cog_info', low traffic list ]</em> {{ form.subscribed.errors }}</td>
                     </tr>
                     <tr>
                         <td class="optional" nowrap="nowrap"><label for="id_private">Do not list me among project members</label></td>

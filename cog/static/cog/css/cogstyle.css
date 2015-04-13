@@ -414,9 +414,36 @@ BEGIN EMPHASIS ELEMENTS
 
 /* for 508 compliance, bold tags and italics tags must be replaced by emphasis tags */
 
-em.italics {font-style: italic;}
+em.message {font-style: italic;} /* used for text that is meant to be a message to the user */
 
-em.bold {font-weight: 700; font-style:normal;}
+em.attribute {font-weight: 700; font-style:normal;} /* style only...for table headers */
+
+em.bold {font-weight: 700; font-style:normal;} /* misc style only */
+
+/* used on tables that have green header bars */
+th.green {
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 12px;
+    background: transparent;
+    padding: 4px;
+}
+
+th.white {
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 12px;
+    background: white;
+    padding: 4px;
+}
+
+tbody tr:nth-child(2n) th.gray, tbody tr.even th.gray{
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 12px;
+    padding: 4px;
+    background-color: #eee /*light-gray */
+}
 
 /******************************
 BEGIN TABLE ELEMENTS
@@ -512,6 +539,7 @@ th {
 }
 
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
+
 
 .long {
 	width:          99%;
