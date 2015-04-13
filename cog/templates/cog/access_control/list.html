@@ -5,25 +5,28 @@
 
   <div class="mybox">
     <table>
-      
-      <tr style="background:#B9E0E3; border-bottom: 1px solid #666666;">
-        <td nowrap="nowrap"><em class="bold">Name</em></td>
-        <td><em class="bold">Description</em></td>
-        <td nowrap="nowrap"><em class="bold">Site</em></td>
-        <td nowrap="nowrap"><em class="bold">Registration URL</em></td>
-      </tr>
-      {% for group_name, group_dict in groups.items %}
-      	{% with 'http://'|add:group_dict.site_domain|add:'/ac/subscribe/'|add:group_name|add:'/' as url %}
-        <tr>		        
-          <td align="right">{{ group_dict.name }}</td>
-		  <td align="right">{{ group_dict.description }}</td>
-		  <td align="right">{{ group_dict.site_name }}</td>
-		  <td align="right"><a href='{{ url }}'>{{ url }}</a></td>
-        </tr> 
-        {% endwith %}      
-      {% endfor %}
+       <caption style="display: none;"> ESGF Access Control Groups </caption> <!--caption for 508 -->
+       <tr style="background:#B9E0E3; border-bottom: 1px solid #666666;">
+          <th scope="col" class="green" nowrap="nowrap">Name</th>
+          <th scope="col" class="green">Description</th>
+          <th scope="col" class="green" nowrap="nowrap">Site</th>
+          <th scope="col" class="green" nowrap="nowrap">Registration URL</th>
+       </tr>
+       <tbody>
+          {% for group_name, group_dict in groups.items %}
+      	     {% with 'http://'|add:group_dict.site_domain|add:'/ac/subscribe/'|add:group_name|add:'/' as url %}
+                 <tr>
+                     <td align="right">{{ group_dict.name }}</td>
+		             <td align="right">{{ group_dict.description }}</td>
+		             <td align="right">{{ group_dict.site_name }}</td>
+		             <td align="right"><a href='{{ url }}'>{{ url }}</a></td>
+                  </tr>
+             {% endwith %}
+          {% endfor %}
+       </tbody>
     </table>
   </div>
-  <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='/'"/></div>
+  <label for="cancel" style="display:none;">Cancel</label>
+  <div style="float:right;"><input id="cancel" type="reset" value="Cancel" onclick="self.location='/'"/></div>
 
 {% endblock %}
