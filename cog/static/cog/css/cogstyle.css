@@ -1127,13 +1127,16 @@ BEGIN SEARCH WIDGET
 /* prevent error styles from affecting error content w/in search widget */
 /*bad openid, bad IDP, failed login etc*/
 .error-box {
-    background:  #FAC24A; /* dark yellow*/
+    /*background:  #FAC24A; /* dark yellow*/
+    background:  red;
 	padding:     5px;
 	margin:      5px;
-	border:      1px solid #417690;
+	/*border:      1px solid #417690;*/
+    border:      1px solid #666666;
 	font-weight: bold;
 	text-align:  center;
-	color:       #FF0000; /*red*/
+	/*color:       #FF0000; /*red*/
+    color:       white;
 }
 
 .search_header {
