@@ -8,7 +8,11 @@
          {% if post.author.id %}
              <a href="{% url 'user_detail' post.author.id %}">{{ post.author.get_full_name }}</a>
          {% else %}
-             {{ post.author.get_full_name }}
+             {% if post.author.get_full_name %}
+                 {{ post.author.get_full_name }}
+             {% else %}
+                 deleted user
+             {% endif %}
          {% endif %}
 	</div> <!--// end div id="last_update_text" //-->
 
