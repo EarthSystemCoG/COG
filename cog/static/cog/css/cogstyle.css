@@ -21,11 +21,12 @@
 /******************************
 * CSS used w/in CoG
 * (for reference):
-* dark teal    = #358C92
-* light teal   = #B9E0E3
-* dark yellow  = #FAC24A
-* light yellow = #FCE79F
-* lightest yellow = #FCF2CE;
+* dark teal    = #358C92 navigation bar
+* light teal   = #B9E0E3 headers and accordions
+* light blue   = #E9F5F6 footer
+* dark yellow  = #FAC24A bar with technical support
+* light yellow = #FCE79F headers
+* lightest yellow = #FCF2CE table dividers, some message boxes
 * dark gray    = #666666
 * middle gray  = #666
 * light gray   = #333
@@ -136,7 +137,6 @@ div.custom_header_bar {
     margin-top:       0;
     margin-bottom:    2px;
     background-color: #E9F5F6; /*light blue*/
-    /*background-color:#e5e5e5; /* grey that Cecelia wanted initially */
 
 }
 
@@ -250,7 +250,7 @@ BEGIN: CoG footer
 
 div.footer_bar{
     width:              100%;     /* note span-24 = 950px */
-    background-color:   #e9f5f6;
+    background-color:   #e9f5f6;  /*light blue*/
     clear:              both;     /*this puts the footer on top of any content that might be below it*/
 }
 
@@ -1054,28 +1054,13 @@ END NEWS WIDGET
 
 /****** END COMMENTS ****/
 
-
 /******************************
-BEGIN SEARCH WIDGET
+BEGIN USER MESSAGES
 ******************************/
 
-.search-box {
-	background:    #FFFFFF;
-	border:        1px solid #666;
-	font-size:     8pt;
-    margin-bottom: 10px;
-    margin-top:    0;
-}
-
-/* Data Text Search */
-.box-colored {
-	background: #FCE79F; /*light yellow*/
-	border:     1px solid #666;
-	font-size:  8pt;
-}
-
+/* cancel membership, password reset, how to cancel a membership, membership notification*/
 .instruction-box {
-        background:  #B9E0E3; /* dark-teal */
+    background:  #B9E0E3; /* dark-teal */
 	padding:     5px;
 	/* margin: 5px; */
 	border:      1px solid #417690;
@@ -1083,7 +1068,8 @@ BEGIN SEARCH WIDGET
 	text-align:  center;
 }
 
-/*project registration notification*/
+
+/*project registration notification, 10K other places */
 .message-box {
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
@@ -1091,16 +1077,6 @@ BEGIN SEARCH WIDGET
 	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
-}
-
-/*access control license.*/
-.license-box {
-    background:  #fce79f; /* light yellow*/
-	padding:     10px;
-	margin:      10px;
-	border:      1px solid #666;
-	width:       720px;
-	text-align:  left;
 }
 
 /*update openID box. This should be removed when no longer needed */
@@ -1114,14 +1090,6 @@ BEGIN SEARCH WIDGET
 	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
-}
-
-.padded-box {
-	background: #FFFFFF;
-	padding:    5px;
-	margin-top: 5px;
-	border:     1px solid #417690;
-	text-align: left;
 }
 
 /* prevent error styles from affecting error content w/in search widget */
@@ -1139,6 +1107,22 @@ BEGIN SEARCH WIDGET
     color:       white;
 }
 
+/****** END USER MESSAGES ****/
+
+
+/******************************
+BEGIN SEARCH WIDGET
+******************************/
+
+/* defines the box around the search widget */
+.search-box {
+	background:    #FFFFFF;
+	border:        1px solid #666;
+	font-size:     8pt;
+    margin-bottom: 10px;
+    margin-top:    0;
+}
+
 .search_header {
 	margin:0;
 	padding: 2px 5px 3px 5px;
@@ -1154,6 +1138,31 @@ BEGIN SEARCH WIDGET
 	display: block;
 }
 
+/* Data Text Search */
+.box-colored {
+	background: #FCE79F; /*light yellow*/
+	border:     1px solid #666;
+	font-size:  8pt;
+}
+
+/*access control license.*/
+.license-box {
+    background:  #fce79f; /* light yellow*/
+	padding:     10px;
+	margin:      10px;
+	border:      1px solid #666;
+	width:       720px;
+	text-align:  left;
+}
+
+/* used to display data records on the search page and data car */
+.padded-box {
+	background: #FFFFFF;
+	padding:    5px;
+	margin-top: 5px;
+	border:     1px solid #417690;
+	text-align: left;
+}
 
 /******************************
 END SEARCH WIDGET
