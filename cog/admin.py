@@ -7,7 +7,9 @@ class ProjectAdmin(admin.ModelAdmin):
 
 admin.site.register(Project, ProjectAdmin)
 
-admin.site.register(Doc)
+class DocAdmin(admin.ModelAdmin):
+    search_fields = ['title', 'path', 'description']
+admin.site.register(Doc, DocAdmin)
 
 class NewsAdmin(admin.ModelAdmin):
 
