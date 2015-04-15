@@ -539,9 +539,12 @@ def search_facet_update(request, facet_id):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
+    # retrieve list of available facets by executing project-specific query
+    facets = _queryFacets(request, project)
+    
     if request.method=='GET':    
         form = SearchFacetForm(instance=facet)    
-        return render_search_facet_form(request, project, form)
+        return render_search_facet_form(request, project, form, facets)
         
     else:
         
@@ -553,7 +556,7 @@ def search_facet_update(request, facet_id):
         
         else:     
             print 'Form is invalid: %s' % form.errors
-            return render_search_facet_form(request, project, form)
+            return render_search_facet_form(request, project, form, facets)
 
 def search_facet_delete(request, facet_id):
          
