@@ -2,10 +2,26 @@
 <!-- Title -->
 <h1 class="title">{{ project.short_name }} Data Search </h1>
 
+<h2>Important Tips about ESGF-CoG Data Searches</h2>
+<ul>
+<li>By default, ESGF searches are conducted across all nodes and return only the latest version of a dataset (without
+    replicas). Use the check boxes (if enabled) below the text box to narrow the search.
+</li>
+
+<li>
+   Results on this page return datasets only. To search for indivdual files, save a dataset to your Data Cart and search
+    using the sub-select text box in the Data Cart itself.
+</li>
+<li>
+    By default, all words entered in the text widget are combined via a logical -OR-. To search via a logical -AND-, use
+    the AND keyword (e.g. word_1 AND word_2).
+</li>
+</ul>
 
 <!-- Search Help -->
 {% if project.searchprofile.description %}
-	<div>
+    <h2>Project Specific Search Tips</h2>
+    <div>
 		{{ project.searchprofile.description|urlize|linebreaksbr }}
 	</div>
 	<br/>

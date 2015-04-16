@@ -32,9 +32,10 @@
                     <td colspan="2">                   	
                     	   {{ form.description }}
                     	   {{ form.description.errors }}
-                    	   <div style="font-style:italic; padding-top:0px;">
+                    	   <div style="font-style:italic; padding-top:0;">
                     	   		{{form.description.help_text}}
-                    	   		<br/>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.
+                                Use a carriage return to break text into paragraphs.
+                    	   		Please note: the characters {{ project|getInvalidCharacters }} are not allowed.
                     	   </div>
                     </td>
                 </tr>
