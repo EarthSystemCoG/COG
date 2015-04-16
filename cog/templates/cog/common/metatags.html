@@ -5,17 +5,47 @@
 <!-- favicon -->
 <link rel="Shortcut Icon" href="{{STATIC_URL}}cog/img/favicon_cog.png" type="image/x-icon" />
 
-{% if project and request|is_home_page:project %}
-	
-	<meta name="keywords" content="{{ project.short_name }}: {{ project.long_name}}" />
-	<meta name="description" content="{{ project.description }}" />
-	
+<!--logic for HTML title:
+1) If the page is within the project context, add the short name to the title
+2) If a project home page, just list use HOME vice the page title
+3) Look for either title or title2 it they exist
+4) If nothing else, just list ESGF-CoG
+-->
+<!-- titles should be less than 70 characters -->
+
+{% if project %}
+    {% if request|is_home_page:project %}
+        <title>{{ project.short_name }} - Home | ESGF-CoG </title>
+    {% else %}
+        {% if title %}
+            <title>{{ title|removetags:"h2"|safe|truncatechars:38 }} | {{ project.short_name }} | ESGF-CoG</title>
+        {% else%}
+            {% if title2 %}
+                <title>{{ title2|removetags:"h2"|safe|truncatechars:38 }} | {{ project.short_name }} | ESGF-CoG</title>
+            {% else %}
+                <title>{{ project.short_name }} | ESGF-CoG </title>
+            {% endif %}
+        {% endif %}
+    {% endif %}
 {% else %}
 
+    {% if title %}
+        <title>{{ title|removetags:"h2"|safe|truncatechars:60 }} | ESGF-CoG</title>
+    {% else%}
+        {% if title2 %}
+            <title>{{ title2|removetags:"h2"|safe|truncatechars:60 }} | ESGF-CoG</title>
+        {% endif %}
+    {% endif %}
+    <title>ESGF-CoG</title>
+{% endif %}
+
+
+{% if project and request|is_home_page:project %}
+	<meta name="keywords" content="{{ project.short_name }}: {{ project.long_name}}" />
+	<meta name="description" content="{{ project.description }}" />
+{% else %}
 	{% if post.body %}
 		<!-- note: must process the text to remove undesired characters, tags  -->
 		<meta name="description" content="{{ post.body|striptags|safe|truncatewords:50 }}" />
-	
 	{% endif %}
-
 {% endif %}
