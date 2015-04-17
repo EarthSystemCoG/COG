@@ -6,15 +6,19 @@
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
-	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data</div> <!--// end div.right_widget_header //-->
-	       <div id="search_entry" style="padding:4px; padding-right:0;margin:0;">
+	       <div class="right_widget_header" style="border-bottom:1px solid black;">
+               Search &amp; Download Data
+           </div> <!--// end div.right_widget_header //-->
+	       <div id="search_entry" style="padding:4px; padding-right:0; margin:0;">
 		       <form action="{% url 'search' project.short_name.lower %}" method="post" id="search-form">
 		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
 		            <input type="hidden" name="type" value="Dataset" />
-	                <input type="text" name="query" size="24" value="" style="width:137px; font-size:8.5pt; padding:0; margin:0; padding-left:2px;" placeholder="Enter Text"/>
+                   <!--original width: 137px;-->
+	                <input type="text" name="query" size="24" value="" style="width:103px; font-size:8.5pt; padding:0; margin:0; padding-left:2px;" placeholder="Simple Text Search"/>
                     <input class="right_go" type="submit" value="Go"/>
+                    <input class="search_help" type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />
 
 	                <!--  <select name="type">
 	                    <option value="Dataset">Data</option>
@@ -22,7 +26,11 @@
 	                    <option value="Document">Documents</option>
 	                </select> -->
 		       </form>
-	           <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
+               <!-- add help text-->
+
+	           <div>
+                   <a class="listlink" href="{% url 'search' project.short_name.lower %}">&nbsp; Search with options</a>
+               </div>
 	       </div> <!--// end div id=search_entry //-->
 	  </div> <!--//end div.search-box //-->
   {% endif %}
