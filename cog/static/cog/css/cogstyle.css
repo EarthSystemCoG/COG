@@ -646,7 +646,7 @@ input.right_go{
 	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
     width:          28px;
 	margin-right:   0;
-    margin-left:    5px;
+    margin-left:    3px;
     height:         22px;
 	padding-top:    2px;
     padding-bottom: 2px;
@@ -655,8 +655,24 @@ input.right_go{
 	color:          black;
 	border:         1px solid #666666;
 	font-size:      8.5pt;
-
 }
+
+
+input.search_help{
+	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+    width:          35px;
+	margin-right:   0;
+    margin-left:    2px;
+    height:         22px;
+	padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   3px;
+    padding-right:  3px;
+	color:          black;
+	border:         1px solid #666666;
+	font-size:      8.5pt;
+}
+
 /***************
 * NAME: text input
 * SCOPE: the current form
@@ -1062,8 +1078,7 @@ BEGIN USER MESSAGES
 .instruction-box {
     background:  #B9E0E3; /* dark-teal */
 	padding:     5px;
-	/* margin: 5px; */
-	border:      1px solid #417690;
+	/*border:      1px solid #417690;*/
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1074,7 +1089,7 @@ BEGIN USER MESSAGES
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
 	margin:      5px;
-	border:      1px solid #666;
+	/*border:      1px solid #666;*/
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1082,12 +1097,13 @@ BEGIN USER MESSAGES
 /*update openID box. This should be removed when no longer needed */
 .changeID-box {
 
-    background:  #FCF2CE; /* lightest yellow*/
+    /*background:  #FCF2CE; /* lightest yellow */
+    background:  #fce79f; /* medium yellow */
 	padding:     10px;
 	margin-left: auto;
     margin-right:auto;
     width:       80%;
-	border:      1px solid #666;
+	/*border:      1px solid #666;*/
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1100,11 +1116,24 @@ BEGIN USER MESSAGES
 	padding:     5px;
 	margin:      5px;
 	/*border:      1px solid #417690;*/
-    border:      1px solid #666666;
+    /*border:      1px solid #666666;*/
 	font-weight: bold;
 	text-align:  center;
 	/*color:       #FF0000; /*red*/
     color:       white;
+}
+
+/* used on login2, site index errors. Used for p tags */
+.errornote {
+	font-size:   9pt !important;
+    text-align:  center;
+	display:     block;
+	padding:     5px;
+	margin:      4px;
+	/*border:      1px solid red;*/
+	color:       white;
+	font-weight: bold;
+	background:  red;
 }
 
 /****** END USER MESSAGES ****/
@@ -1274,16 +1303,7 @@ ul.messagelist li {
 	background: #ffc url(/static/admin/img/icon_success.gif) 5px .3em no-repeat;
 }
 
-.errornote {
-	font-size: 9pt !important;
-	display: block;
-	padding: 4px 5px 4px 25px;
-	margin: 4px;
-	border: 1px solid red;
-	color: red;
-	font-weight: bold;
-	background: #ffc url(/static/admin/img/icon_error.gif) 5px .3em no-repeat;
-}
+
 
 .warning {
 	font-size: 9pt !important;
