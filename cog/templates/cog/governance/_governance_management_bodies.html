@@ -7,7 +7,7 @@
 
 		<!-- header -->
 		<hr/>
-		<b>{{category}} Management Bodies</b>
+		<strong>{{category}} Management Bodies</strong>
 
 		<!-- content -->
 		<table>
@@ -16,7 +16,7 @@
 					<td>
 						<table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
 							<tr>
-								<td class="leftcolumn"><b>{{mb.title}}</b></td>
+								<td class="leftcolumn"><strong>{{mb.title}}</strong></td>
 								<td>{{mb.description|urlizetrunc:50|linebreaksbr}}</td>
 							</tr>
 							{% if mb.get_all_purposes %}

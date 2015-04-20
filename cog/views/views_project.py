@@ -593,15 +593,15 @@ def project_browser(request, project_short_name, tab):
             html += render_project_list(project, tab, tag, request.user, 'Peer', 'peer_projects', display)
             html += render_project_list(project, tab, tag, request.user, 'Child', 'child_projects', display)
         else:
-            html += '<div id="this_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
+            html += '<div id="this_projects" style="display:block; padding:3px"><em class="message">No projects found.</em></div>'
     elif tab == 'all':
         html += render_project_list(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':
         if not request.user.is_anonymous():
             html += render_project_list(project, tab, tag, request.user, None, 'my_projects', None)
         else:
-            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your ' \
-                    'projects.</i></div>'
+            html += '<div id="tags_projects" style="display:block; padding:3px"><em class="message">Please login to display your ' \
+                    'projects.</em></div>'
     elif tab == 'tags':
         if not request.user.is_anonymous():
             display = DisplayStatus(True)  # open all sub-widgets by default
@@ -613,10 +613,10 @@ def project_browser(request, project_short_name, tab):
                     html += render_project_list(project, tab, tag, request.user, utag.name, '%s_projects' % utag.name,
                                                display, add_delete_link=True)
             else:
-                html += '<div id="tags_projects" style="display:block; padding:3px"><i>No projects found.</i></div>'
+                html += '<div id="tags_projects" style="display:block; padding:3px"><em class="message">No projects found.</em></div>'
         else:
-            html += '<div id="tags_projects" style="display:block; padding:3px"><i>Please login to display your ' \
-                    'projects.</i></div>'
+            html += '<div id="tags_projects" style="display:block; padding:3px"><em class="message">Please login to display your ' \
+                    'projects.</em></div>'
             
     return HttpResponse(html, content_type="text/html")
 
@@ -742,7 +742,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
         if add_delete_link:
             html += "<a href='javascript:deleteUserTag(\"%s\");' class='deletelink'>&nbsp;</a>" % widget_name
         if widget_name in ['Parent', 'Child', 'Peer']:
-            html += '%s (%s) projects' % (widget_name, str(len(projects)))
+            html += '%s projects (%s)' % (widget_name, str(len(projects)))
         else:
             html += '%s (%s)' % (widget_name, str(len(projects)))  # shorter title
         html += '</div>'
@@ -760,13 +760,13 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
     html += '<div id="'+widget_id+'" style="display:'+display+'; margin-left:4px;">'
     if len(projects) == 0:
         if tag_error is not None:
-            html += "<i>"+tag_error+"</i>"
+            html += '<em class="message">'+tag_error+'</em>'
         else:
             # special case: cannot retrieve list of projects for guest user
             if (tab == 'my' or tab == 'tags') and not user.is_authenticated():
-                html += "<i>Please login to display your projects.</i>"
+                html += '<em class="message">Please login to display your projects.</em>'
             else:
-                html += "<i>No projects found.</i>"
+                html += '<em class="message">No projects found.</em>'
     else:     
         # loop over projects sorted by name
         for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):

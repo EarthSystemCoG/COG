@@ -11,16 +11,16 @@
            
             <table>
                 <tr>
-                    <td valign="top" nowrap="nowrap"><b>Name</b></td>
+                    <td valign="top" nowrap="nowrap"><strong>Name</strong></td>
                     <!--ordering of the folders in the form occurs in /forms_bookmarks.py -->
                     <td class="long">{{ form.name }}{{ form.name.errors }}</td>
                 </tr>
                 <tr>
-                    <td valign="top" nowrap="nowrap"><b>Parent Folder</b></td>
+                    <td valign="top" nowrap="nowrap"><strong>Parent Folder</strong></td>
                     <td class="long">{{ form.parent }}{{ form.parent.errors }}</td>
                 </tr>
                 <tr>
-                    <td class="long" colspan="2"><i>Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</i></td>
+                    <td class="long" colspan="2"><em class="message">Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</em></td>
                 </tr>                       
             </table>
             

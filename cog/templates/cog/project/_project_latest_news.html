@@ -20,7 +20,7 @@
 		           <tr>
 		             <td>
 		               <div class="news_text" style="padding: 4px">
-				   <a href="{% url 'news_detail' news.id %}"><b>{{ news.title|truncatewords:8 }}</b></a><br/>
+				   <a href="{% url 'news_detail' news.id %}"><strong>{{ news.title|truncatewords:8 }}</strong></a><br/>
 				   {{ news.text|urlizetrunc:20|truncatewords:8 }} 
 			       </div>
 			     </td>

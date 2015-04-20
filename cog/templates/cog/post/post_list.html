@@ -29,7 +29,7 @@
 			   {% get_comment_count for object as comment_count %}
 			   <tr>
 			      <td valign="top">{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
-			      <td valign="top"><b><a href="{% url 'post_detail' object.id %}">{{ object.title }}</a></b></td>
+			      <td valign="top"><strong><a href="{% url 'post_detail' object.id %}">{{ object.title }}</a></strong></td>
 			      <td valign="top" align="left">{{ object.author }} </td>
 			      <td valign="top">{{ object.update_date|date:"d M Y, H:m" }} </td>
 			      <td valign="top">{{ object.topic }} </td>

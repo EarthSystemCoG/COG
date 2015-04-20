@@ -9,12 +9,15 @@ export COG_DIR=/usr/local/cog
 export ESGF=true
 
 # the user and group running the CoG application
-export USER=tomcat
-export GROUP=tomcat
+export USER=apache
+export GROUP=apache
 
 # the specific CoG branch OR version to install
 #export COG_TAG=master
-export COG_TAG=v2.10.0
+export COG_TAG=v2.11.1
+
+# the Python installation from which to create the venev
+export PATH=/usr/local/uvcdat/bin:$PATH
 
 #=== ESGF INSTALLATION LOGIC - DO NOT CHANGE =========
 

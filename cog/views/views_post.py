@@ -18,7 +18,8 @@ from django.utils.timezone import now
 from cog.models.utils import delete_doc
 from django.conf import settings
 import os
- 
+
+
 # view to render a generic post
 def post_detail(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
@@ -29,14 +30,16 @@ def post_detail(request, post_id):
         return redirect
             
     # if page, redirect to page view
-    if post.type==Post.TYPE_PAGE:
+    if post.type == Post.TYPE_PAGE:
         return HttpResponseRedirect(post.url)
     
     # if blog or notes, render template
-    else:              
-        return render_to_response('cog/post/post_detail.html', 
-                                  {'post':post, 'project':post.project, 'title':post.title }, context_instance=RequestContext(request))
-    
+    else:
+        return render_to_response('cog/post/post_detail.html',
+                                  {'post': post, 'project': post.project, 'title': post.title},
+                                  context_instance=RequestContext(request))
+
+
 # view to delete a post (page or blog)
 def post_delete(request, post_id):
     
@@ -52,9 +55,10 @@ def post_delete(request, post_id):
         if not userHasUserPermission(request.user, project):
             return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if request.method=='GET':
+    if request.method == 'GET':
         return render_to_response('cog/post/post_delete.html', 
-                                  {'post':post, 'project':project, 'title':'%s Deletion Request' % post.type.capitalize() }, 
+                                  {'post': post, 'project': project,
+                                   'title': '%s Deletion Request' % post.type.capitalize()},
                                   context_instance=RequestContext(request))
     else:
              
@@ -71,7 +75,8 @@ def post_delete(request, post_id):
         post.delete()
     
         return render_to_response('cog/post/post_delete.html', 
-                                  {'post':_post, 'project':project, 'title':'%s Deletion Confirmation' % _post.type.capitalize() }, 
+                                  {'post': _post, 'project': project,
+                                   'title': '%s Deletion Confirmation' % _post.type.capitalize()},
                                   context_instance=RequestContext(request))
 
 
@@ -83,10 +88,10 @@ def page_detail(request, project_short_name):
         
     # HTTP redirect for non-local projects
     if not project.isLocal():
-        return HttpResponseRedirect( "http://%s%s" % (project.site.domain, request.path) )
+        return HttpResponseRedirect("http://%s%s" % (project.site.domain, request.path))
     
     # check project is active
-    if project.active==False:
+    if project.active == False:
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
@@ -109,8 +114,8 @@ def page_detail(request, project_short_name):
     redirect = getNotAuthorizedRedirect(request, page)
     if redirect is not None:
         return redirect
-    
-    dict = {"title": page.title, "post": page, "project": project }
+
+    dict = {"title": page.title, "post": page, "project": project}
     
     related_pages = []
     for post in page.post_set.all():
@@ -120,10 +125,11 @@ def page_detail(request, project_short_name):
     
     # add extra objects for home page
     if page.is_home:
-        dict['project_latest_signals']=project.signals()[0:5]
+        dict['project_latest_signals'] = project.signals()[0:5]
             
     # render page template
-    return render_to_response(page.template, dict, context_instance=RequestContext(request) )
+    return render_to_response(page.template, dict, context_instance=RequestContext(request))
+
 
 # view to render project home, delegates to the home page URL
 def project_home(request, project_short_name):
@@ -150,7 +156,8 @@ def post_list(request, project_short_name):
     # text query
     query = request.GET.get('query', '')
     if query:
-        qset = qset & ( Q(title__icontains=query) | Q(body__icontains=query) | Q(author__first_name__icontains=query) | Q(author__last_name__icontains=query) | Q(author__username__icontains=query) )
+        qset = qset & (Q(title__icontains=query) | Q(body__icontains=query) | Q(author__first_name__icontains=query) |
+                       Q(author__last_name__icontains=query) | Q(author__username__icontains=query))
         list_title = "Search Results for '%s'" % query
     
     # topic constraint
@@ -161,7 +168,7 @@ def post_list(request, project_short_name):
         
     # execute query, order by descending update date or title
     sortby = request.GET.get('sortby', 'title')
-    if sortby=='date':
+    if sortby == 'date':
         results = Post.objects.filter(qset).distinct().order_by('-update_date')
     else:
         results = Post.objects.filter(qset).distinct().order_by('title')
@@ -169,24 +176,25 @@ def post_list(request, project_short_name):
     # list all possible topics for posts of this project, and of given type
     # must follow the foreign key relation Post -> Topic backward (through 'topic.post_set')
     #topic_list = Topic.objects.all().order_by('name')
-    topic_list = Topic.objects.filter( Q(post__project=project) & Q(post__type=type) ).distinct().order_by('-name')
+    topic_list = Topic.objects.filter(Q(post__project=project) & Q(post__type=type)).distinct().order_by('-name')
 
     return render_to_response('cog/post/post_list.html', 
                               {"object_list": results, 
                                "title": "%s %ss" % (project.short_name, type.capitalize()),
-                               "list_title":list_title,
+                               "list_title": list_title,
                                "query": query,  
-                               "project" : project,
-                               "topic":topic, "topic_list":topic_list}, 
-                               context_instance=RequestContext(request))
-            
+                               "project": project,
+                               "topic": topic, "topic_list": topic_list},
+                              context_instance=RequestContext(request))
+
+
 @login_required
 def post_add(request, project_short_name, owner=None):
-    '''
+    """
     View to create a Post object within a context project.
     Optionally, an owner object can be specified, which is assigned a reference to the newly created Post
     through its method .setPost(Post)
-    '''
+    """
     
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -198,7 +206,7 @@ def post_add(request, project_short_name, owner=None):
     # retrieve type
     type = request.REQUEST.get('type')
   
-    if request.method=='GET':
+    if request.method == 'GET':
         
         # create empty Post object, pre-populate project and type
         post = Post()
@@ -229,7 +237,7 @@ def post_add(request, project_short_name, owner=None):
             post.update_date = now()
 
             # page: build full page URL
-            if post.type==Post.TYPE_PAGE:
+            if post.type == Post.TYPE_PAGE:
                 post.url = get_project_page_full_url(project, post.url)
             else:
                 # assign temporary value before object id is assigned
@@ -237,14 +245,15 @@ def post_add(request, project_short_name, owner=None):
             # assign post order, if top-level
             # note that the post.topic may be None
             if post.parent is None:
-                pages = Post.objects.filter(project=project).filter(topic=post.topic).filter(parent=None).filter(type='page').order_by('order')
+                pages = Post.objects.filter(project=project).filter(topic=post.topic).filter(parent=None).\
+                    filter(type='page').order_by('order')
                 post.order = len(pages)+1
             else:
                 post.order = 0
             # save post object to the database (GET-POST-REDIRECT)
             post.save()
             # assign post URL and save again
-            if post.type==Post.TYPE_BLOG or post.type==Post.TYPE_NOTES:
+            if post.type == Post.TYPE_BLOG or post.type == Post.TYPE_NOTES:
                 post.url = reverse('post_detail', args=[post.id])
                 post.save()
                 
@@ -267,34 +276,38 @@ def post_add(request, project_short_name, owner=None):
         else:
             print form.errors
             return render_post_form(request, form, project, type)
-        
+
+
 def createProjectTopicIfNotExisting(project, topic):
     try:
-        pt = ProjectTopic.objects.get(project=project,topic=topic)
+        pt = ProjectTopic.objects.get(project=project, topic=topic)
     except ProjectTopic.DoesNotExist:
-        pt = ProjectTopic(project=project,topic=topic, order=len(project.topics.all())+1)
+        pt = ProjectTopic(project=project, topic=topic, order=len(project.topics.all())+1)
         pt.save()
+
 
 # function to return an error message if a post object is locked
 def getLostLockRedirect(request, project, post, lock):
         messages = ["Sorry, your lock on this page has expired, and others have modified the page afterwards.",
-                    "Your changes cannot be saved. Please start the update from most current version of the page." ] 
+                    "Your changes cannot be saved. Please start the update from most current version of the page."]
         return render_to_response('cog/common/message.html', 
-                                  {'mytitle':'Changes cannot be saved', 
+                                  {'mytitle': 'Changes cannot be saved',
                                    'project': project,
                                    'messages': messages},
                                   context_instance=RequestContext(request))
-        
+
+
 # function to return an error message if a user lost the lock on the object
 def getPostIsLockedRedirect(request, project, post, lock):
         messages = ["The page '%s' is currently being edited by %s." % (post.title, lock.owner.get_full_name()),
-                    "The current lock will expire at %s." % lock.get_expiration().strftime('%Y-%m-%d %H:%M:%S') ] 
+                    "The current lock will expire at %s." % lock.get_expiration().strftime('%Y-%m-%d %H:%M:%S')]
         return render_to_response('cog/common/message.html', 
-                                  {'mytitle':'Page is locked', 
-                                   'project':project,
-                                   'messages':messages }, 
+                                  {'mytitle': 'Page is locked',
+                                   'project': project,
+                                   'messages': messages},
                                   context_instance=RequestContext(request))
-        
+
+
 @login_required
 def post_cancel(request, post_id):
     """View that releases the lock on a post when user clicks on 'Cancel', then redirects to the post."""
@@ -311,7 +324,7 @@ def post_cancel(request, post_id):
     deleteLock(post)
     
     # redirect to post
-    return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id': post.id}))
+    return HttpResponseRedirect(reverse('post_detail', kwargs={'post_id': post.id}))
     
         
 @login_required
@@ -329,13 +342,13 @@ def post_update(request, post_id):
     if isLockedOut(request.user, lock):
         return getPostIsLockedRedirect(request, post.project, post, lock)
         
-    if (request.method=='GET'):
+    if request.method == 'GET':
         
         # create/renew lock
         lock = createLock(post, request.user)
                 
         # extract page partial URL
-        if post.type==Post.TYPE_PAGE:
+        if post.type == Post.TYPE_PAGE:
             post.url = get_project_page_sub_url(post.project, post.url)
         
         # create form object from model
@@ -349,12 +362,12 @@ def post_update(request, post_id):
         form = PostForm(post.type, post.project, request.POST, instance=post)
         
         # check versions       
-        if post.version!=int(request.REQUEST.get('version',-1)):
-            print 'database version=%s form version=%s' % (post.version, request.REQUEST.get('version',-1))
+        if post.version != int(request.REQUEST.get('version', -1)):
+            print 'database version=%s form version=%s' % (post.version, request.REQUEST.get('version', -1))
             return getLostLockRedirect(request, post.project, post, lock)
         
         #print "1 PAGE URL=%s" % form.data['url']
-        if (form.is_valid()):
+        if form.is_valid():
             # build instance from form data
             post = form.save(commit=False)
                         
@@ -362,7 +375,7 @@ def post_update(request, post_id):
             post.version += 1
             
             # rebuild full page URL
-            if post.type==Post.TYPE_PAGE:
+            if post.type == Post.TYPE_PAGE:
                 post.url = get_project_page_full_url(post.project, post.url)
             # change the author to the last editor
             post.author = request.user
@@ -385,7 +398,8 @@ def post_update(request, post_id):
         else:
             print form.errors
             return render_post_form(request, form, post.project, post.type, lock=lock)
-        
+
+
 @login_required
 def post_add_doc(request, post_id):
 
@@ -393,7 +407,7 @@ def post_add_doc(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     
      # retrieve doc from database
-    doc_id = request.GET.get('doc_id',None)
+    doc_id = request.GET.get('doc_id', None)
     doc = get_object_or_404(Doc, pk=doc_id)
     
     # check permission
@@ -408,8 +422,9 @@ def post_add_doc(request, post_id):
 
     post.save()
     
-    return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id': post.id}) )
-    
+    return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id': post.id}))
+
+
 @login_required
 def post_remove_doc(request, post_id, doc_id):
 
@@ -427,23 +442,26 @@ def post_remove_doc(request, post_id, doc_id):
     if post.docs.get(id=doc_id):
         delete_doc(doc)
     
-    return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id': post.id}) )
-        
+    return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id': post.id}))
+
+
 def render_post_form(request, form, project, type, lock=None):
     
     #type = request.GET.get('type', None)
     title = "%s Editor" % type.capitalize() 
     return render_to_response('cog/post/post_form.html', 
-                             {'form': form, 'project':project, 'title':title, 'lock':lock}, 
+                              {'form': form, 'project': project, 'title': title, 'lock': lock},
                               context_instance=RequestContext(request))
+
 
 # function to redirect to the post blog/page URL
 def redirect_to_post(request, post):
-    if post.type=='blog':
-        return HttpResponseRedirect( reverse('post_detail', kwargs={'post_id':post.id}) )
+    if post.type == 'blog':
+        return HttpResponseRedirect(reverse('post_detail', kwargs={'post_id': post.id}))
     else:
         return HttpResponseRedirect(post.url)
-    
+
+
 # function to check that the user can modify the given post
 def userCanPost(user, post):
     # project members can modify any page except for the home page
@@ -462,6 +480,7 @@ def userCanPost(user, post):
     else:
         return userHasUserPermission(user, post.project)
 
+
 # function to check whether the user can view the current page
 def userCanView(user, post):
         
@@ -471,13 +490,14 @@ def userCanView(user, post):
     # public pages are viewable by everybody
     else:
         return True
-    
+
+
 # function to check that the current user is authorized to view the requested page,
 # and redirect the request appropriately if he/she isn't.
 def getNotAuthorizedRedirect(request, post):
     
     # check project access first
-    if post.project.active==False:
+    if post.project.active == False:
         return getProjectNotActiveRedirect(request, post.project)
     elif post.project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, post.project)
@@ -488,12 +508,12 @@ def getNotAuthorizedRedirect(request, post):
             return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path)
         else:
             messages = ['This page is only viewable to members of %s.' % post.project.short_name,
-                         '<a href="/membership/request/%s">Request to join this project</a>.' % post.project.short_name]
+                        '<a href="/membership/request/%s">Request to join this project</a>.' % post.project.short_name]
             return render_to_response('cog/common/message.html', 
-                              {'mytitle':'Page Access Restricted', 
-                               'project':post.project,
-                               'messages':messages }, 
-                              context_instance=RequestContext(request))    
+                                      {'mytitle': 'Page Access Restricted',
+                                       'project': post.project,
+                                       'messages': messages},
+                                      context_instance=RequestContext(request))
 
     # user is authorized, return no redirect
     else:

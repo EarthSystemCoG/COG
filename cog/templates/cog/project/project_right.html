@@ -6,15 +6,19 @@
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
-	       <div class="right_widget_header" style="border-bottom:1px solid black;">Search &amp; Download Data</div> <!--// end div.right_widget_header //-->
-	       <div id="search_entry" style="padding:4px; padding-right:0;margin:0;">
+	       <div class="right_widget_header" style="border-bottom:1px solid black;">
+               Search &amp; Download Data
+           </div> <!--// end div.right_widget_header //-->
+	       <div id="search_entry" style="padding:4px; padding-right:0; margin:0;">
 		       <form action="{% url 'search' project.short_name.lower %}" method="post" id="search-form">
 		            {% csrf_token %}
 		            <!-- <input type="hidden" name="offset" value="0" /> -->
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
 		            <input type="hidden" name="type" value="Dataset" />
-	                <input type="text" name="query" alt="query" size="24" value="" style="width:137px; font-size:8.5pt; padding:0; margin:0; padding-left:2px;" placeholder="Enter Text"/>
+                   <!--original width: 137px;-->
+	                <input type="text" name="query" size="24" value="" style="width:103px; font-size:8.5pt; padding:0; margin:0; padding-left:2px;" placeholder="Simple Text Search"/>
                     <input class="right_go" type="submit" value="Go"/>
+                    <input class="search_help" type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />
 
 	                <!--  <select name="type">
 	                    <option value="Dataset">Data</option>
@@ -22,7 +26,11 @@
 	                    <option value="Document">Documents</option>
 	                </select> -->
 		       </form>
-	           <a href="{% url 'search' project.short_name.lower %}" class="listlink">&nbsp; &nbsp;Advanced Data Search</a>
+               <!-- add help text-->
+
+	           <div>
+                   <a class="listlink" href="{% url 'search' project.short_name.lower %}">&nbsp; Search with options</a>
+               </div>
 	       </div> <!--// end div id=search_entry //-->
 	  </div> <!--//end div.search-box //-->
   {% endif %}
@@ -40,10 +48,10 @@
           <ul class="yui-nav">
               <!--// urls in the list below don't go anywhere. Some sort of link is required to get the javascript
               to work, but it can be anything. It shows up in the hover, so it is made descriptive. -->
-              <li class="selected">&nbsp;&nbsp;<a href="/project_browser/this/"><em><b>This</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/all/"><em><b>All</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/my/"><em><b>My</b></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/tags/"><em><b>Tags</b></em></a>&nbsp;&nbsp;</li>
+              <li class="selected">&nbsp;&nbsp;<a href="/project_browser/this/"><em><strong>This</strong></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/all/"><em><strong>All</strong></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/my/"><em><strong>My</strong></em></a>&nbsp;&nbsp;</li>
+              <li>&nbsp;&nbsp;<a href="/project_browser/tags/"><em><strong>Tags</strong></em></a>&nbsp;&nbsp;</li>
           </ul>
            <!-- actual list of projects under their accordions -->
           <div class="yui-content">
@@ -65,6 +73,7 @@
 
 			        <!--class=yui-ac-input-->
                     <label for="projectBrowserText" style="display:none;">Enter Tag</label>
+                    <!--ONCLICK: land on All -->
 		            <input type="text" onclick="gotoTab(1);" id="projectBrowserText" placeholder="Enter Tag" style="width:178px; position:static;
 		             font-size:8.5pt; padding:0; padding-left:2px; margin:0;" alt="projectBrowserText" />
 
@@ -74,21 +83,21 @@
 		        </div>
                <!-- add buttons -->
                 <div style="text-align: left; width:181px; margin:0; padding:0; margin-top:4px;">
-                
+                    <!-- SAVE: land on Tags -->
                 	{% if not request.user.is_anonymous %}
                      <input class="right_go" style="width:60px; margin:0" type="submit" value="Save Tag" id="saveUserTag"
-	                         onclick="saveUserTag();"/>	                   
+	                         onclick="saveUserTag();gotoTab(3);"/>
 	                   
 	                {% endif %}
-
+                    <!--RESET: Land on This-->
 	                <input class="right_go" style="width:45px; margin:0; margin-left:1px;"
 	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
 	                   onclick="document.getElementById('projectBrowserText').value='';
                                loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
-
+                    <!--GO: Land on All-->
                     <input class="right_go" style="float:right; margin:0;"
 	                   type="submit" value="Go" id="projectBrowserButton"
-	                   onclick="document.getElementById('projectBrowserText'); loadProjectBrowser('{{project.short_name}}');  "/>
+	                   onclick="document.getElementById('projectBrowserText'); loadProjectBrowser('{{project.short_name}}');gotoTab(1);  "/>
 	                   
 	                <!-- form to save a user tag -->
 	                <form action="{% url 'save_user_tag' %}" method="post" id="save-user-tag-form">
@@ -120,7 +129,7 @@
    <div style="font-size: 12px; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
 
        {% if project.tags.all|length > 0 %}
-           <b>{{ project.short_name }} Tags:</b>
+           <strong>{{ project.short_name }} Tags:</strong>
            {% for tag in project.tags.all %}
                {% if forloop.last %}
                    {{ tag }}
@@ -129,7 +138,7 @@
                {% endif %}
            {% endfor %}
        {% else %}
-           <b>{{ project.short_name }} Tags:</b> None
+           <strong>{{ project.short_name }} Tags:</strong> None
        {% endif %}
    </div>
 

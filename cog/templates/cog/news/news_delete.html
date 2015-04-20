@@ -5,12 +5,12 @@
      <div align="center" class="box-colored">
     
         <form action="" method="post">
-            <p/>
+            <p></p>
             {% csrf_token %}
-            <p/>
-            Are you sure you want to completely delete news <b>{{ news.title }} last updated on {{news.update_date|date:"Y/m/d h:m:s"}}</b>?
+            <p></p>
+            Are you sure you want to completely delete news <strong>{{ news.title }} last updated on {{news.update_date|date:"Y/m/d h:m:s"}}</strong>?
             <br><div style="color:red">Warning: this operation cannot be undone.</div>          
-            <p/> 
+            <p></p>
             <input type="button" value="Cancel" onclick="window.location='{% url 'project_home' project.short_name|lower %}'"/>
             <input type="submit" value="Submit" />
         </form>

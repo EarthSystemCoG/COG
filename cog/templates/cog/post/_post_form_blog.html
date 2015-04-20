@@ -11,7 +11,7 @@
 	    <td>{{ request.user }} </td>		          
     </tr>
     <tr>
-        <td><b>Title</b></td>
+        <td><strong>Title</strong></td>
         <td class="long">{{ form.title }} {{ form.title.errors }}</td>
     </tr>
     <tr>
@@ -19,18 +19,18 @@
           <td>{{ form.parent }} </td>                
     </tr>
     <tr>
-          <td><b>Topic</b></td>
-          <td nowrap="nowrap">{{ form.topic }} &nbsp; <b>or New Topic</b>&nbsp;{{ form.newtopic }} 
+          <td><strong>Topic</strong></td>
+          <td nowrap="nowrap">{{ form.topic }} &nbsp; <strong>or New Topic</strong>&nbsp;{{ form.newtopic }}
               {{ form.newtopic.errors }} {{ form.topic.errors }}
           </td>
      </tr>
      <tr>
-        <td><b>Body</b></td>
+        <td><strong>Body</strong></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>
      </tr>
      <tr>
-          <td nowrap="nowrap"><b>Private?</b></td>
-          <td>{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to view this page</i>)</td>                
+          <td nowrap="nowrap"><strong>Private?</strong></td>
+          <td>{{ form.is_private }} &nbsp; (<em class="message">if checked, only project members will be able to view this page</em>)</td>
      </tr>    
      
 </table>

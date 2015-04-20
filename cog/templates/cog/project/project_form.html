@@ -41,7 +41,7 @@
             {% if action == 'add' %}
 		    <!--width of first row carries down to all others in the table-->
                <td style="width:15%;">
-                   <b>Short Name</b>
+                   <strong>Short Name</strong>
                </td>
                <td style="width:85%;">
                    {{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
@@ -50,7 +50,7 @@
                <!-- project already existing - cannot change short name -->
             {% else %}
                 <td style="width:15%;" >
-                    <b>Short Name</b>
+                    <strong>Short Name</strong>
                 </td>
                 <td style="width:85%;">
                     {{ form.instance.short_name }} {{ form.short_name.as_hidden }}
@@ -59,7 +59,7 @@
             </tr>
             <tr>
                 <td>
-                    <b>Long Name</b>
+                    <strong>Long Name</strong>
                 </td>
                 <td>
                     {{ form.long_name }} {{ form.long_name.errors }}
@@ -67,7 +67,7 @@
             </tr>
             <tr>
                 <td>
-                    <b>Creator</b>
+                    <strong>Creator</strong>
                 </td>
                 <td>
                 {% if form.instance.author %}
@@ -83,7 +83,7 @@
             </tr>
             <tr>
                 <td nowrap="nowrap">
-                    <b>Description</b>
+                    <strong>Description</strong>
                 </td>
                 <td>
                     {{ form.description }} {{ form.description.errors }}
@@ -195,7 +195,7 @@
                                        type="checkbox" onclick="trigger(this)"/>
 				                       <span style="margin-top:2px;vertical-align:middle;">
 				                           {% if forloop.counter == 1 %}
-				                              <label for="tab_{{ tab.label }}"><b>{{tab.label}}</b></label>
+				                              <label for="tab_{{ tab.label }}"><strong>{{tab.label}}</strong></label>
 				                           {% else %}
 				                              <label for="tab_{{ tab.label }}">{{tab.label}}</label>
 				                           {% endif %}

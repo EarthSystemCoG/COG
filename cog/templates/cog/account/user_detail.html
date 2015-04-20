@@ -12,18 +12,18 @@
         <table>
         <caption>Extra User Information (Site Administrators Only)</caption>
          <tr>
-            <td style="width:150px;">
-                <b>Email</b>
-            </td>
+            <th scope="row" class="white" style="width:150px;">
+                Email
+            </th>
             <td>
                 {{ user_profile.user.email }}
             </td>
         </tr>
 
         <tr>
-            <td>
-                <b>Subscribed to cog_info?</b>
-            </td>
+            <th scope="row" class="gray">
+                Subscribed to cog_info?
+            </th>
             <td>
                 {% if user_profile.subscribed %}
                     Yes
@@ -33,21 +33,21 @@
             </td>
         </tr>
         <tr>
-            <td>
-                <b>Home Site</b>
-            </td>
+            <th scope="row" class="white">
+                Home Site
+            </th>
             <td>{{ user_profile.site.name }}</td>
         </tr>
         <tr>
-            <td>
-                <b>Last Password Update</b>
-            </td>
+            <th scope="row" class="gray">
+                Last Password Update
+            </th>
             <td>{{ user_profile.last_password_update }}</td>
         </tr>
         <tr>
-            <td>
-                <b>Last Login</b>
-            </td>
+            <th scope="row" class="white">
+                Last Login
+            </th>
             <td>{{ user_profile.user.last_login }}</td>
         </tr>
         <tr>
@@ -98,7 +98,7 @@
    	    </div>
 
 	    <div class="span-5 last">
-	       <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" {% endif %}/>
+	       <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %}/>
     	</div>
 
 

@@ -21,10 +21,12 @@
 /******************************
 * CSS used w/in CoG
 * (for reference):
-* dark teal    = #358C92
-* light teal   = #B9E0E3
-* dark yellow  = #FAC24A
-* light yellow = #FCE79F
+* dark teal    = #358C92 navigation bar
+* light teal   = #B9E0E3 headers and accordions
+* light blue   = #E9F5F6 footer
+* dark yellow  = #FAC24A bar with technical support
+* light yellow = #FCE79F headers
+* lightest yellow = #FCF2CE table dividers, some message boxes
 * dark gray    = #666666
 * middle gray  = #666
 * light gray   = #333
@@ -135,7 +137,6 @@ div.custom_header_bar {
     margin-top:       0;
     margin-bottom:    2px;
     background-color: #E9F5F6; /*light blue*/
-    /*background-color:#e5e5e5; /* grey that Cecelia wanted initially */
 
 }
 
@@ -249,7 +250,7 @@ BEGIN: CoG footer
 
 div.footer_bar{
     width:              100%;     /* note span-24 = 950px */
-    background-color:   #e9f5f6;
+    background-color:   #e9f5f6;  /*light blue*/
     clear:              both;     /*this puts the footer on top of any content that might be below it*/
 }
 
@@ -309,7 +310,7 @@ img{
 }
 
 /*force IE to behave the same as other browsers */
-.ie9 hr, {
+.ie9 hr {
         background:   #358C92;
 	border:       none;
 	height:        1px;
@@ -408,6 +409,43 @@ END PAGE-LEVEL ELEMENTS
 
 
 /******************************
+BEGIN EMPHASIS ELEMENTS
+******************************/
+
+/* for 508 compliance, bold tags and italics tags must be replaced by emphasis tags */
+
+em.message {font-style: italic;} /* used for text that is meant to be a message to the user */
+
+em.attribute {font-weight: 700; font-style:normal;} /* style only...for table headers */
+
+em.bold {font-weight: 700; font-style:normal;} /* misc style only */
+
+/* used on tables that have green header bars */
+th.green {
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 12px;
+    background: transparent;
+    padding: 4px;
+}
+
+th.white {
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 12px;
+    background: white;
+    padding: 4px;
+}
+
+tbody tr:nth-child(2n) th.gray, tbody tr.even th.gray{
+    font-weight: bold;
+    vertical-align: middle;
+    font-size: 12px;
+    padding: 4px;
+    background-color: #eee /*light-gray */
+}
+
+/******************************
 BEGIN TABLE ELEMENTS
 ******************************/
 
@@ -502,6 +540,7 @@ th {
 
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
 
+
 .long {
 	width:          99%;
 	text-align:     left;
@@ -561,6 +600,23 @@ caption {
 	color:         #666;
 }
 
+
+/*****************************
+* TEST code for Gerhard to
+* format code snippets
+*****************************/
+td.numbers{
+padding-right:10px;
+color:#A0A0A0;
+text-align:right;
+padding-top:0;}
+
+
+td.code{
+padding-top:0;
+background-color:#EFEFFF;
+border:1px solid #C0C0D0;
+padding-right:50px;}
 /******************************
 END TABLE ELEMENTS
 ******************************/
@@ -590,7 +646,7 @@ input.right_go{
 	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
     width:          28px;
 	margin-right:   0;
-    margin-left:    5px;
+    margin-left:    3px;
     height:         22px;
 	padding-top:    2px;
     padding-bottom: 2px;
@@ -599,8 +655,24 @@ input.right_go{
 	color:          black;
 	border:         1px solid #666666;
 	font-size:      8.5pt;
-
 }
+
+
+input.search_help{
+	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+    width:          35px;
+	margin-right:   0;
+    margin-left:    2px;
+    height:         22px;
+	padding-top:    2px;
+    padding-bottom: 2px;
+    padding-left:   3px;
+    padding-right:  3px;
+	color:          black;
+	border:         1px solid #666666;
+	font-size:      8.5pt;
+}
+
 /***************
 * NAME: text input
 * SCOPE: the current form
@@ -938,7 +1010,7 @@ BEGIN NEWS WIDGET
 }
 
 .news_box table.even-color tbody tr:nth-child(even) td,tbody tr.even td {
-	background: #FCF2CE;
+	background: #FCF2CE; /* lightest yellow */
 }
 .news_footer {
 	margin:0;
@@ -998,85 +1070,86 @@ END NEWS WIDGET
 
 /****** END COMMENTS ****/
 
+/******************************
+BEGIN USER MESSAGES
+******************************/
+
+/* cancel membership, password reset, how to cancel a membership, membership notification*/
+.instruction-box {
+    background:  #B9E0E3; /* dark-teal */
+	padding:     5px;
+	/*border:      1px solid #417690;*/
+	font-weight: bold;
+	text-align:  center;
+}
+
+
+/*project registration notification, 10K other places */
+.message-box {
+    background:  #fce79f; /* light yellow*/
+	padding:     5px;
+	margin:      5px;
+	/*border:      1px solid #666;*/
+	font-weight: bold;
+	text-align:  center;
+}
+
+/*update openID box. This should be removed when no longer needed */
+.changeID-box {
+
+    /*background:  #FCF2CE; /* lightest yellow */
+    background:  #fce79f; /* medium yellow */
+	padding:     10px;
+	margin-left: auto;
+    margin-right:auto;
+    width:       80%;
+	/*border:      1px solid #666;*/
+	font-weight: bold;
+	text-align:  center;
+}
+
+/* prevent error styles from affecting error content w/in search widget */
+/*bad openid, bad IDP, failed login etc*/
+.error-box {
+    /*background:  #FAC24A; /* dark yellow*/
+    background:  red;
+	padding:     5px;
+	margin:      5px;
+	/*border:      1px solid #417690;*/
+    /*border:      1px solid #666666;*/
+	font-weight: bold;
+	text-align:  center;
+	/*color:       #FF0000; /*red*/
+    color:       white;
+}
+
+/* used on login2, site index errors. Used for p tags */
+.errornote {
+	font-size:   9pt !important;
+    text-align:  center;
+	display:     block;
+	padding:     5px;
+	margin:      4px;
+	/*border:      1px solid red;*/
+	color:       white;
+	font-weight: bold;
+	background:  red;
+}
+
+/****** END USER MESSAGES ****/
+
 
 /******************************
 BEGIN SEARCH WIDGET
 ******************************/
 
+/* defines the box around the search widget */
 .search-box {
 	background:    #FFFFFF;
 	border:        1px solid #666;
 	font-size:     8pt;
     margin-bottom: 10px;
     margin-top:    0;
-}
-
-/* Data Text Search */
-.box-colored {
-	background: #FCE79F; /*light yellow*/
-	border:     1px solid #666;
-	font-size:  8pt;
-}
-
-.instruction-box {
-        background:  #B9E0E3; /* dark-teal */
-	padding:     5px;
-	/* margin: 5px; */
-	border:      1px solid #417690;
-	font-weight: bold;
-	text-align:  center;
-}
-
-/*project registration notification*/
-.message-box {
-    background:  #fce79f; /* light yellow*/
-	padding:     5px;
-	margin:      5px;
-	border:      1px solid #666;
-	font-weight: bold;
-	text-align:  center;
-}
-
-/*access control license.*/
-.license-box {
-    background:  #fce79f; /* light yellow*/
-	padding:     10px;
-	margin:      10px;
-	border:      1px solid #666;
-	width:       720px;
-	text-align:  left;
-}
-
-/*update openID box. This should be removed when no longer needed */
-.changeID-box {
-    background:  #fce79f; /* light yellow*/
-	padding:     10px;
-	margin-left: auto;
-    margin-right:auto;
-    width:       80%;
-	border:      1px solid #666;
-	font-weight: bold;
-	text-align:  center;
-}
-
-.padded-box {
-	background: #FFFFFF;
-	padding:    5px;
-	margin-top: 5px;
-	border:     1px solid #417690;
-	text-align: left;
-}
-
-/* prevent error styles from affecting error content w/in search widget */
-/*bad openid, bad IDP, failed login etc*/
-.error-box {
-    background:  #FAC24A; /* dark yellow*/
-	padding:     5px;
-	margin:      5px;
-	border:      1px solid #417690;
-	font-weight: bold;
-	text-align:  center;
-	color:       #FF0000; /*red*/
 }
 
 .search_header {
@@ -1094,6 +1167,31 @@ BEGIN SEARCH WIDGET
 	display: block;
 }
 
+/* Data Text Search */
+.box-colored {
+	background: #FCE79F; /*light yellow*/
+	border:     1px solid #666;
+	font-size:  8pt;
+}
+
+/*access control license.*/
+.license-box {
+    background:  #fce79f; /* light yellow*/
+	padding:     10px;
+	margin:      10px;
+	border:      1px solid #666;
+	width:       720px;
+	text-align:  left;
+}
+
+/* used to display data records on the search page and data car */
+.padded-box {
+	background: #FFFFFF;
+	padding:    5px;
+	margin-top: 5px;
+	border:     1px solid #417690;
+	text-align: left;
+}
 
 /******************************
 END SEARCH WIDGET
@@ -1205,16 +1303,7 @@ ul.messagelist li {
 	background: #ffc url(/static/admin/img/icon_success.gif) 5px .3em no-repeat;
 }
 
-.errornote {
-	font-size: 9pt !important;
-	display: block;
-	padding: 4px 5px 4px 25px;
-	margin: 4px;
-	border: 1px solid red;
-	color: red;
-	font-weight: bold;
-	background: #ffc url(/static/admin/img/icon_error.gif) 5px .3em no-repeat;
-}
+
 
 .warning {
 	font-size: 9pt !important;

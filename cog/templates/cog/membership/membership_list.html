@@ -17,10 +17,10 @@
             Click on Cancel Membership to remove a user from the project.
        </p>
        <p>
-            The <b>User Group</b> grants permissions to: create or edit any content in the project workspace (except for the home page),
+            The <strong>User Group</strong> grants permissions to: create or edit any content in the project workspace (except for the home page),
             send news, and comment on any page.
             <br/> 
-            The <b>Admin Group</b> grants additional permissions to: change the project home page,
+            The <strong>Admin Group</strong> grants additional permissions to: change the project home page,
             delete any page or blog in the project workspace (except for the predefined project pages),
             enroll users in the project, create a child project, or delete the project altogether.
        </p>
@@ -33,8 +33,8 @@
                <td>
                    <form name="lookupUserForm" action="" method="post">
                    	    {% csrf_token %}
-                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <b>User Name</b>, <b>First Name</b>, <b>Last Name</b>, or <b>Email</b>:</label>
-                        <input style="vertical-align: middle; width:30%;" type="text" name="match" alt="match" id="match" value="{{request.POST.match}}" />
+                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email</strong>:</label>
+                        <input style="vertical-align: middle; width:30%;" type="text" name="match" id="match" value="{{request.POST.match}}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
 	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
                    </form>
@@ -55,13 +55,13 @@
 	            <caption>{{ list_title }}</caption>
 	            <!-- <br/> tags in table are to align text to the bottom -->
 	            <tr>
-	                <td class="tophead">&nbsp;<br/>Last Name</td>
-	                <td class="tophead">&nbsp;<br/>First Name</td>
-	                <td class="tophead">&nbsp;<br/>User Name</td>
-	                <td class="tophead">&nbsp;<br/>Email</td>
-                    <td style="text-align: center;"><b>User<br/>Group</b></td>
-	                <td style="text-align: center;"><b>Admin<br/>Group</b></td>
-	                <td style="text-align: center;"><b>Cancel<br/>Membership</b></td>
+	                <th scope="col" class="white">&nbsp;<br/>Last Name</th>
+	                <th scope="col" class="white">&nbsp;<br/>First Name</th>
+	                <th scope="col" class="white">&nbsp;<br/>User Name</th>
+	                <th scope="col" class="white">&nbsp;<br/>Email</th>
+                    <th scope="col" class="white" style="text-align: center;">User<br/>Group</th>
+	                <th scope="col" class="white" style="text-align: center;">Admin<br/>Group</th>
+	                <th scope="col" class="white" style="text-align: center;">Cancel<br/>Membership</th>
 
 	            </tr>
 	            {% for user in users %}
@@ -73,8 +73,8 @@
                         <!-- encode HTTP parameters for new and old membership in users group -->
 	                    <td style="text-align:center">
 	                       {% with user|isEnrolled:project.getUserGroup as isEnrolled %}
-                              <label style="display:none" for="user_group">user group</label>
-	                          <input type='checkbox' id="user_group" name='{{ project.getUserGroup|newMembership:user}}'
+                              <label style="display:none" for="{{ user.username }}_user_group">user group</label>
+	                          <input type='checkbox' id="{{ user.username }}_user_group" name='{{ project.getUserGroup|newMembership:user}}'
                                       {% if isEnrolled %} checked="checked" {% endif %} />
 	                           {% if isEnrolled %}
 	                               <input type='hidden' name='{{ project.getUserGroup|oldMembership:user}}' value="on"/>
@@ -84,8 +84,8 @@
 	                    <!-- encode HTTP parameters for new and old membership in admins group -->
                         <td style="text-align:center">
                            {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}
-                               <label style="display:none" for="admin_group">admin group</label>
-                               <input type='checkbox' id="admin_group" name='{{ project.getAdminGroup|newMembership:user}}'
+                               <label style="display:none" for="{{ user.username }}_admin_group">admin group</label>
+                               <input type='checkbox' id="{{ user.username }}_admin_group" name='{{ project.getAdminGroup|newMembership:user}}'
                                       {% if isEnrolled %} checked="checked" {% endif %} />
                                {% if isEnrolled %}
                                    <input type='hidden' name='{{ project.getAdminGroup|oldMembership:user}}' value="on"/>
@@ -102,8 +102,14 @@
 	            
 	        </table>
 	   </div>
-	   <div style="float:left"><input type="reset" value="Cancel" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/></div>
-	   <div style="float:right"><input type="submit" value="Submit"/></div>
+	   <div style="float:left">
+           <label for="cancel" style="display:none;">cancel</label>
+           <input type="reset" id="cancel" value="Cancel" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/>
+       </div>
+	   <div style="float:right">
+           <label for="submit" style="display:none;">submit</label>
+           <input type="submit" value="Submit"/>
+       </div>
 	   <div id="myDialog" class="yui-skin-sam"></div>
    </form>   
 

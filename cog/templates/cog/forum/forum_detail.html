@@ -36,7 +36,7 @@
     			{% empty %}
     				<tr>
     					<td>
-    						<i>This Topic has no Threads yet.</i>
+    						<em class="message">This Topic has no Threads yet.</em>
     					</td>
     				</tr>
     			{% endfor %}
@@ -52,7 +52,7 @@
     		</table>
     	</div>
     {% empty %}
-    	<i>This Forum has no Topics yet.</i>
+    	<em class="message">This Forum has no Topics yet.</em>
     {% endfor %}
     
 	{% paginate %}
@@ -70,7 +70,7 @@
 			<table>
 				<tr>
 					<td nowrap="nowrap">
-						<span style="vertical-align: middle">Start a new <b>Topic</b>:</span>
+						<span style="vertical-align: middle">Start a new <strong>Topic</strong>:</span>
 					</td>
 					<td class="long">
 						<span style="vertical-align: middle">

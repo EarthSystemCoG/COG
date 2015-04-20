@@ -24,12 +24,13 @@
 			        </tr>	        
 			        <tr>
 			          <td>
-			          	<i>{{news.update_date|date:"SHORT_DATETIME_FORMAT"}} by
+			          	<em class="message">{{news.update_date|date:"SHORT_DATETIME_FORMAT"}} by
                             {% if news.author.username %}
                                 <a href="{% url 'user_detail' news.author.id %}">{{ news.author }}</a>
                             {% else %}
                                 {{ news.author }}
                             {% endif %}
+                        </em>
 			          	{% if user|hasUserPermission:news.project %}
 	                  		<div style="float:right">
 	                    	     &nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>

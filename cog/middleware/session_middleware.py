@@ -29,13 +29,14 @@ class SessionMiddleware(object):
                     # update session stamp BEFORE querying remote sites
                     s['LAST_ACCESSED'] = now_seconds
                     s.save()
-                    
-                    # update the user's projects across the federation                
-                    update_user_projects(request.user)
-                    
+                                        
                     # update the user tags from their home site
                     if isUserRemote(request.user):
                         update_user_tags(request.user)
+                        
+                    # update the user's projects across the federation                
+                    update_user_projects(request.user)
+
                     
         except ObjectDoesNotExist:
             pass # no profile

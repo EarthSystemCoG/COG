@@ -20,7 +20,7 @@
 			   {% get_comment_count for doc as comment_count %}
 			   <tr>
 			      <td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
-			      <td><b><a href="{{ doc.file.url }}">{{ doc }}</a></b></td> 
+			      <td><strong><a href="{{ doc.file.url }}">{{ doc }}</a></strong></td>
 			      <td> {{ doc.description|truncatewords:8 }} </td>
 			      <td>{% if doc.is_private %} <span class='privatelink'>&nbsp;</span>{% endif %}</td> 
 			      <td nowrap="true">{{ doc.update_date|date:"d M Y, H:m" }}</td> 

@@ -10,8 +10,6 @@
 	{% include 'cog/datacart/_wget_js.html' %} 
 	{% include 'cog/datacart/_las_js.html' %}
 
-     <!--hello world-->
-    <title>Data Search</title>
 {% endblock %}
 
 {% block main %}
@@ -23,23 +21,26 @@
     		<input type="hidden" name="offset" value="{{search_input.offset}}" />
     		<input type="hidden" name="limit" value="20" />
 			<input type="hidden" name="type" value="Dataset" />
-			    		
+
     		<!-- layout for facets + text box -->
-    		{% if search_output.facets %}
-	    		<div class="span-6">
-	    	   	   <!-- search facets -->
-	                   {% include 'cog/search/_search_facets.html' %}                  
-	    		</div>
-	    		
-	    		<div class="span-18 last">
-	    	 	    <!-- form text box -->
+
+    		    {% if search_output.facets %}
+                    <div class="span-6">
+	    	   	        <!-- search facets -->
+	                    {% include 'cog/search/_search_facets.html' %}
+                    </div>
+
+  	    	       	<div class="span-18 last">
+	    	 	        <!-- form text box -->
 	                    {% include 'cog/search/_search_text.html' %}        
 	                    <!-- search results -->
 	                    {% include 'cog/search/_search_results.html' %}   		  
-	    		</div>
+	    		    </div>
+
+                {% else %}
 	    		
 	    	<!-- layout for text-box only -->
-    		{% else %}
+
     		      <div class="span-3">&nbsp;</div>
     		      
     		      <div class="span-18">
@@ -50,7 +51,7 @@
                 </div>
     		         		
     		    <div class="span-3 last">&nbsp;</div>
-    		{% endif %}
+          {% endif %}
     		
 		</form>    
 	</div>

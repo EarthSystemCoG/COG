@@ -10,7 +10,7 @@
 		<!-- header -->
         <hr>
 
-		<b>{{category}} Organizational Roles</b>
+		<strong>{{category}} Organizational Roles</strong>
 
 		<table class="no-color">
 			{% for role in organizational_roles %}
@@ -24,7 +24,7 @@
 						    <table class="{% if forloop.counter|divisibleby:2 %}{% else %}no-color{% endif %}">
 							    <tr>
 								    <td style="text-align: right; width: 150px;">
-                                        <b>{{role.type}}</b> <!-- controlled vocab -->
+                                        <strong>{{role.type}}</strong> <!-- controlled vocab -->
                                     <td>
                                         {% if role.title %}   <!-- optional text -->
                                             {{role.title}}

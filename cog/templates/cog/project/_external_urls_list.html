@@ -9,13 +9,13 @@
 	<table>
 		{% if group_title %}
 			<tr>
-				<td colspan="3"><b>{{group_title}}</b></td>
+				<td colspan="3"><strong>{{group_title}}</strong></td>
 			</tr>
 		{% else %}
 			<tr>
-				<td width="100px"><b>Title</b></td>
-				<td width="200px"><b>URL</b></td>
-				<td><b>Description</b></td>
+				<td width="100px"><strong>Title</strong></td>
+				<td width="200px"><strong>URL</strong></td>
+				<td><strong>Description</strong></td>
 			</tr>
 		{% endif %}
 		{% for exturl in external_urls %}

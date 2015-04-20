@@ -16,7 +16,7 @@
 		    <!-- upload document form fields -->
             <table>
                 <tr>
-                    <td colspan="3" style="text-align:center;">Required fields are in <b>bold</b>.</td>
+                    <td colspan="3" style="text-align:center;">Required fields are in <strong>bold</strong>.</td>
 
                 </tr>
                 <tr>
@@ -26,7 +26,7 @@
 
                       {% if form.file.errors %}
                          <tr>
-                         <td style="vertical-align:middle; text-align:right;"><b>File</b></td>
+                         <td style="vertical-align:middle; text-align:right;"><strong>File</strong></td>
                          <td style="width:30%;vertical-align:middle;">{{ form.file }}</td>
                          <td style="vertical-align:middle;text-align:left;">Filename: {{ form.instance.file.name }}</td>
                          </tr>
@@ -36,7 +36,7 @@
                          </tr>
                       {% else %}
                          <tr>
-                         <td style="vertical-align:middle; text-align:right;"><b>File</b></td>
+                         <td style="vertical-align:middle; text-align:right;"><strong>File</strong></td>
                          <td style="width:30%;vertical-align:middle;">{{ form.instance.file.name }}{{ form.file }}</td>
                          <td colspan="2" style="vertical-align:middle; font-style:italic;">Max size: 500 MB. The file name can contain only letters, numbers, spaces, and _ - . /</td>
                           </tr>
@@ -52,7 +52,7 @@
                 </tr>
                 <tr>
           			<td nowrap="nowrap" style="text-align:right; vertical-align:middle;">Private?</td>
-          			<td colspan="2">{{ form.is_private }} &nbsp; (<i>if checked, only project members will be able to download this file</i>)</td>
+          			<td colspan="2">{{ form.is_private }} &nbsp; (<em class="message">if checked, only project members will be able to download this file</em>)</td>
     			</tr>
                 <tr>
                     <td colspan="3" style="text-align:right;">

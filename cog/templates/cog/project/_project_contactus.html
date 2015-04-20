@@ -5,24 +5,24 @@
    
 <table>
     <tr>
-		<td nowrap="nowrap"><b>Project Contacts</b></td>
+		<td nowrap="nowrap"><strong>Project Contacts</strong></td>
 		<td class="long">{{proj.projectContacts|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% if proj.technicalSupport %}
 	<tr>
-		<td nowrap="nowrap"><b>Technical Support</b></td>
+		<td nowrap="nowrap"><strong>Technical Support</strong></td>
 		<td class="long">{{proj.technicalSupport|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% endif %}
 	{% if proj.meetingSupport %}
 	<tr>
-		<td nowrap="nowrap"><b>Meeting Support</b></td>
+		<td nowrap="nowrap"><strong>Meeting Support</strong></td>
 		<td class="long">{{proj.meetingSupport|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% endif %}
 	{% if proj.getInvolved %}
 	<tr>
-		<td nowrap="nowrap"><b>Get Involved</b></td>
+		<td nowrap="nowrap"><strong>Get Involved</strong></td>
 		<td class="long">{{proj.getInvolved|urlizetrunc:50|linebreaksbr}}</td>
 	</tr>
 	{% endif %}

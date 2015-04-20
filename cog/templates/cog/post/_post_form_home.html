@@ -14,7 +14,7 @@
       <td>{{ request.user }} </td>		          
     </tr>
     <tr>
-        <td class="col1"><b>Title</b></td>
+        <td class="col1"><strong>Title</strong></td>
         <td>{{ form.title }} </td>
         <td style="vertical-align: middle;">{{ form.title.errors }}</td>
     </tr>
@@ -22,7 +22,7 @@
 <table class="post_home">
     <!-- allow changing of the template, except for the home page -->
     <tr>
-         <td class="col1"><b>Template</b></td>
+         <td class="col1"><strong>Template</strong></td>
          <td class="long">
          <select id="id_template" name="template">
 		 	<option value="cog/post/page_template_center_right.html" 
@@ -37,18 +37,18 @@
     </tr>
     <tr>
           <td class="col1" nowrap="nowrap">Not Viewable?</td>
-          <td>{{ form.is_private }} &nbsp; (<i>If checked, only project members will be able to view this page.</i>)
+          <td>{{ form.is_private }} &nbsp; (<em class="message">If checked, only project members will be able to view this page.</em>)
           </td>                      
     </tr>  
     {% if user|hasAdminPermission:project %}
 	    <tr>
 	          <td nowrap="nowrap" class="col1">Not Editable?</td>
-	          <td>{{ form.is_restricted }} &nbsp; (<i>If checked, only project administrators will be able to edit this page. 
-	                                               If not checked, all project members can edit this page.</i>)</td>                      
+	          <td>{{ form.is_restricted }} &nbsp; (<em class="message">If checked, only project administrators will be able to edit this page.
+	                                               If not checked, all project members can edit this page.</em>)</td>
 	    </tr>   
     {% endif %}
     <tr>
-        <td style="vertical-align:top;" class="col1"><b>Body</b></td>
+        <td style="vertical-align:top;" class="col1"><strong>Body</strong></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>
     </tr>
     

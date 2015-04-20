@@ -59,12 +59,12 @@ def search(request, project_short_name):
     if config:        
         #config.printme()
         # pass on project as extra argument to search
-        return search_config(request, config, extra = {'project' : project} )
+        return search_config(request, config, extra = {'project' : project, 'title2':'%s Data Search' % project.short_name} )
     # search is not configured for this project
     else:
         messages = ['Searching is not enabled for this project.',
                     'Please contact the project administrators for further assistance.']
-        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages }, context_instance=RequestContext(request))
+        return render_to_response('cog/common/message.html', {'project' : project, 'messages':messages, 'title2':'Data Search' }, context_instance=RequestContext(request))
 
 def _buildSearchInput(request, searchConfig):
     '''Assembles the search input from the HTTP request and the project specific configuration.'''
@@ -539,9 +539,12 @@ def search_facet_update(request, facet_id):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
+    # retrieve list of available facets by executing project-specific query
+    facets = _queryFacets(request, project)
+    
     if request.method=='GET':    
         form = SearchFacetForm(instance=facet)    
-        return render_search_facet_form(request, project, form)
+        return render_search_facet_form(request, project, form, facets)
         
     else:
         
@@ -553,7 +556,7 @@ def search_facet_update(request, facet_id):
         
         else:     
             print 'Form is invalid: %s' % form.errors
-            return render_search_facet_form(request, project, form)
+            return render_search_facet_form(request, project, form, facets)
 
 def search_facet_delete(request, facet_id):
          

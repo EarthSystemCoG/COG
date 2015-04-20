@@ -7,7 +7,7 @@
 	
 		/* custom styles for inline instances */
 		.yui-skin-sam .yui-ac-input { position:static;width:32em; vertical-align:middle;}
-		.yui-skin-sam .yui-ac-container { width:32em;left:0px;}
+		.yui-skin-sam .yui-ac-container { width:32em;left:0;}
 		
 		/* needed for stacked instances for ie & sf z-index bug of absolute inside relative els */
 		#bAutoComplete { z-index:9001; } 
@@ -23,16 +23,15 @@
 {% endblock %}
 
 {% block extrahead %}
-
   {% load cog_utils %}
 
   <script type="text/javascript">
   
     // dictionary of known ESGF identity providers, loaded from local file
-    var known_providers = {}
+    var known_providers = {};
   
 	{% for idp_name, idp_url in request|knownIdentityProviders %}
-		known_providers['{{idp_name}}'] = '{{ idp_url }}'
+		known_providers['{{idp_name}}'] = '{{ idp_url }}';
 	{% endfor %}
   
 	function setIdP() {
@@ -45,7 +44,7 @@
 			document.getElementById('openid_identifier').value = known_providers[idp];
 		}
 		return true;
-	};
+	}
 	
 	function init() {
 				
@@ -61,7 +60,7 @@
 		        queryDelay: 0,
 		        minQueryLength: 0,
 		        animVert: .01
-		    }
+		    };
 		    var bAC = new YAHOO.widget.AutoComplete("openid_identifier", "bContainer", bDS, oConfigs);
 		    
 		    // Breakfast combobox
@@ -84,7 +83,7 @@
 		                bAC.sendQuery("");
 		            },0);
 		        }
-		    }
+		    };
 		    oPushButtonB.on("click", toggleB);
 		    bAC.containerCollapseEvent.subscribe(function(){YAHOO.util.Dom.removeClass(bToggler, "open")});		    
 		
@@ -94,7 +93,7 @@
 		    };
 		}();
 		
-	};
+	}
 		
 	// comment out the following line to disable the IdP selector
 	YAHOO.util.Event.onDOMReady(init);
@@ -105,117 +104,105 @@
 
 {% block main %}
 
-{% load cog_utils %}
+
 
 <div class="yui-skin-sam">
-  <div class="prepend-4 span-14">
-
-	<!-- display extra message if available -->
-	{% if request.GET.message %}
-        {% if request.GET.message|showMessage|is_error_msg ==  True %}
-            <div class="error-box">
-               {{ request.GET.message|showMessage|safe }}
-            </div>
-
-        {% else %}
-	        <div class="message-box">
-	     	{{ request.GET.message|showMessage|safe }}
-
-	     	{% if request|get_openid %}
-	   		    <br/>Your assigned OpenID is: <b> {{ request|get_openid }} </b>
-	   	    {% endif %}
-
-	        </div>
-        {% endif %}
-	   <p></p>
-	{% endif %}
-
-
-	<h2>OpenID Login</h2>
-
-	<p>
-	We improved the security of our authentication process and now require an ESGF OpenID for logging onto ESGF-CoG.
-	</p>
-
-	<p>
-      If you don't have an account, please visit the <a href="{% url 'user_add' %}">Create Account</a> page.
-    </p>
-	
-	<p>
-	    If you have an account, but don't have an ESGF OpenID, please see the box below for how to update your account.
-    </p>
-		
-	<div class="changeID-box">
-		<p>
-		All existing accounts must be updated for the OpenID Changes.
-		</p>
-		<p>
-	    If you already have an existing CoG username and password, you will need to obtain an ESGF OpenID and change your password.
-	    Please visit the <a href="{% url 'password_update'%}">Password Update</a> page.
-		</p>
-        <p>
-	    You will no longer be able to login with your old CoG username and password.
-		Please use your ESGF OpenID and new password to login.
+    <div class="prepend-4 span-14">
+	    <!-- display extra message if available -->
+	    {% if request.GET.message %}
+            {% if request.GET.message|showMessage|is_error_msg ==  True %}
+                <div class="error-box">
+                   {{ request.GET.message|showMessage|safe }}
+                </div>
+            {% else %}
+	            <div class="message-box">
+	                {{ request.GET.message|showMessage|safe }}
+   	            	{% if request|get_openid %}
+	   		            <br/>Your assigned OpenID is: <strong> {{ request|get_openid }} </strong>
+	   	            {% endif %}
+	            </div>
+            {% endif %}
+	        <p></p>
+	    {% endif %}
+	    <h2>OpenID Login</h2>
+	    <p>
+	        We improved the security of our authentication process and now require an ESGF OpenID for logging onto ESGF-CoG.
+	    </p>
+    	<p>
+             If you don't have an account, please visit the <a href="{% url 'user_add' %}">Create Account</a> page.
         </p>
-	</div>
-
-	<br/>
-	<p>
-		If you already have an ESGF OpenID, you can use it to log onto ESGF-CoG below.
-	</p>
-	
-
-	<div style="font-style: italic; text-align:center;">
-		Please note that ESGF OpenIDs are case-sensitive.
- 	</div>
+    	<p>
+	         If you have an account, but don't have an ESGF OpenID, please see the box below for how to update your account.
+        </p>
+		<!--YELLOW BOX -->
+	    <div class="changeID-box">
+		    <p>
+		        All existing accounts must be updated for the OpenID Changes.
+		    </p>
+		    <p>
+	             If you already have an existing CoG username and password, you will need to obtain an ESGF OpenID and change your password.
+	             Please visit the <a href="{% url 'password_update'%}">Password Update</a> page.
+		    </p>
+            <p>
+	             You will no longer be able to login with your old CoG username and password.
+		         Please use your ESGF OpenID and new password to login.
+            </p>
+	    </div>
+	    <br/>
+        <!--help text about ESG OpenIDs-->
+	    <p>
+		    If you already have an ESGF OpenID, you can use it to log onto ESGF-CoG below.
+		    However, if your OpenID contains "/myopenid/" it is likely an older version that is no longer supported.
+	    </p>
+     	<div style="font-style: italic; text-align:center;">
+		    Please note that ESGF OpenIDs are case-sensitive.
+ 	    </div>
  	
-	
-	<form name="fopenid" action="{% url 'openid-login' %}" method="post">
-		{% csrf_token %}
-
-		<div class="mybox">
-    	  <table>
-    	    <caption>ESGF-CoG Login</caption>
-    	    <tr>
-    	      <td style="width:10%;text-align:right; vertical-align:middle;">
-                  <label for="openid_identifier"><b>OpenID</b></label>
-              </td>
-	    	  <td style="width:80%; vertical-align:middle;">
-	    	  	<div id="bAutoComplete">
-	    	  		<span id="toggleB"></span>
-	    			<div id="bContainer"></div>
-	    			<input type="text" id="openid_identifier" alt="openid_identifier" 
-	    			       name="openid_identifier" value="{{ request|get_openid }}" size="33em"/>
-              	</div>
-              </td>
-    	      <td style="width:10%;">
-                <input name="bsignin" type="submit" value="Login" onclick="setIdP()">
-              </td>
-
-    	    </tr>
-    	  </table>
-		</div>
-
-		<!-- next page field -->
-		{% if next %}
-			<input type="hidden" name="next" value="{{ next }}" />
-		{% endif %}
-
-		<!-- reminder links -->
-		<div style="position: relative; margin-bottom:40px;">
-			<span style="position: absolute; right: 0;">
-				<a href="{% url 'user_reminder' %}">Forgot OpenID?</a>
-				&nbsp;
-				<a href="{% url 'password_reset' %}">Forgot Password?</a>
-				&nbsp;
-				<a href="{% url 'user_add' %}?next={{ request.GET.next }}">Create Account</a>
-			</span>
-		</div>
-
-	</form>
-	
-		
-  </div>
+	    <!--Begin login form-->
+	    <form name="fopenid" action="{% url 'openid-login' %}" method="post">
+		    {% csrf_token %}
+		    <div class="mybox">
+    	        <table>
+    	            <caption>ESGF-CoG Login</caption>
+    	            <tr>
+    	                <td style="width:10%;text-align:right; vertical-align:middle;">
+                            <label for="openid_identifier"><strong>OpenID</strong></label>
+                        </td>
+	    	            <td style="width:80%; vertical-align:middle;">
+	    	  	            <div id="bAutoComplete">
+	    	  		            <span id="toggleB"></span>
+	    			            <div id="bContainer"></div>
+	    			            <input type="text" id="openid_identifier" alt="openid_identifier"
+	    			            name="openid_identifier" value="{{ request|get_openid }}" size="33em"/>
+              	            </div>
+                        </td>
+    	                <td style="width:10%;">
+                            <input name="bsignin" type="submit" value="Login" onclick="setIdP()">
+                        </td>
+    	            </tr>
+    	        </table>
+		    </div>
+		    <!-- next page field -->
+		    {% if next %}
+			    <input type="hidden" name="next" value="{{ next }}" />
+		    {% endif %}
+		    <!-- reminder links -->
+		    <div style="position: relative; margin-bottom:40px;">
+			     <span style="position: absolute; right: 0;">
+				     <a href="{% url 'user_reminder' %}">Forgot OpenID?</a>
+				     &nbsp;
+				     <a href="{% url 'password_reset' %}">Forgot Password?</a>
+				     &nbsp;
+                     <a href="{% url 'password_update'%}">Password Update</a>
+                     &nbsp;
+				     <a href="{% url 'user_add' %}?next={{ request.GET.next }}">Create Account</a>
+			     </span>
+		    </div>
+	    </form>
+        <p>
+            For the best experience, use Firefox, Chrome, or Internet Explorer. These are the browsers we test.
+        </p>
+    </div>
 </div><!--END:/cog/templates/cog/openid/login.html-->
 
 {% endblock %}
