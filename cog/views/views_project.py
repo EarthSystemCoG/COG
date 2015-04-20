@@ -636,16 +636,17 @@ def save_user_tag(request):
         if isUserLocal(request.user):
             try:
                 tag = ProjectTag.objects.get(name__iexact=tagName)
-                
-                # add this tag to the user preferences
-                utags = request.user.profile.tags
-                if not tag in utags.all():
-                    utags.add(tag)
-                    request.user.profile.save()
-                    print 'Tag: %s added to user: %s' % (tagName, request.user)
-        
             except ObjectDoesNotExist:
-                print "Invalid project tag: %s" % tag
+                tag = ProjectTag.objects.create(name=tagName)
+                print 'Created new tag: %s' % tag
+
+            # add this tag to the user preferences
+            utags = request.user.profile.tags
+            if not tag in utags.all():
+                utags.add(tag)
+                request.user.profile.save()
+                print 'Tag: %s added to user: %s' % (tagName, request.user)
+        
 
             # set session flag to preselect a tab
             request.session['PROJECT_BROWSER_TAB'] = 3                
