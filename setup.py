@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name = "cog",
-    version = "2.11.0",
+    version = "2.12.0",
     author = "CoG Development Team",
     author_email = "cog_support@list.woc.noaa.gov",
     description = ("Earth System CoG: web interface for the Earth System Grid Federation"),
@@ -27,7 +27,8 @@ setup(
                       'python-openid==2.2.5',
                       'passlib==1.6.2',
                       'pysqlite==2.6.3',        
-                      'django-contrib-comments==1.5',          
+                      'django-contrib-comments==1.5',   
+                      'globusonline-transfer-api-client==0.10.16',       
                       ],
     long_description=read('README.md'),
     classifiers=[

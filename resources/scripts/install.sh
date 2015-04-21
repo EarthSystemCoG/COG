@@ -14,7 +14,7 @@ export GROUP=apache
 
 # the specific CoG branch OR version to install
 #export COG_TAG=master
-export COG_TAG=v2.11.1
+export COG_TAG=v2.12.0
 
 # the Python installation from which to create the venev
 export PATH=/usr/local/uvcdat/bin:$PATH
