@@ -13,8 +13,8 @@ export USER=apache
 export GROUP=apache
 
 # the specific CoG branch OR version to install
-#export COG_TAG=master
-export COG_TAG=v2.12.0
+export COG_TAG=globus
+#export COG_TAG=v2.12.0
 
 # the Python installation from which to create the venev
 export PATH=/usr/local/uvcdat/bin:$PATH
@@ -72,6 +72,12 @@ python setup.py install
 
 # create or upgrade CoG installation
 python setup.py setup_cog --esgf=$ESGF
+
+# FIXME: must download and install Globus Nexus manually
+cd $COG_DIR
+git clone git@github.com:globusonline/python-nexus-client.git
+cd python-nexus-client/
+python setup.py install
 
 # cleanup CoG egg
 cd $COG_DIR
