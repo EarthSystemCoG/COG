@@ -16,7 +16,8 @@ def login(request):
 	code = 'xxx'
 	return HttpResponseRedirect(reverse('globus_token')+'?code=%s' % code)
 
-@login_required
+#FIXME: login required
+#@login_required
 def token(request):
 	
 	#code = request.GET['code']
