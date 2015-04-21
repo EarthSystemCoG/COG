@@ -75,7 +75,7 @@ python setup.py setup_cog --esgf=$ESGF
 
 # FIXME: must download and install Globus Nexus manually
 cd $COG_DIR
-git clone git@github.com:globusonline/python-nexus-client.git
+git clone https://github.com/globusonline/python-nexus-client.git
 cd python-nexus-client/
 python setup.py install
 

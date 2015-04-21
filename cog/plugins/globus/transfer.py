@@ -9,20 +9,24 @@ from datetime import datetime, timedelta
 from globusonline.transfer.api_client import Transfer
 from globusonline.transfer.api_client import TransferAPIClient
 import os
+from os.path import expanduser, join
 
 import logging
 
-ACCESS_TOKEN_FILE = "/Users/cinquini/.goauth-token.secret"
+ACCESS_TOKEN_FILE = ".goauth-token.secret"
 
 # FIXME: use web workflow instead
 def get_access_token():
+    
+    filepath = os.path.join(os.path.expanduser("~"), ACCESS_TOKEN_FILE)
+    
     try:
-        with open(ACCESS_TOKEN_FILE, 'r') as f:
+        with open(filepath, 'r') as f:
             access_token = f.read().strip()
             return access_token
     except IOError:
         # file not found
-        logging.warn("Access token file not found: %s" % ACCESS_TOKEN_FILE) 
+        logging.warn("Access token file not found: %s" % filepath) 
         return None
 
 
