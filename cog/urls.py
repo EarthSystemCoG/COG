@@ -160,5 +160,11 @@ urlpatterns = patterns('',
     
     # comments
     url(r'^comments/delete_comment/(?P<id>.*)/$', 'cog.views.views_common.deleteComment', name='delete_comment'),
+    
+    # Globus Online integration
+    url(r'^globus/login/$', 'cog.views.views_globus.login', name='globus_login'),
+    url(r'^globus/token/$', 'cog.views.views_globus.token', name='globus_token'),
+    
+    url(r'^globus/transfer/$', 'cog.views.views_globus.transfer', name='globus_transfer'),
 
 )
