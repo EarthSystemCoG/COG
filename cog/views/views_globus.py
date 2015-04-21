@@ -20,20 +20,20 @@ def login(request):
 def token(request):
 	
 	#code = request.GET['code']
-	code = ''
-	print 'Globus: code=%s' % code
+	#code = ''
+	#print 'Globus: code=%s' % code
 	
 	# use 'code' to get an access token
-	pwd = os.path.dirname(__file__)
+	#pwd = os.path.dirname(__file__)
 	# FIXME: use dictionary instead
-	user_client = GlobusOnlineRestClient(config_file=os.path.join(pwd, 'user_client_config.yml'))
-	print("As " + user_client.client + ", get an access key from code:")
+	#user_client = GlobusOnlineRestClient(config_file=os.path.join(pwd, 'user_client_config.yml'))
+	#print("As " + user_client.client + ", get an access key from code:")
 	
 	#access_token = 'xyz'
-	access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code)
-	print 'Globus: access token=%s' % access_token
+	#access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code)
+	#print 'Globus: access token=%s' % access_token
 	
-	return HttpResponse("access_token=%s" % access_token, content_type="text/plain")
+	return HttpResponse("This is the CoG-Globus token page", content_type="text/plain")
 
 @login_required
 def transfer(request):
