@@ -163,6 +163,9 @@ urlpatterns = patterns('',
     
     # Globus Online integration
     url(r'^globus/login/$', 'cog.views.views_globus.login', name='globus_login'),
+    
+    url(r'^globus/oauth/$', 'cog.views.views_globus.oauth', name='globus_oauth'),
+    
     url(r'^globus/token/$', 'cog.views.views_globus.token', name='globus_token'),
     
     url(r'^globus/transfer/$', 'cog.views.views_globus.transfer', name='globus_transfer'),
