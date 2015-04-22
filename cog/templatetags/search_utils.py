@@ -74,6 +74,8 @@ def recordUrls(record):
     '''Returns an ordered list of URL endpoints for this record.'''
     
     urls = []
+    
+    #record.printme()
         
     # add all existing URL endpoints (THREDDS, LAS etc...)
     if 'url' in record.fields:
@@ -84,5 +86,13 @@ def recordUrls(record):
     urls.append( ("javascript:wgetScript('%s','%s')" % (record.fields['index_node'][0], record.id) , 
                   "application/wget", 
                   "WGET Script") )
-        
+    
+    # add GridFTP endpoint
+    if 'access' in record.fields and 'index_node' in record.fields:
+        for value in record.fields['access']:
+            if value.lower() == 'gridftp':
+                urls.append( ('/globus/download?dataset=%s@%s' %(record.id,record.fields['index_node'][0]),
+                              'application/gridftp',
+                              'GridFTP') )
+            
     return sorted(urls, key = lambda url: url_order(url[1]))

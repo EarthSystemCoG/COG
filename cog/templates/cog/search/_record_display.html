@@ -46,12 +46,15 @@
 		{% if record.fields.project.0 != 'NCPP' %}
 			&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
 		{% endif %}
+		
+	<!-- Globus Online -->
+	{% elif url.1 == 'application/gridftp' %}
+		&nbsp; [ <a href="{{ url.0 }}&method=web"><strong>Globus Web Download</strong></a> ]
+		&nbsp; [ <a href="{{ url.0 }}&method=script"><strong>Globus Download Script </strong></a> ]
 
 	<!--  all other services -->
 	{% else %}
-		{% if url.2.lower != 'gridftp' %} <!-- FIXME -->
 		&nbsp; [ <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> ]
-		{% endif %}
 
     {% endif %}
 
