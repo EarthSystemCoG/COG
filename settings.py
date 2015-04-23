@@ -12,12 +12,8 @@ located in directory COG_CONFIG_DIR (or by default '/usr/local/cog/cog_config').
 Each parameter has a default value.
 '''
 
-SECTION_DEFAULT = 'DEFAULT'
-SECTION_ESGF = 'ESGF'
-SECTION_EMAIL = 'EMAIL'
-SECTION_GLOBUS = 'GLOBUS'
-
 from cog.site_manager import siteManager
+from cog.constants import SECTION_ESGF
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
@@ -52,7 +48,7 @@ print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
 
 # FIXME
 # ESGF specific settings
-ESGF_CONFIG = siteManager.hasConfig(SECTION_ESGF)
+ESGF_CONFIG = siteManager.isEsgfEnabled()
 if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=SECTION_ESGF, default='')
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=SECTION_ESGF)

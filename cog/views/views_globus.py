@@ -29,11 +29,6 @@ GLOBUS_ENDPOINTS = {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
 
 import os
 
-def isGlobusEnabled():
-	'''Utility function to check whether Globus has been configured for this CoG installation.'''
-		
-	return siteManager.hasConfig(settings.SECTION_GLOBUS)
-
 
 @login_required
 def download(request):
@@ -168,7 +163,6 @@ def token(request):
 	# CoG portal
 	# FIXME: instantiate at module scope ?
 	#user_client = GlobusOnlineRestClient(config_file=os.path.join(os.path.expanduser("~"), 'user_client_config.yml'))
-	print '\nGLOBUS ENABLED=%s' % isGlobusEnabled()
 	user_client = GlobusOnlineRestClient(config={'server': GLOBUS_NEXUS_URL,
                                                  'client': siteManager.get('PORTAL_GO_USERNAME', section=settings.SECTION_GLOBUS),
                                                  'client_secret': siteManager.get('PORTAL_GO_PASSWORD', section=settings.SECTION_GLOBUS),
