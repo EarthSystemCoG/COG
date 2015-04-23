@@ -14,6 +14,19 @@ from os.path import expanduser, join
 import logging
 
 ACCESS_TOKEN_FILE = ".goauth-token.secret"
+DOWNLOAD_SCRIPT = "download.py"
+
+def generateGlobusDownloadScript(download_map):
+    
+    print "Generating script for downloading files: "
+    print download_map
+    
+    # return script 'download.py' located in same directory
+    scriptFile = os.path.join(os.path.dirname(__file__), DOWNLOAD_SCRIPT)
+    with open(scriptFile, 'r') as f:
+        script = f.read().strip()
+    return script
+    
 
 # FIXME: use web workflow instead
 def get_access_token():

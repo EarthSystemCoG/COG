@@ -1,27 +1,30 @@
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from nexus import GlobusOnlineRestClient
-from cog.plugins.globus.transfer import submiTransfer, get_access_token
+from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
 from getpass import getpass
 import urllib, urllib2
 from cog.utils import getJson
 from urlparse import urlparse
-from django.conf import settings
+from cog.constants import SECTION_GLOBUS
 from cog.site_manager import siteManager
+import datetime
+from constants import GLOBUS_NOT_ENABLED_MESSAGE
 
 DOWNLOAD_METHOD_WEB = 'web'
 DOWNLOAD_METHOD_SCRIPT = 'script'
 DOWNLOAD_MAP = 'globus_download_map'
 DOWNLOAD_LIMIT = 10000 # default maximum number of files to download for each dataset
-DOWNLOAD_CLIENT_ID = "jplesgnode" # FIXME: read from CoG configuration settings
 
 GLOBUS_ACCESS_TOKEN = 'globus_access_token'
 GLOBUS_USERNAME = 'globus_username'
 
 GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
 GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
+
+PYTHON_MIME_TYPE = 'application/x-python'
 
 # FIXME: map of (data_node:port, globus endpoint) pairs
 GLOBUS_ENDPOINTS = {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
@@ -32,13 +35,17 @@ import os
 
 @login_required
 def download(request):
-	'''View that initiates the Globus download workflow - either through the web, or through a script.
-	This view collects the GridFTP URLs to be downloaded, then redirects to the view specific to the download method.
+	'''
+	View that initiates the Globus download workflow - either through the web, or through a script.
+	This view collects the GridFTP URLs to be downloaded, then redirects to the view specific to the download method: web or script.
 	Example URL: http://localhost:8000/globus/download/
 	             ?dataset=obs4MIPs.NASA-JPL.AIRS.mon.v1%7Cesg-vm.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
 	             &dataset=obs4MIPs.NASA-JPL.MLS.mon.v1%7Cesg-datanode.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
 	             &method=web
 	'''
+	
+	if not siteManager.isGlobusEnabled():
+		return HttpResponseForbidden(GLOBUS_NOT_ENABLED_MESSAGE)
 	
 	# retrieve request parameters
 	method = request.GET.get('method', DOWNLOAD_METHOD_WEB)
@@ -47,10 +54,9 @@ def download(request):
 	limit = request.GET.get('limit', DOWNLOAD_LIMIT)
 	# optional query filter
 	query = request.GET.get('query', None)
-
 	
 	# map of (data_node, list of GridFTP URLs to download)
-	map = {}
+	download_map = {}
 	
 	# loop over requested datasets
 	for dataset in datasets:
@@ -58,13 +64,13 @@ def download(request):
 		# query each index_node for all files belonging to that dataset
 		(dataset_id, index_node) = str(dataset).split('@')
 		
-		params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json"), 
-				   ("distrib", "false"), ('offset','0'), ('limit',limit), ('fields','url') ]
+		params = [ ('type',"File"), ('dataset_id',dataset_id), ("distrib", "false"),
+				   ('offset','0'), ('limit',limit), ('fields','url'), ("format", "application/solr+json") ]
 		if query is not None and len(query.strip())>0:
 			params.append( ('query', query) )
- 
+			
 		url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-		print 'Searching for files: URL=%s' % url
+		print 'Searching for files at URL: %s' % url
 		jobj = getJson(url)
 		
 		# parse response for GridFTP URls
@@ -75,22 +81,25 @@ def download(request):
 				if parts[2].lower()=='gridftp':
 					# example or urlparse output:
 					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
-					o = urlparse( parts[0])
-					if (str(o.netloc) in GLOBUS_ENDPOINTS):
-						gendpoint = GLOBUS_ENDPOINTS[str(o.netloc)]
-						if not gendpoint in map:
-							map[gendpoint] = [] # insert empty list of URLs
-						map[gendpoint].append( str(o.path).replace('//','/'))
+					o = urlparse(parts[0])
+					hostname = str(o.netloc)
+					if (hostname in GLOBUS_ENDPOINTS):
+						gendpoint = GLOBUS_ENDPOINTS[hostname]
+						if not gendpoint in download_map:
+							download_map[gendpoint] = [] # insert empty list of URLs
+						download_map[gendpoint].append( str(o.path).replace('//','/'))
+					else:
+						print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
 						
 	# store map in session
-	request.session[DOWNLOAD_MAP] = map
-	print 'Globus Download Map=%s' % map.items()
+	request.session[DOWNLOAD_MAP] = download_map
+	print 'Globus Download Map=%s' % download_map.items()
 	
-	# redirect to web/script workflow
+	# redirect to Globus OAuth page
 	if method==DOWNLOAD_METHOD_WEB:
 				
 		params = [ ('response_type','code'),
-				   ('client_id',DOWNLOAD_CLIENT_ID),
+				   ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
 				   ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),
 				 ]
 		
@@ -102,10 +111,28 @@ def download(request):
 		# redirect to Globus OAuth URL
 		return HttpResponseRedirect(globus_url)
 		
+	elif method==DOWNLOAD_METHOD_SCRIPT:
+		
+		return HttpResponseRedirect( reverse('globus_script') )
+		
+	# redirect to script generation view
 	else:
 		raise Exception("Unknown download method: %s" % method)
-								
-	return HttpResponse(map.items(), content_type="text/plain")
+	
+@login_required
+def script(request):
+	'''View to generate a Globus download script from the parameters stored at session scope.'''
+	
+	# retrieve files from session
+	download_map = request.session[DOWNLOAD_MAP]
+	
+	# return python script
+	response = HttpResponse(content=generateGlobusDownloadScript(download_map))
+	now = datetime.datetime.now()
+	scriptName = "globus_download_%s.py" % now.strftime("%Y%m%d_%H%M%S")
+	response['Content-Type']= PYTHON_MIME_TYPE
+	response['Content-Disposition'] = 'attachment; filename=%s' % scriptName
+	return response
 	
 @login_required
 # FIXME: not needed any more ?
@@ -164,8 +191,8 @@ def token(request):
 	# FIXME: instantiate at module scope ?
 	#user_client = GlobusOnlineRestClient(config_file=os.path.join(os.path.expanduser("~"), 'user_client_config.yml'))
 	user_client = GlobusOnlineRestClient(config={'server': GLOBUS_NEXUS_URL,
-                                                 'client': siteManager.get('PORTAL_GO_USERNAME', section=settings.SECTION_GLOBUS),
-                                                 'client_secret': siteManager.get('PORTAL_GO_PASSWORD', section=settings.SECTION_GLOBUS),
+                                                 'client': siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS),
+                                                 'client_secret': siteManager.get('PORTAL_GO_PASSWORD', section=SECTION_GLOBUS),
                                                  'verify_ssl':False,
                                                  'cache':{'class': 'nexus.token_utils.InMemoryCache', 'args': [],} 
                                              })

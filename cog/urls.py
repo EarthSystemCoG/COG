@@ -171,5 +171,7 @@ urlpatterns = patterns('',
     url(r'^globus/token/$', 'cog.views.views_globus.token', name='globus_token'),
     
     url(r'^globus/transfer/$', 'cog.views.views_globus.transfer', name='globus_transfer'),
+    
+    url(r'^globus/script/$', 'cog.views.views_globus.script', name='globus_script'),
 
 )
