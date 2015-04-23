@@ -13,18 +13,19 @@ from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
 
+# download parameters
 DOWNLOAD_METHOD_WEB = 'web'
 DOWNLOAD_METHOD_SCRIPT = 'script'
-DOWNLOAD_MAP = 'globus_download_map'
 DOWNLOAD_LIMIT = 10000 # default maximum number of files to download for each dataset
 
+# session attribute keys
+GLOBUS_DOWNLOAD_MAP = 'globus_download_map'
 GLOBUS_ACCESS_TOKEN = 'globus_access_token'
 GLOBUS_USERNAME = 'globus_username'
 
+# external URLs
 GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
 GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
-
-PYTHON_MIME_TYPE = 'application/x-python'
 
 # FIXME: map of (data_node:port, globus endpoint) pairs
 GLOBUS_ENDPOINTS = {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
@@ -92,8 +93,8 @@ def download(request):
 						print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
 						
 	# store map in session
-	request.session[DOWNLOAD_MAP] = download_map
-	print 'Globus Download Map=%s' % download_map.items()
+	request.session[GLOBUS_DOWNLOAD_MAP] = download_map
+	print 'Stored Globus Download Map=%s at session scope' % download_map
 	
 	# redirect to Globus OAuth page
 	if method==DOWNLOAD_METHOD_WEB:
@@ -104,18 +105,20 @@ def download(request):
 				 ]
 		
 		globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
-		print globus_url
+		
 		# FIXME: fake the Globus URL
 		globus_url = request.build_absolute_uri( reverse("globus_oauth") ) + "?" + urllib.urlencode(params)
 	
 		# redirect to Globus OAuth URL
-		return HttpResponseRedirect(globus_url)
-		
-	elif method==DOWNLOAD_METHOD_SCRIPT:
-		
-		return HttpResponseRedirect( reverse('globus_script') )
+		print "Redirecting to: %s" % globus_url
+		#return HttpResponseRedirect(globus_url)
+		return HttpResponse(download_map.items(), "text/plain") # FIXME
 		
 	# redirect to script generation view
+	elif method==DOWNLOAD_METHOD_SCRIPT:
+		return HttpResponseRedirect( reverse('globus_script') )
+		
+	# unknown download method request
 	else:
 		raise Exception("Unknown download method: %s" % method)
 	
@@ -124,13 +127,13 @@ def script(request):
 	'''View to generate a Globus download script from the parameters stored at session scope.'''
 	
 	# retrieve files from session
-	download_map = request.session[DOWNLOAD_MAP]
+	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 	
 	# return python script
 	response = HttpResponse(content=generateGlobusDownloadScript(download_map))
 	now = datetime.datetime.now()
 	scriptName = "globus_download_%s.py" % now.strftime("%Y%m%d_%H%M%S")
-	response['Content-Type']= PYTHON_MIME_TYPE
+	response['Content-Type']= "application/x-python"
 	response['Content-Disposition'] = 'attachment; filename=%s' % scriptName
 	return response
 	
@@ -231,7 +234,7 @@ def transfer(request):
 	#sourceFiles = ["/esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc",
 	#				"/esg_dataroot/obs4MIPs/observations/atmos/taStderr/mon/grid/NASA-JPL/AIRS/v20110608/taStderr_AIRS_L3_RetStd-v5_200209-201105.nc"]
 	
-	download_map = request.session[DOWNLOAD_MAP]
+	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 	print 'Downloading files=%s' % download_map.items()
 	
 	# loop over source endpoints, submit one transfer for each source endpoint
