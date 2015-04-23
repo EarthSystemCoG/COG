@@ -15,6 +15,7 @@ Each parameter has a default value.
 SECTION_DEFAULT = 'DEFAULT'
 SECTION_ESGF = 'ESGF'
 SECTION_EMAIL = 'EMAIL'
+SECTION_GLOBUS = 'GLOBUS'
 
 from cog.site_manager import siteManager
 

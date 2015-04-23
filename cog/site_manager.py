@@ -37,6 +37,10 @@ class SiteManager(object):
        EMAIL_USERNAME=........
        EMAIL_PASSWORD=........
        EMAIL_SECURITY=STARTTLS
+       
+       [GLOBUS]
+       PORTAL_GO_USERNAME = ..........
+       PORTAL_GO_PASSWORD = ..........
 
     '''
     
@@ -73,6 +77,7 @@ class SiteManager(object):
         '''Returns True if the configuration file contains the named section.'''
 
         return self.config.has_section(section)
+    
     
 siteManager = SiteManager()
             

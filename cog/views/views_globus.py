@@ -8,6 +8,8 @@ from getpass import getpass
 import urllib, urllib2
 from cog.utils import getJson
 from urlparse import urlparse
+from django.conf import settings
+from cog.site_manager import siteManager
 
 DOWNLOAD_METHOD_WEB = 'web'
 DOWNLOAD_METHOD_SCRIPT = 'script'
@@ -17,6 +19,8 @@ DOWNLOAD_CLIENT_ID = "jplesgnode" # FIXME: read from CoG configuration settings
 
 GLOBUS_ACCESS_TOKEN = 'globus_access_token'
 GLOBUS_USERNAME = 'globus_username'
+
+GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
 GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
 
 # FIXME: map of (data_node:port, globus endpoint) pairs
@@ -24,6 +28,12 @@ GLOBUS_ENDPOINTS = {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
 				    'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
 
 import os
+
+def isGlobusEnabled():
+	'''Utility function to check whether Globus has been configured for this CoG installation.'''
+		
+	return siteManager.hasConfig(settings.SECTION_GLOBUS)
+
 
 @login_required
 def download(request):
@@ -157,7 +167,14 @@ def token(request):
 	
 	# CoG portal
 	# FIXME: instantiate at module scope ?
-	user_client = GlobusOnlineRestClient(config_file=os.path.join(os.path.expanduser("~"), 'user_client_config.yml'))
+	#user_client = GlobusOnlineRestClient(config_file=os.path.join(os.path.expanduser("~"), 'user_client_config.yml'))
+	print '\nGLOBUS ENABLED=%s' % isGlobusEnabled()
+	user_client = GlobusOnlineRestClient(config={'server': GLOBUS_NEXUS_URL,
+                                                 'client': siteManager.get('PORTAL_GO_USERNAME', section=settings.SECTION_GLOBUS),
+                                                 'client_secret': siteManager.get('PORTAL_GO_PASSWORD', section=settings.SECTION_GLOBUS),
+                                                 'verify_ssl':False,
+                                                 'cache':{'class': 'nexus.token_utils.InMemoryCache', 'args': [],} 
+                                             })
 
 	code = request.GET['code']
 	print 'Using globus code=%s' % code
