@@ -10,6 +10,7 @@
 	{% include 'cog/datacart/_datacart_js.html' %}
 	{% include 'cog/datacart/_wget_js.html' %}
 	{% include 'cog/datacart/_las_js.html' %}
+	{% include 'cog/datacart/_go_js.html' %}
 
 	<!-- custom spacing of datacart table -->
 	<style scoped type="text/css">
@@ -58,6 +59,13 @@
 
 	  <!-- skeleton form to empty the data cart via POST -->
 	  <form name="emptyDataCartForm" action='{% url 'datacart_empty' site.id request.user.id %}' method='post'></form>
+	  
+	  <!-- form for submitting Globus Online download for multiple datasets -->
+	  <form name="goForm" method="post" action="{% url 'globus_download' %}" >
+	  	{% csrf_token %}
+		<input type="hidden" name="dataset"/>
+		<input type="hidden" name="method"/>
+	  </form>
 
 	  <!-- data cart form -->
 	  <form name="dataCartForm">
@@ -67,11 +75,16 @@
 
 			<!-- Header: services -->
 			<tr>
-			<td colspan="3" style="vertical-align: middle;"><strong>Collective Services for All Selected Datasets: </strong>
-			[<strong><a href="" onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">WGET Script</a></strong> ]
-      		&nbsp; 
-      		[ <strong><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></strong> ]
-			</td>
+				<td colspan="3" style="vertical-align: middle;"><strong>Collective Services for All Selected Datasets: </strong>
+					[ <strong><a href="" onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">WGET Script</a></strong> ]
+	      			&nbsp; 
+	      			[ <strong><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></strong> ]
+	      			&nbsp; 
+	      			[ <strong><a href="" onclick="javascript:goDatasets('web'); return false">Globus Web Download</a></strong> ]
+	      			&nbsp; 
+	      			[ <strong><a href="" onclick="javascript:goDatasets('script'); return false">Globus Script Download</a></strong> ]
+	      			
+				</td>
 			</tr> 
 			
 			<tr>
@@ -139,5 +152,5 @@
 		</table>
 	  </form>
 	{% endif %}
-
+	
 {% endblock %}

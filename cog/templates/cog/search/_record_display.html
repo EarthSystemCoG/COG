@@ -30,7 +30,7 @@
 {% for url in record|recordUrls %}
 
 	<!-- add this service to the catalog -->
-	<script language="javascript">services.add( new Service('{{record.id}}','{{url.0}}', '{{url.1}}','{{url.2}}' ) );</script>
+	<script language="javascript">services.add( new Service('{{record.id}}','{{url.0}}', '{{url.1}}','{{url.2}}','{{record.fields.index_node.0}}') );</script>
 
 	<!-- THREDDS -->
 	{% if url.1 == 'application/html+thredds' %}

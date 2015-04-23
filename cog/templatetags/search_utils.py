@@ -72,7 +72,10 @@ def url_order(mtype):
     
 @register.filter
 def recordUrls(record):
-    '''Returns an ordered list of URL endpoints for this record.'''
+    '''
+    Returns an ordered list of URL endpoints for this record.
+    Note: the URL parts must match the values used by _services_js.html.
+    '''
     
     urls = []
     
@@ -94,7 +97,7 @@ def recordUrls(record):
             for value in record.fields['access']:
                 if value.lower() == 'gridftp':
                     urls.append( ('/globus/download?dataset=%s@%s' %(record.id,record.fields['index_node'][0]),
-                                  'application/gridftp',
+                                  'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
                                   'GridFTP') )
             
     return sorted(urls, key = lambda url: url_order(url[1]))

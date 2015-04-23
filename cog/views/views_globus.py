@@ -39,9 +39,9 @@ def download(request):
 	'''
 	View that initiates the Globus download workflow - either through the web, or through a script.
 	This view collects the GridFTP URLs to be downloaded, then redirects to the view specific to the download method: web or script.
+	This view can be invoked via GET (link from search page, one dataset only) or POST (link from data cart page, multiple datasets at once).
 	Example URL: http://localhost:8000/globus/download/
-	             ?dataset=obs4MIPs.NASA-JPL.AIRS.mon.v1%7Cesg-vm.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
-	             &dataset=obs4MIPs.NASA-JPL.MLS.mon.v1%7Cesg-datanode.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
+	             ?dataset=obs4MIPs.NASA-JPL.AIRS.mon.v1%7Cesg-vm.jpl.nasa.gov@esg-datanode.jpl.nasa.gov,obs4MIPs.NASA-JPL.MLS.mon.v1%7Cesg-datanode.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
 	             &method=web
 	'''
 	
@@ -49,8 +49,8 @@ def download(request):
 		return HttpResponseForbidden(GLOBUS_NOT_ENABLED_MESSAGE)
 	
 	# retrieve request parameters
-	method = request.GET.get('method', DOWNLOAD_METHOD_WEB)
-	datasets = request.GET.getlist('dataset', [])
+	method = request.REQUEST.get('method', DOWNLOAD_METHOD_WEB)
+	datasets = request.REQUEST.get('dataset','').split(",")
 	# maximum number of files to query for, if specified
 	limit = request.GET.get('limit', DOWNLOAD_LIMIT)
 	# optional query filter
@@ -111,8 +111,8 @@ def download(request):
 	
 		# redirect to Globus OAuth URL
 		print "Redirecting to: %s" % globus_url
-		#return HttpResponseRedirect(globus_url)
-		return HttpResponse(download_map.items(), "text/plain") # FIXME
+		return HttpResponseRedirect(globus_url)
+		#return HttpResponse(download_map.items(), "text/plain") # FIXME
 		
 	# redirect to script generation view
 	elif method==DOWNLOAD_METHOD_SCRIPT:
