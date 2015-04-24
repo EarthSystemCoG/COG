@@ -39,7 +39,7 @@ import os
 @login_required
 def download(request):
 	'''
-	View that initiates the Globus download workflows by collecting and optionally sub-selecting the GridFTP URLs to be downloaded.
+	View that initiates the Globus download workflow by collecting and optionally sub-selecting the GridFTP URLs to be downloaded.
 	This view can be invoked via GET (link from search page, one dataset only) or POST (link from data cart page, multiple datasets at once).
 	Example URL: http://localhost:8000/globus/download/
 	             ?dataset=obs4MIPs.NASA-JPL.AIRS.mon.v1%7Cesg-vm.jpl.nasa.gov@esg-datanode.jpl.nasa.gov,obs4MIPs.NASA-JPL.MLS.mon.v1%7Cesg-datanode.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
@@ -100,6 +100,7 @@ def download(request):
 
 	
 def start(request):
+	'''View that starts the Globus Online download either via the web browser, or via the CLI script.'''
 	
 	if request.method=='GET':
 		
@@ -107,8 +108,8 @@ def start(request):
 		download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 
 		return render_to_response('cog/globus/start.html', 
-							  { GLOBUS_DOWNLOAD_MAP: download_map },
-							  context_instance=RequestContext(request))	
+							     { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' },
+							     context_instance=RequestContext(request))	
 
 		
 	else:

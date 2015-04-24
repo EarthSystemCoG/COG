@@ -1,15 +1,95 @@
 {% extends "cog/common/layout_center.html" %}
 
+{% block extrahead %}
+
+	{% include 'cog/datacart/_go_js.html' %}
+
+{% endblock %}
+
 {% block main %}
 
-The following files will be downloaded:
+<!-- Instructions -->
+<p>
+Globus Online uses the high performance, reliable GridFTP protocol to transfer many files at once from their remote archives to your desktop. 
+<br/>To use Globus Download, you need to:
 
-{% for source_endpoint, files in globus_download_map.items %}
+<ul>
+	<li>Sign up for a <a href="https://www.globus.org/SignIn#step=signup">Globus Account</a> (free).
+	<li>Install the <a href="https://www.globus.org/globus-connect-personal">Globus Connect</a> client on your desktop (click-through).
+	<li>Additionally, to use the Python scripts (Option 2 below), you need to upload your public <i>ssh</i> key to the Globus site 
+	    (see <a href="https://support.globus.org/entries/20979751-How-do-I-add-an-SSH-key-to-my-Globus-account">instructions</a>).
+</ul>
+
+For more information about Globus, see the <a href="http://www.globus.org">Globus Home Page</a>,
+including the <a href="https://www.globus.org/researchers/getting-started">Getting Started</a> page.
+</p>
+
+{% if globus_download_map %}
+
+   <!-- table of files to be downloaded -->
+   <div class="mybox">
+	    <table>
+	        <caption>The following files be dowloaded</caption>
+	        {% for source_endpoint, files in globus_download_map.items %}
 	
-	{% for file in files %}
-		<br/>{{ source_endpoint }} : {{ file }}
-	{% endfor %}
+				{% for file in files %}
+					<tr><td>{{ source_endpoint }}</td><td>{{ file }}</td></tr>
+				{% endfor %}	
+			{% endfor %}
+	    </table>
+	</div>
+		
+	<p>
+
+	<!-- Form to start workflows -->
+	<table>
+		<tr>
+			<td width="50%">
+				<div class="box-globus">
+					<div style="font-weight:bold; text-align:center; padding: 4px;">Option 1: Web Download</div>
+					Submit your download request through this web browser. 
+					<br/>
+					You will be asked to sign-in to the Globus Online site (if not signed-in already),
+					and to select the destination folder on your laptop. You must also enter your ESGF password below:
+					<br/><b>ESGF password</b>
+					<div style="text-align: center;">
+						<input type="button" value="Start Web Download" onclick="javascript:submitGoDownload('web');"/> 
+					</div>
+				</div>
+			</td>
+			<td width="50%">
+				<div class="box-globus">
+					<div style="font-weight:bold; text-align:center; padding: 4px;">Option 2: Script Download</div>
+					Download a Python script to start the download from the command line.
+					<br/>
+					Execute the script as: &nbsp; <i>python globus_download_<yyyymmddhhmmss>.py -e <your Globus Connect endpoint> -u <your Globus username>
+					For example: &nbsp; <i>python globus_download_20150101223445.py -e gouser#mymac -u gouser
+					<br>
+					Files will be downloaded in the directory where the script is located.
+					<div style="text-align: center;">
+						<input type="button" value="Start Script Download" onclick="javascript:submitGoDownload('script');"/> 
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
 	
-{% endfor %}
+	<div style="text-align: center">
+		Please use the Globus Online site to <a href="https://www.globus.org/xfer/ViewActivity">monitor your data transfer requests</a>.
+	</div>
+	
+	<!-- form that starts the Globus Online workflow -->
+	<form name="startGoForm" method="post" action="{% url 'globus_start' %}">
+	  	{% csrf_token %}
+		<input type="hidden" name="method"/>
+	</form>
+		
+{% else %}
+	<div class="warning">
+		No files were selected for download. Please select one or more Globus-enabled datasets in your Data Cart.
+	</div>
+{% endif %}
+
+
 
 {% endblock %}

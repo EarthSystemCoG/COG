@@ -1174,6 +1174,14 @@ BEGIN SEARCH WIDGET
 	font-size:  8pt;
 }
 
+.box-globus {
+	background: #FCE79F; /*light yellow*/
+	border:     1px solid #666;
+	font-size:  10pt;
+	padding: 4px;
+	height: 150px;
+}
+
 /*access control license.*/
 .license-box {
     background:  #fce79f; /* light yellow*/
