@@ -2,6 +2,8 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from nexus import GlobusOnlineRestClient
 from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
 from getpass import getpass
@@ -37,8 +39,7 @@ import os
 @login_required
 def download(request):
 	'''
-	View that initiates the Globus download workflow - either through the web, or through a script.
-	This view collects the GridFTP URLs to be downloaded, then redirects to the view specific to the download method: web or script.
+	View that initiates the Globus download workflows by collecting and optionally sub-selecting the GridFTP URLs to be downloaded.
 	This view can be invoked via GET (link from search page, one dataset only) or POST (link from data cart page, multiple datasets at once).
 	Example URL: http://localhost:8000/globus/download/
 	             ?dataset=obs4MIPs.NASA-JPL.AIRS.mon.v1%7Cesg-vm.jpl.nasa.gov@esg-datanode.jpl.nasa.gov,obs4MIPs.NASA-JPL.MLS.mon.v1%7Cesg-datanode.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
@@ -49,12 +50,11 @@ def download(request):
 		return HttpResponseForbidden(GLOBUS_NOT_ENABLED_MESSAGE)
 	
 	# retrieve request parameters
-	method = request.REQUEST.get('method', DOWNLOAD_METHOD_WEB)
 	datasets = request.REQUEST.get('dataset','').split(",")
+	# optional query filter
+	query = request.REQUEST.get('query',None)
 	# maximum number of files to query for, if specified
 	limit = request.GET.get('limit', DOWNLOAD_LIMIT)
-	# optional query filter
-	query = request.GET.get('query', None)
 	
 	# map of (data_node, list of GridFTP URLs to download)
 	download_map = {}
@@ -96,31 +96,50 @@ def download(request):
 	request.session[GLOBUS_DOWNLOAD_MAP] = download_map
 	print 'Stored Globus Download Map=%s at session scope' % download_map
 	
-	# redirect to Globus OAuth page
-	if method==DOWNLOAD_METHOD_WEB:
-				
-		params = [ ('response_type','code'),
-				   ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
-				   ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),
-				 ]
-		
-		globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
-		
-		# FIXME: fake the Globus URL
-		globus_url = request.build_absolute_uri( reverse("globus_oauth") ) + "?" + urllib.urlencode(params)
+	return HttpResponseRedirect( reverse('globus_start') )
+
 	
-		# redirect to Globus OAuth URL
-		print "Redirecting to: %s" % globus_url
-		return HttpResponseRedirect(globus_url)
-		#return HttpResponse(download_map.items(), "text/plain") # FIXME
+def start(request):
+	
+	if request.method=='GET':
 		
-	# redirect to script generation view
-	elif method==DOWNLOAD_METHOD_SCRIPT:
-		return HttpResponseRedirect( reverse('globus_script') )
+		# retrieve files from session
+		download_map = request.session[GLOBUS_DOWNLOAD_MAP]
+
+		return render_to_response('cog/globus/start.html', 
+							  { GLOBUS_DOWNLOAD_MAP: download_map },
+							  context_instance=RequestContext(request))	
+
 		
-	# unknown download method request
 	else:
-		raise Exception("Unknown download method: %s" % method)
+	
+		method = request.POST.get('method', DOWNLOAD_METHOD_WEB)
+		
+		# redirect to Globus OAuth page
+		if method==DOWNLOAD_METHOD_WEB:
+					
+			params = [ ('response_type','code'),
+					   ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
+					   ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),
+					 ]
+			
+			globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
+			
+			# FIXME: fake the Globus URL
+			globus_url = request.build_absolute_uri( reverse("globus_oauth") ) + "?" + urllib.urlencode(params)
+		
+			# redirect to Globus OAuth URL
+			print "Redirecting to: %s" % globus_url
+			return HttpResponseRedirect(globus_url)
+			#return HttpResponse(download_map.items(), "text/plain") # FIXME
+			
+		# redirect to script generation view
+		elif method==DOWNLOAD_METHOD_SCRIPT:
+			return HttpResponseRedirect( reverse('globus_script') )
+			
+		# unknown download method request
+		else:
+			raise Exception("Unknown download method: %s" % method)
 	
 @login_required
 def script(request):

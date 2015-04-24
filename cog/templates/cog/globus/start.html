@@ -1,0 +1,15 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+The following files will be downloaded:
+
+{% for source_endpoint, files in globus_download_map.items %}
+	
+	{% for file in files %}
+		<br/>{{ source_endpoint }} : {{ file }}
+	{% endfor %}
+	
+{% endfor %}
+
+{% endblock %}

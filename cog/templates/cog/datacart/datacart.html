@@ -64,7 +64,7 @@
 	  <form name="goForm" method="post" action="{% url 'globus_download' %}" >
 	  	{% csrf_token %}
 		<input type="hidden" name="dataset"/>
-		<input type="hidden" name="method"/>
+		<input type="hidden" name="query"/>
 	  </form>
 
 	  <!-- data cart form -->
@@ -80,16 +80,13 @@
 	      			&nbsp; 
 	      			[ <strong><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></strong> ]
 	      			&nbsp; 
-	      			[ <strong><a href="" onclick="javascript:goDatasets('web'); return false">Globus Web Download</a></strong> ]
-	      			&nbsp; 
-	      			[ <strong><a href="" onclick="javascript:goDatasets('script'); return false">Globus Script Download</a></strong> ]
-	      			
+	      			[ <strong><a href="" onclick="javascript:goDatasets(); return false">Globus Download</a></strong> ]	      			
 				</td>
 			</tr> 
 			
 			<tr>
 			<td style="width:72%;vertical-align:middle;">
-			    When 'Show Files' is clicked, or when generating WGET scripts, you may use an optional string to sub-select the filenames:
+			    When 'Show Files' is clicked, or when using WGET or Globus, you may use an optional string to sub-select the filenames:
 			</td>
 			<td style="width:14%;vertical-align:middle;">
 			    <input type="text" name="query-filter" alt="query-filter" id="query-filter" placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter(); return false; }" />

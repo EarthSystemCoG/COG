@@ -49,8 +49,7 @@
 		
 	<!-- Globus Online -->
 	{% elif url.1 == 'application/gridftp' %}
-		&nbsp; [ <a href="{{ url.0 }}&method=web"><strong>Globus Web Download</strong></a> ]
-		&nbsp; [ <a href="{{ url.0 }}&method=script"><strong>Globus Download Script </strong></a> ]
+		&nbsp; [ <a href="javascript:goDataset('{{ url.0 }}')"><strong>Globus Download</strong></a> ]
 
 	<!--  all other services -->
 	{% else %}
