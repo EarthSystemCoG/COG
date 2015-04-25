@@ -24,6 +24,8 @@ DOWNLOAD_LIMIT = 10000 # default maximum number of files to download for each da
 GLOBUS_DOWNLOAD_MAP = 'globus_download_map'
 GLOBUS_ACCESS_TOKEN = 'globus_access_token'
 GLOBUS_USERNAME = 'globus_username'
+TARGET_ENDPOINT = 'target_endpoint'
+TARGET_FOLDER = 'target_folder'
 
 # external URLs
 GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
@@ -120,8 +122,8 @@ def start(request):
 		# redirect to Globus OAuth page
 		if method==DOWNLOAD_METHOD_WEB:
 					
-			params = [ ('ep','GC'), ('lock', 'ep'),
-					   ('redirect_uri', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
+			params = [ ('ep','GC'), ('lock', 'ep'), ('method','get'), ('folderlimit','1'),
+					   ('action', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
 					 ]
 			
 			globus_url = GLOBUS_SELECT_DESTINATION_URL + "?" + urllib.urlencode(params)
@@ -129,6 +131,7 @@ def start(request):
 			# redirect to Globus OAuth URL
 			print "Redirecting to: %s" % globus_url
 			return HttpResponseRedirect(globus_url)
+			#return HttpResponseRedirect( request.build_absolute_uri(reverse("globus_oauth")) ) # FIXME
 		
 		# redirect to script generation view
 		elif method==DOWNLOAD_METHOD_SCRIPT:
@@ -141,6 +144,16 @@ def start(request):
 		
 @login_required
 def oauth(request):
+	
+	# retrieve destionation parameters from Globus redirect
+	# example URL with added parameters from Globus redirect: 
+	# http://localhost:8000/globus/oauth/?label=test&verify_checksum=on&submitForm=&folder%5B0%5D=Downloads&endpoint=cinquiniluca%23mymac&path=%2F%7E%2F&ep=GC&lock=ep&method=get&action=http%3A%2F%2Flocalhost%3A8000%2Fglobus%2Foauth%2F
+	request.session[TARGET_ENDPOINT] = request.REQUEST.get('endpoint','#')
+	request.session[TARGET_FOLDER] = request.REQUEST.get('path','/~/') + request.REQUEST.get('folder[0]','/~/')  # default value: user home directory
+	label = request.REQUEST.get('label','')
+	print 'path=%s' % request.REQUEST.get('path')
+	print 'folder=%s' % request.REQUEST.get('folder[0]')
+	print 'User selected destionation endpoint:%s, folder: %s' % (request.session[TARGET_ENDPOINT], request.session[TARGET_FOLDER])
 	
 	params = [ ('response_type','code'),
 		       ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
@@ -271,7 +284,8 @@ def transfer(request):
 	
 	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 	print 'Downloading files=%s' % download_map.items()
-	
+	print 'User selected destionation endpoint:%s, folder: %s' % (request.session[TARGET_ENDPOINT], request.session[TARGET_FOLDER])
+
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = [] # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
@@ -282,15 +296,15 @@ def transfer(request):
 		#source_endpoint = "esg#jpl"
 		
 		# target endpoint - this is the user own's laptop
-		# FIXME: get target_endpoint from web workflow (user choice)
-		target_endpoint = "cinquiniluca#mymac"
+		#target_endpoint = "cinquiniluca#mymac"
+		target_endpoint = request.session[TARGET_ENDPOINT]
 		
 		# target directory to store files
-		# FIXME: get target_endpoint from web workflow (user choice)
-		target_directory = "/~" # is this a GO custom notation ?
+		#target_folder = "/~" # is this a GO custom notation ?
+		target_folder = request.session[TARGET_FOLDER]
 	
 		# submit transfer request
-		task_id = submiTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_directory)
+		task_id = submiTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
 		
 		task_ids.append(task_id)
 	
