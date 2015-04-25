@@ -50,23 +50,24 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
 					Submit your download request through this web browser. 
 					<br/>
 					You will be asked to sign-in to the Globus Online site (if not signed-in already),
-					and to select the destination folder on your laptop. You must also enter your ESGF password below:
-					<br/><b>ESGF password</b>
-					<div style="text-align: center;">
+					and to select the destination folder on your laptop.
+					<div style="text-align: center; padding:5px;">
 						<input type="button" value="Start Web Download" onclick="javascript:submitGoDownload('web');"/> 
 					</div>
 				</div>
 			</td>
 			<td width="50%">
 				<div class="box-globus">
-					<div style="font-weight:bold; text-align:center; padding: 4px;">Option 2: Script Download</div>
+					<div style="font-weight:bold; text-align:center; padding: 4px; ">Option 2: Script Download</div>
 					Download a Python script to start the download from the command line.
 					<br/>
-					Execute the script as: &nbsp; <i>python globus_download_<yyyymmddhhmmss>.py -e <your Globus Connect endpoint> -u <your Globus username>
-					For example: &nbsp; <i>python globus_download_20150101223445.py -e gouser#mymac -u gouser
+					Execute the script as: <i>python globus_download_yyyymmddhhmmss.py 
+					-e &lt;your Globus Connect endpoint&gt; -u &lt;your Globus username&gt;</i>
+					<br/>
+					For example: <i>python globus_download.py -e gouser#mymac -u gouser</i>
 					<br>
 					Files will be downloaded in the directory where the script is located.
-					<div style="text-align: center;">
+					<div style="text-align: center; padding:5px;">
 						<input type="button" value="Start Script Download" onclick="javascript:submitGoDownload('script');"/> 
 					</div>
 				</div>
@@ -74,8 +75,10 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
 		</tr>
 	</table>
 	
+	<p/>
 	<div style="text-align: center">
-		Please use the Globus Online site to <a href="https://www.globus.org/xfer/ViewActivity">monitor your data transfer requests</a>.
+		After starting the files transfer request, 
+		please use the Globus Online site to <a href="https://www.globus.org/xfer/ViewActivity">monitor the acivity</a>.
 	</div>
 	
 	<!-- form that starts the Globus Online workflow -->
