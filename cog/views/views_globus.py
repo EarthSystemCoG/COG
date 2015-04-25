@@ -27,6 +27,7 @@ GLOBUS_USERNAME = 'globus_username'
 
 # external URLs
 GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
+GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/xfer/BrowseEndpoint'
 GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
 
 # FIXME: map of (data_node:port, globus endpoint) pairs
@@ -98,7 +99,7 @@ def download(request):
 	
 	return HttpResponseRedirect( reverse('globus_start') )
 
-	
+@login_required
 def start(request):
 	'''View that starts the Globus Online download either via the web browser, or via the CLI script.'''
 	
@@ -119,21 +120,16 @@ def start(request):
 		# redirect to Globus OAuth page
 		if method==DOWNLOAD_METHOD_WEB:
 					
-			params = [ ('response_type','code'),
-					   ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
-					   ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),
+			params = [ ('ep','GC'), ('lock', 'ep'),
+					   ('redirect_uri', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
 					 ]
 			
-			globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
-			
-			# FIXME: fake the Globus URL
-			globus_url = request.build_absolute_uri( reverse("globus_oauth") ) + "?" + urllib.urlencode(params)
-		
+			globus_url = GLOBUS_SELECT_DESTINATION_URL + "?" + urllib.urlencode(params)
+					
 			# redirect to Globus OAuth URL
 			print "Redirecting to: %s" % globus_url
 			return HttpResponseRedirect(globus_url)
-			#return HttpResponse(download_map.items(), "text/plain") # FIXME
-			
+		
 		# redirect to script generation view
 		elif method==DOWNLOAD_METHOD_SCRIPT:
 			return HttpResponseRedirect( reverse('globus_script') )
@@ -141,6 +137,24 @@ def start(request):
 		# unknown download method request
 		else:
 			raise Exception("Unknown download method: %s" % method)
+	
+		
+@login_required
+def oauth(request):
+	
+	params = [ ('response_type','code'),
+		       ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
+		       ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),]
+	
+	globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
+	
+	# FIXME: fake the Globus URL
+	globus_url = request.build_absolute_uri( reverse("globus_oauth2") ) + "?" + urllib.urlencode(params)
+
+	# redirect to Globus OAuth URL
+	print "Redirecting to: %s" % globus_url
+	return HttpResponseRedirect(globus_url)
+	#return HttpResponse(download_map.items(), "text/plain") # FIXME
 	
 @login_required
 def script(request):
@@ -173,7 +187,8 @@ def login(request):
 	return HttpResponseRedirect(globus_url)
 
 # FIXME: not needed any more when Globus web page is enabled
-def oauth(request):
+@login_required
+def oauth2(request):
 	'''Temporary view that mimics the Globus OAuth page.'''
 	
 	client_id = request.GET['client_id']

@@ -170,6 +170,8 @@ urlpatterns = patterns('',
     
     url(r'^globus/oauth/$', 'cog.views.views_globus.oauth', name='globus_oauth'),
     
+    url(r'^globus/oauth2/$', 'cog.views.views_globus.oauth2', name='globus_oauth2'), # tmp
+    
     url(r'^globus/token/$', 'cog.views.views_globus.token', name='globus_token'),
     
     url(r'^globus/transfer/$', 'cog.views.views_globus.transfer', name='globus_transfer'),
