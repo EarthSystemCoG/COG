@@ -25,7 +25,7 @@ def generateGlobusDownloadScript(download_map):
     scriptFile = os.path.join(os.path.dirname(__file__), DOWNLOAD_SCRIPT)
     with open(scriptFile, 'r') as f:
         script = f.read().strip()
-    script = script.replace('##GENDPOINTDICT##', str(download_map))
+    script = script.replace('{}##GENDPOINTDICT##', str(download_map))
 
     return script
     

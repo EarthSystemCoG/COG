@@ -83,7 +83,7 @@ def getFiles(gendpointDict, uendpoint, username, upath, sshkey):
 
 if __name__ == '__main__':
 
-	gendpointDict = ##GENDPOINTDICT##
+	gendpointDict = {}##GENDPOINTDICT##
 	uendpoint, username, upath, sshkey = arguments(sys.argv)
 	activateEndpoints(gendpointDict, uendpoint, username, sshkey)
 	getFiles(gendpointDict, uendpoint, username, upath, sshkey)
