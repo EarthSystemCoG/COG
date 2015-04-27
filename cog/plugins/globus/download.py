@@ -1,88 +1,89 @@
 import sys
-import getopt
+import argparse
 import os
 
+from random import randint
 from uuid import uuid4
 
-'''
-To use this script, you must have added your SSH key your Gloubus profile.
-For reference see https://support.globus.org/entries/20979751-How-do-I-add-an-SSH-key-to-my-Globus-account-
-
-This script makes use of the Globus CLI 'transfer' command.  It will activate
-the appropriate endpoints.  By default, the transfer command will:
-
- - verify the checksum of the transfer
- - encrypt the transfer
- - delete any fies at the user endpoint with the same name
-
-User can call this script in the followin manner:
-
-% python download.py -e <user endpoint> -u <username> -s <user SSH key file; optional>
-'''
-
 def activateEndpoints(gendpointDict, uendpoint, username, sshkey):
-    endNames = gendpointDict.keys()
-    for thisEndName in endNames:
-        os.system("ssh " + sshkey + " " + username + "@cli.globusonline.org endpoint-activate " + thisEndName)
 
-    uendpointBase = uendpoint.split('/')[0]
-    os.system("ssh " + sshkey + " " + username + "@cli.globusonline.org endpoint-activate " + uendpointBase)
+	endNames = gendpointDict.keys()
+	for thisEndName in endNames:
+		os.system("ssh " + sshkey + " " + username + "@cli.globusonline.org endpoint-activate " + thisEndName)
 
-    return
+	uendpointBase = uendpoint.split('/')[0]
+	os.system("ssh " + sshkey + " " + username + "@cli.globusonline.org endpoint-activate " + uendpointBase)
+
+	return
 
 def arguments(argv):
-    uendpoint = ''
-    username = ''
-    sshkey = ''
 
-    try:
-        opts, args = getopt.getopt(argv,"he:u:s:")
-    except getopt.GetoptError:
-        print 'download.py -e <user endpoint> -u <username> -s <user SSH key file; optional>'
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-h':
-            print 'test.py -e <user endpoint> -u <username> -s <user SSH key file; optional>'
-            sys.exit()
-        elif opt in ("-e"):
-            if '#' not in arg:
-                print "Please supply a valid Globus enpoint"
-                sys.exit()
-            else:
-                uendpoint = arg
-        elif opt in ("-u"):
-            username = arg
-        elif opt in ("-s"):
-            sshkey = arg
+	parser = argparse.ArgumentParser(description = '''To use this script, you must have added your SSH key your Gloubus profile.'''
+		'''For reference see https://support.globus.org/entries/20979751-How-do-I-add-an-SSH-key-to-my-Globus-account-'''
+		'''This script makes use of the Globus CLI 'transfer' command.  It will activate'''
+		'''the appropriate endpoints.  By default, the transfer command will:'''
+		'''verify the checksum of the transfer, encrypt the transfer, and delete any fies at the user endpoint with the same name.'''
+		)
+	parser.add_argument('-e', '--user-endpoint', type=str, help='endpoint you wish to download files to', required=True)
+	parser.add_argument('-u', '--username', type=str, help='your Globus username', required=True)
+	parser.add_argument('-p', '--path', type=str, help='the path on your endpoint where you want files to be downloaded to', default='/~/')
+	parser.add_argument('-s', '--ssh-key', type=str, help='your SSH key file', default=' ')
+	args = parser.parse_args()
 
-    return (uendpoint, username, sshkey)
+	username = args.username
+	uendpoint = args.user_endpoint
+	sshkey = args.ssh_key
+	upath = args.path
 
-def getFiles(gendpointDict, uendpoint, username, sshkey):
-    label = str(uuid4())
+	if '#' not in uendpoint:
+		print "Please supply a valid Globus enpoint"
+		sys.exit()
+	if '/' in uendpoint:
+		print "Do not include the download path in the endpoint name, please use the -p option"
+		sys.exit()
+	if upath[0] != '/' and upath != '/~/':
+		upath = '/' + upath
+	if sshkey != ' ':
+		sshkey = '-i ' + sshkey
 
-    endNames = gendpointDict.keys()
+	return (uendpoint, username, upath, sshkey)
 
-    for thisEndName in endNames:
+def getFiles(gendpointDict, uendpoint, username, upath, sshkey):
 
-        fileList = gendpointDict[thisEndName]
+	transferFile = '/tmp/transferList' + str(randint(1,9999)) + '.txt' 
+	file = open(transferFile, 'w')
 
-        for thisFile in fileList:
+	label = str(uuid4())
 
-            basename = os.path.basename(thisFile)
+	endNames = gendpointDict.keys()
 
-            if uendpoint[-1] != '/':
-                basename = '/' + basename
+	for thisEndName in endNames: 
 
-            remote = thisEndName + thisFile
-            local = uendpoint + basename
-            os.system("echo '" + remote + " " + local + "' | ssh " + sshkey + "  " + username + "@cli.globusonline.org transfer --verify-checksum --encrypt --label=" + label + " --delete")
+		fileList = gendpointDict[thisEndName]
 
-    return
+		for thisFile in fileList:
+
+			basename = os.path.basename(thisFile)
+
+			if upath[-1] != '/':
+				basename = '/' + basename
+
+			remote = thisEndName + thisFile
+			local = uendpoint + upath + basename
+	
+			file.write(remote + ' ' + local + '\n')
+
+	file.close()
+
+	os.system("cat '" + transferFile  + "' | ssh " + sshkey + "  " + username + "@cli.globusonline.org transfer --verify-checksum --encrypt --label=" + label + " --delete") 
+
+	os.remove(transferFile)
+
+	return
 
 if __name__ == '__main__':
-    gendpointDict = ##GENDPOINTDICT##
-    uendpoint, username, sshkey = arguments(sys.argv[1:])
-    if sshkey != '':
-        sshkey = '-i ' + sshkey
-    activateEndpoints(gendpointDict, uendpoint, username, sshkey)
-    getFiles(gendpointDict, uendpoint, username, sshkey)
+
+	gendpointDict = ##GENDPOINTDICT##
+	uendpoint, username, upath, sshkey = arguments(sys.argv)
+	activateEndpoints(gendpointDict, uendpoint, username, sshkey)
+	getFiles(gendpointDict, uendpoint, username, upath, sshkey)
