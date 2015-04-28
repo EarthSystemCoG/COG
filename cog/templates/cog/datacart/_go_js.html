@@ -30,10 +30,14 @@
     		goForm.submit();
     	 }
     	 
-     }
-     
+     }  
+
      function submitGoDownload(method) {
      
+     	if (method=='script') {
+     		// show confirmation dialog otherwise user might think nothing is happening
+     		//showMessage("Confirmation", "The download script will be saved into the standard location for your browser.");
+     	}
      	goForm = document.forms['startGoForm'];
      	goForm.method.value = method
      	goForm.submit();
