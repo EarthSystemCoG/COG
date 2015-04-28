@@ -111,9 +111,8 @@ def start(request):
 		download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 
 		return render_to_response('cog/globus/start.html', 
-							     { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' },
-							     context_instance=RequestContext(request))	
-
+	    						     { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' },
+	    						     context_instance=RequestContext(request))	
 		
 	else:
 	
@@ -308,7 +307,9 @@ def transfer(request):
 		
 		task_ids.append(task_id)
 	
-	# return response
-	text = "Task ids=%s submitted, monitor your task at: https://www.globus.org/xfer/ViewActivity" % task_ids
-	return HttpResponse(text, content_type="text/plain")
+	# display confirmation page
+	return render_to_response('cog/globus/confirmation.html', 
+						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
+						        context_instance=RequestContext(request))	
+
 	
