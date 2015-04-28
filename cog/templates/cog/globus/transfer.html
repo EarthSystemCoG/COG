@@ -11,10 +11,10 @@
 <!-- Instructions -->
 <p>
 Globus Online uses the high performance, reliable GridFTP protocol to transfer many files at once from their remote archives to your desktop. 
-<br/>To use Globus Download, you need to:
+<br/>To use Globus Online, you need to:
 
 <ul>
-	<li>Sign up for a <a href="https://www.globus.org/SignIn#step=signup">Globus Account</a> (free).
+	<li>Sign up for a <a href="https://www.globus.org/SignIn#step=signup">Globus Online Account</a> (free).
 	<li>Install the <a href="https://www.globus.org/globus-connect-personal">Globus Connect</a> client on your desktop (click-through).
 	<li>Additionally, to use the Python scripts (Option 2 below), you need to upload your public <i>ssh</i> key to the Globus site 
 	    (see <a href="https://support.globus.org/entries/20979751-How-do-I-add-an-SSH-key-to-my-Globus-account">instructions</a>).
@@ -29,7 +29,7 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
    <!-- table of files to be downloaded -->
    <div class="mybox">
 	    <table>
-	        <caption>The following files be dowloaded</caption>
+	        <caption>The following files be dowloaded:</caption>
 	        {% for source_endpoint, files in globus_download_map.items %}
 	
 				{% for file in files %}
@@ -46,33 +46,40 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
 		<tr>
 			<td width="50%">
 				<div class="box-globus">
+					
 					<div style="font-weight:bold; text-align:center; padding: 4px;">Option 1: Web Download</div>
-					Submit your download request through this web browser. 
-					<br/>
+					
+					<div style="text-align:center; padding-bottom: 10px;">Submit the download request through this web browser.</div>
+
 					You will be asked to sign-in to the Globus Online site (if not signed-in already),
 					and to select the destination folder on your laptop.
+					
+					<p/>
 					<div style="text-align: center; padding:5px;">
 						<form name="globusTransferForm" method="post" action="{% url 'globus_transfer' %}">
 							{% csrf_token %}
 							<input type="submit" value="Start Web Download"/> 
 						</form>
 					</div>
+					
 				</div>
 			</td>
 			<td width="50%">
 				<div class="box-globus">
 					<div style="font-weight:bold; text-align:center; padding: 4px; ">Option 2: Script Download</div>
-					Download a Python script to start the download from the command line.
+					<div style="text-align:center; padding-bottom: 10px;">Download a Python script to start the download from the command line.</div>
+					
+					Execute the script as: 
+					<br/><i>python globus_download_yyyymmddhhmmss.py 
+					-e &lt;your Globus Connect endpoint&gt; -u &lt;your Globus username&gt; -p &lt;target directory&gt;</i>
 					<br/>
-					Execute the script as: <i>python globus_download_yyyymmddhhmmss.py 
-					-e &lt;your Globus Connect endpoint&gt; -u &lt;your Globus username&gt;</i>
-					<br/>
-					For example: <i>python globus_download.py -e gouser#mymac -u gouser</i>
-					<br>
-					Files will be downloaded in the directory where the script is located.
+					For example: 
+					<br/><i>python globus_download_20150101_235959.py -e gouser#mymac -u gouser -p /tmp</i>
+					
 					<div style="text-align: center; padding:5px;">
 						<input type="button" value="Start Script Download" onclick="window.location='{% url 'globus_script' %}'"/>
 					</div>
+					
 				</div>
 			</td>
 		</tr>
