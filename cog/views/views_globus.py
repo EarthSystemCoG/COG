@@ -99,111 +99,61 @@ def download(request):
 	request.session[GLOBUS_DOWNLOAD_MAP] = download_map
 	print 'Stored Globus Download Map=%s at session scope' % download_map
 	
-	return HttpResponseRedirect( reverse('globus_start') )
+	# redirect after post (to display page)
+	return HttpResponseRedirect( reverse('globus_transfer') )
 
 @login_required
-def start(request):
-	'''View that starts the Globus Online download either via the web browser, or via the CLI script.'''
+def transfer(request):
+	'''View that initiates a Globus data transfer request.'''
 	
 	if request.method=='GET':
 		
 		# retrieve files from session
 		download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 
-		return render_to_response('cog/globus/start.html', 
-	    						     { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' },
-	    						     context_instance=RequestContext(request))	
+		# display the same page as resulting from data cart invocation
+		return render_to_response('cog/globus/transfer.html', 
+	    						  { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' },
+	    						  context_instance=RequestContext(request))	
 		
 	else:
-	
-		download_method = request.POST.get('download_method', DOWNLOAD_METHOD_WEB)
+						
+		# redirect to Globus OAuth URL
+		params = [ ('ep','GC'), ('lock', 'ep'), ('method','get'), ('folderlimit','1'),
+				   ('action', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
+				 ]
+		globus_url = GLOBUS_SELECT_DESTINATION_URL + "?" + urllib.urlencode(params)
+		print "Redirecting to: %s" % globus_url
+		return HttpResponseRedirect(globus_url)
+		# replacement URL for localhost development
+		#return HttpResponseRedirect( request.build_absolute_uri(reverse("globus_oauth")) ) # FIXME
 		
-		# redirect to Globus OAuth page
-		if download_method==DOWNLOAD_METHOD_WEB:
-					
-			params = [ ('ep','GC'), ('lock', 'ep'), ('method','get'), ('folderlimit','1'),
-					   ('action', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
-					 ]
-			
-			globus_url = GLOBUS_SELECT_DESTINATION_URL + "?" + urllib.urlencode(params)
-					
-			# redirect to Globus OAuth URL
-			print "Redirecting to: %s" % globus_url
-			return HttpResponseRedirect(globus_url)
-			#return HttpResponseRedirect( request.build_absolute_uri(reverse("globus_oauth")) ) # FIXME
-		
-		# redirect to script generation view
-		elif download_method==DOWNLOAD_METHOD_SCRIPT:
-			return HttpResponseRedirect( reverse('globus_script') )
-			
-		# unknown download method request
-		else:
-			raise Exception("Unknown download method: %s" % download_method)
-	
 		
 @login_required
 def oauth(request):
 	
-	# retrieve destionation parameters from Globus redirect
+	# retrieve destination parameters from Globus redirect
 	# example URL with added parameters from Globus redirect: 
-	# http://localhost:8000/globus/oauth/?label=test&verify_checksum=on&submitForm=&folder%5B0%5D=Downloads&endpoint=cinquiniluca%23mymac&path=%2F%7E%2F&ep=GC&lock=ep&method=get&action=http%3A%2F%2Flocalhost%3A8000%2Fglobus%2Foauth%2F
+	# /globus/oauth/?label=&verify_checksum=on&submitForm=&folder[0]=tmp&endpoint=cinquiniluca#mymac&path=/~/&ep=GC&lock=ep&method=get&folderlimit=1&action=http://localhost:8000/globus/oauth/
 	request.session[TARGET_ENDPOINT] = request.REQUEST.get('endpoint','#')
 	request.session[TARGET_FOLDER] = request.REQUEST.get('path','/~/') + request.REQUEST.get('folder[0]','/~/')  # default value: user home directory
-	label = request.REQUEST.get('label','')
-	print 'path=%s' % request.REQUEST.get('path')
-	print 'folder=%s' % request.REQUEST.get('folder[0]')
-	print 'User selected destionation endpoint:%s, folder: %s' % (request.session[TARGET_ENDPOINT], request.session[TARGET_FOLDER])
+	print 'User selected destionation endpoint:%s, path:%s, folder:%s' % (request.session[TARGET_ENDPOINT], request.REQUEST.get('path','/~/'), request.session[TARGET_FOLDER])
 	
 	params = [ ('response_type','code'),
 		       ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
 		       ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),]
 	
 	globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
-	
 	# FIXME: fake the Globus URL
-	#globus_url = request.build_absolute_uri( reverse("globus_oauth2") ) + "?" + urllib.urlencode(params)
+	globus_url = request.build_absolute_uri( reverse("globus_oauth2") ) + "?" + urllib.urlencode(params)
 
 	# redirect to Globus OAuth URL
 	print "Redirecting to: %s" % globus_url
 	return HttpResponseRedirect(globus_url)
-	#return HttpResponse(download_map.items(), "text/plain") # FIXME
 	
-@login_required
-def script(request):
-	'''View to generate a Globus download script from the parameters stored at session scope.'''
-		
-	# retrieve files from session
-	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
-	
-	# return python script
-	content = generateGlobusDownloadScript(download_map)
-	response = HttpResponse( content )
-	now = datetime.datetime.now()
-	scriptName = "globus_download_%s.py" % now.strftime("%Y%m%d_%H%M%S")
-	response['Content-Type']= "application/x-python"
-	response['Content-Disposition'] = 'attachment; filename=%s' % scriptName
-	response['Content-Length'] = len(content)
-	return response
-	
-@login_required
-# FIXME: not needed any more ?
-def login(request):
-	'''View that redirects to the GO authentication page.'''
-	
-	client_id = "jplesgnode"
-	redirect_uri = request.build_absolute_uri( reverse("globus_token") )
-	
-	globus_url = "https://www.globus.org/OAuth?response_type=code&client_id=%s&redirect_uri=%s" % (client_id, redirect_uri)
-	# FIXME: fake the Globus URL
-	globus_url = request.build_absolute_uri( reverse("globus_oauth") ) + "?response_type=code&client_id=%s&redirect_uri=%s" % (client_id, redirect_uri)
-
-	# redirect to Globus OAuth URL
-	return HttpResponseRedirect(globus_url)
-
-# FIXME: not needed any more when Globus web page is enabled
 @login_required
 def oauth2(request):
-	'''Temporary view that mimics the Globus OAuth page.'''
+	'''View that mimics the Globus OAuth page. Not ordinarily invoked unless developing on localhost.'''
 	
 	client_id = request.GET['client_id']
 	redirect_uri = request.GET['redirect_uri']
@@ -223,10 +173,11 @@ def oauth2(request):
 		alias, client_id, nexus_host = alias_client.goauth_validate_token(token)
 		print "Using valid token for alias=%s" % alias
 	except:
-		print "That is not a valid authorization code"
+		raise Exception("That is not a valid authorization code")
 	
 	print("As " + alias + ", get a request token for client " + user_client.client + " using rsa authentication:")
 	response = alias_client.goauth_rsa_get_request_token(alias, user_client.client, lambda: getpass("Private Key Password"))
+	
 	# code can only be used once
 	code = response['code']
 	print 'Obtained request code=%s for identity=%s' % (code, user_client.client )
@@ -234,10 +185,11 @@ def oauth2(request):
 	# Note: 'code' is a one-time credential issued by Globus Nexus to CoG portal to act on the user behalf
 	return HttpResponseRedirect( redirect_uri + "?code=%s" % code)
 
-#FIXME: login required
-#@login_required
+
+@login_required
 def token(request):
-	'''View that uses the request_token found in parameter 'code' to obtain an 'access_token' from Globus Online.'''
+	'''View that uses the request_token found in parameter 'code' (can only be used once) 
+	   to obtain an 'access_token' from Globus Online (can be used multiple times).'''
 	
 	# CoG portal
 	# FIXME: instantiate at module scope ?
@@ -249,61 +201,39 @@ def token(request):
                                                  'cache':{'class': 'nexus.token_utils.InMemoryCache', 'args': [],} 
                                              })
 
-	code = request.GET['code']
-	print 'Using globus code=%s' % code
-	
+	# use 'code' to obtain an 'access_token'
+	code = request.GET['code']	
 	access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code)
-	print 'Got access token=%s' % access_token
 
 	# validate access_token
 	alias, client_id, nexus_host = user_client.goauth_validate_token(access_token)
-	message = nexus_host + " claims this is a valid token issued by " + alias + " for " + client_id
+	print "%s claims this is a valid token issued by %s for %s" % (nexus_host, alias, client_id)
 	
 	# store token into session
 	request.session[GLOBUS_ACCESS_TOKEN] = access_token
 	request.session[GLOBUS_USERNAME] = alias
 	
-	return HttpResponseRedirect( reverse('globus_transfer') )
+	return HttpResponseRedirect( reverse('globus_submit') )
 
 @login_required
-def transfer(request):
+def submit(request):
 	'''View to submit a Globus transfer request.
 	   The access token and files to download are retrieved from the session. '''
 	
-	# authentication parameters 
-	# FIXME; retrieve parameters from previous web workflow
-	#username = "cinquiniluca"
+	# retrieve all data transfer request parameters from session
 	username = request.session[GLOBUS_USERNAME]
-	print 'globus username=%s' % username
 	access_token = request.session[GLOBUS_ACCESS_TOKEN]
-	
-	# files to transfer
-	# these are obtained from the GridFTP URls by removing the "gsiftp://<hostname:port>" part, which is implicit in the "esg#jpl" source endpoint configuration
-	# FIXME: get file URLs from Data Cart
-	#sourceFiles = ["/esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc",
-	#				"/esg_dataroot/obs4MIPs/observations/atmos/taStderr/mon/grid/NASA-JPL/AIRS/v20110608/taStderr_AIRS_L3_RetStd-v5_200209-201105.nc"]
-	
 	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
+	target_endpoint = request.session[TARGET_ENDPOINT]
+	target_folder = request.session[TARGET_FOLDER]
+	
 	print 'Downloading files=%s' % download_map.items()
-	print 'User selected destionation endpoint:%s, folder: %s' % (request.session[TARGET_ENDPOINT], request.session[TARGET_FOLDER])
+	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = [] # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
-		print 'Download source=%s, %s' % (source_endpoint, source_files)
-
-		# source endpoint - this is the JPL server
-		# FIXME: get source_endppoint from GridFTP server name
-		#source_endpoint = "esg#jpl"
-		
-		# target endpoint - this is the user own's laptop
-		#target_endpoint = "cinquiniluca#mymac"
-		target_endpoint = request.session[TARGET_ENDPOINT]
-		
-		# target directory to store files
-		#target_folder = "/~" # is this a GO custom notation ?
-		target_folder = request.session[TARGET_FOLDER]
-	
+			
 		# submit transfer request
 		task_id = submiTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
 		
@@ -314,4 +244,19 @@ def transfer(request):
 						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
 						        context_instance=RequestContext(request))	
 
+@login_required
+def script(request):
+	'''View to generate a Globus download script from the parameters stored at session scope.'''
+		
+	# retrieve files from session
+	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 	
+	# return python script
+	content = generateGlobusDownloadScript(download_map)
+	response = HttpResponse( content )
+	now = datetime.datetime.now()
+	scriptName = "globus_download_%s.py" % now.strftime("%Y%m%d_%H%M%S")
+	response['Content-Type']= "application/x-python"
+	response['Content-Disposition'] = 'attachment; filename=%s' % scriptName
+	response['Content-Length'] = len(content)
+	return response

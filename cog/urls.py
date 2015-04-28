@@ -163,19 +163,11 @@ urlpatterns = patterns('',
     
     # Globus Online integration
     url(r'^globus/download/$', 'cog.views.views_globus.download', name='globus_download'),
-    
-    url(r'^globus/start/$', 'cog.views.views_globus.start', name='globus_start'),
-    
-    url(r'^globus/login/$', 'cog.views.views_globus.login', name='globus_login'),
-    
-    url(r'^globus/oauth/$', 'cog.views.views_globus.oauth', name='globus_oauth'),
-    
-    url(r'^globus/oauth2/$', 'cog.views.views_globus.oauth2', name='globus_oauth2'), # tmp
-    
-    url(r'^globus/token/$', 'cog.views.views_globus.token', name='globus_token'),
-    
     url(r'^globus/transfer/$', 'cog.views.views_globus.transfer', name='globus_transfer'),
-    
+    url(r'^globus/oauth/$', 'cog.views.views_globus.oauth', name='globus_oauth'),
+    url(r'^globus/oauth2/$', 'cog.views.views_globus.oauth2', name='globus_oauth2'), # view that mimics the Globus OAuth URL
+    url(r'^globus/token/$', 'cog.views.views_globus.token', name='globus_token'),
+    url(r'^globus/submit/$', 'cog.views.views_globus.submit', name='globus_submit'),
     url(r'^globus/script/$', 'cog.views.views_globus.script', name='globus_script'),
 
 )

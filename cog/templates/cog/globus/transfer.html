@@ -52,9 +52,8 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
 					You will be asked to sign-in to the Globus Online site (if not signed-in already),
 					and to select the destination folder on your laptop.
 					<div style="text-align: center; padding:5px;">
-						<form name="webDownloadForm" method="post" action="{% url 'globus_start' %}">
+						<form name="globusTransferForm" method="post" action="{% url 'globus_transfer' %}">
 							{% csrf_token %}
-							<input name="download_method" type="hidden" value="web"/>
 							<input type="submit" value="Start Web Download"/> 
 						</form>
 					</div>
