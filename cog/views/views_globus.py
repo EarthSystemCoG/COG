@@ -145,7 +145,7 @@ def oauth(request):
 	
 	globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
 	# FIXME: fake the Globus URL
-	globus_url = request.build_absolute_uri( reverse("globus_oauth2") ) + "?" + urllib.urlencode(params)
+	#globus_url = request.build_absolute_uri( reverse("globus_oauth2") ) + "?" + urllib.urlencode(params)
 
 	# redirect to Globus OAuth URL
 	print "Redirecting to: %s" % globus_url
