@@ -116,10 +116,10 @@ def start(request):
 		
 	else:
 	
-		method = request.POST.get('method', DOWNLOAD_METHOD_WEB)
+		download_method = request.POST.get('download_method', DOWNLOAD_METHOD_WEB)
 		
 		# redirect to Globus OAuth page
-		if method==DOWNLOAD_METHOD_WEB:
+		if download_method==DOWNLOAD_METHOD_WEB:
 					
 			params = [ ('ep','GC'), ('lock', 'ep'), ('method','get'), ('folderlimit','1'),
 					   ('action', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
@@ -133,12 +133,12 @@ def start(request):
 			#return HttpResponseRedirect( request.build_absolute_uri(reverse("globus_oauth")) ) # FIXME
 		
 		# redirect to script generation view
-		elif method==DOWNLOAD_METHOD_SCRIPT:
+		elif download_method==DOWNLOAD_METHOD_SCRIPT:
 			return HttpResponseRedirect( reverse('globus_script') )
 			
 		# unknown download method request
 		else:
-			raise Exception("Unknown download method: %s" % method)
+			raise Exception("Unknown download method: %s" % download_method)
 	
 		
 @login_required
@@ -171,16 +171,18 @@ def oauth(request):
 @login_required
 def script(request):
 	'''View to generate a Globus download script from the parameters stored at session scope.'''
-	
+		
 	# retrieve files from session
 	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 	
 	# return python script
-	response = HttpResponse(content=generateGlobusDownloadScript(download_map))
+	content = generateGlobusDownloadScript(download_map)
+	response = HttpResponse( content )
 	now = datetime.datetime.now()
 	scriptName = "globus_download_%s.py" % now.strftime("%Y%m%d_%H%M%S")
 	response['Content-Type']= "application/x-python"
 	response['Content-Disposition'] = 'attachment; filename=%s' % scriptName
+	response['Content-Length'] = len(content)
 	return response
 	
 @login_required

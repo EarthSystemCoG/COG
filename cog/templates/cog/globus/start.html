@@ -52,7 +52,11 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
 					You will be asked to sign-in to the Globus Online site (if not signed-in already),
 					and to select the destination folder on your laptop.
 					<div style="text-align: center; padding:5px;">
-						<input type="button" value="Start Web Download" onclick="javascript:submitGoDownload('web');"/> 
+						<form name="webDownloadForm" method="post" action="{% url 'globus_start' %}">
+							{% csrf_token %}
+							<input name="download_method" type="hidden" value="web"/>
+							<input type="submit" value="Start Web Download"/> 
+						</form>
 					</div>
 				</div>
 			</td>
@@ -68,7 +72,7 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
 					<br>
 					Files will be downloaded in the directory where the script is located.
 					<div style="text-align: center; padding:5px;">
-						<input type="button" value="Start Script Download" onclick="javascript:submitGoDownload('script');"/> 
+						<input type="button" value="Start Script Download" onclick="window.location='{% url 'globus_script' %}'"/>
 					</div>
 				</div>
 			</td>
@@ -80,12 +84,7 @@ including the <a href="https://www.globus.org/researchers/getting-started">Getti
 		After starting the files transfer request, 
 		please use the Globus Online site to <a href="https://www.globus.org/xfer/ViewActivity">monitor the acivity</a>.
 	</div>
-	
-	<!-- form that starts the Globus Online workflow -->
-	<form name="startGoForm" method="post" action="{% url 'globus_start' %}">
-	  	{% csrf_token %}
-		<input type="hidden" name="method"/>
-	</form>
+
 		
 {% else %}
 	<div class="warning">
