@@ -1,0 +1,33 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block extrahead %}
+
+	{% include 'cog/datacart/_go_js.html' %}
+
+{% endblock %}
+
+{% block main %}
+
+	{% if task_ids %}
+
+		<div class="message-box">
+			
+			The following data transfer task(s) were submitted:
+			{% for task_id in task_ids %}
+				<br/>{{task_id}}
+			{% endfor %}
+		</div>
+		
+		<p/>
+		<div style="text-align:center">
+			Please visit the 
+			<a href="https://www.globus.org/xfer/ViewActivity" target="_blank">Globus Data Transfer Activity</a> to monitor the task(s).
+		</div>
+		
+	{% else %}
+		<div class="warning">
+			No data transfer tasks were submitted.
+		</div>
+	{% endif %}
+
+{% endblock %}

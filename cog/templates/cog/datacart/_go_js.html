@@ -1,0 +1,36 @@
+<!-- Javascript controls for Globus Online functionality --> 
+<script type="text/javascript">
+  //<![CDATA[
+  
+     // function to start a Globus Online download for one dataset
+     // makes GET invocation after adding optional query filter
+     function goDataset(url) {
+     
+     	window.location = url + getQueryFilter('GET');
+     
+     }
+           
+     // function to start a Globus Online download for many datasets
+     // makes POST invocation including optional query filter
+     function goDatasets() {
+    	 
+    	 var objs = getSelectedItemsByServiceType(GRIDFTP);
+    	 if (objs.length<=0) {
+    		 showMessage("Warning", "Please select one or more datasets in the Data Cart that are Globus-enabled.");
+    		 
+    	 } else {
+    	 
+    	 	goForm = document.forms['goForm'];
+    	 	datasets = [];
+	    	for (var i in objs) {
+	    		datasets[datasets.length] = objs[i].id +"@" + objs[i].index_node;
+	    	}
+	    	goForm.dataset.value = datasets.join(",");
+	    	goForm.query.value = getQueryFilter('POST');
+    		goForm.submit();
+    	 }
+    	 
+     }  
+        
+   //]]>
+</script>

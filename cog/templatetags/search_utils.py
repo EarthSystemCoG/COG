@@ -1,5 +1,6 @@
 from django import template
 from cog.models.search import searchMappings
+from cog.site_manager import siteManager
 from string import replace
 import json
 
@@ -71,9 +72,14 @@ def url_order(mtype):
     
 @register.filter
 def recordUrls(record):
-    '''Returns an ordered list of URL endpoints for this record.'''
+    '''
+    Returns an ordered list of URL endpoints for this record.
+    Note: the URL parts must match the values used by _services_js.html.
+    '''
     
     urls = []
+    
+    #record.printme()
         
     # add all existing URL endpoints (THREDDS, LAS etc...)
     if 'url' in record.fields:
@@ -84,5 +90,14 @@ def recordUrls(record):
     urls.append( ("javascript:wgetScript('%s','%s')" % (record.fields['index_node'][0], record.id) , 
                   "application/wget", 
                   "WGET Script") )
-        
+    
+    # add GridFTP endpoint
+    if siteManager.isGlobusEnabled(): # only if this site has been registered with Globus Online
+        if 'access' in record.fields and 'index_node' in record.fields:
+            for value in record.fields['access']:
+                if value.lower() == 'gridftp':
+                    urls.append( ('/globus/download?dataset=%s@%s' %(record.id,record.fields['index_node'][0]),
+                                  'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
+                                  'GridFTP') )
+            
     return sorted(urls, key = lambda url: url_order(url[1]))

@@ -10,6 +10,7 @@ from cog.models import UserProfile, ProjectTag, getProjectForGroup
 from cog.utils import getJson
 from cog.views.utils import get_all_projects_for_user
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 
 # callback receiver function for UserProfile post_save events
 @receiver(post_save, sender=UserProfile, dispatch_uid="user_profile_post_save")
@@ -97,9 +98,14 @@ def update_user_tags(user):
                     pass # tag not found in local database
             
             # store tags in local user profile
-            user.profile.tags = tags
-            user.profile.save()
-            print 'User: %s updated for tags: %s' % (user, tags)
+            # must protect database write against possible race condition
+            with transaction.commit_manually():
+                userProfile = UserProfile.objects.select_for_update().get(id=user.profile.id)
+                userProfile.tags.clear()
+                userProfile.tags = tags
+                userProfile.save()
+                transaction.commit()
+                print 'User: %s updated for tags: %s' % (user, tags)
     
 # NOTE: connecting the login signal is not needed because every time the user logs in,
 # the session is refreshed and updating of projects is triggered already by the CoG session middleware

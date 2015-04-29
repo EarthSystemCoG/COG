@@ -4,6 +4,8 @@ from threading import Thread
 from django.conf import settings
 from cog.site_manager import siteManager
 
+from cog.constants import SECTION_EMAIL
+
 class EmailConfig:
     '''
     Class that stores the email server connection properties from a local configuration file.
@@ -14,14 +16,14 @@ class EmailConfig:
         
         self.init = False
         
-        if siteManager.hasConfig(settings.SECTION_EMAIL):
-            self.server = siteManager.get('EMAIL_SERVER', section=settings.SECTION_EMAIL)
+        if siteManager.hasConfig(SECTION_EMAIL):
+            self.server = siteManager.get('EMAIL_SERVER', section=SECTION_EMAIL)
             if self.server is not None and self.server.strip() != '':
-                self.port = siteManager.get('EMAIL_PORT', section=settings.SECTION_EMAIL)
-                self.sender = siteManager.get('EMAIL_SENDER', section=settings.SECTION_EMAIL)
-                self.username = siteManager.get('EMAIL_USERNAME', section=settings.SECTION_EMAIL)
-                self.password = siteManager.get('EMAIL_PASSWORD', section=settings.SECTION_EMAIL)
-                self.security = siteManager.get('EMAIL_SECURITY', section=settings.SECTION_EMAIL)
+                self.port = siteManager.get('EMAIL_PORT', section=SECTION_EMAIL)
+                self.sender = siteManager.get('EMAIL_SENDER', section=SECTION_EMAIL)
+                self.username = siteManager.get('EMAIL_USERNAME', section=SECTION_EMAIL)
+                self.password = siteManager.get('EMAIL_PASSWORD', section=SECTION_EMAIL)
+                self.security = siteManager.get('EMAIL_SECURITY', section=SECTION_EMAIL)
                 print 'Using email server=%s' %  self.server
                 print 'Using email port=%s' %  self.port
                 print 'Using email sender=%s' %  self.sender

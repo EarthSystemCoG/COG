@@ -5,7 +5,7 @@ It uses the configuration settings from $COG_CONFIG_DIR/cog_settings.cfg
 
 import os
 import cog
-from settings import SECTION_EMAIL
+from cog.constants import SECTION_EMAIL
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
         

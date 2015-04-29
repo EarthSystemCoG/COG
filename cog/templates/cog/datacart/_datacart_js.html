@@ -58,14 +58,20 @@
 		return document.getElementById(id);
 	}
 
-	// function to return the HTTP parameter string for "&query=..."
-	function getQueryFilter() {
+	// function to return the HTTP 'query' parameter string for method=GET/POST
+	function getQueryFilter(method) {
 
 		var q = "";
 		var qdiv = document.getElementById("query-filter");
 		if (qdiv!=null) {
 			var query = qdiv.value.trim();
-			if ( query.length > 0 ) q = "&query="+encodeURI(query);
+			if ( query.length > 0 ) {
+				if (method.toLowerCase()=='get') {
+					q = "&query="+encodeURI(query);
+				} else {
+					q = encodeURI(query);
+				}
+			}
 		}
 		return q;
 
@@ -89,7 +95,7 @@
 		  // note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
 		  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
 		          // add optional query filter
-				  + getQueryFilter();
+				  + getQueryFilter('GET');
 
 		  // pass in extra arguments to callback functions
 		  filesCallback.argument[0] = project

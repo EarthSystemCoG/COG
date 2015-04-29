@@ -10,6 +10,7 @@
 	{% include 'cog/datacart/_datacart_js.html' %}
 	{% include 'cog/datacart/_wget_js.html' %}
 	{% include 'cog/datacart/_las_js.html' %}
+	{% include 'cog/datacart/_go_js.html' %}
 
 	<!-- custom spacing of datacart table -->
 	<style scoped type="text/css">
@@ -58,6 +59,13 @@
 
 	  <!-- skeleton form to empty the data cart via POST -->
 	  <form name="emptyDataCartForm" action='{% url 'datacart_empty' site.id request.user.id %}' method='post'></form>
+	  
+	  <!-- form for submitting Globus Online download for multiple datasets -->
+	  <form name="goForm" method="post" action="{% url 'globus_download' %}" >
+	  	{% csrf_token %}
+		<input type="hidden" name="dataset"/>
+		<input type="hidden" name="query"/>
+	  </form>
 
 	  <!-- data cart form -->
 	  <form name="dataCartForm">
@@ -67,16 +75,18 @@
 
 			<!-- Header: services -->
 			<tr>
-			<td colspan="3" style="vertical-align: middle;"><strong>Collective Services for All Selected Datasets: </strong>
-			[<strong><a href="" onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">WGET Script</a></strong> ]
-      		&nbsp; 
-      		[ <strong><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></strong> ]
-			</td>
+				<td colspan="3" style="vertical-align: middle;"><strong>Collective Services for All Selected Datasets: </strong>
+					[ <strong><a href="" onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">WGET Script</a></strong> ]
+	      			&nbsp; 
+	      			[ <strong><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></strong> ]
+	      			&nbsp; 
+	      			[ <strong><a href="" onclick="javascript:goDatasets(); return false">Globus Download</a></strong> ]	      			
+				</td>
 			</tr> 
 			
 			<tr>
 			<td style="width:72%;vertical-align:middle;">
-			    When 'Show Files' is clicked, or when generating WGET scripts, you may use an optional string to sub-select the filenames:
+			    When 'Show Files' is clicked, or when using WGET or Globus, you may use an optional string to sub-select the filenames:
 			</td>
 			<td style="width:14%;vertical-align:middle;">
 			    <input type="text" name="query-filter" alt="query-filter" id="query-filter" placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter(); return false; }" />
@@ -139,5 +149,5 @@
 		</table>
 	  </form>
 	{% endif %}
-
+	
 {% endblock %}

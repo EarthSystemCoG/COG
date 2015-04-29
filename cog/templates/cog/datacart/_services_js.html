@@ -5,13 +5,15 @@
 	// service types
 	var THREDDS = 'application/html+thredds';
 	var LAS = 'application/las';
+	var GRIDFTP = 'application/gridftp'
 
 	// class representing a service that is available for a data cart item
-	function Service(id, url, type, name) {
+	function Service(id, url, type, name, index_node) {
 		this.id = id;
 		this.url = url;
 		this.type=type;
 		this.name = name;
+		this.index_node = index_node;
 	}
 	
 	// class indexing the available services

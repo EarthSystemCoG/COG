@@ -12,7 +12,7 @@
 	  // FIXME: relative wget URL is hard-wired to ESGF web service endpoint
 	  var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
                 // add optional query filter
-		        + getQueryFilter();
+		        + getQueryFilter('GET');
 
 	  // add dataset ids
 	  for (i=0; i<ids.length; i++) {

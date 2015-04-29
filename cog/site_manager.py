@@ -2,6 +2,8 @@ import os
 import ConfigParser
 import logging
 
+from cog.constants import (SECTION_ESGF, SECTION_GLOBUS)
+
 class SiteManager(object):
     '''Class used to load site-specific settings at COG startup.
 
@@ -37,6 +39,10 @@ class SiteManager(object):
        EMAIL_USERNAME=........
        EMAIL_PASSWORD=........
        EMAIL_SECURITY=STARTTLS
+       
+       [GLOBUS]
+       PORTAL_GO_USERNAME = ..........
+       PORTAL_GO_PASSWORD = ..........
 
     '''
     
@@ -73,6 +79,18 @@ class SiteManager(object):
         '''Returns True if the configuration file contains the named section.'''
 
         return self.config.has_section(section)
+    
+    def isEsgfEnabled(self):
+        '''Utility function to check whether this site is backed-up by an ESGF node.'''
+        
+        return self.hasConfig(SECTION_ESGF)
+    
+    def isGlobusEnabled(self):
+        '''Utility function to check whether Globus has been configured for this CoG installation.'''
+        
+        return self.hasConfig(SECTION_GLOBUS)
+
+    
     
 siteManager = SiteManager()
             

@@ -30,7 +30,7 @@
 {% for url in record|recordUrls %}
 
 	<!-- add this service to the catalog -->
-	<script language="javascript">services.add( new Service('{{record.id}}','{{url.0}}', '{{url.1}}','{{url.2}}' ) );</script>
+	<script language="javascript">services.add( new Service('{{record.id}}','{{url.0}}', '{{url.1}}','{{url.2}}','{{record.fields.index_node.0}}') );</script>
 
 	<!-- THREDDS -->
 	{% if url.1 == 'application/html+thredds' %}
@@ -46,12 +46,14 @@
 		{% if record.fields.project.0 != 'NCPP' %}
 			&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
 		{% endif %}
+		
+	<!-- Globus Online -->
+	{% elif url.1 == 'application/gridftp' %}
+		&nbsp; [ <a href="javascript:goDataset('{{ url.0 }}')"><strong>Globus Download</strong></a> ]
 
 	<!--  all other services -->
 	{% else %}
-		{% if url.2.lower != 'gridftp' %} <!-- FIXME -->
 		&nbsp; [ <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> ]
-		{% endif %}
 
     {% endif %}
 
