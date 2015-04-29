@@ -14,6 +14,7 @@ from cog.constants import SECTION_GLOBUS
 from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
+from functools import wraps
 
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
@@ -38,7 +39,23 @@ GLOBUS_ENDPOINTS = {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
 
 import os
 
+def requires_globus(view_func):
+	'''
+	Custom decorator that prevents a view to be invoked unless this site
+	is configured with a [Globus] section in cog_settings.py.
+	'''
+	
+	def _decorator(request, *args, **kwargs):
+		
+		if siteManager.isGlobusEnabled():
+			return view_func(request, *args, **kwargs)
+		else:
+			return HttpResponseForbidden(GLOBUS_NOT_ENABLED_MESSAGE)
+	
+	return wraps(view_func)(_decorator)
+	
 
+@requires_globus
 @login_required
 def download(request):
 	'''
@@ -48,10 +65,7 @@ def download(request):
 	             ?dataset=obs4MIPs.NASA-JPL.AIRS.mon.v1%7Cesg-vm.jpl.nasa.gov@esg-datanode.jpl.nasa.gov,obs4MIPs.NASA-JPL.MLS.mon.v1%7Cesg-datanode.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
 	             &method=web
 	'''
-	
-	if not siteManager.isGlobusEnabled():
-		return HttpResponseForbidden(GLOBUS_NOT_ENABLED_MESSAGE)
-	
+		
 	# retrieve request parameters
 	datasets = request.REQUEST.get('dataset','').split(",")
 	# optional query filter
@@ -102,6 +116,7 @@ def download(request):
 	# redirect after post (to display page)
 	return HttpResponseRedirect( reverse('globus_transfer') )
 
+@requires_globus
 @login_required
 def transfer(request):
 	'''View that initiates a Globus data transfer request.'''
@@ -129,6 +144,7 @@ def transfer(request):
 		#return HttpResponseRedirect( request.build_absolute_uri(reverse("globus_oauth")) ) # FIXME
 		
 		
+@requires_globus
 @login_required
 def oauth(request):
 	
@@ -151,6 +167,7 @@ def oauth(request):
 	print "Redirecting to: %s" % globus_url
 	return HttpResponseRedirect(globus_url)
 	
+@requires_globus
 @login_required
 def oauth2(request):
 	'''View that mimics the Globus OAuth page. Not ordinarily invoked unless developing on localhost.'''
@@ -186,6 +203,7 @@ def oauth2(request):
 	return HttpResponseRedirect( redirect_uri + "?code=%s" % code)
 
 
+@requires_globus
 @login_required
 def token(request):
 	'''View that uses the request_token found in parameter 'code' (can only be used once) 
@@ -215,6 +233,7 @@ def token(request):
 	
 	return HttpResponseRedirect( reverse('globus_submit') )
 
+@requires_globus
 @login_required
 def submit(request):
 	'''View to submit a Globus transfer request.
@@ -244,6 +263,7 @@ def submit(request):
 						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
 						        context_instance=RequestContext(request))	
 
+@requires_globus
 @login_required
 def script(request):
 	'''View to generate a Globus download script from the parameters stored at session scope.'''
