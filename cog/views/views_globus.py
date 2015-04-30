@@ -15,6 +15,8 @@ from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
+from cog.plugins.esgf.idp_whitelist import LocalEndpointDict
+import os
 
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
@@ -33,11 +35,9 @@ GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
 GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/xfer/BrowseEndpoint'
 GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
 
-# FIXME: map of (data_node:port, globus endpoint) pairs
-GLOBUS_ENDPOINTS = {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
-				    'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
-
-import os
+if siteManager.isGlobusEnabled():	
+	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
+	GLOBUS_ENDPOINTS= LocalEndpointDict('/esg/config/esgf_endpoints.xml')
 
 def requires_globus(view_func):
 	'''
@@ -101,8 +101,11 @@ def download(request):
 					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
 					o = urlparse(parts[0])
 					hostname = str(o.netloc)
-					if (hostname in GLOBUS_ENDPOINTS):
-						gendpoint = GLOBUS_ENDPOINTS[hostname]
+					epDict = GLOBUS_ENDPOINTS.endpointDict()
+					# {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
+					#  'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
+					if (hostname in epDict):
+						gendpoint = epDict[hostname]
 						if not gendpoint in download_map:
 							download_map[gendpoint] = [] # insert empty list of URLs
 						download_map[gendpoint].append( str(o.path).replace('//','/'))

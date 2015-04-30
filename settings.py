@@ -39,7 +39,7 @@ if siteManager.get('DEBUG', default='False').lower() == 'true':
 else:
     DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS').split(",")
+ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS', default=SITE_DOMAIN).split(",")
 print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
 IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
 print 'Using IdP whitelist(s): %s' % IDP_WHITELIST

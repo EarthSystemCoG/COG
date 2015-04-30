@@ -13,12 +13,6 @@ import os
 
 NS = "http://www.esgf.org/whitelist"
 
-#curl = pycurl.Curl()
-#curl.setopt(pycurl.CAINFO, certifi.where())
-#print '\nPYCURL'
-#curl.setopt(pycurl.URL, "https://esg-datanode.jpl.nasa.gov/esgf-idp/")
-#curl.perform()
-
 class WhiteList(object):
 
     __metaclass__ = abc.ABCMeta
@@ -36,6 +30,66 @@ class KnownProvidersDict(object):
     def idpDict(self):
         '''Returns a dictionary of (IdP name, IdP URL) pairs.''' 
         pass
+    
+class EndpointDict(object):
+
+    __metaclass__ = abc.ABCMeta
+    
+    @abc.abstractmethod
+    def endpointDict(self):
+        '''Returns a dictionary of (GridFTP hostname:port, Globus endpoint name) pairs.''' 
+        pass
+    
+class LocalEndpointDict(EndpointDict):
+    '''Implementation of EndpointDict based on a local XML configuration file.'''
+    
+    def __init__(self, filepath):
+        
+        self.endpoints = {}
+        self.init = False
+        
+        try:
+            if os.path.exists(filepath):
+                self.filepath = filepath
+                self.modtime = file_modification_datetime(self.filepath)
+                self._reload(force=True)
+                self.init = True
+            
+        except IOError:
+            pass
+        
+    def _reload(self, force=False):
+        '''Internal method to reload the dictionary of endpoints if the file has changed since it was last read'''
+
+        modtime = file_modification_datetime(self.filepath)
+
+        if force or modtime > self.modtime:
+
+            print 'Loading endpoints from: %s, last modified: %s' % (self.filepath, modtime)
+            self.modtime = modtime
+            endpoints = {}
+
+            # read XML file
+            with open (self.filepath, "r") as myfile:
+                xml=myfile.read().replace('\n', '')
+                
+            # <endpoints xmlns="http://www.esgf.org/whitelist">
+            root = fromstring(xml)
+            # <endpoint name="esg#jpl" gridftp="esg-datanode.jpl.nasa.gov:2811" />
+            for endpoint in root.findall("{%s}endpoint" % NS):
+                gridftp = endpoint.attrib['gridftp']
+                name = endpoint.attrib['name']
+                endpoints[ gridftp ] = name
+                print 'Using endpoint: %s --> %s' % (gridftp, name)
+
+            # switch the dictionary of endpoints after reading
+            self.endpoints = endpoints
+    
+    def endpointDict(self):
+        
+        self._reload() # reload dictionary from file ?
+        return self.endpoints
+
     
 class LocalKnownProvidersDict(KnownProvidersDict):
     '''Implementation of KnownProvidersDict based on a local XML configuration file.'''
