@@ -5,8 +5,10 @@ Module to interact with Globus Online ("GO") data transfer services.
 '''
 
 from datetime import datetime, timedelta
-from globusonline.transfer.api_client import Transfer
-from globusonline.transfer.api_client import TransferAPIClient
+from cog.site_manager import siteManager
+if siteManager.isGlobusEnabled():    
+    from globusonline.transfer.api_client import Transfer
+    from globusonline.transfer.api_client import TransferAPIClient
 import os
 
 ACCESS_TOKEN_FILE = ".goauth-token.secret"
