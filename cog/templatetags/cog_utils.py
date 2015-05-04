@@ -23,9 +23,11 @@ from cog.views.utils import getKnownIdentityProviders
 
 register = template.Library()
 
+
 @register.filter
 def knownIdentityProviders(request):
     return getKnownIdentityProviders().items()
+
 
 @register.filter
 def concat(astring, bstring):
@@ -631,6 +633,7 @@ def sponsors(project):
 
 @register.filter
 # filter that builds the content for the Javascript projectTags array
+# This is tags across ALL projects. Used in the tag pulldown in the Project Browser
 def projectTags(project):
 
     tags = ProjectTag.objects.all()
@@ -638,6 +641,14 @@ def projectTags(project):
     for tag in tags:
         tagstring += '\"'+tag.name+'\",'
     return mark_safe(tagstring[0:-1])  # important: no escaping!
+
+
+@register.filter
+# filter to list projects below the Project Browser in alphabetical order regardless of case
+def list_project_tags(project):
+
+    tags_sorted = sorted(project.tags.all(), key=lambda _tag: _tag.name.lower())
+    return tags_sorted
 
 
 @register.filter
@@ -726,6 +737,7 @@ def get_domain(url):
     
     return urlparse.urlparse(url)[1]
 
+
 @register.filter
 def get_openid(request):
     """
@@ -739,6 +751,7 @@ def get_openid(request):
         return request.COOKIES['openid']
     else:
         return ''
+
 
 @register.filter
 def delete_from_session(session, key):

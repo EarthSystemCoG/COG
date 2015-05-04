@@ -493,3 +493,6 @@ def create_upload_directory(project):
     if not os.path.exists(fb_upload_dir):
         os.makedirs(fb_upload_dir)
         print 'Project Upload directory created: %s' % fb_upload_dir
+
+
+
