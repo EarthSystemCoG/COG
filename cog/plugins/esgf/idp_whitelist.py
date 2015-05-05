@@ -31,13 +31,22 @@ class KnownProvidersDict(object):
         '''Returns a dictionary of (IdP name, IdP URL) pairs.''' 
         pass
     
+class Endpoint(object):
+    '''Utility class that stores the fields for processing a Globus endpoint.'''
+    
+    def __init__(self, name, path_out=None, path_in=None):
+        self.name = name
+        self.path_out = path_out
+        self.path_in = path_in
+    
+    
 class EndpointDict(object):
 
     __metaclass__ = abc.ABCMeta
     
     @abc.abstractmethod
     def endpointDict(self):
-        '''Returns a dictionary of (GridFTP hostname:port, Globus endpoint name) pairs.''' 
+        '''Returns a dictionary of (GridFTP hostname:port, Globus Endpoint object) pairs.''' 
         pass
     
 class LocalEndpointDict(EndpointDict):
@@ -78,9 +87,11 @@ class LocalEndpointDict(EndpointDict):
             # <endpoint name="esg#jpl" gridftp="esg-datanode.jpl.nasa.gov:2811" />
             for endpoint in root.findall("{%s}endpoint" % NS):
                 gridftp = endpoint.attrib['gridftp']
-                name = endpoint.attrib['name']
-                endpoints[ gridftp ] = name
-                print 'Using endpoint: %s --> %s' % (gridftp, name)
+                name = endpoint.attrib['name']                   # mandatory attribute
+                path_out = endpoint.attrib.get('path_out', None) # optional attribute
+                path_in = endpoint.attrib.get('path_in', None)   # optional attribute
+                endpoints[ gridftp ] = Endpoint(name, path_out=path_out, path_in=path_in)
+                print 'Using Globus endpoint %s : %s (%s --> %s)'  % (gridftp, name, path_out, path_in)
 
             # switch the dictionary of endpoints after reading
             self.endpoints = endpoints
