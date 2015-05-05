@@ -37,7 +37,7 @@ def arguments(argv):
     upath = args.path
 
     if '#' not in uendpoint:
-        print "Please supply a valid Globus enpoint"
+        print "Please supply a valid Globus endpoint"
         sys.exit()
     if '/' in uendpoint:
         print "Do not include the download path in the endpoint name, please use the -p option"
