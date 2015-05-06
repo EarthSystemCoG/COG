@@ -55,11 +55,15 @@ def project_add(request):
         
         # create list of unsaved project folders
         folders = getUnsavedProjectSubFolders(project, request)
+
+        # set project to be private by default on start-up
+        project.private = True
         
         form = ProjectForm(instance=project)
+
         return render_to_response('cog/project/project_form.html',
                                   {'form': form, 'title': 'Register New Project', 'project': parent,
-                                   'action': 'add', 'tabs': tabs, 'folders': folders},
+                                   'action': 'add', 'tabs': tabs, 'folders': folders,},
                                   context_instance=RequestContext(request))
         
     else:
