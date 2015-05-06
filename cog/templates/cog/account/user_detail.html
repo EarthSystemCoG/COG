@@ -5,129 +5,127 @@
 {% load cog_utils %}
 
 {% block main %}
-<!-- Extra block for Site Admins to display key user info we don't show the public-->
-  {% if request.user.is_staff %}
-    <div class="prepend-4 span-14 last" style="margin-bottom:20px;">
-      <div class="mybox">
-        <table>
-        <caption>Extra User Information (Site Administrators Only)</caption>
-         <tr>
-            <th scope="row" class="white" style="width:150px;">
-                Email
-            </th>
-            <td>
-                {{ user_profile.user.email }}
-            </td>
-        </tr>
+    <!-- Extra block for Site Admins to display key user info we don't show the public-->
+    {% if request.user.is_staff %}
+        <div class="prepend-4 span-14 last" style="margin-bottom:20px;">
+            <div class="mybox">
+                <table>
+                    <caption>Extra User Information (Site Administrators Only)</caption>
+                    <tr>
+                        <th scope="row" class="white" style="width:150px;">
+                            Email
+                        </th>
+                        <td>
+                            {{ user_profile.user.email }}
+                        </td>
+                    </tr>
 
-        <tr>
-            <th scope="row" class="gray">
-                Subscribed to cog_info?
-            </th>
-            <td>
-                {% if user_profile.subscribed %}
-                    Yes
-                {% else %}
-                    No
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th scope="row" class="white">
-                Home Site
-            </th>
-            <td>{{ user_profile.site.name }}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="gray">
-                Last Password Update
-            </th>
-            <td>{{ user_profile.last_password_update }}</td>
-        </tr>
-        <tr>
-            <th scope="row" class="white">
-                Last Login
-            </th>
-            <td>{{ user_profile.user.last_login }}</td>
-        </tr>
-        <tr>
-            <td colspan="2" style="text-align: center;">
-                Note: CoG keeps users logged in via a cookie. Last Login may be different from last access.
-            </td>
-        </tr>
-
-        </table>
-      </div>
-    </div>
-  {% endif %}
-
-  {% if user_profile.user|isRemote %}
-      <div class="prepend-6 span-12 last">
-           <!-- display a message and link to the user's Home Site -->
-           <h2>User Profile</h2>
-           <div class="message-box">
-               User Home Site: {{ user_profile.site.name }}
-    	   </div>
-           <br/>
-    	   <div style="text-align: center">
-    		  <a href="{{ user_profile.getAbsoluteUrl }}">View User Profile at {{ user_profile.site.name }}</a>
-    	   </div>
-      </div>
-
-  {% else %}
-
-     <div class="prepend-1 span-24">
-
-        <!-- display extra message if it exists -->
-         {% if request.GET.message %}
-		    <div class="prepend-6 span-12 last">
-	   	      	<div class="message-box"> {{ request.GET.message|showMessage }}</div>
-	     	</div>
-	    	<p></p>
-         {%  endif %}
-
-
-        <h2>User Profile</h2>
-        <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
-        <div class="span-10" style="margin-bottom:5px;">
-		   {% include 'cog/account/_user_profile.html' %}
-	    </div>
-		   
-  	    <div class="span-8" style="margin-bottom:5px;">
-           {% include 'cog/account/_user_projects.html' %}
-   	    </div>
-
-	    <div class="span-5 last">
-	       <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %}/>
-    	</div>
-
-
-	    <div class="span-17 last" style="margin-bottom:5px;" >
-           {% include 'cog/account/_user_openids.html' %}
-	    </div>
-
-	    <div class="span-17 last" style="margin-bottom:5px;" >
-	      {% include 'cog/account/_user_research.html' %}
+                    <tr>
+                        <th scope="row" class="gray">
+                            Subscribed to cog_info?
+                        </th>
+                        <td>
+                            {% if user_profile.subscribed %}
+                                Yes
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="white">
+                            Home Site
+                        </th>
+                        <td>{{ user_profile.site.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="gray">
+                            Last Password Update
+                        </th>
+                        <td>{{ user_profile.last_password_update }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="white">
+                            Last Login
+                        </th>
+                        <td>{{ user_profile.user.last_login }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">
+                            Note: CoG keeps users logged in via a cookie. Last Login may be different from last access.
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-		  
-        <div class="span-17 last" style="margin-bottom:40px;" >
-		   {% if request.user.id == user_profile.user.id or request.user.is_staff %}
-		       <div style="text-align:center;">
-		            <a href="{% url 'user_update' user_profile.user.id %}">Update my profile</a>
-		               &nbsp; &nbsp;
-		               <!-- Change password -->
-		               {% if user_profile.localOpenid %}
-			               &nbsp; &nbsp;
-			               <a href="{% url 'password_update' %}">Change my password</a>
-			           {% else %}		
-			           		{% if user_profile.openid %}           
-			           	    	<a href="http://{{ user_profile.openid|get_domain }}/esgf-web-fe/login">Change my password</a> (at the site that issued your OpenID)
-		               		{% endif %}
-		               {% endif %}
-		       </div>
-		   {% endif %}
-	   	</div>
+    {% endif %}
 
-	 </div>
-  {% endif %}
+    <!-- Begin User Profile -->
+    <div class="prepend-1 span-24">
+
+        <div class="span-17 last" style="margin-bottom:20px;" >
+            <h2>User Profile</h2>
+            {% if request.user.id == user_profile.user.id or request.user.is_staff %}
+                <div style="text-align:center;">
+                    <a href="{% url 'user_update' user_profile.user.id %}">Update my profile |</a>
+                    <!-- Change password -->
+                    {% if user_profile.localOpenid %}
+                        <a href="{% url 'password_update' %}">Change my password</a>
+                    {% else %}
+                        {% if user_profile.openid %}
+                            <a href="http://{{ user_profile.openid|get_domain }}/esgf-web-fe/login">Change my password</a> (at the site that issued your OpenID)
+                        {% else %}
+                            No OpenID found. No way to change password. Contact <a href="mailto:cog_support@list.woc.noaa.gov">cog_support@list.woc.noaa.gov</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- display a message and link to the user's Home Site -->
+        {% if user_profile.user|isRemote %}
+            <div class="prepend-6 span-12 last">
+                <div class="message-box">
+                    User Home Site: {{ user_profile.site.name }}
+                </div>
+                <br/>
+                <div style="text-align: center">
+                   <a href="{{ user_profile.getAbsoluteUrl }}">View User Profile at {{ user_profile.site.name }}</a>
+                </div>
+            </div>
+        {% else %}
+
+            <!-- display extra message if it exists -->
+            {% if request.GET.message %}
+                <div class="prepend-6 span-12 last">
+                    <div class="message-box">
+                        {{ request.GET.message|showMessage }}
+                    </div>
+                </div>
+                <p></p>
+            {% endif %}
+
+            <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
+            <div class="span-10" style="margin-bottom:5px;">
+               {% include 'cog/account/_user_profile.html' %}
+            </div>
+
+            <div class="span-8" style="margin-bottom:5px;">
+               {% include 'cog/account/_user_projects.html' %}
+            </div>
+
+            <div class="span-5 last">
+               <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %}/>
+            </div>
+
+
+            <div class="span-17 last" style="margin-bottom:5px;" >
+               {% include 'cog/account/_user_openids.html' %}
+            </div>
+
+            <div class="span-17 last" style="margin-bottom:5px;" >
+              {% include 'cog/account/_user_research.html' %}
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
