@@ -375,20 +375,19 @@ def createGroup(group_name):
     
 
 # shortcut method to check for project user permission
-# note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
+# old note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
+# new note: now this method works directly on groups: a local staff user may NOT be in the user group for a remote project
 def userHasUserPermission(user, project):
-    # the first check is redundant
-    #return (user.is_staff and project.isLocal()) or user.has_perm(getPermissionLabel(project.getUserPermission()))
-    return user.has_perm(getPermissionLabel(project.getUserPermission()))
+    #return user.is_staff or user.has_perm(getPermissionLabel(project.getUserPermission()))
+    return (user.is_staff and project.isLocal()) or project.getUserGroup() in user.groups.all()
 
 
 # shortcut method to check for project admin permission
-# note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
+# old note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
+# new note: now this method works directly on groups: a local staff user may NOT be in the admin group for a remote project
 def userHasAdminPermission(user, project):
-    # the first check is redundant
-    #return (user.is_staff and project.isLocal()) or user.has_perm(getPermissionLabel(project.getAdminPermission()))
-    return user.has_perm(getPermissionLabel(project.getAdminPermission()))
-
+    #return user.is_staff or user.has_perm(getPermissionLabel(project.getAdminPermission()))
+    return (user.is_staff and project.isLocal()) or project.getAdminGroup() in user.groups.all()
 
 def userHasProjectRole(user, project, role):
     if user.is_staff:
