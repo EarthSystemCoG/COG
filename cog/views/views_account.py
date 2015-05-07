@@ -584,13 +584,17 @@ def user_reminder(request):
 
 def password_reset(request):
     
+    # redirect to another site if necessary
+    if redirectToIdp():
+        return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
+    
     if request.method == 'GET':
         
         # optional GET parameters to pre-populate the form
         initial = { 'openid': request.GET.get('openid',''),
                     'email': request.GET.get('email','') }
         
-        form = PasswordResetForm(initial=initial)
+        form = PasswordResetForm(initial=initial)       
         return render_password_reset_form(request, form)
 
     else:
@@ -624,8 +628,6 @@ def password_reset(request):
                         new_password = "Ab1-"+User.objects.make_random_password(length=8)
         
                         # change password in database
-                        # FIXME
-                        '''
                         user.set_password(new_password)
                         user.save()
                         user.profile.last_password_update = datetime.datetime.now()
@@ -635,7 +637,6 @@ def password_reset(request):
                         if settings.ESGF_CONFIG:
                             esgfDatabaseManager.updatePassword(user, new_password)
         
-                        '''
                         # logout user (if logged in)
                         logout(request)
         
@@ -664,18 +665,29 @@ def password_reset(request):
                     idpurl = urlparse(openid)
                     idpurl = "%s://%s/" % (idpurl.scheme, idpurl.netloc)
                     message =  "This OpenID was issued by another site."
-                    message += "<br/>Please reset your password at: <a href='%s'>%s</a>" % (idpurl, idpurl)
+                    message += "<br/>Please reset your password at <a href='%s'>that site</a>." % idpurl
                     return render_password_reset_form(request, form, message)
                 
             #  2) non-local user: redirect request to peer CoG site, post automatically
             else:
                 site = user.profile.site
-                redirect_url = 'http://%s%s?openid=%s&email=%s&post=true' % (site.domain, reverse('password_reset'), openid, email)
-                return HttpResponseRedirect(redirect_url)
+                redirect_url = 'http://%s%s?openid=%s&email=%s' % (site.domain, reverse('password_reset'), openid, email)
+                
+                # 2a) automatically redirect to peer site
+                #redirect_url += "&post=true" # submit form automatically at that site
+                #return HttpResponseRedirect(redirect_url)
+                
+                # 2b) show message on this site with link to peer site
+                message  = "This OpenID was issued by another CoG site."
+                message += "<br/>Please use the <a href='%s'>Reset Password</a> page at that site." % redirect_url
+                return render_password_reset_form(request, form, message)
                 
         # openid not found
         except UserOpenID.DoesNotExist:
-            message = "OpenID not found. Please reset your password on the site that issued this OpenID."
+            message = "OpenID not found."
+            message += "<br/>If your OpenID was issued by '%s'," % settings.ESGF_HOSTNAME
+            message += "<br/>then please use the 'Forgot OpenID?' link below to retrieve the correct OpenID." 
+            message += "<br/>Otherwise, please reset your password on the site that issued your OpenID."
             return render_password_reset_form(request, form, message)
 
 
