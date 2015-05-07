@@ -52,14 +52,14 @@ class UserOpenidForm(ModelForm):
 
 class PasswordResetForm(Form):
 
-    username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    openid = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
     email = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
 
     # validate data against bad characters
     def clean(self):
 
-        username = self.cleaned_data.get('username')
-        validate_field(self, 'username', username)
+        openid = self.cleaned_data.get('openid')
+        validate_field(self, 'openid', openid)
 
         email = self.cleaned_data.get('email')
         validate_field(self, 'email', email)

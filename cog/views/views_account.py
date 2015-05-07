@@ -584,68 +584,99 @@ def user_reminder(request):
 
 def password_reset(request):
     
-    # redirect to another site if necessary
-    if redirectToIdp():
-        return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
-
     if request.method == 'GET':
-        form = PasswordResetForm()
+        
+        # optional GET parameters to pre-populate the form
+        initial = { 'openid': request.GET.get('openid',''),
+                    'email': request.GET.get('email','') }
+        
+        form = PasswordResetForm(initial=initial)
         return render_password_reset_form(request, form)
 
     else:
         form = PasswordResetForm(request.POST)
 
-        if form.is_valid():
-
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
-
-            # look for user with given username, email
-            try:
-                # retrieve user for given username and email
-                user = User.objects.filter(username=username).get(email__iexact=email)
-                
-                # generate new random password
-                # prepend "AB1-" to satisfy mandatory requirements
-                new_password = "Ab1-"+User.objects.make_random_password(length=8)
-
-                # change password in database
-                user.set_password(new_password)
-                user.save()
-                user.profile.last_password_update = datetime.datetime.now()
-                user.profile.save()
-                
-                # update ESGF user object
-                if settings.ESGF_CONFIG:
-                    esgfDatabaseManager.updatePassword(user, new_password)
-
-                # logout user (if logged in)
-                logout(request)
-
-                # user profile url
-                url = reverse('user_detail', kwargs={'user_id': user.id})
-                url = request.build_absolute_uri(url)
-
-                # send email to user
-                subject = "Password Reset"
-                message = "Your new password has been set to: %s\n" % new_password
-                message += "Your openid is: %s\n" % user.profile.openid()
-                message += "For security reasons, please change this password as soon as you log in.\n"  
-                message += "To change your password, first log in with your openid and new password,\n"
-                message += "then click on the 'My Profile' link on the top-right of each page,\n"
-                message += "or visit the following URL: %s" % url
-                notify(user, subject, message)
-
-                # redirect to login page with special message
-                return HttpResponseRedirect(reverse('login')+"?message=password_reset")
-
-            # user not found
-            except User.DoesNotExist:
-                return render_password_reset_form(request, form, "Invalid username/email combination")
-
-        else:
+        # check form is valid first
+        if not form.is_valid():
             print "Form is invalid: %s" % form.errors
             return render_password_reset_form(request, form)
+
+
+        openid = form.cleaned_data.get('openid')
+        email = form.cleaned_data.get('email')
+        
+        # the openid entered by the user MUST be found in the local database
+        # otherwise we can neither change the password, nor we can redirect to a known site
+        try:
+            userOpenid = UserOpenID.objects.get(claimed_id=openid)
+            user = userOpenid.user
+            
+            # 1) local user (i.e. user home site == this site)
+            if isUserLocal(user):
+            
+                # 1a) this site issued this openid
+                if isOpenidLocal(openid):
+    
+                    if user.email == email:
+                                            
+                        # generate new random password
+                        # prepend "AB1-" to satisfy mandatory requirements
+                        new_password = "Ab1-"+User.objects.make_random_password(length=8)
+        
+                        # change password in database
+                        # FIXME
+                        '''
+                        user.set_password(new_password)
+                        user.save()
+                        user.profile.last_password_update = datetime.datetime.now()
+                        user.profile.save()
+                        
+                        # update ESGF user object
+                        if settings.ESGF_CONFIG:
+                            esgfDatabaseManager.updatePassword(user, new_password)
+        
+                        '''
+                        # logout user (if logged in)
+                        logout(request)
+        
+                        # user profile url
+                        url = reverse('user_detail', kwargs={'user_id': user.id})
+                        url = request.build_absolute_uri(url)
+        
+                        # send email to user
+                        subject = "Password Reset"
+                        message = "Your new password has been set to: %s\n" % new_password
+                        message += "Your openid is: %s\n" % user.profile.openid()
+                        message += "For security reasons, please change this password as soon as you log in.\n"  
+                        message += "To change your password, first log in with your openid and new password,\n"
+                        message += "then click on the 'My Profile' link on the top-right of each page,\n"
+                        message += "or visit the following URL: %s" % url
+                        notify(user, subject, message)
+        
+                        # redirect to login page with special message
+                        return HttpResponseRedirect(reverse('login')+"?message=password_reset")
+                    
+                    else:
+                        return render_password_reset_form(request, form, "Invalid OpenID/email combination")
+
+                # 1b) user used an external ESGF openid (for example, http://dkrz...) to login onto this site (for example, http://www.earthsystemcog.org/...)
+                else:
+                    idpurl = urlparse(openid)
+                    idpurl = "%s://%s/" % (idpurl.scheme, idpurl.netloc)
+                    message =  "This OpenID was issued by another site."
+                    message += "<br/>Please reset your password at: <a href='%s'>%s</a>" % (idpurl, idpurl)
+                    return render_password_reset_form(request, form, message)
+                
+            #  2) non-local user: redirect request to peer CoG site, post automatically
+            else:
+                site = user.profile.site
+                redirect_url = 'http://%s%s?openid=%s&email=%s&post=true' % (site.domain, reverse('password_reset'), openid, email)
+                return HttpResponseRedirect(redirect_url)
+                
+        # openid not found
+        except UserOpenID.DoesNotExist:
+            message = "OpenID not found. Please reset your password on the site that issued this OpenID."
+            return render_password_reset_form(request, form, message)
 
 
 def render_user_form(request, form, formset1, formset2, title=''):

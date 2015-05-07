@@ -88,12 +88,7 @@ class UserProfile(models.Model):
             return [x for x in self.openids() if settings.ESGF_HOSTNAME in x]
         except AttributeError: # no 'ESGF_HOSTNAME' in settings
             return []
-    
-    def isOpenidLocal(self, openid):
-        '''Utility method to determine wether the given openid is issued by this site.'''
         
-        return settings.ESGF_HOSTNAME in openid
-    
     # utility method to return the user first openid
     def openid(self):
         if len(self.user.useropenid_set.all()) > 0:
@@ -158,13 +153,18 @@ def discoverSiteForUser(openid):
     # site not found
     return None
         
+def isOpenidLocal(openid):
+    '''Utility method to determine whether the given openid is issued by this site.'''
+    
+    return settings.ESGF_HOSTNAME in openid
+
 # loops over the peer sites to retrieve the data cart size
 def getDataCartsForUser(openid):
         
     dcs = {} # dictionary of (site_name, datacart_size) items
     
     #for site in Site.objects.all():  # loop over all sites in database. Note: includes current site
-    for site in getPeerSites(): # loop over sites that are federates
+    for site in getPeerSites(): # loop over sites that are federated
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
         print 'Querying for datacart: url=%s' % url
         jobj = getJson(url)
@@ -173,6 +173,6 @@ def getDataCartsForUser(openid):
                 dcs[ site ] = int( value['datacart']['size'] )
             
     return dcs
-
+        
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
