@@ -200,7 +200,8 @@
            autoComp.useShadow = true;
            autoComp.allowBrowserAutocomplete = false;
            autoComp.animSpeed = 0.2;
-           autoComp.maxResultsDisplayed = 10;
+           // Maximum number of results to display. A value of 0 or less will allow an unlimited number of results.
+           autoComp.maxResultsDisplayed = 0; // was 10 and not all were showing up
            autoComp.minQueryLength = 0;
            autoComp.typeHead = true;
            //autoComp.alwaysShowContainer = true;

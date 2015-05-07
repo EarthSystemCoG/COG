@@ -5,8 +5,10 @@ Module to interact with Globus Online ("GO") data transfer services.
 '''
 
 from datetime import datetime, timedelta
-from globusonline.transfer.api_client import Transfer
-from globusonline.transfer.api_client import TransferAPIClient
+from cog.site_manager import siteManager
+if siteManager.isGlobusEnabled():    
+    from globusonline.transfer.api_client import Transfer
+    from globusonline.transfer.api_client import TransferAPIClient
 import os
 
 ACCESS_TOKEN_FILE = ".goauth-token.secret"
@@ -48,7 +50,9 @@ def submiTransfer(username, access_token, source_endpoint, source_files, target_
     # instantiate GO client
     goapi_client = TransferAPIClient(username, goauth=access_token)
         
-    # target_endpoint can be automatically activated using cached credentials
+    # must automatically activate the endpoints using cached credentials
+    code, reason, result = goapi_client.endpoint_autoactivate(source_endpoint, if_expires_in=600)
+    print "Source Endpoint Activation: : %s (%s)" % (result["code"], result["message"])
     code, reason, result = goapi_client.endpoint_autoactivate(target_endpoint, if_expires_in=600)
     print "Target Endpoint Activation: : %s (%s)" % (result["code"], result["message"])
         

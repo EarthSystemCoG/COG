@@ -117,9 +117,6 @@
             {% else %}
 	            <div class="message-box">
 	                {{ request.GET.message|showMessage|safe }}
-   	            	{% if request|get_openid %}
-	   		            <br/>Your assigned OpenID is: <strong> {{ request|get_openid }} </strong>
-	   	            {% endif %}
 	            </div>
             {% endif %}
 	        <p></p>
@@ -193,8 +190,6 @@
 				     &nbsp;
 				     <a href="{% url 'password_reset' %}">Forgot Password?</a>
 				     &nbsp;
-                     <a href="{% url 'password_update'%}">Password Update</a>
-                     &nbsp;
 				     <a href="{% url 'user_add' %}?next={{ request.GET.next }}">Create Account</a>
 			     </span>
 		    </div>

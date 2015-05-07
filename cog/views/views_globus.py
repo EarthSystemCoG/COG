@@ -1,10 +1,9 @@
 
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from nexus import GlobusOnlineRestClient
 from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
 from getpass import getpass
 import urllib, urllib2
@@ -14,6 +13,9 @@ from cog.constants import SECTION_GLOBUS
 from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
+from functools import wraps
+from cog.plugins.esgf.idp_whitelist import LocalEndpointDict
+import os
 
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
@@ -32,13 +34,28 @@ GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
 GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/xfer/BrowseEndpoint'
 GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
 
-# FIXME: map of (data_node:port, globus endpoint) pairs
-GLOBUS_ENDPOINTS = {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
-				    'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
+if siteManager.isGlobusEnabled():	
+	from nexus import GlobusOnlineRestClient
+	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
+	GLOBUS_ENDPOINTS= LocalEndpointDict('/esg/config/esgf_endpoints.xml')
 
-import os
+def requires_globus(view_func):
+	'''
+	Custom decorator that prevents a view to be invoked unless this site
+	is configured with a [Globus] section in cog_settings.py.
+	'''
+	
+	def _decorator(request, *args, **kwargs):
+		
+		if siteManager.isGlobusEnabled():
+			return view_func(request, *args, **kwargs)
+		else:
+			return HttpResponseForbidden(GLOBUS_NOT_ENABLED_MESSAGE)
+	
+	return wraps(view_func)(_decorator)
+	
 
-
+@requires_globus
 @login_required
 def download(request):
 	'''
@@ -48,10 +65,7 @@ def download(request):
 	             ?dataset=obs4MIPs.NASA-JPL.AIRS.mon.v1%7Cesg-vm.jpl.nasa.gov@esg-datanode.jpl.nasa.gov,obs4MIPs.NASA-JPL.MLS.mon.v1%7Cesg-datanode.jpl.nasa.gov@esg-datanode.jpl.nasa.gov
 	             &method=web
 	'''
-	
-	if not siteManager.isGlobusEnabled():
-		return HttpResponseForbidden(GLOBUS_NOT_ENABLED_MESSAGE)
-	
+		
 	# retrieve request parameters
 	datasets = request.REQUEST.get('dataset','').split(",")
 	# optional query filter
@@ -78,22 +92,35 @@ def download(request):
 		jobj = getJson(url)
 		
 		# parse response for GridFTP URls
-		for doc in jobj['response']['docs']:
-			for url in doc['url']:
-				# example URL: "gsiftp://esg-datanode.jpl.nasa.gov:2811//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc|application/gridftp|GridFTP"
-				parts = url.split('|')
-				if parts[2].lower()=='gridftp':
-					# example or urlparse output:
-					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
-					o = urlparse(parts[0])
-					hostname = str(o.netloc)
-					if (hostname in GLOBUS_ENDPOINTS):
-						gendpoint = GLOBUS_ENDPOINTS[hostname]
-						if not gendpoint in download_map:
-							download_map[gendpoint] = [] # insert empty list of URLs
-						download_map[gendpoint].append( str(o.path).replace('//','/'))
-					else:
-						print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
+		if jobj is not None:
+			for doc in jobj['response']['docs']:
+				for url in doc['url']:
+					# example URL: "gsiftp://esg-datanode.jpl.nasa.gov:2811//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc|application/gridftp|GridFTP"
+					parts = url.split('|')
+					if parts[2].lower()=='gridftp':
+						# example or urlparse output:
+						# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
+						o = urlparse(parts[0])
+						hostname = str(o.netloc)
+						epDict = GLOBUS_ENDPOINTS.endpointDict()
+						# {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
+						#  'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
+						if (hostname in epDict):
+							gendpoint_name = epDict[hostname].name
+							gendpoint_path_out = epDict[hostname].path_out
+							gendpoint_path_in = epDict[hostname].path_in
+							if not gendpoint_name in download_map:
+								download_map[gendpoint_name] = [] # insert empty list of URLs
+							gfilepath = str(o.path).replace('//','/')
+							if gendpoint_path_out is not None:
+								gfilepath = gfilepath.replace(gendpoint_path_out, '')
+							if gendpoint_path_in is not None:
+								gfilepath = gendpoint_path_in + gfilepath
+							download_map[gendpoint_name].append(gfilepath)
+						else:
+							print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
+		else:
+			return HttpResponseServerError("Error querying for files URL")
 						
 	# store map in session
 	request.session[GLOBUS_DOWNLOAD_MAP] = download_map
@@ -102,6 +129,7 @@ def download(request):
 	# redirect after post (to display page)
 	return HttpResponseRedirect( reverse('globus_transfer') )
 
+@requires_globus
 @login_required
 def transfer(request):
 	'''View that initiates a Globus data transfer request.'''
@@ -129,6 +157,7 @@ def transfer(request):
 		#return HttpResponseRedirect( request.build_absolute_uri(reverse("globus_oauth")) ) # FIXME
 		
 		
+@requires_globus
 @login_required
 def oauth(request):
 	
@@ -151,6 +180,7 @@ def oauth(request):
 	print "Redirecting to: %s" % globus_url
 	return HttpResponseRedirect(globus_url)
 	
+@requires_globus
 @login_required
 def oauth2(request):
 	'''View that mimics the Globus OAuth page. Not ordinarily invoked unless developing on localhost.'''
@@ -186,6 +216,7 @@ def oauth2(request):
 	return HttpResponseRedirect( redirect_uri + "?code=%s" % code)
 
 
+@requires_globus
 @login_required
 def token(request):
 	'''View that uses the request_token found in parameter 'code' (can only be used once) 
@@ -215,6 +246,7 @@ def token(request):
 	
 	return HttpResponseRedirect( reverse('globus_submit') )
 
+@requires_globus
 @login_required
 def submit(request):
 	'''View to submit a Globus transfer request.
@@ -244,6 +276,7 @@ def submit(request):
 						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
 						        context_instance=RequestContext(request))	
 
+@requires_globus
 @login_required
 def script(request):
 	'''View to generate a Globus download script from the parameters stored at session scope.'''

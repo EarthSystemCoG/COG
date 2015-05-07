@@ -1,6 +1,13 @@
 import sys, os
 sys.path.insert(0, '/usr/local/cog/cog_install')
 
+# print debugging information BEFORE import Django/CoG
+print 'Using Python version: %s' % sys.version
+print 'Using Python path: %s' % sys.path
+print 'PYTHONPATH=%s' % os.environ.get('PYTHONPATH', None)
+print 'LD_LIBRARY_PATH=%s' % os.environ.get('LD_LIBRARY_PATH', None)
+print 'SSL_CERT_DIR=%s' % os.environ.get('SSL_CERT_DIR', None)
+
 # note: settings.py is located under '/usr/local/cog/cog_install/settings.py'
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 from django.conf import settings

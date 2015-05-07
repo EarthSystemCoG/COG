@@ -43,6 +43,7 @@ class SiteManager(object):
        [GLOBUS]
        PORTAL_GO_USERNAME = ..........
        PORTAL_GO_PASSWORD = ..........
+       ENDPOINTS = /esg/config/esgf_endpoints.xml
 
     '''
     

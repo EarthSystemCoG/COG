@@ -130,7 +130,7 @@
 
        {% if project.tags.all|length > 0 %}
            <strong>{{ project.short_name }} Tags:</strong>
-           {% for tag in project.tags.all %}
+           {% for tag in project|list_project_tags %}
                {% if forloop.last %}
                    {{ tag }}
                {% else %}

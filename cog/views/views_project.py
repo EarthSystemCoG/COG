@@ -55,11 +55,15 @@ def project_add(request):
         
         # create list of unsaved project folders
         folders = getUnsavedProjectSubFolders(project, request)
+
+        # set project to be private by default on start-up
+        project.private = True
         
         form = ProjectForm(instance=project)
+
         return render_to_response('cog/project/project_form.html',
                                   {'form': form, 'title': 'Register New Project', 'project': parent,
-                                   'action': 'add', 'tabs': tabs, 'folders': folders},
+                                   'action': 'add', 'tabs': tabs, 'folders': folders,},
                                   context_instance=RequestContext(request))
         
     else:
@@ -813,7 +817,6 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
     # filter projects
     _projects = []  # empty list
     for prj in projects:
-
         prjtags = list(prj.tags.all())
         if prj.isRemoteAndDisabled():
             # filter out projects from peer sites that are NOT enabled
@@ -821,10 +824,10 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         elif not prj.active:
             # do not add
             pass
-        # only display projects that are visible to the user ?
-        #elif prj.isNotVisible(user):
+        # only display projects that are visible to the user
+        elif prj.isNotVisible(user):
             # do not add
-            # pass
+            pass
         # don't apply the additional 'tag' filter to the 'tags' tab
         elif tab != 'tags' and tag is not None and tag not in prjtags:
             # do not add
@@ -956,3 +959,4 @@ def render_development_form(request, project, form):
     return render_to_response('cog/project/development_form.html',
                               {'title' : 'Development Overview Update', 'project': project, 'form':form},
                                context_instance=RequestContext(request))
+
