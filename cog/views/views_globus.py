@@ -4,9 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
-from getpass import getpass
-import urllib, urllib2
+import urllib
 from cog.utils import getJson
 from urlparse import urlparse
 from cog.constants import SECTION_GLOBUS
@@ -36,6 +34,8 @@ GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
 
 if siteManager.isGlobusEnabled():	
 	from nexus import GlobusOnlineRestClient
+	from getpass import getpass
+	from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
 	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
 	GLOBUS_ENDPOINTS= LocalEndpointDict('/esg/config/esgf_endpoints.xml')
 
