@@ -5,6 +5,77 @@
 {% load cog_utils %}
 
 {% block main %}
+
+    <!-- Begin User Profile -->
+    <!-- NOTE: the full page is 19+5=24 columns wide. The last 5 columns are reserved for the picture. -->
+    <div class="span-24 last">
+        
+        <!-- display extra message if it exists -->
+        {% if request.GET.message %}
+            <div class="message-box">
+                {{ request.GET.message|showMessage }}
+
+            </div>
+        {% endif %}
+    
+        <!-- display a message and link to the user's Home Site -->
+        {% if user_profile.user|isRemote %}
+            
+            <div class="prepend-6 span-12 last">
+                <div class="message-box">
+                    User Home Site: {{ user_profile.site.name }}
+                </div>
+                <br/>
+                <div style="text-align: center">
+                   <a href="{{ user_profile.getAbsoluteUrl }}">View User Profile at {{ user_profile.site.name }}</a>
+                </div>
+            </div>
+            
+        {% else %}
+
+	        <div class="span-19 last" style="margin-bottom:10px;" >
+	        
+	            {% if request.user.id == user_profile.user.id or request.user.is_staff %}
+	                <div style="text-align:center;">
+	                    <a href="{% url 'user_update' user_profile.user.id %}">Update profile |</a>
+	                    <!-- Change password -->
+	                    {% if user_profile.localOpenid %}
+	                        <a href="{% url 'password_update' user_profile.user.id %}">Change password</a>
+	                    {% else %}
+	                        {% if user_profile.openid %}
+	                            <a href="http://{{ user_profile.openid|get_domain }}/">Change my password</a> (at the site that issued your OpenID)
+	                        {% else %}
+	                            Sorry, your account is not associated with any OpenID. 
+	                            <br/>Please contact <a href="mailto:cog_support@list.woc.noaa.gov">cog_support@list.woc.noaa.gov</a> to change your password.
+	                        {% endif %}
+	                    {% endif %}
+	                </div>
+	            {% endif %}
+	        </div>
+
+            <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
+            <div class="span-11" style="margin-bottom:5px;">
+               {% include 'cog/account/_user_profile.html' %}
+            </div>
+
+            <div class="span-8" style="margin-bottom:5px;">
+               {% include 'cog/account/_user_projects.html' %}
+            </div>
+
+            <div class="span-5 last">
+               <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %}/>
+            </div>
+
+            <div class="span-19 last" style="margin-bottom:5px;" >
+               {% include 'cog/account/_user_openids.html' %}
+            </div>
+
+            <div class="span-19 last" style="margin-bottom:5px;" >
+              {% include 'cog/account/_user_research.html' %}
+            </div>
+        {% endif %}
+    </div>
+    
     <!-- Extra block for Site Admins to display key user info we don't show the public-->
     {% if request.user.is_staff %}
         <div class="prepend-4 span-14 last" style="margin-bottom:20px;">
@@ -59,73 +130,5 @@
             </div>
         </div>
     {% endif %}
-
-    <!-- Begin User Profile -->
-    <div class="prepend-1 span-24">
-
-        <div class="span-17 last" style="margin-bottom:20px;" >
-            {% if request.user.id == user_profile.user.id or request.user.is_staff %}
-                <div style="text-align:center;">
-                    <a href="{% url 'user_update' user_profile.user.id %}">Update my profile |</a>
-                    <!-- Change password -->
-                    {% if user_profile.localOpenid %}
-                        <a href="{% url 'password_update' %}">Change my password</a>
-                    {% else %}
-                        {% if user_profile.openid %}
-                            <a href="http://{{ user_profile.openid|get_domain }}/">Change my password</a> (at the site that issued your OpenID)
-                        {% else %}
-                            Sorry, your account is not associated with any OpenID. 
-                            <br/>Please contact <a href="mailto:cog_support@list.woc.noaa.gov">cog_support@list.woc.noaa.gov</a> to change your password.
-                        {% endif %}
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
-
-        <!-- display a message and link to the user's Home Site -->
-        {% if user_profile.user|isRemote %}
-            <div class="prepend-6 span-12 last">
-                <div class="message-box">
-                    User Home Site: {{ user_profile.site.name }}
-                </div>
-                <br/>
-                <div style="text-align: center">
-                   <a href="{{ user_profile.getAbsoluteUrl }}">View User Profile at {{ user_profile.site.name }}</a>
-                </div>
-            </div>
-        {% else %}
-
-            <!-- display extra message if it exists -->
-            {% if request.GET.message %}
-                <div class="prepend-6 span-12 last">
-                    <div class="message-box">
-                        {{ request.GET.message|showMessage }}
-                    </div>
-                </div>
-                <p></p>
-            {% endif %}
-
-            <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
-            <div class="span-10" style="margin-bottom:5px;">
-               {% include 'cog/account/_user_profile.html' %}
-            </div>
-
-            <div class="span-8" style="margin-bottom:5px;">
-               {% include 'cog/account/_user_projects.html' %}
-            </div>
-
-            <div class="span-5 last">
-               <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %}/>
-            </div>
-
-
-            <div class="span-17 last" style="margin-bottom:5px;" >
-               {% include 'cog/account/_user_openids.html' %}
-            </div>
-
-            <div class="span-17 last" style="margin-bottom:5px;" >
-              {% include 'cog/account/_user_research.html' %}
-            </div>
-        {% endif %}
-    </div>
+    
 {% endblock %}

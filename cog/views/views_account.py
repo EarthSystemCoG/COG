@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django_openid_auth.models import UserOpenID
@@ -491,32 +491,36 @@ def user_update(request, user_id):
 
 
 @login_required
-def password_update(request):
+def password_update(request, user_id):
+    '''View used by the user (or by a site administrator) to change their password.'''
 
     # redirect to another site if necessary
     if redirectToIdp():
         return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
 
-    if request.method == 'GET':
-        
-        # user that is logged on
-        user = request.user
-        
-        # check use has OpenID issued by this site
-        if user.profile.localOpenid() is None:
-            return HttpResponseForbidden("Non local user: password must be changed at site that issued the OpenID.")
+    # check permission: user that owns the account, or a site administrator
+    user = get_object_or_404(User, id=user_id)
+    if user!=request.user and not request.user.is_staff:
+        return HttpResponseServerError("You don't have permission to change the password for this user.")
 
+    # check use has OpenID issued by this site
+    if user.profile.localOpenid() is None:
+        return HttpResponseForbidden("Non local user: password must be changed at site that issued the OpenID.")
+
+    if request.method == 'GET':
+                
         # create form (pre-fill username)
-        initial = {'username': user.username}
+        initial = {'username': user.username,            # the target user
+                   'requestor': request.user.username }  # the user requesting the change
         form = PasswordChangeForm(initial=initial)
-        return render_password_change_form(request, form)
+        return render_password_change_form(request, form, user.username)
 
     else:
         form = PasswordChangeForm(request.POST)
 
         if form.is_valid():
             
-            user = User.objects.get(username=form.cleaned_data.get('username'))
+            #user = User.objects.get(username=form.cleaned_data.get('username'))
 
             # change password in database
             user.set_password(form.cleaned_data.get('password'))
@@ -528,19 +532,25 @@ def password_update(request):
             if settings.ESGF_CONFIG:
                 esgfDatabaseManager.updatePassword(user, form.cleaned_data.get('password'))
             
-            # logout user
-            logout(request)
+            # standard user: logout
+            if user==request.user:
+                logout(request)
                         
-            # redirect to login page with special message
-            response = HttpResponseRedirect(reverse('login')+"?message=password_update")
-            openid = user.profile.openid()
-            if openid is not None:
-                set_openid_cookie(response, openid)        
-            return response
+                # redirect to login page with special message
+                response = HttpResponseRedirect(reverse('login')+"?message=password_update")
+                openid = user.profile.openid()
+                if openid is not None:
+                    set_openid_cookie(response, openid)        
+                return response
+            
+            # administrator: back to user profile
+            else:
+                return HttpResponseRedirect(reverse('user_detail', kwargs={'user_id':user.id})+"?message=password_updated_by_admin")
+                
 
         else:
             print "Form is invalid: %s" % form.errors
-            return render_password_change_form(request, form)
+            return render_password_change_form(request, form, user.username)
 
 
 def user_reminder(request):
@@ -702,9 +712,9 @@ def render_user_form(request, form, formset1, formset2, title=''):
                               context_instance=RequestContext(request))
 
 
-def render_password_change_form(request, form):
+def render_password_change_form(request, form, username):
     return render_to_response('cog/account/password_change.html',
-                              {'form': form, 'mytitle': 'Change User Password'},
+                              {'form': form, 'mytitle': 'Change Password for User: %s' % username},
                               context_instance=RequestContext(request))
 
 
