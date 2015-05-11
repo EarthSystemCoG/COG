@@ -21,6 +21,9 @@ class PostForm(ModelForm):
     # extra field not present in Post model
     newtopic = forms.CharField(max_length=200, required=False)
 
+    # save only flag: keeps form open
+    save_only = forms.BooleanField(required=False, initial=False)
+
     # override __init__ method to provide extra arguments to customize the query set
     def __init__(self, type, project, *args, **kwargs):
 

@@ -360,41 +360,55 @@ def post_update(request, post_id):
         
         # update existing database model with form data
         form = PostForm(post.type, post.project, request.POST, instance=post)
-        
+
         # check versions       
         if post.version != int(request.REQUEST.get('version', -1)):
             print 'database version=%s form version=%s' % (post.version, request.REQUEST.get('version', -1))
             return getLostLockRedirect(request, post.project, post, lock)
-        
+
         #print "1 PAGE URL=%s" % form.data['url']
         if form.is_valid():
+            # TODO: if hit cancel, form does not render, what is missing from save?
+
             # build instance from form data
             post = form.save(commit=False)
-                        
-            # increment version
-            post.version += 1
-            
-            # rebuild full page URL
-            if post.type == Post.TYPE_PAGE:
-                post.url = get_project_page_full_url(post.project, post.url)
-            # change the author to the last editor
-            post.author = request.user
-            # update date 
-            post.update_date = now()
-            # save instance
-            post.save()
-            # create project-topic relation if not existing already
-            if post.topic is not None:
-                createProjectTopicIfNotExisting(post.project, post.topic)
-                
-            # release lock
-            deleteLock(post)
-            
-            # send post update signal
-            post.send_signal(SIGNAL_OBJECT_UPDATED)
+            form_data = form.clean()
 
-            # redirect to post (GET-POST-REDIRECT)
-            return redirect_to_post(request, post)
+            if form_data.get("save_only"):
+
+                # save instance
+                post.save()
+                return render_post_form(request, form, post.project, post.type, lock=lock)
+            else:
+                # increment version
+                post.version += 1
+            
+                # rebuild full page URL
+                if post.type == Post.TYPE_PAGE:
+                    post.url = get_project_page_full_url(post.project, post.url)
+
+                # change the author to the last editor
+                post.author = request.user
+
+                # update date
+                post.update_date = now()
+
+                # save instance
+                post.save()
+
+                # create project-topic relation if not existing already
+                if post.topic is not None:
+                    createProjectTopicIfNotExisting(post.project, post.topic)
+
+                # release lock
+                deleteLock(post)
+
+                # send post update signal
+                post.send_signal(SIGNAL_OBJECT_UPDATED)
+
+                # redirect to post (GET-POST-REDIRECT)
+                return redirect_to_post(request, post)
+
         else:
             print form.errors
             return render_post_form(request, form, post.project, post.type, lock=lock)
