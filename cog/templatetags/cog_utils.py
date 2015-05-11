@@ -678,6 +678,9 @@ def showMessage(message):
 
     elif message == 'password_update':
         return 'Your password has been changed. Please login again.'
+    
+    elif message == 'password_updated_by_admin':
+        return 'The user password has been updated.'
 
     elif message == 'user_reminder':
         return 'Your UserName and OpenID have been emailed to the address you provided.' \

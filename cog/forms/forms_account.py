@@ -81,7 +81,8 @@ class UsernameReminderForm(Form):
 
 class PasswordChangeForm(Form):
 
-    username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the target user
+    requestor = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the user reuesting the change (same as target user, or a site administrator)
     old_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }))
     password = CharField(required=True, 
                      # trigger javascript function when input field looses focus
@@ -99,16 +100,31 @@ class PasswordChangeForm(Form):
 
     def clean(self):
         
-        # load user by username
-        username = self.cleaned_data.get('username')
         
         try:
-            user = User.objects.get(username=username)
+            
+            # load user by username
+            user = User.objects.get(username=self.cleaned_data.get('username'))
+            
+            # load requestor by username
+            requestor = User.objects.get(username=self.cleaned_data.get('requestor'))
+            
+            # check OpenID was issued by this site
+            if user.profile.localOpenid() is None:
+                self._errors["username"] = self.error_class(["Non local user: password must be changed at site that issued the OpenID."])
     
-            # check current password
+            # normal user: check current password
             old_password = self.cleaned_data.get('old_password')
-            if not check_password(old_password, user.password):
-                self._errors["old_password"] = self.error_class(["Wrong old password."])
+            if user.username == requestor.username:
+                if not check_password(old_password, user.password):
+                    self._errors["old_password"] = self.error_class(["Wrong user old password."])
+            
+            elif requestor.is_staff:
+                if not check_password(old_password, requestor.password):
+                    self._errors["old_password"] = self.error_class(["Wrong administrator password."])
+                
+            else:
+                raise Exception("Unauthoriuzed attempt to change the user password")
     
             # validate 'password', 'confirm_password' fields
             validate_password(self)
