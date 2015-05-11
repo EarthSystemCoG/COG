@@ -104,6 +104,10 @@ class PasswordChangeForm(Form):
         
         try:
             user = User.objects.get(username=username)
+            
+            # check OpenID was issued by this site
+            if user.profile.localOpenid is None:
+                self._errors["username"] = self.error_class(["Non local user: password must be changed at site that issued the OpenID."])
     
             # check current password
             old_password = self.cleaned_data.get('old_password')

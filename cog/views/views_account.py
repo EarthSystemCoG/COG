@@ -489,7 +489,7 @@ def user_update(request, user_id):
             return render_user_form(request, form, formset1, formset2, title='Update User Profile')
 
 
-#@login_required
+@login_required
 def password_update(request):
 
     # redirect to another site if necessary
@@ -498,11 +498,8 @@ def password_update(request):
 
     if request.method == 'GET':
 
-        # create form
-        if request.user.is_anonymous():
-            initial = {}
-        else:  # pre-fill username
-            initial = {'username': request.user.username}
+        # create form (pre-fill username)
+        initial = {'username': request.user.username}
         form = PasswordChangeForm(initial=initial)
         return render_password_change_form(request, form)
 
