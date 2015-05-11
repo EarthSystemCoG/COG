@@ -308,7 +308,7 @@ def user_detail(request, user_id):
     projects = sorted(_projects, key=lambda x: x.short_name)
             
     return render_to_response('cog/account/user_detail.html',
-                              {'user_profile': user_profile, 'projects': projects},
+                              {'user_profile': user_profile, 'projects': projects, 'title':'User Profile'},
                               context_instance=RequestContext(request))
 
 

@@ -64,7 +64,6 @@
     <div class="prepend-1 span-24">
 
         <div class="span-17 last" style="margin-bottom:20px;" >
-            <h2>User Profile</h2>
             {% if request.user.id == user_profile.user.id or request.user.is_staff %}
                 <div style="text-align:center;">
                     <a href="{% url 'user_update' user_profile.user.id %}">Update my profile |</a>
@@ -73,9 +72,10 @@
                         <a href="{% url 'password_update' %}">Change my password</a>
                     {% else %}
                         {% if user_profile.openid %}
-                            <a href="http://{{ user_profile.openid|get_domain }}/esgf-web-fe/login">Change my password</a> (at the site that issued your OpenID)
+                            <a href="http://{{ user_profile.openid|get_domain }}/">Change my password</a> (at the site that issued your OpenID)
                         {% else %}
-                            No OpenID found. No way to change password. Contact <a href="mailto:cog_support@list.woc.noaa.gov">cog_support@list.woc.noaa.gov</a>
+                            Sorry, your account is not associated with any OpenID. 
+                            <br/>Please contact <a href="mailto:cog_support@list.woc.noaa.gov">cog_support@list.woc.noaa.gov</a> to change your password.
                         {% endif %}
                     {% endif %}
                 </div>
