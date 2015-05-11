@@ -22,6 +22,7 @@ from cog.notification import notify, sendEmail
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.util.thumbnails import *
 from cog.views.utils import set_openid_cookie, get_all_projects_for_user
+from django.http.response import HttpResponseForbidden
 
 
 def redirectToIdp():
@@ -497,9 +498,16 @@ def password_update(request):
         return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
 
     if request.method == 'GET':
+        
+        # user that is logged on
+        user = request.user
+        
+        # check use has OpenID issued by this site
+        if user.profile.localOpenid() is None:
+            return HttpResponseForbidden("Non local user: password must be changed at site that issued the OpenID.")
 
         # create form (pre-fill username)
-        initial = {'username': request.user.username}
+        initial = {'username': user.username}
         form = PasswordChangeForm(initial=initial)
         return render_password_change_form(request, form)
 
