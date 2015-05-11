@@ -35,8 +35,16 @@
 	       <td style="width:50%;text-align:center;vertical-align:middle;">
            <input type="submit" value="Search"/>
 		   &nbsp; <input type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
-           &nbsp; <input type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />
+           <!--&nbsp; <input type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />-->
 	      {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
+           <span style="display:inline-block; vertical-align: -3px;">
+               <a href="https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help" target="_blank">
+                   <img alt="question mark icon" style="float:right;" src="/static/cog/img/question-blue.gif">
+               </a>
+           </span>
+           &nbsp;
+
+
 	      Display
 	      <select name="limit" id="limit">
 	         <option value="10" {% if search_input.limit == 10 %} selected="selected" {% endif %}>10</option>
