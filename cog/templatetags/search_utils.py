@@ -3,7 +3,8 @@ from cog.models.search import searchMappings
 from cog.site_manager import siteManager
 from string import replace
 import json
-from cog.views.views_globus import GLOBUS_ENDPOINTS
+if siteManager.isGlobusEnabled():    
+    from cog.views.views_globus import GLOBUS_ENDPOINTS
 
 register = template.Library()
 
