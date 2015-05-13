@@ -21,6 +21,7 @@ from cog.services.SolrSerializer import deserialize
 
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 from cog.models.utils import get_or_create_default_search_group
+from django.http.response import HttpResponseServerError
 
 
 SEARCH_INPUT  = "search_input"
@@ -34,15 +35,20 @@ REPLICA_FLAG  = "replica_flag"
 LATEST_FLAG   = "latest_flag"
 LOCAL_FLAG    = "local_flag"
 SEARCH_PATH   = "search_path"
-SEARCH_URL    = 'search_url'
+SEARCH_URL    = 'search_url'         # stores ESGF search URL
+LAST_SEARCH_URL = "last_search_url"  # stores CoG last search URL (including project)
 # constraints excluded from bread crums display
 SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type"]
-                
+              
+      
 def search(request, project_short_name):
     """
     Entry point for all search requests (GET/POST).
     Loads project-specific configuration.
     """
+    
+    # store this URL at session scope so other pages can reload the last search
+    request.session[LAST_SEARCH_URL] = request.get_full_path()  # relative search page URL + optional query string
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -607,6 +613,21 @@ def search_files(request, dataset_id, index_node):
     response = fh.read().decode("UTF-8")
 
     return HttpResponse(response, content_type="application/json")
+
+def search_reload(request):
+    '''View that attempts to redirect to the last project-specific page,
+       including constraints and results.'''
+    
+    if request.session.get(LAST_SEARCH_URL, None):
+        print 'Reloading search page: %s' % request.session[LAST_SEARCH_URL]
+        request.session[SEARCH_REDIRECT] = True # flag to retrieve constraints, results
+        return HttpResponseRedirect(request.session[LAST_SEARCH_URL]) # just like after the last POST
+        
+    else:
+        return render_to_response('cog/common/message.html', 
+                                  {'mytitle': 'An Error Occurred',
+                                   'messages': ['Your last search page could not be found.'] },
+                                   context_instance=RequestContext(request))
 
             
 def render_search_profile_form(request, project, form):

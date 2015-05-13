@@ -16,6 +16,7 @@ Globus Online uses the high performance, reliable GridFTP protocol to transfer m
       please click <a href="https://www.globus.org/SignIn#step=signup">here</a> to set one up.</span>
 
 <br/>For help about using Globus Online with ESGF/CoG, please see <a href="https://www.earthsystemcog.org/projects/cog/globus_esgf_cog">here</a>.
+&nbsp;To go back to your last search, please click <a href="{% url 'search_reload' %}">here</a>.
 </p>
 
 {% if globus_download_map %}
@@ -76,6 +77,7 @@ Globus Online uses the high performance, reliable GridFTP protocol to transfer m
 		No files were selected for download. Please select one or more Globus-enabled datasets in your Data Cart.
 	</div>
 {% endif %}
+
 
 <!-- placeholder for message dialog -->
 <div id="myDialog" class="yui-skin-sam"></div>

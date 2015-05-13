@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
     url(r'^cogadmin/peers/$', 'cog.views.admin_peers', name='admin_peers' ),
     url(r'^cogadmin/users/$', 'cog.views.admin_users', name='admin_users' ),
-
+    
     url(r'^search/(?P<project_short_name>.+)/$', 'cog.views.search', name='search' ),
     url(r'^search_profile/config/(?P<project_short_name>.+)/$', 'cog.views.search_profile_config', name='search_profile_config'),
     url(r'^search_facet/add/(?P<project_short_name>.+)/$', 'cog.views.search_facet_add', name='search_facet_add'),
@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^search_facet/delete/(?P<facet_id>.+)/$', 'cog.views.search_facet_delete', name='search_facet_delete'),
     url(r'^search_files/(?P<dataset_id>.+)/(?P<index_node>.+)/$', 'cog.views.search_files', name='search_files'),
     url(r'^metadata_display/(?P<project_short_name>.+)/$', 'cog.views.metadata_display', name='metadata_display' ),
+    url(r'^search_reload/$', 'cog.views.search_reload', name='search_reload' ),
 
     # authentication options
     # a) django (username/password) login
