@@ -338,8 +338,7 @@
 
 	}
 
-	// returns the currently selected data cart items
-	// with a specific service type
+	// returns the currently selected data cart items with a specific service type
 	function getSelectedItemsByServiceType(mtype) {
 
 		var objs = [];
@@ -356,6 +355,27 @@
 		        		if (obj!=null) {
 		        			objs.push(obj);
 		        		}
+		        	}
+		    	}
+		    }
+		}
+
+		return objs;
+
+	}
+	
+	// returns ALL currently selected data cart items
+	function getSelectedDataCartItems() {
+
+		var objs = [];
+
+		// loop over selected checkboxes
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 0; i < inputs.length; i++) {
+		    if (inputs[i].type == "checkbox") {
+		    	if (inputs[i].id!=null && inputs[i].id.length>0 && inputs[i].id.indexOf("dataitem-checkbox")==0) {
+		        	if (inputs[i].checked) {
+		        		objs.push(inputs[i]);
 		        	}
 		    	}
 		    }

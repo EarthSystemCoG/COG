@@ -15,9 +15,13 @@
      function goDatasets() {
     	 
     	 var objs = getSelectedItemsByServiceType(GRIDFTP);
+    	 var allObjs = getSelectedDataCartItems();
     	 if (objs.length<=0) {
     		 showMessage("Warning", "Please select one or more datasets in the Data Cart that are Globus-enabled.");
     		 
+    	 } else if (allObjs.length > objs.length) {
+    	 	showMessage("Warning", "Please de-select those datasets in the Data Cart that are NOT Globus-enabled.");
+    	 	
     	 } else {
     	 
     	 	goForm = document.forms['goForm'];
