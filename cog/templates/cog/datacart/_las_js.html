@@ -4,6 +4,9 @@
            
      // function to invoke LAS for the selected datasets
      function lasDatasets() {
+     
+     	// clear message from other services
+     	clearAllMessages();
     	 
     	 var objs = getSelectedItemsByServiceType(LAS);
     	 if (objs.length<=0) {

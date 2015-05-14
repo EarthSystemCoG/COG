@@ -384,6 +384,44 @@
 		return objs;
 
 	}
+	
+	// shows a 'must uncheck' message for all selected data cart items that are NOT enabled for a specific type.
+	function showUncheckMessage(serviceType, serviceName) {
+     
+         var selectedItemsWithServiceType = getSelectedItemsByServiceType(serviceType);
+    	 var selectedCheckboxElements = getSelectedDataCartItems();
+     
+     	// highlight selected data cart items that don't have this service type
+	 	for (var i = 0; i < selectedCheckboxElements.length; i++) { // loop over all selected checkboxes
+	 		var showMessage = true;
+	 	    for (var j = 0; j < selectedItemsWithServiceType.length; j++) { // compare with checkboxes that are enabled for the requested service type
+	 	    	if ("dataitem-checkbox_"+selectedItemsWithServiceType[j].id==selectedCheckboxElements[i].id) {
+	 	    		showMessage = false; // this item does have 'serviceType' access
+	 	    	}
+	 		}
+	 		if (showMessage) {
+	 			var messageDivId =  selectedCheckboxElements[i].id.replace("dataitem-checkbox_","message_");
+	 			var messageDiv = document.getElementById(messageDivId);
+	 			messageDiv.innerHTML = "Please de-select this dataset because it can not be accessed through '"+serviceName+"'.";
+	 			messageDiv.style.display = "block";
+	 		}
+	 	}
+
+	 	// show message
+	 	//showMessage("Warning", "Please de-select those datasets in the Data Cart that are NOT "+serviceType+" enabled");
+     
+     }
+     
+     // clears warning message for all selected datasets
+     function clearAllMessages() {
+     	var selectedCheckboxElements = getSelectedDataCartItems();
+     	for (var i=0; i < selectedCheckboxElements.length; i++) {
+     		var messageDivId =  selectedCheckboxElements[i].id.replace("dataitem-checkbox_","message_");
+ 			var messageDiv = document.getElementById(messageDivId);
+ 			messageDiv.innerHTML = '';
+ 			messageDiv.style.display = "none";
+     	}
+     }
 
     // function to apply the query filter to the currently showing file listings
     function applyQueryFilter() {
