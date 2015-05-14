@@ -122,35 +122,15 @@
 	        <p></p>
 	    {% endif %}
 	    <h2>OpenID Login</h2>
-	    <p>
-	        We improved the security of our authentication process and now require an ESGF OpenID for logging onto ESGF-CoG.
-	    </p>
-    	<p>
-             If you don't have an account, please visit the <a href="{% url 'user_add' %}">Create Account</a> page.
-        </p>
-    	<p>
-	         If you have an account, but don't have an ESGF OpenID, please see the box below for how to update your account.
-        </p>
-		<!--YELLOW BOX -->
-	    <div class="changeID-box">
-		    <p>
-		        All existing accounts must be updated for the OpenID Changes.
-		    </p>
-		    <p>
-	             If you already have an existing CoG username and password, you will need to obtain an ESGF OpenID and change your password.
-	             Please visit the Password Update.
-		    </p>
-            <p>
-	             You will no longer be able to login with your old CoG username and password.
-		         Please use your ESGF OpenID and new password to login.
-            </p>
-	    </div>
-	    <br/>
+
         <!--help text about ESG OpenIDs-->
 	    <p>
 		    If you already have an ESGF OpenID, you can use it to log onto ESGF-CoG below.
 		    However, if your OpenID contains "/myopenid/" it is likely an older version that is no longer supported.
 	    </p>
+        <p>
+            For the best experience, use Firefox, Chrome, or Internet Explorer. These are the browsers we test.
+        </p>
      	<div style="font-style: italic; text-align:center;">
 		    Please note that ESGF OpenIDs are case-sensitive.
  	    </div>
@@ -190,13 +170,13 @@
 				     &nbsp;
 				     <a href="{% url 'password_reset' %}">Forgot Password?</a>
 				     &nbsp;
+                     <a href="https://www.earthsystemcog.org/projects/cog/openid">Login Help</a>
+                     &nbsp;
 				     <a href="{% url 'user_add' %}?next={{ request.GET.next }}">Create Account</a>
 			     </span>
 		    </div>
 	    </form>
-        <p>
-            For the best experience, use Firefox, Chrome, or Internet Explorer. These are the browsers we test.
-        </p>
+
     </div>
 </div><!--END:/cog/templates/cog/openid/login.html-->
 
