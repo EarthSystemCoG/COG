@@ -34,6 +34,8 @@
 		<!-- local data cart -->
 		Number of Items in My '{{ site.name }}' Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span>
 		
+		<div id="message" class="message-box" style="display:none"/>
+		
 		<!-- remote data carts -->
 		{% if datacarts.items|length > 0 %}
 			&nbsp; &nbsp;

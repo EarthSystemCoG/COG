@@ -387,9 +387,18 @@
 	
 	// shows a 'must uncheck' message for all selected data cart items that are NOT enabled for a specific type.
 	function showUncheckMessage(serviceType, serviceName) {
+	
+		// show top-level message
+    	var messageDiv = document.getElementById("message");
+     	messageDiv.innerHTML = 'You have selected some datasets that are not currently available through ' + serviceName + '.' 
+     		                 + '<br/>You must de-select these items in order to proceed.'
+     		                 + '<br/>Ineligible items are identified by a de-select message below.';
+ 		messageDiv.style.display = "block";
+		
      
-         var selectedItemsWithServiceType = getSelectedItemsByServiceType(serviceType);
-    	 var selectedCheckboxElements = getSelectedDataCartItems();
+        // who message below each ineligible data cart item that's been selected
+        var selectedItemsWithServiceType = getSelectedItemsByServiceType(serviceType);
+    	var selectedCheckboxElements = getSelectedDataCartItems();
      
      	// highlight selected data cart items that don't have this service type
 	 	for (var i = 0; i < selectedCheckboxElements.length; i++) { // loop over all selected checkboxes
@@ -414,13 +423,21 @@
      
      // clears warning message for all selected datasets
      function clearAllMessages() {
+     
+        // global message
+     	var messageDiv = document.getElementById("message");
+     	messageDiv.innerHTML = '';
+ 		messageDiv.style.display = "none";
+
+		// individual items message     
      	var selectedCheckboxElements = getSelectedDataCartItems();
      	for (var i=0; i < selectedCheckboxElements.length; i++) {
      		var messageDivId =  selectedCheckboxElements[i].id.replace("dataitem-checkbox_","message_");
- 			var messageDiv = document.getElementById(messageDivId);
+ 			messageDiv = document.getElementById(messageDivId);
  			messageDiv.innerHTML = '';
  			messageDiv.style.display = "none";
      	}
+     	
      }
 
     // function to apply the query filter to the currently showing file listings
