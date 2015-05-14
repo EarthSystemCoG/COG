@@ -147,7 +147,8 @@ def transfer(request):
 	else:
 						
 		# redirect to Globus OAuth URL
-		params = [ ('ep','GC'), ('lock', 'ep'), ('method','get'), ('folderlimit','1'),
+		params = [ ('ep','GC'), ('method','get'), ('folderlimit','1'),
+				   # ('lock', 'ep'), # do NOT allow the user to change their endpoint
 				   ('action', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
 				 ]
 		globus_url = GLOBUS_SELECT_DESTINATION_URL + "?" + urllib.urlencode(params)
