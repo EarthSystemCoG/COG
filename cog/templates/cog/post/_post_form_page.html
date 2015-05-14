@@ -80,13 +80,14 @@
           </td>
     	</tr>
     {% endif %}
-
+    {% if form.url.value %}
     <tr>
         <td class="col1" nowrap="nowrap" style="vertical-align: middle;">Save Only Mode?</td>
         <td style="vertical-align: middle;">{{form.save_only}}
        (<em class="message">If checked, page will save only. Uncheck to publish.</em>)
             </td>
     </tr>
+    {% endif %}
 
  {% if form.save_only.value %}
     <tr>
