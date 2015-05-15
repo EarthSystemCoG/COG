@@ -33,10 +33,10 @@
 		
 		<!-- local data cart -->
 		Number of Items in My '{{ site.name }}' Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span>
-		
+				
 		<!-- remote data carts -->
 		{% if datacarts.items|length > 0 %}
-			&nbsp; &nbsp;
+			&nbsp; | &nbsp;
             <label for="dataCartSelect">My Other Data Carts</label>
 			<select name="dataCartSelect" id="dataCartSelect" onchange="javascript:handleOtherDataCartSelect(this)">
 				<option id="other_datacart">My Other Data Carts</option>
@@ -51,7 +51,18 @@
 			</select>
 		{% endif %}
 		
+		<!-- link back to search -->
+		{% if request.session.last_search_url %}
+			&nbsp; | &nbsp;
+			Back to my <a href="{% url 'search_reload' %}">Last Search</a>
+		{% endif %}
+		
+		<!-- optional message -->
+		<div id="message" class="message-box" style="display:none"/>
+		
+		
 	</div>
+	
 	
 	
 <!-- local data cart -->
