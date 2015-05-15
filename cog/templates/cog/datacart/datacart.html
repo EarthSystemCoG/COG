@@ -32,7 +32,7 @@
 	<div style="text-align:center; font-weight:bold">
 		
 		<!-- local data cart -->
-		Number of Items in My '{{ site.name }}' Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span>
+		Number of Items in My '{{ site.name }}' Data Cart (<span id="datacart_size2">{{ datacart.items.all|length }})</span>
 				
 		<!-- remote data carts -->
 		{% if datacarts.items|length > 0 %}
