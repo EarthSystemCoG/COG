@@ -330,7 +330,7 @@ def delete_doc(doc):
     for fp in [fullpath, fullpath2]:
         if os.path.exists(fp):
             print 'Deleting document=%s' % fp
-            os.remove(fullpath)
+            os.remove(fp)
     
     # also delete possible thumbnail files (created by File Browser)
     # canberra_hero_image.jpg
