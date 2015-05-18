@@ -1,15 +1,13 @@
 '''
-Created on Nov 4, 2014
+Tests for ESGF group registration.
 
 @author: cinquini
 '''
 
-import os
-import sys
-import cog
-path = os.path.dirname(cog.__file__)
-sys.path.append( path )
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+import sys, os
+sys.path.insert(0, os.environ['COG_INSTALL_DIR'])
+# note: settings.py is located under '/usr/local/cog/cog_install/settings.py'
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 import unittest
 from cog.plugins.esgf.security import esgfDatabaseManager
