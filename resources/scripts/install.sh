@@ -13,11 +13,12 @@ export USER=apache
 export GROUP=apache
 
 # the specific CoG branch OR version to install
-export COG_TAG=globus
-#export COG_TAG=v2.12.0
+#export COG_TAG=globus
+export COG_TAG=v2.12.0
 
-# the Python installation from which to create the venev
-export PATH=/usr/local/uvcdat/bin:$PATH
+# the Python installation from which to create the venev.
+# VERY IMPORTANT: MUST BE 2.7.9+
+export PATH=/usr/local/python-2.7.9/bin:$PATH
 
 #=== ESGF INSTALLATION LOGIC - DO NOT CHANGE =========
 
