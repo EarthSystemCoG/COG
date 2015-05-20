@@ -109,7 +109,11 @@
 	  <div class="span-5 last">
 	      <div id="top_subnav_right">
 	          {% if request.user.is_authenticated %}
-		           <a href="{% url 'user_profile_redirect' request.user.id %}">My Profile</a>
+		           <!--<a href="{% url 'user_profile_redirect' request.user.id %}">My Profile</a>-->
+                  {% if request.session.last_search_url %}
+			          <a href="{% url 'search_reload' %}"> Last Search</a>
+		          {% endif %}
+
 		               | <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle;" alt="datacart logo"/>
 		           <a href="{% url 'datacart_display' site.id request.user.id %}">My Data Cart (<span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>)
 		               </a>
