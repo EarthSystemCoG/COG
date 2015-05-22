@@ -10,13 +10,18 @@
 
 <!-- Instructions -->
 <p>
-Globus uses the high performance, reliable GridFTP protocol to transfer many files at once from their remote archives to your desktop. 
+Globus uses the high performance, reliable GridFTP protocol to transfer many files at once from their remote archives to your desktop.
+</p>
 
-<br/><span style="color:red">To use Globus, you must have an account.  If you do not already have a free Globus Account, 
-      please click <a href="https://www.globus.org/SignIn#step=signup">here</a> to set one up.</span>
-
-<br/>For help about using Globus with ESGF/CoG, please see <a href="https://www.earthsystemcog.org/projects/cog/globus_esgf_cog">here</a>.
-&nbsp;To go back to your last search, please click <a href="{% url 'search_reload' %}">here</a>.
+<p>
+    <span style="color:red">
+        You must have a Globus account and installed software to use this service. The Globus site will guide you through the process.
+        <a href="https://www.globus.org/SignIn#step=signup" target="_blank">(Setup Globus)</a>.
+    </span>
+</p>
+<p>
+    <a href="https://www.earthsystemcog.org/projects/cog/globus_esgf_cog" target="_blank">Help with Globus and CoG</a> |
+    <a href="{% url 'search_reload' %}"> Last Search</a>.
 </p>
 
 {% if globus_download_map %}
@@ -26,17 +31,14 @@ Globus uses the high performance, reliable GridFTP protocol to transfer many fil
 		<tr>
 			<td width="50%">
 				<div class="box-globus">
-					
 					<div style="font-weight:bold; text-align:center; padding: 4px;">Option 1: Web Download</div>
-					
-					<div style="text-align:center;">Submit the download request through this web browser.</div>					
+					<div style="text-align:center;">Submit the download request through this web browser.</div>
 					<div style="text-align: center; padding:5px;">
 						<form name="globusTransferForm" method="post" action="{% url 'globus_transfer' %}">
 							{% csrf_token %}
 							<input type="submit" value="Start Web Download"/> 
 						</form>
 					</div>
-					
 				</div>
 			</td>
 			<td width="50%">
@@ -52,14 +54,14 @@ Globus uses the high performance, reliable GridFTP protocol to transfer many fil
 		</tr>
 	</table>
 	
-	<p/>
+	<p></p>
 	<div style="text-align: center">
-		After starting the files transfer request, 
-		please use the Globus site to <a href="https://www.globus.org/xfer/ViewActivity">monitor the acivity</a>.
+		After starting the file transfer request,
+		please use the Globus site to <a href="https://www.globus.org/xfer/ViewActivity">monitor the download</a>.
 	</div>
 
 	<!-- table of files to be downloaded -->
-	<p/>
+	<p></p>
     <div class="mybox">
 	    <table>
 	        <caption>The following files will be downloaded:</caption>
@@ -74,7 +76,7 @@ Globus uses the high performance, reliable GridFTP protocol to transfer many fil
 		
 {% else %}
 	<div class="warning">
-		No files were selected for download. Please select one or more Globus-enabled datasets in your Data Cart.
+		No files were selected for download. Please select one or more Globus-enabled datasets in your Data Cart or on a project search page.
 	</div>
 {% endif %}
 
