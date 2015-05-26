@@ -73,7 +73,7 @@
 	  <!-- skeleton form to empty the data cart via POST -->
 	  <form name="emptyDataCartForm" action='{% url 'datacart_empty' site.id request.user.id %}' method='post'></form>
 	  
-	  <!-- form for submitting Globus Online download for multiple datasets -->
+	  <!-- form for submitting Globus download for multiple datasets -->
 	  <form name="goForm" method="post" action="{% url 'globus_download' %}" >
 	  	{% csrf_token %}
 		<input type="hidden" name="dataset"/>
