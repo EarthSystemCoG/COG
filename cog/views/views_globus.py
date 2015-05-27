@@ -221,7 +221,7 @@ def oauth2(request):
 @login_required
 def token(request):
 	'''View that uses the request_token found in parameter 'code' (can only be used once) 
-	   to obtain an 'access_token' from Globus Online (can be used multiple times).'''
+	   to obtain an 'access_token' from Globus (can be used multiple times).'''
 	
 	# CoG portal
 	# FIXME: instantiate at module scope ?

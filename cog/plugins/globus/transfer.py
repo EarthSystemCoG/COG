@@ -1,5 +1,5 @@
 '''
-Module to interact with Globus Online ("GO") data transfer services.
+Module to interact with Globus data transfer services.
 
 @author: Luca Cinquini
 '''
@@ -29,7 +29,7 @@ def generateGlobusDownloadScript(download_map):
     
 
 def get_access_token():
-    '''Utility function to read an access_token for a client portal that is not registered with Globus Online.'''
+    '''Utility function to read an access_token for a client portal that is not registered with Globus.'''
     
     filepath = os.path.join(os.path.expanduser("~"), ACCESS_TOKEN_FILE)
     
@@ -44,7 +44,7 @@ def get_access_token():
 
 def submiTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_directory):
     '''
-    Method to submit a data transfer request to Globus Online.
+    Method to submit a data transfer request to Globus.
     '''
     
     # instantiate GO client
@@ -56,7 +56,7 @@ def submiTransfer(username, access_token, source_endpoint, source_files, target_
     code, reason, result = goapi_client.endpoint_autoactivate(target_endpoint, if_expires_in=600)
     print "Target Endpoint Activation: : %s (%s)" % (result["code"], result["message"])
         
-    # obtain a submission id from Globus Online
+    # obtain a submission id from Globus
     code, message, data = goapi_client.transfer_submission_id()
     submission_id = data["value"]
     print "Obtained transfer submission id: %s" % submission_id
