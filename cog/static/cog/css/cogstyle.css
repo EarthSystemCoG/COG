@@ -1509,7 +1509,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 	width: 97%;
 	padding-top: 2px;
 	padding-left: 6px;
-	text-align: center;
+	text-align: right;
 	/* background: #FCE79F; */
 	color: #666;
 }
