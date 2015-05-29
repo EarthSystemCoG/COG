@@ -22,6 +22,9 @@ def datacart_display(request, site_id, user_id):
         
     # load User object
     user = get_object_or_404(User, pk=user_id)
+    # security checl
+    if user != request.user:
+        return HttpResponseForbidden("Un-authorized attempt to access another user datacart!")
     try:
         datacart = DataCart.objects.get(user=user)
     except DataCart.DoesNotExist:

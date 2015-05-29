@@ -379,7 +379,11 @@ def createGroup(group_name):
 # new note: now this method works directly on groups: a local staff user may NOT be in the user group for a remote project
 def userHasUserPermission(user, project):
     #return user.is_staff or user.has_perm(getPermissionLabel(project.getUserPermission()))
-    return (user.is_staff and project.isLocal()) or project.getUserGroup() in user.groups.all()
+   
+    if userHasAdminPermission(user, project): # NOTE: the 'admin' role automatically garantees 'user' privileges
+        return True
+    else:
+        return (user.is_staff and project.isLocal()) or project.getUserGroup() in user.groups.all()
 
 
 # shortcut method to check for project admin permission

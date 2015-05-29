@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^cogadmin/projects/$', 'cog.views.admin_projects', name='admin_projects' ),
     url(r'^cogadmin/peers/$', 'cog.views.admin_peers', name='admin_peers' ),
     url(r'^cogadmin/users/$', 'cog.views.admin_users', name='admin_users' ),
-
+    
     url(r'^search/(?P<project_short_name>.+)/$', 'cog.views.search', name='search' ),
     url(r'^search_profile/config/(?P<project_short_name>.+)/$', 'cog.views.search_profile_config', name='search_profile_config'),
     url(r'^search_facet/add/(?P<project_short_name>.+)/$', 'cog.views.search_facet_add', name='search_facet_add'),
@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^search_facet/delete/(?P<facet_id>.+)/$', 'cog.views.search_facet_delete', name='search_facet_delete'),
     url(r'^search_files/(?P<dataset_id>.+)/(?P<index_node>.+)/$', 'cog.views.search_files', name='search_files'),
     url(r'^metadata_display/(?P<project_short_name>.+)/$', 'cog.views.metadata_display', name='metadata_display' ),
+    url(r'^search_reload/$', 'cog.views.search_reload', name='search_reload' ),
 
     # authentication options
     # a) django (username/password) login
@@ -53,7 +54,7 @@ urlpatterns = patterns('',
     url(r'^user/add/$', 'cog.views.user_add', name='user_add' ),
     url(r'^user/update/(?P<user_id>\d+)/$', 'cog.views.user_update', name='user_update' ),
     url(r'^user/detail/(?P<user_id>\d+)/$', 'cog.views.user_detail', name='user_detail'),
-    url(r'^password/update/$', 'cog.views.password_update', name='password_update'),
+    url(r'^password/update/(?P<user_id>\d+)/$', 'cog.views.password_update', name='password_update'),
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
     url(r'^user/reminder/$', 'cog.views.user_reminder', name='user_reminder'),
     url(r'^user/byopenid/$', 'cog.views.user_byopenid', name='user_byopenid'),
@@ -161,7 +162,7 @@ urlpatterns = patterns('',
     # comments
     url(r'^comments/delete_comment/(?P<id>.*)/$', 'cog.views.views_common.deleteComment', name='delete_comment'),
     
-    # Globus Online integration
+    # Globus integration
     url(r'^globus/download/$', 'cog.views.views_globus.download', name='globus_download'),
     url(r'^globus/transfer/$', 'cog.views.views_globus.transfer', name='globus_transfer'),
     url(r'^globus/oauth/$', 'cog.views.views_globus.oauth', name='globus_oauth'),

@@ -5,7 +5,7 @@
 	// function to execute a request to a single index node
 	// for a wget script spanning one or more datasets
 	function wgetScript(index_node, ids) {
-
+		
 	  // NOTE: must transform the "," separated string into array of dataset ids
 	  ids = ids.split(",");
 
@@ -65,6 +65,10 @@
 
 	// function to create wget scripts for all selected datasets
 	function wgetDatasets(id, hlink, showText, hideText) {
+	
+	  // clear message from other services
+      clearAllMessages();
+	
 	  {% if request.user.is_authenticated %}
 
 		  // open the wget panel

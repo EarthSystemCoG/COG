@@ -338,8 +338,7 @@
 
 	}
 
-	// returns the currently selected data cart items
-	// with a specific service type
+	// returns the currently selected data cart items with a specific service type
 	function getSelectedItemsByServiceType(mtype) {
 
 		var objs = [];
@@ -364,6 +363,82 @@
 		return objs;
 
 	}
+	
+	// returns ALL currently selected data cart items
+	function getSelectedDataCartItems() {
+
+		var objs = [];
+
+		// loop over selected checkboxes
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 0; i < inputs.length; i++) {
+		    if (inputs[i].type == "checkbox") {
+		    	if (inputs[i].id!=null && inputs[i].id.length>0 && inputs[i].id.indexOf("dataitem-checkbox")==0) {
+		        	if (inputs[i].checked) {
+		        		objs.push(inputs[i]);
+		        	}
+		    	}
+		    }
+		}
+
+		return objs;
+
+	}
+	
+	// shows a 'must uncheck' message for all selected data cart items that are NOT enabled for a specific type.
+	function showUncheckMessage(serviceType, serviceName) {
+	
+		// show top-level message
+    	var messageDiv = document.getElementById("message");
+     	messageDiv.innerHTML = 'You have selected some datasets that are not currently available through ' + serviceName + '.' 
+     		                 + '<br/>You must de-select these items in order to proceed.'
+     		                 + '<br/>Ineligible items are identified by a de-select message below.';
+ 		messageDiv.style.display = "block";
+		
+     
+        // who message below each ineligible data cart item that's been selected
+        var selectedItemsWithServiceType = getSelectedItemsByServiceType(serviceType);
+    	var selectedCheckboxElements = getSelectedDataCartItems();
+     
+     	// highlight selected data cart items that don't have this service type
+	 	for (var i = 0; i < selectedCheckboxElements.length; i++) { // loop over all selected checkboxes
+	 		var showMessage = true;
+	 	    for (var j = 0; j < selectedItemsWithServiceType.length; j++) { // compare with checkboxes that are enabled for the requested service type
+	 	    	if ("dataitem-checkbox_"+selectedItemsWithServiceType[j].id==selectedCheckboxElements[i].id) {
+	 	    		showMessage = false; // this item does have 'serviceType' access
+	 	    	}
+	 		}
+	 		if (showMessage) {
+	 			var messageDivId =  selectedCheckboxElements[i].id.replace("dataitem-checkbox_","message_");
+	 			var messageDiv = document.getElementById(messageDivId);
+	 			messageDiv.innerHTML = "Please de-select this dataset because it can not be accessed through '"+serviceName+"'.";
+	 			messageDiv.style.display = "block";
+	 		}
+	 	}
+
+	 	// show message
+	 	//showMessage("Warning", "Please de-select those datasets in the Data Cart that are NOT "+serviceType+" enabled");
+     
+     }
+     
+     // clears warning message for all selected datasets
+     function clearAllMessages() {
+     
+        // global message
+     	var messageDiv = document.getElementById("message");
+     	messageDiv.innerHTML = '';
+ 		messageDiv.style.display = "none";
+
+		// individual items message     
+     	var selectedCheckboxElements = getSelectedDataCartItems();
+     	for (var i=0; i < selectedCheckboxElements.length; i++) {
+     		var messageDivId =  selectedCheckboxElements[i].id.replace("dataitem-checkbox_","message_");
+ 			messageDiv = document.getElementById(messageDivId);
+ 			messageDiv.innerHTML = '';
+ 			messageDiv.style.display = "none";
+     	}
+     	
+     }
 
     // function to apply the query filter to the currently showing file listings
     function applyQueryFilter() {

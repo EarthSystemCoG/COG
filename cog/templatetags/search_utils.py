@@ -3,6 +3,8 @@ from cog.models.search import searchMappings
 from cog.site_manager import siteManager
 from string import replace
 import json
+if siteManager.isGlobusEnabled():    
+    from cog.views.views_globus import GLOBUS_ENDPOINTS
 
 register = template.Library()
 
@@ -92,12 +94,17 @@ def recordUrls(record):
                   "WGET Script") )
     
     # add GridFTP endpoint
-    if siteManager.isGlobusEnabled(): # only if this site has been registered with Globus Online
-        if 'access' in record.fields and 'index_node' in record.fields:
+    if siteManager.isGlobusEnabled(): # only if this site has been registered with Globus
+        if 'access' in record.fields and 'index_node' in record.fields and 'data_node' in record.fields:
+            index_node = record.fields['index_node'][0]
+            data_node = record.fields['data_node'][0]
             for value in record.fields['access']:
                 if value.lower() == 'gridftp':
-                    urls.append( ('/globus/download?dataset=%s@%s' %(record.id,record.fields['index_node'][0]),
-                                  'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
-                                  'GridFTP') )
+                    # data_node must appear in list of valid Globus endpoints (example: "esg-datanode.jpl.nasa.gov:2811")
+                    for gridftp_url in GLOBUS_ENDPOINTS.endpointDict().keys():
+                        if data_node in gridftp_url:
+                            urls.append( ('/globus/download?dataset=%s@%s' %(record.id, index_node),
+                                          'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
+                                          'GridFTP') )
             
     return sorted(urls, key = lambda url: url_order(url[1]))

@@ -4,13 +4,14 @@
 {% load search_utils %}
 
 <!-- Record core fields -->
-<strong>{{record.fields.title.0}}</strong>
-{% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 }}{% endif %}
-{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }}{% endif %}
-{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
-{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
-
-<br/>
+<div id="record_{{record.id}}">
+	<strong>{{record.fields.title.0}}</strong>
+	<div id="message_{{record.id}}" style="display:none; color: #FF0000;">Message</div>
+	{% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 }}{% endif %}
+	{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }}{% endif %}
+	{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
+	{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
+</div>
 
 <!-- Record metadata -->
 [ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
@@ -47,7 +48,7 @@
 			&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
 		{% endif %}
 		
-	<!-- Globus Online -->
+	<!-- Globus -->
 	{% elif url.1 == 'application/gridftp' %}
 		&nbsp; [ <a href="javascript:goDataset('{{ url.0 }}')"><strong>Globus Download</strong></a> ]
 

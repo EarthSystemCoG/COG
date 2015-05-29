@@ -29,14 +29,15 @@
 {% block main %}
 
 <!--pull down menu of other data carts-->
+    <h1>My DataCart</h1>
 	<div style="text-align:center; font-weight:bold">
 		
 		<!-- local data cart -->
-		Number of Items in My '{{ site.name }}' Data Cart: <span id="datacart_size2">{{ datacart.items.all|length }}</span>
-		
+		Number of Items (<span id="datacart_size2">{{ datacart.items.all|length }})</span>
+				
 		<!-- remote data carts -->
 		{% if datacarts.items|length > 0 %}
-			&nbsp; &nbsp;
+			&nbsp; | &nbsp;
             <label for="dataCartSelect">My Other Data Carts</label>
 			<select name="dataCartSelect" id="dataCartSelect" onchange="javascript:handleOtherDataCartSelect(this)">
 				<option id="other_datacart">My Other Data Carts</option>
@@ -51,16 +52,28 @@
 			</select>
 		{% endif %}
 		
+		<!-- link back to search -->
+		{% if request.session.last_search_url %}
+			&nbsp; | &nbsp;
+			<a href="{% url 'search_reload' %}"> Return to Last Search</a>
+		{% endif %}
+		
+		<!-- optional message -->
+		<div id="message" class="message-box" style="display:none"></div>
+		
+		
 	</div>
+	
 	
 	
 <!-- local data cart -->
 	{% if datacart.items.all|length > 0 %}
+    <br><br>
 
 	  <!-- skeleton form to empty the data cart via POST -->
 	  <form name="emptyDataCartForm" action='{% url 'datacart_empty' site.id request.user.id %}' method='post'></form>
 	  
-	  <!-- form for submitting Globus Online download for multiple datasets -->
+	  <!-- form for submitting Globus download for multiple datasets -->
 	  <form name="goForm" method="post" action="{% url 'globus_download' %}" >
 	  	{% csrf_token %}
 		<input type="hidden" name="dataset"/>

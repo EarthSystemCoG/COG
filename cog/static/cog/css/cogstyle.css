@@ -1076,9 +1076,9 @@ BEGIN USER MESSAGES
 
 /* cancel membership, password reset, how to cancel a membership, membership notification*/
 .instruction-box {
-    background:  #B9E0E3; /* dark-teal */
+    background:  #B9E0E3; /* light-teal */
 	padding:     5px;
-	/*border:      1px solid #417690;*/
+	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1089,7 +1089,7 @@ BEGIN USER MESSAGES
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
 	margin:      5px;
-	/*border:      1px solid #666;*/
+	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1098,12 +1098,12 @@ BEGIN USER MESSAGES
 .changeID-box {
 
     /*background:  #FCF2CE; /* lightest yellow */
-    background:  #fce79f; /* medium yellow */
+    background:  #fce79f; /* light yellow */
 	padding:     10px;
 	margin-left: auto;
     margin-right:auto;
     width:       80%;
-	/*border:      1px solid #666;*/
+	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1115,11 +1115,9 @@ BEGIN USER MESSAGES
     background:  red;
 	padding:     5px;
 	margin:      5px;
-	/*border:      1px solid #417690;*/
-    /*border:      1px solid #666666;*/
+    border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
-	/*color:       #FF0000; /*red*/
     color:       white;
 }
 
@@ -1130,7 +1128,7 @@ BEGIN USER MESSAGES
 	display:     block;
 	padding:     5px;
 	margin:      4px;
-	/*border:      1px solid red;*/
+	border:      1px solid #666;
 	color:       white;
 	font-weight: bold;
 	background:  red;
@@ -1179,7 +1177,7 @@ BEGIN SEARCH WIDGET
 	border:     1px solid #666;
 	font-size:  10pt;
 	padding: 4px;
-	height: 180px;
+	height: 80px;
 }
 
 /*access control license.*/
@@ -1511,7 +1509,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 	width: 97%;
 	padding-top: 2px;
 	padding-left: 6px;
-	text-align: center;
+	text-align: right;
 	/* background: #FCE79F; */
 	color: #666;
 }
