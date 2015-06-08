@@ -84,14 +84,15 @@ def doc_add(request, project_short_name):
             doc.is_private = True
         
         # create form from instance
-        form = DocForm(instance=doc)
+        form = DocForm(project, instance=doc)
         
         return render_doc_form(request, form, project)
     
     else:
-        form = DocForm(request.POST, request.FILES)
+        form = DocForm(project, request.POST, request.FILES)
 
         if form.is_valid():
+                        
             doc = form.save(commit=False)
             doc.author = request.user
             if doc.title is None or len(doc.title.strip()) == 0:
@@ -102,6 +103,15 @@ def doc_add(request, project_short_name):
             doc.path = doc.file.name
             # must save again
             doc.save()
+            
+            # optionally create Resource in selected Folder
+            folder = form.cleaned_data['folder']
+            if folder is not None:
+                # must use full URL since Bookmark.url is of type URLField
+                url = request.build_absolute_uri( doc.file.url )
+                bookmark = Bookmark.objects.create(name=doc.title, url=url, folder=folder, 
+                                                   description=doc.description, order=len(folder.bookmark_set.all()))
+                
             
             # optional redirect
             redirect = form.cleaned_data['redirect']
@@ -217,12 +227,12 @@ def doc_update(request, doc_id):
     
     if request.method == 'GET':
         # create form from model
-        form = DocForm(instance=doc)
+        form = DocForm(doc.project, instance=doc)
         return render_doc_form(request, form, doc.project)
         
     else:
         # update existing database model with form data
-        form = DocForm(request.POST, request.FILES, instance=doc)
+        form = DocForm(doc.project, request.POST, request.FILES, instance=doc)
         if form.is_valid():
             doc = form.save()
             # redirect to document detail (GET-POST-REDIRECT)

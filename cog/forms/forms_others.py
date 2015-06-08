@@ -53,6 +53,18 @@ class DocForm(ModelForm):
     # extra field not present in model,
     # used for redirection to other URLs after for has been successfully submitted
     redirect = forms.CharField(required=False)
+    
+    # additional extra field to optionally create a resource under the selected folder
+    folder = forms.ModelChoiceField(queryset=None, required=False)
+    
+    # override __init__ method to provide a filtered list of options for the bookmark folder
+    def __init__(self, project, *args, **kwargs):
+        
+        super(DocForm, self).__init__(*args, **kwargs)
+        
+        # filter folders by project and active state
+        # order by name in the form pull down
+        self.fields['folder'].queryset = Folder.objects.filter(project=project).filter(active=True).distinct().order_by('name')
 
     def clean(self):
         ''' Override clean method to check that file size does not exceed limit.
