@@ -28,6 +28,7 @@
             {{ form.project.as_hidden }}
             {{ form.user.as_hidden }}
             {{ form.order.as_hidden }}
+            {{ form.redirect.as_hidden }}
             
             <div style="text-align:right">
                 <input type="button" value="Cancel" onclick="window.location='{% url 'bookmark_list' project.short_name|lower %}'"/>

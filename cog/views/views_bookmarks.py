@@ -228,8 +228,10 @@ def folder_add(request, project_short_name):
         folder.parent = topfolder
                      
         # create form from instance
-        # project, user are used to sub-select the parent folder options
-        form = FolderForm(project, instance=folder)
+        # project is used to sub-select the parent folder options
+        form = FolderForm(project, 
+                          instance=folder, 
+                          initial = { 'redirect': request.GET.get('next', None) })
         return render_folder_form(request, project, form)
     
     else:
@@ -244,8 +246,12 @@ def folder_add(request, project_short_name):
             folder.active = True
             folder.save()
             
-            # redirect to bookmark add page
-            return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()]))
+            redirect = form.cleaned_data['redirect']
+            if redirect is not None and redirect.lower()!='none' and len(redirect.strip())>0:
+                return HttpResponseRedirect(redirect)
+            else:
+                # redirect to bookmark add page
+                return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()]))
             
         else:
             # return to view

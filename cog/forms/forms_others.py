@@ -75,7 +75,7 @@ class DocForm(ModelForm):
         
         if not file:
             self._errors["file"] = self.error_class(["Sorry, the file is empty."])
-	    return cleaned_data
+            return cleaned_data
 
         if re.search(INVALID_CHARS, file.name):
             self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters.  It can only contain letters, numbers, spaces, and _ - . /"])
