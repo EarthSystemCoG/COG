@@ -14,6 +14,9 @@ class Bookmark(models.Model):
     # note: do not delete bookmark if notes is deleted
     notes = models.ForeignKey(Post, blank=True, null=True, on_delete=models.SET_NULL)
     
+    def __unicode__(self):
+        return "%s [%s]" % (self.name , self.url)
+
     class Meta:
         app_label = APPLICATION_LABEL
         

@@ -231,12 +231,25 @@ def doc_update(request, doc_id):
         return render_doc_form(request, form, doc.project)
         
     else:
-        # update existing database model with form data
+        
         form = DocForm(doc.project, request.POST, request.FILES, instance=doc)
+        
         if form.is_valid():
+            
+            # update existing database model with form data
             doc = form.save()
+            
+            # update associated Bookmar, if any
+            bookmark = getBookmarkFromDoc(doc)
+            if bookmark is not None:
+                bookmark.name = doc.title
+                bookmark.description = doc.description
+                bookmark.save()
+                print 'Updated associated bookmark: %s' % bookmark
+            
             # redirect to document detail (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('doc_detail', kwargs={'doc_id': doc.id}))
+        
         else:
             return render_doc_form(request, form, doc.project)
 

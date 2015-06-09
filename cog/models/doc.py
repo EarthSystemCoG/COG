@@ -15,17 +15,17 @@ class OverridingFileStorage(FileSystemStorage):
 
     # This method is actually defined in Storage
     def save(self, name, content):
-      # must delete current file first  
-      if self.exists(name):
-          print 'Deleting existing file=%s' % name
-          self.delete(name)     
-      # also, look for Doc objects for the same named file  
-      prefix = getattr(settings, "FILEBROWSER_DIRECTORY", "")
-      filepath = name[len(prefix):]
-      docs = Doc.objects.filter(path__endswith=filepath)
-      for doc in docs:
-          doc.delete()
-      return super(OverridingFileStorage, self).save(name, content)
+        # must delete current file first  
+        if self.exists(name):
+            print 'Deleting existing file=%s' % name
+            self.delete(name)     
+        # also, look for Doc objects for the same named file  
+        prefix = getattr(settings, "FILEBROWSER_DIRECTORY", "")
+        filepath = name[len(prefix):]
+        docs = Doc.objects.filter(path__endswith=filepath)
+        for doc in docs:
+            doc.delete()
+        return super(OverridingFileStorage, self).save(name, content)
   
 ofs = OverridingFileStorage()
 
