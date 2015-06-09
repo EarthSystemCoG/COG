@@ -7,6 +7,7 @@ from search_facet import SearchFacet
 from search_group import SearchGroup
 from post import Post
 from bookmark import Bookmark
+from doc import Doc
 from navbar import PROJECT_PAGES, DEFAULT_TABS
 from django.conf import settings
 from django.utils.timezone import now
@@ -318,6 +319,17 @@ def getBookmarkFromDoc(doc):
         return bookmark
     return None # no Bookmark found
 
+def getDocFromBookmark(bookmark):
+    '''Returns the first Doc with path that matches the Bookmark URL.'''
+    
+    if 'site_media/' in bookmark.url:
+        _, url_fragment = bookmark.url.split('site_media/', 1)
+        print 'Looking for doc that contains path: %s' % url_fragment
+        docs = Doc.objects.filter(path__contains=url_fragment)
+        for doc in docs:
+            return doc
+        return None
+    
 
 def delete_doc(doc):
     '''

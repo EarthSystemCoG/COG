@@ -189,6 +189,14 @@ def bookmark_update(request, project_short_name, bookmark_id):
             
             bookmark = form.save()
             
+            # update associated Doc, if any
+            doc = getDocFromBookmark(bookmark)
+            if doc is not None:
+                print 'Updating associated doc: %s' % doc
+                doc.title = bookmark.name
+                doc.description = bookmark.description
+                doc.save()
+            
             # redirect to bookmarks listing
             return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
             
