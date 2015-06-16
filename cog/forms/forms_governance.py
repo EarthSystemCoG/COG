@@ -30,7 +30,7 @@ class ManagementBodyForm(ModelForm):
         exclude = ('category',)
         widgets = {
             'description': Textarea(attrs={'rows': 4}),
-            'other': Textarea(attrs={'rows': 4}),
+            'other': Textarea(attrs={'rows': 2}),
             'termsOfReference': Textarea(attrs={'rows': 8})
         }
 
@@ -69,8 +69,8 @@ class CommunicationMeansForm(ModelForm):
 
     class Meta:
         model = CommunicationMeans
-        widgets = {'frequency': Textarea(attrs={'rows': 4}),
-                   'participationDetails': Textarea(attrs={'rows': 4}), }
+        widgets = {'frequency': Textarea(attrs={'rows': 1}),
+                   'participationDetails': Textarea(attrs={'rows': 8}), }
         #widgets = { 'membership' : NullBooleanSelect() }
 
 
@@ -96,7 +96,7 @@ class OrganizationalRoleForm(ModelForm):
     class Meta:
         model = OrganizationalRole
         exclude = ('category',)
-        widgets = {'description': Textarea(attrs={'rows': 2})}
+        widgets = {'description': Textarea(attrs={'rows': 4})}
 
 
 class CommunicationMeansMemberForm(ModelForm):
