@@ -706,7 +706,7 @@ def showMessage(message):
         return "Your password has expired. Please choose a new password conforming to the requirements below."
 
     else:
-        return message
+        raise Exception("Invalid message")
 
 
 @register.filter
