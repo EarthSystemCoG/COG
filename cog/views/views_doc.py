@@ -16,6 +16,7 @@ from cog.models.project import userHasUserPermission
 from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
+from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
 import os
 
 
@@ -278,6 +279,10 @@ def doc_list(request, project_short_name):
         
     # document type        
     filter_by = request.GET.get('filter_by', DOCUMENT_TYPE_ALL)
+    # validate 'filter_by' value
+    if filter_by.lower() not in VALID_FILTER_BY_VALUES:
+        raise Exception("Invalid 'filter_by' value")
+    
     if filter_by != DOCUMENT_TYPE_ALL:
         types = DOCUMENT_TYPES[filter_by]
         _qset = Q(path__iendswith=types[0])
@@ -287,6 +292,9 @@ def doc_list(request, project_short_name):
         qset = qset & _qset
     
     order_by = request.GET.get('order_by', 'title')
+    # validate 'order_by' value
+    if order_by.lower() not in VALID_ORDER_BY_VALUES:
+        raise Exception("Invalid 'order_by' value")
     #list_title += ", order by %s" % order_by
         
     # execute query, order by descending update date
