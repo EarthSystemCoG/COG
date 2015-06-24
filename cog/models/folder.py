@@ -21,7 +21,7 @@ class Folder(models.Model):
 
     project = models.ForeignKey(Project, blank=False)
     name = models.CharField(max_length=200, blank=False)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='Parent Folder')
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='parent_folder')
     active = models.BooleanField(default=True, blank=False, null=False)
     order = models.IntegerField(blank=True, default=0)
 

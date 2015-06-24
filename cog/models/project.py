@@ -97,11 +97,11 @@ class Project(models.Model):
     
     # A project may have many parents. The relationship is not symmetrical.
     # The attribute parents_set contains the inverse relationship
-    parents = models.ManyToManyField('self', blank=True, related_name='Parent Projects', symmetrical=False)
+    parents = models.ManyToManyField('self', blank=True, related_name='parent_projects', symmetrical=False)
     
     # A project may have many peers. The relationship is not symmetrical.
     # The attribute peers_set contains the inverse relationship
-    peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects', symmetrical=False)
+    peers = models.ManyToManyField('self', blank=True, related_name='peer_projects', symmetrical=False)
     
     # the initial requester of the project, if any
     author = models.ForeignKey(User, blank=True, null=True, default=None, on_delete=models.SET_NULL)
