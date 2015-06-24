@@ -120,10 +120,10 @@ class Project(models.Model):
     logo_url = models.CharField(max_length=200, blank=True, null=True, help_text='Optional logo hyperlink URL.')
     
     # list of available topics for this project
-    topics = models.ManyToManyField(Topic, blank=True, null=True, through='ProjectTopic')
+    topics = models.ManyToManyField(Topic, blank=True, through='ProjectTopic')
     
     # list of project tags
-    tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='projects')
+    tags = models.ManyToManyField(ProjectTag, blank=True, related_name='projects')
     
     # flag to enable the search widget
     dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
