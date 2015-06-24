@@ -13,6 +13,7 @@
 	{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
 </div>
 
+
 <!-- Record metadata -->
 [ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
 
@@ -57,6 +58,10 @@
 		&nbsp; [ <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> ]
 
     {% endif %}
+
+&nbsp;
+[ <b><a href="http://pcmdi11.llnl.gov:8080/VISUS?dataset_id={{record.id}}">VISUS IDX</a></b> ]
+&nbsp;
 
 {% endfor %}
 
