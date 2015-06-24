@@ -99,7 +99,7 @@ def update_user_tags(user):
             
             # store tags in local user profile
             # must protect database write against possible race condition
-            with transaction.commit_manually():
+            with transaction.atomic():
                 userProfile = UserProfile.objects.select_for_update().get(id=user.profile.id)
                 userProfile.tags.clear()
                 userProfile.tags = tags
