@@ -16,6 +16,7 @@ from cog.models.project import userHasUserPermission
 from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
+from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
 import os
 
 
@@ -84,14 +85,15 @@ def doc_add(request, project_short_name):
             doc.is_private = True
         
         # create form from instance
-        form = DocForm(instance=doc)
+        form = DocForm(project, instance=doc)
         
         return render_doc_form(request, form, project)
     
     else:
-        form = DocForm(request.POST, request.FILES)
+        form = DocForm(project, request.POST, request.FILES)
 
         if form.is_valid():
+                        
             doc = form.save(commit=False)
             doc.author = request.user
             if doc.title is None or len(doc.title.strip()) == 0:
@@ -102,6 +104,15 @@ def doc_add(request, project_short_name):
             doc.path = doc.file.name
             # must save again
             doc.save()
+            
+            # optionally create Resource in selected Folder
+            folder = form.cleaned_data['folder']
+            if folder is not None:
+                # must use full URL since Bookmark.url is of type URLField
+                url = request.build_absolute_uri( doc.file.url )
+                bookmark = Bookmark.objects.create(name=doc.title, url=url, folder=folder, 
+                                                   description=doc.description, order=len(folder.bookmark_set.all()))
+                
             
             # optional redirect
             redirect = form.cleaned_data['redirect']
@@ -217,16 +228,29 @@ def doc_update(request, doc_id):
     
     if request.method == 'GET':
         # create form from model
-        form = DocForm(instance=doc)
+        form = DocForm(doc.project, instance=doc)
         return render_doc_form(request, form, doc.project)
         
     else:
-        # update existing database model with form data
-        form = DocForm(request.POST, request.FILES, instance=doc)
+        
+        form = DocForm(doc.project, request.POST, request.FILES, instance=doc)
+        
         if form.is_valid():
+            
+            # update existing database model with form data
             doc = form.save()
+            
+            # update associated Bookmar, if any
+            bookmark = getBookmarkFromDoc(doc)
+            if bookmark is not None:
+                bookmark.name = doc.title
+                bookmark.description = doc.description
+                bookmark.save()
+                print 'Updated associated bookmark: %s' % bookmark
+            
             # redirect to document detail (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('doc_detail', kwargs={'doc_id': doc.id}))
+        
         else:
             return render_doc_form(request, form, doc.project)
 
@@ -255,6 +279,10 @@ def doc_list(request, project_short_name):
         
     # document type        
     filter_by = request.GET.get('filter_by', DOCUMENT_TYPE_ALL)
+    # validate 'filter_by' value
+    if filter_by.lower() not in VALID_FILTER_BY_VALUES:
+        raise Exception("Invalid 'filter_by' value")
+    
     if filter_by != DOCUMENT_TYPE_ALL:
         types = DOCUMENT_TYPES[filter_by]
         _qset = Q(path__iendswith=types[0])
@@ -264,6 +292,9 @@ def doc_list(request, project_short_name):
         qset = qset & _qset
     
     order_by = request.GET.get('order_by', 'title')
+    # validate 'order_by' value
+    if order_by.lower() not in VALID_ORDER_BY_VALUES:
+        raise Exception("Invalid 'order_by' value")
     #list_title += ", order by %s" % order_by
         
     # execute query, order by descending update date

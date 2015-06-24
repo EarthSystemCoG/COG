@@ -33,6 +33,9 @@ class BookmarkForm(ModelForm):
 
 
 class FolderForm(ModelForm):
+    
+    # extra field for redirection to the 'add_doc' view, if needed
+    redirect = CharField(required=False)
 
     class Meta:
 
