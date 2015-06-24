@@ -47,6 +47,7 @@ class NewsForm(ModelForm):
 
     class Meta:
         model = News
+        fields = "__all__" 
 
 class DocForm(ModelForm):
 
