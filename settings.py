@@ -201,9 +201,7 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'pagination',
-    'south',
     'layouts',
-    #'kronos',
     'cog',
     'cog.templatetags',
 )
