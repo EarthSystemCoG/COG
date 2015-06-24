@@ -28,7 +28,8 @@ setup(
                       'passlib==1.6.2',
                       'pysqlite==2.6.3',        
                       'django-contrib-comments==1.5',   
-                      'globusonline-transfer-api-client==0.10.16',       
+                      'globusonline-transfer-api-client==0.10.16',     
+                      'pillow==2.8.2'  
                       ],
     long_description=read('README.md'),
     classifiers=[
