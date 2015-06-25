@@ -202,7 +202,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'pagination',
     'layouts',
-    'cog',
+    'cog.apps.CogConfig',
     'cog.templatetags',
 )
 
