@@ -67,7 +67,7 @@ class CoGInstall(object):
         
         # django management commands
         management.call_command("syncdb", interactive=False)
-        management.call_command("migrate", "cog")
+        management.call_command("migrate")
         management.call_command("collectstatic", interactive=False)
         
         # custom management commands
