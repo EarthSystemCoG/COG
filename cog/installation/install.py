@@ -22,6 +22,7 @@ from cog.installation.constants import (DEFAULT_PROJECT_SHORT_NAME, ESGF_ROOTADM
 from cog.plugins.esgf.security import esgfDatabaseManager
 from django_openid_auth.models import UserOpenID
 
+from django import setup as django_setup
 from django.core import management
 import sqlalchemy
 import datetime
@@ -35,6 +36,9 @@ class CoGInstall(object):
     '''
     
     def __init__(self):
+        
+        # in stand-alone scripts, must explicitly invoke django.setup() to populate the application registry before anything can be done
+        django_setup()
         
         # read cog_settings.cfg
         self.siteManager = SiteManager()

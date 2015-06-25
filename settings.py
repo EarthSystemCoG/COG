@@ -196,7 +196,7 @@ INSTALLED_APPS = (
     'django_openid_auth',
     'grappelli',
     'filebrowser',
-    'django.contrib.admin',
+    'django.contrib.admin.apps.SimpleAdminConfig',
     'django_comments',
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
