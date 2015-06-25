@@ -98,14 +98,12 @@ def update_user_tags(user):
                     pass # tag not found in local database
             
             # store tags in local user profile
-            # must protect database write against possible race condition
-            with transaction.atomic():
-                userProfile = UserProfile.objects.select_for_update().get(id=user.profile.id)
-                userProfile.tags.clear()
-                userProfile.tags = tags
-                userProfile.save()
-                transaction.commit()
-                print 'User: %s updated for tags: %s' % (user, tags)
+            userProfile = UserProfile.objects.select_for_update().get(id=user.profile.id)
+            userProfile.tags.clear()
+            userProfile.tags = tags
+            userProfile.save()
+            transaction.commit()
+            print 'User: %s updated for tags: %s' % (user, tags)
     
 # NOTE: connecting the login signal is not needed because every time the user logs in,
 # the session is refreshed and updating of projects is triggered already by the CoG session middleware
