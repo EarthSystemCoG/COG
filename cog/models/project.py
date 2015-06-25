@@ -134,6 +134,9 @@ class Project(models.Model):
     
     maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
+    
+    # test field
+    pnumber = models.IntegerField(default=1, blank=True, null=False, help_text='Field to test new django migrations')
         
     class Meta:
         app_label = APPLICATION_LABEL
