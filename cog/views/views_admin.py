@@ -73,7 +73,7 @@ def admin_users(request):
 @user_passes_test(lambda u: u.is_staff)
 def admin_peers(request):
     
-    PeerSiteFormSet = modelformset_factory(PeerSite, extra=0, can_delete=False)
+    PeerSiteFormSet = modelformset_factory(PeerSite, extra=0, can_delete=False, fields="__all__")
     
     if request.method == 'GET':
         

@@ -5,7 +5,7 @@ from cog.models.constants import LEAD_ORGANIZATIONAL_ROLES_DICT, \
     MANAGEMENT_BODY_CATEGORY_OPERATIONAL
 from constants import PERMISSION_DENIED_MESSAGE
 from django.contrib.auth.decorators import login_required
-from django.forms.models import BaseInlineFormSet, modelformset_factory, inlineformset_factory
+from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
