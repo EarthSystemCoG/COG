@@ -27,7 +27,7 @@ setup(
                       'python-openid==2.2.5',
                       'passlib==1.6.2',
                       'pysqlite==2.6.3',        
-                      'django-contrib-comments==1.5.1',   
+                      'django-contrib-comments==1.6.1',   
                       'globusonline-transfer-api-client==0.10.16',     
                       'pillow==2.8.2'  
                       ],

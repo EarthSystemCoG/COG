@@ -197,7 +197,7 @@ INSTALLED_APPS = (
     'grappelli',
     'filebrowser',
     'django.contrib.admin.apps.SimpleAdminConfig',
-    #'django_comments',
+    'django_comments',
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'pagination',
@@ -207,7 +207,6 @@ INSTALLED_APPS = (
 )
 
 MIGRATION_MODULES = { 'django_openid_auth': 'cog.db_migrations.django_openid_auth' }
-                    #  'django_comments': 'cog.db_migrations.django_comments' }
 
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
