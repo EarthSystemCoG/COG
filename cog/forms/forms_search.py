@@ -9,6 +9,7 @@ class SearchProfileForm(ModelForm):
     
     class Meta:
         model = SearchProfile
+        fields = "__all__" 
 
     def clean_url(self):
         return clean_url_field(self, 'url')
@@ -21,6 +22,7 @@ class SearchFacetForm(ModelForm):
     
     class Meta:
         model = SearchFacet
+        fields = "__all__" 
     
     # execute combined validation on form id and key
     # for each project, the search facet key and label must be unique

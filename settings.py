@@ -196,17 +196,17 @@ INSTALLED_APPS = (
     'django_openid_auth',
     'grappelli',
     'filebrowser',
-    'django.contrib.admin',
+    'django.contrib.admin.apps.SimpleAdminConfig',
     'django_comments',
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'pagination',
-    'south',
     'layouts',
-    #'kronos',
-    'cog',
+    'cog.apps.CogConfig',
     'cog.templatetags',
 )
+
+MIGRATION_MODULES = { 'django_openid_auth': 'cog.db_migrations.django_openid_auth' }
 
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',

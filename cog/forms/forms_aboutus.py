@@ -40,6 +40,7 @@ class OrganizationForm(ImageForm):
     
     class Meta:
         model = Organization
+        fields = "__all__" 
         widgets = {
             'name': TextInput(attrs={'size': 30}),
             'url': TextInput(attrs={'size': 30}),
@@ -52,6 +53,7 @@ class FundingSourceForm(ImageForm):
     
     class Meta:
         model = FundingSource
+        fields = "__all__" 
         widgets = {
             'name': TextInput(attrs={'size': 30}),
             'url': TextInput(attrs={'size': 30}),
@@ -64,6 +66,7 @@ class CollaboratorForm(ImageForm):
              
     class Meta:
         model = Collaborator
+        fields = "__all__" 
         widgets = {
             'first_name': TextInput(attrs={'size': 20}),
             'last_name': TextInput(attrs={'size': 20}),

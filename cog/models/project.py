@@ -97,11 +97,11 @@ class Project(models.Model):
     
     # A project may have many parents. The relationship is not symmetrical.
     # The attribute parents_set contains the inverse relationship
-    parents = models.ManyToManyField('self', blank=True, related_name='Parent Projects', symmetrical=False)
+    parents = models.ManyToManyField('self', blank=True, related_name='parent_projects', symmetrical=False)
     
     # A project may have many peers. The relationship is not symmetrical.
     # The attribute peers_set contains the inverse relationship
-    peers = models.ManyToManyField('self', blank=True, related_name='Peer Projects', symmetrical=False)
+    peers = models.ManyToManyField('self', blank=True, related_name='peer_projects', symmetrical=False)
     
     # the initial requester of the project, if any
     author = models.ForeignKey(User, blank=True, null=True, default=None, on_delete=models.SET_NULL)
@@ -120,10 +120,10 @@ class Project(models.Model):
     logo_url = models.CharField(max_length=200, blank=True, null=True, help_text='Optional logo hyperlink URL.')
     
     # list of available topics for this project
-    topics = models.ManyToManyField(Topic, blank=True, null=True, through='ProjectTopic')
+    topics = models.ManyToManyField(Topic, blank=True, through='ProjectTopic')
     
     # list of project tags
-    tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='projects')
+    tags = models.ManyToManyField(ProjectTag, blank=True, related_name='projects')
     
     # flag to enable the search widget
     dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
@@ -134,6 +134,9 @@ class Project(models.Model):
     
     maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
+    
+    # test field
+    #pnumber = models.IntegerField(default=1, blank=True, null=False, help_text='Field to test new django migrations')
         
     class Meta:
         app_label = APPLICATION_LABEL

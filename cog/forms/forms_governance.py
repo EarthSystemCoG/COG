@@ -19,9 +19,7 @@ class ExternalUrlForm(ModelForm):
 
     class Meta:
         model = ExternalUrl
-        widgets = {'url': TextInput(attrs={'size': '120'}),
-                   'title': TextInput(attrs={'size': '120'})}
-
+        fields = "__all__" 
 
 class ManagementBodyForm(ModelForm):
 
@@ -69,8 +67,14 @@ class CommunicationMeansForm(ModelForm):
 
     class Meta:
         model = CommunicationMeans
+<<<<<<< HEAD
         widgets = {'frequency': Textarea(attrs={'rows': 1}),
                    'participationDetails': Textarea(attrs={'rows': 8}), }
+=======
+        fields = "__all__" 
+        widgets = { 'frequency': Textarea(attrs={'rows':4}),
+                    'participationDetails': Textarea(attrs={'rows':4}), }
+>>>>>>> devel
         #widgets = { 'membership' : NullBooleanSelect() }
 
 
@@ -103,6 +107,7 @@ class CommunicationMeansMemberForm(ModelForm):
 
     class Meta:
         model = CommunicationMeansMember
+        fields = "__all__" 
 
     # override __init__ method to filter users by project
     def __init__(self, *args, **kwargs):
@@ -118,6 +123,7 @@ class ManagementBodyMemberForm(ModelForm):
 
     class Meta:
         model = ManagementBodyMember
+        fields = "__all__" 
 
     # override __init__ method to filter users by project
     def __init__(self, *args, **kwargs):
@@ -133,6 +139,7 @@ class OrganizationalRoleMemberForm(ModelForm):
 
     class Meta:
         model = OrganizationalRoleMember
+        fields = "__all__" 
 
     # override __init__ method to filter users by project
     def __init__(self, *args, **kwargs):

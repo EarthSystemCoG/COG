@@ -7,7 +7,7 @@ class BookmarkForm(ModelForm):
     
     class Meta:
         model = Bookmark
-        exclude = ('type',)
+        fields = "__all__" 
         
     # override __init__ method to provide a filtered list of options for the bookmark folder
     def __init__(self, project, *args, **kwargs):
@@ -33,10 +33,14 @@ class BookmarkForm(ModelForm):
 
 
 class FolderForm(ModelForm):
+    
+    # extra field for redirection to the 'add_doc' view, if needed
+    redirect = CharField(required=False)
 
     class Meta:
 
         model = Folder
+        exclude = ()
         
     # override __init__ method to provide a filtered list of options for the bookmark folder
     def __init__(self, project, *args, **kwargs):

@@ -12,7 +12,7 @@ class News(models.Model):
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
     project = models.ForeignKey(Project, verbose_name='About Project')
-    other_projects = models.ManyToManyField(Project, verbose_name='Projects Notified', related_name='other_news', blank=True, null=True)
+    other_projects = models.ManyToManyField(Project, verbose_name='Projects Notified', related_name='other_news', blank=True)
     
     def __unicode__(self):
         return self.title

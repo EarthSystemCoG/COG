@@ -17,7 +17,7 @@ setup(
     packages=find_packages(exclude=[]),
     include_package_data=True,
     install_requires=['pil==1.1.7',
-                      'django==1.6.5',
+                      'django==1.8.2',
                       'django-grappelli==2.4.5',
                       'django-openid-auth==0.5',
                       'django-pagination==1.0.7',
@@ -27,8 +27,9 @@ setup(
                       'python-openid==2.2.5',
                       'passlib==1.6.2',
                       'pysqlite==2.6.3',        
-                      'django-contrib-comments==1.5',   
-                      'globusonline-transfer-api-client==0.10.16',       
+                      'django-contrib-comments==1.6.1',   
+                      'globusonline-transfer-api-client==0.10.16',     
+                      'pillow==2.8.2'  
                       ],
     long_description=read('README.md'),
     classifiers=[

@@ -47,12 +47,25 @@ class NewsForm(ModelForm):
 
     class Meta:
         model = News
+        fields = "__all__" 
 
 class DocForm(ModelForm):
 
     # extra field not present in model,
     # used for redirection to other URLs after for has been successfully submitted
     redirect = forms.CharField(required=False)
+    
+    # additional extra field to optionally create a resource under the selected folder
+    folder = forms.ModelChoiceField(queryset=None, required=False)
+    
+    # override __init__ method to provide a filtered list of options for the bookmark folder
+    def __init__(self, project, *args, **kwargs):
+        
+        super(DocForm, self).__init__(*args, **kwargs)
+        
+        # filter folders by project and active state
+        # order by name in the form pull down
+        self.fields['folder'].queryset = Folder.objects.filter(project=project).filter(active=True).distinct().order_by('name')
 
     def clean(self):
         ''' Override clean method to check that file size does not exceed limit.
@@ -63,7 +76,7 @@ class DocForm(ModelForm):
         
         if not file:
             self._errors["file"] = self.error_class(["Sorry, the file is empty."])
-	    return cleaned_data
+            return cleaned_data
 
         if re.search(INVALID_CHARS, file.name):
             self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters.  It can only contain letters, numbers, spaces, and _ - . /"])
