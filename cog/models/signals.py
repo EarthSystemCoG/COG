@@ -98,7 +98,7 @@ def update_user_tags(user):
                     pass # tag not found in local database
             
             # store tags in local user profile
-            userProfile = UserProfile.objects.select_for_update().get(id=user.profile.id)
+            userProfile = UserProfile.objects.get(id=user.profile.id)
             userProfile.tags.clear()
             userProfile.tags = tags
             userProfile.save()
