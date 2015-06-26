@@ -208,7 +208,7 @@ class Project(models.Model):
         for user in users:
             try:
                 print 'Checking user=%s' % user  # TODO:FixME
-                if not user.get_profile().private:
+                if not user.profile.private:
                     pubUsers.append(user)
             except ObjectDoesNotExist:
                 pass # non user profile

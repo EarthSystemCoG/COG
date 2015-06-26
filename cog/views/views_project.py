@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test, per
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
-from django.forms.models import modelformset_factory, inlineformset_factory
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response, redirect

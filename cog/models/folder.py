@@ -2,6 +2,7 @@ from django.db import models
 from constants import APPLICATION_LABEL
 from project import Project
 from collections import OrderedDict
+from cog.models.dbutils import UnsavedForeignKey
 
 # name of project top-folder
 TOP_FOLDER = "Bookmarks"
@@ -19,7 +20,8 @@ TOP_SUB_FOLDERS = OrderedDict([('PRESENTATIONS', 'Presentations'),
 
 class Folder(models.Model):
 
-    project = models.ForeignKey(Project, blank=False)
+    project = UnsavedForeignKey(Project, blank=False)
+    
     name = models.CharField(max_length=200, blank=False)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='parent_folder')
     active = models.BooleanField(default=True, blank=False, null=False)
