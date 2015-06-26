@@ -162,7 +162,7 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # initialize formset factory for this governance object
-    ObjectFormSet = inlineformset_factory(Project, objectType, extra=1, form=objectTypeForm, formset=formsetType)
+    ObjectFormSet = inlineformset_factory(Project, objectType, extra=1, form=objectTypeForm, formset=formsetType, fields="__all__")
 
     # GET request
     if request.method == 'GET':
@@ -270,7 +270,7 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # formset factory
-    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, extra=3)
+    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, extra=3, fields="__all__")
     # set the formset form to custom class that includes the current project
     ObjectFormSet.form = objectForm
 
@@ -378,7 +378,7 @@ def organizational_role_update(request, project_short_name):
     
     # must build the formset via non-traditional means to pass the current project as a class attribute
     OrganizationalRoleFormSet = inlineformset_factory(Project, OrganizationalRole, extra=1, can_delete=True,
-                                                      form=OrganizationalRoleForm)
+                                                      form=OrganizationalRoleForm, fields="__all__")
     
     # GET request
     if request.method == 'GET':
