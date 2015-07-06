@@ -281,7 +281,7 @@ def user_add(request):
             elif not formset1.is_valid():
                 print "URL formset is invalid: %s" % formset1.errors
             elif not formset2.is_valid():
-                print "OpenID formset is invalid: %s" % formset1.errors
+                print "OpenID formset is invalid: %s" % formset2.errors
             return render_user_form(request, form, formset1, formset2, title='Create User Profile')
 
 
