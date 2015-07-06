@@ -265,7 +265,8 @@ def user_add(request):
                     url = urlparse(_next)
                     login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
             # append openid to initial login_url
-            login_url += "&openid=%s" % urllib.quote_plus( userp.openid() )
+            if userp.openid() is not None:
+                login_url += "&openid=%s" % urllib.quote_plus( userp.openid() )
             
             response = HttpResponseRedirect(login_url)
             
