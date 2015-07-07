@@ -43,9 +43,9 @@
 				<br/>
 				{% if request.user.is_authenticated %}
 					{% if project.short_name.lower != 'downscaling-2013' %}
-						<a href="{% url 'datacart_add_all' site.id request.user.id %}?back={{ request.get_full_path }}">Add all displayed results to Data Cart</a>
+						<a href="{% url 'datacart_add_all' site.id request.user.id %}?back={% url 'search_reload' %}">Add all displayed results to Data Cart</a>
 						&nbsp; &nbsp;
-						<a href="{% url 'datacart_delete_all' site.id request.user.id %}?back={{ request.get_full_path }}">Remove all displayed results from Data Cart</a>
+						<a href="{% url 'datacart_delete_all' site.id request.user.id %}?back={% url 'search_reload' %}">Remove all displayed results from Data Cart</a>
 					{% endif %}
 
 				{% else %}
