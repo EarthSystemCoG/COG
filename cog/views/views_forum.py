@@ -6,7 +6,7 @@ Views for CoG Forum.
 
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasAdminPermission, userHasUserPermission
+from cog.models.project import Project, userHasAdminPermission, userHasUserPermission, userHasContributorPermission
 from cog.models.forum import Forum, ForumThread, ForumTopic
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -279,7 +279,7 @@ def thread_add(request, project_short_name, topic_id):
     topic = get_object_or_404(ForumTopic, id=topic_id)
     
     # threads can be updated only by project members
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     title = '%s: New Thread' % topic.title

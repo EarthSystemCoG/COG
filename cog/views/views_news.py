@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 
 from cog.models import *
+from cog.models.auth import userHasContributorPermission
 from cog.forms import *
 from constants import PERMISSION_DENIED_MESSAGE
 
@@ -37,7 +38,7 @@ def news_update(request, news_id):
     news = get_object_or_404(News, pk=news_id)
         
     # check permission
-    if not userHasUserPermission(request.user, news.project):
+    if not userHasContributorPermission(request.user, news.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # GET method pre-populates the form with the news properties    
@@ -84,7 +85,7 @@ def news_add(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
         
     # GET method pre-populates the form from the request parameters    
@@ -140,7 +141,7 @@ def news_delete(request, news_id):
     project = news.project
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # show confirmation form

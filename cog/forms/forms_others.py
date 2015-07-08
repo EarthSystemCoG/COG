@@ -1,4 +1,5 @@
 from cog.models import *
+from cog.models.auth import userHasUserPermission
 from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple

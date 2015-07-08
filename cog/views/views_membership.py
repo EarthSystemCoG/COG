@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from utils import getUsersThatMatch
 from django.contrib.sites.models import Site
+from cog.models.auth import userHasAdminPermission
 
 from cog.notification import notify
 from constants import PERMISSION_DENIED_MESSAGE

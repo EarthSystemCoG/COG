@@ -1,4 +1,5 @@
 from cog.models import *
+from cog.models.auth import userHasUserPermission, userHasContributorPermission, userHasAdminPermission, userHasProjectRole
 from cog.models.utils import site_index, listPeople
 from cog.views import encodeMembershipPar, NEW_MEMBERSHIP, OLD_MEMBERSHIP, NO_MEMBERSHIP
 from cog.views import userCanPost, userCanView
@@ -298,6 +299,9 @@ def noMembership(group, user):
 def hasUserPermission(user, project):
     return userHasUserPermission(user, project)
 
+@register.filter
+def hasContributorPermission(user, project):
+    return userHasContributorPermission(user, project)
 
 @register.filter
 def hasAdminPermission(user, project):

@@ -22,6 +22,8 @@ from cog.services.SolrSerializer import deserialize
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 from cog.models.utils import get_or_create_default_search_group
 from django.http.response import HttpResponseServerError
+from cog.models.auth import userHasUserPermission
+from cog.models.auth import userHasAdminPermission
 
 
 SEARCH_INPUT  = "search_input"
