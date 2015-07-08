@@ -5,11 +5,11 @@
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasProjectRole
+from cog.models.project import Project, getProjectsForUser
+from cog.models.auth import userHasProjectRole
 
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import ROLE_USER, ROLE_ADMIN, ROLE_CONTRIBUTOR
-from cog.models.project import getProjectsForUser
 
 from django.template import RequestContext
 

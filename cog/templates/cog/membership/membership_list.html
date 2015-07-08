@@ -60,6 +60,7 @@
 	                <th scope="col" class="white">&nbsp;<br/>User Name</th>
 	                <th scope="col" class="white">&nbsp;<br/>Email</th>
                     <th scope="col" class="white" style="text-align: center;">User<br/>Group</th>
+                    <th scope="col" class="white" style="text-align: center;">Contributor<br/>Group</th>
 	                <th scope="col" class="white" style="text-align: center;">Admin<br/>Group</th>
 	                <th scope="col" class="white" style="text-align: center;">Cancel<br/>Membership</th>
 
@@ -81,6 +82,18 @@
 	                           {% endif %}
 	                       {% endwith %}
 	                    </td>
+	                    <!-- encode HTTP parameters for new and old membership in contributors group -->
+	                    <td style="text-align:center">
+	                       {% with user|isEnrolled:project.getContributorGroup as isEnrolled %}
+                              <label style="display:none" for="{{ user.username }}_contributor_group">contributor group</label>
+	                          <input type='checkbox' id="{{ user.username }}_contributor_group" name='{{ project.getContributorGroup|newMembership:user}}'
+                                      {% if isEnrolled %} checked="checked" {% endif %} />
+	                           {% if isEnrolled %}
+	                               <input type='hidden' name='{{ project.getContributorGroup|oldMembership:user}}' value="on"/>
+	                           {% endif %}
+	                       {% endwith %}
+	                    </td>
+	                    
 	                    <!-- encode HTTP parameters for new and old membership in admins group -->
                         <td style="text-align:center">
                            {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}
