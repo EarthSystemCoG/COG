@@ -4,7 +4,6 @@ from constants import *
 from navbar import *
 from django.conf import settings
 from django.contrib.auth.models import User, Permission, Group
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Q
 from django.forms import Textarea
@@ -21,6 +20,9 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
+from cog.models.auth import (getAdminGroupName, getContributorGroupName, getUserGroupName, 
+                             getOrCreateGroup, getOrCreateProjectPermission,
+                             userHasUserPermission, userHasContributorPermission, userHasAdminPermission)
 
 
 # Project
@@ -149,11 +151,19 @@ class Project(models.Model):
         return "http://%s%s" % (self.site.domain, reverse('project_home', args=[self.short_name.lower()]))
     
     # group of standard users associated with this project
+    # (typically, user==read permission)
     def getUserGroup(self):
         groupName = getUserGroupName(self)
         return getOrCreateGroup(groupName)
        
+    # group of privileged users associated with this project
+    # (typically, contributor==write permission)
+    def getContributorGroup(self):
+        groupName = getContributorGroupName(self)
+        return getOrCreateGroup(groupName)
+       
     # group of project administrators 
+    # (typically, admin==config permission)
     def getAdminGroup(self):
         groupName = getAdminGroupName(self)
         return getOrCreateGroup(groupName)
@@ -161,42 +171,57 @@ class Project(models.Model):
     # returns the project group for the specified role
     def getGroup(self, roleName):
         
-        if roleName.lower() == 'user':
+        if roleName.lower() == ROLE_USER:
             return self.getUserGroup()
-        elif roleName.lower() == 'admin':
+        elif roleName.lower() == ROLE_CONTRIBUTOR:
+            return self.getContributorGroup()
+        elif roleName.lower() == ROLE_ADMIN:
             return self.getAdminGroup()
         else:
             return None
     
-    # permission for standard users project
+    # permission for standard project members
     def getUserPermission(self):
         pDescription = '%s User Permission' % self.short_name
         pCodeName = "%s_user_permission" % self.short_name.lower()
-        return getOrCreateProjectPermission(pDescription, pCodeName, [self.getUserGroup(), self.getAdminGroup()])
+        return getOrCreateProjectPermission(pDescription, pCodeName, 
+                                            [self.getUserGroup(), self.getContributorGroup(), self.getAdminGroup()])
+    
+    # permission for privileged project members
+    def getContributorPermission(self):
+        pDescription = '%s Contributor Permission' % self.short_name
+        pCodeName = "%s_contributor_permission" % self.short_name.lower()
+        return getOrCreateProjectPermission(pDescription, pCodeName, 
+                                            [self.getContributorGroup(), self.getAdminGroup()])
     
     # permission for project administrators
     def getAdminPermission(self):
         pDescription = '%s Admin Permission' % self.short_name
         pCodeName = "%s_admin_permission" % self.short_name.lower()
-        return getOrCreateProjectPermission(pDescription, pCodeName, [self.getAdminGroup()])
+        return getOrCreateProjectPermission(pDescription, pCodeName, 
+                                            [self.getAdminGroup()])
     
     # Method to return all project users 
-    # (i.e. associated with either the project Users or Admins group)
+    # (i.e. associated with any of the project groups)
     def getUsers(self, exclude_superuser=False):
         if exclude_superuser:
             # users
             uset = set(self.getUserGroup().user_set.all().exclude(is_superuser=True))
+            # contributors
+            cset = set(self.getContributorGroup().user_set.all().exclude(is_superuser=True))
             # administrators
             aset = set(self.getAdminGroup().user_set.all().exclude(is_superuser=True))
         else:
             # users
             uset = set(self.getUserGroup().user_set.all())
+            # contributors
+            cset = set(self.getContributorGroup().user_set.all())
             # administrators
             aset = set(self.getAdminGroup().user_set.all())
 
-        # join the two groups
-        users = list(uset.union( aset ))
-        # sort by username
+        # join all the groups
+        users = list(uset.union(aset).union(cset))
+        # sort
         #users.sort(key=lambda x: x.last_name, reverse=True)
         users.sort(key=lambda x: x.last_name)
         return users
@@ -215,18 +240,20 @@ class Project(models.Model):
         return pubUsers
 
     def getGroups(self):
-        return [self.getUserGroup(), self.getAdminGroup()]
+        return [self.getUserGroup(), self.getContributorGroup(), self.getAdminGroup()]
     
-    # returns true if user is enrolled in any of the project's groups
+    # returns true if the user is enrolled in any of the project's groups
     def hasUser(self, user):
         if user in self.getUserGroup().user_set.all():
+            return True
+        elif user in self.getContributorGroup().user_set.all():
             return True
         elif user in self.getAdminGroup().user_set.all():
             return True
         else:
             return False
         
-    # return true if the user is waiting membership approval in this project's group
+    # return true if the user is waiting membership approval in the project's 'user' group
     def hasUserPending(self, user):
         mrlist = MembershipRequest.objects.filter(group=self.getUserGroup()).filter(user=user)
         if len(mrlist) > 0:
@@ -236,11 +263,14 @@ class Project(models.Model):
         
     # return True if the user is allowed to view the project pages
     def isVisible(self, user):
+        
         if self.active == False:
             return False
         elif self.private == False:
             return True
         elif userHasUserPermission(user, self):
+            return True
+        elif userHasContributorPermission(user, self):
             return True
         elif userHasAdminPermission(user, self):
             return True
@@ -328,89 +358,7 @@ class Project(models.Model):
     def __unicode__(self):
         return smart_truncate(self.full_name(), 50)  
 
-
-# method to return a named permission from the database, 
-# or create a new one for these groups if not existing already
-def getOrCreateProjectPermission(pDesc, pCodeName, groups):
-    try:       
-        return Permission.objects.get(codename=pCodeName)
-    except:
-        return createProjectPermission(pDesc, pCodeName, groups)           
-
-
-# method to create a project permission
-# and assign it to the given groups
-def createProjectPermission(pDesc, pCodeName, groups):
-        projectContenType = ContentType.objects.get(app_label=APPLICATION_LABEL, model='project')
-        permission = Permission(name=pDesc, codename=pCodeName, content_type=projectContenType)
-        permission.save()
-        print 'Created permission=%s...' % permission.codename
-        for group in groups:
-            group.permissions.add(permission)
-            group.save()
-            print '...and associated to group=%s' % group.name
-        return permission
-
-
-# method to build the group name of projects users
-def getUserGroupName(project):
-    return "%s_users" % project.short_name.lower()
-
-
-# method to build the group name of project administrators
-def getAdminGroupName(project):
-    return "%s_admins" % project.short_name.lower()
-
-
-# method to load a group from the database, or create a new one if not existing already
-def getOrCreateGroup(group_name):
-    try:       
-        return Group.objects.get(name=group_name)
-    except Group.DoesNotExist:
-        return createGroup(group_name)
-
-
-def createGroup(group_name):
-    group = Group(name=group_name)
-    group.save()
-    print "Created group: %s" % group.name
-    return group
-    
-
-# shortcut method to check for project user permission
-# old note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
-# new note: now this method works directly on groups: a local staff user may NOT be in the user group for a remote project
-def userHasUserPermission(user, project):
-    #return user.is_staff or user.has_perm(getPermissionLabel(project.getUserPermission()))
-   
-    if userHasAdminPermission(user, project): # NOTE: the 'admin' role automatically garantees 'user' privileges
-        return True
-    else:
-        return (user.is_staff and project.isLocal()) or project.getUserGroup() in user.groups.all()
-
-
-# shortcut method to check for project admin permission
-# old note: this method works on permissions, not groups: as a consequence, staff users have ALL permissions
-# new note: now this method works directly on groups: a local staff user may NOT be in the admin group for a remote project
-def userHasAdminPermission(user, project):
-    #return user.is_staff or user.has_perm(getPermissionLabel(project.getAdminPermission()))
-    return (user.is_staff and project.isLocal()) or project.getAdminGroup() in user.groups.all()
-
-def userHasProjectRole(user, project, role):
-    if user.is_staff:
-        return True
-    elif role == ROLE_USER:
-        return userHasUserPermission(user, project) or userHasAdminPermission(user, project)
-    elif role == ROLE_ADMIN:
-        return userHasAdminPermission(user, project)
-    else:
-        return False
-
-
-# method to return the full permission label: cog.<pCodeName>
-def getPermissionLabel(permission):
-    return "%s.%s" % (APPLICATION_LABEL, permission.codename)
-
+# PROJECT UTILITY METHODS
 
 # function to return the site administrators (aka web masters) for this site
 def getSiteAdministrators():
@@ -439,11 +387,10 @@ def getProjectsForUser(user, includePending):
             project = getProjectForGroup(group)
             if not project in projects and project.active == True:
                 projects.append(project)
-        # in case he group has not been deleted with the project
+        # in case the group has not been deleted with the project
         except Project.DoesNotExist:
             pass
     return projects
-
 
 # method to return an ordered dictionary of (project_short_name, user_roles[]) pairs for a given user
 # pending projects are NOT included
@@ -464,19 +411,20 @@ def getProjectsAndRolesForUsers(user, includeRemote=True):
                     projects[project.short_name] = []
                 # add this role to this project
                 if group.name.endswith('_admins'):
-                    projects[project.short_name].append('admin')
+                    projects[project.short_name].append(ROLE_ADMIN)
+                elif group.name.endswith('_contributors'):
+                    projects[project.short_name].append(ROLE_CONTRIBUTOR)
                 elif group.name.endswith('_users'):
-                    projects[project.short_name].append('user')
+                    projects[project.short_name].append(ROLE_USER)
         except ObjectDoesNotExist:
             print "WARNING: cannot retrieve project for group=%s" % group
             pass
         
     return projects
 
-
 # method to return the project associated to a group
 def getProjectForGroup(group):
-    project_short_name = group.name.replace('_users', '').replace('_admins', '')
+    project_short_name = group.name.replace('_users', '').replace('_admins', '').replace('_contributors', '')
     return Project.objects.get(short_name__iexact=project_short_name)
 
 
