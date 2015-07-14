@@ -181,25 +181,25 @@ class Project(models.Model):
             return None
     
     # permission for standard project members
-    def getUserPermission(self):
-        pDescription = '%s User Permission' % self.short_name
-        pCodeName = "%s_user_permission" % self.short_name.lower()
-        return getOrCreateProjectPermission(pDescription, pCodeName, 
-                                            [self.getUserGroup(), self.getContributorGroup(), self.getAdminGroup()])
+    #def getUserPermission(self):
+    #    pDescription = '%s User Permission' % self.short_name
+    #    pCodeName = "%s_user_permission" % self.short_name.lower()
+    #    return getOrCreateProjectPermission(pDescription, pCodeName, 
+    #                                       [self.getUserGroup(), self.getContributorGroup(), self.getAdminGroup()])
     
     # permission for privileged project members
-    def getContributorPermission(self):
-        pDescription = '%s Contributor Permission' % self.short_name
-        pCodeName = "%s_contributor_permission" % self.short_name.lower()
-        return getOrCreateProjectPermission(pDescription, pCodeName, 
-                                            [self.getContributorGroup(), self.getAdminGroup()])
+    #def getContributorPermission(self):
+    #    pDescription = '%s Contributor Permission' % self.short_name
+    #    pCodeName = "%s_contributor_permission" % self.short_name.lower()
+    #    return getOrCreateProjectPermission(pDescription, pCodeName, 
+    #                                       [self.getContributorGroup(), self.getAdminGroup()])
     
     # permission for project administrators
-    def getAdminPermission(self):
-        pDescription = '%s Admin Permission' % self.short_name
-        pCodeName = "%s_admin_permission" % self.short_name.lower()
-        return getOrCreateProjectPermission(pDescription, pCodeName, 
-                                            [self.getAdminGroup()])
+    #def getAdminPermission(self):
+    #    pDescription = '%s Admin Permission' % self.short_name
+    #    pCodeName = "%s_admin_permission" % self.short_name.lower()
+    #    return getOrCreateProjectPermission(pDescription, pCodeName, 
+    #                                       [self.getAdminGroup()])
     
     # Method to return all project users 
     # (i.e. associated with any of the project groups)

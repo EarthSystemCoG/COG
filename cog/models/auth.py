@@ -79,9 +79,9 @@ def userHasAdminPermission(user, project):
     return (user.is_staff and project.isLocal()) or project.getAdminGroup() in user.groups.all()
 
 # method to return the full permission label: cog.<pCodeName>
-# use to check for user.has_perm(getPermissionLabel(project.getUserPermission()))
-def getPermissionLabel(permission):
-    return "%s.%s" % (APPLICATION_LABEL, permission.codename)
+# used to check for user.has_perm(getPermissionLabel(project.getUserPermission()))
+#def getPermissionLabel(permission):
+#    return "%s.%s" % (APPLICATION_LABEL, permission.codename)
 
 
 # ROLES

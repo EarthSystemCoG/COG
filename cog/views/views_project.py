@@ -395,8 +395,8 @@ def deleteProject(project):
         
     # delete permissions
     # note: if permissions didn't exit, they would be created first, then deleted
-    project.getUserPermission().delete()
-    project.getAdminPermission().delete()
+    #project.getUserPermission().delete()
+    #project.getAdminPermission().delete()
     
     # delete groups
     # note: if groups didn't exit, they would be created first, then deleted
@@ -448,9 +448,10 @@ def initProject(project):
     aGroup = project.getAdminGroup()
     
     # create project permissions
-    uPermission = project.getUserPermission()
-    cPermission = project.getContributorPermission()
-    aPermission = project.getAdminPermission()
+    # obsolete ?
+    #uPermission = project.getUserPermission()
+    #cPermission = project.getContributorPermission()
+    #aPermission = project.getAdminPermission()
     
     # assign creator as project administrator
     if project.author is not None:
