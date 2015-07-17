@@ -96,7 +96,7 @@
 
 									{% comment %}
 		                           	<!-- link to Resources -->
-		                            {% if user|hasUserPermission:project %}
+		                            {% if user|hasContributorPermission:project %}
 
 			                        	<!-- loop over URls, use THREDDS catalog URL -->
 			                        	{% for url in record.fields.url %}
