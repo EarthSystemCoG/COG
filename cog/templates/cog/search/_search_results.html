@@ -8,97 +8,91 @@
   <!-- display search path (aka bread-crumbing) -->
   {% if request.session.search_path|length > 0 %}
 	  <p>
-	  <strong>Search Constraints</strong>: &nbsp;
-	  {% for item in request.session.search_path %}
-	  	<a href='javascript:resetFacet("{{item.0}}")' class='deletelink'> </a> 
-	  	<a href='javascript:resetFromFacetIndex("{{forloop.counter0}}")'>{{ item.1 }}</a>
-	  	{% if not forloop.last %} | {% endif %}
-	  {% endfor %}
+	      <strong>Search Constraints</strong>: &nbsp;
+	      {% for item in request.session.search_path %}
+	  	      <a href='javascript:resetFacet("{{item.0}}")' class='deletelink'> </a>
+	  	      <a href='javascript:resetFromFacetIndex("{{forloop.counter0}}")'>{{ item.1 }}</a>
+	  	      {% if not forloop.last %}
+                  |
+              {% endif %}
+	      {% endfor %}
 	  </p>
   {% endif %}
   
 
   <!-- don't display results if form submission resulted in error -->
   {% if not error_message %}
+      {% with search_output.results as results %}
+          {% if results|length == 0 %}
+              {% if search_input.limit != 0 %}
+                  <p></p>
+                      <div style="text-align:center; font-weight:bold">
+                          The search returned 0 results.
+                      </div>
+              {% endif %}
+          {% else %}
+              <p></p>
+              <div style="text-align:center">
+	              Total Number of Results: {{ search_output.counts }}
+	              <br/>
+				  {% for page in search_pages %}
+				      {% if page.1 == search_input.offset %}
+					      {{ page.0 }} <!-- current page, no hyperlink -->
+					  {% else %}
+						  <a href="{% url 'search' project.short_name.lower %}" onclick="javascript:searchit({{ page.1 }}); return false;">{{ page.0 }}</a>
+					  {% endif %}
+				  {% endfor %}
+				  <br/>
+				  {% if request.user.is_authenticated %}
+				      {% if project.short_name.lower != 'downscaling-2013' %}
+					      <a href="{% url 'datacart_add_all' site.id request.user.id %}?back={% url 'search_reload' %}">Add all displayed results to Data Cart</a>
+						  &nbsp; &nbsp;
+						  <a href="{% url 'datacart_delete_all' site.id request.user.id %}?back={% url 'search_reload' %}">Remove all displayed results from Data Cart</a>
+					  {% endif %}
+  				  {% else %}
+				      <em class="message">Please login to add search results to your Data Cart</em>
+				  {% endif %}
+				  <br/>
+	        	  Expert Users: you may display the search URL and <a href='{{ search_url }}' target='_blank'>return results as XML</a> or <a href='{{ search_url }}&amp;format=application%2Fsolr%2Bjson' target='_blank'>return results as JSON</a>
+			  </div>
+			  &nbsp;<br/>
 
-    {% with search_output.results as results %}
+	          <div class="mybox">
+	              <!-- Table of search results -->
+	              <table>
+ 	                  {% for record in results %}
+	                      <tr>
+	                          <td class="tophead">{{ search_input.offset|add:forloop.counter }}.</td>
+	                          <td class="long">
+	                              <!-- dataset metadata container -->
+	                              {% with record as record %}
+								      {% include 'cog/search/_record_display.html' %}
+								  {% endwith %}
+  	                              {% if request.user.is_authenticated %}
+	                           	      <br/>
+	                           		  <!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
+									  {% if record.fields.project.0 != 'NCPP' %}
+		                           	      <!--  add or remove from Data Cart -->
+		                           		  <span id="datacart-delete-{{record.id}}" style="display:none">
+										      <a href="javascript:deleteFromCart('{{ record.id }}')">
+											      <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Remove from Data Cart</img>
+											  </a>
+										  </span>
+										  <span id="datacart-add-{{record.id}}" style="display:none">
+											  <a href="javascript:addToCart('{{ record.id }}', '{{ record|toJson }}')">
+												  <img src="{{STATIC_URL}}cog/img/datacart-add.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Add to Data Cart</img>
+											  </a>
+										  </span>
 
-        {% if results|length == 0 %}
-            {% if search_input.limit != 0 %}
-            	<p/><div style="text-align:center; font-weight:bold">The search returned 0 results.</div>
-            {% endif %}
-        {% else %}
-
-            <p/>
-            <div style="text-align:center">
-	            Total Number of Results: {{ search_output.counts }}
-	            <br/>
-				{% for page in search_pages %}
-					{% if page.1 == search_input.offset %}
-						{{ page.0 }} <!-- current page, no hyperlink -->
-					{% else %}
-						<a href="{% url 'search' project.short_name.lower %}" onclick="javascript:searchit({{ page.1 }}); return false;">{{ page.0 }}</a>
-					{% endif %}
-				{% endfor %}
-				<br/>
-				{% if request.user.is_authenticated %}
-					{% if project.short_name.lower != 'downscaling-2013' %}
-						<a href="{% url 'datacart_add_all' site.id request.user.id %}?back={% url 'search_reload' %}">Add all displayed results to Data Cart</a>
-						&nbsp; &nbsp;
-						<a href="{% url 'datacart_delete_all' site.id request.user.id %}?back={% url 'search_reload' %}">Remove all displayed results from Data Cart</a>
-					{% endif %}
-
-				{% else %}
-					<em class="message">Please login to add search results to your Data Cart</em>
-				{% endif %}
-			
-				<br/>
-	        	Expert Users: you may display the search URL and <a href='{{ search_url }}' target='_blank'>return results as XML</a> or <a href='{{ search_url }}&amp;format=application%2Fsolr%2Bjson' target='_blank'>return results as JSON</a>
-			
-			</div>
-			&nbsp;<br/>
-
-	        <div class="mybox">
-
-	            <!-- Table of search results -->
-	            <table>
-
-	                {% for record in results %}
-	                    <tr>
-	                        <td class="tophead">{{ search_input.offset|add:forloop.counter }}.</td>
-	                        <td class="long">
-
-	                        	<!-- dataset metadata container -->
-	                            {% with record as record %}
-									{% include 'cog/search/_record_display.html' %}
-								{% endwith %}
-
-	                           	{% if request.user.is_authenticated %}
-	                           		<br/>
-
-	                           		<!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
-									{% if record.fields.project.0 != 'NCPP' %}
-		                           		<!--  add or remove from Data Cart -->
-		                           		<span id="datacart-delete-{{record.id}}" style="display:none">
-											<a href="javascript:deleteFromCart('{{ record.id }}')">
-												<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Remove from Data Cart</img>
-											</a>
-										</span>
-										<span id="datacart-add-{{record.id}}" style="display:none">
-											<a href="javascript:addToCart('{{ record.id }}', '{{ record|toJson }}')">
-												<img src="{{STATIC_URL}}cog/img/datacart-add.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">Add to Data Cart</img>
-											</a>
-										</span>
-
-										<!-- display one link or the other -->
-		                           		{% if  request.user|dataCartContains:record.id %}
-		                           			<script>set_visibility("datacart-delete-{{record.id}}", true);</script>
-		                           			<script>set_visibility("datacart-add-{{record.id}}", false);</script>
-										{% else %}
-											<script>set_visibility("datacart-delete-{{record.id}}", false);</script>
-		                           			<script>set_visibility("datacart-add-{{record.id}}", true);</script>
-										{% endif %}
-									{% endif %}
+										  <!-- display one link or the other -->
+		                           		  {% if  request.user|dataCartContains:record.id %}
+		                           			  <script>set_visibility("datacart-delete-{{record.id}}", true);</script>
+		                           			  <script>set_visibility("datacart-add-{{record.id}}", false);</script>
+										  {% else %}
+											  <script>set_visibility("datacart-delete-{{record.id}}", false);</script>
+		                           			  <script>set_visibility("datacart-add-{{record.id}}", true);</script>
+										  {% endif %}
+									  {% endif %}
 
 									{% comment %}
 		                           	<!-- link to Resources -->
@@ -114,18 +108,12 @@
 			                            {% endfor %}
 	                                {% endif %}
 	                                {% endcomment %}
-
-                                {% endif %}
-
-	                        </td>
-	                    </tr>
-	                {% endfor %}
-
-	            </table>
-
-	        </div>
-        {% endif %}
-
-
-    {% endwith %}
+                                  {% endif %}
+	                          </td>
+	                      </tr>
+	                  {% endfor %}
+	              </table>
+	          </div>
+          {% endif %}
+      {% endwith %}
   {% endif %}
