@@ -46,6 +46,7 @@
 	
 	<hr/>		
 	<!-- new thread form -->
+    <!-- for now does not need to be a Contributor-->
 	{% if user|hasUserPermission:project %}
 		<form action="" method="post">
 			{% csrf_token %}
