@@ -124,7 +124,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         if not folder.isPredefined():
             deleteurl = reverse('folder_delete', args=[folder.project.short_name.lower(), folder.id])
             updateurl = reverse('folder_update', args=[folder.project.short_name.lower(), folder.id])
-            if hasUserPermission(user, folder.project):
+            if hasContributorPermission(user, folder.project):
                 html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
                 html += "<a href='" + deleteurl + \
                         "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
@@ -147,7 +147,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             html += "<li><span class='bookmark'>"
             html += "<a href='%s'>%s</a>" % (bookmark.url, bookmark.name)
             # display [Edit|Delete] links
-            if hasUserPermission(user, folder.project):
+            if hasContributorPermission(user, folder.project):
                 html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
                 html += "<a href='" + deleteurl + \
                         "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Bookmark Confirmation'," \
