@@ -1,5 +1,5 @@
 from cog.models import *
-from cog.models.auth import userHasUserPermission
+from cog.models.auth import userHasContributorPermission
 from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
@@ -45,11 +45,12 @@ class NewsForm(ModelForm):
             self.fields['peer_projects'].initial = self.instance.other_projects.all()
             self.fields['child_projects'].initial = self.instance.other_projects.all()
 
-    # method to build a query set that contains only the projects the user has access to
+    # method to build a query set that contains only the projects the User has access to.
+    # the User must be a Contributor to post news
     def _buildQuerySet(self, projects, user):
         qs = Q(pk=0)  # start with an empty query set - does not match any project
         for p in projects:
-            if userHasUserPermission(user, p):
+            if userHasContributorPermission(user, p):
                 qs = qs | Q(pk=p.id)
         return qs
 
