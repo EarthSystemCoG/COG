@@ -22,7 +22,8 @@
 	    <a href="{% url 'post_update' post.id %}" class="changelink">&nbsp;Update {{ post.type|capfirst }}</a>&nbsp;&nbsp;
 	    <a href="{% url 'doc_add' post.project.short_name.lower %}?redirect={% url 'post_add_doc' post.id %}" class="addlink">Add File</a>&nbsp;&nbsp;
         <a href="{% url 'post_add' post.project.short_name.lower %}?type={{ post.type }}&amp;parent_id={{post.id}}" class="addlink">Add Child {{ post.type|capfirst }}</a>&nbsp;&nbsp;
-            {% if user|hasUserPermission:post.project %}
+            <!--must be a contributor to delete a post-->
+            {% if user|hasContributorPermission:post.project %}
                 {% if not post.is_predefined %}
                     <a href="{% url 'post_delete' post.id %}" class="deletelink">Delete {{ post.type|capfirst }}</a>&nbsp;&nbsp;
                 {% endif %}  
