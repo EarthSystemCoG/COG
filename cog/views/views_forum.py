@@ -279,7 +279,7 @@ def thread_add(request, project_short_name, topic_id):
     topic = get_object_or_404(ForumTopic, id=topic_id)
     
     # threads can be updated only by project members
-    if not userHasContributorPermission(request.user, project):
+    if not userHasUserPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     title = '%s: New Thread' % topic.title
