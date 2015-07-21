@@ -4,18 +4,23 @@
 
 {% autoescape off %}
 
+
+    <!--// include action links via cog/post/_post_actions.html  //-->
+    {% include 'cog/post/_post_actions.html' %}
+
     <div id="cog_post_body">
         {{ post.body }}
     </div> <!--// end div id=cog_post_body //-->
-    
-    <!--// include action links via cog/post/_post_actions.html  //-->
-    {% include 'cog/post/_post_actions.html' %}
-    
+
+    <!-- include last updated text -->
+    {% include 'cog/post/_post_last_update.html' %}
+
     <!--// add social media buttons //-->
     <div id="social_media" style="text-align:center; padding-top: 4px; padding-bottom:8px;">
-        {% include 'cog/common/cog_social_media.html' %} 
+        {% include 'cog/common/cog_social_media.html' %}
     </div><!--// end div id=social_media //-->
-        	
+
+
     <!--// add comments via cog/common/_comments.html //-->
     <div id="comments" style="text-align:left;">
     {% with post.url as next_view %}
