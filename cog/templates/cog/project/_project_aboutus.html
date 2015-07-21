@@ -1,49 +1,68 @@
 <!--content displayed in all the templated content under about_us-->
+<!--lines, social media, and "update link" contained in rollup.html-->
 
 {% load cog_utils %}
 
 <table>
 	{% if tab == "ABOUTUS"|tabs %}
 	    <tr>
-			<td nowrap="nowrap"><strong>Long Name</strong></td>
-			<td class="long">{{proj.long_name}}</td>
+			<td nowrap="nowrap">
+                <strong>Long Name</strong>
+            </td>
+			<td class="long">
+                {{proj.long_name}}
+            </td>
 		</tr>
 		{% if proj.description %}
 		    <tr>
-			    <td nowrap="nowrap"><strong>Description</strong></td>
-			    <td class="long">{{proj.description|urlizetrunc:50|linebreaksbr}}</td>
+			    <td nowrap="nowrap">
+                    <strong>Description</strong>
+                </td>
+			    <td class="long">
+                    {{proj.description|urlizetrunc:50|linebreaksbr}}
+                </td>
 		    </tr>
 		{% endif %}
 		{% if proj.external_homepage %}
 		    <tr>
 			    <td nowrap="nowrap"><strong>Home Page</strong></td>
-			    <td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage|urlizetrunc:50}}</a></td>
+			    <td class="long">
+                    <a href="{{proj.external_homepage}}">{{proj.external_homepage|urlizetrunc:50}}</a>
+                </td>
 		    </tr>
 		{% endif %}
 	{% endif %}
 	
 	{% if tab == "MISSION"|tabs and proj.mission %}
 		<tr>
-			<td class="long" colspan="2">{{proj.mission|urlizetrunc:50|linebreaksbr}}</td>
+			<td class="long" colspan="2">
+                {{proj.mission|urlizetrunc:50|linebreaksbr}}
+            </td>
 		</tr>
 	{% endif %}
 	
 	{% if tab == "VISION"|tabs and proj.vision %}
 		<tr>
-			<td class="long" colspan="2">{{proj.vision|urlizetrunc:50|linebreaksbr}}</td>
+			<td class="long" colspan="2">
+                {{proj.vision|urlizetrunc:50|linebreaksbr}}
+            </td>
 		</tr>
 	{% endif %}
 		
 	{% if tab == "VALUES"|tabs and proj.values %}
 	<tr>
-		<td class="long" class="long" colspan="2">{{proj.values|urlizetrunc:50|linebreaksbr}}</td>
+		<td class="long" class="long" colspan="2">
+            {{proj.values|urlizetrunc:50|linebreaksbr}}
+        </td>
 	</tr>
 	{% endif %}
 	
 	{% if tab == "HISTORY"|tabs %}
 		{% if proj.history %}
 		<tr>
-			<td class="long" colspan="2">{{proj.history|urlizetrunc:50|linebreaksbr}}</td>
+			<td class="long" colspan="2">
+                {{proj.history|urlizetrunc:50|linebreaksbr}}
+            </td>
 		</tr>
 		{% endif %}
 	{% endif %}
@@ -53,7 +72,6 @@
 			<tr>
 				<td class="long">
 					<strong>{{impact.title}}</strong>
-					<p></p>
                     {{impact.description|urlizetrunc:50|linebreaksbr}}
 				</td>
 			</tr>
@@ -85,6 +103,3 @@
 	{% endif %}
 	
 </table>
-<!-- add horizontal line before "social media" buttons -->
-<hr/>
-        
