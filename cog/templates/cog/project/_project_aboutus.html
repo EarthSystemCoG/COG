@@ -1,4 +1,4 @@
-<!--about_us sub-navigation-->
+<!--content displayed in all the templated content under about_us-->
 
 {% load cog_utils %}
 
@@ -9,16 +9,16 @@
 			<td class="long">{{proj.long_name}}</td>
 		</tr>
 		{% if proj.description %}
-		<tr>
-			<td nowrap="nowrap"><strong>Description</strong></td>
-			<td class="long">{{proj.description|urlizetrunc:50|linebreaksbr}}</td>
-		</tr>
+		    <tr>
+			    <td nowrap="nowrap"><strong>Description</strong></td>
+			    <td class="long">{{proj.description|urlizetrunc:50|linebreaksbr}}</td>
+		    </tr>
 		{% endif %}
 		{% if proj.external_homepage %}
-		<tr>
-			<td nowrap="nowrap"><strong>Home Page</strong></td>
-			<td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage|urlizetrunc:50}}</a></td>
-		</tr>
+		    <tr>
+			    <td nowrap="nowrap"><strong>Home Page</strong></td>
+			    <td class="long"><a href="{{proj.external_homepage}}">{{proj.external_homepage|urlizetrunc:50}}</a></td>
+		    </tr>
 		{% endif %}
 	{% endif %}
 	
@@ -53,7 +53,8 @@
 			<tr>
 				<td class="long">
 					<strong>{{impact.title}}</strong>
-					<p></p>{{impact.description|urlizetrunc:50|linebreaksbr}}
+					<p></p>
+                    {{impact.description|urlizetrunc:50|linebreaksbr}}
 				</td>
 			</tr>
 		{% endfor %}
@@ -84,4 +85,6 @@
 	{% endif %}
 	
 </table>
+<!-- add horizontal line before "social media" buttons -->
+<hr/>
         
