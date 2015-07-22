@@ -2,7 +2,6 @@
 {% if post %}
     <!--clear:both added to move the last update down if any elements above are floated.-->
     <!--clear:both means no floating elements allowed on either the left or the right side-->
-    <hr/>
 	<div id="last_update_text" style="font-size: 8pt; font-style: italic; text-align:center; clear:both;">
 	     Last Update: {{ post.update_date }} by
          {% if post.author.id %}
