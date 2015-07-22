@@ -2,29 +2,7 @@
 
 {% load pagination_tags %}
 {% with proj|getPeople as users %}
-    {% autopaginate users 50 %}
-
-       <table style="margin-left:55px; width:500px;">
-           <tr>
-               <td>
-                   <form name="lookupUserForm" action="" method="post">
-                   	    {% csrf_token %}
-                        <label for="match" style="width:60%; vertical-align: middle;">Search for project member by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email:</strong></label>
-                        <input style="vertical-align: middle; width:70%;" type="text" alt="text" name="match" id="match" value="{{request.POST.match}}" />
-	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
-	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
-                   </form>
-               </td>
-           </tr>
-       </table>
-       <p></p>
-
-
-
-
-
-    {% paginate %}
-
+{% autopaginate users 50 %}
 
 	<table class="no-color">
 	    <tr>
@@ -97,7 +75,8 @@
 		    </tr>
 	    {% endfor %}
 	</table>
-<div id="myDialog" class="yui-skin-sam"></div>
+  {% paginate %}
+
 {% endwith %}
 	    
 
