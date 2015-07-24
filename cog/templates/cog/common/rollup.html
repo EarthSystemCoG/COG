@@ -54,11 +54,15 @@
 		{% include template_page %}	
 	{% endwith %}
 
-    <!--hr is located outside permissions block so it is visible to all users -->
-    <hr/>
+	<!-- social media buttons -->
+	<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
+	    {% include 'cog/common/cog_social_media.html' %}
+	</div>
+
 	<!-- Edit this project details - access restricted to project administrators -->
 	{% if template_form_pages|length > 0 %}
 		{% if user|hasAdminPermission:project %}
+            <hr/>
 		    <div style="text-align:center">
 			    {% for template_form_page, template_form_title in template_form_pages.items %}
 			   		&nbsp;<a href="{{ template_form_page }}" class="changelink"> Update Project {{ template_form_title }}</a>&nbsp;
@@ -66,11 +70,6 @@
 		    </div>
 		{% endif %}
 	{% endif %}
-	
-	<!-- social media buttons -->
-	<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
-	    {% include 'cog/common/cog_social_media.html' %}
-	</div>	
 	
     <!-- children projects-->    
  	{% if children %}
