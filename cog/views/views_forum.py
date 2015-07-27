@@ -6,7 +6,7 @@ Views for CoG Forum.
 
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasAdminPermission, userHasUserPermission
+from cog.models.project import Project, userHasAdminPermission, userHasUserPermission, userHasContributorPermission
 from cog.models.forum import Forum, ForumThread, ForumTopic
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden

@@ -13,6 +13,7 @@ from django.db.models import Q
 from cog.models.constants import MANAGEMENT_BODY_CATEGORY_STRATEGIC, MANAGEMENT_BODY_CATEGORY_OPERATIONAL
 from os.path import exists
 from cog.forms.forms_image import ImageForm
+from cog.models.auth import getUserGroupName, getContributorGroupName, getAdminGroupName
 
 
 class ExternalUrlForm(ModelForm):
@@ -150,6 +151,7 @@ class OrganizationalRoleMemberForm(ModelForm):
 # function to build a queryset that selects users of the given project
 def projectUsersQuerySet(project):
         uGroup = getUserGroupName(project)
+        cGroup = getContributorGroupName(project)
         aGroup = getAdminGroupName(project)
-        query = Q(groups__name=uGroup) | Q(groups__name=aGroup)
+        query = Q(groups__name=uGroup) | Q(groups__name=cGroup) | Q(groups__name=aGroup)
         return User.objects.filter(query).distinct().order_by('username')

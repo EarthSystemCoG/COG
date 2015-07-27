@@ -13,6 +13,7 @@ from django.utils.functional import curry
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS, TAB_LABELS
 from cog.views.views_templated import templated_page_display
+from cog.models.auth import userHasAdminPermission
 
 # management_body_update proj.short_name.lower category
 

@@ -30,8 +30,9 @@
                 <td>{{ doc.is_private }}</td>
             </tr>
         </table>
-    </div> 
-    {% if request.user|hasUserPermission:project %}
+    </div>
+    <!--only Contributors can update documents -->
+    {% if request.user|hasContributorPermission:project %}
         <div style="text-align:right">
             <hr/>
             <a href="{% url 'doc_update' doc.id %}" class="changelink">Update</a>

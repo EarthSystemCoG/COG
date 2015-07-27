@@ -21,7 +21,8 @@
                             {% endif %}
                     </em>
 		          	<!-- links to update, delete the news -->
-                    {% if user|hasUserPermission:news.project %}
+                    <!-- Must be a Contributor to update or delete news -->
+                    {% if user|hasContributorPermission:news.project %}
                   		<div style="float:right">
                     	     &nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>
                     	     &nbsp;<a href="{% url 'news_delete' news.id %}" class="deletelink">Delete</a>

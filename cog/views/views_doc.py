@@ -12,7 +12,7 @@ from cog.forms import UploadImageForm
 from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES, SYSTEM_DOCS, SYSTEM_IMAGES
 from django.conf import settings
 from django.views.static import serve
-from cog.models.project import userHasUserPermission
+from cog.models.auth import userHasUserPermission, userHasContributorPermission
 from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
@@ -69,7 +69,7 @@ def doc_add(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
      
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -200,7 +200,7 @@ def doc_remove(request, doc_id):
     project = doc.project
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # delete doc altogether
@@ -223,7 +223,7 @@ def doc_update(request, doc_id):
     doc = get_object_or_404(Doc, pk=doc_id)
     
     # check permission
-    if not userHasUserPermission(request.user, doc.project):
+    if not userHasContributorPermission(request.user, doc.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':

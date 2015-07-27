@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from constants import PERMISSION_DENIED_MESSAGE, BAD_REQUEST
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from views_post import post_add
+from cog.models.auth import userHasContributorPermission
 
 
 def _hasBookmarks(project):
@@ -73,7 +74,7 @@ def bookmark_add(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     if request.method == 'GET':
@@ -110,7 +111,7 @@ def bookmark_add2(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     response_data = {}
@@ -149,7 +150,7 @@ def bookmark_delete(request, project_short_name, bookmark_id):
     project = bookmark.folder.project
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
         
     # delete notes (recursively)
@@ -171,7 +172,7 @@ def bookmark_update(request, project_short_name, bookmark_id):
     project = bookmark.folder.project
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
         
     if request.method == 'GET':
@@ -214,7 +215,7 @@ def folder_add(request, project_short_name):
     user = request.user
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -266,7 +267,7 @@ def folder_update(request, project_short_name, folder_id):
     folder = get_object_or_404(Folder, pk=folder_id)
     
     # security check
-    if not userHasUserPermission(request.user, folder.project):
+    if not userHasContributorPermission(request.user, folder.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     if request.method == 'GET':
@@ -302,7 +303,7 @@ def folder_delete(request, project_short_name, folder_id):
     parentFolder = folder.topParent()
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if folder.parent == None:

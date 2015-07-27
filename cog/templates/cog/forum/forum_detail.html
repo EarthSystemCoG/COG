@@ -43,6 +43,7 @@
 
 
     			<!-- link to start new thread -->
+                <!-- for now does not need to be a Contributor -->
     			{% if user|hasUserPermission:project %}
 	    			<tr>
 	    				<td>Start a <a href="{% url 'thread_add' project.short_name topic.id %}" class="changelink">new Thread</a> about this Topic.</td>
