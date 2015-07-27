@@ -76,35 +76,39 @@
        changing the position back to static and display back to inline. -->
 
 	   <div id="project_browser_controls">
-	       <div id="tag_entry" style="padding:4px; padding-bottom: 2px; padding-right:0; margin:0;">
+	       <div id="tag_entry" style="padding:0; padding-bottom: 2px; margin:0; width:188px;">
                 <!--class=yui-ac-->
-		        <div id="tagAutoComplete" style="margin:0; padding:0; margin-top:8px; width:180px; position:static; display:inline;">
+		        <div id="tagAutoComplete" style="margin:0; padding:0; width:188px; position:static; display:inline;">
 
 			        <!--class=yui-ac-input-->
                     <label for="projectBrowserText" style="display:none;">Enter Tag</label>
                     <!--ONCLICK: land on All -->
-		            <input type="text" onclick="gotoTab(1);" id="projectBrowserText" placeholder="Enter Tag" style="width:178px; position:static;
-		             font-size:8.5pt; padding:0; padding-left:2px; margin:0;" alt="projectBrowserText" />
+                    <!-- width includes size of box + margins -->
+                    <!--176px + 4px left margin = 180px, which leaves 4px either side from 188px-->
+		            <input type="text" onclick="gotoTab(1);" id="projectBrowserText" placeholder="Enter Tag" style="width:176px; position:static;
+		             font-size:8.5pt; padding:0; padding-left:2px; margin:0; margin-left:4px; margin-top:4px;" alt="projectBrowserText" />
 
 		            <div style="width:177px" id="tagContainer"> <!-- make size 1px smaller than input above -->
 
 		            </div>
 		        </div>
                <!-- add buttons -->
-                <div style="text-align: left; width:181px; margin:0; padding:0; margin-top:4px;">
+                <div style="text-align: left; width:181px; margin:0; margin-left:4px; padding:0; margin-top:4px;">
+
                     <!-- SAVE: land on Tags -->
                 	{% if not request.user.is_anonymous %}
-                     <input class="right_go" style="width:60px; margin:0" type="submit" value="Save Tag" id="saveUserTag"
+                     <input class="right_go" style="width:60px; margin:0;margin-left:0;" type="submit" value="Save Tag" id="saveUserTag"
 	                         onclick="saveUserTag();gotoTab(3);"/>
-	                   
 	                {% endif %}
+
                     <!--RESET: Land on This-->
-	                <input class="right_go" style="width:45px; margin:0; margin-left:1px;"
+	                <input class="right_go" style="width:45px; margin:0; margin-left:0px;"
 	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
 	                   onclick="document.getElementById('projectBrowserText').value='';
                                loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
+
                     <!--GO: Land on All-->
-                    <input class="right_go" style="float:right; margin:0;"
+                    <input class="right_go" style="float:right; margin:0;margin-right:1px;"
 	                   type="submit" value="Go" id="projectBrowserButton"
 	                   onclick="document.getElementById('projectBrowserText'); loadProjectBrowser('{{project.short_name}}');gotoTab(1);  "/>
 	                   

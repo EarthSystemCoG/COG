@@ -336,7 +336,7 @@ def post_update(request, post_id):
         
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # check lock
     lock = getLock(post)
@@ -427,7 +427,7 @@ def post_add_doc(request, post_id):
     
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # attach doc to post
     post.docs.add(doc)
@@ -448,7 +448,7 @@ def post_remove_doc(request, post_id, doc_id):
     
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # retrieve doc from database
     doc = get_object_or_404(Doc, pk=doc_id)
