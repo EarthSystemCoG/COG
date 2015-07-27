@@ -13,6 +13,7 @@ from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS
 import os.path
 from django_openid_auth.models import UserOpenID
 import imghdr
+from captcha.fields import CaptchaField
 from cog.forms.forms_utils import validate_image
 
 # list of invalid characters in text fields
@@ -165,6 +166,9 @@ class UserForm(ImageForm):
     
     # field that stores redirection URL after account creation
     next = CharField(required=False)
+    
+    # captcha field to prevent submission by web-bots
+    captcha = CaptchaField()
 
     class Meta:
         # note: use User model, not UserProfile

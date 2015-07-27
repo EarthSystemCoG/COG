@@ -29,7 +29,8 @@ setup(
                       'pysqlite==2.6.3',        
                       'django-contrib-comments==1.6.1',   
                       'globusonline-transfer-api-client==0.10.16',     
-                      'pillow==2.8.2'  
+                      'pillow==2.8.2',
+                      'django-simple-captcha==0.4.5'
                       ],
     long_description=read('README.md'),
     classifiers=[

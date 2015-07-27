@@ -201,6 +201,7 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'pagination',
+    'captcha',
     'layouts',
     'cog.apps.CogConfig',
     'cog.templatetags',

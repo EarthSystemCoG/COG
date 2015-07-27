@@ -23,6 +23,24 @@
             width:300px;
             padding-bottom: 8px;
         }
+        
+        #captcha_element {
+        	padding: 10px;	
+        }
+        
+		#captcha_element input[type=text] {
+			border:       1px solid #666666;
+			background:   #FFFFFF;
+			color:        #5D781D;
+			width:        100px;
+			padding-left: 5px;
+			padding-right: 10px;
+			height:       16px;
+		}
+		#captcha_element img {
+			vertical-align: middle;
+			padding: 5px;
+		}
     </style>
 
     {% include 'cog/account/_countries.html' %}
@@ -108,7 +126,6 @@
 	              			</tr> 	
 			    		{% endfor %}
 		    		{% endif %}
-	            
 	             	<tr>
 	                    <td class="required" nowrap="nowrap"><label for="id_first_name">First Name</label></td>
 	                    <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
@@ -262,17 +279,25 @@
 		        {% endfor %}
  	        </table>
 
-            <div style="text-align:right;">
+            <div style="text-align:right; padding:5px;" >
                 <hr/>
+                                
+                <!-- captcha -->
+                <span id="captcha_element">
+	                Please type the letters in the image to prove you are human:
+	                {{ form.captcha }} {{ form.captcha.errors }}
+                </span>
+                
                 {% if request.user.is_anonymous %}
                    <input type="button" value="Cancel" onclick="window.location='{% url 'site_home' %}'"/>
-                {% else %}
+                {% else %}                   
                    <!-- prevent user with non-complete data to hit 'cancel' button -->
                    {% if request.user|isValidUser and form.instance.id %}
                    <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
                    {% endif %}
                 {% endif %}
                 <input type="submit" value="Submit" />
+                
             </div>
 
 			<!-- optional URL for eventual redirection -->
