@@ -27,6 +27,8 @@
 	<!-- authentication form -->
 	<div style="font-style: italic; text-align:center;">
 		Please note that username and password are case-sensitive.
+        <br>
+        Items in <strong>bold</strong> are required.
 	</div>
 
 	<form method="post">
@@ -35,11 +37,21 @@
 			<table>
 				<caption>User Login</caption>
 				<tr>
-				    <th class="white" scope="row">{{ form.username.label_tag }}</th>
-				    <td>{{ form.username }}</td>
+				    <th class="white" scope="row">
+                        <strong>
+                            {{ form.username.label_tag }}
+                        </strong>
+                    </th>
+				    <td>
+                        {{ form.username }}
+                    </td>
 				</tr>
 				<tr>
-				    <th class="gray" scope="row">{{ form.password.label_tag }}</th>
+				    <th class="gray" scope="row">
+                        <strong>
+                            {{ form.password.label_tag }}
+                        </strong>
+                    </th>
 				    <td>{{ form.password }}</td>
 				</tr>
 			</table>
