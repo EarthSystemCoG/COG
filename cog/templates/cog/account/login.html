@@ -1,7 +1,7 @@
 {% extends "cog/common/layout_center.html" %}
 <!--LOCATION: /cog/templates/cog/account/login.html-->
-<!--looks like this file has been deprecated and should be removed-->
-<!--it does not contain an openID login-->
+
+<!-- template for login2-->
 
 {% load cog_utils %}
 
@@ -14,12 +14,14 @@
 	<!-- display extra message if available -->
 	{% if request.GET.message %}
 	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
-	   <p/>
+	   <p></p>
 	{% endif %}
 
 	<!-- display authentication errors -->
 	{% if form.errors %}
-	<p class="errornote">Your username and password didn't match. Please try again.</p>
+	    <p class="errornote">
+            Your username and password didn't match. Please try again.
+        </p>
 	{% endif %}
 
 	<!-- authentication form -->
@@ -33,22 +35,22 @@
 			<table>
 				<caption>User Login</caption>
 				<tr>
-				    <td>{{ form.username.label_tag }}</td>
+				    <th class="white" scope="row">{{ form.username.label_tag }}</th>
 				    <td>{{ form.username }}</td>
 				</tr>
 				<tr>
-				    <td>{{ form.password.label_tag }}</td>
+				    <th class="gray" scope="row">{{ form.password.label_tag }}</th>
 				    <td>{{ form.password }}</td>
 				</tr>
 			</table>
         </div>
 
 		<div style="position: relative;">
-			<span style="position: absolute; left: 0px;">
+			<span style="position: absolute; left: 0;">
 			  <input type="submit" value="Login" />
 			  <input type="hidden" name="next" value="{{ next }}" />
 			</span>
-			<span style="position: absolute; right: 0px;">
+			<span style="position: absolute; right: 0;">
 			  <a href="{% url 'user_reminder' %}">Forgot Username?</a>
 			  &nbsp;
 			  <a href="{% url 'password_reset' %}">Forgot Password?</a>
