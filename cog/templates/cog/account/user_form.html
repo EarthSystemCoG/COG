@@ -25,7 +25,9 @@
         }
         
         #captcha_element {
-        	padding: 10px;	
+        	padding: 5px;
+
+            vertical-align: middle;
         }
         
 		#captcha_element input[type=text] {
@@ -33,9 +35,9 @@
 			background:   #FFFFFF;
 			color:        #5D781D;
 			width:        100px;
-			padding-left: 5px;
-			padding-right: 10px;
-			height:       16px;
+			padding-left:   5px;
+			padding-right:  0px;
+			height:        16px;
 		}
 		#captcha_element img {
 			vertical-align: middle;
@@ -84,239 +86,329 @@
 {% endblock %}
 
 {% block main %}
-  <div class="prepend-1 span-22">
+    <div class="prepend-1 span-22">
+        <h2>{{ mytitle }}</h2>
+        <!-- display extra message if available -->
+	    {% if request.GET.message %}
+	        <div class="message-box"> {{ request.GET.message|showMessage }}</div>
+	        <br>
+	    {% endif %}
 
-    <h2>{{ mytitle }}</h2>
-    <p>Please provide the information below to request a CoG account. Required fields are in <strong>bold</strong>.
-    <br/>Upon submission, an OpenID will be automatically assigned to you: you will need that OpenID to login. 
-    <br/>The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $ </p>
 
-    <!-- display extra message if available -->
-	{% if request.GET.message %}
-	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
-	   <br>
-	{% endif %}
-	
-    <div class="yui-skin-sam">
-	    <div class="mybox" id="userDiv">
 
-			<!-- NOTE: form cannot be submitted unless password meets criteria -->
-	        <form action="" method="post" enctype="multipart/form-data" onsubmit="return checkPassword();">
-	        
-	            {% csrf_token %}
-	            {{ formset1.management_form }}
-	            {{ formset2.management_form }}
-	           <!--width specified for IE, which does not accept
-	            width=99% as listed in the CSS for long-->
+        <!-- New Account -->
+        {% if not form.instance.id %}
+             <p>
+                 Please provide the information below to request a CoG account.
+                 <br/>Required fields are in <strong>bold</strong>.
+                 <br/>Upon submission, an OpenID will be automatically assigned to you: you will need that OpenID to login.
+                 <br/>The following characters are not allowed: &lt; &gt; &amp; # % { } [ ] $
+             </p>
 
-	            <table>
-	                <tr>
-	                    <td class="required" nowrap="nowrap"><label for="id_username">User Name</label></td>
-	                    {% if form.instance.id %}
-	                   		<td>{{ form.instance.username }} {{ form.username.as_hidden }}</td>
-	                	{% else %}
-	                   		<td>{{ form.username }}
-	                        	<em class="message">[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</em><br>{{ form.username.errors }}
-	                    	</td>
-	                   {% endif %}
-	                </tr>
-	                
-             		<!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
-              		{% if form.instance.id %}
-              			{% for openidform in formset2 %}
-	              			<tr>
-	              				{{ openidform.id }}
-	              				<td class="required" nowrap="nowrap"><label for="id_claimed_id">ESGF OpenID</label></td>
-	              				<td style="width:500px;vertical-align:middle;">
-	              					{{ openidform.instance.claimed_id }} 
-	              					{{ openidform.claimed_id.as_hidden }}
-	              					{{ openidform.display_id.as_hidden }}
-	              					{{ openidform.user.as_hidden }}
-	              				</td>
-	              			</tr> 	
-			    		{% endfor %}
-		    		{% endif %}
-	             	<tr>
-	                    <td class="required" nowrap="nowrap"><label for="id_first_name">First Name</label></td>
-	                    <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
-	                </tr>
-	                <tr>
-	                    <td class="required" nowrap="nowrap"><label for="id_last_name">Last Name</label></td>
-	                    <td >{{ form.last_name }} {{ form.last_name.errors }}</td>
-	                </tr>
-	                <tr>
-	                    <td class="required" nowrap="nowrap"><label for="id_email">Email</label></td>
-	                    <td>{{ form.email }} {{ form.email.errors }}</td>
-	                </tr>
-	                
+             <div class="message-box">
+                       Please note that if you are logging in with a previously granted ESGF OpenID, CoG requires that Institution, City, and Country be added to your account.
+             </div>
+        {% else %}
+            <!--current users -->
+            <p>Use this form to update your profile. Remember that required fields are in <strong>bold</strong>.</p>
+        {% endif %}
 
-	                <!-- existing COG users: the encrypted passwords are resubmitted as hidden fields -->
-	                {% if form.instance.id %}
+        <div class="yui-skin-sam">
+	        <div class="mybox" id="userDiv">
+	            <!-- NOTE: form cannot be submitted unless password meets criteria -->
+	            <form action="" method="post" enctype="multipart/form-data" onsubmit="return checkPassword();">
+                    {% csrf_token %}
+	                {{ formset1.management_form }}
+	                {{ formset2.management_form }}
 
-	                	{% if form.instance.profile.type == 1 %}
-			            	<!-- existing user: include encoded password, confirm_password as hidden fields -->
-		                	{{ form.password.as_hidden }}
+                    {% if not form.instance.id %}
+                            <!-- new users: must submit a password, confirm password -->
+                            <table>
+                                <caption>Create Password</caption>
+                                <!-- create a password -->
+		                        <tr>
+		                            <th class="white" style="width:212px;" scope="row" nowrap="nowrap">
+                                        <label for="id_password">
+                                            <strong>Password</strong>
+                                        </label>
+                                    </th>
+		                            <td>
+                                        {{ form.password }}
+		                                <br/><em class="message">[ {{ form.password.help_text }} ]</em>
+		                                {{ form.password.errors }}
+		                                <div id="password_check" style="display:none; margin-top:2px; vertical-align: middle;" >
+                                            &nbsp;
+		                                </div>
+		                            </td>
+		                        </tr>
+		                        <tr>
+		                            <th class="gray" scope="row" nowrap="nowrap">
+                                        <label for="id_confirm_password">
+                                            <strong>Confirm Password</strong>
+                                        </label>
+                                    </th>
+		                            <td>
+                                        {{ form.confirm_password }}
+		                                <br/><em class="message">[ {{ form.confirm_password.help_text }} ]</em>
+		                                <br/>{{ form.confirm_password.errors }}
+		                            </td>
+		                        </tr>
+                            </table>
+                    {% else %}
+                        <!-- existing COG users: the encrypted passwords are resubmitted as hidden fields -->
+                        {% if form.instance.profile.type == 1 %}
+			                <!-- existing user: include encoded password, confirm_password as hidden fields -->
+		                    {{ form.password.as_hidden }}
 		                    {{ form.confirm_password.as_hidden }}
 	                    {% endif %}
+        	        {% endif %}
 
-	                <!-- new users: must submit a password, confirm password -->
-	                {% else %}
-		                <!-- otherwise, the user must submit a password -->
-		                <tr>
-		                    <td class="required" nowrap="nowrap"><label for="id_password">Password</label></td>
-		                    <td>{{ form.password }}
-		                       <br/><em class="message">[ {{ form.password.help_text }} ]</em>
-		                       {{ form.password.errors }}
-		                       <div id="password_check" style="display:none; margin-top:2px; vertical-align: middle;" >
-                                   &nbsp;
-		                       </div>
-		                    </td>
-		                </tr>
-		                <tr>
-		                    <td class="required" nowrap="nowrap"><label for="id_confirm_password">Confirm Password</label></td>
-		                    <td>{{ form.confirm_password }}
-		                        <br/><em class="message">[ {{ form.confirm_password.help_text }} ]</em>
-		                        <br/>{{ form.confirm_password.errors }}
-		                    </td>
-		                </tr>
-	                {% endif %}
-	                <tr>
-                        <td class="required" nowrap="nowrap"><label for="id_institution">Institution</label></td>
-                        <td>{{ form.institution }} {{ form.institution.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="optional" nowrap="nowrap"><label for="id_department">Department</label></td>
-                        <td class="long">{{ form.department }} {{ form.department.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="required" nowrap="nowrap"><label for="id_city">City</label></td>
-                        <td class="long">{{ form.city }} {{ form.city.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="optional" nowrap="nowrap"><label for="id_state">State</label></td>
-                        <td>
-                            <div id="stateAutoComplete">
-                            {{ form.state }} <div id="stateContainer"></div></div><br/> {{ form.state.errors }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="required" nowrap="nowrap"><label for="id_country">Country</label></td>
-                        <td>
-                            <div id="countryAutoComplete">
-                            {{ form.country }} <div id="countryContainer"></div></div><br/> {{ form.country.errors }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="optional" nowrap="nowrap"><label for="id_researchKeywords">Interest Keywords</label></td>
-                        <td>
-                        [A short list of science fields you are involved with (60 characters maximum).
-                        <br/>Example: Software Engineering, Grid Computing, Climate Change.]
-                        <br/>{{ form.researchKeywords }} {{ form.researchKeywords.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="optional" nowrap="nowrap"><label for="id_researchInterests">Interest Statement</label></td>
-                        <td>
-                        [A short paragraph describing your professional interests (1000 characters maximum).]
-                        <br/>{{ form.researchInterests }} {{ form.researchInterests.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="optional" nowrap="nowrap"><label for="id_subscribed">Subscribe to COG Email List?</label></td>
-                        <td>{{ form.subscribed }} <em class="message">[ 'cog_info', low traffic list ]</em> {{ form.subscribed.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td class="optional" nowrap="nowrap"><label for="id_private">Do not list me among project members</label></td>
-                        <td>{{ form.private }} {{ form.private.errors }}</td>
-                    </tr>
-                    {% if not request.user.is_anonymous %}
+                    <!-- user information -->
+	                <table>
+                        {% if not form.instance.id %}
+                             <caption style="border-top:1px solid #666;">User Information</caption>
+                        {% else %}
+                             <caption>User Information</caption>
+                        {% endif %}
 	                    <tr>
-	                      <td class="optional" nowrap="nowrap">Picture
-	                        <br/>(Maximum Size: 1MB)
-	                        <br/>(Format: 'jpg', 'png', or 'gif')
-	                      </td>
-	                      <td>
-	                        <table>
-	                          <tr>
-	                        	<td>
-	                        	<img alt="user_image" src="{{ form.instance|getImage }}" {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
-	                        	</td>
-	                        	<td align="left">
-				                  <div style="margin-top:2px">
-				                    {% if not 'unknown' in form.instance|getImage %}
-				                      {{ form.delete_image }} Delete current picture?
-				                    {% endif %}
-				                    <br>
-				                    {{ form.image }}
-				                    &nbsp;{{ form.image.errors }}
-				                  </div>
-	                            </td>
-	                          </tr>
-	                        </table>
-	                      </td>
+	                        <th class="white" scope="row" nowrap="nowrap">
+                                <label for="id_username">
+                                    <strong>User Name</strong>
+                               </label>
+                            </th>
+	                            {% if form.instance.id %}
+	                   		        <td>
+                                        {{ form.instance.username }} {{ form.username.as_hidden }}
+                                    </td>
+	                	        {% else %}
+	                   		        <td>
+                                        {{ form.username }}
+	                        	        <em class="message">[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</em><br>{{ form.username.errors }}
+	                    	        </td>
+	                            {% endif %}
 	                    </tr>
-                    {% else %}
+	             	    <tr>
+	                            <th class="gray" scope="row" nowrap="nowrap">
+                                    <label for="id_first_name">
+                                        <strong>First Name</strong>
+                                    </label>
+                                </th>
+	                            <td>{{ form.first_name }} {{ form.first_name.errors }}</td>
+	                    </tr>
+	                    <tr>
+	                            <th class="white" scope="row" nowrap="nowrap">
+                                    <label for="id_last_name">
+                                        <strong>Last Name</strong>
+                                    </label>
+                                </th>
+	                            <td >{{ form.last_name }} {{ form.last_name.errors }}</td>
+	                    </tr>
+	                    <tr>
+	                            <th class="gray" scope="row" nowrap="nowrap">
+                                    <label for="id_email">
+                                        <strong>Email</strong>
+                                    </label>
+                                </th>
+	                            <td>{{ form.email }} {{ form.email.errors }}</td>
+	                    </tr>
+	                    <tr>
+                                <th class="white" scope="row" nowrap="nowrap">
+                                    <label for="id_institution">
+                                        <strong>Institution</strong>
+                                    </label>
+                                </th>
+                                <td>{{ form.institution }} {{ form.institution.errors }}</td>
+                        </tr>
                         <tr>
+                                <th class="gray" scope="row" nowrap="nowrap"><label for="id_department">Department</label></th>
+                                <td class="long">{{ form.department }} {{ form.department.errors }}</td>
+                        </tr>
+                        <tr>
+                                <th class="white" scope="row" nowrap="nowrap">
+                                    <label for="id_city">
+                                        <strong>City</strong>
+                                    </label>
+                                </th>
+                                <td class="long">{{ form.city }} {{ form.city.errors }}</td>
+                        </tr>
+                        <tr>
+                                <th class="gray" scope="row" nowrap="nowrap"><label for="id_state">State</label></th>
+                                <td>
+                                    <div id="stateAutoComplete" style="margin-bottom:20px;">
+                                        {{ form.state }}
+                                        <div id="stateContainer" style="width:99%;"></div>
+                                    </div>
+                                    {{ form.state.errors }}
+                                </td>
+                        </tr>
+                        <tr>
+                                <td class="white" scope="row" nowrap="nowrap">
+                                    <label for="id_country">
+                                        <strong>Country</strong>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div id="countryAutoComplete" style="margin-bottom:20px;">
+                                        {{ form.country }}
+                                        <div id="countryContainer"></div>
+                                    </div>
+                                    {{ form.country.errors }}
+                                </td>
+                        </tr>
+                        <tr>
+                                <th class="gray" scope="row" nowrap="nowrap"><label for="id_researchKeywords">Interest Keywords</label></th>
+                                <td>
+                                    {{ form.researchKeywords }} {{ form.researchKeywords.errors }}
+                                    <br/>[A short list of science fields you are involved with (60 characters maximum).
+                                    <br/>Example: Software Engineering, Grid Computing, Climate Change.]
+                                </td>
+                        </tr>
+                        <tr>
+                            <th class="white" scope="row" nowrap="nowrap"><label for="id_researchInterests">Interest Statement</label></th>
                             <td>
-                                <img alt="user_image" style="margin-top:4px;" src="/static/cog/img/unknown.thumbnail.jpeg">
-                            </td>
-                            <td colspan="2" class="optional" style="vertical-align: middle;">
-                                Note: You may upload a picture to your profile after you login for the first time.
+                                {{ form.researchInterests }} {{ form.researchInterests.errors }}
+                                <br/>[A short paragraph describing your professional interests (1000 characters maximum).]
                             </td>
                         </tr>
+                        <tr>
+                            <th class="gray" scope="row" nowrap="nowrap">
+                                <label for="id_subscribed">
+                                    Subscribe to COG Email List?
+                                </label>
+                            </th>
+                            <td>{{ form.subscribed }} <em class="message">[ 'cog_info', low traffic list ]</em> {{ form.subscribed.errors }}</td>
+                        </tr>
+                        <tr>
+                        <!--TODO: figure out why these widths are different but look the same -->
+                            <th class="white" style="width:220px;" scope="row" nowrap="nowrap">
+                                <label for="id_private">
+                                    Do not list me among project members
+                                </label>
+                            </th>
+                            <td>{{ form.private }} {{ form.private.errors }}</td>
+                        </tr>
+                    </table>
+
+
+                    <!--User Picture-->
+                    <table>
+                        <caption style="border-top:1px solid #666;">User Picture</caption>
+                        {% if not request.user.is_anonymous %}
+	                        <tr>
+	                            <th class="white" scope="row"  style="width:205px;" nowrap="nowrap">
+                                    Picture
+	                                <br/>(Maximum Size: 1MB)
+	                                <br/>(Format: 'jpg', 'png', or 'gif')
+	                            </th>
+	                            <td>
+	                                <table> <!--layout only -->
+	                                    <tr>
+	                        	            <td>
+	                        	                <img alt="user_image" src="{{ form.instance|getImage }}"
+                                                    {% if not 'unknown' in form.instance|getImage %} class="myimage" {% endif %}/>
+	                        	            </td>
+	                        	            <td style="vertical-align:middle;">
+				                                <div style="margin-top:2px;display:table-cell;vertical-align: middle;">
+				                                    {% if not 'unknown' in form.instance|getImage %}
+				                                        {{ form.delete_image }} Delete current picture?
+				                                    {% else %}
+				                                        {{ form.image }}
+				                                        &nbsp;
+                                                        {{ form.image.errors }}
+                                                    {% endif %}
+				                                </div>
+	                                        </td>
+	                                    </tr>
+	                                </table>
+	                            </td>
+	                        </tr>
+                        {% else %}
+                            <tr>
+                                <td>
+                                    <img alt="user_image" style="margin-top:4px;" src="/static/cog/img/unknown.thumbnail.jpeg">
+                                </td>
+                                <td colspan="2" class="optional" style="vertical-align: middle;">
+                                    Note: You may upload a picture to your profile after you login for the first time.
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </table>
+
+                    <!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
+              	    {% if form.instance.id %}
+              		    {% for openidform in formset2 %}
+                            <table>
+                                <caption style="border-top:1px solid #666;">User Picture</caption>
+	              			    <tr>
+	              				    {{ openidform.id }}
+	              				    <th class="white" scope="row" nowrap="nowrap">
+                                        <label for="id_claimed_id">
+                                            ESGF OpenID
+                                        </label>
+                                    </th>
+	              				    <td style="width:500px;vertical-align:middle;">
+	              					    {{ openidform.instance.claimed_id }}
+	              					    {{ openidform.claimed_id.as_hidden }}
+	              					    {{ openidform.display_id.as_hidden }}
+	              					    {{ openidform.user.as_hidden }}
+	              				    </td>
+	              			    </tr>
+                            </table>
+			    	    {% endfor %}
+		    	    {% endif %}
+
+                    <!--web URLs-->
+
+                    {% if not request.user.is_anonymous %}
+	                    <table>
+				        <caption style="border-top:1px solid #666;">Web Sites</caption>
+		    	        <!-- URLs -->
+		    	            <tr>
+              	                <td colspan="6">[Optional web sites associated with this COG user account: (e.g. 'Home Page', 'My Blog') ]</td>
+                            </tr>
+                            {% for urlform in formset1 %}{{ urlform.id }}
+				                <tr>
+			                        <td style="width:60px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-url">Web URL:</label></td>
+				                    <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
+			                        <td style="width:30px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-name">Title:</label></td>
+				                    <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
+			                        <td style="vertical-align:middle;">{{ urlform.DELETE }} <label for="id_url-{{forloop.counter0}}-DELETE">Delete?</label></td>
+				                </tr>
+		                    {% endfor %}
+ 	                    </table>
                     {% endif %}
-                </table>
 
-	     <!--this section is its own table in order to make the td widths different from the one above-->
-         <!--with the removal of the user image until after authentication, the color of this table now needs to vary
-         depending upon whether or not a user is authenticated-->
-         {% if not request.user.is_anonymous %}
-	        <table class="odd-color">
-         {% else %}
-            <table>
-         {% endif %}
-				
-		    	<!-- URLs -->
-		    	<tr>
-              	   <td colspan="6">[Optional web sites associated with this COG user account: (e.g. 'Home Page', 'My Blog') ]</td>
-                </tr>
-                {% for urlform in formset1 %}{{ urlform.id }}
-				    <tr>
-			           <td style="width:60px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-url">Web URL:</label></td>
-				       <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
-			           <td style="width:30px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-name">Title:</label></td>
-				       <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
-			           <td style="vertical-align:middle;">{{ urlform.DELETE }} <label for="id_url-{{forloop.counter0}}-DELETE">Delete?</label></td>
-				    </tr>
-		        {% endfor %}
- 	        </table>
 
-            <div style="text-align:right; padding:5px;" >
-                <hr/>
-                                
-                <!-- captcha -->
-                <span id="captcha_element">
-	                Please type the letters in the image to prove you are human:
-	                {{ form.captcha }} {{ form.captcha.errors }}
-                </span>
-                
-                {% if request.user.is_anonymous %}
-                   <input type="button" value="Cancel" onclick="window.location='{% url 'site_home' %}'"/>
-                {% else %}                   
-                   <!-- prevent user with non-complete data to hit 'cancel' button -->
-                   {% if request.user|isValidUser and form.instance.id %}
-                   <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
-                   {% endif %}
-                {% endif %}
-                <input type="submit" value="Submit" />
-                
-            </div>
+                    <!--captcha and buttons-->
+                    <div style="text-align:right; margin-top:10px;" >
+                        <!-- captcha -->
+                        <!--TODO: make captcha not required for regular submission -->
+                        {% if not form.instance.id %}
+                            <hr style="background-color:#666;"/>
+                            <!-- captcha -->
+                            <span id="captcha_element">
+	                            Please type the letters in the image to prove you are human:
+	                            {{ form.captcha }} {{ form.captcha.errors }}
+                            </span>
 
-			<!-- optional URL for eventual redirection -->
-			{{ form.next.as_hidden }}
+                            <br>
+                        {% endif %}
 
-	        </form>
-	        
-	    </div>
+                        {% if request.user.is_anonymous %}
+                            <input type="button" value="Cancel" onclick="window.location='{% url 'site_home' %}'"/>
+                        {% else %}
+                            <!-- prevent user with non-complete data to hit 'cancel' button -->
+                            {% if request.user|isValidUser and form.instance.id %}
+                                  <input type="button" value="Cancel" onclick="window.location='{% url 'user_detail' form.instance.id %}'"/>
+                            {% endif %}
+                        {% endif %}
+                        <input type="submit" style="margin-right:4px;" value="Submit" />
+                    </div>
+                    <!-- optional URL for eventual redirection -->
+                    {{ form.next.as_hidden }}
+	            </form>
+            </div> <!--end div class my box-->
+        </div>
     </div>
-</div>
 
 {% endblock %}
