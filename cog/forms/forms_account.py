@@ -194,6 +194,10 @@ class UserForm(ImageForm):
         # new user only: validate 'password', 'confirm_password' fields
         if user_id is None:
             validate_password(self)
+            
+        # disable captcha validation if user is updating the form
+        if user_id is not None:
+            del self._errors['captcha']
 
         # validate 'username' field
         validate_username(self, user_id)

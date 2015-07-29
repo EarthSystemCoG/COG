@@ -66,16 +66,6 @@
            stateAutoComp.allowBrowserAutocomplete = false;
        }
        YAHOO.util.Event.onContentReady("userDiv", init);
-       
-       $('.js-captcha-refresh').click(function(){
-    	    $form = $(this).parents('form');
-
-    	    $.getJSON($(this).data('url'), {}, function(json) {
-    	        // This should update your captcha image src and captcha hidden input
-    	    });
-
-    	    return false;
-    	});
 
     //]]>
     </script>
@@ -381,17 +371,14 @@
 
                     <!--captcha and buttons-->
                     <div style="text-align:right; margin-top:10px;" >
-                        <!-- captcha -->
-                        <!--TODO: make captcha not required for regular submission -->
+                    
+                        <!-- captcha - only when user first register -->
                         {% if not form.instance.id %}
                             <hr style="background-color:#666;"/>
-                            <!-- captcha -->
                             <span id="captcha_element">
 	                            Please type the letters in the image to prove you are human:
 	                            {{ form.captcha }} {{ form.captcha.errors }}
                             </span>
-
-                            <br>
                         {% endif %}
 
                         {% if request.user.is_anonymous %}
