@@ -5,14 +5,21 @@
 	        <caption>Project Affiliations</caption>
             {% for project in projects %}
 	            {% if not project.private or request.user == user_profile.user or request.user.is_staff == True or request.user|hasAdminPermission:project %}
-	                <tr>
-	                    <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
-	                    <td nowrap="nowrap">
-	                        {% if request.user.id == user_profile.user.id %}
-	                             <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a>
-	                        {% endif %}
-	                    </td>
-	                </tr>
+                    <!--TODO: adjust colors to match rest of page -->
+                    <tr>
+                        <th scope="col">Project Name</th>
+                        <th scope="col">Cancel Membership</th>
+                    </tr>
+                    <tbody>
+	                    <tr>
+	                        <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
+	                        <td nowrap="nowrap">
+	                            {% if request.user.id == user_profile.user.id %}
+	                                 <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a>
+	                            {% endif %}
+	                        </td>
+                        </tr>
+	                </tbody>
 	            {% endif %}
 	        {% endfor %}
 	    </table>
