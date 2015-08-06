@@ -14,19 +14,19 @@
                 {% endif %}
                 on {{ doc.publication_date|date:"d M Y, H:m" }}, last update: {{ doc.update_date|timesince }} ago.</caption>
             <tr>
-                <td class="head">Title</td>
+                <th class="white" scope="row"><strong>Title</strong></th>
                 <td>{{ doc.title }}</td>
             </tr>
             <tr>
-                <td class="head">Description</td>
+                <th class="grey" scope="row"><strong>Description</strong></th>
                 <td>{{ doc.description|urlizetrunc:50|linebreaksbr }}</td>
             </tr>
             <tr>
-                <td class="head">Download URL</td>
+                <th class="white" scope="row"><strong>Download URL</strong></th>
                 <td><a href="{{ doc.file.url }}">http://{{ request.get_host }}{{ doc.file.url }}</a></td>
             </tr>
             <tr>
-                <td class="head">Is Private?</td>
+                <th class="grey" scope="row"><strong>Is Private?</strong></th>
                 <td>{{ doc.is_private }}</td>
             </tr>
         </table>
