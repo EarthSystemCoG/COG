@@ -18,7 +18,11 @@
 	
 		    <div class="mybox">
 			    <table>
-			       <caption>{{news.project.short_name}}: {{ news.title }}</caption>
+			        <tr>
+                        <td class="caption_mimic">
+                            <strong>{{news.project.short_name}}: {{ news.title }}</strong>
+                        </td>
+                    </tr>
 			        <tr>
 			           <td class="long"> {{ news.text|urlizetrunc:50|linebreaksbr }} </td>
 			        </tr>	        

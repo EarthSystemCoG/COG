@@ -11,10 +11,12 @@
     {% for topic in topics %}
    		<div class="mybox">
 	    	<table>
-	        	<caption>
-	        		{{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}">{{ topic.title }}</a>
-	        		{% include 'cog/forum/_topic_links.html' %} 			
-	        	</caption>
+	        	<tr>
+                    <td class="caption_mimic">
+	        		    {{ topic|is_locked:request }} <a href="{% url 'topic_detail' project.short_name topic.id %}"><strong>{{ topic.title }}</strong></a>
+	        		    {% include 'cog/forum/_topic_links.html' %}
+	        	    </td>
+                </tr>
     			<!-- one row per thread -->
     			{% for thread in topic.get_threads %}
     				{% get_comment_count for thread as comment_count %}
