@@ -16,11 +16,11 @@
 </script>
 
 <!-- display image -->
-<p/>
+<p></p>
 <div style="text-align:center">
 
 	<!-- optional image or thumbnail -->
-	{% if request.GET.subtype = 'image' %}
+	{% if request.GET.subtype == 'image' %}
 	<div id="image" style="text-align:center">
 		<a href="{{ metadata.url}}" target="imgwin"><img src="{{ metadata.url}}" width="400px" onerror="imgError(this);"/></a>
 	</div>
@@ -37,10 +37,14 @@
 
 <!-- image metadata table -->
 {% if metadata.fields|length > 0 %}
-	<p/>
+	<p></p>
 	<div class="mybox">
 		<table>
-			<caption>File Metadata</caption>
+			<tr>
+                <td class="caption_mimic">
+                    <strong>File Metadata</strong>
+                </td>
+            </tr>
 			{% for tuple in metadata.fields %}
 			<tr>
 				<td class="head" nowrap="nowrap">{{ tuple.0 }}</td>
@@ -58,10 +62,14 @@
 	
 <!-- dataset metadata table -->
 {% if parentMetadata.fields|length > 0 %}
-	<p/>
+	<p></p>
 	<div class="mybox">
 		<table>
-			<caption>Dataset Metadata</caption>
+			<tr>
+                <td class="caption_mimic">
+                    <strong>Dataset Metadata</strong>
+                </td>
+            </tr>
 			{% for tuple in parentMetadata.fields %}
 			<tr>
 				<td class="head" nowrap="nowrap">{{ tuple.0 }}</td>
