@@ -5,7 +5,8 @@
 
 {% block main %}
 
-	Use this form to update the project external collaborators. Project members are automatically listed.
+	Use this form to update the project external collaborators. Project members are automatically listed. Required fields are in
+    <strong>bold</strong>.
 	
 	<p>
 	<form method="post" action="" enctype="multipart/form-data">
@@ -17,13 +18,13 @@
 		    <table>
 		    	<caption>{{ project.short_name }} External Collaborators</caption>
 		    	<tr>
-		    		<td style="font-weight: bold;" nowrap="nowrap">First Name</td>
-		    		<td style="font-weight: bold;" nowrap="nowrap">Last Name</td>
-		    		<td style="font-weight: bold;" nowrap="nowrap">Institution</td>
-		    		<td nowrap="nowrap">Interests (max 60 chars)</td>
-		    		<td style="text-align: center;" nowrap="nowrap">Picture</td>
-		    		<td style="text-align: center;" nowrap="nowrap">(maximum size: 1MB)</td>
-		    		<td style="text-align: center;" nowrap="nowrap">Delete?</td>
+		    		<th class="white"  nowrap="nowrap"><strong>First Name</strong></th>
+		    		<th class="white"  nowrap="nowrap"><strong>Last Name</strong></th>
+		    		<th class="white"  nowrap="nowrap"><strong>Institution</strong></th>
+		    		<th class="white"  nowrap="nowrap">Interests (max 60 chars)</th>
+		    		<th class="white"  nowrap="nowrap">Picture</th>
+		    		<th class="white"  nowrap="nowrap">(maximum size: 1MB)</th>
+		    		<th class="white"  nowrap="nowrap">Delete?</th>
 		    	</tr>
 		    {% for form in formset %}
 	        	{{ form.id }}
