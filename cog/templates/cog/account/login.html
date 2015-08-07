@@ -35,23 +35,25 @@
 	   {% csrf_token %}
 		<div class="mybox">
 			<table>
-				<caption>User Login</caption>
 				<tr>
-				    <th class="white" scope="row">
+                    <td colspan="2" class="caption_mimic"><strong>User Login</strong></td>
+                </tr>
+				<tr>
+				    <td scope="row">
                         <strong>
                             {{ form.username.label_tag }}
                         </strong>
-                    </th>
+                    </td>
 				    <td>
                         {{ form.username }}
                     </td>
 				</tr>
 				<tr>
-				    <th class="gray" scope="row">
+				    <td scope="row">
                         <strong>
                             {{ form.password.label_tag }}
                         </strong>
-                    </th>
+                    </td>
 				    <td>{{ form.password }}</td>
 				</tr>
 			</table>
