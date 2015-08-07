@@ -14,34 +14,32 @@
 	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js"></script>
 
     <!-- note: must style the autocomplete containers otherwise it expands to fit the whole window-->
-    <style scoped type="text/css">
+    <style type="text/css">
         #countryAutoComplete {
-            width:300px;
+            width:          99%;
             padding-bottom: 8px;
         }
         #stateAutoComplete {
-            width:300px;
+            width:          99%;
             padding-bottom: 8px;
         }
         
         #captcha_element {
-        	padding: 5px;
-
             vertical-align: middle;
+            margin-right:4px;
         }
         
 		#captcha_element input[type=text] {
 			border:       1px solid #666666;
 			background:   #FFFFFF;
 			color:        #5D781D;
-			width:        100px;
-			padding-left:   5px;
-			padding-right:  0px;
+			width:        150px;
 			height:        16px;
+            margin:        0;
 		}
 		#captcha_element img {
 			vertical-align: middle;
-			padding: 5px;
+			padding:        5px;
 		}
     </style>
 
@@ -364,16 +362,19 @@
 
 
                     <!--captcha and buttons-->
-                    <div style="text-align:right;" >
-                        <!-- captcha - only when user first register -->
-                        {% if not form.instance.id %}
-                            <hr style="background-color:#666; margin-top:0;"/>
-                            <span id="captcha_element">
+
+                    <!-- captcha - only when user first register -->
+                    {% if not form.instance.id %}
+                        <hr style="background-color:#666; margin-top:0;"/>
+                        <div style="text-align:right;">
+                            <div id="captcha_element">
 	                            Please type the letters in the image to prove you are human:
 	                            {{ form.captcha }} {{ form.captcha.errors }}
-                            </span>
-                        {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
 
+                    <div style="text-align: right;" >
                         {% if request.user.is_anonymous %}
                             <input type="button" value="Cancel" onclick="window.location='{% url 'site_home' %}'"/>
                         {% else %}
