@@ -588,6 +588,13 @@ td.tophead {
 	vertical-align: top;
 }
 
+td.caption_mimic{
+    background-color: #B9E0E3;
+    text-align:       left;
+    color:            #666;
+    border-bottom:    1px solid #666;
+}
+
 td.righttop {
 	text-align: right;
 	vertical-align: top;

@@ -2,15 +2,18 @@
 <!--in _user_projects.html -->
     <div class="mybox">
 	    <table>
-	        <caption>Project Affiliations</caption>
+	        <tr>
+                <td class="caption_mimic">
+                    <strong>Project Affiliations</strong>
+                </td>
+            </tr>
             {% for project in projects %}
 	            {% if not project.private or request.user == user_profile.user or request.user.is_staff == True or request.user|hasAdminPermission:project %}
                     <!--TODO: adjust colors to match rest of page -->
                     <tr>
-                        <th scope="col">Project Name</th>
-                        <th scope="col">Cancel Membership</th>
+                        <td>Project Name</td>
+                        <td>Cancel Membership</td>
                     </tr>
-                    <tbody>
 	                    <tr>
 	                        <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
 	                        <td nowrap="nowrap">
@@ -19,7 +22,7 @@
 	                            {% endif %}
 	                        </td>
                         </tr>
-	                </tbody>
+
 	            {% endif %}
 	        {% endfor %}
 	    </table>
