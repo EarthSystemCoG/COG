@@ -5,14 +5,14 @@
 	<div class="mybox">
 		 <table>
              <tr>
-                 <td class="caption_mimic">
+                 <td colspan="2" class="caption_mimic">
 		             <strong>My OpenID</strong>
                  </td>
              </tr>
              {% if user_profile.openids %}
 			     {% for openid in user_profile.openids %}
 		        	<tr>
-			            <td nowrap="nowrap">OpenID</td>
+			            <td nowrap="nowrap"><strong>OpenID</strong></td>
 			            <td class="long">{{ openid }}</td>
 			        </tr>
 		        {% endfor %}
