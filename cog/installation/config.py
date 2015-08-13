@@ -134,7 +134,7 @@ class CogConfig(object):
         # [DEFAULT]        
         hostName = self._safeGet("esgf.host", default='localhost') 
         self._safeSet('SITE_NAME', hostName.upper())
-        self._safeSet('SITE_DOMAIN', hostName + ":8000") # FIXME after Apache integration
+        self._safeSet('SITE_DOMAIN', hostName)
         self._safeSet('TIME_ZONE', 'America/Denver')
         self._safeSet('SECRET_KEY','<change this to a random sequence of characters 20 or more and dont share it>')
         self._safeSet('COG_MAILING_LIST','cog_info@list.woc.noaa.gov')
