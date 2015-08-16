@@ -744,6 +744,24 @@ def get_domain(url):
     
     return urlparse.urlparse(url)[1]
 
+@register.filter
+def get_target_url_with_next_url(request, target_url_name):
+    '''Returns a named target URL with the 'next' parameter set to the current page URL.'''
+    
+    # <a href="{% url 'login' %}?next={{ request.build_absolute_uri }}"> Login</a>
+    target_url = reverse(target_url_name)
+    
+    # current page full URL
+    current_url =  request.build_absolute_uri()
+    
+    # keep the same 'next' URL, don't keep adding
+    if '?next=' in current_url:
+        next_url = current_url.split("?next=")[1]
+    # return to current page, with optional query parameters
+    else:
+        next_url = current_url
+    
+    return "%s?next=%s" % (target_url, next_url)
 
 @register.filter
 def get_openid(request):
