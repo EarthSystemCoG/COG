@@ -168,7 +168,7 @@ def notifyAdminsOfUserSubscription(user, request, action):
 def user_add(request):
     
     # redirection URL
-    _next = request.REQUEST.get('next', None)
+    _next = request.GET.get('next', None) or request.POST.get('next', None)
     
     # redirect to another site if necessary
     if redirectToIdp():
