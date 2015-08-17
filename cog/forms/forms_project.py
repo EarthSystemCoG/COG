@@ -19,10 +19,10 @@ class ProjectForm(ModelForm):
     # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its
     # styles are controlled in cogstyle.css
 
-    parents = forms.ModelMultipleChoiceField("parents", cache_choices=False, required=False,
+    parents = forms.ModelMultipleChoiceField("parents", required=False,
                                              widget=forms.SelectMultiple(attrs={'size': '20',
                                                                                 'class': 'selectprojects'}))
-    peers = forms.ModelMultipleChoiceField("peers", cache_choices=False, required=False,
+    peers = forms.ModelMultipleChoiceField("peers", required=False,
                                            widget=forms.SelectMultiple(attrs={'size': '20',
                                                                               'class': 'selectprojects'}))
     # filtering of what is see in the form is done down below. 
