@@ -3,6 +3,10 @@
 
 {% block right %}
 {% load cog_utils %}
+
+	<!-- Peer Nodes widget -->
+	{% include 'cog/common/_peer_nodes.html' %}
+ 
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">

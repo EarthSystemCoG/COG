@@ -24,7 +24,7 @@ def getPeerSites():
     '''Returns a list of ENABLED peer site objects.'''
     
     # filter PeerSites by enabled=True
-    return [peer.site for peer in PeerSite.objects.filter(enabled=True)]
+    return [peer.site for peer in PeerSite.objects.filter(enabled=True).order_by('site__name')]
 
 
 
