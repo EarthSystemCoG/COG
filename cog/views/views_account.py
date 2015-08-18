@@ -168,7 +168,7 @@ def notifyAdminsOfUserSubscription(user, request, action):
 def user_add(request):
     
     # redirection URL
-    _next = request.REQUEST.get('next', None)
+    _next = request.GET.get('next', None) or request.POST.get('next', None)
     
     # redirect to another site if necessary
     if redirectToIdp():
@@ -181,7 +181,7 @@ def user_add(request):
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
                                                  extra=2)
-    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2)
+    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2, fields="__all__")
             
     if request.method == 'GET':
 
@@ -265,7 +265,8 @@ def user_add(request):
                     url = urlparse(_next)
                     login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
             # append openid to initial login_url
-            login_url += "&openid=%s" % urllib.quote_plus( userp.openid() )
+            if userp.openid() is not None:
+                login_url += "&openid=%s" % urllib.quote_plus( userp.openid() )
             
             response = HttpResponseRedirect(login_url)
             
@@ -281,7 +282,7 @@ def user_add(request):
             elif not formset1.is_valid():
                 print "URL formset is invalid: %s" % formset1.errors
             elif not formset2.is_valid():
-                print "OpenID formset is invalid: %s" % formset1.errors
+                print "OpenID formset is invalid: %s" % formset2.errors
             return render_user_form(request, form, formset1, formset2, title='Create User Profile')
 
 
@@ -365,7 +366,7 @@ def user_update(request, user_id):
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
                                                  extra=2)
-    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=0)
+    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=0, fields="__all__")
 
     if request.method == 'GET':
 

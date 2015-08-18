@@ -2,13 +2,21 @@
 
 <div class="mybox">
 	 <table>
-	     <caption>User Interests</caption>
+	     <tr>
+             <td class="caption_mimic" colspan="2">
+                 <strong>User Interests</strong>
+             </td>
+         </tr>
 		 <tr>
-		 		<th scope="row" class="white" nowrap="nowrap">Interest Keywords</th>
+		 		<td nowrap="nowrap">
+                    <strong>Interest Keywords</strong>
+                </td>
 		 		<td class="long">{{ user_profile.researchKeywords }}</td>
 		 </tr>
 		 <tr>
-		 		<th scope="row" class="gray" nowrap="nowrap">Interest Statement</th>
+		 		<td nowrap="nowrap">
+                    <strong>Interest Statement</strong>
+                </td>
 		 		<td class="long">{{ user_profile.researchInterests|urlizetrunc:50|linebreaksbr }}</td>
 		 </tr>		   
 	 </table>

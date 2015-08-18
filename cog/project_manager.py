@@ -78,8 +78,12 @@ class ProjectManager(object):
                         
                         if not Project.objects.filter(short_name=short_name).exists(): # avoid conflicts with existing projects, from ANY site
                             # create new project
-                            Project.objects.create(short_name=short_name, long_name=long_name, site=remote_site, active=True)
-                            print 'Created project=%s for site=%s in local database' % (short_name, remote_site)
+                            print 'Creating project=%s (%s) for site=%s in local database' % (short_name, long_name, remote_site)
+                            try:
+                                Project.objects.create(short_name=short_name, long_name=long_name, site=remote_site, active=True)
+                                print 'Created project=%s for site=%s in local database' % (short_name, remote_site)
+                            except Exception as e:
+                                print e # ignore errors while creating any one project from remote site, continue iteration
                         else:
                             print 'Project with name:%s already exists (local or remote)' % short_name
                 

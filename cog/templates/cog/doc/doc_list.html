@@ -2,8 +2,7 @@
 
 {% block main %}
 
-	{% load cog_utils %}
-
+    {% load cog_utils %}
     {% url 'doc_list' as url %}
     {% with 'document' as object_type %}
         {% include 'cog/common/_search.html' %}
@@ -16,32 +15,49 @@
     <div class="mybox">
 	    <table>
 	        <caption>{{ list_title }}</caption>
+            <tr>
+                <th class="white" scope="col"><strong>#</strong></th>
+                <th class="white" scope="col"><strong>Title</strong></th>
+                <th class="white" scope="col"><strong>Description</strong></th>
+                <th class="white" scope="col"><strong>Private?</strong></th>
+                <th class="white" scope="col"><strong>Date</strong></th>
+                <th class="white" scope="col"><strong>View Info</strong></th>
+                <th class="white" scope="col"><strong>Delete?</strong></th>
+                <th class="white" scope="col"><strong>Comments</strong></th>
+            </tr>
+
+
 			{% for doc in object_list %}
-			   {% get_comment_count for doc as comment_count %}
-			   <tr>
-			      <td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
-			      <td><strong><a href="{{ doc.file.url }}">{{ doc }}</a></strong></td>
-			      <td> {{ doc.description|truncatewords:8 }} </td>
-			      <td>{% if doc.is_private %} <span class='privatelink'>&nbsp;</span>{% endif %}</td> 
-			      <td nowrap="true">{{ doc.update_date|date:"d M Y, H:m" }}</td> 
-			      <td nowrap="true"><a href="{% url 'doc_detail' doc.id %}" class="listlink">&nbsp;Info</a></td>
-			      <td nowrap="nowrap">
-			      	{% if request.user|hasUserPermission:project %}
-			      	<a href="{% url 'doc_remove' doc.id %}?redirect={{ request.path }}" class="deletelink"
-                       onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document?',this)">Delete</a>
-			      	{% endif %}
-			      </td>
-			      <td nowrap="true">{{ comment_count }} Comment{{ comment_count|pluralize }} </td>
-			   </tr>
+			    {% get_comment_count for doc as comment_count %}
+			    <tr>
+			        <td>{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
+			        <td><strong><a href="{{ doc.file.url }}">{{ doc }}</a></strong></td>
+			        <td> {{ doc.description|truncatewords:8 }} </td>
+			        <td>
+                        {% if doc.is_private %}
+                            <span class='privatelink'>&nbsp;</span>
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                    </td>
+			        <td nowrap="true">{{ doc.update_date|date:"d M Y, H:m" }}</td>
+			        <td nowrap="true"><a href="{% url 'doc_detail' doc.id %}" class="listlink">&nbsp;Info</a></td>
+			        <td nowrap="nowrap">
+                        <!-- only Contributors can delete documents -->
+			      	    {% if request.user|hasContributorPermission:project %}
+			      	        <a href="{% url 'doc_remove' doc.id %}?redirect={{ request.path }}" class="deletelink"
+                            onclick="return urlConfirmationDialog('Delete Document Confirmation','Are you sure you want to delete this document?',this)">Delete</a>
+			      	    {% endif %}
+			        </td>
+			        <td nowrap="true">{{ comment_count }} Comment{{ comment_count|pluralize }} </td>
+			    </tr>
 			{% endfor %}
 			<tr>
-              <td colspan="8">
-                 <small><span class="addlink">&nbsp;</span><a href="{% url 'doc_add' project.short_name.lower %}">Upload New File</a></small>
-              </td>
-            </tr>
+                <td colspan="8">
+                    <small><span class="addlink">&nbsp;</span><a href="{% url 'doc_add' project.short_name.lower %}">Upload New File</a></small>
+                </td>
+             </tr>
 		</table>
 	</div>
-	
     {% paginate %}
-	
 {% endblock %}

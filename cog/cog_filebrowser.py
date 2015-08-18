@@ -5,11 +5,11 @@
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasProjectRole
+from cog.models.project import Project, getProjectsForUser
+from cog.models.auth import userHasProjectRole
 
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import ROLE_USER, ROLE_ADMIN
-from cog.models.project import getProjectsForUser
+from cog.models.constants import ROLE_USER, ROLE_ADMIN, ROLE_CONTRIBUTOR
 
 from django.template import RequestContext
 
@@ -105,7 +105,7 @@ class filebrowser_check(object):
                     return self._access_denied(request,
                                                ['Sorry, upload to the top-level folder is forbidden.',
                                                 'Please upload to the project specific folder.'])
-                if userHasProjectRole(request.user, project, ROLE_USER):
+                if userHasProjectRole(request.user, project, ROLE_CONTRIBUTOR):
                     return view(_self, *args, **kwargs)           
                 else:
                     # by default, return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)

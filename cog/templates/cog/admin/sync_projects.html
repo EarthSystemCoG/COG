@@ -3,43 +3,40 @@
 {% block main %}
   <!-- limit visibility to site administrators -->
   {% if request.user.is_staff %}
+      <div class="prepend-5 span-14 last" >
     
-    <div class="prepend-5 span-14 last" >
-    
-    	<h1>CoG Peer Nodes Synchronization</h1>
+          <h1>CoG Peer Nodes Synchronization</h1>
     	
-	    <div class="mybox">
-		    <table>
-		        <caption>
-		           Synchronization Report
-		        </caption>
+	          <div class="mybox">
+		          <table>
+		              <caption>
+		                  Synchronization Report
+		              </caption>
 		        
-		        <!-- header row -->
-		        <tr>
-	                <td class="tophead">Site Name</td>
-	                <td class="tophead">Domain</td>
-	                <td class="tophead">Shared Projects Document</td>
-	                <td class="tophead">Sync Status</td>
-	            </tr>
-				<!-- data rows -->	        
-		        {% for siteid, sitedict in sites.items %}
-			        <tr>
-			           <td>{{ sitedict.name }}</td>
-			           <td>{{ sitedict.domain }}</td>
-			           <td><a href='{{ sitedict.url }}'>Shared Projects</a></td>
-			           <td>
-			           		{% if sitedict.status == 'ERROR' %}
-			           			<span style="color:#FF0000">{{ sitedict.status }}</span>
-			           	   	{% else %}
-			           	   		<span style="color:#358C92">{{ sitedict.status }}</span>
-			           		{% endif %}
-                       </td>
-			        </tr>
-			    {% endfor %}
-		    </table>
-	    </div>
-	    
-	</div>
-       
-  {% endif %}   
+		              <!-- header row -->
+		              <tr>
+	                      <th class="white" scope="col">Site Name</th>
+	                      <th class="white" scope="col">Domain</th>
+	                      <th class="white" scope="col">Shared Projects Document</th>
+	                      <th class="white" scope="col">Sync Status</th>
+	                  </tr>
+				      <!-- data rows -->
+		              {% for siteid, sitedict in sites.items %}
+			              <tr>
+			                  <td>{{ sitedict.name }}</td>
+			                  <td>{{ sitedict.domain }}</td>
+			                  <td><a href='{{ sitedict.url }}'>Shared Projects</a></td>
+			                  <td>
+			           		      {% if sitedict.status == 'ERROR' %}
+			           			      <span style="color:#FF0000">{{ sitedict.status }}</span>
+			           	   	      {% else %}
+			           	   		      <span style="color:#358C92">{{ sitedict.status }}</span>
+			           		      {% endif %}
+                              </td>
+			              </tr>
+			          {% endfor %}
+		          </table>
+	          </div>
+	  </div>
+  {% endif %}
 {% endblock %}

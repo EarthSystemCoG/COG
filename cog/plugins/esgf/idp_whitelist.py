@@ -2,7 +2,7 @@
 Module containing API and implementation for OpenID white-listing.
 '''
 
-from xml.etree.ElementTree import fromstring
+from xml.etree.ElementTree import fromstring, ParseError
 import re
 import abc
 #import pycurl
@@ -189,7 +189,10 @@ class LocalWhiteList(WhiteList):
             self.modtimes[filepath] = file_modification_datetime(filepath)
 
             # load this white list for the first time
-            self._reload(filepath, force=True)
+            try:
+                self._reload(filepath, force=True)
+            except ParseError as e:
+                print e # print error from parsing single white-list files and continue
 
 
     def _reload(self, filepath, force=False):

@@ -12,6 +12,9 @@ print 'SSL_CERT_DIR=%s' % os.environ.get('SSL_CERT_DIR', None)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 from django.conf import settings
 
+from django import setup as django_setup
+django_setup()
+
 import django.core.management
 utility = django.core.management.ManagementUtility()
 command = utility.fetch_command('runserver')

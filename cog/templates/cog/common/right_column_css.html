@@ -67,6 +67,7 @@
 
 
     #parent_projects a, #peer_projects a, #child_projects a, #all_projects a, #my_projects a {
+        /*line-height: 1.231;*/
         line-height: 1.3;
     }
 
@@ -77,11 +78,18 @@
 
 
     /* enable vertical scrollbar if large number of items needs to be displayed (in conjunction with large autoComp.maxResultsDisplayed) */
-    .yui-skin-sam .yui-ac-content { /* set scrolling */
+    /* set scrolling */
+    .yui-skin-sam .yui-ac-content {
 	    max-height:10em;
 	    overflow:auto; overflow-x:hidden; /* set scrolling */
 	    _height:10em; /* ie6 */
+
 	}
+    .yui-skin-sam .yui-ac-content li {
+        padding: 0;
+        padding-left: 4px;
+        line-height: 1.3; /* make same as #parent_projects a
+    }
 
  </style>
 

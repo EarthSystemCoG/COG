@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test, per
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
-from django.forms.models import modelformset_factory, inlineformset_factory
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response, redirect
@@ -24,7 +23,7 @@ from cog.utils import *
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.views.views_templated import templated_page_display
 from cog.views.utils import add_get_parameter
-
+from cog.models.auth import userHasAdminPermission, userHasUserPermission, userHasContributorPermission
 
 # method to add a new project, with optional parent project
 @login_required
@@ -133,7 +132,7 @@ def project_index(request, project_short_name):
         return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
         
     # check permission
-    if not userHasAdminPermission(request.user, project) and not request.user.is_staff:
+    if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     errors = {}
@@ -224,7 +223,7 @@ def project_update(request, project_short_name):
         return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
             
     # check permission
-    if not userHasAdminPermission(request.user, project) and not request.user.is_staff:
+    if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -396,8 +395,8 @@ def deleteProject(project):
         
     # delete permissions
     # note: if permissions didn't exit, they would be created first, then deleted
-    project.getUserPermission().delete()
-    project.getAdminPermission().delete()
+    #project.getUserPermission().delete()
+    #project.getAdminPermission().delete()
     
     # delete groups
     # note: if groups didn't exit, they would be created first, then deleted
@@ -445,11 +444,14 @@ def initProject(project):
     
     # create project groups
     uGroup = project.getUserGroup()
+    cGroup = project.getContributorGroup()
     aGroup = project.getAdminGroup()
     
     # create project permissions
-    uPermission = project.getUserPermission()
-    aPermission = project.getAdminPermission()
+    # obsolete ?
+    #uPermission = project.getUserPermission()
+    #cPermission = project.getContributorPermission()
+    #aPermission = project.getAdminPermission()
     
     # assign creator as project administrator
     if project.author is not None:

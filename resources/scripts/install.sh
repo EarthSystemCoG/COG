@@ -64,6 +64,9 @@ fi
 
 # checkout a specific tag or version
 cd $COG_INSTALL_DIR
+git status
+# remove any local changes that would prevent 'git pull'
+git stash
 git pull
 git checkout $COG_TAG
 

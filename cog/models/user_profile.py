@@ -51,7 +51,7 @@ class UserProfile(models.Model):
     last_password_update = models.DateTimeField('Date and Time when Password was Last Updated', blank=True, null=True)
     
     # list of user-selected project tags
-    tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='users')
+    tags = models.ManyToManyField(ProjectTag, blank=True, related_name='users')
 
 
     def __unicode__(self):

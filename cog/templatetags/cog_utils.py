@@ -1,4 +1,5 @@
 from cog.models import *
+from cog.models.auth import userHasUserPermission, userHasContributorPermission, userHasAdminPermission, userHasProjectRole
 from cog.models.utils import site_index, listPeople
 from cog.views import encodeMembershipPar, NEW_MEMBERSHIP, OLD_MEMBERSHIP, NO_MEMBERSHIP
 from cog.views import userCanPost, userCanView
@@ -123,7 +124,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         if not folder.isPredefined():
             deleteurl = reverse('folder_delete', args=[folder.project.short_name.lower(), folder.id])
             updateurl = reverse('folder_update', args=[folder.project.short_name.lower(), folder.id])
-            if hasUserPermission(user, folder.project):
+            if hasContributorPermission(user, folder.project):
                 html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
                 html += "<a href='" + deleteurl + \
                         "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Folder Confirmation'," \
@@ -146,7 +147,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
             html += "<li><span class='bookmark'>"
             html += "<a href='%s'>%s</a>" % (bookmark.url, bookmark.name)
             # display [Edit|Delete] links
-            if hasUserPermission(user, folder.project):
+            if hasContributorPermission(user, folder.project):
                 html += "&nbsp;&nbsp;[ <a href='" + updateurl + "' class='changelink'>Edit</a> | "
                 html += "<a href='" + deleteurl + \
                         "' class='deletelink' onclick=\"return urlConfirmationDialog('Delete Bookmark Confirmation'," \
@@ -298,6 +299,9 @@ def noMembership(group, user):
 def hasUserPermission(user, project):
     return userHasUserPermission(user, project)
 
+@register.filter
+def hasContributorPermission(user, project):
+    return userHasContributorPermission(user, project)
 
 @register.filter
 def hasAdminPermission(user, project):
@@ -706,7 +710,7 @@ def showMessage(message):
         return "Your password has expired. Please choose a new password conforming to the requirements below."
 
     else:
-        return message
+        raise Exception("Invalid message")
 
 
 @register.filter
@@ -740,6 +744,24 @@ def get_domain(url):
     
     return urlparse.urlparse(url)[1]
 
+@register.filter
+def get_target_url_with_next_url(request, target_url_name):
+    '''Returns a named target URL with the 'next' parameter set to the current page URL.'''
+    
+    # <a href="{% url 'login' %}?next={{ request.build_absolute_uri }}"> Login</a>
+    target_url = reverse(target_url_name)
+    
+    # current page full URL
+    current_url =  request.build_absolute_uri()
+    
+    # keep the same 'next' URL, don't keep adding
+    if '?next=' in current_url:
+        next_url = current_url.split("?next=")[1]
+    # return to current page, with optional query parameters
+    else:
+        next_url = current_url
+    
+    return "%s?next=%s" % (target_url, next_url)
 
 @register.filter
 def get_openid(request):
@@ -765,3 +787,12 @@ def delete_from_session(session, key):
     if session.get(key, None):
         del session[key]
         session.save()
+        
+@register.filter
+def get_peer_sites(project):
+    """
+    Returns a list of ENABLED peer sites, ordered alphabetically by name.
+    """
+    
+    print 'SITES=%s' % getPeerSites()
+    return getPeerSites()

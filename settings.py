@@ -196,17 +196,18 @@ INSTALLED_APPS = (
     'django_openid_auth',
     'grappelli',
     'filebrowser',
-    'django.contrib.admin',
+    'django.contrib.admin.apps.SimpleAdminConfig',
     'django_comments',
     'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'pagination',
-    'south',
+    'captcha',
     'layouts',
-    #'kronos',
-    'cog',
+    'cog.apps.CogConfig',
     'cog.templatetags',
 )
+
+MIGRATION_MODULES = { 'django_openid_auth': 'cog.db_migrations.django_openid_auth' }
 
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
@@ -288,3 +289,11 @@ OPENID_UPDATE_DETAILS_FROM_SREG = False
 # this is because django-openid-auth does not allow redirection to full URLs by default,
 # unless the host is specifically enabled
 ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = [re.sub(':\d+','', SITE_DOMAIN) ]
+
+#===== django-simpla-captcha =========
+
+#CAPTCHA_LETTER_ROTATION = None
+CAPTCHA_BACKGROUND_COLOR = '#FAC24A' # matches CoG dark yellow
+#CAPTCHA_FOREGROUND_COLOR = "#666666" # matches CoG dark gray
+CAPTCHA_IMAGE_SIZE = (100, 40)
+#CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'

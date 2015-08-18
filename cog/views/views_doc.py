@@ -12,10 +12,11 @@ from cog.forms import UploadImageForm
 from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES, SYSTEM_DOCS, SYSTEM_IMAGES
 from django.conf import settings
 from django.views.static import serve
-from cog.models.project import userHasUserPermission
+from cog.models.auth import userHasUserPermission, userHasContributorPermission
 from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
+from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
 import os
 
 
@@ -68,7 +69,7 @@ def doc_add(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
      
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -199,7 +200,7 @@ def doc_remove(request, doc_id):
     project = doc.project
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # delete doc altogether
@@ -222,7 +223,7 @@ def doc_update(request, doc_id):
     doc = get_object_or_404(Doc, pk=doc_id)
     
     # check permission
-    if not userHasUserPermission(request.user, doc.project):
+    if not userHasContributorPermission(request.user, doc.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -278,6 +279,10 @@ def doc_list(request, project_short_name):
         
     # document type        
     filter_by = request.GET.get('filter_by', DOCUMENT_TYPE_ALL)
+    # validate 'filter_by' value
+    if filter_by.lower() not in VALID_FILTER_BY_VALUES:
+        raise Exception("Invalid 'filter_by' value")
+    
     if filter_by != DOCUMENT_TYPE_ALL:
         types = DOCUMENT_TYPES[filter_by]
         _qset = Q(path__iendswith=types[0])
@@ -287,6 +292,9 @@ def doc_list(request, project_short_name):
         qset = qset & _qset
     
     order_by = request.GET.get('order_by', 'title')
+    # validate 'order_by' value
+    if order_by.lower() not in VALID_ORDER_BY_VALUES:
+        raise Exception("Invalid 'order_by' value")
     #list_title += ", order by %s" % order_by
         
     # execute query, order by descending update date

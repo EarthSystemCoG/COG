@@ -15,7 +15,11 @@
 	<!-- table of topic threads -->
     <div class="mybox">
 	    <table>
-	        <caption>Threads</caption>
+	        <tr>
+                <td class="caption_mimic">
+                    <strong>Threads</strong>
+                </td>
+            </tr>
     
     		<!-- loop over threads -->
     		{% for thread in threads %}
@@ -46,6 +50,7 @@
 	
 	<hr/>		
 	<!-- new thread form -->
+    <!-- for now does not need to be a Contributor-->
 	{% if user|hasUserPermission:project %}
 		<form action="" method="post">
 			{% csrf_token %}

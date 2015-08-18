@@ -19,10 +19,10 @@ class ProjectForm(ModelForm):
     # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its
     # styles are controlled in cogstyle.css
 
-    parents = forms.ModelMultipleChoiceField("parents", cache_choices=False, required=False,
+    parents = forms.ModelMultipleChoiceField("parents", required=False,
                                              widget=forms.SelectMultiple(attrs={'size': '20',
                                                                                 'class': 'selectprojects'}))
-    peers = forms.ModelMultipleChoiceField("peers", cache_choices=False, required=False,
+    peers = forms.ModelMultipleChoiceField("peers", required=False,
                                            widget=forms.SelectMultiple(attrs={'size': '20',
                                                                               'class': 'selectprojects'}))
     # filtering of what is see in the form is done down below. 
@@ -117,17 +117,17 @@ class ContactusForm(ModelForm):
     class Meta:
         model = Project
         fields = ('projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved')
-        widgets = {'projectContacts': Textarea(attrs={'rows': 6}),
-                   'technicalSupport': Textarea(attrs={'rows': 6}),
-                   'meetingSupport': Textarea(attrs={'rows': 6}),
-                   'getInvolved': Textarea(attrs={'rows': 6}), }
+        widgets = {'projectContacts': Textarea(attrs={'rows': 4}),
+                   'technicalSupport': Textarea(attrs={'rows': 4}),
+                   'meetingSupport': Textarea(attrs={'rows': 4}),
+                   'getInvolved': Textarea(attrs={'rows': 4}), }
 
 
 class DevelopmentOverviewForm(ModelForm):
 
     class Meta:
         model = Project
-        widgets = {'developmentOverview': Textarea(attrs={'rows': 6})}
+        widgets = {'developmentOverview': Textarea(attrs={'rows': 8})}
         fields = ('developmentOverview',)
 
 
@@ -135,13 +135,13 @@ class SoftwareForm(ModelForm):
 
     class Meta:
         model = Project
-        widgets = {'software_features': Textarea(attrs={'rows': 6}),
-                   'system_requirements': Textarea(attrs={'rows': 4}),
-                   'license': Textarea(attrs={'rows': 4}),
-                   'implementationLanguage': Textarea(attrs={'rows': 4}),
-                   'bindingLanguage': Textarea(attrs={'rows': 4}),
-                   'supportedPlatforms': Textarea(attrs={'rows': 4}),
-                   'externalDependencies': Textarea(attrs={'rows': 4}),
+        widgets = {'software_features': Textarea(attrs={'rows': 8}),
+                   'system_requirements': Textarea(attrs={'rows': 8}),
+                   'license': Textarea(attrs={'rows': 1}),
+                   'implementationLanguage': Textarea(attrs={'rows': 1}),
+                   'bindingLanguage': Textarea(attrs={'rows': 1}),
+                   'supportedPlatforms': Textarea(attrs={'rows': 8}),
+                   'externalDependencies': Textarea(attrs={'rows': 8}),
                    }
         fields = ('software_features', 'system_requirements', 'license',
                   'implementationLanguage', 'bindingLanguage', 'supportedPlatforms', 'externalDependencies')
@@ -158,7 +158,7 @@ class UsersForm(ModelForm):
 
     class Meta:
         model = Project
-        widgets = {'getting_started': Textarea(attrs={'rows': 10}), }
+        widgets = {'getting_started': Textarea(attrs={'rows': 12}), }
         fields = ('getting_started', )
 
 

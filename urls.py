@@ -26,6 +26,9 @@ urlpatterns = patterns('',
     # Comments
     (r'^comments/', include('django_comments.urls')),
     
+    # django-simple-captcha
+    (r'^captcha/', include('captcha.urls')),
+    
     # OpenID URLs included within CoG URLs
     #(r'^openid/', include('django_openid_auth.urls')),
             

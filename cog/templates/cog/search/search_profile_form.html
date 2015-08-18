@@ -103,6 +103,12 @@
 	    <div class="mybox">
             <table>
                 <caption>Search Facets</caption>
+                <tr>
+                    <th class="white"><strong>Facet Key</strong></th>
+                    <th class="white"><strong>Facet Label</strong></th>
+                    <th class="white"><strong>Edit?</strong></th>
+                    <th class="white"><strong>Delete?</strong></th>
+                </tr>
                 {% for facet in project.searchprofile.facets %}
                     <tr>
                        <td nowrap="nowrap">{{facet.key}}</td>

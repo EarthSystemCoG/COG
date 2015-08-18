@@ -30,7 +30,7 @@ class Post(models.Model):
         # optional parent post - must specify both blank=True (form validation) and null=True (model)
         parent = models.ForeignKey('self', verbose_name='Parent Post', blank=True, null=True, on_delete=models.SET_NULL)
         # optional attached documents - must specify both blank=True (form validation) and null=True (model)
-        docs = models.ManyToManyField(Doc, verbose_name='Attachments', blank=True, null=True)
+        docs = models.ManyToManyField(Doc, verbose_name='Attachments', blank=True)
         
         # post type
         type = models.CharField(max_length=10, verbose_name='Type', blank=False, choices=POST_TYPES)

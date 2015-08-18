@@ -13,6 +13,7 @@
 	</div>
 	
     <!-- Comments -->
+    <!--for now does not need to be a contributor-->
     {% if not thread.topic.is_private or user|hasUserPermission:project %}
 	    {% with thread as object %}
 	        {% url 'thread_detail' project.short_name thread.id as next_view %}

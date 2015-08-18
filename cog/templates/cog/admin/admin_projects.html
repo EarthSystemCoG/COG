@@ -12,15 +12,22 @@
 		        <caption>
 		           Project List
 		        </caption>
+                <tr>
+                    <th class="white" scope="col">Name</th>
+                    <th class="white" scope="col">Status</th>
+                    <th class="white" scope="col">Update?</th>
+                    <th class="white" scope="col">Delete?</th>
+                </tr>
+
 		        {% for project in project_list %}
 			        <tr>
 			           <td class="long"><a href="{% url 'project_home' project.short_name.lower %}">{{ project }} &raquo;</a></td>
 			           <td nowrap="true" style="text-align: center">
-			             {% if project.active %}
-			                 Active
-			             {% else %}
-			                 Not Active
-			             {% endif %}
+			               {% if project.active %}
+			                   Active
+			               {% else %}
+			                   Not Active
+			               {% endif %}
 			           </td>
 			           <td nowrap="true"><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">Update &raquo;</a></td>
 			           <td nowrap="true"><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">Delete &raquo;</a></td>
@@ -28,8 +35,6 @@
 		        {% endfor %}   
 		    </table>
 	    </div>
-    
-    {% paginate %}
-   
-    {% endif %}   
+        {% paginate %}
+    {% endif %}
 {% endblock %}

@@ -62,6 +62,7 @@
 {% paginate %}
 		
 <!-- only authenticated users can comment -->
+<!-- for now, do not need to be a Contributor to comment -->
 {% if request.user|hasUserPermission:project %}
 	{% get_comment_form for object as form %}
 	<form action="{% comment_form_target %}" method="post">
