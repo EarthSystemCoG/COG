@@ -1,5 +1,6 @@
 from cog.forms import *
 from cog.models import *
+from cog.models.auth import userHasContributorPermission, userHasAdminPermission, userHasUserPermission
 from cog.utils import *
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
@@ -52,7 +53,7 @@ def post_delete(request, post_id):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     else:
         # check permission: only project members can delete non-predefined project pages
-        if not userHasUserPermission(request.user, project):
+        if not userHasContributorPermission(request.user, project):
             return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -200,7 +201,7 @@ def post_add(request, project_short_name, owner=None):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # retrieve type
@@ -335,7 +336,7 @@ def post_update(request, post_id):
         
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # check lock
     lock = getLock(post)
@@ -426,7 +427,7 @@ def post_add_doc(request, post_id):
     
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # attach doc to post
     post.docs.add(doc)
@@ -447,7 +448,7 @@ def post_remove_doc(request, post_id, doc_id):
     
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # retrieve doc from database
     doc = get_object_or_404(Doc, pk=doc_id)
@@ -478,21 +479,13 @@ def redirect_to_post(request, post):
 
 # function to check that the user can modify the given post
 def userCanPost(user, post):
-    # project members can modify any page except for the home page
-    #if post.is_home:     
-    #    if not userHasAdminPermission(user, post.project):
-    #        return False
-    #else:
-    #    if not userHasUserPermission(user, post.project):
-    #        return False
-    #return True
     
     # page editing is restricted to project administrators
     if post.is_restricted:
         return userHasAdminPermission(user, post.project)
     # page can be edited by all project members
     else:
-        return userHasUserPermission(user, post.project)
+        return userHasContributorPermission(user, post.project)
 
 
 # function to check whether the user can view the current page

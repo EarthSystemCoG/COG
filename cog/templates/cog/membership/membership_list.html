@@ -17,12 +17,14 @@
             Click on Cancel Membership to remove a user from the project.
        </p>
        <p>
-            The <strong>User Group</strong> grants permissions to: create or edit any content in the project workspace (except for the home page),
-            send news, and comment on any page.
-            <br/> 
-            The <strong>Admin Group</strong> grants additional permissions to: change the project home page,
-            delete any page or blog in the project workspace (except for the predefined project pages),
-            enroll users in the project, create a child project, or delete the project altogether.
+            The <strong>User Group</strong> grants permissions to view private documents and participate in forum discussions.
+            <br><br>
+            The <strong>Contributor Group</strong> grants additional permissions to upload and delete files, create and delete wiki pages,
+            news items, and resources.
+            <br><br>
+            The <strong>Admin Group</strong> grants additional permissions to control the links in the upper navigation bar, fill in templated
+            content, change the project home page, turn on the data widget, configure the data search, approve project members,
+            assign project roles, and edit admin only wiki pages.
        </p>
    {% endif %}
 
@@ -55,13 +57,14 @@
 	            <caption>{{ list_title }}</caption>
 	            <!-- <br/> tags in table are to align text to the bottom -->
 	            <tr>
-	                <th scope="col" class="white">&nbsp;<br/>Last Name</th>
-	                <th scope="col" class="white">&nbsp;<br/>First Name</th>
-	                <th scope="col" class="white">&nbsp;<br/>User Name</th>
-	                <th scope="col" class="white">&nbsp;<br/>Email</th>
-                    <th scope="col" class="white" style="text-align: center;">User<br/>Group</th>
-	                <th scope="col" class="white" style="text-align: center;">Admin<br/>Group</th>
-	                <th scope="col" class="white" style="text-align: center;">Cancel<br/>Membership</th>
+	                <th scope="col" class="white">&nbsp;<br/><strong>Last Name</strong></th>
+	                <th scope="col" class="white">&nbsp;<br/><strong>First Name</strong></th>
+	                <th scope="col" class="white">&nbsp;<br/><strong>User Name</strong></th>
+	                <th scope="col" class="white">&nbsp;<br/><strong>Email</strong></th>
+                    <th scope="col" class="white" style="text-align: center;"><strong>User<br/>Group</strong></th>
+                    <th scope="col" class="white" style="text-align: center;"><strong>Contributor<br/>Group</strong></th>
+	                <th scope="col" class="white" style="text-align: center;"><strong>Admin<br/>Group</strong></th>
+	                <th scope="col" class="white" style="text-align: center;"><strong>Cancel<br/>Membership</strong></th>
 
 	            </tr>
 	            {% for user in users %}
@@ -81,6 +84,18 @@
 	                           {% endif %}
 	                       {% endwith %}
 	                    </td>
+	                    <!-- encode HTTP parameters for new and old membership in contributors group -->
+	                    <td style="text-align:center">
+	                       {% with user|isEnrolled:project.getContributorGroup as isEnrolled %}
+                              <label style="display:none" for="{{ user.username }}_contributor_group">contributor group</label>
+	                          <input type='checkbox' id="{{ user.username }}_contributor_group" name='{{ project.getContributorGroup|newMembership:user}}'
+                                      {% if isEnrolled %} checked="checked" {% endif %} />
+	                           {% if isEnrolled %}
+	                               <input type='hidden' name='{{ project.getContributorGroup|oldMembership:user}}' value="on"/>
+	                           {% endif %}
+	                       {% endwith %}
+	                    </td>
+	                    
 	                    <!-- encode HTTP parameters for new and old membership in admins group -->
                         <td style="text-align:center">
                            {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}

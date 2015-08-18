@@ -8,14 +8,12 @@
 {% with proj|get_external_urls:external_url_type as external_urls %}
 	<table>
 		{% if group_title %}
-			<tr>
-				<td colspan="3"><strong>{{group_title}}</strong></td>
-			</tr>
+			<caption><strong>{{group_title}}</strong></caption>
 		{% else %}
 			<tr>
-				<td width="100px"><strong>Title</strong></td>
-				<td width="200px"><strong>URL</strong></td>
-				<td><strong>Description</strong></td>
+				<th class="white" scope="col" width="100px"><strong>Title</strong></th>
+				<td class="white" scope="col" width="200px"><strong>URL</strong></td>
+				<th class="white" scope="col"><strong>Description</strong></th>
 			</tr>
 		{% endif %}
 		{% for exturl in external_urls %}

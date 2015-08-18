@@ -12,31 +12,36 @@
            </td>
        </tr>
        <tr>
-       {% if project.logo %}
-           <!-- height of the td is 70px to match the height w/o an image. The td will expand if the project logo is larger -->
-           <!-- height of the project logo above the left nav bar is really controlled by the padding associated with the font-size
-           and padding of the site node, since that is a different row. -->
-           <td style="height: 70px; vertical-align: bottom;  padding:0; padding-left:2px; margin:0;"> <!--must use vertical-align: bottom-->
-                <span>
-                {% if project.logo_url %}
-	    	         <a  href="{{ project.logo_url }}">
-	    	    {% else %}
-	    	         <a style="padding:0; margin:0;" href="{% url 'project_home' project.short_name|lower %}">
-	    	    {% endif %}
-                <img style="max-height: 150px; vertical-align: bottom;" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/>
-                </a>
-                </span>
-           </td>
-	   {% else %}
-           <!-- project title -->
-           <!-- height must be same as logo td -->
-           <!-- the negative bottom takes the text below the level of the table cell -->
-           <td style="height: 70px; vertical-align: bottom; padding:0; padding-left: 2px; position:relative; font-weight: bold; font-size: 20pt; font-style: italic; color: #666666;">
-			   <!--<span style="position:absolute; bottom: -10px;">-->
-               <span style="position:absolute; bottom: 0;">
-                   {{ project.long_name|capfirst }}
-               </span>
-           </td>
+       <!-- shrink the space between the navigation and user menu on pages that don't have a project context e.g. no project name or logo -->
+       {% if not project %}
+            <td style="height: 40px; vertical-align: bottom;  padding:0; padding-left:2px; margin:0;"> <!--must use vertical-align: bottom-->
+       {% else %}
+           {% if project.logo %}
+               <!-- height of the td is 70px to match the height w/o an image. The td will expand if the project logo is larger -->
+               <!-- height of the project logo above the left nav bar is really controlled by the padding associated with the font-size
+               and padding of the site node, since that is a different row. -->
+               <td style="height: 70px; vertical-align: bottom;  padding:0; padding-left:2px; margin:0;"> <!--must use vertical-align: bottom-->
+                    <span>
+                    {% if project.logo_url %}
+                         <a  href="{{ project.logo_url }}">
+                    {% else %}
+                         <a style="padding:0; margin:0;" href="{% url 'project_home' project.short_name|lower %}">
+                    {% endif %}
+                    <img style="max-height: 150px; vertical-align: bottom;" src="{{ project.logo.url }}" alt="{{ project.short_name }} logo"/>
+                    </a>
+                    </span>
+               </td>
+           {% else %}
+               <!-- project title -->
+               <!-- height must be same as logo td -->
+               <!-- the negative bottom takes the text below the level of the table cell -->
+               <td style="height: 70px; vertical-align: bottom; padding:0; padding-left: 2px; position:relative; font-weight: bold; font-size: 20pt; font-style: italic; color: #666666;">
+                   <!--<span style="position:absolute; bottom: -10px;">-->
+                   <span style="position:absolute; bottom: 0;">
+                       {{ project.long_name|capfirst }}
+                   </span>
+               </td>
+           {% endif %}
        {% endif %}
    </tr>
    <tr>

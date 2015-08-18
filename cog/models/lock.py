@@ -12,7 +12,7 @@ class Lock(models.Model):
     
     object_type = models.CharField(max_length=100, verbose_name='Object Type', blank=False)
     object_id = models.IntegerField(verbose_name='Object Identifier', blank=False)
-    timestamp = models.DateTimeField('Last Update Date', auto_now_add=True,  auto_now=True)    
+    timestamp = models.DateTimeField('Last Update Date', auto_now=True)    
     owner = models.ForeignKey(User, verbose_name='Owner', blank=False)
         
     def __unicode__(self):

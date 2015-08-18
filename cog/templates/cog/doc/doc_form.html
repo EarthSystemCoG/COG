@@ -54,6 +54,16 @@
           			<td nowrap="nowrap" style="text-align:right; vertical-align:middle;">Private?</td>
           			<td colspan="2">{{ form.is_private }} &nbsp; (<em class="message">if checked, only project members will be able to download this file</em>)</td>
     			</tr>
+    			{% if not form.instance.id %}
+    			<!-- only show folder selection when file is first uploaded, later folder can only be changed through the Resources page -->
+    			<tr>
+          			<td nowrap="nowrap" style="text-align:right; vertical-align:middle;">Folder</td>
+          			<td colspan="2" style="vertical-align:middle; font-style:italic;">{{ form.folder }} 
+          			&nbsp;<strong>-OR-</strong>&nbsp;</span>
+                    <a href="{% url 'folder_add' project.short_name.lower %}?next={{ request.path }}" class="addlink">&nbsp;Create New</a>
+          			&nbsp; (<em class="message">optional folder to list this file under Resources</em>)</td>
+    			</tr>
+    			{% endif %}
                 <tr>
                     <td colspan="3" style="text-align:right;">
                         {% if form.instance.id %}

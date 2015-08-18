@@ -5,7 +5,7 @@ from cog.models.constants import LEAD_ORGANIZATIONAL_ROLES_DICT, \
     MANAGEMENT_BODY_CATEGORY_OPERATIONAL
 from constants import PERMISSION_DENIED_MESSAGE
 from django.contrib.auth.decorators import login_required
-from django.forms.models import BaseInlineFormSet, modelformset_factory, inlineformset_factory
+from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -13,6 +13,7 @@ from django.utils.functional import curry
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS, TAB_LABELS
 from cog.views.views_templated import templated_page_display
+from cog.models.auth import userHasAdminPermission
 
 # management_body_update proj.short_name.lower category
 
@@ -162,7 +163,7 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # initialize formset factory for this governance object
-    ObjectFormSet = inlineformset_factory(Project, objectType, extra=1, form=objectTypeForm, formset=formsetType)
+    ObjectFormSet = inlineformset_factory(Project, objectType, extra=1, form=objectTypeForm, formset=formsetType, fields="__all__")
 
     # GET request
     if request.method == 'GET':
@@ -270,7 +271,7 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # formset factory
-    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, extra=3)
+    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, extra=3, fields="__all__")
     # set the formset form to custom class that includes the current project
     ObjectFormSet.form = objectForm
 
@@ -378,7 +379,7 @@ def organizational_role_update(request, project_short_name):
     
     # must build the formset via non-traditional means to pass the current project as a class attribute
     OrganizationalRoleFormSet = inlineformset_factory(Project, OrganizationalRole, extra=1, can_delete=True,
-                                                      form=OrganizationalRoleForm)
+                                                      form=OrganizationalRoleForm, fields="__all__")
     
     # GET request
     if request.method == 'GET':

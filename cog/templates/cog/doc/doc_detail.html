@@ -6,32 +6,37 @@
     <p>
     <div align="center" class="mybox">
         <table>
-            <caption>Uploaded by
-                {% if doc.author.username %}
-                    <a href="{% url 'user_detail' doc.author.id %}">{{ doc.author }}</a>
-                {% else %}
-                    {{ doc.author }}
-                {% endif %}
-                on {{ doc.publication_date|date:"d M Y, H:m" }}, last update: {{ doc.update_date|timesince }} ago.</caption>
             <tr>
-                <td class="head">Title</td>
+                <td colspan="2" class="caption_mimic">
+                    <strong>Uploaded by
+                    {% if doc.author.username %}
+                        <a href="{% url 'user_detail' doc.author.id %}">{{ doc.author }}</a>
+                    {% else %}
+                        {{ doc.author }}
+                    {% endif %}
+                    on {{ doc.publication_date|date:"d M Y, H:m" }}, last update: {{ doc.update_date|timesince }} ago.</strong>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Title</strong></td>
                 <td>{{ doc.title }}</td>
             </tr>
             <tr>
-                <td class="head">Description</td>
+                <td><strong>Description</strong></td>
                 <td>{{ doc.description|urlizetrunc:50|linebreaksbr }}</td>
             </tr>
             <tr>
-                <td class="head">Download URL</td>
+                <td><strong>Download URL</strong></td>
                 <td><a href="{{ doc.file.url }}">http://{{ request.get_host }}{{ doc.file.url }}</a></td>
             </tr>
             <tr>
-                <td class="head">Is Private?</td>
+                <td><strong>Is Private?</strong></td>
                 <td>{{ doc.is_private }}</td>
             </tr>
         </table>
-    </div> 
-    {% if request.user|hasUserPermission:project %}
+    </div>
+    <!--only Contributors can update documents -->
+    {% if request.user|hasContributorPermission:project %}
         <div style="text-align:right">
             <hr/>
             <a href="{% url 'doc_update' doc.id %}" class="changelink">Update</a>

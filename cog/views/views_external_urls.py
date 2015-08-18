@@ -13,6 +13,7 @@ from cog.models.constants import *
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS
 from cog.models.external_url_conf import externalUrlManager
+from cog.models.auth import userHasContributorPermission
 
 
 # Generic view to display a given type of external URLs.
@@ -83,7 +84,7 @@ def external_urls_update(request, project_short_name, suburl):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     try:

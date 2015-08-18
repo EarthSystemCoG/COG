@@ -46,8 +46,8 @@ class LoginMiddleware(object):
                 # DEBUG
                 #print 'OpenID login request: %s' % request
     
-                openid_identifier = request.REQUEST.get('openid_identifier', None)
-                next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
+                openid_identifier = request.GET.get('openid_identifier', None)
+                next = request.GET.get('next', "/") # preserve 'next' redirection after successful login
                 if openid_identifier is not None:
     
                     # invalid OpenID
@@ -71,9 +71,9 @@ class LoginMiddleware(object):
         if self.init:
 
             # request parameters to include when redirecting
-            next = request.REQUEST.get('next', "/") # preserve 'next' redirection after successful login
-            openid_identifier = request.REQUEST.get('openid_identifier', None)
-            username = request.REQUEST.get('username', None)
+            next = request.GET.get('next', "/") # preserve 'next' redirection after successful login
+            openid_identifier = request.GET.get('openid_identifier', None)
+            username = request.GET.get('username', None)
     
             # process errors from openid authentication
             if request.path == self.url2:

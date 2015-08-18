@@ -40,10 +40,10 @@ class DataCartItem(models.Model):
         return DataCartItem.create(datacart, record.id, record.fields)
     
     @staticmethod 
-    @transaction.commit_manually
+    @transaction.atomic
     def create(datacart, id, metadata):
         '''Factory method to create and persist a DataCartItem (and related objects) from an identifier and a dictionary of metadata fields.
-           Note that all related objects acre created in a single database transaction'''
+           Note that all related objects are created in a single database transaction'''
 
         # add item to the cart
         item = DataCartItem(cart=datacart, identifier=id)
@@ -62,10 +62,7 @@ class DataCartItem(models.Model):
                     val = value
                 itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
                 itemValue.save()
-                
-        # save the full item
-        transaction.commit()
-                    
+                                    
         return item
 
     def asRecord(self):

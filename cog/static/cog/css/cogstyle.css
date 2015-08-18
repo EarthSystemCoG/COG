@@ -48,6 +48,9 @@ BEGIN MEDIA-SPECIFIC STYLES
 	div.search-box {
 		display: none !important;
 	}
+	div.peer-nodes-box {
+		display: none !important;
+	}
 	div#top_nav_right {
 		display: none !important;
 	}
@@ -396,13 +399,7 @@ a:hover {
 }
 
 
-.white {
-	background-color: #FFFFFF;
-}
 
-.invisible {
-	display: none;
-}
 /******************************
 END PAGE-LEVEL ELEMENTS
 ******************************/
@@ -420,30 +417,26 @@ em.attribute {font-weight: 700; font-style:normal;} /* style only...for table he
 
 em.bold {font-weight: 700; font-style:normal;} /* misc style only */
 
-/* used on tables that have green header bars */
-th.green {
-    font-weight: bold;
-    vertical-align: middle;
-    font-size: 12px;
+.white {
+	background-color: #FFFFFF;
+}
+
+.gray {
+    background:     #eee;
+
+}
+
+.green
+{
     background: transparent;
-    padding: 4px;
 }
 
-th.white {
-    font-weight: bold;
-    vertical-align: middle;
-    font-size: 12px;
-    background: white;
-    padding: 4px;
+.invisible {
+	display: none;
 }
 
-tbody tr:nth-child(2n) th.gray, tbody tr.even th.gray{
-    font-weight: bold;
-    vertical-align: middle;
-    font-size: 12px;
-    padding: 4px;
-    background-color: #eee /*light-gray */
-}
+
+
 
 /******************************
 BEGIN TABLE ELEMENTS
@@ -456,9 +449,16 @@ BEGIN TABLE ELEMENTS
 table {
         /* prevent nested cells' borders or spacing from accumulating */
 	border-collapse: collapse;
-	border-color: #ccc;
-	margin-bottom:0;
-	margin-left:0;
+	border-color:    #ccc;
+	margin-bottom:   0;
+	margin-left:     0;
+}
+
+tbody tr:nth-child(2n), tbody tr.even{
+    vertical-align:   middle;
+    font-size:        12px;
+    padding:          4px;
+    background-color: #eee /*light-gray */
 }
 
 /* background color for cells in even rows */
@@ -515,31 +515,57 @@ table.gray td{
 }
 
 /***************
+* NAME: caption
+* SCOPE: the caption of a table
+* used in lots of places outside of the wiki
+***************/
+
+/* set default for cog outside of the wiki */
+caption {
+	margin:        0;
+	padding:       2px 5px 3px 5px;
+	font-size:     12px; /* this needs to be the same size as other headers on the site */
+	text-align:    left;
+	font-weight:   bold;
+	background:    #B9E0E3;
+	border-bottom: 1px solid #666666;
+	color:         #666;
+}
+
+#cog_post_body caption {
+
+    margin:        0;
+	padding:       2px 5px 3px 5px;
+	font-size:     12px; /* this needs to be the same size as other headers on the site */
+	text-align:    left;
+	font-weight:   bold;
+	background:    #C3D9FF;
+	border-bottom: 1px solid #666666;
+	color:         #666;
+}
+
+/***************
 * NAME: table cells (standard data and headers)
 ***************/
 
 /* set defaults for all tables and headers on the site. Make table data and table headers have the same size */
 td, th {
     margin:         0;
-    font-size:      9pt;
     padding:        4px;
-    vertical-align: top;
+    vertical-align: middle;
+    font-size:      12px;
+    font-weight:    normal; /* override topography.css */
 }
 
-/* default table headers are bold with a cyan background. Change this.*/
-th {
+/* table headers in the wiki */
+#cog_post_body th {
     font-weight: bold;
     background:  none repeat scroll 0 0 #C3D9FF;
-}
-
-/* other CSS can alter the table header's size; this more specific CSS sets it to the proper value */
-#cog_post_body th {
-    padding: 5px;
-    font-size: 9pt;  /*this is different from the font on the page...will need to standardize */
+    padding:     5px;
+    font-size:   inherit;
 }
 
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
-
 
 .long {
 	width:          99%;
@@ -565,6 +591,13 @@ td.tophead {
 	vertical-align: top;
 }
 
+td.caption_mimic{
+    background-color: #B9E0E3;
+    text-align:       left;
+    color:            #666;
+    border-bottom:    1px solid #666;
+}
+
 td.righttop {
 	text-align: right;
 	vertical-align: top;
@@ -584,21 +617,7 @@ td.righttop {
 	vertical-align: middle;
 }
 
-/***************
-* NAME: caption
-* SCOPE: the caption of a table
-* used in lots of places outside of the wiki
-***************/
-caption {
-	margin:        0;
-	padding:       2px 5px 3px 5px;
-	font-size:     9pt; /* this needs to be the same size as other headers on the site */
-	text-align:    left;
-	font-weight:   bold;
-	background:    #B9E0E3;
-	border-bottom: 1px solid #666666;
-	color:         #666;
-}
+
 
 
 /*****************************
@@ -999,10 +1018,10 @@ BEGIN NEWS WIDGET
 	overflow-y: auto;
 }
 
-.news_box table td,th {
+.news_box table td, .news_box table th {
 	font-size: 8pt;
-	padding:0;
-	margin:0;
+	padding:   0;
+	margin:    0;
 }
 
 .news_box table th {
@@ -1235,6 +1254,27 @@ BEGIN ADVANCED SEARCH PAGE
 END ADVANCED SEARCH PAGE
 ******************************/
 
+/******************************
+BEGIN PEER-NODES-BOX
+******************************/
+
+.peer-nodes-box {
+	background:    #FFFFFF;
+	border:        1px solid #666;
+	font-size:     8pt;
+    margin-bottom: 10px;
+    margin-top:    0;
+}
+
+.peer-nodes-box-body {
+	
+	padding: 4px;
+	
+}
+
+/******************************
+END PEER-NODES-BOX
+******************************/
 
 .caption {
 	margin:0;

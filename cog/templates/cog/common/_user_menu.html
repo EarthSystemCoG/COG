@@ -37,8 +37,8 @@
 
 {% else %}
      Welcome, <strong>Guest</strong>.
-     | <a href="{% url 'login' %}?next={{ request.build_absolute_uri }}"> Login</a>
+     | <a href="{{ request|get_target_url_with_next_url:'login' }}"> Login</a>
      <!-- | <a href="{% url 'openid-login' %}?next={{ request.build_absolute_uri }}">OpenID Login</a> -->
-     | <a href="{% url 'user_add' %}?next={{ request.build_absolute_uri }}">Create Account</a>
+     | <a href="{{ request|get_target_url_with_next_url:'user_add' }}">Create Account</a>
 {% endif %}
 <!--//END: /cog/templates/cog/common/_user_menu.html //-->
