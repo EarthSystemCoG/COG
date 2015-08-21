@@ -26,30 +26,30 @@
 	<style type="text/css">
 
 	    #parent_projects ul, #peer_projects ul, #child_projects ul {
-		    margin: 0;
-		    padding: 0;
-		    padding-left: 18px; /* indent checkbox */
+		    margin:          0;
+		    padding:         0;
+		    padding-left:    18px; /* indent checkbox */
 		    list-style-type: none;
 		}
 
+       /* align box and text */
        input {
            vertical-align: bottom;
-           position: relative;
-           top: -1px;
+           position:       relative;
+           top:            -1px;
        }
 
-
+	   /* IE10+ specific styles go here */
        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-           /* IE10+ specific styles go here */
+
            input {
                vertical-align: bottom;
-               position: relative;
-               top: 1px;
+               position:       relative;
+               top:            1px;
 
            }
 
            label {
-               color: red;
                vertical-align: bottom;
            }
        }
