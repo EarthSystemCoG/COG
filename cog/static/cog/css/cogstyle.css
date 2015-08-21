@@ -275,7 +275,7 @@ div.footer{
     vertical-align: middle;
     font:           normal normal 8pt/1.231 Arial,sans-serif;
     color:          #666;
-    padding:       0;  /*ensure the table lines up with the left navigation bar */
+    padding:        0;  /*ensure the table lines up with the left navigation bar */
     padding-top:    3px;  /* nice spacing in the div and between the two table rows */
 }
 
@@ -292,8 +292,8 @@ BEGIN FIXES FOR IE
 .ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body{
     margin-right:  auto;
 	margin-left:   auto;
-    margin-top:   0;
-	margin-bottom:0;
+    margin-top:    0;
+	margin-bottom: 0;
     text-align:    left;
 
 /* debug: are the IE conditionals even working? */
@@ -302,7 +302,7 @@ BEGIN FIXES FOR IE
 
 /* turn off image borders by default */
 img{
-        border:none;
+        border: none;
 }
 
 /* adjust bullets which are outside by default in IE */
@@ -314,7 +314,7 @@ img{
 
 /*force IE to behave the same as other browsers */
 .ie9 hr {
-        background:   #358C92;
+    background:   #358C92;
 	border:       none;
 	height:        1px;
 	margin-bottom: 4px;

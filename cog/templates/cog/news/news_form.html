@@ -32,14 +32,20 @@
 		    list-style-type: none;
 		}
 
-       input{
+       .ie10 input, .ie11 input{
            vertical-align: bottom;
-           position: relative;
-           top: +1px;
+           position:       relative;
+           top:            1px;
 
            }
+       input {
+           vertical-align: bottom;
+           position: relative;
+           top: -1px;
+       }
 
-       label{
+
+       .ie10 label, .ie11 label{
            color:red;
            vertical-align: bottom;
        }
