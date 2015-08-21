@@ -289,7 +289,7 @@ BEGIN FIXES FOR IE
 /****************************/
 
 /* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body{
+.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body, .edge body{
     margin-right:  auto;
 	margin-left:   auto;
     margin-top:    0;

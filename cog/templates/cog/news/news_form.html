@@ -32,25 +32,28 @@
 		    list-style-type: none;
 		}
 
-       .ie10 input, .ie11 input{
-           vertical-align: bottom;
-           position:       relative;
-           top:            1px;
-
-           }
        input {
            vertical-align: bottom;
            position: relative;
            top: -1px;
        }
 
+	</style>
+    <!--[if IE]>
+       <style type="text/css">
+           input{
+           vertical-align: bottom;
+           position:       relative;
+           top:            1px;
 
-       .ie10 label, .ie11 label{
+           }
+
+           label{
            color:red;
            vertical-align: bottom;
-       }
-
-	</style>
+           }
+       </style>
+    <![endif]-->
 
 {% endblock %}
 
