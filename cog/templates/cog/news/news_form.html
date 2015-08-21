@@ -38,22 +38,23 @@
            top: -1px;
        }
 
-	</style>
-    <!--[if IE]>
-       <style type="text/css">
-           input{
-           vertical-align: bottom;
-           position:       relative;
-           top:            1px;
+
+       @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+           /* IE10+ specific styles go here */
+           input {
+               vertical-align: bottom;
+               position: relative;
+               top: 1px;
 
            }
 
-           label{
-           color:red;
-           vertical-align: bottom;
+           label {
+               color: red;
+               vertical-align: bottom;
            }
+       }
        </style>
-    <![endif]-->
+
 
 {% endblock %}
 
