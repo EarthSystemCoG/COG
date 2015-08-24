@@ -336,6 +336,9 @@ IE10+ no longer accepts conditionals
            label {
                vertical-align: bottom;
            }
+           td.checkbox {
+               vertical-align: bottom;
+           }
        }
 
 /*******************************
