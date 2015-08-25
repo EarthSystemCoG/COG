@@ -323,6 +323,12 @@ IE10+ no longer accepts conditionals
     vertical-align: -3px;
 }
 
+/* non-IE version */
+/* used in file upload form */
+td.checkbox_label {
+    vertical-align: middle;
+}
+
 /* IE10+ modifications */
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
 
@@ -341,11 +347,7 @@ IE10+ no longer accepts conditionals
            }
        }
 
-/* non-IE version */
-/* used in file upload form */
-td.checkbox_label {
-    vertical-align: middle;
-}
+
 /*******************************
 BEGIN: headers
 *******************************/
