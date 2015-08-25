@@ -336,11 +336,16 @@ IE10+ no longer accepts conditionals
            label {
                vertical-align: bottom;
            }
-           td.checkbox {
+           td.checkbox_label {
                vertical-align: bottom;
            }
        }
 
+/* non-IE version */
+/* used in file upload form */
+td.checkbox_label {
+    vertical-align: middle;
+}
 /*******************************
 BEGIN: headers
 *******************************/
