@@ -73,7 +73,7 @@
     </tr>
     {% if user|hasAdminPermission:project %}
     	<tr>
-          <td class="col1" nowrap="nowrap" style="vertical-align: middle;">Not Editable?</td>
+          <td class="col1" nowrap="nowrap">Not Editable?</td>
           <td style="vertical-align: middle;">{{form.is_restricted}}
                (<em class="message">If checked, only project administrators will be able to edit this page. 
                     If not checked, all project members can edit this page.</em>)
