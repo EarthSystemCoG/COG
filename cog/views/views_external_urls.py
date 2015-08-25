@@ -129,12 +129,15 @@ def external_urls_update(request, project_short_name, suburl):
     
     # POST
     else:
-
         formset = ExternalUrlFormSet(request.POST)
 
         if formset.is_valid():
             # select instances that have changed, don't save to database yet
             instances = formset.save(commit=False)
+            # must manually delete the instances marked for deletion
+            for obj in formset.deleted_objects:
+                obj.delete()
+            # for all others, assign the project reference and persist changes
             for instance in instances:
                 instance.project = project
                 instance.type = type
