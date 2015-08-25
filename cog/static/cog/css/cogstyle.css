@@ -102,11 +102,14 @@ body{
     margin-left:    auto;
     vertical-align: baseline; /* this is the default, be we want to control */
     width:          100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
-    height:         100%; 
-
-
+    height:         100%;
 }
 
+
+/* turn off image borders by default */
+img{
+        border: none;
+}
 /*********************************
 BEGIN: Content wrappers
 **********************************/
@@ -275,7 +278,7 @@ div.footer{
     vertical-align: middle;
     font:           normal normal 8pt/1.231 Arial,sans-serif;
     color:          #666;
-    padding:       0;  /*ensure the table lines up with the left navigation bar */
+    padding:        0;  /*ensure the table lines up with the left navigation bar */
     padding-top:    3px;  /* nice spacing in the div and between the two table rows */
 }
 
@@ -288,25 +291,19 @@ div.footer{
 BEGIN FIXES FOR IE
 /****************************/
 
-/* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body{
+/* force IE9 and below to center the content in the body
+IE10+ no longer accepts conditionals
+*/
+.ie6 body, .ie7 body, .ie8 body, .ie9 body{
     margin-right:  auto;
 	margin-left:   auto;
-    margin-top:   0;
-	margin-bottom:0;
+    margin-top:    0;
+	margin-bottom: 0;
     text-align:    left;
-
-/* debug: are the IE conditionals even working? */
-        /*background-color: pink;*/
-}
-
-/* turn off image borders by default */
-img{
-        border:none;
 }
 
 /* adjust bullets which are outside by default in IE */
-.ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul, .ie10 ul, .ie11 ul{
+.ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul{
      margin:             0;
      padding:            0;
      list-style-position: inside;
@@ -314,18 +311,42 @@ img{
 
 /*force IE to behave the same as other browsers */
 .ie9 hr {
-        background:   #358C92;
+    background:   #358C92;
 	border:       none;
 	height:        1px;
 	margin-bottom: 4px;
 	margin-top:    4px;
 }
 
-
-/* checkboxes and labels don't align correctly in IE. */
-.ie9 input[type=checkbox], .ie10 input[type=checkbox], .ie11 input[type=checkbox] {
+/* checkboxes and labels don't align correctly in IE9. */
+.ie9 input[type=checkbox]{
     vertical-align: -3px;
 }
+
+/* non-IE version */
+/* used in file upload form */
+td.checkbox_label {
+    vertical-align: middle;
+}
+
+/* IE10+ modifications */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+           input[type=checkbox] {
+               vertical-align: bottom;
+               position:       relative;
+               top:            2px;
+
+           }
+
+           label {
+               vertical-align: bottom;
+           }
+           td.checkbox_label {
+               vertical-align: bottom;
+           }
+       }
+
 
 /*******************************
 BEGIN: headers

@@ -51,7 +51,7 @@
                     <td colspan="2" >{{ form.description }} {{ form.description.errors }} </td>
                 </tr>
                 <tr>
-          			<td nowrap="nowrap" style="text-align:right; vertical-align:middle;">Private?</td>
+          			<td class="checkbox_label" nowrap="nowrap" style="text-align:right;">Private?</td>
           			<td colspan="2">{{ form.is_private }} &nbsp; (<em class="message">if checked, only project members will be able to download this file</em>)</td>
     			</tr>
     			{% if not form.instance.id %}

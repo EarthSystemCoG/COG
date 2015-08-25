@@ -152,6 +152,9 @@ def impacts_update(request, project_short_name, tab):
                 instance.order = 1
                 instance.save()
 
+            for obj in formset.deleted_objects:
+                obj.delete()
+
             redirect = reverse('aboutus_display', args=[project_short_name, tab])
             return HttpResponseRedirect(redirect)
 

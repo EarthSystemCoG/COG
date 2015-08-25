@@ -3,7 +3,7 @@
 
 {% block extrahead %}
 <!--// begin styles for _post_form_home.html //-->
-<!--// note: don't incoude scoped for this style because it is used one template down //-->
+<!--// note: don't include scoped for this style because it is used one template down //-->
    <style type="text/css">
       table.post_home td{
       vertical-align:middle;
@@ -16,7 +16,14 @@
      td.col1{
          width:    75px;
          min-width:75px;
+         vertical-align: middle;
      }
+
+   @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+       td.col1{
+           vertical-align:bottom;
+       }
+   }
    </style>
 {% endblock %}
 

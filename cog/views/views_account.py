@@ -454,6 +454,9 @@ def user_update(request, user_id):
                 url.profile = profile
                 url.save()
 
+            for obj in formset1.deleted_objects:
+                obj.delete()
+
             # must assign OpenIDs to this user
             openids = formset2.save(commit=False)
             for openid in openids:
