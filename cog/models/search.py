@@ -2,7 +2,7 @@ from django.db import models
 import ConfigParser
 import os
 
-INVALID_CHARACTERS = ['>','<','&','$','!','\\','\/','\'','\"']
+INVALID_CHARACTERS = ['>','<','&','$','!','\\','\/','\'','\"','(',')','[',']','{','}']
 
 # maximum number of results per page
 LIMIT = 10
