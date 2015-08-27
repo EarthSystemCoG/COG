@@ -45,6 +45,13 @@ IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
 print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
 KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
 print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
+# DEVELOPMENT/PRODUCTION server switch
+if siteManager.get('PRODUCTION_SERVER', default='False').lower() == 'true':
+    PRODUCTION_SERVER = True
+else:
+    PRODUCTION_SERVER = False
+print 'Production server flag=%s' % PRODUCTION_SERVER
+
 
 # FIXME
 # ESGF specific settings
@@ -56,8 +63,6 @@ if ESGF_CONFIG:
 
 #====================== standard django settings.py ======================
 
-# DEV/PROD switch
-server_type = os.environ.get("SERVER_TYPE", "DEV")
 
 # IMPORTANT: this setting must be set to True if using COG behind a proxy server,
 # otherwise redirects won't work properly
@@ -234,10 +239,10 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 )
 
 # HTTPS support: can only send cookies via SSL connections
-if server_type == 'PROD':
+if PRODUCTION_SERVER:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"

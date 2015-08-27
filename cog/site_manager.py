@@ -26,6 +26,8 @@ class SiteManager(object):
        IDP_REDIRECT=https://www.earthsystemcog.org
        # whitelist of trusted Identity Providers
        IDP_WHITELIST=/esg/config/esgf_idp.xml, /esg/config/esgf_idp_static.xml
+       # dev/prod server switch
+       PRODUCTION_SERVER = True
 
        [ESGF]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov

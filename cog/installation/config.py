@@ -169,6 +169,8 @@ class CogConfig(object):
         self._safeSet('IDP_WHITELIST', IDP_WHITELIST)
         # KNOWN_PROVIDERS = /esg/config/esgf_known_providers.xml
         self._safeSet('KNOWN_PROVIDERS', KNOWN_PROVIDERS)
+        # option to send SESSION and CSRF cookies via SSL only - requires full SSL-encrypted site
+        self._safeSet('PRODUCTION_SERVER', True)
         
         #[ESGF]
         if self.esgf:
