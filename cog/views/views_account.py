@@ -126,12 +126,17 @@ def notifyAdminsOfUserRegistration(user):
 def notifyUserOfRegistration(user):
     
     subject = "CoG Account Creation"
-    message = "Thank you for creating a new CoG account."
+    message = "Thank you for creating a new ESGF-CoG account."
     message += "\n"
     message += "\nYour User Name is: %s" % user.username
     message += "\nYour OpenID is: %s" % user.profile.openid()
     message += "\n"
     message += "\nPlease note that you will need your OpenID to login."
+    message += "\n"
+    message += "\nCoG Tutorials: https://www.earthsystemcog.org/projects/cog/tutorials_web"
+    message += "\n"
+    message += "\nCoG Support: cog_support@list.woc.noaa.gov"
+
     notify(user, subject, message)
 
 
