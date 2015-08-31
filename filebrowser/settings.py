@@ -7,16 +7,6 @@ import os
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-# settings for django-tinymce
-#FIXME: remove the tinymce content, we no longer use it.
-try:
-    import tinymce.settings
-    DEFAULT_URL_TINYMCE = tinymce.settings.JS_BASE_URL + '/'
-    DEFAULT_PATH_TINYMCE = tinymce.settings.JS_ROOT + '/'
-except ImportError:
-    DEFAULT_URL_TINYMCE = settings.STATIC_URL + "grappelli/tinymce/jscripts/tiny_mce/"
-    DEFAULT_PATH_TINYMCE = os.path.join(settings.STATIC_ROOT, 'grappelli/tinymce/jscripts/tiny_mce/')
-
 # PATH AND URL SETTINGS
 # Main Media Settings 
 # WARNING: FILEBROWSER_MEDIA_ROOT and FILEBROWSER_MEDIA_URL will be removed in the next major release of Filebrowser.
