@@ -399,8 +399,9 @@ def deleteProject(project):
     #project.getAdminPermission().delete()
     
     # delete groups
-    # note: if groups didn't exit, they would be created first, then deleted
+    # note: if groups didn't exist, they would be created first, then deleted
     project.getUserGroup().delete()
+    project.getContributorGroup().delete()
     project.getAdminGroup().delete()
             
     # delete project
