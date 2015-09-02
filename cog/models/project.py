@@ -134,6 +134,11 @@ class Project(models.Model):
     forumNotificationEnabled = models.BooleanField(default=False, blank=False, null=False,
                                                    help_text='Enable forum notifications to project administrators ?')
     
+    # flag to enable the peer widget
+    nodesWidgetEnabled = models.BooleanField(default=False, blank=False, null=False, 
+                                             help_text='Enable federated nodes widget ?')
+    
+    
     maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
     

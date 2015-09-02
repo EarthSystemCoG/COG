@@ -241,6 +241,16 @@
                     [ Check to email project administrators about forum postings (requires 'Forum' tab). ]
                 </td>
             </tr>
+            <tr>
+                <td nowrap="nowrap">
+                    <span style="margin-top:2px">Enable nodes widget ?</span>
+                </td>
+                <td class="long">
+                    {{ form.nodesWidgetEnabled }}
+                    [ Check to display the federated nodes widget among the right widgets (on the project home page only). ]
+                    {{ form.nodesWidgetEnabled.errors }}
+                </td>
+            </tr>
         </table>
            
         <!--  hidden fields -->
