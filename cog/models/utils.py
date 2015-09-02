@@ -400,6 +400,16 @@ def deleteProject(project, dryrun=True, rmdir=False):
     if not dryrun:
         ag.delete()
 
+    # delete project Contributor group, permissions
+    cg = project.getContributorGroup()
+    for p in cg.permissions.all():
+        print '\tDeleting permission: %s' % p
+        if not dryrun:
+            p.delete()
+    print '\tDeleting group: %s' % cg
+    if not dryrun:
+        cg.delete()
+
     if rmdir:
         media_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
         print "\tRemoving directory tree: %s" % media_dir

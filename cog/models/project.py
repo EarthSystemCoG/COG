@@ -458,4 +458,3 @@ def create_upload_directory(project):
         print 'Project Upload directory created: %s' % fb_upload_dir
 
 
-
