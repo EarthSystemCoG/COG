@@ -6,37 +6,38 @@
 {% if project|projectNews %}
 <!--some css styles located in project_right.html-->    
     <div class="news_box">
-         <table>
-	    <tr>
-	    <td>
-             <div class="right_widget_header" style="border-bottom: 1px solid #666;">Read News</div>
-	     </td>
-	     </tr>
-             <tr>
+        <table>
+	        <tr>
+	            <td>
+                    <div class="right_widget_header" style="border-bottom: 1px solid #666;">Read News</div>
+	            </td>
+	        </tr>
+            <tr>
              	<td>
-		     <div class="news_box_body">
-			   <table class="even-color">
-		           {% for news in project|projectNews|slice:":5" %}
-		           <tr>
-		             <td>
-		               <div class="news_text" style="padding: 4px">
-				   <a href="{% url 'news_detail' news.id %}"><strong>{{ news.title|truncatewords:8 }}</strong></a><br/>
-				   {{ news.text|urlizetrunc:20|truncatewords:8 }} 
-			       </div>
-			     </td>
-                           </tr>
-                           {% endfor %}
-                           </table>
-		     </div> <!--// end div.news_box_body //-->
+		            <div class="news_box_body">
+			            <table class="even-color">
+		                    {% for news in project|projectNews|slice:":5" %}
+		                        <tr>
+		                            <td>
+		                                <div class="news_text" style="padding: 4px">
+				                            <a href="{% url 'news_detail' news.id %}">
+                                                <strong>{{ news.title|truncatewords:8 }}</strong></a><br/>
+				                                {{ news.text|urlizetrunc:20|truncatewords:12 }}
+			                            </div>
+			                        </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+		            </div> <!--// end div.news_box_body //-->
              	</td>
-             </tr>
-         </table>  
-         {% if project_latest_news|length == 1 %}
+            </tr>
+        </table>
+        {% if project_latest_news|length == 1 %}
          	<div class="news_footer">
          		<a href="{% url 'news_list' project.short_name.lower %}">&nbsp;More Project News &raquo;</a>
          	</div>
-         {% endif %}
-     </div> <!--// end div.news_box //-->
+        {% endif %}
+    </div> <!--// end div.news_box //-->
 {% endif %}
 
      
