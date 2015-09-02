@@ -19,10 +19,12 @@
 		                    {% for news in project|projectNews|slice:":5" %}
 		                        <tr>
 		                            <td>
-		                                <div class="news_text" style="padding: 4px">
+                                        <!--div is 173px long. Subtract -4px for each padding to get 165px -->
+		                                <div class="news_text" style="max-width:165px; max-height: 50px; padding: 4px;
+		                                overflow: hidden;">
 				                            <a href="{% url 'news_detail' news.id %}">
                                                 <strong>{{ news.title|truncatewords:8 }}</strong></a><br/>
-				                                {{ news.text|urlizetrunc:20|truncatewords:12 }}
+				                                {{ news.text|urlizetrunc:20|truncatewords:15}}
 			                            </div>
 			                        </td>
                                 </tr>
