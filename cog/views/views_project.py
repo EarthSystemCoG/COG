@@ -316,7 +316,7 @@ def project_delete(request, project_short_name):
     else:
         
         # delete all project objects
-        deleteProject(project)
+        deleteProject(project, dryrun=False, rmdir=True)
         
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_home'))
@@ -385,27 +385,6 @@ def render_contactus_form(request, project, form):
                               {'form': form, 'title': 'Update Project Contact Us', 'project': project},
                               context_instance=RequestContext(request))
     
-
-# method to delete a project and all its associated groups, permissions
-def deleteProject(project):
-    
-    print "Deleting project: %s" % project.short_name
-    
-    # note: project posts and tabs are automatically deleted because of one-to-many relationship to project
-        
-    # delete permissions
-    # note: if permissions didn't exit, they would be created first, then deleted
-    #project.getUserPermission().delete()
-    #project.getAdminPermission().delete()
-    
-    # delete groups
-    # note: if groups didn't exit, they would be created first, then deleted
-    project.getUserGroup().delete()
-    project.getAdminGroup().delete()
-            
-    # delete project
-    project.delete()
-
 
 # function to notify the site administrators that a new project has been requested
 def notifySiteAdminsOfProjectRequest(project, request):

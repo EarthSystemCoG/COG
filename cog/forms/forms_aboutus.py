@@ -19,13 +19,7 @@ class AboutusForm(ModelForm):
                   'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved',  # CONTACTUS
                   'site',
                   )
-        
-        #exclude = ('short_name','parent','peers','author','active','private','logo','logo_url', 'maxUploadSize',
-        #           'getting_started', 
-        #           'software_features', 'system_requirements', 'license', 'implementationLanguage', 'bindingLanguage', 'supportedPlatforms', 'externalDependencies',
-        #           'topics', 'tags', 'dataSearchEnabled',
-        #           'taskPrioritizationStrategy','requirementsIdentificationProcess', 'developmentOverview', 'governanceOverview',)
-                    
+                            
         widgets = {
             'description':  Textarea(attrs={'rows': 8}),
             'mission':     Textarea(attrs={'rows': 8}),

@@ -134,6 +134,11 @@ class Project(models.Model):
     forumNotificationEnabled = models.BooleanField(default=False, blank=False, null=False,
                                                    help_text='Enable forum notifications to project administrators ?')
     
+    # flag to enable the peer widget
+    nodesWidgetEnabled = models.BooleanField(default=False, blank=False, null=False, 
+                                             help_text='Enable federated nodes widget ?')
+    
+    
     maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
     
@@ -451,6 +456,5 @@ def create_upload_directory(project):
     if not os.path.exists(fb_upload_dir):
         os.makedirs(fb_upload_dir)
         print 'Project Upload directory created: %s' % fb_upload_dir
-
 
 

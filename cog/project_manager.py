@@ -3,7 +3,7 @@ Class responsible for listing and serving federation-wide projects.
 '''
 
 from django.contrib.sites.models import Site
-from cog.models import Project, ProjectTag
+from cog.models import Project, ProjectTag, deleteProject
 from cog.utils import getJson
 
 from cog.models import getPeerSites
@@ -132,8 +132,8 @@ class ProjectManager(object):
                 # remove obsolete projects from this remote site
                 for proj in Project.objects.filter(site=remote_site):
                     if proj.short_name not in jobj["projects"]:
-                        print 'Removing remote site=%s' % proj,short_name
-                        proj.delete()
+                        # delete the project and associated objects
+                        deleteProject(proj, dryrun=False, rmdir=False) # no local site media directory for remote project
     
                 # remove unused tags
                 for tag in ProjectTag.objects.all():

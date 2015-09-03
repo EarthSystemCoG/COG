@@ -93,17 +93,9 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = ('short_name', 'long_name', 'author', 'description', 
-                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 'dataSearchEnabled',
-                  'forumNotificationEnabled',
+                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 
+                  'dataSearchEnabled', 'forumNotificationEnabled', 'nodesWidgetEnabled',
                   'site', 'maxUploadSize')
-        # Note: must exclude the many2many field mapped through an intermediary table
-        #exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy',
-        # 'requirementsIdentificationProcess','governanceOverview',
-        #           'developmentOverview',
-        #           'software_features', 'system_requirements',
-        #           'getting_started',
-        #           'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved',)
-
 
 class ContactusForm(ModelForm):
 

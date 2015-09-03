@@ -1291,6 +1291,8 @@ BEGIN PEER-NODES-BOX
 .peer-nodes-box-body {
 	
 	padding: 4px;
+	max-height: 80px;
+	overflow-y: auto;
 	
 }
 
