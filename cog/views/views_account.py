@@ -186,11 +186,12 @@ def user_add(request):
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
                                                  extra=2)
-    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2, fields="__all__")
+    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2,
+                                                    fields="__all__")
             
     if request.method == 'GET':
 
-        form = UserForm( initial={'next':_next} )  # initialize form with redirect URL
+        form = UserForm(initial={'next': _next})  # initialize form with redirect URL
         formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')           # empty formset
         # NOTE: currently openid formset is not really used when first creating COG users
         formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.none(), prefix='openid')  # empty formset
@@ -258,20 +259,20 @@ def user_add(request):
             notifyAdminsOfUserRegistration(user)
 
             # subscribe to mailing list ?
-            if userp.subscribed == True:
+            if userp.subscribed:
                 subscribeUserToMailingList(user, request)
 
             # redirect to login page with special message
             login_url = reverse('login')+"?message=user_add"
-            if _next is not None and len(_next.strip())>0:
-                login_url += ("&next=%s" % urllib.quote_plus(_next) )
+            if _next is not None and len(_next.strip()) > 0:
+                login_url += ("&next=%s" % urllib.quote_plus(_next))
                 # redirect to absolute URL (possibly at an another site)
                 if 'http' in _next:
                     url = urlparse(_next)
                     login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
             # append openid to initial login_url
             if userp.openid() is not None:
-                login_url += "&openid=%s" % urllib.quote_plus( userp.openid() )
+                login_url += "&openid=%s" % urllib.quote_plus(userp.openid())
             
             response = HttpResponseRedirect(login_url)
             
@@ -315,7 +316,7 @@ def user_detail(request, user_id):
     projects = sorted(_projects, key=lambda x: x.short_name)
             
     return render_to_response('cog/account/user_detail.html',
-                              {'user_profile': user_profile, 'projects': projects, 'title':'User Profile'},
+                              {'user_profile': user_profile, 'projects': projects, 'title': 'User Profile'},
                               context_instance=RequestContext(request))
 
 
@@ -371,7 +372,8 @@ def user_update(request, user_id):
     # create URLs formset
     UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
                                                  extra=2)
-    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=0, fields="__all__")
+    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=0,
+                                                    fields="__all__")
 
     if request.method == 'GET':
 
@@ -436,7 +438,7 @@ def user_update(request, user_id):
 
             # image management
             _generateThumbnail = False
-            if form.cleaned_data.get('delete_image') == True:
+            if form.cleaned_data.get('delete_image'):
                 deleteImageAndThumbnail(user_profile)
 
             elif form.cleaned_data['image'] is not None:
@@ -473,11 +475,11 @@ def user_update(request, user_id):
                 generateThumbnail(user_profile.image.path, THUMBNAIL_SIZE_SMALL)
 
             # subscribe/unsubscribe user if mailing list selection changed
-            if oldSubscribed == True and form.cleaned_data['subscribed'] == False:
-                if oldValidFlag: # send email only for non-new users
+            if oldSubscribed and form.cleaned_data['subscribed'] == False:
+                if oldValidFlag:  # send email only for non-new users
                     unSubscribeUserToMailingList(user, request)
                     
-            elif oldSubscribed == False and form.cleaned_data['subscribed'] == True:
+            elif oldSubscribed == False and form.cleaned_data['subscribed']:
                 subscribeUserToMailingList(user, request)
 
             # redirect user profile page
@@ -501,7 +503,9 @@ def user_update(request, user_id):
 
 @login_required
 def password_update(request, user_id):
-    '''View used by the user (or by a site administrator) to change their password.'''
+    """
+    View used by the user (or by a site administrator) to change their password.
+    """
 
     # redirect to another site if necessary
     if redirectToIdp():
@@ -509,7 +513,7 @@ def password_update(request, user_id):
 
     # check permission: user that owns the account, or a site administrator
     user = get_object_or_404(User, id=user_id)
-    if user!=request.user and not request.user.is_staff:
+    if user != request.user and not request.user.is_staff:
         return HttpResponseServerError("You don't have permission to change the password for this user.")
 
     # check use has OpenID issued by this site
@@ -520,7 +524,7 @@ def password_update(request, user_id):
                 
         # create form (pre-fill username)
         initial = {'username': user.username,            # the target user
-                   'requestor': request.user.username }  # the user requesting the change
+                   'requestor': request.user.username}  # the user requesting the change
         form = PasswordChangeForm(initial=initial)
         return render_password_change_form(request, form, user.username)
 
@@ -542,7 +546,7 @@ def password_update(request, user_id):
                 esgfDatabaseManager.updatePassword(user, form.cleaned_data.get('password'))
             
             # standard user: logout
-            if user==request.user:
+            if user == request.user:
                 logout(request)
                         
                 # redirect to login page with special message
@@ -554,8 +558,8 @@ def password_update(request, user_id):
             
             # administrator: back to user profile
             else:
-                return HttpResponseRedirect(reverse('user_detail', kwargs={'user_id':user.id})+"?message=password_updated_by_admin")
-                
+                return HttpResponseRedirect(reverse('user_detail',
+                                                    kwargs={'user_id': user.id})+"?message=password_updated_by_admin")
 
         else:
             print "Form is invalid: %s" % form.errors
@@ -592,7 +596,7 @@ def user_reminder(request):
                     for openid in user.profile.openids():
                         message += "Your OpenID is: %s\n" % openid
 
-                notify(user, subject, message)
+                    notify(user, subject, message)
 
                 # redirect to login page with special message
                 return HttpResponseRedirect(reverse('login')+"?message=user_reminder")
@@ -615,8 +619,8 @@ def password_reset(request):
     if request.method == 'GET':
         
         # optional GET parameters to pre-populate the form
-        initial = { 'openid': request.GET.get('openid',''),
-                    'email': request.GET.get('email','') }
+        initial = {'openid': request.GET.get('openid', ''),
+                   'email': request.GET.get('email', '')}
         
         form = PasswordResetForm(initial=initial)       
         return render_password_reset_form(request, form)
@@ -628,7 +632,6 @@ def password_reset(request):
         if not form.is_valid():
             print "Form is invalid: %s" % form.errors
             return render_password_reset_form(request, form)
-
 
         openid = form.cleaned_data.get('openid')
         email = form.cleaned_data.get('email')
@@ -684,25 +687,27 @@ def password_reset(request):
                     else:
                         return render_password_reset_form(request, form, "Invalid OpenID/email combination")
 
-                # 1b) user used an external ESGF openid (for example, http://dkrz...) to login onto this site (for example, http://www.earthsystemcog.org/...)
+                # 1b) user used an external ESGF openid (for example, http://dkrz...) to login onto this site
+                # (for example, http://www.earthsystemcog.org/...)
                 else:
                     idpurl = urlparse(openid)
                     idpurl = "%s://%s/" % (idpurl.scheme, idpurl.netloc)
-                    message =  "This OpenID was issued by another site."
+                    message = "This OpenID was issued by another site."
                     message += "<br/>Please reset your password at <a href='%s'>that site</a>." % idpurl
                     return render_password_reset_form(request, form, message)
                 
             #  2) non-local user: redirect request to peer CoG site, post automatically
             else:
                 site = user.profile.site
-                redirect_url = 'http://%s%s?openid=%s&email=%s' % (site.domain, reverse('password_reset'), openid, email)
+                redirect_url = 'http://%s%s?openid=%s&email=%s' % (site.domain, reverse('password_reset'),
+                                                                   openid, email)
                 
                 # 2a) automatically redirect to peer site
                 #redirect_url += "&post=true" # submit form automatically at that site
                 #return HttpResponseRedirect(redirect_url)
                 
                 # 2b) show message on this site with link to peer site
-                message  = "This OpenID was issued by another CoG site."
+                message = "This OpenID was issued by another CoG site."
                 message += "<br/>Please use the <a href='%s'>Reset Password</a> page at that site." % redirect_url
                 return render_password_reset_form(request, form, message)
                 
