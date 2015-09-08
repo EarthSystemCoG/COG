@@ -1,8 +1,8 @@
-'''
+"""
 Module containing views for managing access control groups.
 
 @author: Luca Cinquini
-'''
+"""
 from collections import OrderedDict
 
 from django.contrib.auth.decorators import login_required
@@ -30,20 +30,20 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 
 @login_required
 def ac_subscribe(request, group_name):
-    '''
+    """
     View to request an access control permission.
     Currently, it can only be used to request ROLE_USER.
-    '''
+    """
             
     title = '%s Data Access Request' % group_name
     template = 'cog/access_control/subscribe.html'
     
     # prevent requests to 'wheel' group
-    if group_name=='wheel':
+    if group_name == 'wheel':
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # display submission form
-    if request.method=='GET':
+    if request.method == 'GET':
         
         try:
             status = registrationService.status(request.user.profile.openid(), group_name, ROLE_USER)
@@ -66,8 +66,8 @@ def ac_subscribe(request, group_name):
                 pass
         
         return render_to_response(template, 
-                                  {'title': title, 'group_name': group_name, 'status':status, 
-                                   'licenseTxt':licenseTxt, 'licenseHtml':licenseHtml }, 
+                                  {'title': title, 'group_name': group_name, 'status': status,
+                                   'licenseTxt': licenseTxt, 'licenseHtml': licenseHtml},
                                   context_instance=RequestContext(request))
         
     # process submission form
@@ -80,15 +80,16 @@ def ac_subscribe(request, group_name):
             notifyAdmins(group_name, request.user.id, request)
             
         # (GET-POST-REDIRECT)
-        return HttpResponseRedirect( reverse('ac_subscribe', kwargs={'group_name': group_name }) + "?approved=%s" % approved)            
+        return HttpResponseRedirect(reverse('ac_subscribe',
+                                            kwargs={'group_name': group_name}) + "?approved=%s" % approved)
             
             
 @login_required
 def ac_process(request, group_name, user_id):
-    '''
+    """
     View to process an access control permission request.
     This view can be used to assign any permissions to the user.
-    '''
+    """
     
     # check site administrator privileges
     admin = request.user
@@ -103,7 +104,7 @@ def ac_process(request, group_name, user_id):
     template = 'cog/access_control/process.html'
 
     # display admin form
-    if request.method=='GET':
+    if request.method == 'GET':
 
         # set initial status of check boxes from database
         initial = {}
@@ -114,7 +115,7 @@ def ac_process(request, group_name, user_id):
         form = PermissionForm(initial=initial)
         
         return render_to_response(template, 
-                                  {'group_name': group_name, 'title': title, 'user':user, 'form':form }, 
+                                  {'group_name': group_name, 'title': title, 'user': user, 'form': form},
                                   context_instance=RequestContext(request))
     
     # process admin form
@@ -126,35 +127,36 @@ def ac_process(request, group_name, user_id):
             # loop over roles
             for role in [ROLE_USER, ROLE_PUBLISHER, ROLE_SUPERUSER, ROLE_ADMIN]:
                 # retrieve approve status from POST data and store it in ESGF database
-                approve = form.cleaned_data.get('%sPermissionCheckbox' % role, False) # only True values are transmitted in POST data
+                approve = form.cleaned_data.get('%sPermissionCheckbox' % role, False)
+                # only True values are transmitted in POST data
                 try:
                     registrationService.process(openid, group_name, role, approve)
                 
-                except NoResultFound: # permission not found in database    
-                    if approve: # create new permission, but only if approve=True
+                except NoResultFound:  # permission not found in database
+                    if approve:  # create new permission, but only if approve=True
                         registrationService.subscribe(openid, group_name, role)
                         registrationService.process(openid, group_name, role, approve)
                         
             # notify user
             permissions = registrationService.list(user.profile.openid(), group_name)
             notifyUser(group_name, request.user, permissions)
-                
 
             # (GET-POST-REDIRECT)
-            return HttpResponseRedirect( reverse('ac_process', kwargs={'user_id': user.id, 'group_name': group_name })
-                                         + "?message=%s" % SAVED)            
+            return HttpResponseRedirect(reverse('ac_process', kwargs={'user_id': user.id, 'group_name': group_name})
+                                        + "?message=%s" % SAVED)
             
         else:
             print "Form is invalid: %s" % form.errors
             return render_to_response(template, 
-                                      {'group_name': group_name, 'title': title, 'user':user, 'form':form }, 
+                                      {'group_name': group_name, 'title': title, 'user': user, 'form': form},
                                       context_instance=RequestContext(request))
-            
+
+
 def ac_list(request):
-    '''
+    """
     View to display all access control groups that may be used to restrict data access.
     This view is intentionally open to the public (for now).
-    '''
+    """
     
     # loop over local site + peer sites
     groups = {}
@@ -163,9 +165,9 @@ def ac_list(request):
     for site in sites:
         url = "http://%s/share/groups/" % site.domain
         jobj = getJson(url)
-        if jobj is not None: # no error in fetching URL
+        if jobj is not None:  # no error in fetching URL
             site_name = jobj['site']['name']
-            site_domain =  jobj['site']['domain']
+            site_domain = jobj['site']['domain']
 
             # loop over groups for this site
             for group_name, group_dict in jobj['groups'].items():
@@ -182,19 +184,22 @@ def ac_list(request):
         del _groups['wheel']
     
     return render_to_response('cog/access_control/list.html', 
-                              {'groups': _groups, 'title': 'ESGF Data Access Control Groups' }, 
+                              {'groups': _groups, 'title': 'ESGF Data Access Control Groups'},
                               context_instance=RequestContext(request))
     
+
 def notifyAdmins(group_name, user_id, incomingRequest):
     
     user = get_object_or_404(User, pk=user_id)
 
     subject = "'%s' Data Access Request" % group_name
     message = "User '%s' has requested membership in group '%s'" % (user.get_full_name(), group_name)
-    message += '\nPlease process the request at: %s' % incomingRequest.build_absolute_uri( reverse('ac_process', kwargs={ 'group_name':group_name, 'user_id':user.id }) )
+    message += '\nPlease process the request at: %s' \
+               % incomingRequest.build_absolute_uri(reverse('ac_process',
+                                                            kwargs={'group_name': group_name, 'user_id': user.id}))
 
     # user attributes
-    message +="\n"
+    message += "\n"
     message += "\nFirst Name: %s" % user.first_name
     message += "\nLast Name: %s" % user.last_name
     message += "\nUser Name: %s" % user.username
@@ -214,6 +219,7 @@ def notifyAdmins(group_name, user_id, incomingRequest):
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
         
+
 def notifyUser(group_name, user, permissions):
     
     subject = "'%s' Data Access Notification" % group_name
