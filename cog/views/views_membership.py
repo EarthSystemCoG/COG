@@ -152,18 +152,7 @@ def render_membership_page(request, project, users, title, view_name):
                                'title': title, 'list_title': '%s Membership' % project.short_name},
                               context_instance=RequestContext(request))
 
-
-def render_system_users_page(request, project, users, title, view_name):
-
-    # load project groups
-    #groups = project.getGroups()
-
-    return render_to_response('cog/membership/system_list.html',
-                              {'project': project, 'users': users,
-                               'view_name': view_name, 'title': title},
-                              context_instance=RequestContext(request))
     
-
 # view to cancel user's own membership in a project
 # this view acts on the currently logged-in user
 @login_required
@@ -224,7 +213,7 @@ def membership_process(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    for (name, value) in request.REQUEST.items():
+    for (name, value) in request.GET.items():
                 
         if name.startswith(NEW_MEMBERSHIP) or name.startswith(OLD_MEMBERSHIP) or name.startswith(NO_MEMBERSHIP):
             (prefix, group_name, user_id) = name.split(":")
@@ -241,8 +230,8 @@ def membership_process(request, project_short_name):
             # HTTP POST parameter from form hidden field
             elif name.startswith(OLD_MEMBERSHIP):
                 try:
-                    # do not remove is new_membership parameter is found
-                    new_membership = request.REQUEST[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
+                    # do not remove if new_membership parameter is found
+                    new_membership = request.GET[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
                 except KeyError:
                     status = cancelMembership(user, group)
                     if status == RESULT_SUCCESS:
@@ -255,7 +244,7 @@ def membership_process(request, project_short_name):
                     notifyUserOfGroupRemoval(project, group, user)
         
     # redirect to the original listing that submitted the processing   
-    view_name = request.REQUEST['view_name']
+    view_name = request.POST['view_name']
     return HttpResponseRedirect(reverse(view_name,
                                         kwargs={'project_short_name': project_short_name})+"?status=success")
 
