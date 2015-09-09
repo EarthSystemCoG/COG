@@ -73,39 +73,49 @@
 	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
 	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
 	                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+
                         <!-- encode HTTP parameters for new and old membership in users group -->
 	                    <td style="text-align:center">
-	                       {% with user|isEnrolled:project.getUserGroup as isEnrolled %}
-                              <label style="display:none" for="{{ user.username }}_user_group">user group</label>
-	                          <input type='checkbox' id="{{ user.username }}_user_group" name='{{ project.getUserGroup|newMembership:user}}'
-                                      {% if isEnrolled %} checked="checked" {% endif %} />
-	                           {% if isEnrolled %}
-	                               <input type='hidden' name='{{ project.getUserGroup|oldMembership:user}}' value="on"/>
-	                           {% endif %}
-	                       {% endwith %}
+	                        {% with user|isEnrolled:project.getUserGroup as isEnrolled %}
+
+                                <label style="display:none" for="{{ user.username }}_user_group">user group</label>
+	                            <input type='checkbox' id="{{ user.username }}_user_group" name=
+			                           '{{ project.getUserGroup|newMembership:user}}'
+                                    {% if isEnrolled %} checked="checked" {% endif %} />
+	                                {% if isEnrolled %}
+		                                <!--hidden text field-->
+	                                    <input type="hidden" name='{{ project.getUserGroup|oldMembership:user}}'
+	                                           value="on"/>
+	                                {% endif %}
+	                        {% endwith %}
 	                    </td>
 	                    <!-- encode HTTP parameters for new and old membership in contributors group -->
 	                    <td style="text-align:center">
-	                       {% with user|isEnrolled:project.getContributorGroup as isEnrolled %}
-                              <label style="display:none" for="{{ user.username }}_contributor_group">contributor group</label>
-	                          <input type='checkbox' id="{{ user.username }}_contributor_group" name='{{ project.getContributorGroup|newMembership:user}}'
-                                      {% if isEnrolled %} checked="checked" {% endif %} />
-	                           {% if isEnrolled %}
-	                               <input type='hidden' name='{{ project.getContributorGroup|oldMembership:user}}' value="on"/>
-	                           {% endif %}
+	                        {% with user|isEnrolled:project.getContributorGroup as isEnrolled %}
+		                        
+                                <label style="display:none" for="{{ user.username }}_contributor_group">contributor group</label>
+	                            <input type='checkbox' id="{{ user.username }}_contributor_group" name=
+			                           '{{ project.getContributorGroup|newMembership:user}}'
+                                       {% if isEnrolled %} checked="checked" {% endif %} />
+	                            {% if isEnrolled %}
+	                                <input type='hidden' name='{{ project.getContributorGroup|oldMembership:user}}'
+	                                       value="on"/>
+	                            {% endif %}
 	                       {% endwith %}
 	                    </td>
 	                    
 	                    <!-- encode HTTP parameters for new and old membership in admins group -->
                         <td style="text-align:center">
-                           {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}
-                               <label style="display:none" for="{{ user.username }}_admin_group">admin group</label>
-                               <input type='checkbox' id="{{ user.username }}_admin_group" name='{{ project.getAdminGroup|newMembership:user}}'
-                                      {% if isEnrolled %} checked="checked" {% endif %} />
-                               {% if isEnrolled %}
-                                   <input type='hidden' name='{{ project.getAdminGroup|oldMembership:user}}' value="on"/>
-                               {% endif %}
-                           {% endwith %}
+                            {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}
+                                <label style="display:none" for="{{ user.username }}_admin_group">admin group</label>
+                                <input type='checkbox' id="{{ user.username }}_admin_group" name=
+		                                '{{ project.getAdminGroup|newMembership:user}}'
+                                        {% if isEnrolled %} checked="checked" {% endif %} />
+                                {% if isEnrolled %}
+                                    <input type='hidden' name='{{ project.getAdminGroup|oldMembership:user}}'
+                                           value="on"/>
+                                {% endif %}
+                            {% endwith %}
                         </td>
                         <td style="text-align:center">
                             <a class="deletelink" 
@@ -114,11 +124,12 @@
                                &{{project.getContributorGroup|noMembership:user}}=on
                                &{{project.getAdminGroup|noMembership:user}}=on
                                &view_name={{view_name}}"
-                               onclick="return urlConfirmationDialog('Cancel Membership Confirmation','Are you sure you want to remove this user from the group?',this)">Cancel</a>
+                               onclick="return urlConfirmationDialog('Cancel Membership Confirmation',
+                               'Are you sure you want to remove this user from this group?',this)">
+	                            Cancel</a>
                         </td>
 	                </tr>
 	            {% endfor %}
-	            
 	        </table>
 	   </div>
 	   <div style="float:left">
