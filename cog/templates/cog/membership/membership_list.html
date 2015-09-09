@@ -109,7 +109,11 @@
                         </td>
                         <td style="text-align:center">
                             <a class="deletelink" 
-                               href="{% url 'membership_process' project.short_name|lower %}?{{project.getUserGroup|noMembership:user}}=on&{{ project.getAdminGroup|noMembership:user}}=on&view_name={{view_name}}"
+                               href="{% url 'membership_process' project.short_name|lower %}
+                               ?{{project.getUserGroup|noMembership:user}}=on
+                               &{{project.getContributorGroup|noMembership:user}}=on
+                               &{{project.getAdminGroup|noMembership:user}}=on
+                               &view_name={{view_name}}"
                                onclick="return urlConfirmationDialog('Cancel Membership Confirmation','Are you sure you want to remove this user from the group?',this)">Cancel</a>
                         </td>
 	                </tr>
