@@ -15,6 +15,7 @@ from django_openid_auth.models import UserOpenID
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
+
 # view to display the data cart for a given site, user
 @require_GET
 @login_required
@@ -41,15 +42,16 @@ def datacart_display(request, site_id, user_id):
                 print site, size
                 dcs[openid][site] = size
         
-    return render_to_response('cog/datacart/datacart.html', { 'datacart': datacart, 'datacarts': dcs },
+    return render_to_response('cog/datacart/datacart.html', {'datacart': datacart, 'datacarts': dcs},
                               context_instance=RequestContext(request))    
     
+
 # view to display a user datacart by openid
 @require_GET
 @login_required
 def datacart_byopenid(request):
     
-    if (request.method=='GET'):
+    if request.method == 'GET':
     
         openid = request.GET['openid']
         
@@ -58,11 +60,12 @@ def datacart_byopenid(request):
         
         # redirect to user profile page on local site
         return HttpResponseRedirect(reverse('datacart_display', 
-                                    kwargs={ 'site_id': Site.objects.get_current().id, 'user_id': userOpenid.user.id }))
+                                    kwargs={'site_id': Site.objects.get_current().id, 'user_id': userOpenid.user.id}))
             
     else:
         return HttpResponseNotAllowed(['GET'])
     
+
 # view to add an item to a user data cart
 # NOTE: no CSRF token required, but request must be authenticated
 @login_required
@@ -96,11 +99,12 @@ def datacart_add(request, site_id, user_id):
         item = DataCartItem.fromJson(datacart, identifier, metadata)
 
     # return new number of items in cart
-    response_data['datacart_size'] = len( datacart.items.all() )
+    response_data['datacart_size'] = len(datacart.items.all())
     # return identifier of newly added datcart item
     response_data['item'] = identifier
     
     return HttpResponse(json.dumps(response_data), content_type='application/json') 
+
 
 # view to add ALL current search results (as displayed in the page) to the user data cart
 @login_required
@@ -135,8 +139,9 @@ def datacart_add_all(request, site_id, user_id):
                 print 'Added item: %s' % record.id
 
     # redirect to search results
-    back = request.GET.get('back','/')
-    return HttpResponseRedirect( back )
+    back = request.GET.get('back', '/')
+    return HttpResponseRedirect(back)
+
 
 # view to delete ALL current search results (as displayed in the page) from the user data cart
 @login_required
@@ -172,8 +177,8 @@ def datacart_delete_all(request, site_id, user_id):
                 pass
             
     # redirect to search results
-    back = request.GET.get('back','/')
-    return HttpResponseRedirect( back )
+    back = request.GET.get('back', '/')
+    return HttpResponseRedirect(back)
 
 
 # view to generate wget URLS for all selected datacart items
@@ -228,6 +233,7 @@ def datacart_wget(request, site_id, user_id):
     '''
     return HttpResponse(json.dumps(response_data), content_type='application/json') 
     
+
 # view to delete an item to a user data cart
 @login_required
 @require_POST
@@ -255,9 +261,10 @@ def datacart_delete(request, site_id, user_id):
     # return id of item just deleted so it can be hidden
     response_data['item'] = identifier
     # return number of remaining items
-    response_data['datacart_size'] = len( datacart.items.all() )
+    response_data['datacart_size'] = len(datacart.items.all())
         
     return HttpResponse(json.dumps(response_data), content_type='application/json') 
+
 
 # view to completely empty a user data cart
 # NOTE: no CSRF token required, but request must be authenticated

@@ -109,11 +109,10 @@ def doc_add(request, project_short_name):
             folder = form.cleaned_data['folder']
             if folder is not None:
                 # must use full URL since Bookmark.url is of type URLField
-                url = request.build_absolute_uri( doc.file.url )
+                url = request.build_absolute_uri(doc.file.url)
                 bookmark = Bookmark.objects.create(name=doc.title, url=url, folder=folder, 
                                                    description=doc.description, order=len(folder.bookmark_set.all()))
-                
-            
+
             # optional redirect
             redirect = form.cleaned_data['redirect']
             if redirect:
@@ -158,7 +157,6 @@ def doc_download(request, path):
         return doc_download_private(request, path, doc)
     else:
         return serve(request, path, document_root=settings.PROJECTS_ROOT)
-        
 
 
 def data_download(request, path):

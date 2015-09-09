@@ -118,7 +118,7 @@ def external_urls_update(request, project_short_name, suburl):
         # sorting of the main view occurs in project.py
         if type == 'release_schedule':
             formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
-                                        order_by('-title'))
+                                         order_by('-title'))
         else:
 
             # external_urls are ordered by title when editing to match the order when just viewing.
