@@ -152,8 +152,8 @@ def render_membership_page(request, project, users, title, view_name):
                                'title': title, 'list_title': '%s Membership' % project.short_name},
                               context_instance=RequestContext(request))
 
-    
-# view to cancel user's own membership in a project
+
+# view to cancel membership in a project...initiated by the user from their profile page
 # this view acts on the currently logged-in user
 @login_required
 def membership_remove(request, project_short_name):
@@ -179,7 +179,7 @@ def membership_remove(request, project_short_name):
     # process submission form
     else:
         
-        for group in [project.getAdminGroup(), project.getUserGroup()]:
+        for group in [project.getAdminGroup(), project.getUserGroup(), project.getContributorGroup()]:
             # user is enrolled in group
             if group in request.user.groups.all():
                 status = cancelMembership(request.user, group)
@@ -201,50 +201,66 @@ def membership_remove(request, project_short_name):
         return HttpResponseRedirect(reverse('user_profile_redirect', kwargs={'user_id': request.user.id}))
     
 
-# view to bulk-process group membership operations
-# this view can be invoked as either GET or POST,  following a GET request to a membership listing
-@login_required
+#view to bulk-process group membership operations from the pending_users or current_users template
+#this view can be invoked as either GET or POST,  following a GET request to a membership listing
+# @login_required
 def membership_process(request, project_short_name):
-    
     # load project
+    print 'in membership process'
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
     # check permission
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
-    for (name, value) in request.GET.items():
-                
+
+    print 'items', request.REQUEST.items()
+    for (name, value) in request.REQUEST.items():
+        print '**************************************'
+        print 'name is ', name
         if name.startswith(NEW_MEMBERSHIP) or name.startswith(OLD_MEMBERSHIP) or name.startswith(NO_MEMBERSHIP):
             (prefix, group_name, user_id) = name.split(":")
             
             group = get_object_or_404(Group, name=group_name)
             user = get_object_or_404(User, pk=user_id)
             
-            # HTTP POST parameter from form check-box
+            # HTTP POST parameter from form check-box, all checks are treated as new
+            # process checkbox as a new user
             if name.startswith(NEW_MEMBERSHIP):
+                print 'new', user.get_full_name(), group_name
                 status = addMembership(user, group)
+
+                #only email if user not already a member
                 if status == RESULT_SUCCESS:
                     notifyUserOfMembershipGranted(project, group, user, request)
                 
+
+            # process hidden input field that indicates current membership
             # HTTP POST parameter from form hidden field
+            # if user has a role, then {{isEnrolled}} turns on the hidden field with value = "on"
+
             elif name.startswith(OLD_MEMBERSHIP):
+                print 'old', user.get_full_name(), group_name
                 try:
-                    # do not remove if new_membership parameter is found
-                    new_membership = request.GET[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
+                    # don't delete from group if checkbox is still checked  (e.g. new membership)
+                    new_membership = request.REQUEST[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
+                    if new_membership:
+                        print 'checkbox is there', group_name
                 except KeyError:
+                    # checkbox is empty, so remove from group
                     status = cancelMembership(user, group)
                     if status == RESULT_SUCCESS:
                         notifyUserOfGroupRemoval(project, group, user)
              
-            # HTTP GET parameter       
+            # HTTP GET parameter (when delete link clicked)
             elif name.startswith(NO_MEMBERSHIP):
+                #TODO check group here, should remove from all groups
+                print 'method on delete ', request.method
+                print 'none', user.get_full_name()
                 status = cancelMembership(user, group)
                 if status == RESULT_SUCCESS:
                     notifyUserOfGroupRemoval(project, group, user)
-        
-    # redirect to the original listing that submitted the processing   
-    view_name = request.POST['view_name']
+
+    # redirect to the original listing that submitted the processing
+    view_name = request.REQUEST['view_name']
     return HttpResponseRedirect(reverse(view_name,
                                         kwargs={'project_short_name': project_short_name})+"?status=success")
 

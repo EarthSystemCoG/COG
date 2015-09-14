@@ -77,14 +77,13 @@
                         <!-- encode HTTP parameters for new and old membership in users group -->
 	                    <td style="text-align:center">
 	                        {% with user|isEnrolled:project.getUserGroup as isEnrolled %}
-
                                 <label style="display:none" for="{{ user.username }}_user_group">user group</label>
 	                            <input type='checkbox' id="{{ user.username }}_user_group" name=
 			                           '{{ project.getUserGroup|newMembership:user}}'
                                     {% if isEnrolled %} checked="checked" {% endif %} />
 	                                {% if isEnrolled %}
 		                                <!--hidden text field-->
-	                                    <input type="hidden" name='{{ project.getUserGroup|oldMembership:user}}'
+	                                    <input name='{{ project.getUserGroup|oldMembership:user}}'
 	                                           value="on"/>
 	                                {% endif %}
 	                        {% endwith %}
@@ -92,13 +91,13 @@
 	                    <!-- encode HTTP parameters for new and old membership in contributors group -->
 	                    <td style="text-align:center">
 	                        {% with user|isEnrolled:project.getContributorGroup as isEnrolled %}
-		                        
+
                                 <label style="display:none" for="{{ user.username }}_contributor_group">contributor group</label>
 	                            <input type='checkbox' id="{{ user.username }}_contributor_group" name=
 			                           '{{ project.getContributorGroup|newMembership:user}}'
                                        {% if isEnrolled %} checked="checked" {% endif %} />
 	                            {% if isEnrolled %}
-	                                <input type='hidden' name='{{ project.getContributorGroup|oldMembership:user}}'
+	                                <input name='{{ project.getContributorGroup|oldMembership:user}}'
 	                                       value="on"/>
 	                            {% endif %}
 	                       {% endwith %}
@@ -112,21 +111,15 @@
 		                                '{{ project.getAdminGroup|newMembership:user}}'
                                         {% if isEnrolled %} checked="checked" {% endif %} />
                                 {% if isEnrolled %}
-                                    <input type='hidden' name='{{ project.getAdminGroup|oldMembership:user}}'
+                                    <input name='{{ project.getAdminGroup|oldMembership:user}}'
                                            value="on"/>
                                 {% endif %}
                             {% endwith %}
                         </td>
                         <td style="text-align:center">
-                            <a class="deletelink" 
-                               href="{% url 'membership_process' project.short_name|lower %}
-                               ?{{project.getUserGroup|noMembership:user}}=on
-                               &{{project.getContributorGroup|noMembership:user}}=on
-                               &{{project.getAdminGroup|noMembership:user}}=on
-                               &view_name={{view_name}}"
-                               onclick="return urlConfirmationDialog('Cancel Membership Confirmation',
-                               'Are you sure you want to remove this user from this group?',this)">
-	                            Cancel</a>
+	                        <!--REALLY LONG STRING to CANCEL a member by removing from all groups-->
+                            <a class="deletelink" href="
+                            {% url 'membership_process' project.short_name|lower %}?{{project.getUserGroup|noMembership:user}}=on&{{project.getContributorGroup|noMembership:user}}=on&{{project.getAdminGroup|noMembership:user}}=on&view_name={{view_name}}" onclick="return urlConfirmationDialog('Cancel Membership Confirmation','Are you sure you want to remove this user from this group?',this)">Cancel</a>
                         </td>
 	                </tr>
 	            {% endfor %}
