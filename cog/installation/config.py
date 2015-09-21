@@ -149,7 +149,6 @@ class CogConfig(object):
         self._safeSet('DATABASE_USER', self._safeGet("db.user") )
         self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
         self._safeSet('DATABASE_PORT', self._safeGet("db.port", default='5432'))
-        
         self._safeSet('MEDIA_ROOT','%s/site_media' % COG_CONFIG_DIR)
         # default project to where '/' requests are redirected
         self._safeSet('HOME_PROJECT', DEFAULT_PROJECT_SHORT_NAME)
@@ -160,7 +159,11 @@ class CogConfig(object):
         # optional number of days after which password expire
         self._safeSet('PASSWORD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
-        self._safeSet('IDP_REDIRECT','') # no redirect by default
+        idpPeer = self._safeGet("esgf.idp.peer", default='')
+        if hostName != idpPeer:
+            self._safeSet('IDP_REDIRECT', 'https://%s' % idpPeer) # redirect to specified "esgf.idp.peer"
+        else:
+            self._safeSet('IDP_REDIRECT','') # no redirect by default
         # DEBUG setting: must be False for production servers to avoid broadcasting detailed system paths
         self._safeSet('DEBUG', 'False')
         # ALLOWED_HOSTS = [] must be included if DEBUG=False
