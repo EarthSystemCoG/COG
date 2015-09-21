@@ -794,5 +794,4 @@ def get_peer_sites(project):
     Returns a list of ENABLED peer sites, ordered alphabetically by name.
     """
     
-    print 'SITES=%s' % getPeerSites()
     return getPeerSites()

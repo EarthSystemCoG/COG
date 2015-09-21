@@ -3,7 +3,7 @@
 {% block main %}
   <!-- limit visibility to site administrators -->
   {% if request.user.is_staff %}
-      <div class="prepend-5 span-14 last" >
+      <div class="prepend-2 span-20 last" >
     
           <h1>CoG Peer Nodes Synchronization</h1>
     	
@@ -17,14 +17,18 @@
 		              <tr>
 	                      <th class="white" scope="col">Site Name</th>
 	                      <th class="white" scope="col">Domain</th>
-	                      <th class="white" scope="col">Shared Projects Document</th>
+	                      <th class="white" scope="col">Number of Projects</th>
+	                      <th class="white" scope="col">Number of Users</th>
+	                      <th class="white" scope="col">Report Document</th>
 	                      <th class="white" scope="col">Sync Status</th>
 	                  </tr>
 				      <!-- data rows -->
-		              {% for siteid, sitedict in sites.items %}
+		              {% for siteid, sitedict in sites %}
 			              <tr>
 			                  <td>{{ sitedict.name }}</td>
 			                  <td>{{ sitedict.domain }}</td>
+			                  <td>{{ sitedict.numberOfProjects }}</td>
+			                  <td>{{ sitedict.numberOfUsers }}</td>
 			                  <td><a href='{{ sitedict.url }}'>Shared Projects</a></td>
 			                  <td>
 			           		      {% if sitedict.status == 'ERROR' %}
@@ -35,6 +39,15 @@
                               </td>
 			              </tr>
 			          {% endfor %}
+			          <!-- totals row -->
+			          <tr>
+			          	<td>Total</td>
+			          	<td>&nbsp;</td>
+			          	<td>{{ totalNumberOfProjects }}</td>
+			          	<td>{{ totalNumberOfUsers }}</td>
+			          	<td>&nbsp;</td>
+			          	<td>&nbsp;</td>
+			          </tr>
 		          </table>
 	          </div>
 	  </div>
