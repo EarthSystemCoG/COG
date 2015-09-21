@@ -59,6 +59,7 @@ ESGF_CONFIG = siteManager.isEsgfEnabled()
 if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=SECTION_ESGF, default='')
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=SECTION_ESGF)
+    ESGF_VERSION = siteManager.get('ESGF_VERSION', section=SECTION_ESGF)
 # FIXME
 
 #====================== standard django settings.py ======================

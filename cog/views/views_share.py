@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.template import RequestContext
 
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
+from cog.models.user_profile import UserProfile
 
 JSON = "application/json"
 
@@ -90,6 +91,10 @@ def share_projects(request):
             
         response_data["projects"] = projects   
         
+        # list users from this site
+        numberOfUsers = UserProfile.objects.filter(site=current_site).count()
+        response_data["users"] = numberOfUsers   
+        
         return HttpResponse(json.dumps(response_data, indent=4), content_type=JSON)
     else:
         return HttpResponseNotAllowed(['GET'])
@@ -146,9 +151,11 @@ def sync_projects(request):
     if not request.user.is_staff:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    sites = projectManager.sync()
+    sites, totalNumberOfProjects, totalNumberOfUsers = projectManager.sync()
     
-    return render_to_response('cog/admin/sync_projects.html', {'sites':sites },
-                                  context_instance=RequestContext(request))
+    return render_to_response('cog/admin/sync_projects.html', 
+                              {'sites':sorted(sites.iteritems(), key=lambda (siteid, sitedict): sitedict['name']), 
+                               'totalNumberOfProjects':totalNumberOfProjects, 'totalNumberOfUsers':totalNumberOfUsers },
+                              context_instance=RequestContext(request))
         
     
