@@ -84,7 +84,7 @@
 	                                {% if isEnrolled %}
 		                                <!--hidden text field. This is required because django can tell if a checkbox
 		                                 is unchecked.-->
-	                                    <input style="display:hidden;" name=
+	                                    <input type="hidden" name=
 		                                '{{ project.getUserGroup|oldMembership:user}}' value="on"/>
 	                                {% endif %}
 	                        {% endwith %}
@@ -99,7 +99,7 @@
                                        {% if isEnrolled %} checked="checked" {% endif %} />
 	                            {% if isEnrolled %}
 		                            <!--hidden text field-->
-	                                <input style="display:hidden;" name=
+	                                <input type="hidden" name=
 			                                '{{ project.getContributorGroup|oldMembership:user}}' value="on"/>
 	                            {% endif %}
 	                       {% endwith %}
@@ -113,7 +113,7 @@
 		                                '{{ project.getAdminGroup|newMembership:user}}'
                                         {% if isEnrolled %} checked="checked" {% endif %} />
                                 {% if isEnrolled %}
-                                    <input style="display:hidden;" name='{{ project.getAdminGroup|oldMembership:user}}'
+                                    <input type="hidden" name='{{ project.getAdminGroup|oldMembership:user}}'
                                            value="on"/>
                                 {% endif %}
                             {% endwith %}
