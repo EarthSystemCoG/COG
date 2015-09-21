@@ -231,7 +231,6 @@ def membership_process(request, project_short_name):
                 #only email if user not already a member
                 if status == RESULT_SUCCESS:
                     notifyUserOfMembershipGranted(project, group, user, request)
-                
 
             # process hidden input field that indicates current membership
             # HTTP POST parameter from form hidden field
@@ -298,7 +297,8 @@ def notifyUserOfGroupRemoval(project, group, user):
     
     subject = "[%s] Permissions Group Modification" % project.short_name
     message = "Greetings %s. Your permissions in the ESGF-CoG Project:%s have changed." \
-              "\n You have been removed from %s permissions group." % (user.first_name, project.short_name, group.name)
+              "\nYou have been removed from the %s permissions group." % (user.first_name, project.short_name,
+                                                                         group.name)
     notify(user, subject, message)
     
 
