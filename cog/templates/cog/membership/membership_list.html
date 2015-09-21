@@ -74,7 +74,7 @@
 	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
 	                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
 
-                        <!-- encode HTTP parameters for new and old membership in users group -->
+                        <!-- encode HTTP parameters for new and old membership in USERS group -->
 	                    <td style="text-align:center">
 	                        {% with user|isEnrolled:project.getUserGroup as isEnrolled %}
                                 <label style="display:none" for="{{ user.username }}_user_group">user group</label>
@@ -82,13 +82,14 @@
 			                           '{{ project.getUserGroup|newMembership:user}}'
                                     {% if isEnrolled %} checked="checked" {% endif %} />
 	                                {% if isEnrolled %}
-		                                <!--hidden text field-->
-	                                    <input name='{{ project.getUserGroup|oldMembership:user}}'
-	                                           value="on"/>
+		                                <!--hidden text field. This is required because django can tell if a checkbox
+		                                 is unchecked.-->
+	                                    <input style="display:hidden;" name=
+		                                '{{ project.getUserGroup|oldMembership:user}}' value="on"/>
 	                                {% endif %}
 	                        {% endwith %}
 	                    </td>
-	                    <!-- encode HTTP parameters for new and old membership in contributors group -->
+	                    <!-- encode HTTP parameters for new and old membership in CONTRIBUTORS group -->
 	                    <td style="text-align:center">
 	                        {% with user|isEnrolled:project.getContributorGroup as isEnrolled %}
 
@@ -97,13 +98,14 @@
 			                           '{{ project.getContributorGroup|newMembership:user}}'
                                        {% if isEnrolled %} checked="checked" {% endif %} />
 	                            {% if isEnrolled %}
-	                                <input name='{{ project.getContributorGroup|oldMembership:user}}'
-	                                       value="on"/>
+		                            <!--hidden text field-->
+	                                <input style="display:hidden;" name=
+			                                '{{ project.getContributorGroup|oldMembership:user}}' value="on"/>
 	                            {% endif %}
 	                       {% endwith %}
 	                    </td>
 	                    
-	                    <!-- encode HTTP parameters for new and old membership in admins group -->
+	                    <!-- encode HTTP parameters for new and old membership in ADMINS group -->
                         <td style="text-align:center">
                             {% with user|isEnrolled:project.getAdminGroup as isEnrolled %}
                                 <label style="display:none" for="{{ user.username }}_admin_group">admin group</label>
@@ -111,7 +113,7 @@
 		                                '{{ project.getAdminGroup|newMembership:user}}'
                                         {% if isEnrolled %} checked="checked" {% endif %} />
                                 {% if isEnrolled %}
-                                    <input name='{{ project.getAdminGroup|oldMembership:user}}'
+                                    <input style="display:hidden;" name='{{ project.getAdminGroup|oldMembership:user}}'
                                            value="on"/>
                                 {% endif %}
                             {% endwith %}
