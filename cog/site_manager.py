@@ -32,6 +32,7 @@ class SiteManager(object):
        [ESGF]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
        ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
+       ESGF_VERSION=v2.0-RC4.3-devel
        
        [EMAIL]
        EMAIL_SERVER=smtp.gmail.com

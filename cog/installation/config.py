@@ -110,14 +110,15 @@ class CogConfig(object):
             logging.warn("ESGF database password file: %s could not found or could not be read" % ESGF_PASSWORD_FILE) 
                 
                 
-    def _safeSet(self, key, value, section=SECTION_DEFAULT):
-        '''Method to set a configuration option, without overriding an existing value.'''
+    def _safeSet(self, key, value, section=SECTION_DEFAULT, override=False):
+        '''Method to set a configuration option, without overriding an existing value
+            (unless explicitly requested).'''
         
         if not self.cogConfig.has_section(section):
             if section != SECTION_DEFAULT: 
                 self.cogConfig.add_section(section) # "The DEFAULT section is not acknowledged."
             
-        if not self.cogConfig.has_option(section, key):
+        if override or not self.cogConfig.has_option(section, key):
             self.cogConfig.set(section, key, value)
         
     def _safeGet(self, key, default=None, section=SECTION_DEFAULT):
@@ -174,6 +175,11 @@ class CogConfig(object):
         self._safeSet('KNOWN_PROVIDERS', KNOWN_PROVIDERS)
         # option to send SESSION and CSRF cookies via SSL only - requires full SSL-encrypted site
         self._safeSet('PRODUCTION_SERVER', True)
+        # ESGF software stack version
+        esgfVersion = self._safeGet("esgf.version", default=None)
+        if esgfVersion:
+            self._safeSet('ESGF_VERSION', esgfVersion, override=True)
+
         
         #[ESGF]
         if self.esgf:
