@@ -279,12 +279,11 @@ def notifyAdminsOfMembershipRequest(project, user, request):
     for admin in list(project.getAdminGroup().user_set.all())+list(getSiteAdministrators()):
         notify(admin, subject, message)
 
-
 def notifyUserOfMembershipGranted(project, group, user, request):
     
     subject = "[%s] Membership Granted" % project.short_name
     message = "Welcome %s! You have been granted membership in the ESGF-CoG Project: %s," \
-              " and assigned to the %s permissions group." % (user.first_name, project.short_name, group.name)
+              " and assigned to the %s permissions group." % (user.first_name, project.short_name, _getGroupDescription(group.name))
     
     url = project.home_page_url()
     url = request.build_absolute_uri(url)
@@ -298,7 +297,7 @@ def notifyUserOfGroupRemoval(project, group, user):
     subject = "[%s] Permissions Group Modification" % project.short_name
     message = "Greetings %s. Your permissions in the ESGF-CoG Project: %s have changed." \
               "\nYou have been removed from the %s permissions group." % (user.first_name, project.short_name,
-                                                                         group.name)
+                                                                         _getGroupDescription(group.name) )
     notify(user, subject, message)
     
 
@@ -310,6 +309,12 @@ def notifyUserOfMembershipSelfCanceled(project, user):
               "request this action." % project.short_name
     notify(user, subject, message)
     
+def _getGroupDescription(group_name):
+    '''Returns a human readable description for a permissions group.'''
+    
+    parts = group_name.split('_')
+    return parts[1].capitalize()
+
 
 def notifyAdminsOfMembershipCanceled(project, user):
 
