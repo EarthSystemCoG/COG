@@ -289,14 +289,14 @@ def notifyUserOfMembershipGranted(project, group, user, request):
     url = project.home_page_url()
     url = request.build_absolute_uri(url)
 
-    message += "\nPlease login and collaborate with us at: %s" % url
+    message += "\nPlease login and collaborate with us at: %s." % url
     notify(user, subject, message)
 
 
 def notifyUserOfGroupRemoval(project, group, user):
     
     subject = "[%s] Permissions Group Modification" % project.short_name
-    message = "Greetings %s. Your permissions in the ESGF-CoG Project:%s have changed." \
+    message = "Greetings %s. Your permissions in the ESGF-CoG Project: %s have changed." \
               "\nYou have been removed from the %s permissions group." % (user.first_name, project.short_name,
                                                                          group.name)
     notify(user, subject, message)
