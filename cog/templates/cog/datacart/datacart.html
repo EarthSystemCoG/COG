@@ -104,9 +104,10 @@
 			<td style="width:14%;vertical-align:middle;">
 			    <input type="text" name="query-filter" alt="query-filter" id="query-filter" placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter(); return false; }" />
 			</td>
-			<td style="width:14%;vertical-align:middle;display:inline;"> 
+			<td style="width:14%;vertical-align:middle;display:inline;background-color:white;">
 	  	        &nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
-	  		&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>
+	  		    &nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value='';
+	  		 javascript:applyQueryFilter(); return false;"/>
 			</td>
 			</tr>
 		</table>
