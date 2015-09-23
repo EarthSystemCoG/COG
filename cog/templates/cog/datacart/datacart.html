@@ -99,8 +99,9 @@
 						 Download</a></strong> ]
 				     </td>
 			    </tr>
-			
-			    <tr>
+			    <!--this row must be set explicitly to white since the td, which is white does not fill up the entire
+			     row, which is gray -->
+			    <tr style="background-color: white;">
 			         <td style="width:72%;vertical-align:middle;">
 			              When 'Show Files' is clicked, or when using WGET or Globus,
 				          you may use an optional string to
@@ -145,7 +146,7 @@
 				         <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
                                   Remove All</a>
 				    </td>
-			    /tr>
+			    </tr>
             </table>
 
 		    <table class="no-color" id="datacart-table">
