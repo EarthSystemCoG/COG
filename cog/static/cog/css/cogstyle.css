@@ -476,7 +476,7 @@ table {
 	margin-left:     0;
 }
 
-tbody tr:nth-child(2n), tbody tr.even{
+tbody tr:nth-child(2n), table tbody tr.even{
     vertical-align:   middle;
     font-size:        12px;
     padding:          4px;
@@ -485,7 +485,7 @@ tbody tr:nth-child(2n), tbody tr.even{
 
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
-tbody tr:nth-child(even) td, tbody tr.even td {
+tbody tr:nth-child(even) td, table tbody tr.even td {
 	/* background:       #B9E0E3;/*light-teal */
     background-color: #eee /*light-gray */
 }
@@ -522,8 +522,9 @@ table.odd-color tbody tr:nth-child(even) td, tbody tr.even td {
 }
 
 /* style for all cells in a non-colored (ie: no alternating color) table */
-table.no-color td {
+table.no-color td{
 	background-color: #FFFFFF !important;
+
 }
 
 /* for use in the custom header for JPL */
@@ -531,7 +532,8 @@ table.transparent tbody tr:nth-child(even) td, tbody tr.even td{
     background-color: inherit;
 }
 
-/* for tables that are entirely gray. Used when a table is imbedded in another table with a dark row */
+/* for tables that are entirely gray. Used when a table is embedded in another table with a dark row */
+/* TODO remove the td here */
 table.gray td{
         background-color: #eee !important;
 }
