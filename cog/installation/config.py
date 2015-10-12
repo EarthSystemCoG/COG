@@ -176,7 +176,7 @@ class CogConfig(object):
         # option to send SESSION and CSRF cookies via SSL only - requires full SSL-encrypted site
         self._safeSet('PRODUCTION_SERVER', True)
         # ESGF software stack version
-        esgfVersion = self._safeGet("esgf.version", default=None)
+        esgfVersion = self._safeGet("version", default=None)
         if esgfVersion:
             self._safeSet('ESGF_VERSION', esgfVersion, override=True)
 

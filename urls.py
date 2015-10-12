@@ -1,14 +1,18 @@
+from django.conf import settings
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
-from django.conf import settings
-
+from django.views.generic import TemplateView
 
 from filebrowser.sites import site
+
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                           
+                       
+    # robots.txt file
+    url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), name='robots.txt'),
+                                                      
     # site index
     url(r'^$', 'cog.views.site_home', name='site_home'),
                            

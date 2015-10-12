@@ -7,10 +7,7 @@
 	<!-- NOAA/ESRL production server -->
 	<site name="NOAA ESRL ESGF-CoG" domain="cog-esgf.esrl.noaa.gov" />
 
-	<!--  NOAA/ESRL development server -->	
-	<!-- <site name="CoG @ dev-hydra" domain="dev-hydra-httpd.esrl.svc" /> -->
-
-        <!-- NASA/JPL production server -->
-        <site name="NASA-JPL ESGF-CoG" domain="esg-datanode.jpl.nasa.gov" />
+    <!-- NASA/JPL production server -->
+    <site name="NASA-JPL ESGF-CoG" domain="esgf-node.jpl.nasa.gov" />
 
 </sites>
