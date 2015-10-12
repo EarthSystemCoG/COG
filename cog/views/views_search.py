@@ -191,7 +191,7 @@ def search_get(request, searchInput, searchConfig, extra={}):
             
         except HTTPError:
             print "HTTP Request Error"
-            data = request.session[SEARCH_DATA]
+            #data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
             data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
             

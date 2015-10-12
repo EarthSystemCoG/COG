@@ -166,6 +166,7 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -219,6 +220,9 @@ AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+# Use stricter policy for X_FRAME_OPTIONS: default is X_FRAME_OPTIONS='SAMEORIGIN'
+#X_FRAME_OPTIONS = 'DENY'
 
 # login page URL (default: '/accounts/login')
 LOGIN_URL = '/login'

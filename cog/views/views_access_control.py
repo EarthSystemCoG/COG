@@ -24,7 +24,7 @@ from cog.notification import notify
 from cog.plugins.esgf.objects import ROLE_USER, ROLE_PUBLISHER, ROLE_SUPERUSER, ROLE_ADMIN
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.utils import getJson
-from constants import PERMISSION_DENIED_MESSAGE, SAVED
+from constants import PERMISSION_DENIED_MESSAGE, SAVED, GROUP_NOT_FOUND_MESSAGE
 from cog.plugins.esgf.security import esgfDatabaseManager
 
 
@@ -41,6 +41,12 @@ def ac_subscribe(request, group_name):
     # prevent requests to 'wheel' group
     if group_name == 'wheel':
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    # check that group exists in local database
+    group_list = registrationService.listGroups()
+    group_names = [str(groupDict['name']) for groupDict in group_list]
+    if not group_name in group_names:
+        return HttpResponseForbidden(GROUP_NOT_FOUND_MESSAGE)
 
     # display submission form
     if request.method == 'GET':

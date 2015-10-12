@@ -90,6 +90,15 @@ class ProjectForm(ModelForm):
 
         return short_name
 
+    def clean_long_name(self):
+        
+        long_name = self.cleaned_data['long_name']
+        # do not allow quotation characters in long name (causes problems in browser widget)
+        if '\"' in long_name:
+            raise forms.ValidationError("Quotation characters are not allowed in project long name")
+        
+        return long_name
+        
     class Meta:
         model = Project
         fields = ('short_name', 'long_name', 'author', 'description', 
