@@ -1137,6 +1137,16 @@ BEGIN USER MESSAGES
 	text-align:  center;
 }
 
+.node-notification-box{
+	background:   #666;
+	color:        white;
+	text-align:   center;
+	padding:      10px;
+	font-size:    11pt;
+	margin-top:   5px;
+	margin-bottom:10px;
+}
+
 /*update openID box. This should be removed when no longer needed */
 .changeID-box {
 
