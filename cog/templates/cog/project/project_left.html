@@ -64,7 +64,7 @@
 
         {% endif %}
     
-        <!-- access restricted to Project Adminstrators-->
+        <!-- access restricted to Project Administrators-->
         {% if user|hasAdminPermission:project %}
             <div class="left_widget_header">
                 Administrators
@@ -83,9 +83,9 @@
             </ul>
         {% endif %}
        
-        <!-- access restricted to Site Administrators -->
+        <!-- access restricted to Node Administrators -->
         {% if user.is_staff %}
-            <div class="left_widget_header">Site Administrators</div>
+            <div class="left_widget_header">Node Administrators</div>
                 <ul>
                     <li><a href="{% url 'admin_projects' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
 	                <li><a href="{% url 'admin_projects' %}" class="listlink">&nbsp;List All Projects</a>
