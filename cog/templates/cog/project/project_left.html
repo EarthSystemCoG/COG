@@ -88,8 +88,10 @@
             <div class="left_widget_header">Site Administrators</div>
                 <ul>
                     <li><a href="{% url 'admin_projects' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
+	                <li><a href="{% url 'admin_projects' %}" class="listlink">&nbsp;List All Projects</a>
                     <li><a href="{% url 'admin_users' %}" class="listlink">&nbsp;List System Users</a></li>
                     <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="listlink">&nbsp;Django Admin</a></li>
                 </ul>
         {% endif %}
     </div> <!--end of vertical menu-->
