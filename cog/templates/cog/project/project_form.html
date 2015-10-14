@@ -144,7 +144,7 @@
             </tr>
 	    </table>
         <table class="odd-color">
-            <!-- only allow site administrators to change the active state of a project  -->
+            <!-- only allow node administrators to change the active state of a project  -->
             {% if request.user.is_staff and action == 'update' %}
 	            <tr>
 	                 <td style="width:15%;">
@@ -161,7 +161,7 @@
             {% else %}
                 {{ form.active.as_hidden }}
             {% endif %}
-            <!--// Checkbox for private sites   \\-->
+            <!--// Checkbox for private projects   \\-->
             <tr>
 	            <td nowrap="nowrap">
                     Is Private?
