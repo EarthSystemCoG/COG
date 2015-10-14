@@ -2,7 +2,7 @@
 {% load cog_utils %}
 
 
-<div class="span-24 last" >
+<div class="span-max last" >
    <!--// first row of the header with user links-->
    <!--load top-right user menu from cog/common/_user_menu.html-->
    <table class="no-color">
@@ -53,9 +53,9 @@
 </div>
 
 <!-- top navigation bar -->
-<div class="span-24 last">
+<div class="span-max last">
    <div class="top_nav">
-       <div class="span-19">
+       <div class="span-26">
 	       <div id="top_nav_left">
 		       {% if project %}
 			       <ul>
@@ -70,66 +70,65 @@
                            {% endfor %}
 				       {% endfor %}
 			       </ul>
-
 		       {% endif %}
 		   </div> <!--// end div id=top_nav_left //-->
-	   </div> <!--//end div.span-19 //-->
+	   </div> <!--//end div.span-26 //-->
 	
 	   <div  class="span-5 last">
 		   <div id="top_nav_right">
                <a href="https://www.earthsystemcog.org/projects/cog/contactus/">Technical Support</a>
 		   </div> <!--//end div id=top_nav_right //-->
 	   </div> <!--// end div.span-5 last //-->
-   </div><!--// end div.top_nav -->
+   </div><!--// end div.top_nav //-->
 
-  <!-- top navigation sub-bar -->
-  <div class="top_nav" id="sub_nav_bar">
-      <div class="span-19">
-	      {% if project %}
-
-	          {% for tablist in project|getTopNav:request %}
-
-		          {% if tablist|length > 1 %}
-
+   <!-- top navigation sub-bar -->
+   <!-- top nav...width=100%-->
+   <div class="top_nav">
+       <div class="span-26">
+	       {% if project %}
+	           {% for tablist in project|getTopNav:request %}
+		           {% if tablist|length > 1 %}
 		               <div id="top_subnav_left">
                            <div id="subnav_link_box">
-		                   <ul>
-		                       {% for tab in tablist %}
-		                           <!-- Sub-navigation bar: Render second tablist only -->
-                                   <!--tab.0=project, tab.1=url, tab.2=label-->
-		                           {% if forloop.counter > 1 %}
-		                                <li><a href="{{ tab.1 }}" {{ tablist|getSubTabStyle:tab }}><span style="color: #666">{{ tab.0 }}</span></a></li>
-		                           {% endif %}
-	                           {% endfor %}
-                           </ul>
+		                       <ul>
+		                           {% for tab in tablist %}
+		                               <!-- Sub-navigation bar: Render second tablist only -->
+                                       <!--tab.0=project, tab.1=url, tab.2=label-->
+		                               {% if forloop.counter > 1 %}
+		                                  <li><a href="{{ tab.1 }}" {{ tablist|getSubTabStyle:tab }}><span
+				                                  style="color: #666">{{ tab.0 }}</span></a></li>
+		                               {% endif %}
+	                               {% endfor %}
+                               </ul>
                            </div>
 	                   </div><!--// end div id=top_subnav_left //-->
-		          {% endif %}
-	          {% endfor %}
-	      {% endif %}
-	      &nbsp;
-	  </div> <!--// end div.span-19 //-->
+		           {% endif %}
+	           {% endfor %}
+	       {% endif %}
+		   &nbsp; <!--in case there are no items-->
+	   </div> <!--// end div.span-26 //-->
 
-      <!--add links to MyProfile and the DataCart-->
-	  <div class="span-5 last">
-	      <div id="top_subnav_right">
-	          {% if request.user.is_authenticated %}
+       <!--add links to MyProfile and the DataCart-->
+	   <div class="span-5 last">
+	       <div id="top_subnav_right">
+	           {% if request.user.is_authenticated %}
 		           <!--<a href="{% url 'user_profile_redirect' request.user.id %}">My Profile</a>-->
-                  {% if request.session.last_search_url %}
-			          <a href="{% url 'search_reload' %}"> Last Search</a> |
-		          {% endif %}
-                  <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle;margin-left:0;" alt="datacart logo"/>
-		          <a href="{% url 'datacart_display' site.id request.user.id %}">
-                      My Data Cart (<span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>)
-		          </a>
-	          {% endif %}
-	      </div> <!--// end div id=top_subnav_right //-->
-	  </div>	<!--// end div.span-5 last//-->
-  </div><!--//end div id=sub_nav_bar //-->
+                   {% if request.session.last_search_url %}
+			           <a href="{% url 'search_reload' %}"> Last Search</a> |
+		           {% endif %}
+                   <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle;
+                   margin-left:0;" alt="datacart logo"/>
+		           <a href="{% url 'datacart_display' site.id request.user.id %}">
+                       My Data Cart (<span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>)
+		           </a>
+	           {% endif %}
+	       </div> <!--// end div id=top_subnav_right //-->
+	   </div>	<!--// end div.span-5 last//-->
+   </div>
 
-    <!-- anchor for message dialogs -->
-  <div id="myDialog" class="yui-skin-sam"></div>
-</div> <!--// end div.span-24 last //-->
+   <!-- anchor for message dialogs -->
+   <div id="myDialog" class="yui-skin-sam"></div>
+</div> <!--// end div.span-max last //-->
 &nbsp; <br>
 <!--// END: /cog/templates/common/cog_header.html //-->
 
