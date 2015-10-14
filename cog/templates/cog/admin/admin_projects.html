@@ -1,7 +1,7 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-    <!-- limit visibility to site administrators -->
+    <!-- limit visibility to node administrators -->
     {% if request.user.is_staff %}
     
         {% load pagination_tags %}
