@@ -13,7 +13,7 @@
 			{% if request.GET.approved == 'True' %}
 				Your request has been approved automatically.
 			{% else %}
-				Your request is pending approval by the site administrator.
+				Your request is pending approval by the node administrator.
 			{% endif %}
 			
 		</div>
@@ -58,7 +58,8 @@
 		   		{% if status %}
 		   			<p>You already have "{{ group_name }}" data access rights.</p>
 		   		{% else %}
-		   			<p>Your request for "{{ group_name }}" data access is pending approval by the site administrator.</p>
+		   			<p>Your request for "{{ group_name }}" data access is pending approval by the node administrator
+					    .</p>
 		   		{% endif %}
 		   
 		 {% endif %}

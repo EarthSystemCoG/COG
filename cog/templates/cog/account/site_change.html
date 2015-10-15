@@ -1,5 +1,5 @@
 {% extends "cog/common/layout_center.html" %}
-<!-- Template page used to change the user home site -->
+<!-- Template page used to change the user home node -->
 
 {% block main %}
 
@@ -17,7 +17,7 @@
                    <tr>
                         <td>
                         	<div style="text-align:center;">
-	                        	<strong>Choose Home Site :</strong>
+	                        	<strong>Choose Home Node:</strong>
 	                       		&nbsp;{{ form.site }}
 	                            <br/>{{ form.site.errors }}
                             </div>
@@ -26,7 +26,7 @@
                    <tr>
                    		<td>
                    			<div style="text-align:center; font-style:italic">
-                        		The Home Site is where you maintain your user profile, including your OpenID.
+                        		The Home Node is where you maintain your user profile, including your OpenID.
                         	</div>
                         </td>
                     </tr>

@@ -1,7 +1,7 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-  <!-- limit visibility to site administrators -->
+  <!-- limit visibility to node administrators -->
   {% if request.user.is_staff %}
       <div class="prepend-2 span-20 last" >
     
@@ -15,7 +15,7 @@
 		        
 		              <!-- header row -->
 		              <tr>
-	                      <th class="white" scope="col">Site Name</th>
+	                      <th class="white" scope="col">Node Name</th>
 	                      <th class="white" scope="col">Domain</th>
 	                      <th class="white" scope="col">Number of Projects</th>
 	                      <th class="white" scope="col">Number of Users</th>
