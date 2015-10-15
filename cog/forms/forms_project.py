@@ -46,7 +46,7 @@ class ProjectForm(ModelForm):
         queryset2 = Q(site__id=current_site.id) | Q(site__peersite__enabled=True)
 
         if 'instance' in kwargs:
-            # peer and parent query-set options: exclude the project itself, projects from disabled peer sites
+            # peer and parent query-set options: exclude the project itself, projects from disabled peer nodes
             instance = kwargs.get('instance')
             queryset1 = ~Q(id=instance.id)
             self.fields['parents'].queryset = \
@@ -57,7 +57,7 @@ class ProjectForm(ModelForm):
                 extra(select={'snl': 'lower(short_name)'}, order_by=['snl'])
         
         else:    
-            # peer and parent query-set options: exclude projects from disabled peer sites
+            # peer and parent query-set options: exclude projects from disabled peer nodes
             self.fields['parents'].queryset = \
                 Project.objects.filter(queryset2).distinct().extra(select={'snl': 'lower(short_name)'},
                                                                    order_by=['snl'])

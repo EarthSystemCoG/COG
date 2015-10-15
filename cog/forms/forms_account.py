@@ -83,7 +83,8 @@ class UsernameReminderForm(Form):
 class PasswordChangeForm(Form):
 
     username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the target user
-    requestor = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the user reuesting the change (same as target user, or a site administrator)
+    requestor = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the user requesting the change (
+    # same as target user, or a node administrator)
     old_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }))
     password = CharField(required=True, 
                      # trigger javascript function when input field looses focus
@@ -110,9 +111,10 @@ class PasswordChangeForm(Form):
             # load requestor by username
             requestor = User.objects.get(username=self.cleaned_data.get('requestor'))
             
-            # check OpenID was issued by this site
+            # check OpenID was issued by this node
             if user.profile.localOpenid() is None:
-                self._errors["username"] = self.error_class(["Non local user: password must be changed at site that issued the OpenID."])
+                self._errors["username"] = self.error_class(["Non local user: password must be changed at the node "
+                                                             "that issued the OpenID."])
     
             # normal user: check current password
             old_password = self.cleaned_data.get('old_password')
