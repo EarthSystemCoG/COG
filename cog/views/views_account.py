@@ -64,10 +64,10 @@ def custom_login_complete(request, **kwargs):
             
         except ObjectDoesNotExist:
 
-            # retrieve user home site            
+            # retrieve user home node
             site = discoverSiteForUser(openid)
             if site is None: 
-                # set user home site to current site
+                # set user home node to current node
                 site = Site.objects.get_current()
                 
             # create new ESGF/OpenID login, type=2: ESGF
@@ -175,7 +175,7 @@ def user_add(request):
     # redirection URL
     _next = request.GET.get('next', None) or request.POST.get('next', None)
     
-    # redirect to another site if necessary
+    # redirect to another node if necessary
     if redirectToIdp():
         redirect_url = settings.IDP_REDIRECT + request.path
         if _next is not None:
@@ -254,7 +254,7 @@ def user_add(request):
                 except ValueError:
                     pass  # image does not exist, ignore
 
-            # notify user, site administrators of new registration
+            # notify user, node administrators of new registration
             notifyUserOfRegistration(user)
             notifyAdminsOfUserRegistration(user)
 
@@ -266,7 +266,7 @@ def user_add(request):
             login_url = reverse('login')+"?message=user_add"
             if _next is not None and len(_next.strip()) > 0:
                 login_url += ("&next=%s" % urllib.quote_plus(_next))
-                # redirect to absolute URL (possibly at an another site)
+                # redirect to absolute URL (possibly at an another node)
                 if 'http' in _next:
                     url = urlparse(_next)
                     login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
@@ -320,7 +320,7 @@ def user_detail(request, user_id):
                               context_instance=RequestContext(request))
 
 
-# view to redirect to the user profile on the local or remote site
+# view to redirect to the user profile on the local or remote node
 # this view is always invoked with the *local* user 'id'
 def user_profile_redirect(request, user_id):
     
@@ -340,7 +340,7 @@ def user_profile_redirect(request, user_id):
 
 
 # view to look up a *local* user by OpenID
-# this view does NOT redirect to other peer sites
+# this view does NOT redirect to other peer nodes
 # (user_profile_redirect does that)
 def user_byopenid(request):
     
@@ -351,7 +351,7 @@ def user_byopenid(request):
         # load User object
         userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
         
-        # redirect to user profile page on local site
+        # redirect to user profile page on local node
         return HttpResponseRedirect(reverse('user_detail', kwargs={'user_id': userOpenid.user.id}))
             
     else:
@@ -504,21 +504,21 @@ def user_update(request, user_id):
 @login_required
 def password_update(request, user_id):
     """
-    View used by the user (or by a site administrator) to change their password.
+    View used by the user (or by a node administrator) to change their password.
     """
 
-    # redirect to another site if necessary
+    # redirect to another node if necessary
     if redirectToIdp():
         return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
 
-    # check permission: user that owns the account, or a site administrator
+    # check permission: user that owns the account, or a node administrator
     user = get_object_or_404(User, id=user_id)
     if user != request.user and not request.user.is_staff:
         return HttpResponseServerError("You don't have permission to change the password for this user.")
 
-    # check use has OpenID issued by this site
+    # check use has OpenID issued by this node
     if user.profile.localOpenid() is None:
-        return HttpResponseForbidden("Non local user: password must be changed at site that issued the OpenID.")
+        return HttpResponseForbidden("Non local user: password must be changed at the node that issued the OpenID.")
 
     if request.method == 'GET':
                 
@@ -568,7 +568,7 @@ def password_update(request, user_id):
 
 def user_reminder(request):
     
-    # redirect to another site if necessary
+    # redirect to another node if necessary
     if redirectToIdp():
         return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
 
@@ -603,7 +603,7 @@ def user_reminder(request):
 
             # user not found
             else:
-                return render_user_reminder_form(request, form, "This email address cannot be found")
+                return render_user_reminder_form(request, form, "This email address cannot be found.")
 
         else:
             print "Form is invalid: %s" % form.errors
@@ -612,7 +612,7 @@ def user_reminder(request):
 
 def password_reset(request):
     
-    # redirect to another site if necessary
+    # redirect to another node if necessary
     if redirectToIdp():
         return HttpResponseRedirect(settings.IDP_REDIRECT + request.path)
     
@@ -637,15 +637,15 @@ def password_reset(request):
         email = form.cleaned_data.get('email')
         
         # the openid entered by the user MUST be found in the local database
-        # otherwise we can neither change the password, nor we can redirect to a known site
+        # otherwise we can neither change the password, nor we can redirect to a known node
         try:
             userOpenid = UserOpenID.objects.get(claimed_id=openid)
             user = userOpenid.user
             
-            # 1) local user (i.e. user home site == this site)
+            # 1) local user (i.e. user home node == this node)
             if isUserLocal(user):
             
-                # 1a) this site issued this openid
+                # 1a) this node issued this openid
                 if isOpenidLocal(openid):
     
                     if user.email == email:
@@ -687,28 +687,28 @@ def password_reset(request):
                     else:
                         return render_password_reset_form(request, form, "Invalid OpenID/email combination")
 
-                # 1b) user used an external ESGF openid (for example, http://dkrz...) to login onto this site
+                # 1b) user used an external ESGF openid (for example, http://dkrz...) to login onto this node
                 # (for example, http://www.earthsystemcog.org/...)
                 else:
                     idpurl = urlparse(openid)
                     idpurl = "%s://%s/" % (idpurl.scheme, idpurl.netloc)
-                    message = "This OpenID was issued by another site."
-                    message += "<br/>Please reset your password at <a href='%s'>that site</a>." % idpurl
+                    message = "This OpenID was issued by another node."
+                    message += "<br/>Please reset your password at <a href='%s'>that node</a>." % idpurl
                     return render_password_reset_form(request, form, message)
                 
-            #  2) non-local user: redirect request to peer CoG site, post automatically
+            #  2) non-local user: redirect request to peer node, post automatically
             else:
                 site = user.profile.site
                 redirect_url = 'http://%s%s?openid=%s&email=%s' % (site.domain, reverse('password_reset'),
                                                                    openid, email)
                 
-                # 2a) automatically redirect to peer site
-                #redirect_url += "&post=true" # submit form automatically at that site
+                # 2a) automatically redirect to peer node
+                #redirect_url += "&post=true" # submit form automatically at that node
                 #return HttpResponseRedirect(redirect_url)
                 
-                # 2b) show message on this site with link to peer site
-                message = "This OpenID was issued by another CoG site."
-                message += "<br/>Please use the <a href='%s'>Reset Password</a> page at that site." % redirect_url
+                # 2b) show message on this node with link to peer node
+                message = "This OpenID was issued by another ESG-CoG node."
+                message += "<br/>Please use the <a href='%s'>Reset Password</a> page at that node." % redirect_url
                 return render_password_reset_form(request, form, message)
                 
         # openid not found
@@ -716,7 +716,7 @@ def password_reset(request):
             message = "OpenID not found."
             message += "<br/>If your OpenID was issued by '%s'," % settings.ESGF_HOSTNAME
             message += "<br/>then please use the 'Forgot OpenID?' link below to retrieve the correct OpenID." 
-            message += "<br/>Otherwise, please reset your password on the site that issued your OpenID."
+            message += "<br/>Otherwise, please reset your password on the ESGF-CoG node that issued your OpenID."
             return render_password_reset_form(request, form, message)
 
 
@@ -746,5 +746,5 @@ def render_user_reminder_form(request, form, message=""):
 
 def render_site_change_form(request, form):
     return render_to_response('cog/account/site_change.html',
-                              {'form': form, 'mytitle' : 'Change User Home Site' },
+                              {'form': form, 'mytitle' : 'Change User Home Node' },
                               context_instance=RequestContext(request))

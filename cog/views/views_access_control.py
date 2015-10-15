@@ -81,7 +81,7 @@ def ac_subscribe(request, group_name):
         
         approved = registrationService.subscribe(request.user.profile.openid(), group_name, ROLE_USER)
         
-        # notify site administrators
+        # notify node administrators
         if not approved:
             notifyAdmins(group_name, request.user.id, request)
             
@@ -97,7 +97,7 @@ def ac_process(request, group_name, user_id):
     This view can be used to assign any permissions to the user.
     """
     
-    # check site administrator privileges
+    # check node administrator privileges
     admin = request.user
     if not admin.is_staff:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
@@ -164,7 +164,7 @@ def ac_list(request):
     This view is intentionally open to the public (for now).
     """
     
-    # loop over local site + peer sites
+    # loop over local node + peer nodes
     groups = {}
     sites = [Site.objects.get_current()] + getPeerSites()
     
@@ -175,7 +175,7 @@ def ac_list(request):
             site_name = jobj['site']['name']
             site_domain = jobj['site']['domain']
 
-            # loop over groups for this site
+            # loop over groups for this node
             for group_name, group_dict in jobj['groups'].items():
                 # augment group dictionary
                 group_dict['site_name'] = site_name

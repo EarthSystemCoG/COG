@@ -16,7 +16,7 @@ from django_openid_auth.models import UserOpenID
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
 
-# view to display the data cart for a given site, user
+# view to display the data cart for a given node, user
 @require_GET
 @login_required
 def datacart_display(request, site_id, user_id):
@@ -58,7 +58,7 @@ def datacart_byopenid(request):
         # load User object
         userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
         
-        # redirect to user profile page on local site
+        # redirect to user profile page on local node
         return HttpResponseRedirect(reverse('datacart_display', 
                                     kwargs={'site_id': Site.objects.get_current().id, 'user_id': userOpenid.user.id}))
             
@@ -247,7 +247,7 @@ def datacart_delete(request, site_id, user_id):
     if not request.user.id != user_id:
         raise Exception("User not authorized to modify datacart")
     
-    # TODO:: check site, redirect in case
+    # TODO:: check node, redirect in case
     identifier = request.REQUEST['item']
     
     # NOTE: make sure this item belongs to the user's data cart

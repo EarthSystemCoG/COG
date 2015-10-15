@@ -1,5 +1,5 @@
 '''
-Views for exchanging information with other sites.
+Views for exchanging information with other nodes.
 '''
 from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
@@ -73,7 +73,7 @@ def serialize_user(user):
     
 
 def share_projects(request):
-    '''Shares the site's projects as a JSON-formatted list.'''
+    '''Shares the node's projects as a JSON-formatted list.'''
     
     if (request.method=='GET'):
         
@@ -83,7 +83,7 @@ def share_projects(request):
         current_site = Site.objects.get_current()
         response_data['site'] = serialize_site(current_site)
         
-        # list projects from this site
+        # list projects from this node
         projects = {}
         print 'Listing active, public projects for current site=%s' % current_site
         for project in Project.objects.filter(active=True).filter(site=current_site):
@@ -91,7 +91,7 @@ def share_projects(request):
             
         response_data["projects"] = projects   
         
-        # list users from this site
+        # list users from this node
         numberOfUsers = UserProfile.objects.filter(site=current_site).count()
         response_data["users"] = numberOfUsers   
         
@@ -100,17 +100,17 @@ def share_projects(request):
         return HttpResponseNotAllowed(['GET'])
     
 def share_groups(request):
-    '''Shares the site's access control groups as a JSON-formatted list.'''
+    '''Shares the node's access control groups as a JSON-formatted list.'''
     
     if (request.method=='GET'):
         
         response_data = {}
         
-        # current site
+        # current node
         current_site = Site.objects.get_current()
         response_data['site'] = serialize_site(current_site)
         
-        # list groups from this site, index by group name
+        # list groups from this node, index by group name
         print 'Listing visible groups for current site=%s' % current_site
         groups = {}
         for group in registrationService.listGroups():

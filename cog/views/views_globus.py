@@ -41,7 +41,7 @@ if siteManager.isGlobusEnabled():
 
 def requires_globus(view_func):
 	'''
-	Custom decorator that prevents a view to be invoked unless this site
+	Custom decorator that prevents a view to be invoked unless this node
 	is configured with a [Globus] section in cog_settings.py.
 	'''
 	
