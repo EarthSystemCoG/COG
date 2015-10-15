@@ -54,6 +54,7 @@ class LocalEndpointDict(EndpointDict):
     
     def __init__(self, filepath):
         
+        self.filepath = None
         self.endpoints = {}
         self.init = False
         
@@ -70,31 +71,33 @@ class LocalEndpointDict(EndpointDict):
     def _reload(self, force=False):
         '''Internal method to reload the dictionary of endpoints if the file has changed since it was last read'''
 
-        modtime = file_modification_datetime(self.filepath)
-
-        if force or modtime > self.modtime:
-
-            print 'Loading endpoints from: %s, last modified: %s' % (self.filepath, modtime)
-            self.modtime = modtime
-            endpoints = {}
-
-            # read XML file
-            with open (self.filepath, "r") as myfile:
-                xml=myfile.read().replace('\n', '')
-                
-            # <endpoints xmlns="http://www.esgf.org/whitelist">
-            root = fromstring(xml)
-            # <endpoint name="esg#jpl" gridftp="esg-datanode.jpl.nasa.gov:2811" />
-            for endpoint in root.findall("{%s}endpoint" % NS):
-                gridftp = endpoint.attrib['gridftp']
-                name = endpoint.attrib['name']                   # mandatory attribute
-                path_out = endpoint.attrib.get('path_out', None) # optional attribute
-                path_in = endpoint.attrib.get('path_in', None)   # optional attribute
-                endpoints[ gridftp ] = Endpoint(name, path_out=path_out, path_in=path_in)
-                print 'Using Globus endpoint %s : %s (%s --> %s)'  % (gridftp, name, path_out, path_in)
-
-            # switch the dictionary of endpoints after reading
-            self.endpoints = endpoints
+        if self.filepath: # only if endpoints file exists
+            
+            modtime = file_modification_datetime(self.filepath)
+    
+            if force or modtime > self.modtime:
+    
+                print 'Loading endpoints from: %s, last modified: %s' % (self.filepath, modtime)
+                self.modtime = modtime
+                endpoints = {}
+    
+                # read XML file
+                with open (self.filepath, "r") as myfile:
+                    xml=myfile.read().replace('\n', '')
+                    
+                # <endpoints xmlns="http://www.esgf.org/whitelist">
+                root = fromstring(xml)
+                # <endpoint name="esg#jpl" gridftp="esg-datanode.jpl.nasa.gov:2811" />
+                for endpoint in root.findall("{%s}endpoint" % NS):
+                    gridftp = endpoint.attrib['gridftp']
+                    name = endpoint.attrib['name']                   # mandatory attribute
+                    path_out = endpoint.attrib.get('path_out', None) # optional attribute
+                    path_in = endpoint.attrib.get('path_in', None)   # optional attribute
+                    endpoints[ gridftp ] = Endpoint(name, path_out=path_out, path_in=path_in)
+                    print 'Using Globus endpoint %s : %s (%s --> %s)'  % (gridftp, name, path_out, path_in)
+    
+                # switch the dictionary of endpoints after reading
+                self.endpoints = endpoints
     
     def endpointDict(self):
         
