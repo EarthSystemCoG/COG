@@ -81,7 +81,7 @@
 	var DEFAULT_LIMIT=10;
 
 	// function to retrieve the files belonging to a given dataset
-	function showFiles(dataset_id, index_node, limit, project) {
+	function showFiles(dataset_id, index_node, shard, limit, project) {
 
 	  fdiv = getFilesDiv(dataset_id);
 
@@ -96,6 +96,10 @@
 		  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
 		          // add optional query filter
 				  + getQueryFilter('GET');
+		  // add optional 'local' shard
+		  if (shard.length>0) {
+			  url += "&shard=" + encodeURI(shard)
+		  }
 
 		  // pass in extra arguments to callback functions
 		  filesCallback.argument[0] = project

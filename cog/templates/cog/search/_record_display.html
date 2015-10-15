@@ -18,13 +18,15 @@
 
 <!-- Dataset files -->
 &nbsp; [ <strong><a href="" onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
-                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', '{{ project.short_name.lower }}');
+                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
+                        		              '0', '{{ project.short_name.lower }}');
                          return false">Show Files</a></strong> ]
 
 	  <!-- hidden button used to trigger the same event as the href element above -->
 	  <input type="button" id="href_{{record.id}}" style="display:none"
 		     onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
-		              javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', '{{ project.short_name.lower }}');
+		              javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
+		            		               '0', '{{ project.short_name.lower }}');
 	  	              return false" />
 
 <!-- Display URL links -->
