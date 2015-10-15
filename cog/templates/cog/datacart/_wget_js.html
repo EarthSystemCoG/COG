@@ -4,15 +4,24 @@
 
 	// function to execute a request to a single index node
 	// for a wget script spanning one or more datasets
-	function wgetScript(index_node, ids) {
+	function wgetScript(index_node, shard, ids) {
 		
 	  // NOTE: must transform the "," separated string into array of dataset ids
 	  ids = ids.split(",");
 
 	  // FIXME: relative wget URL is hard-wired to ESGF web service endpoint
-	  var url = "http://"+index_node+"/esg-search/wget/?distrib=false"
-                // add optional query filter
-		        + getQueryFilter('GET');
+	  var url = "http://"+index_node+"/esg-search/wget/"; 
+	
+	  // add optional 'local' shard
+	  if (shard.length>0) {
+		  url += "?shards=" + encodeURI(shard+"/solr");  // "?shards=localhost:8982/solr"
+	  } else {
+	  // or target shared "slave" shard only
+		  url += "?distrib=false";
+	  }
+	  
+	  // add optional query filter
+	  url += getQueryFilter('GET');
 
 	  // add dataset ids
 	  for (i=0; i<ids.length; i++) {
@@ -30,12 +39,15 @@
 		// parse JSON response into object
 		/** example JSON response:
 			{
-			   u'pcmdi9.llnl.gov':[
-			      u'cmip5.output1.INM.inmcm4.1pctCO2.day.atmos.day.r1i1p1.v20110323|pcmdi9.llnl.gov',
-			      u'cmip5.output1.INM.inmcm4.esmHistorical.fx.atmos.fx.r0i0p0.v20110927|pcmdi9.llnl.gov',
-			      u'cmip5.output1.INM.inmcm4.1pctCO2.day.ocean.day.r1i1p1.v20110323|pcmdi9.llnl.gov'
-			   ]
-			}
+		        u'esgf-node.jpl.nasa.gov|localhost:8982': [u'CMAC.NASA-GSFC.AIRS.mon.v1|esg-datanode.jpl.nasa.gov'], 
+		        u'esgf-node.jpl.nasa.gov': [u'obs4MIPs.NASA-JPL.QuikSCAT.mon.v1|esgf-node.jpl.nasa.gov'],
+		        u'pcmdi9.llnl.gov':
+		            [
+		              u'cmip5.output1.INM.inmcm4.1pctCO2.day.atmos.day.r1i1p1.v20110323|pcmdi9.llnl.gov',
+		              u'cmip5.output1.INM.inmcm4.esmHistorical.fx.atmos.fx.r0i0p0.v20110927|pcmdi9.llnl.gov',
+		              u'cmip5.output1.INM.inmcm4.1pctCO2.day.ocean.day.r1i1p1.v20110323|pcmdi9.llnl.gov'
+		           ]
+		    }
 		*/
 		var jsonResponse = eval('(' + o.responseText + ')');
 
@@ -47,11 +59,21 @@
 		      + "<br/>Click on each link below to retrieve the script for each Data Center.</div>";
 
 		html += "<div style='text-align:center'>";
-		for (var index_node in jsonResponse) {
-			  if (jsonResponse.hasOwnProperty(index_node)) {
+		for (var wget_key in jsonResponse) {
+			  if (jsonResponse.hasOwnProperty(wget_key)) {
 				// NOTE: ids is an array but becomes a string when enclosed in ""
-			    var ids = jsonResponse[index_node];
-			    html += "<br/><a href='javascript:wgetScript(\""+index_node+"\",\""+ids+"\")'>WGET Script for "+index_node+"</a>";
+			    var ids = jsonResponse[wget_key];
+			  	var index_node_and_shard = wget_key.split("|");
+			  	var index_node = index_node_and_shard[0];
+			  	var shard = '';
+			  	if (index_node_and_shard.length==2) {
+			  		shard = index_node_and_shard[1];
+			  	} 
+			  	html += "<br/><a href='javascript:wgetScript(\""+index_node+"\",\""+shard+"\",\""+ids+"\")'>WGET Script for "+index_node;
+			  	if (shard.length>0) {
+			  		html += " (shard="+shard+")";
+			  	}
+			  	html += "</a>";
 			  }
 		}
 		html += "</div>";
@@ -77,9 +99,9 @@
 			//  wget endpoint
 			var url = "{% url 'datacart_wget' site.id request.user.id %}";
 
-			// loop over selected data cart items with THREDDS endpoint
+			// loop over selected data cart items with WGET endpoint
 			var postdata = "";
-			var objs = getSelectedItemsByServiceType(THREDDS);
+			var objs = getSelectedItemsByServiceType(WGET);
 			for (var i in objs) {
 				postdata += "&id="+objs[i].id;
 			}
