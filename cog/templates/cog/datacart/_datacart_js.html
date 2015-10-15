@@ -81,7 +81,7 @@
 	var DEFAULT_LIMIT=10;
 
 	// function to retrieve the files belonging to a given dataset
-	function showFiles(dataset_id, index_node, limit, project) {
+	function showFiles(dataset_id, index_node, shard, limit, project) {
 
 	  fdiv = getFilesDiv(dataset_id);
 
@@ -96,11 +96,16 @@
 		  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
 		          // add optional query filter
 				  + getQueryFilter('GET');
+		  // add optional 'local' shard
+		  if (shard.length>0) {
+			  url += "&shard=" + encodeURI(shard)
+		  }
 
 		  // pass in extra arguments to callback functions
 		  filesCallback.argument[0] = project
 		  filesCallback.argument[1] = index_node
 		  filesCallback.argument[2] = dataset_id
+		  filesCallback.argument[3] = shard
 
 		  // execute asynchronous GET request
 		  var transaction = YAHOO.util.Connect.asyncRequest('GET', url, filesCallback, null);
@@ -127,6 +132,7 @@
 		project = o.argument[0]
 		index_node = o.argument[1]
 		dataset_id = o.argument[2]
+		shard = o.argument[3]
 
 		// parse JSON response into object
 		var jsonResponse = eval('(' + o.responseText + ')');
@@ -147,6 +153,8 @@
 		html  += "<div style='text-align:center; font-weight:bold'>Total Number of Files: "+numFound+"</div>";
 		if (numFound>0) {
 			html += "<table>";
+			
+			// loop over files
 			for (var i=0; i<docs.length; i++) {
 				var doc = docs[i];
 				html += "<tr><td>"+(i+1)+"</td>"
@@ -264,13 +272,13 @@
 
 		// link to show more files
 		if (docs.length < numFound) {
-			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+numFound+"','"+project+"')";
+			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+shard+"','"+numFound+"','"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show All Files</a></style>";
 
 		// link to show less files
 		} else if (docs.length > DEFAULT_LIMIT) {
 			var url = "javascript:window.scrollTo(0,0); " // must resize the scrollbar
-				    + "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+DEFAULT_LIMIT+"','"+project+"')";
+				    + "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+shard+"','"+DEFAULT_LIMIT+"','"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
 
 		}

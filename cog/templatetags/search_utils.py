@@ -89,7 +89,7 @@ def recordUrls(record):
             urls.append(value)
         
     # add special WGET endpoint
-    urls.append( ("javascript:wgetScript('%s','%s')" % (record.fields['index_node'][0], record.id) , 
+    urls.append( ("javascript:wgetScript('%s','%s','%s')" % (record.fields['index_node'][0], record.fields.get('shard', [''])[0], record.id) , 
                   "application/wget", 
                   "WGET Script") )
     
