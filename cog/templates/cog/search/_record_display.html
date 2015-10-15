@@ -45,10 +45,7 @@
 
 	<!-- WGET -->
 	{% elif url.1 == 'application/wget' %}
-		<!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
-		{% if record.fields.project.0 != 'NCPP' %}
-			&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
-		{% endif %}
+		&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.fields.shard.0 }}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
 		
 	<!-- Globus -->
 	{% elif url.1 == 'application/gridftp' %}

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from cog.models.search import Record
 import json
 from django.db import transaction
+from django.core.exceptions import ObjectDoesNotExist
 
 class DataCart(models.Model):
     
@@ -87,10 +88,13 @@ class DataCartItem(models.Model):
     def getValues(self, key):
         
         values = []
-        _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
-        if _key is not None:
-            for _value in  _key.values.all():
-                values.append(_value.value)
+        try:
+            _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
+            if _key is not None:
+                for _value in  _key.values.all():
+                    values.append(_value.value)
+        except ObjectDoesNotExist:
+            pass # key not found in metadata
         
         return values
     
