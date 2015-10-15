@@ -37,8 +37,8 @@ def update_user_projects_at_login(sender, user, request, **kwargs):
 def update_user_projects(user):
     '''
     Function to update the user projects from across the federation.
-    Will query all remote sites 
-    (but NOT the current site, since that information should already be up-to-date) 
+    Will query all remote nodes
+    (but NOT the current nodes, since that information should already be up-to-date)
     and save the updated information in the local database.
     '''
 
@@ -78,7 +78,7 @@ def update_user_projects(user):
         user.save()
                                                    
 def update_user_tags(user):
-    '''Function to update the user tags from their home site.'''
+    '''Function to update the user tags from their home node.'''
     
     if user.profile.openid() is not None:
         
@@ -89,7 +89,7 @@ def update_user_tags(user):
         
         if jobj is not None and openid in jobj['users'] and 'project_tags' in jobj['users'][openid]:
             
-            # loop over tags found on user home site
+            # loop over tags found on user home node
             tags = []
             for tagName in jobj['users'][openid]['project_tags']:
                 try:
