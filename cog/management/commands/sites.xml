@@ -5,9 +5,9 @@
 	<site name="CoG-CU" domain="www.earthsystemcog.org" />
 
 	<!-- NOAA/ESRL production server -->
-	<site name="NOAA ESRL ESGF-CoG" domain="cog-esgf.esrl.noaa.gov" />
+	<site name="ESGF@NOAA/ESRL" domain="cog-esgf.esrl.noaa.gov" />
 
     <!-- NASA/JPL production server -->
-    <site name="NASA-JPL ESGF-CoG" domain="esgf-node.jpl.nasa.gov" />
+    <site name="ESGF@NASA/JPL" domain="esgf-node.jpl.nasa.gov" />
 
 </sites>
