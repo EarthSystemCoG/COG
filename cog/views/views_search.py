@@ -429,7 +429,11 @@ def _getSearchConfig(request, project):
         constraints = project.searchprofile.constraints.split('&')
         for constraint in constraints:
             (key,values) = constraint.strip().split('=')
-            _values = values.split(',')
+            # IMPORTANT: DO NOT SPLIT 'localhost:8982/solr,localhost:8983/solr' as 'shards=localhost:8982/solr&shards=localhost:8982/solr'
+            if key == 'shards':
+                _values = [values]
+            else:
+                _values = values.split(',')
             for value in _values:
                 try:
                     fixedConstraints[key].append(value)
