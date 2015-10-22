@@ -1,5 +1,12 @@
 <div style="height:42px;" class="custom_header">
-<table style="height:42px; padding:0; margin:0; vertical-align:middle;">
+<map name="logo">
+	<area href="http://esgf.llnl.gov/" shape="rect" coords="0,0,119,30" title="ESGF">
+	<area href="http://www.earthsystemcog.org" shape="rect" coords="125,0,177,30" title="ESGF">
+</map>
+
+
+
+<table style="height:42px; padding:0; margin:0; vertical-align:middle;background-color: transparent;">
    <tr>
        <td class="hosted_by" style="width:52px; font-size:10px; font-weight:bold; font-style:italic; padding-right:1px;">
             Hosted by
@@ -14,9 +21,8 @@
             Powered by
         </td>
        <td class="custom_header_esgf_cog">
-          <a href="https://www.earthsystemcog.org">
-              <img style="vertical-align:middle; height:36px; margin:0;" src="/static/cog/img/cog_esgf_small.png" alt="ESGF-CoG logo"/>
-          </a>
+              <img style="vertical-align:middle; height:36px; margin:0;" src="/static/cog/img/cog_esgf_small.png"
+                   usemap="#logo" alt="ESGF-CoG logo"/>
        </td>
    </tr>
 </table>
