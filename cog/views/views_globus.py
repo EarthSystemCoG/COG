@@ -171,7 +171,7 @@ def oauth(request):
 	
 	params = [ ('response_type','code'),
 		       ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
-		       ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),]
+		       ('redirect_uri', request.build_absolute_uri(reverse("globus_token")).replace('http:','https:') ),] # MUST force 'https' protocol
 	
 	globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
 	# FIXME: fake the Globus URL
