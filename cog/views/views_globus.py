@@ -37,7 +37,7 @@ if siteManager.isGlobusEnabled():
 	from getpass import getpass
 	from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
 	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
-	GLOBUS_ENDPOINTS= LocalEndpointDict('/esg/config/esgf_endpoints.xml')
+	GLOBUS_ENDPOINTS= LocalEndpointDict(endpoints_filepath)
 
 def requires_globus(view_func):
 	'''
