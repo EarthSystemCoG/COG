@@ -70,6 +70,7 @@
                 Administrators
             </div>
             <ul>
+                <li><a href="{% url 'post_list' project.short_name.lower %}" class="listlink">&nbsp;List All Pages</a></li>
                 <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
                 <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
                 <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List
