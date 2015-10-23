@@ -14,6 +14,7 @@ from cog.models.constants import MANAGEMENT_BODY_CATEGORY_STRATEGIC, MANAGEMENT_
 from os.path import exists
 from cog.forms.forms_image import ImageForm
 from cog.models.auth import getUserGroupName, getContributorGroupName, getAdminGroupName
+import itertools
 
 
 class ExternalUrlForm(ModelForm):
@@ -112,8 +113,9 @@ class CommunicationMeansMemberForm(ModelForm):
         project = kwargs.pop('project')
         super(CommunicationMeansMemberForm, self).__init__(*args, **kwargs)
 
-        # filter parent posts by project and type
+        # filter communications members by project
         self.fields['user'].queryset = projectUsersQuerySet(project)
+
 
 
 class ManagementBodyMemberForm(ModelForm):
@@ -128,7 +130,7 @@ class ManagementBodyMemberForm(ModelForm):
         project = kwargs.pop('project')
         super(ManagementBodyMemberForm, self).__init__(*args, **kwargs)
 
-        # filter parent posts by project and type
+        # filter mgt body members by project
         self.fields['user'].queryset = projectUsersQuerySet(project)
 
 
@@ -144,8 +146,12 @@ class OrganizationalRoleMemberForm(ModelForm):
         project = kwargs.pop('project')
         super(OrganizationalRoleMemberForm, self).__init__(*args, **kwargs)
 
-        # filter parent posts by project and type
-        self.fields['user'].queryset = projectUsersQuerySet(project)
+        # filter roles by project
+        prj_members = projectUsersQuerySet(project)
+        prj_collaborators = Collaborator.objects.filter(project=project)
+        prj_all = itertools.chain(prj_members, prj_collaborators)
+
+        self.fields['user'] == prj_all
 
 
 # function to build a queryset that selects users of the given project
