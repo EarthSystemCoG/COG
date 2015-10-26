@@ -147,11 +147,7 @@ class OrganizationalRoleMemberForm(ModelForm):
         super(OrganizationalRoleMemberForm, self).__init__(*args, **kwargs)
 
         # filter roles by project
-        prj_members = projectUsersQuerySet(project)
-        prj_collaborators = Collaborator.objects.filter(project=project)
-        prj_all = itertools.chain(prj_members, prj_collaborators)
-
-        self.fields['user'] == prj_all
+        self.fields['user'].queryset = projectUsersQuerySet(project)
 
 
 # function to build a queryset that selects users of the given project
