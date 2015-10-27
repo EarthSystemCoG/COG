@@ -1,6 +1,8 @@
 {% extends "cog/common/layout_center.html" %}
 <!--START:/cog/templates/cog/openid/login.html-->
 
+<!--/template for main OpenID login -->
+
 {% block extrastyle %}
 
 	<style type="text/css">
@@ -107,7 +109,7 @@
 
 
 <div class="yui-skin-sam">
-    <div class="prepend-4 span-14">
+    <div class="prepend-6 span-18">
 	    <!-- display extra message if available -->
 	    {% if request.GET.message %}
             {% if request.GET.message|showMessage|is_error_msg ==  True %}

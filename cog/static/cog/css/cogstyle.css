@@ -149,7 +149,7 @@ div.custom_header_bar {
 
 /* create a white header that is just slightly larger than the main cog site */
 div.custom_header{
-    width:        950px; /* note span-24 = 950px */
+    width:        1300px;
     margin-left:  auto;
     margin-right: auto;
 }
@@ -219,14 +219,14 @@ This sets the styles for the defaults
 
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 div.custom_footer_bar{
-    width:              100%; /* note span-24 = 950px */
+    width:              100%;
     background-color:   #666; /*gray */
     position:           relative;
 }
 
 /* create a custom footer that is slightly larger than the main cog site */
 div.custom_footer {
-    width:        950px; /* note span-24 = 950px */
+    width:        1300px;
     margin-left:  auto;
     margin-right: auto;
     color:        white; /*text color */
@@ -256,7 +256,7 @@ BEGIN: CoG footer
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 
 div.footer_bar{
-    width:              100%;     /* note span-24 = 950px */
+    width:              100%;
     background-color:   #e9f5f6;  /*light blue*/
     clear:              both;     /*this puts the footer on top of any content that might be below it*/
 }
@@ -272,7 +272,7 @@ div.footer{
   margin-left:  auto;
   margin-right: auto;
   height:       40px;
-  width:        950px; /* note span-24 = 950px */
+  width:        1300px;
 }
 
 .footer td{
@@ -1518,15 +1518,15 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 /* TOP NAV */
 .top_nav {
-    width: 100%;
-    height: 20px;
-    margin: 0 auto;
-    padding:  0;
-    background: #FFFFFF;
-    color: #FFFFFF;
-    font-size: 9pt;
+    width:       100%;
+    height:      20px;
+    margin:      0 auto;
+    padding:     0;
+    background:  #FFFFFF;
+    color:       #FFFFFF;
+    font-size:   9pt;
     font-weight: bold;
-    font-style: normal;
+    font-style:  normal;
 }
 
 /*bar that shows up when there is no upper navigation items (e.g. data cart) */
@@ -1540,11 +1540,11 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 #top_subnav_left {
-	padding-top: 2px;
-	padding-left: 6px;
-	width: 100%;
-	background-color: #B9E0E3;
-	float:left;
+	padding-top:     2px;
+	padding-left:    6px;
+	width:           100%;
+	background-color:#B9E0E3;
+	float:           left;
 }
 
 #top_subnav_left a:link, #top_subnav_left a:visited {
@@ -1562,9 +1562,9 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 #top_nav_right a {
-	color: #000000;
-    padding: 0;
-    padding-top:4px;
+	color:         black;
+    padding:       0;
+    padding-top:   4px;
     padding-bottom:4px;
     padding-right: 4px;
 }

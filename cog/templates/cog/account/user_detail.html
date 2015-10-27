@@ -8,7 +8,7 @@
 
     <!-- Begin User Profile -->
     <!-- NOTE: the full page is 19+5=24 columns wide. The last 5 columns are reserved for the picture. -->
-    <div class="span-24 last">
+    <div class="span-max last">
         
         <!-- display extra message if it exists -->
         {% if request.GET.message %}
@@ -21,7 +21,7 @@
         <!-- display a message and link to the user's Home Node -->
         {% if user_profile.user|isRemote %}
             
-            <div class="span-19 last">
+            <div class="span-max last">
                 <div class="message-box">
                     User Home Node: {{ user_profile.site.name }}
                 </div>
@@ -33,7 +33,7 @@
             
         {% else %}
 
-	        <div class="span-19 last" style="margin-bottom:10px;" >
+	        <div class="span-max last" style="margin-bottom:10px;" >
 	        
 	            {% if request.user.id == user_profile.user.id or request.user.is_staff %}
 	                <div style="text-align:center;">
@@ -54,32 +54,42 @@
 	            {% endif %}
 	        </div>
 
-            <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. Note .mybox has a 5px margin. Just adding 5px; -->
-            <div class="span-11" style="margin-bottom:5px;">
-               {% include 'cog/account/_user_profile.html' %}
-            </div>
+	        <div class="span-max last" style="margin-bottom:10px;" >
+                <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main
+                pages. Note .mybox has a 5px margin. Just adding 5px; -->
+                <div class="prepend-3 span-12" style="margin-bottom:5px;">
+                   {% include 'cog/account/_user_profile.html' %}
+                </div>
 
-            <div class="span-8" style="margin-bottom:5px;">
-               {% include 'cog/account/_user_projects.html' %}
-            </div>
+                <div class="span-12" style="margin-bottom:5px;">
+                   {% include 'cog/account/_user_projects.html' %}
+                </div>
 
-            <div class="span-5 last">
-               <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %}/>
-            </div>
+                <div class="span-5 last">
+                   <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture
+                    of {{ user_profile.user.get_full_name }}" {% endif %}/>
+                </div>
+	        </div>
 
-            <div class="span-19 last" style="margin-bottom:5px;" >
-               {% include 'cog/account/_user_openids.html' %}
-            </div>
 
-            <div class="span-19 last" style="margin-bottom:5px;" >
-              {% include 'cog/account/_user_research.html' %}
-            </div>
+            <div class="span-max last" style="margin-bottom:10px;" >
+                <div class="prepend-3 span-12 last" style="margin-bottom:5px;" >
+                    {% include 'cog/account/_user_openids.html' %}
+                </div>
+	        </div>
+
+            <div class="span-max last" style="margin-bottom:10px;" >
+	            <div class="prepend-3 span-12 last" style="margin-bottom:5px;" >
+                    {% include 'cog/account/_user_research.html' %}
+                </div>
+	        </div>
+
         {% endif %}
     </div>
     
     <!-- Extra block for Node Admins to display key user info we don't show the public-->
     {% if request.user.is_staff %}
-        <div class="prepend-4 span-14 last" style="margin-bottom:20px;">
+        <div class="prepend-3 span-12 last" style="margin-bottom:20px;">
             <div class="mybox">
                 <table>
                     <tr>
