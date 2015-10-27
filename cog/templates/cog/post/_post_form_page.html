@@ -25,18 +25,20 @@
         <td class="col1" style="vertical-align: middle;">
            <strong>URL</strong>
         </td>
-        <td style="max-width:300px; vertical-align:middle;" nowrap="nowrap">
-             /projects/{{project.short_name|lower }}/
+        <td style="vertical-align:middle;padding-right:0;" nowrap="nowrap">
+             <div style="display:block;float:left;max-width:200px;">/projects/{{ project.short_name|lower }}/</div>
+
         </td>
-        <td style="width:300px; vertical-align: middle;">
-            {{ form.url }}
+        <td style="vertical-align:middle;padding-left:0;" nowrap="nowrap">
+           <div style="display:block;float:left;width:150px;">{{ form.url }}</div>
         </td>
+
        {% if form.url.errors|length == 0 %}
-	       <td style="width:400px;vertical-align:middle;">
-              <em class="message">Use only letters, numbers, '_', '-' and '/'</em>
+	       <td style="vertical-align:middle;width:750px;">
+              <em class="message" style="text-align: center;">Use only letters, numbers, '_', '-' and '/'</em>
            </td>
        {%  else %}
-           <td style="width:400px;vertical-align:middle;">
+           <td style="width:750px;vertical-align:middle;">
               {{ form.url.errors }}
            </td>
        {% endif %}
