@@ -174,11 +174,11 @@ def post_list(request, project_short_name):
     # execute query, order by descending update date or title
     sortby = request.GET.get('sortby', 'title')
     if sortby == 'date':
-        results = Post.objects.distinct().order_by('-update_date')
+        results = Post.objects.filter(project=project).distinct().order_by('-update_date')
     elif sortby == 'topic':
-        results = Post.objects.distinct().order_by('-topic')
+        results = Post.objects.filter(project=project).distinct().order_by('-topic')
     else:
-        results = Post.objects.distinct().order_by('title')
+        results = Post.objects.filter(project=project).distinct().order_by('title')
                 
     # list all possible topics for posts of this project, and of given type
     # must follow the foreign key relation Post -> Topic backward (through 'topic.post_set')
