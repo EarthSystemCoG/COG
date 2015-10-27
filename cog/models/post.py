@@ -17,7 +17,8 @@ class Post(models.Model):
       
         author = models.ForeignKey(User, related_name='posts', verbose_name='Author', blank=False, null=True, on_delete=models.SET_NULL)
         title = models.CharField(max_length=200, verbose_name='Title', blank=False)
-        label = models.CharField(max_length=25, verbose_name='Label', help_text='Short index label', blank=True, null=True)
+        label = models.CharField(max_length=28, verbose_name='Label', help_text='Short index label', blank=True,
+                                 null=True)
         body = models.TextField(verbose_name='Content', blank=True, default="")
         publication_date = models.DateTimeField('Date Published', auto_now_add=True)
         update_date = models.DateTimeField('Date Updated')
