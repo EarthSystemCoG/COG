@@ -1131,7 +1131,7 @@ BEGIN USER MESSAGES
 .message-box {
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
-	margin:      5px;
+	margin:      5px 0 5px 0;
 	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;

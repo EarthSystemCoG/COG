@@ -3,9 +3,9 @@
 
 <!--// Loading block main //-->
 {% block main %}
-{% load cog_utils %}
-<script language="javascript">
-// function that selects/deselects tab/subtabs checkboxes to insure consistency
+    {% load cog_utils %}
+    <script language="javascript">
+        // function that selects/deselects tab/subtabs checkboxes to insure consistency
 		function trigger(checkbox) {
 			// if subtab is checked, tab must be checked
 			if (checkbox.checked==true) {
@@ -29,7 +29,7 @@
 				{% endfor %}
 			}
 		}
-</script>
+    </script>
 
 	{% if not form.instance.id %}
 	     <div class="message-box">
