@@ -16,7 +16,7 @@ from django_openid_auth.models import UserOpenID
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
 
-# view to display the data cart for a given site, user
+# view to display the data cart for a given node, user
 @require_GET
 @login_required
 def datacart_display(request, site_id, user_id):
@@ -58,7 +58,7 @@ def datacart_byopenid(request):
         # load User object
         userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
         
-        # redirect to user profile page on local site
+        # redirect to user profile page on local node
         return HttpResponseRedirect(reverse('datacart_display', 
                                     kwargs={'site_id': Site.objects.get_current().id, 'user_id': userOpenid.user.id}))
             
@@ -199,7 +199,7 @@ def datacart_wget(request, site_id, user_id):
     
     # retrieve list of selected dataset ids
     ids = request.REQUEST.getlist('id')
-    
+        
     # map of dataset ids grouped by index node 
     response_data = {}
     
@@ -211,24 +211,31 @@ def datacart_wget(request, site_id, user_id):
 
     if datacart:
         for item in datacart.items.all():
-
+            
             # filter selected datasets only
             if item.identifier in ids:
 
                 # group selected dataset by index_node
                 index_node = item.getValue('index_node')
-                if index_node not in response_data:
-                    response_data[index_node] = []
-                response_data[index_node].append(item.identifier)
+                wget_key = index_node
+                shard = item.getValue('shard')
+                if shard is not None and len(shard.strip())>0:
+                    wget_key += "|" + shard
+                if wget_key not in response_data:
+                    response_data[wget_key] = []
+                response_data[wget_key].append(item.identifier)
     
     '''
     Example response_data:
     {
-       u'pcmdi9.llnl.gov':[
-          u'cmip5.output1.INM.inmcm4.1pctCO2.day.atmos.day.r1i1p1.v20110323|pcmdi9.llnl.gov',
-          u'cmip5.output1.INM.inmcm4.esmHistorical.fx.atmos.fx.r0i0p0.v20110927|pcmdi9.llnl.gov',
-          u'cmip5.output1.INM.inmcm4.1pctCO2.day.ocean.day.r1i1p1.v20110323|pcmdi9.llnl.gov'
-       ]
+        u'esgf-node.jpl.nasa.gov|localhost:8982': [u'CMAC.NASA-GSFC.AIRS.mon.v1|esg-datanode.jpl.nasa.gov'], 
+        u'esgf-node.jpl.nasa.gov': [u'obs4MIPs.NASA-JPL.QuikSCAT.mon.v1|esgf-node.jpl.nasa.gov'],
+        u'pcmdi9.llnl.gov':
+            [
+              u'cmip5.output1.INM.inmcm4.1pctCO2.day.atmos.day.r1i1p1.v20110323|pcmdi9.llnl.gov',
+              u'cmip5.output1.INM.inmcm4.esmHistorical.fx.atmos.fx.r0i0p0.v20110927|pcmdi9.llnl.gov',
+              u'cmip5.output1.INM.inmcm4.1pctCO2.day.ocean.day.r1i1p1.v20110323|pcmdi9.llnl.gov'
+           ]
     }
     '''
     return HttpResponse(json.dumps(response_data), content_type='application/json') 
@@ -247,7 +254,7 @@ def datacart_delete(request, site_id, user_id):
     if not request.user.id != user_id:
         raise Exception("User not authorized to modify datacart")
     
-    # TODO:: check site, redirect in case
+    # TODO:: check node, redirect in case
     identifier = request.REQUEST['item']
     
     # NOTE: make sure this item belongs to the user's data cart

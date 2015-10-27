@@ -161,7 +161,7 @@ def membership_remove(request, project_short_name):
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
-    # redirect to project home site?
+    # redirect to project home node?
     if project.site != Site.objects.get_current():
         url = 'http://%s%s' % (project.site.domain, reverse('membership_remove',
                                                             kwargs={'project_short_name': project.short_name}))
@@ -197,7 +197,7 @@ def membership_remove(request, project_short_name):
         #title = 'Cancel %s Membership Confirmation' % project.short_name
         #return render_to_response(template, {'project':project,'title': title },
         # context_instance=RequestContext(request))
-        # redirect to user profile (on proper site)
+        # redirect to user profile (on proper node)
         return HttpResponseRedirect(reverse('user_profile_redirect', kwargs={'user_id': request.user.id}))
     
 

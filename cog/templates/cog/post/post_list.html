@@ -1,30 +1,41 @@
-{% extends "cog/common/layout_left_center.html" %}
+{% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-
-    <!-- Search widget -->
+    {% load cog_utils %}
     {% url post_list as url %}
-    {% with 'post' as object_type %}
-       {% include 'cog/common/_search.html' %}
-    {% endwith %}
-    
     {% load comments %}
     {% load pagination_tags %}
-    {% autopaginate object_list 10 %}
+    {% autopaginate object_list 50 %}
+
                 
     <div class="mybox">
 	    <table>
 	        <caption>
-	                 {{ list_title }} 
-	                 <span style="float: right">Sort by:
-	                       {% if request.GET.sortby = 'date' %}
-	                           date | <a href="{{ url }}?type={{request.GET.type}}&amp;sortby=title&amp;query={{request.GET.query}}">title</a>
-	                       {% else %}
-	                           <a href="{{ url }}?type={{request.GET.type}}&amp;sortby=date&amp;query={{request.GET.query}}">date</a> | title
-	                        {% endif %}
-	                 </span>
-	                 &nbsp;
+		        {{ list_title }}
+	            <span style="float: right;">Sort by:
+	                <a href="{{ url }}?type={{request.GET.type}}&amp;sortby=title&amp;query=
+	                {{request.GET.query}}">Title</a> |
+
+	                <a href="{{ url }}?type={{request.GET.type}}&amp;sortby=date&amp;query=
+	                {{request.GET.query}}">Date</a>  |
+
+		            <a href="{{ url }}?type={{request.GET.type}}&amp;sortby=topic&amp;query=
+		            {{request.GET.query}}">Topic</a>
+	            </span>
+	            &nbsp;
 	        </caption>
+	        <tr>
+	            <th><strong>#</strong></th>
+	            <th><strong>Title</strong></th>
+	            <th><strong>Author</strong></th>
+	            <th><strong>Update Date</strong></th>
+	            <th><strong>Topic</strong></th>
+	            <th><strong># Comments</strong></th>
+		        {% if request.user|hasAdminPermission:project %}
+		            <th><strong>Delete?</strong></th>
+		        {% endif %}
+
+	        </tr>
 			{% for object in object_list %}
 			   {% get_comment_count for object as comment_count %}
 			   <tr>
@@ -34,6 +45,14 @@
 			      <td valign="top">{{ object.update_date|date:"d M Y, H:m" }} </td>
 			      <td valign="top">{{ object.topic }} </td>
 			      <td valign="top" nowrap="true">{{ comment_count }} Comment{{ comment_count|pluralize }} </td>
+				  {% if request.user|hasAdminPermission:project %}
+			          <td valign="top">
+                          <!-- only Admins can delete posts -->
+			      	      {% if not post.is_predefined %}
+                              <a href="{% url 'post_delete' object.id %}" class="deletelink">Delete</a>&nbsp;&nbsp;
+                          {% endif %}
+					  </td>
+			      {% endif %}
 			   </tr>
 			{% endfor %}
 		</table>

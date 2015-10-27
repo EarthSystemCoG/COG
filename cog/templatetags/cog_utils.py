@@ -791,7 +791,7 @@ def delete_from_session(session, key):
 @register.filter
 def get_peer_sites(project):
     """
-    Returns a list of ENABLED peer sites, ordered alphabetically by name.
+    Returns a list of ENABLED peer nodes, ordered alphabetically by name.
     """
     
     return getPeerSites()

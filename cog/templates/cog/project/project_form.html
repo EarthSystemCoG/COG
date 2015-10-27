@@ -30,6 +30,13 @@
 			}
 		}
 </script>
+
+	{% if not form.instance.id %}
+	     <div class="message-box">
+	     You do not need to create a project to download data. <br> Instead
+		     navigate to the project hosting the data of interest and follow their instructions.
+		 </div>
+	{% endif %}
 	 
  <div class="mybox">
     <!-- note: action form can be "add" or "update" -->
@@ -64,7 +71,7 @@
                 <td>
                     {{ form.long_name }} {{ form.long_name.errors }}
                     <br />
-                    [ Project long name must NOT contain quotation marks. ]
+                    [Project long name must NOT contain quotation marks.]
                 </td>
             </tr>
             <tr>
@@ -78,7 +85,7 @@
                     {% else %}
                         <a href="mailto:{{form.instance.author.email}}">{{ form.instance.author.username }}</a>
                     {% endif %}
-                    <span style="margin-top:2px">[ You may email the project creator for any questions concerning its metadata. ]</span>
+                    <span style="margin-top:2px">[You may email the project creator for any questions concerning its metadata.]</span>
                 {% endif %}
                     {{ form.author.as_hidden }}
                 </td>
@@ -102,7 +109,7 @@
                 <td>
                     {{ form.parents }} {{ form.parents.errors }}
                     <br/>
-                    [ To RETAIN or ADD new selections hold down the "Control" key (Windows), or the "Command" key (Mac).
+                    [To RETAIN or ADD new selections hold down the "Control" key (Windows), or the "Command" key (Mac).
                                  Assigning parent projects is NOT required.]
                         
                 </td>
@@ -144,7 +151,7 @@
             </tr>
 	    </table>
         <table class="odd-color">
-            <!-- only allow site administrators to change the active state of a project  -->
+            <!-- only allow node administrators to change the active state of a project  -->
             {% if request.user.is_staff and action == 'update' %}
 	            <tr>
 	                 <td style="width:15%;">
@@ -161,7 +168,7 @@
             {% else %}
                 {{ form.active.as_hidden }}
             {% endif %}
-            <!--// Checkbox for private sites   \\-->
+            <!--// Checkbox for private projects   \\-->
             <tr>
 	            <td nowrap="nowrap">
                     Is Private?

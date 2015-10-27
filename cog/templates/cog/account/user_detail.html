@@ -18,12 +18,12 @@
             </div>
         {% endif %}
     
-        <!-- display a message and link to the user's Home Site -->
+        <!-- display a message and link to the user's Home Node -->
         {% if user_profile.user|isRemote %}
             
             <div class="span-max last">
                 <div class="message-box">
-                    User Home Site: {{ user_profile.site.name }}
+                    User Home Node: {{ user_profile.site.name }}
                 </div>
                 <br/>
                 <div style="text-align: center">
@@ -43,7 +43,8 @@
 	                        <a href="{% url 'password_update' user_profile.user.id %}">Change password</a>
 	                    {% else %}
 	                        {% if user_profile.openid %}
-	                            <a href="http://{{ user_profile.openid|get_domain }}/">Change my password</a> (at the site that issued your OpenID)
+	                            <a href="http://{{ user_profile.openid|get_domain }}/">Change my password</a> (at the
+		                        node that issued your OpenID)
 	                        {% else %}
 	                            Sorry, your account is not associated with any OpenID. 
 	                            <br/>Please contact <a href="mailto:cog_support@list.woc.noaa.gov">cog_support@list.woc.noaa.gov</a> to change your password.
@@ -86,14 +87,14 @@
         {% endif %}
     </div>
     
-    <!-- Extra block for Site Admins to display key user info we don't show the public-->
+    <!-- Extra block for Node Admins to display key user info we don't show the public-->
     {% if request.user.is_staff %}
         <div class="prepend-3 span-12 last" style="margin-bottom:20px;">
             <div class="mybox">
                 <table>
                     <tr>
                         <td class="caption_mimic" colspan="2">
-                            <strong>Extra User Information (Site Administrators Only)</strong>
+                            <strong>Extra User Information (Node Administrators Only)</strong>
                         </td>
                     </tr>
                     <tr>
@@ -119,7 +120,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Home Site</strong>
+                            <strong>Home Node</strong>
                         </td>
                         <td>{{ user_profile.site.name }}</td>
                     </tr>

@@ -64,7 +64,7 @@ def getUsersThatMatch(match):
 def get_all_projects_for_user(user, includeCurrentSite=True):
     """Queries all nodes (including local node) for projects the user belongs to.
        Returns a list of dictionaries but does NOT update the local database.
-       Example of JSON data retrieved from each site:
+       Example of JSON data retrieved from each node:
       {
         "users": {
             "https://hydra.fsl.noaa.gov/esgf-idp/openid/rootAdmin": {
@@ -89,8 +89,8 @@ def get_all_projects_for_user(user, includeCurrentSite=True):
                 .....
     """
 
-    # dictionary of information retrieved from each site, including current site
-    projDict = {}  # site --> dictionary
+    # dictionary of information retrieved from each node, including current node
+    projDict = {}  # node --> dictionary
     
     try:
         if user.profile.openid() is not None:
@@ -98,7 +98,7 @@ def get_all_projects_for_user(user, includeCurrentSite=True):
             openid = user.profile.openid()
             print 'Updating projects for user with openid=%s' % openid
             
-            # loop over remote (enabled) sites, possibly add current site
+            # loop over remote (enabled) nodes, possibly add current node
             sites = list(getPeerSites())
             if includeCurrentSite:
                 sites = sites + [Site.objects.get_current()]
