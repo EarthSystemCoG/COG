@@ -55,7 +55,6 @@ class FolderForm(ModelForm):
         # exclude the option for no parent - all folders created after the first must have parent
         self.fields['parent'].empty_label = None
 
-
     def clean_name(self):
 
         name = self.cleaned_data['name']
