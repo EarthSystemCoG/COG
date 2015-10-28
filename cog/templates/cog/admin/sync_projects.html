@@ -3,7 +3,7 @@
 {% block main %}
   <!-- limit visibility to node administrators -->
   {% if request.user.is_staff %}
-      <div class="prepend-4 span-23 last" >
+      <div class="prepend-5 span-22 last" >
     
           <h1>CoG Peer Nodes Synchronization</h1>
     	
@@ -15,12 +15,12 @@
 		        
 		              <!-- header row -->
 		              <tr>
-	                      <th class="white" scope="col">Node Name</th>
-	                      <th class="white" scope="col">Domain</th>
-	                      <th class="white" scope="col">Number of Projects</th>
-	                      <th class="white" scope="col">Number of Users</th>
-	                      <th class="white" scope="col">Report Document</th>
-	                      <th class="white" scope="col">Sync Status</th>
+	                      <th class="white" scope="col"><strong>Node Name</strong></th>
+	                      <th class="white" scope="col"><strong>Domain</strong></th>
+	                      <th class="white" scope="col"><strong>Number of Projects</strong></th>
+	                      <th class="white" scope="col"><strong>Number of Users</strong></th>
+	                      <th class="white" scope="col"><strong>Report Document</strong></th>
+	                      <th class="white" scope="col"><strong>Sync Status</strong></th>
 	                  </tr>
 				      <!-- data rows -->
 		              {% for siteid, sitedict in sites %}
