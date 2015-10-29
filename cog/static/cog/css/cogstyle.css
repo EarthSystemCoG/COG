@@ -1608,7 +1608,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     /* COG STYLE: TOP NAV BAR TEXT */
     text-decoration: none;
     /* padding: top-right-bottom-left */
-    padding: 2px 6px 6px 6px;
+    padding: 2px 8px 6px 6px;
     font-weight: bold;
     color: #FFFFFF;
     border: none;
