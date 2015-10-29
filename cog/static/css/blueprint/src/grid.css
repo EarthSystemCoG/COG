@@ -13,7 +13,7 @@
 
 /* A container should group all your columns. */
 .container {
-  width: 1300px;
+  width: 1140px;
   margin: 0 auto;
 }
 
@@ -29,7 +29,8 @@
 /* Sets up basic grid floating and margin. */
 .column, .span-1, .span-2, .span-3, .span-4, .span-5, .span-6, .span-7, .span-8, .span-9,
 .span-10, .span-11, .span-12, .span-13, .span-14, .span-15, .span-16, .span-17, .span-18,
-.span-19, .span-20, .span-21, .span-22, .span-23, .span-24, .span-25, .span-26, .span-27,.span-max,.span-900, .span-940{
+.span-19, .span-20, .span-21, .span-22, .span-23, .span-24, .span-25, .span-26, .span-27,
+.span-max,.span-660,.span-740,.span-900, .span-940{
   float: left;
   margin-right: 10px;
 }
@@ -67,10 +68,13 @@
 /* additional classes for expanded cog */
 .span-900 {width: 900px;}
 .span-940 {width: 940px;}
+.span-700 {width: 700px;}
+.span-740 {width: 740px;}
+.span-680 {width: 660px;}
 .span-25  {width: 980px;}
 .span-26  {width: 1100px;}
 .span-27  {width: 1140px;}
-.span-max {width:1300px;}
+.span-max {width:1140px;}
 
 
 

@@ -149,7 +149,7 @@ div.custom_header_bar {
 
 /* create a white header that is just slightly larger than the main cog site */
 div.custom_header{
-    width:        1300px;
+    width:        1140px;
     margin-left:  auto;
     margin-right: auto;
 }
@@ -226,7 +226,7 @@ div.custom_footer_bar{
 
 /* create a custom footer that is slightly larger than the main cog site */
 div.custom_footer {
-    width:        1300px;
+    width:        1140px;
     margin-left:  auto;
     margin-right: auto;
     color:        white; /*text color */
@@ -272,7 +272,7 @@ div.footer{
   margin-left:  auto;
   margin-right: auto;
   height:       40px;
-  width:        1300px;
+  width:        1140px;
 }
 
 .footer td{
@@ -1608,7 +1608,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     /* COG STYLE: TOP NAV BAR TEXT */
     text-decoration: none;
     /* padding: top-right-bottom-left */
-    padding: 2px 10px 6px 6px;
+    padding: 2px 6px 6px 6px;
     font-weight: bold;
     color: #FFFFFF;
     border: none;
