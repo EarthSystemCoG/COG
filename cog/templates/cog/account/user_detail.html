@@ -57,11 +57,11 @@
 	        <div class="span-max last" style="margin-bottom:10px;" >
                 <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main
                 pages. Note .mybox has a 5px margin. Just adding 5px; -->
-                <div class="prepend-3 span-12" style="margin-bottom:5px;">
+                <div class="prepend-2 span-11" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_profile.html' %}
                 </div>
 
-                <div class="span-12" style="margin-bottom:5px;">
+                <div class="span-11" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_projects.html' %}
                 </div>
 
@@ -73,13 +73,13 @@
 
 
             <div class="span-max last" style="margin-bottom:10px;" >
-                <div class="prepend-3 span-12 last" style="margin-bottom:5px;" >
+                <div class="prepend-2 span-11 last" style="margin-bottom:5px;" >
                     {% include 'cog/account/_user_openids.html' %}
                 </div>
 	        </div>
 
             <div class="span-max last" style="margin-bottom:10px;" >
-	            <div class="prepend-3 span-12 last" style="margin-bottom:5px;" >
+	            <div class="prepend-2 span-11 last" style="margin-bottom:5px;" >
                     {% include 'cog/account/_user_research.html' %}
                 </div>
 	        </div>
@@ -89,7 +89,7 @@
     
     <!-- Extra block for Node Admins to display key user info we don't show the public-->
     {% if request.user.is_staff %}
-        <div class="prepend-9 span-12 last" style="margin-bottom:20px;">
+        <div class="prepend-8 span-11 last" style="margin-bottom:20px;">
             <div class="mybox">
                 <table>
                     <tr>
