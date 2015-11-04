@@ -12,7 +12,7 @@ from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
-from cog.plugins.esgf.idp_whitelist import LocalEndpointDict
+from cog.plugins.esgf.registry import LocalEndpointDict
 import os
 
 # download parameters

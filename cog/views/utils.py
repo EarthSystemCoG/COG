@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 import urllib
 
-from cog.plugins.esgf.idp_whitelist import LocalKnownProvidersDict
+from cog.plugins.esgf.registry import LocalKnownProvidersDict
 
 # module-scope object that holds list of known ESGF Identity Providers
 # included here because login view is part of django-openid-auth module

@@ -45,6 +45,8 @@ IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
 print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
 KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
 print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
+PEER_NODES = siteManager.get('PEER_NODES', default=None)
+print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
 # DEVELOPMENT/PRODUCTION server switch
 if siteManager.get('PRODUCTION_SERVER', default='False').lower() == 'true':
     PRODUCTION_SERVER = True
@@ -172,6 +174,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'cog.middleware.init_middleware.InitMiddleware',
     'cog.middleware.login_middleware.LoginMiddleware',
     'cog.middleware.session_middleware.SessionMiddleware',
     'cog.middleware.password_middleware.PasswordMiddleware'
