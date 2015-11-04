@@ -357,6 +357,39 @@ def user_byopenid(request):
     else:
         return HttpResponseNotAllowed(['GET'])
     
+# view to retrieve the image of a local user, identified by openid
+# optionally, the image thumbnail can be retrieved instead
+def user_image(request):
+    
+    if request.method == 'GET':
+    
+        openid = request.GET['openid']
+        thumbnail = request.GET.get('thumbnail', False)
+        
+        # default image
+        imagePath = getattr(settings, "STATIC_URL") + DEFAULT_IMAGES['User']
+        
+        # load User object
+        try:
+            userOpenid = UserOpenID.objects.get(claimed_id=openid)
+            
+            # load user image
+            userProfile = UserProfile.objects.get(user=userOpenid.user)
+            imagePath = userProfile.image.url
+                    
+        except (ValueError, ObjectDoesNotExist) as e:
+            pass # use default image
+            
+        # return thumbnail
+        if thumbnail:
+            return HttpResponseRedirect( getThumbnailPath(imagePath) )
+        # return full image
+        else:
+            return HttpResponseRedirect( imagePath )        
+
+    else:
+        return HttpResponseNotAllowed(['GET'])
+    
 
 @login_required
 def user_update(request, user_id):

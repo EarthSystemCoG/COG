@@ -606,11 +606,18 @@ def getThumbnailById(id, type):
 @register.filter
 def getThumbnail(user):
 
-    imagePath = getImage(user)
-    thumbnailPath = getThumbnailPath(imagePath)
-    print thumbnailPath
-    return thumbnailPath
-
+    openid = user.profile.openid()
+    if openid is not None:
+        # return image URL at user home node
+        url = 'http://%s%s?openid=%s&thumbnail=true' % (user.profile.site.domain, 
+                                                        reverse('user_image'), openid)
+        return url
+        
+    else:
+        # return image path on local system
+        imagePath = getImage(user)
+        thumbnailPath = getThumbnailPath(imagePath)
+        return thumbnailPath
 
 @register.filter
 def doc_redirect(doc):

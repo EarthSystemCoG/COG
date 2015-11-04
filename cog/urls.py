@@ -58,6 +58,7 @@ urlpatterns = patterns('',
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
     url(r'^user/reminder/$', 'cog.views.user_reminder', name='user_reminder'),
     url(r'^user/byopenid/$', 'cog.views.user_byopenid', name='user_byopenid'),
+    url(r'^user/image/$', 'cog.views.user_image', name='user_image'),
     url(r'^user/profile/(?P<user_id>\d+)/$', 'cog.views.user_profile_redirect', name='user_profile_redirect'),
     
 
