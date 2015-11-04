@@ -576,6 +576,7 @@ def getImage(obj):
 
         # Collaborator
         elif isinstance(obj, Collaborator):
+            print 'COLLABORATOR=%s' % obj
             return obj.image.url
 
         elif isinstance(obj, Organization) or isinstance(obj, FundingSource):
@@ -606,11 +607,19 @@ def getThumbnailById(id, type):
 @register.filter
 def getThumbnail(user):
 
+    # try returning image URL at user home node
+    if isinstance(user, User):
+        openid = user.profile.openid()
+        if openid is not None:
+            url = 'http://%s%s?openid=%s&thumbnail=true' % (user.profile.site.domain, 
+                                                            reverse('user_image'), openid)
+            return url
+        
+    print 'RETURNING DEFAULT FOR: %s' % user
+    # default: return image path on local system
     imagePath = getImage(user)
     thumbnailPath = getThumbnailPath(imagePath)
-    print thumbnailPath
     return thumbnailPath
-
 
 @register.filter
 def doc_redirect(doc):

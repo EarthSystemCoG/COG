@@ -30,7 +30,7 @@ import time
 
 from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, 
-                       IDP_WHITELIST, KNOWN_PROVIDERS,
+                       IDP_WHITELIST, KNOWN_PROVIDERS, PEER_NODES,
                        DEFAULT_PROJECT_SHORT_NAME)
 
 
@@ -173,6 +173,8 @@ class CogConfig(object):
         self._safeSet('IDP_WHITELIST', IDP_WHITELIST)
         # KNOWN_PROVIDERS = /esg/config/esgf_known_providers.xml
         self._safeSet('KNOWN_PROVIDERS', KNOWN_PROVIDERS)
+        # PEER_NODES = /esg/config/esgf_cogs.xml
+        self._safeSet('PEER_NODES', PEER_NODES)
         # option to send SESSION and CSRF cookies via SSL only - requires full SSL-encrypted site
         self._safeSet('PRODUCTION_SERVER', True)
         # ESGF software stack version

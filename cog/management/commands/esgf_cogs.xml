@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Example configuration files for ESGF/CoG nodes.
+     The actual list is read at startup from the location pointed by the PEER_NODES settings -->
+<sites>
+
+	<!-- Central CoG site -->
+	<site name="CoG-CU" domain="www.earthsystemcog.org" />
+
+	<!-- NOAA/ESRL production server -->
+	<site name="ESGF@NOAA/ESRL" domain="cog-esgf.esrl.noaa.gov" />
+
+        <!-- NASA/JPL production server -->
+        <site name="ESGF@NASA/JPL" domain="esgf-node.jpl.nasa.gov" />
+
+        <!-- DOE/LLNL production server -->
+        <site name="ESGF@DOE/LLNL" domain="pcmdi9.llnl.gov" />
+
+</sites>

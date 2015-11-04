@@ -1,5 +1,5 @@
 '''
-Module containing API and implementation for OpenID white-listing.
+Module containing API and implementation for registry-type objects.
 '''
 
 from xml.etree.ElementTree import fromstring, ParseError
@@ -10,6 +10,10 @@ import abc
 from cog.utils import file_modification_datetime
 from django.conf import settings
 import os
+from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
+
+from cog.models import PeerSite
 
 NS = "http://www.esgf.org/whitelist"
 
@@ -243,3 +247,66 @@ class LocalWhiteList(WhiteList):
 
         # don't trust this openid
         return False
+    
+class PeerNodesList(object):
+    '''
+    Class that updates the peer nodes in the database from an XML configuration file.
+    '''
+    
+    def __init__(self, filepath):
+        self.filepath = filepath
+        
+    def reload(self, delete=False):
+        
+        if os.path.exists(self.filepath):
+            
+            print('Updating list of CoG sites from: %s (delete: %s)' % (self.filepath, delete) )
+            
+            # current site - must not be updated from file list
+            current_site = Site.objects.get_current()
+                        
+            # read esgf_cogs.xml 
+            with open (self.filepath, "r") as myfile:
+                
+                xml=myfile.read().replace('\n', '')
+    
+                # <sites>
+                root = fromstring(xml)
+                
+                # update/insert all sites found in file
+                domains = [] # list of site domains found in file
+                for site in root.findall("site"):
+                    name = site.attrib['name']
+                    domain = site.attrib['domain']
+                    domains.append(domain)
+                    print 'Updating site domain: %s name: %s' % (domain, name)
+                    
+                    # update Site objects
+                    try:
+                        _site = Site.objects.get(domain=domain)
+                        if _site != current_site:
+                            # update site
+                            _site.name = name
+                            _site.save()
+                            print('Updated site: %s' % _site)
+                    except ObjectDoesNotExist:
+                        _site = Site.objects.create(name=name, domain=domain)
+                        print 'Created site: %s' % _site
+                        
+                    # update PeerSite objects
+                    try:
+                        peersite = PeerSite.objects.get(site=_site)
+                    except ObjectDoesNotExist:
+                        peersite = PeerSite.objects.create(site=_site, enabled=False)
+                    print '\tPeer site: %s' % peersite
+                            
+            # clean up stale sites
+            if delete:
+                for peer in PeerSite.objects.all():
+                    if peer.site.domain not in domains:
+                        if peer.site != current_site:
+                            print 'Stale peer site found at domain: %s' % peer.site.domain + ", deleting it..."
+                            peer.site.delete() # will also delete the PeerSite object on cascade
+
+        else:
+            print 'WARNING: File %s does not exist, skipping update of ESGF peer nodes' % self.filepath
