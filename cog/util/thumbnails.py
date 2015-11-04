@@ -3,7 +3,7 @@
 import os
 import Image
 
-THUMBNAIL_EXT = "jpeg"
+THUMBNAIL_EXT = "png"
 THUMBNAIL_SIZE_SMALL = 35,35
 THUMBNAIL_SIZE_BIG = 60,60
 
@@ -24,7 +24,7 @@ def generateThumbnail(filePath, thumbnail_size):
             if im.mode != "RGB":
                 im = im.convert("RGB")
             im.thumbnail(thumbnail_size)
-            im.save(thumbnailPath, "JPEG")
+            im.save(thumbnailPath, "PNG")
         except IOError as error:
             print "Cannot create thumbnail for", filePath
             print error
