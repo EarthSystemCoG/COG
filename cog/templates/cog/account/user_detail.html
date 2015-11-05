@@ -54,32 +54,52 @@
 	            {% endif %}
 	        </div>
 
+
+
 	        <div class="span-max last" style="margin-bottom:10px;" >
+		        <div class="span-5">
+                   <img  style="border-radius: 10px; max-width:190px; display:block;margin:auto;" src=
+		                   "{{ user_profile.user|getImage }}"
+		                   {% if user_profile.image %}
+		                class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %} />
+                   <p style="font-size:16pt;margin-bottom:5px; text-align:center; text-overflow: ellipsis;
+                   overflow:hidden;">
+			            <strong>
+				            {{ user_profile.user.first_name }} &nbsp;
+				            {{ user_profile.user.last_name }}
+			            </strong>
+                   </p>
+		           {% if user.is_staff or user_profile.user == user %}
+			           <p style="font-size:16pt;color:#666;margin-top:0; margin-bottom:5px; text-align:center;">
+			               <strong>
+				              {{ user_profile.user.username }}
+			               </strong>
+                       </p>
+			       {%  endif %}
+
+		           <p style="font-size:13px;text-align:center;"> Joined on: <br> {{ user_profile.user.date_joined }}
+	            </div>
                 <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main
                 pages. Note .mybox has a 5px margin. Just adding 5px; -->
-                <div class="prepend-2 span-11" style="margin-bottom:5px;">
+                <div class="span-12" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_profile.html' %}
                 </div>
 
-                <div class="span-11" style="margin-bottom:5px;">
+                <div class="span-11 last" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_projects.html' %}
                 </div>
 
-                <div class="span-5 last">
-                   <img src="{{ user_profile.user|getImage }}" {% if user_profile.image %} class="myimage" alt="picture
-                    of {{ user_profile.user.get_full_name }}" {% endif %}/>
-                </div>
 	        </div>
 
 
             <div class="span-max last" style="margin-bottom:10px;" >
-                <div class="prepend-2 span-11 last" style="margin-bottom:5px;" >
+                <div class="prepend-5 span-12 last" style="margin-bottom:5px;" >
                     {% include 'cog/account/_user_openids.html' %}
                 </div>
 	        </div>
 
             <div class="span-max last" style="margin-bottom:10px;" >
-	            <div class="prepend-2 span-11 last" style="margin-bottom:5px;" >
+	            <div class="prepend-5 span-12 last" style="margin-bottom:5px;" >
                     {% include 'cog/account/_user_research.html' %}
                 </div>
 	        </div>
@@ -88,8 +108,14 @@
     </div>
     
     <!-- Extra block for Node Admins to display key user info we don't show the public-->
+
     {% if request.user.is_staff %}
-        <div class="prepend-355 span-11 last" style="margin-bottom:20px;">
+	    {% if user_profile.user|isRemote %}
+	        <div class="prepend-335 span-12 last" style="margin-bottom:20px;">
+	    {% else %}
+	        <div class="prepend-5 span-12 last" style="margin-bottom:20px;">
+        {% endif %}
+
             <div class="mybox">
                 <table>
                     <tr>
