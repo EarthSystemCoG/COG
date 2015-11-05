@@ -54,8 +54,6 @@
 	            {% endif %}
 	        </div>
 
-
-
 	        <div class="span-max last" style="margin-bottom:10px;" >
 		        <div class="span-5">
                    <img  style="border-radius: 10px; max-width:190px; display:block;margin:auto;" src=
@@ -85,6 +83,7 @@
                    {% include 'cog/account/_user_profile.html' %}
                 </div>
 
+	            <!--keep at span-11, cuz there is not room for span-12-->
                 <div class="span-11 last" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_projects.html' %}
                 </div>
@@ -111,8 +110,10 @@
 
     {% if request.user.is_staff %}
 	    {% if user_profile.user|isRemote %}
+		    <!--align with left column when present-->
 	        <div class="prepend-335 span-12 last" style="margin-bottom:20px;">
 	    {% else %}
+		    <!--center under banner when the table is the only thing on the page-->
 	        <div class="prepend-5 span-12 last" style="margin-bottom:20px;">
         {% endif %}
 
