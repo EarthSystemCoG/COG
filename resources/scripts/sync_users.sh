@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# example script to update the state of CoG projects around the federation
+# example script to delete stale user stubs from the local database
 
 # setup environment
 source /usr/local/cog/venv/bin/activate
@@ -12,4 +12,4 @@ export COG_INSTALL_DIR=/usr/local/cog/cog_install
 # reference the COG configuration
 export COG_CONFIG_DIR=/usr/local/cog/cog_config
 
-python $COG_INSTALL_DIR/manage.py sync_projects
+python $COG_INSTALL_DIR/manage.py sync_users
