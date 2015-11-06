@@ -77,7 +77,7 @@
 		<div class="header_bar"> 
 		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;View Child Project {{ template_title}} ({{ children|length }})</a>
 		</div>
-		<div id="children_rollup" style="display:none">	   	    
+		<div id="children_rollup" style="display:block">	   	    
 		    {% for child in children %}
 	    		{% with child as proj %}
 	    			<br/>
@@ -102,7 +102,7 @@
 		<div class="header_bar"> 
 		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;View Peer Project {{ template_title}} ({{ peers|length }})</a>
 		</div>
-		<div id="peer_rollup" style="display:none">	   	    
+		<div id="peer_rollup" style="display:block">	   	    
 		    {% for peer in peers %}
 	    		{% with peer as proj %}
 	    			<br/>
