@@ -576,7 +576,6 @@ def getImage(obj):
 
         # Collaborator
         elif isinstance(obj, Collaborator):
-            print 'COLLABORATOR=%s' % obj
             return obj.image.url
 
         elif isinstance(obj, Organization) or isinstance(obj, FundingSource):
@@ -615,7 +614,6 @@ def getThumbnail(user):
                                                             reverse('user_image'), openid)
             return url
         
-    print 'RETURNING DEFAULT FOR: %s' % user
     # default: return image path on local system
     imagePath = getImage(user)
     thumbnailPath = getThumbnailPath(imagePath)
