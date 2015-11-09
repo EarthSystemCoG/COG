@@ -52,7 +52,7 @@ def custom_login_complete(request, **kwargs):
     Method invoked after successful OpenID login.
     Overridden to create user profile after first successful OpenID login.
     """
-
+    
     # authenticate user
     response = login_complete(request, **kwargs)
 
@@ -64,15 +64,19 @@ def custom_login_complete(request, **kwargs):
             
         except ObjectDoesNotExist:
 
+            print 'Discovering site for user with openid=%s' % openid
+            
             # retrieve user home node
             site = discoverSiteForUser(openid)
             if site is None: 
                 # set user home node to current node
                 site = Site.objects.get_current()
                 
+            print 'User site=%s... creating user profile...' % site
+                
             # create new ESGF/OpenID login, type=2: ESGF
             UserProfile.objects.create(user=request.user, institution='', city='', country='', type=2, site=site)
-
+            
             # create user datacart
             DataCart.objects.create(user=request.user)
             
@@ -84,12 +88,13 @@ def custom_login_complete(request, **kwargs):
 
 
 def _custom_login(request, response):
-
+    
     # successful login
     if not request.user.is_anonymous():
                 
         # missing information
         if isUserLocal(request.user) and not isUserValid(request.user):
+            print 'User is local but some information is missing, redirecting to user update page'
             return HttpResponseRedirect(reverse('user_update', kwargs={'user_id': request.user.id}) +
                                         "?message=incomplete_profile")
         
