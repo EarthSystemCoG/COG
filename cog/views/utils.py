@@ -9,6 +9,7 @@ from cog.models.peer_site import getPeerSites
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 import urllib
+from collections import OrderedDict
 
 from cog.plugins.esgf.registry import LocalKnownProvidersDict
 
@@ -18,7 +19,9 @@ esgf_known_providers = LocalKnownProvidersDict()
 
 
 def getKnownIdentityProviders():
-    return esgf_known_providers.idpDict()
+    # sort dictionary by key
+    return OrderedDict(sorted(esgf_known_providers.idpDict().items()))
+    #return esgf_known_providers.idpDict()
 
 
 # function to return an error message if a project is not active

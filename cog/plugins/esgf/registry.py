@@ -168,9 +168,10 @@ class LocalKnownProvidersDict(KnownProvidersDict):
                 #  </OP>
                 for idp in root.findall("OP"):
                     name = idp.find('NAME').text
-                    url = idp.find('URL').text
-                    idps[name] = url
-                    print 'Using known IdP: name=%s url=%s' % (name, url)
+                    if name is not None and len(name.strip()) > 0:
+                        url = idp.find('URL').text
+                        idps[name] = url
+                        print 'Using known IdP: name=%s url=%s' % (name, url)
     
                 # switch the dictionary of knwon providers
                 self.idps = idps

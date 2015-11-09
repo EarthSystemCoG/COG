@@ -32,6 +32,8 @@
     // dictionary of known ESGF identity providers, loaded from local file
     var known_providers = {};
   
+    // add first entry for full openids
+    known_providers['https://'] = 'https://';
 	{% for idp_name, idp_url in request|knownIdentityProviders %}
 		known_providers['{{idp_name}}'] = '{{ idp_url }}';
 	{% endfor %}
@@ -65,7 +67,7 @@
 		    };
 		    var bAC = new YAHOO.widget.AutoComplete("openid_identifier", "bContainer", bDS, oConfigs);
 		    
-		    // Breakfast combobox
+		    // Openid combobox
 		    var bToggler = YAHOO.util.Dom.get("toggleB");
 		    var oPushButtonB = new YAHOO.widget.Button({container:bToggler});
 		    var toggleB = function(e) {
@@ -98,7 +100,7 @@
 	}
 		
 	// comment out the following line to disable the IdP selector
-	//YAHOO.util.Event.onDOMReady(init);
+	YAHOO.util.Event.onDOMReady(init);
 	
   </script>
 
