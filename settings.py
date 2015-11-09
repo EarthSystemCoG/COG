@@ -295,8 +295,8 @@ PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
 # create user account after first openid authentication
 OPENID_CREATE_USERS = True
 
-# do NOT keep updating the user profile from the IdP
-OPENID_UPDATE_DETAILS_FROM_SREG = False
+# do / do NOT keep updating the user profile from the IdP
+OPENID_UPDATE_DETAILS_FROM_SREG = True
 
 # list of allowed hosts to redirect to after successful openid login
 # this is because django-openid-auth does not allow redirection to full URLs by default,
