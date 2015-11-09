@@ -2,6 +2,7 @@
 
 import os
 import Image
+import shutil
 
 THUMBNAIL_EXT = "png"
 THUMBNAIL_SIZE_SMALL = 35,35
@@ -26,8 +27,9 @@ def generateThumbnail(filePath, thumbnail_size):
             im.thumbnail(thumbnail_size)
             im.save(thumbnailPath, "PNG")
         except IOError as error:
-            print "Cannot create thumbnail for", filePath
+            print "Cannot create thumbnail for %s, using full image instead " % filePath
             print error
+            shutil.copy(filePath, thumbnailPath)
 
 def deleteThumbnail(filePath):
     thumbnailPath = getThumbnailPath(filePath)
