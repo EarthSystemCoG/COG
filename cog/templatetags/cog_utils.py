@@ -15,7 +15,7 @@ from django.conf import settings
 from cog.models.constants import DEFAULT_LOGO, FOOTER_LOGO, ROLES
 from cog.models.navbar import NAVMAP, INVNAVMAP, TABS, TAB_LABELS
 from cog.models.constants import DEFAULT_IMAGES
-from cog.util.thumbnails import getThumbnailPath, getThumbnailPath2
+from cog.util.thumbnails import getThumbnailPath
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 import urlparse
@@ -616,9 +616,7 @@ def getThumbnail(user):
         
     # default: return image path on local system
     imagePath = getImage(user)
-    thumbnailPath = getThumbnailPath(imagePath)
-    if not os.path.exists(thumbnailPath):
-        thumbnailPath = getThumbnailPath2(thumbnailPath)
+    thumbnailPath = getThumbnailPath(imagePath, mustExist=True)
     return thumbnailPath
 
 @register.filter
