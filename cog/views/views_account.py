@@ -387,7 +387,12 @@ def user_image(request):
             
         # return thumbnail
         if thumbnail:
-            return HttpResponseRedirect( getThumbnailPath(imagePath) )
+            
+            thumbnailPath = getThumbnailPath(imagePath)
+            if not os.path.exists(thumbnailPath):
+                thumbnailPath = getThumbnailPath2(thumbnailPath)
+            return HttpResponseRedirect( thumbnailPath )
+        
         # return full image
         else:
             return HttpResponseRedirect( imagePath )        

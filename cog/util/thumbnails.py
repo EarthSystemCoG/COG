@@ -5,6 +5,7 @@ import Image
 import shutil
 
 THUMBNAIL_EXT = "png"
+THUMBNAIL_EXT2 = "jpeg" # old extension
 THUMBNAIL_SIZE_SMALL = 35,35
 THUMBNAIL_SIZE_BIG = 60,60
 
@@ -15,6 +16,8 @@ def getThumbnailPath(filePath):
     thumbnailPath = os.path.join(dir, "%s.thumbnail.%s" % (name, THUMBNAIL_EXT) )
     return thumbnailPath
     
+def getThumbnailPath2(thumbnailPath):
+    return thumbnailPath.replace(THUMBNAIL_EXT, THUMBNAIL_EXT2)
     
 def generateThumbnail(filePath, thumbnail_size):
         
