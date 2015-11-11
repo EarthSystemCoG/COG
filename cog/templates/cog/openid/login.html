@@ -128,11 +128,13 @@
 	    <h2>OpenID Login</h2>
 
         <!--help text about ESG OpenIDs-->
-	    <p>
-		    If you already have an ESGF OpenID, you can use it to log onto ESGF-CoG below.
-		    However, if your OpenID contains "/myopenid/" it is likely an older version that is no longer supported.
-	    </p>
-        <p>
+
+        <div class="message-box">
+		    Enter your OpenID in the text box below <br>or</br>
+	        select your OpenID provider using the pull down menu.
+        </div>
+
+        <p style="text-align: center;">
             For the best experience, please use Firefox, Chrome, or Internet Explorer. These are the browsers we support.
         </p>
      	<div style="font-style: italic; text-align:center;">
@@ -156,10 +158,11 @@
 	    	            <td style="width:80%; vertical-align:middle;">
 	    	  	            <div id="bAutoComplete">
 	    	  		            <span id="toggleB"></span>
-	    			            <div id="bContainer"></div>
-	    			            <input type="text" id="openid_identifier" alt="openid_identifier"
-	    			            name="openid_identifier" value="{{ request|get_openid }}" size="33em"/>
-              	            </div>
+			                    <div id="bContainer"></div>
+			                    <input type="text" id="openid_identifier" alt="openid_identifier"
+	    			                name="openid_identifier" value="{{ request|get_openid }}" style="width:91%;
+	    			                padding-left:5px;"/>
+		                    </div>
                         </td>
     	                <td style="width:10%;">
                             <input name="bsignin" type="submit" value="Login" onclick="setIdP()">
