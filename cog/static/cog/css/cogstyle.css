@@ -641,7 +641,13 @@ td.righttop {
 	vertical-align: middle;
 }
 
+/* used on templated content, both views and forms */
+td.leftcolumn {
+        width: 160px;
+		text-align: right;
+		vertical-align: top;
 
+}
 
 
 /*****************************

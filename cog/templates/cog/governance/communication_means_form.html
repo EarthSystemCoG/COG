@@ -16,7 +16,7 @@
 	        <div class="mybox">
 				<table>
 	            	<tr>
-	            		<td valign="top" nowrap="nowrap"><strong>Title</strong></td>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>Title</strong></td>
 	            		<td class="long">
 	            			{{ form.title.help_text }}
 	            			{{ form.title }} 
@@ -24,33 +24,33 @@
 	            		</td>
 	            	</tr>
 	            	<tr>
-	            		<td valign="top" nowrap="nowrap"><strong>Type</strong></td>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>Type</strong></td>
 	            		<td class="long">
-	            			{{ form.type.help_text }} 
+	            			{{ form.type.help_text }} <br><br>
 	            			{{ form.type }} 
 	            			{{ form.type.errors }}
 	            		</td>
 	            	</tr>	            	
 	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Frequency</td>
+	            		<td class="leftcolumn" nowrap="nowrap">Frequency</td>
 	            		<td class="long">
-	            			{{ form.frequency.help_text }} 
+	            			{{ form.frequency.help_text }}
 	            			{{ form.frequency }} 
 	            			{{ form.frequency.errors }}
 	            		</td>
 	            	</tr>
 	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Purpose</td>
+	            		<td class="leftcolumn" nowrap="nowrap">Purpose</td>
 	            		<td class="long">
-	            			{{ form.purpose.help_text }} 
-	            			{{ form.purpose }} 
+	            			{{ form.purpose.help_text }} <br><br>
+	            			{{ form.purpose }}
 	            			{{ form.purpose.errors }}
 	            		</td>
 	            	</tr>
 	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Membership</td>
+	            		<td class="leftcolumn" nowrap="nowrap">Membership</td>
 	            		<td class="long">
-	            			{{ form.membership.help_text }} 
+	            			{{ form.membership.help_text }} <br><br>
 	            			{{ form.membership }} 
 	            			{{ form.membership.errors }}
 	            		</td>

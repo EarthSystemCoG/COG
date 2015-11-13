@@ -18,35 +18,35 @@
 		
 		{% if proj.license %}
 			<tr>
-				<td class="leftcolumn"><strong>License</strong></td>
+				<td class="leftcolumn" nowrap="nowrap"><strong>License</strong></td>
 				<td class="long">{{ proj.license|urlizetrunc:50|linebreaksbr }}</td>
 			</tr>
 		{% endif %}
 		
 		{% if proj.implementationLanguage %}
 			<tr>
-				<td class="leftcolumn"><strong>Implementation Language</strong></td>
+				<td class="leftcolumn" nowrap="nowrap"><strong>Implementation Language</strong></td>
 				<td class="long">{{ proj.implementationLanguage }}</td>
 			</tr>
 		{% endif %}
 		
 		{% if proj.bindingLanguage %}
 			<tr>
-				<td class="leftcolumn"><strong>Binding Language</strong></td>
+				<td class="leftcolumn" nowrap="nowrap"><strong>Binding Language</strong></td>
 				<td class="long">{{ proj.bindingLanguage }}</td>
 			</tr>
 		{% endif %}
 		
 		{% if proj.supportedPlatforms %}
 			<tr>
-				<td class="leftcolumn"><strong>Supported Platforms</strong></td>
+				<td class="leftcolumn" nowrap="nowrap"><strong>Supported Platforms</strong></td>
 				<td class="long">{{ proj.supportedPlatforms|urlizetrunc:50|linebreaksbr }}</td>
 			</tr>
 		{% endif %}
 		
 		{% if proj.externalDependencies %}
 			<tr>
-				<td class="leftcolumn"><strong>External Dependencies</strong></td>
+				<td class="leftcolumn" nowrap="nowrap"><strong>External Dependencies</strong></td>
 				<td class="long">{{ proj.externalDependencies|urlizetrunc:50|linebreaksbr }}</td>
 			</tr>
 		{% endif %}
