@@ -153,7 +153,9 @@ input.span-24, textarea.span-24 { width: 938px; }
 .prepend-4 { padding-left: 160px;}
 .prepend-5 { padding-left: 200px;}
 .prepend-6 { padding-left: 240px;}
+.prepend-255 { padding-left:255px;}
 .prepend-7 { padding-left: 280px;}
+.prepend-295 {padding-left: 295px;}
 .prepend-8 { padding-left: 320px;}
 .prepend-335 {padding-left: 335px;}
 .prepend-355 { padding-left:355px;}
