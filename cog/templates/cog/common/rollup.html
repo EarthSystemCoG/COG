@@ -25,7 +25,7 @@
        var tree;
        function bookmarkTreeInit() {
            
-           treeId = this.id
+           treeId = this.id;
            tree = new YAHOO.widget.TreeView(document.getElementById(treeId));
            tree.subscribe('clickEvent',tree.onEventToggleHighlight);  
            //tree.setNodesProperty('propagateHighlightUp',true); 
@@ -36,15 +36,123 @@
        }
       //]]>
    </script>
+   <script>
+       function set_class(li,title) {
+	       if (typeof li != 'undefined'){
+		       document.getElementById(li).className = title;
+	       }
+
+       }
+
+       function set_display(li,title){
+	       document.getElementById(li).style.display = title;
+       }
+
+
+	</script>
 
 {% endblock %}
 
 {% block main %} 
 
     <!-- load the template for the page (e.g. contact_us) -->
+
+    {% comment %}
+    save
 	{% with project as proj %}
 		{% include template_page %}	
 	{% endwith %}
+	{% endcomment %}
+
+
+	{% with project as proj %}
+	    <ul style="list-style: none; margin:0; padding:0; margin-top:10px;" >
+		    <li class="rollover tab_1_selected" id="tab_this">
+			    <a href="" class="nolink" id="this_link">&nbsp;{{ template_title }}</a>
+		    </li>
+
+		    {% if children %}
+		    <li class="rollover tab_not" id="tab_children">
+			    <a id="child_link" href=""
+			           onclick="
+			           set_display('this_display','none');
+			           set_display('peer_rollup','none');
+			           set_display('child_rollup','block');
+			           set_class('tab_this','rollover tab_1_not');
+					   set_class('tab_children','rollover tab_selected');
+					   set_class('tab_peers','rollover tab_not');
+					   set_class('child_link','nolink');
+					   set_class('this_link','listlink');
+					   set_class('peer_link','listlink');
+			           return false;"
+			           class="listlink">&nbsp;View Child {{ template_title }} ({{ children|length }})
+			    </a>
+
+		    </li>
+		    {% endif %}
+
+	        {% if peers %}
+		    <li class="rollover tab_not" id="tab_peers">
+			    <a id="peer_link" href=""
+			            onclick="
+			           set_display('peer_rollup','block');
+			           set_display('child_rollup','none');
+			           set_display('this_display','none');
+			           set_class('tab_this','rollover tab_1_not');
+					   set_class('tab_children','rollover tab_not');
+					   set_class('tab_peers','rollover tab_selected');
+					   set_class('this_link','listlink');
+					   set_class('child_link','listlink');
+					   set_class('peer_link','nolink');
+			           return true;"
+			            class="listlink">&nbsp;View Peer {{ template_title }} ({{ peers|length }})
+			    </a>
+		    </li>
+	    </ul>
+	{% endif %}
+
+
+	<div id="this_display" style="padding-top:20px; display:block;">
+	        {% include template_page %}
+	</div>
+
+    <div id="child_rollup" style="display:none; padding-top:20px;">
+	    {% for child in children %}
+	        {% with child as proj %}
+		        <div class="mybox" style="padding:0;">
+		            <div class="header-gray">
+			            <div style="text-align:center; font-weight:bold; padding-top:1px;">
+                                {{ proj.short_name }} Project {{ template_title}}
+			            </div>
+		            </div>
+
+			            {% include template_page %}
+
+		        </div>
+	        {% endwith %}
+	    {% endfor %}
+	</div>
+
+
+	<div id="peer_rollup" style="display:none; padding-top:20px;">
+		{% for peer in peers %}
+			{% with peer as proj %}
+				<div class="mybox" style="padding:0;">
+					<div class="header-gray">
+						<div style="text-align:center; font-weight:bold; padding-top:1px;">
+                                {{ proj.short_name }} Project {{ template_title}}
+						</div>
+					</div>
+
+					{% include template_page %}
+
+				</div>
+			{% endwith %}
+		{% endfor %}
+	</div>
+
+	{% endwith %}
+
 
 	<!-- social media buttons -->
 	<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
@@ -62,12 +170,14 @@
 		    </div>
 		{% endif %}
 	{% endif %}
-	
+
+	{% comment %}
     <!-- children projects-->    
  	{% if children %}
 		<p></p>
 		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;View Child Project {{ template_title}} ({{ children|length }})</a>
+		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">
+			     &nbsp;View Child Project {{ template_title}} ({{ children|length }})</a>
 		</div>
 		<div id="children_rollup" style="display:none">	   	    
 		    {% for child in children %}
@@ -112,5 +222,6 @@
 		    {% endfor %}		
 		</div>
 	{% endif %}
+	{% endcomment %}
 {% endblock %}
 <!--//START: /cog/templates/cog/common/rollup.html //-->
