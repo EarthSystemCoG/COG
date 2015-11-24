@@ -7,4 +7,4 @@
 
 export PATH=/usr/local/pgsql/bin:$PATH
 pg_dump -p 5432 -U dbsuper cogdb > /tmp/cogdb_$(date +%Y-%m-%d).sql
-#pg_dump -p 5432 -U dbsuper esgcet > /tmp/esgcet_$(date +%Y-%m-%d).sql
+pg_dump -p 5432 -U dbsuper esgcet > /tmp/esgcet_$(date +%Y-%m-%d).sql
