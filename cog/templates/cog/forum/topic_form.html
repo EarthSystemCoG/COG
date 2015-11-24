@@ -3,13 +3,13 @@
 {% block main %}
 
 	<form action="" method="post">
-
+        * indicates a required field
 		<div class="mybox">
 			
 			{% csrf_token %}	
 			<table>
 				<tr>
-	               <td style="vertical-align:middle; text-align:right"><strong>Title:</strong></td>
+	               <td style="vertical-align:middle; text-align:right"><strong>*Title:</strong></td>
 	               <td class="long">
 	               		{{ form.title }} 
 	               		<br/>
@@ -21,7 +21,6 @@
 					<td>This topic is private (can only be viewed by project members)</td>
 				</tr>
 			</table>
-			
 		</div>
 	
 		<div style="text-align:right">

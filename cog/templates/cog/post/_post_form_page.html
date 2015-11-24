@@ -8,7 +8,7 @@
 	<td>{{ request.user }}</td>
     </tr>
     <tr>
-        <td class="col1" style="vertical-align: middle;"><strong>Title</strong></td>
+        <td class="col1" style="vertical-align: middle;"><strong>*Title</strong></td>
         <td style="vertical-align: middle;">{{ form.title }}</td>
         <td style="vertical-align: middle;">{{ form.title.errors }}</td>
     </tr>
@@ -24,7 +24,7 @@
 <table class="odd-color">
    <tr>
         <td class="col1" style="vertical-align: middle;">
-           <strong>URL</strong>
+           <strong>*URL</strong>
         </td>
         <td style="vertical-align:middle;padding-right:0;" nowrap="nowrap">
              <div style="display:block;float:left;max-width:200px;">/projects/{{ project.short_name|lower }}/</div>
@@ -48,7 +48,7 @@
 <!--// Load list of templates from /cog/forms/forms_post.py //-->
 <table>
     <tr>
-         <td class="col1" style="vertical-align: middle;"><strong>Template</strong></td>
+         <td class="col1" style="vertical-align: middle;"><strong>*Template</strong></td>
          <td class="long">{{ form.template }} {{ form.template.errors }}</td>
     </tr>
 </table>
@@ -60,7 +60,7 @@
 </table>
 <table>
     <tr>
-          <td class="col1" style="vertical-align: middle;"><strong>Topic</strong></td>
+          <td class="col1" style="vertical-align: middle;">Topic</td>
           <td style="width:80px; vertical-align:middle;" nowrap="nowrap">{{ form.topic }}</td>
           <td style="width:80px; vertical-align:middle;"><strong>or New Topic</strong></td>
 	  <td style="width:140px;vertical-align:middle;">{{ form.newtopic }}</td>
@@ -107,7 +107,7 @@
 </table>
 <table>
     <tr>
-        <td class="col1"><strong>Body</strong></td>
+        <td class="col1"><strong>*Body</strong></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>
     </tr>
 </table>

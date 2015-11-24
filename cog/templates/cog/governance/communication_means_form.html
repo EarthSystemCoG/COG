@@ -10,82 +10,79 @@
 	     {{ formset.management_form }}
 	     
 	     {% for form in formset.forms %}
-	     	
      	    {{ form.id }}
-	        
-	        <div class="mybox">
-				<table>
-	            	<tr>
-	            		<td class="leftcolumn" nowrap="nowrap"><strong>Title</strong></td>
+
+		     * indicates a required field
+		     <div class="mybox" style="margin-bottom:20px;">
+				 <table>
+	            	 <tr>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>*Title</strong></td>
 	            		<td class="long">
 	            			{{ form.title.help_text }}
 	            			{{ form.title }} 
 	            			{{ form.title.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
-	            		<td class="leftcolumn" nowrap="nowrap"><strong>Type</strong></td>
+	            	 </tr>
+	            	 <tr>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>*Type</strong></td>
 	            		<td class="long">
 	            			{{ form.type.help_text }} <br><br>
 	            			{{ form.type }} 
 	            			{{ form.type.errors }}
 	            		</td>
-	            	</tr>	            	
-	            	<tr>
+	            	 </tr>
+	            	 <tr>
 	            		<td class="leftcolumn" nowrap="nowrap">Frequency</td>
 	            		<td class="long">
 	            			{{ form.frequency.help_text }}
 	            			{{ form.frequency }} 
 	            			{{ form.frequency.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
+	            	 </tr>
+	            	 <tr>
 	            		<td class="leftcolumn" nowrap="nowrap">Purpose</td>
 	            		<td class="long">
 	            			{{ form.purpose.help_text }} <br><br>
 	            			{{ form.purpose }}
 	            			{{ form.purpose.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
+	            	 </tr>
+	            	 <tr>
 	            		<td class="leftcolumn" nowrap="nowrap">Membership</td>
 	            		<td class="long">
 	            			{{ form.membership.help_text }} <br><br>
 	            			{{ form.membership }} 
 	            			{{ form.membership.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
+	            	 </tr>
+	            	 <tr>
 	            		<td valign="top" nowrap="nowrap">Participation Details</td>
 	            		<td class="long">
 	            			{{ form.participationDetails.help_text }} 
 	            			{{ form.participationDetails }} 
 	            			{{ form.participationDetails.errors }}
 	            		</td>
-	            	</tr>	            	
-	            	{% if form.instance.id %}
-		            	<tr>
+	            	 </tr>
+	            	 {% if form.instance.id %}
+		            	 <tr>
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
 		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
 		            			&nbsp;<a href="{% url 'communication_means_members' form.instance.id %}" class="changelink" style="float:right">Update Members</a>
 		            		</td>
-		            	</tr>
-	            	{% endif %}
-	            	
+		            	 </tr>
+	            	 {% endif %}
 	            </table>
-            </div>
-            
+             </div>
             <!-- preserve 'internal' flag -->
 	        {{ form.internal.as_hidden }}
-	     		     	
 	     {% endfor %}
     
     	 <div style="text-align:right">
 	        <input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'communication' %}'"/>
 	        <input type="submit" value="Submit" />
          </div>
-    
-    </form>    
-	
+
+    </form>
+
 {% endblock %}

@@ -4,6 +4,7 @@
 
 {% block main %}
 
+    * indicates a required field
 	<div class="mybox">
 		<form action="" method="post" enctype="multipart/form-data">
 		
@@ -15,10 +16,7 @@
 		    
 		    <!-- upload document form fields -->
             <table>
-                <tr>
-                    <td colspan="3" style="text-align:center;">Required fields are in <strong>bold</strong>.</td>
 
-                </tr>
                 <tr>
                     <td style="text-align:right;">Publisher</td>
                     <td colspan="2" >{{ request.user }} </td>
@@ -26,7 +24,7 @@
 
                       {% if form.file.errors %}
                          <tr>
-                         <td style="vertical-align:middle; text-align:right;"><strong>File</strong></td>
+                         <td style="vertical-align:middle; text-align:right;"><strong>*File</strong></td>
                          <td style="width:30%;vertical-align:middle;">{{ form.file }}</td>
                          <td style="vertical-align:middle;text-align:left;">Filename: {{ form.instance.file.name }}</td>
                          </tr>

@@ -11,50 +11,50 @@
 
 	     {% for form in formset.forms %}
 
-     	    {{ form.id }}
+     	     {{ form.id }}
 
-	        <div class="mybox">
-				<table>
-					<tr>
-	            		<td class="leftcolumn" nowrap="nowrap"><strong>Type</strong></td>
-	            		<td class="long">
+		     * indicates a required field
+	         <div class="mybox">
+				 <table>
+					 <tr>
+	            		 <td class="leftcolumn" nowrap="nowrap"><strong>*Type</strong></td>
+	            		 <td class="long">
 	            			{{ form.type.help_text }}<br>
 	            			{{ form.type }}
 	            			{{ form.type.errors }}
-	            		</td>
-	            	</tr>
-	            	<tr>
-	            		<td class="leftcolumn" nowrap="nowrap">Sub-Type</td>
-	            		<td class="long">
+	            		 </td>
+	            	 </tr>
+	            	 <tr>
+	            		 <td class="leftcolumn" nowrap="nowrap">Sub-Type</td>
+	            		 <td class="long">
 	            			{{ form.title.help_text }}
 	            			{{ form.title }}
 	            			{{ form.title.errors }}
-	            		</td>
-	            	</tr>
-	            	<tr>
-	            		<td class="leftcolumn" nowrap="nowrap">Description</td>
-	            		<td class="long">
+	            		 </td>
+	            	 </tr>
+	            	 <tr>
+	            		 <td class="leftcolumn" nowrap="nowrap">Description</td>
+	            		 <td class="long">
 	            			{{ form.description.help_text }}
 	            			{{ form.description }}
 	            			{{ form.description.errors }}
-	            		</td>
-	            	</tr>
-	            	<tr>
-	            		{% if form.instance.id %}
+	            		 </td>
+	            	 </tr>
+	            	 <tr>
+	            		 {% if form.instance.id %}
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
 		            			{{ form.DELETE }} <span style="padding:0;">Delete?</span>
 		            			&nbsp;<a href="{% url 'organizational_role_members' form.instance.id %}" class="changelink" style="float:right">Update Members</a>
 		            		</td>
-		            {% else %}
-		            	<td class="long" colspan="2">
+		                 {% else %}
+		            	 <td class="long" colspan="2">
 							You will be able to assign a project member to this role after it has been saved.
 							<br/>The link to assign the member will appear in place of this text when you edit the role again.
-		            	</td>
-	            	{% endif %}
-	            	</tr>
-
-	            </table>
+		            	 </td>
+	            	     {% endif %}
+	            	 </tr>
+	             </table>
             </div>
 
 	     {% endfor %}
@@ -63,7 +63,6 @@
 	         <input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'roles' %}'"/>
 	         <input type="submit" value="Submit" />
          </div>
-
     </form>
 
 {% endblock %}
