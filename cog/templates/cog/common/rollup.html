@@ -38,7 +38,8 @@
    </script>
    <script>
        function set_class(li,title) {
-	       if (typeof li != 'undefined'){
+
+	       if (document.getElementById(li) !== null) {
 		       document.getElementById(li).className = title;
 	       }
 
@@ -71,8 +72,9 @@
 			    <a href="" class="nolink" id="this_link">&nbsp;{{ template_title }}</a>
 		    </li>
 
-		    {% if children %}
+            {% if children %}
 		    <li class="rollover tab_not" id="tab_children">
+
 			    <a id="child_link" href=""
 			           onclick="
 			           set_display('this_display','none');
@@ -87,29 +89,33 @@
 			           return false;"
 			           class="listlink">&nbsp;View Child {{ template_title }} ({{ children|length }})
 			    </a>
-
 		    </li>
-		    {% endif %}
+            {% endif %}
 
-	        {% if peers %}
+            {% if peers %}
 		    <li class="rollover tab_not" id="tab_peers">
+
 			    <a id="peer_link" href=""
-			            onclick="
+			           onclick="
 			           set_display('peer_rollup','block');
 			           set_display('child_rollup','none');
 			           set_display('this_display','none');
+			           set_class('this_link','listlink');
 			           set_class('tab_this','rollover tab_1_not');
-					   set_class('tab_children','rollover tab_not');
-					   set_class('tab_peers','rollover tab_selected');
-					   set_class('this_link','listlink');
-					   set_class('child_link','listlink');
 					   set_class('peer_link','nolink');
-			           return true;"
+					   set_class('tab_peers','rollover tab_selected');
+					   set_class('tab_children','rollover tab_not');
+					   set_class('child_link','listlink');
+			           return false;"
 			            class="listlink">&nbsp;View Peer {{ template_title }} ({{ peers|length }})
 			    </a>
+
 		    </li>
+            {% endif %}
+
+	        <li class="rollover tab_not">&nbsp;</li>
 	    </ul>
-	{% endif %}
+
 
 
 	<div id="this_display" style="padding-top:20px; display:block;">
