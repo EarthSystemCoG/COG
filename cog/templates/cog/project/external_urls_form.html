@@ -2,9 +2,10 @@
 
 {% block main %}
 
-	{% load cog_utils %}
+	    {% load cog_utils %}
 	
         <!-- note: action form can be "add" or "update" -->
+	    * indicates a required field
         <form action="" method="post">
                 
             {% csrf_token %}
@@ -16,11 +17,11 @@
 		        <div class="mybox">
 					<table>
 		            	<tr>
-		            		<td valign="top" nowrap="nowrap"><strong>Title</strong></td>
+		            		<td valign="top" nowrap="nowrap"><strong>*Title</strong></td>
 		            		<td class="long">{{ form.title }} {{ form.title.errors }}</td>
 		            	</tr>
 		            	<tr>
-		            		<td valign="top" nowrap="nowrap"><strong>URL</strong></td>
+		            		<td valign="top" nowrap="nowrap"><strong>*URL</strong></td>
 		            		<td class="long">{{ form.url }} {{ form.url.errors }}</td>
 		            	</tr>
 		            	<tr>
@@ -36,17 +37,11 @@
 		            	
 		            </table>
 	            </div>
-	
-
 		    {% endfor %}
 			    
-			    <div style="text-align:right">
-                	<input type="button" value="Cancel" onclick="window.location='{{ redirect }}'"/>
-                	<input type="submit" value="Submit" />
-            	</div>
-
+	        <div style="text-align:right">
+		        <input type="button" value="Cancel" onclick="window.location='{{ redirect }}'"/>
+		        <input type="submit" value="Submit" />
+	        </div>
 		</form>
-	
-
-                
 {% endblock %}

@@ -3,7 +3,8 @@
 {% block main %} 
 
 	{% load cog_utils %}
-    
+
+    * indicates a required field
 	<form action="" method="post">
 	         
 	     {% csrf_token %}
@@ -11,7 +12,7 @@
 	        <div class="mybox">
 				<table>
 					<tr>
-	            		<td class="leftcolumn" nowrap="nowrap"><strong>Features</strong></td>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>*Features</strong></td>
 	            		<td class="long">
 	            			{% if form.software_features.help_text %} {{ form.software_features.help_text }} {% endif %}
 	            			{{ form.software_features }} 

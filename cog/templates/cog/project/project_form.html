@@ -32,12 +32,14 @@
     </script>
 
 	{% if not form.instance.id %}
-	     <div class="message-box">
+	     <div class="message-box" style="margin-bottom: 20px;">
 	     You do not need to create a project to download data. <br> Instead
 		     navigate to the project hosting the data of interest and follow their instructions.
 		 </div>
 	{% endif %}
-	 
+
+
+ * indicates a required field
  <div class="mybox">
     <!-- note: action form can be "add" or "update" -->
     <form action="" method="post" enctype="multipart/form-data" novalidate>
@@ -48,7 +50,7 @@
             {% if action == 'add' %}
 		    <!--width of first row carries down to all others in the table-->
                <td style="width:15%;">
-                   <strong>Short Name</strong>
+                   <strong>*Short Name</strong>
                </td>
                <td style="width:85%;">
                    {{ form.short_name }} <span style="margin-top:2px">[ {{ form.short_name.help_text }} ]</span> {{ form.short_name.errors }}
@@ -57,7 +59,7 @@
                <!-- project already existing - cannot change short name -->
             {% else %}
                 <td style="width:15%;" >
-                    <strong>Short Name</strong>
+                    <strong>*Short Name</strong>
                 </td>
                 <td style="width:85%;">
                     {{ form.instance.short_name }} {{ form.short_name.as_hidden }}
@@ -66,7 +68,7 @@
             </tr>
             <tr>
                 <td>
-                    <strong>Long Name</strong>
+                    <strong>*Long Name</strong>
                 </td>
                 <td>
                     {{ form.long_name }} {{ form.long_name.errors }}
@@ -76,7 +78,7 @@
             </tr>
             <tr>
                 <td>
-                    <strong>Creator</strong>
+	                Creator
                 </td>
                 <td>
                 {% if form.instance.author %}
@@ -92,7 +94,7 @@
             </tr>
             <tr>
                 <td nowrap="nowrap">
-                    <strong>Description</strong>
+                    <strong>*Description</strong>
                 </td>
                 <td>
                     {{ form.description }} {{ form.description.errors }}

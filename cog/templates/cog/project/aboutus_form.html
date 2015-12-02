@@ -3,24 +3,26 @@
 {% block main %}
 
 	{% load cog_utils %}
-		
+
+
 	 <form action="" method="post" enctype="multipart/form-data">
 	         
 	     {% csrf_token %}
 	          
 		 {% if tab == "ABOUTUS"|tabs %}
+		 * indicates a required field
 		 <div class="mybox">
 		 	<table>	     
 		     	 <!-- Update "About Us" tab -->
 		     	 <tr>
-			        <td nowrap="nowrap"><strong>Project Long Name</strong></td>
+			        <td nowrap="nowrap"><strong>*Project Long Name</strong></td>
 			        <td class="long" colspan="2">
 			            {{ form.long_name }} 
 			            {{ form.long_name.errors }}
 			         </td>
 		         </tr>	     
 			     <tr>
-			        <td nowrap="nowrap"><strong>Description</strong></td>
+			        <td nowrap="nowrap"><strong>*Description</strong></td>
 			        <td class="long" colspan="2">
 			            {{form.description.help_text}}
 			            {{ form.description }} 
@@ -78,6 +80,7 @@
 		 {% endif %}
 		 
 		 {% if tab == "IMPACTS"|tabs %}
+			 * indicates a required field
 		 	{{ formset.management_form }}
 		    {% for form in formset.forms %}
 		    	{{ form.id }}
@@ -85,7 +88,7 @@
 				 <div class="mybox">
 			        <table>
 			        	 <tr>
-					        <td nowrap="nowrap"><strong>Title</strong></td>
+					        <td nowrap="nowrap"><strong>*Title</strong></td>
 					        <td class="long" colspan="2">
 					        	{{ form.title.help_text }}
 					        	{{ form.title }} 
@@ -93,7 +96,7 @@
 					        </td>
 				         </tr>	 	 
 				         <tr>
-					        <td nowrap="nowrap"><strong>Description</strong></td>
+					        <td nowrap="nowrap"><strong>*Description</strong></td>
 					        <td class="long" colspan="2">
 					        	{{ form.description.help_text }}
 					        	{{ form.description }} 
