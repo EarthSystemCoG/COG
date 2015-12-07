@@ -7,11 +7,12 @@
 	<!-- facet form -->
 	<div class="mybox">
 	  <form method="POST" action="" id="facetForm">
-	
+
+		*indicates a required field
 	    {% csrf_token %}
 	    <table>
 	        <tr>
-	            <td valign="top" nowrap="nowrap"><strong>Facet Key</strong></td>
+	            <td valign="top" nowrap="nowrap"><strong>*Facet Key</strong></td>
 	            <td class="long">{{ form.key }} {{ form.key.errors }}</td>
 	        </tr>
             <tr>
@@ -19,7 +20,7 @@
                 <td class="long"><em class="message">The metadata key used by the search engine. Available keys and associated values are listed below. </em></td>
             </tr>	        
 	        <tr>
-	            <td valign="top" nowrap="nowrap"><strong>Facet Label</strong></td>
+	            <td valign="top" nowrap="nowrap"><strong>*Facet Label</strong></td>
 	            <td class="long">{{ form.label }} {{ form.label.errors }}</td>
 	        </tr>
 	        <tr>
