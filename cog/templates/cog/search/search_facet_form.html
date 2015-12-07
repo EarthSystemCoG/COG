@@ -5,43 +5,46 @@
     {% load cog_utils %}
     
 	<!-- facet form -->
+	
+	*indicates a required field
 	<div class="mybox">
-	  <form method="POST" action="" id="facetForm">
+	    <form method="POST" action="" id="facetForm">
 
-		*indicates a required field
-	    {% csrf_token %}
-	    <table>
-	        <tr>
-	            <td valign="top" nowrap="nowrap"><strong>*Facet Key</strong></td>
-	            <td class="long">{{ form.key }} {{ form.key.errors }}</td>
-	        </tr>
-            <tr>
-                <td valign="top" nowrap="nowrap">&nbsp;</td>
-                <td class="long"><em class="message">The metadata key used by the search engine. Available keys and associated values are listed below. </em></td>
-            </tr>	        
-	        <tr>
-	            <td valign="top" nowrap="nowrap"><strong>*Facet Label</strong></td>
-	            <td class="long">{{ form.label }} {{ form.label.errors }}</td>
-	        </tr>
-	        <tr>
-                <td valign="top" nowrap="nowrap">&nbsp;</td>
-                <td class="long"><em class="message">The facet label displayed in the user interface.</em></td>
-            </tr>           
-            <tr>
-                <td class="long" colspan="2"><em class="message">Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</em></td>
-            </tr>           	        
-	    </table> 
+	        {% csrf_token %}
+	        <table>
+	            <tr>
+	                <td valign="top" nowrap="nowrap"><strong>*Facet Key</strong></td>
+	                <td class="long">{{ form.key }} {{ form.key.errors }}</td>
+	            </tr>
+                <tr>
+                   <td valign="top" nowrap="nowrap">&nbsp;</td>
+                   <td class="long"><em class="message">The metadata key used by the search engine. Available keys and
+	                 associated values are listed below. </em></td>
+                </tr>
+	            <tr>
+	                <td valign="top" nowrap="nowrap"><strong>*Facet Label</strong></td>
+	                <td class="long">{{ form.label }} {{ form.label.errors }}</td>
+	            </tr>
+	            <tr>
+                    <td valign="top" nowrap="nowrap">&nbsp;</td>
+                    <td class="long"><em class="message">The facet label displayed in the user interface.</em></td>
+	            </tr>
+                <tr>
+                     <td class="long" colspan="2"><em class="message">Please note: the characters
+	                 {{ project|getInvalidCharacters }} are not allowed.</em></td>
+                </tr>
+	        </table>
 	    
-	    <!-- fields not editable by the user -->
-	    {{ form.order.as_hidden }}
-	    {{ form.group.as_hidden }}
+	        <!-- fields not editable by the user -->
+	        {{ form.order.as_hidden }}
+		    {{ form.group.as_hidden }}
 	    	    
-	    <div style="text-align:right">
-	        <input type="button" value="Cancel" onclick="window.location='{% url 'search_profile_config' project.short_name|lower %}'"/>
-	        <input type="submit" value="Submit" />
-	    </div>          
-	    
-	  </form>
+	        <div style="text-align:right">
+	            <input type="button" value="Cancel" onclick="window.location=
+			         '{% url 'search_profile_config' project.short_name|lower %}'"/>
+	            <input type="submit" value="Submit" />
+	         </div>
+	    </form>
 	</div>
 	
 	<!-- table of available facets table -->
