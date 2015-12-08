@@ -1657,7 +1657,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 .tab_not {
-    border-width: 0 0 1px 0;
+    border-width: 0;
 }
 
 .tab_selected {
