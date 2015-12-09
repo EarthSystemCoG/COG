@@ -57,10 +57,13 @@ def bookmark_list(request, project_short_name):
     template_form_name = None
 
     return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':
-                                  template_form_name,
-                               'children': children, 'peers': peers},
+                              {'project': project,
+                               'title': template_title,
+                               'template_page': template_page,
+                               'template_title': template_title,
+                               'template_form_name': template_form_name,
+                               'children': children,
+                               'peers': peers},
                               context_instance=RequestContext(request))
 
     
@@ -356,5 +359,5 @@ def bookmark_add_notes(request, project_short_name, bookmark_id):
     project = bookmark.folder.project
     
     # invoke generic view
-    #return add_notes(request, project, bookmark)
+    # return add_notes(request, project, bookmark)
     return post_add(request, project.short_name, owner=bookmark)

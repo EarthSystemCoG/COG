@@ -48,8 +48,6 @@
        function set_display(li,title){
 	       document.getElementById(li).style.display = title;
        }
-
-
 	</script>
 
 {% endblock %}
@@ -69,11 +67,11 @@
 	{% with project as proj %}
 	    <ul style="list-style: none; margin:0; padding:0; margin-top:20px;" >
 		    <li class="rollover tab_1_selected" id="tab_this">
-			    <a href="" class="nolink" id="this_link">&nbsp;This Project</a>
+			    <a href="" class="nolink" id="this_link">This Project</a>
 		    </li>
 
             {% if children %}
-		    <li class="rollover tab_not" id="tab_children">
+		        <li class="rollover tab_not" id="tab_children">
 
 			    <a id="child_link" href=""
 			           onclick="
@@ -87,13 +85,15 @@
 					   set_class('this_link','islink');
 					   set_class('peer_link','islink');
 			           return false;"
-			           >&nbsp;Child Projects ({{ children|length }})
+			           >Child Projects ({{ children|length }})
 			    </a>
-		    </li>
-            {% endif %}
+
+		        </li>
+             {% endif %}
+
 
             {% if peers %}
-		    <li class="rollover tab_not" id="tab_peers">
+		        <li class="rollover tab_not" id="tab_peers">
 
 			    <a id="peer_link" href=""
 			           onclick="
@@ -107,13 +107,11 @@
 					   set_class('tab_children','rollover tab_not');
 					   set_class('child_link','islink');
 			           return false;"
-			            >&nbsp;Peer Projects ({{ peers|length }})
+			            >Peer Projects ({{ peers|length }})
 			    </a>
 
-		    </li>
+		        </li>
             {% endif %}
-
-	        <li class="rollover tab_not">&nbsp;</li>
 	    </ul>
 
 
@@ -170,58 +168,5 @@
 		    </div>
 		{% endif %}
 	{% endif %}
-
-	{% comment %}
-    <!-- children projects-->    
- 	{% if children %}
-		<p></p>
-		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">
-			     &nbsp;View Child Project {{ template_title}} ({{ children|length }})</a>
-		</div>
-		<div id="children_rollup" style="display:none">	   	    
-		    {% for child in children %}
-	    		{% with child as proj %}
-	    			<br/>
-	    			<div class="mybox" style="padding:0;">
-	    				<div class="header-gray">
-	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">
-                                {{ proj.short_name }} Project {{ template_title}}
-                            </div>
-	    				</div>
-						<div style="padding:4px;">
-							{% include template_page %}
-						</div>
-					</div>
-				{% endwith %}
-		    {% endfor %}		
-		</div>
-	{% endif %}
- 
-    <!-- peer projects-->    
- 	{% if peers %}
-		<p></p>
-		<div class="header_bar"> 
-		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;View Peer Project {{ template_title}} ({{ peers|length }})</a>
-		</div>
-		<div id="peer_rollup" style="display:none">	   	    
-		    {% for peer in peers %}
-	    		{% with peer as proj %}
-	    			<br/>
-	    			<div class="mybox" style="padding:0;">
-	    				<div class="header-gray">
-	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">
-                                {{ proj.short_name }} Project {{ template_title}}
-                            </div>
-	    				</div>
-	    				<div style="padding:4px;">
-							{% include template_page %}
-						</div>
-					</div>
-				{% endwith %}
-		    {% endfor %}		
-		</div>
-	{% endif %}
-	{% endcomment %}
 {% endblock %}
 <!--//START: /cog/templates/cog/common/rollup.html //-->

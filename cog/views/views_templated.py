@@ -1,6 +1,6 @@
-'''
+"""
 Module containing functionality for rendering templated pages.
-'''
+"""
 
 from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import RequestContext
