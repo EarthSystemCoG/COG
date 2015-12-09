@@ -52,6 +52,7 @@ def aboutus_display(request, project_short_name, tab):
         template_form_pages = {reverse('people_update', args=[project_short_name, tab]): 'People'}
     else:
         template_form_pages = {reverse('aboutus_update', args=[project_short_name, tab]): 'About Us'}
+
     template_title = TAB_LABELS[tab]
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 

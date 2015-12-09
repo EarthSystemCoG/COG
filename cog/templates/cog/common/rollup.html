@@ -67,9 +67,9 @@
 
 
 	{% with project as proj %}
-	    <ul style="list-style: none; margin:0; padding:0; margin-top:10px;" >
+	    <ul style="list-style: none; margin:0; padding:0; margin-top:20px;" >
 		    <li class="rollover tab_1_selected" id="tab_this">
-			    <a href="" class="nolink" id="this_link">&nbsp;{{ template_title }}</a>
+			    <a href="" class="nolink" id="this_link">&nbsp;This Project</a>
 		    </li>
 
             {% if children %}
@@ -84,10 +84,10 @@
 					   set_class('tab_children','rollover tab_selected');
 					   set_class('tab_peers','rollover tab_not');
 					   set_class('child_link','nolink');
-					   set_class('this_link','listlink');
-					   set_class('peer_link','listlink');
+					   set_class('this_link','islink');
+					   set_class('peer_link','islink');
 			           return false;"
-			           >&nbsp;Child Projects Rollup ({{ children|length }})
+			           >&nbsp;Child Projects ({{ children|length }})
 			    </a>
 		    </li>
             {% endif %}
@@ -100,14 +100,14 @@
 			           set_display('peer_rollup','block');
 			           set_display('child_rollup','none');
 			           set_display('this_display','none');
-			           set_class('this_link','listlink');
+			           set_class('this_link','islink');
 			           set_class('tab_this','rollover tab_1_not');
 					   set_class('peer_link','nolink');
 					   set_class('tab_peers','rollover tab_selected');
 					   set_class('tab_children','rollover tab_not');
-					   set_class('child_link','listlink');
+					   set_class('child_link','islink');
 			           return false;"
-			            >&nbsp;Peer Projects Rollup ({{ peers|length }})
+			            >&nbsp;Peer Projects ({{ peers|length }})
 			    </a>
 
 		    </li>
@@ -117,46 +117,40 @@
 	    </ul>
 
 
-
-	<div id="this_display" style="padding-top:20px; display:block;">
+	    <div id="this_display" style="padding-top:20px; display:block;">
 	        {% include template_page %}
-	</div>
+	    </div>
 
-    <div id="child_rollup" style="display:none; padding-top:20px;">
-	    {% for child in children %}
-	        {% with child as proj %}
-		        <div class="mybox" style="padding:0;">
-		            <div class="header-gray">
-			            <div style="text-align:center; font-weight:bold; padding-top:1px;">
+        <div id="child_rollup" style="display:none; padding-top:20px;">
+	        {% for child in children %}
+	            {% with child as proj %}
+		            <div class="mybox" style="padding:0;">
+		                <div class="header-gray">
+			                 <div style="text-align:center; font-weight:bold; padding-top:1px;">
                                 {{ proj.short_name }} Project {{ template_title}}
-			            </div>
-		            </div>
-
+			                 </div>
+		                </div>
 			            {% include template_page %}
+		            </div>
+	            {% endwith %}
+	        {% endfor %}
+	    </div>
 
-		        </div>
-	        {% endwith %}
-	    {% endfor %}
-	</div>
 
-
-	<div id="peer_rollup" style="display:none; padding-top:20px;">
-		{% for peer in peers %}
-			{% with peer as proj %}
-				<div class="mybox" style="padding:0;">
-					<div class="header-gray">
-						<div style="text-align:center; font-weight:bold; padding-top:1px;">
+	    <div id="peer_rollup" style="display:none; padding-top:20px;">
+	      	{% for peer in peers %}
+			    {% with peer as proj %}
+				    <div class="mybox" style="padding:0;">
+					    <div class="header-gray">
+						    <div style="text-align:center; font-weight:bold; padding-top:1px;">
                                 {{ proj.short_name }} Project {{ template_title}}
-						</div>
-					</div>
-
-					{% include template_page %}
-
-				</div>
-			{% endwith %}
-		{% endfor %}
-	</div>
-
+						    </div>
+					    </div>
+   					    {% include template_page %}
+    				</div>
+			    {% endwith %}
+		    {% endfor %}
+	    </div>
 	{% endwith %}
 
 

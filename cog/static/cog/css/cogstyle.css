@@ -1657,7 +1657,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 .tab_not {
-    border-width: 0;
+    border-width: 0 0 1px 0;
 }
 
 .tab_selected {
@@ -1666,4 +1666,8 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 a.nolink{
     color:#666;
+}
+
+a.islink{
+    color: #358c92;;
 }
