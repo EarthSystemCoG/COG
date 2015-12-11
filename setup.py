@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name = "cog",
-    version = "3.1.0",
+    version = "3.1.1",
     author = "CoG Development Team",
     author_email = "cog_support@list.woc.noaa.gov",
     description = ("Earth System CoG: web interface for the Earth System Grid Federation"),
