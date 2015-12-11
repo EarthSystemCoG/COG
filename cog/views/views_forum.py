@@ -1,12 +1,12 @@
-'''
+"""
 Views for CoG Forum.
 
 @author: cinquini
-'''
+"""
 
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasAdminPermission, userHasUserPermission, userHasContributorPermission
+from cog.models.project import Project, userHasAdminPermission, userHasUserPermission
 from cog.models.forum import Forum, ForumThread, ForumTopic
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -17,9 +17,10 @@ from cog.forms.forms_forum import ForumThreadForm, MyCommentForm, ForumTopicForm
 from django_comments.models import Comment
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 
+
 def forum_detail(request, project_short_name):
-    '''View to display a list of all forum topics.
-       This view is also used to shortcut the creation of a new forum topic.'''
+    """View to display a list of all forum topics.
+       This view is also used to shortcut the creation of a new forum topic."""
 
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -28,7 +29,7 @@ def forum_detail(request, project_short_name):
     (forum, created) = Forum.objects.get_or_create(project=project)
     
     # check project is active and visible to user
-    if project.active==False:
+    if project.active == False:
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
@@ -37,10 +38,10 @@ def forum_detail(request, project_short_name):
     _topics = ForumTopic.objects.filter(forum=forum).order_by('title')
     
     # filter by privacy settings
-    topics = [t for t in _topics if not t.is_private or userHasUserPermission(request.user, project) ]
+    topics = [t for t in _topics if not t.is_private or userHasUserPermission(request.user, project)]
     
     # GET request to list all threads
-    if request.method=='GET':
+    if request.method == 'GET':
         
         # create new empty form
         form = ForumTopicForm()
@@ -66,17 +67,15 @@ def forum_detail(request, project_short_name):
             # save topic to database
             topic.save()
                         
-            return HttpResponseRedirect( reverse('forum_detail', 
-                                                 kwargs={'project_short_name':project.short_name}) )
-
+            return HttpResponseRedirect(reverse('forum_detail', kwargs={'project_short_name': project.short_name}))
         else:
-            
             # display forum index with errors
             return _render_forum_template(topics, project, form, request)
 
+
 def topic_detail(request, project_short_name, topic_id):
-    '''View to display a list of all threads for a given forum topic.
-       This view is also used to shortcut the creation of a new thread.'''
+    """View to display a list of all threads for a given forum topic.
+       This view is also used to shortcut the creation of a new thread."""
 
     # retrieve objects from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -84,16 +83,16 @@ def topic_detail(request, project_short_name, topic_id):
     threads = ForumThread.objects.filter(topic=topic).order_by('-create_date')
     
     # check project is active and visible to user
-    if project.active==False:
+    if project.active == False:
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
     
     # GET request to list all threads
-    if request.method=='GET':
+    if request.method == 'GET':
         
         # create new empty form
-        form = ForumThreadForm(initial={'topic':topic})
+        form = ForumThreadForm(initial={'topic': topic})
         
         # display forum index
         return _render_topic_template(project, topic, threads, form, request)
@@ -111,14 +110,15 @@ def topic_detail(request, project_short_name, topic_id):
             # save thread to database
             thread.save()
                         
-            return HttpResponseRedirect( reverse('topic_detail', 
-                                                 kwargs={'project_short_name':project.short_name, 'topic_id':topic.id}) )
+            return HttpResponseRedirect(reverse('topic_detail', kwargs={'project_short_name': project.short_name,
+                                                                        'topic_id': topic.id}))
 
         else:
             
             # display topic page with errors
             return _render_topic_template(project, topic, threads, form, request)
         
+
 @login_required
 def topic_delete(request, project_short_name, topic_id):
     
@@ -139,7 +139,8 @@ def topic_delete(request, project_short_name, topic_id):
     topic.delete()
     
     # redirect to forum
-    return HttpResponseRedirect( reverse('forum_detail', kwargs={'project_short_name':project.short_name}) )
+    return HttpResponseRedirect(reverse('forum_detail', kwargs={'project_short_name': project.short_name}))
+
 
 def _render_topic_template(project, topic, threads, form, request):
     
@@ -147,29 +148,29 @@ def _render_topic_template(project, topic, threads, form, request):
                               {'title': topic.title,
                                'project': project,
                                'topic': topic,
-                               'threads':threads,
-                               'form':form },
+                               'threads': threads,
+                               'form': form},
                               context_instance=RequestContext(request))
 
-    
-            
+
 def _render_forum_template(topics, project, form, request):
     
     return render_to_response('cog/forum/forum_detail.html',
                               {'topics': topics,
                                'title': '%s Forum' % project.short_name,
                                'project': project,
-                               'form':form },
+                               'form': form},
                               context_instance=RequestContext(request))
     
+
 def thread_detail(request, project_short_name, thread_id):
-    '''View to display all comments associated with a given forum thread.'''
+    """View to display all comments associated with a given forum thread."""
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check project is active and visible to user
-    if project.active==False:
+    if project.active == False:
         return getProjectNotActiveRedirect(request, project)
     elif project.isNotVisible(request.user):
         return getProjectNotVisibleRedirect(request, project)
@@ -185,9 +186,10 @@ def _render_thread_template(request, project, thread):
     return render_to_response('cog/forum/thread_detail.html',
                               {'thread': thread,
                                'title': thread.title,
-                               'project': project },
+                               'project': project},
                               context_instance=RequestContext(request))
     
+
 @login_required
 def comment_update(request, comment_id):
     
@@ -196,18 +198,18 @@ def comment_update(request, comment_id):
     
     # comments can be updated only by original author or project administrator
     project = comment.content_object.getProject()
-    if not userHasAdminPermission(request.user, project) and comment.user!=request.user:
+    if not userHasAdminPermission(request.user, project) and comment.user != request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    if request.method=='GET':
+    if request.method == 'GET':
         
-        form = MyCommentForm(initial={ 'text':comment.comment } )
+        form = MyCommentForm(initial={'text': comment.comment})
         
         return render_to_response('cog/forum/comment_form.html',
-                                  { 'title': 'Update Comment',
-                                    'project':project, 
-                                    'comment':comment,
-                                    'form':form },
+                                  {'title': 'Update Comment',
+                                   'project': project,
+                                   'comment': comment,
+                                   'form': form},
                                   context_instance=RequestContext(request))
     else:
         
@@ -219,18 +221,18 @@ def comment_update(request, comment_id):
             comment.comment = text
             comment.save()
             
-            return HttpResponseRedirect( reverse('thread_detail', kwargs={ 'thread_id':comment.content_object.id, 
-                                                                          'project_short_name':project.short_name }) )
+            return HttpResponseRedirect(reverse('thread_detail', kwargs={'thread_id': comment.content_object.id,
+                                                                         'project_short_name': project.short_name}))
 
-            
         else:
             return render_to_response('cog/forum/comment_form.html',
-                                  { 'title': 'Update Comment',
-                                    'project':project, 
-                                    'comment':comment,
-                                    'form':form },
-                                  context_instance=RequestContext(request))
+                                      {'title': 'Update Comment',
+                                       'project': project,
+                                       'comment': comment,
+                                       'form': form},
+                                      context_instance=RequestContext(request))
  
+
 @login_required
 def topic_update(request, project_short_name, topic_id):
     
@@ -242,12 +244,12 @@ def topic_update(request, project_short_name, topic_id):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
-    if request.method=='GET':
+    if request.method == 'GET':
         
         form = ForumTopicForm(instance=topic)
         
         return _render_topic_form(request, project, topic, form)
-        
+
     else:
     
         form = ForumTopicForm(request.POST, instance=topic)
@@ -255,19 +257,21 @@ def topic_update(request, project_short_name, topic_id):
         if form.is_valid():
             
             topic = form.save()
-            #return HttpResponseRedirect( reverse('topic_detail', kwargs={ 'topic_id':topic.id, 'project_short_name':project.short_name }) )
-            return HttpResponseRedirect( reverse('forum_detail', kwargs={ 'project_short_name':project.short_name }) )
+            # return HttpResponseRedirect( reverse('topic_detail', kwargs={ 'topic_id':topic.id,
+            # 'project_short_name':project.short_name }) )
+            return HttpResponseRedirect(reverse('forum_detail', kwargs={'project_short_name': project.short_name}))
             
         else:
             return _render_topic_form(request, project, topic, form)
+
 
 def _render_topic_form(request, project, topic, form):
 
     return render_to_response('cog/forum/topic_form.html',
                               {'topic': topic, 
                                'title': '%s: %s Update' % (project.short_name, topic.title),
-                               'project':project, 
-                               'form':form },
+                               'project': project,
+                               'form': form},
                               context_instance=RequestContext(request))
 
 
@@ -283,9 +287,9 @@ def thread_add(request, project_short_name, topic_id):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     title = '%s: New Thread' % topic.title
-    if request.method=='GET':
+    if request.method == 'GET':
         
-        form = ForumThreadForm(initial={'topic':topic})
+        form = ForumThreadForm(initial={'topic': topic})
         return _render_thread_form(request, project, None, form, title)
         
     else:
@@ -294,10 +298,8 @@ def thread_add(request, project_short_name, topic_id):
         if form.is_valid():
             
             thread = form.save()
-            return HttpResponseRedirect( reverse('forum_detail', 
-                                         kwargs={'project_short_name':project.short_name}) )
+            return HttpResponseRedirect(reverse('forum_detail', kwargs={'project_short_name': project.short_name}))
 
-            
         else:
             return _render_thread_form(request, project, None, form, title)
 
@@ -312,12 +314,12 @@ def thread_update(request, project_short_name, thread_id):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # thread can be updated only by original author, or project administrator
-    if not userHasAdminPermission(request.user, project) and thread.author!=request.user:
+    if not userHasAdminPermission(request.user, project) and thread.author != request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     title = '%s: Update Thread' % thread.title
 
-    if request.method=='GET':
+    if request.method == 'GET':
         
         form = ForumThreadForm(instance=thread)
         return _render_thread_form(request, project, thread, form, title)
@@ -328,19 +330,22 @@ def thread_update(request, project_short_name, thread_id):
         
         if form.is_valid():
             thread = form.save()
-            return HttpResponseRedirect( reverse('thread_detail', kwargs={ 'thread_id':thread.id, 'project_short_name':project.short_name }) )
+            return HttpResponseRedirect(reverse('thread_detail', kwargs={'thread_id': thread.id,
+                                                                         'project_short_name': project.short_name}))
             
         else:
             return _render_thread_form(request, project, thread, form, title)
-            
+
+
 def _render_thread_form(request, project, thread, form, title):
 
     return render_to_response('cog/forum/thread_form.html',
-                          {'thread': thread, 
-                           'title': title,
-                           'project':project, 
-                           'form':form },
-                          context_instance=RequestContext(request))
+                              {'thread': thread,
+                               'title': title,
+                               'project': project,
+                               'form': form},
+                              context_instance=RequestContext(request))
+
 
 @login_required
 def thread_delete(request, project_short_name, thread_id):
@@ -349,7 +354,7 @@ def thread_delete(request, project_short_name, thread_id):
     thread = get_object_or_404(ForumThread, id=thread_id)
     
     # thread can be deleted only by original author, or project administrator
-    if not userHasAdminPermission(request.user, thread.getProject()) and thread.author!=request.user:
+    if not userHasAdminPermission(request.user, thread.getProject()) and thread.author != request.user:
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # must explicitly delete comments
@@ -360,15 +365,16 @@ def thread_delete(request, project_short_name, thread_id):
     thread.delete()
     
     # redirect to forum
-    return HttpResponseRedirect( reverse('forum_detail', kwargs={'project_short_name':thread.getProject().short_name}) )
+    return HttpResponseRedirect(reverse('forum_detail', kwargs={'project_short_name': thread.getProject().short_name}))
+
 
 def forumthread_detail(request, forumthread_id):
-    '''This view is needed to support a common implementation for log_comment_event.
-       It redirects to the project-aware thread view.'''
+    """This view is needed to support a common implementation for log_comment_event.
+       It redirects to the project-aware thread view."""
     
     # retrieve requested thread
     thread = get_object_or_404(ForumThread, id=forumthread_id)
     
-    url = reverse('thread_detail', kwargs={ 'thread_id':thread.id, 'project_short_name':thread.getProject().short_name })
+    url = reverse('thread_detail', kwargs={'thread_id':thread.id, 'project_short_name':thread.getProject().short_name})
     
-    return HttpResponseRedirect( url )
+    return HttpResponseRedirect(url)
