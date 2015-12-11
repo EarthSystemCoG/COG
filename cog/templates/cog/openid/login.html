@@ -130,8 +130,11 @@
         <!--help text about ESG OpenIDs-->
 
         <div class="message-box">
-		    Enter your OpenID in the text box below <br>or</br>
+		    Enter your OpenID in the text box below or
 	        select your OpenID provider (if listed) from the pulldown menu.
+	        <br>&nbsp;</br>
+	        Please note: if you have an older OpenID from the Earth System Grid Federation,
+	        <br/>you may have to <a href="{% url 'user_add' %}?next={{ request.GET.next }}">create a new account</a>.
         </div>
 
         <p style="text-align: center;">
