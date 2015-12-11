@@ -9,7 +9,7 @@ import ast
 from django.contrib.sites.models import Site  
 from cog.models import PeerSite
 from django.forms.models import modelformset_factory
-from utils import getUsersThatMatch
+from utils import getUsersThatMatch, get_projects_by_name
 
 
 def site_home(request):
@@ -30,27 +30,30 @@ def site_home(request):
 @user_passes_test(lambda u: u.is_staff)
 def admin_projects(request):
     """
-    Only lists local projects.
-    :param request:
-    :return:
+    Lists local projects in a table with links to edit or delete
     """
-    
+    site = Site.objects.get_current()
+
     # optional active=True|False filter
     active = request.GET.get('active', None)
     if active != None:
         project_list = Project.objects.filter(site=Site.objects.get_current()).filter(active=ast.literal_eval(active))\
             .order_by('short_name')
     else:
-        project_list = Project.objects.filter(site=Site.objects.get_current()).order_by('short_name')
-    
-    return render_to_response('cog/admin/admin_projects.html',
-                              {
-                              # retrieve top-level projects, ordered alphabetically
-                              'project_list': project_list,
-                              'title': 'COG Projects Administration'
-                              }, 
-                              context_instance=RequestContext(request))    
+        if request.method == 'GET':
+            project_list = Project.objects.filter(site=Site.objects.get_current()).order_by('short_name')
+        else:
+            # list project by search criteria. Search function located in utils.py
+            # get list of all projects
+            project_list = get_projects_by_name(request.POST['match'])
+            # filter projects to include local site only
+            project_list = project_list.filter(site=Site.objects.get_current()).order_by('short_name')
 
+    # retrieve top-level projects, ordered alphabetically by short name. Only list those on the current site.
+    return render_to_response('cog/admin/admin_projects.html',
+                              {'project_list': project_list,
+                               'title': '%s Projects Administration' % site.name,
+                               }, context_instance=RequestContext(request))
 
 # admin page for listing all system users
 @user_passes_test(lambda u: u.is_staff)

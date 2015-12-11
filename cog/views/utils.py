@@ -64,6 +64,11 @@ def getUsersThatMatch(match):
                                 Q(last_name__icontains=match) | Q(email__icontains=match)))
 
 
+def get_projects_by_name(match):
+    """Returns the list of users that match a given expression."""
+
+    return Project.objects.filter((Q(short_name__icontains=match)))
+
 def get_all_projects_for_user(user, includeCurrentSite=True):
     """Queries all nodes (including local node) for projects the user belongs to.
        Returns a list of dictionaries but does NOT update the local database.

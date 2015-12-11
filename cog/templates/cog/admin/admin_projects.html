@@ -5,7 +5,21 @@
     {% if request.user.is_staff %}
     
         {% load pagination_tags %}
-        {% autopaginate project_list 10 %}
+        {% autopaginate project_list 20 %}
+
+	    <table style="margin-left:375px; width:390px;">
+           <tr>
+               <td>
+                   <form name="lookupProjectForm" action="" method="post">
+                   	    {% csrf_token %}
+                        <label for="match" style="width:60%; vertical-align: middle;">Lookup project by <strong>Name</strong>:</label>
+                        <input style="vertical-align: middle; width:30%;" type="text" name="match" id="match" value="{{request.POST.match}}" />
+	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
+	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
+                   </form>
+               </td>
+           </tr>
+       </table>
     
 	    <div class="mybox">
 		    <table>
@@ -13,10 +27,10 @@
 		           Project List
 		        </caption>
                 <tr>
-                    <th class="white" scope="col">Name</th>
-                    <th class="white" scope="col">Status</th>
-                    <th class="white" scope="col">Update?</th>
-                    <th class="white" scope="col">Delete?</th>
+                    <th class="white" scope="col"><strong>Name</strong></th>
+                    <th class="white" scope="col"><strong>Status</strong></th>
+                    <th class="white" scope="col"><strong>Update?</strong></th>
+                    <th class="white" scope="col"><strong>Delete?</strong></th>
                 </tr>
 
 		        {% for project in project_list %}
