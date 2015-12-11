@@ -13,19 +13,20 @@
 	{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
 </div>
 
-
 <!-- Record metadata -->
 [ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
 
 <!-- Dataset files -->
 &nbsp; [ <strong><a href="" onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
-                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', '{{ project.short_name.lower }}');
+                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
+                        		              '0', '{{ project.short_name.lower }}');
                          return false">Show Files</a></strong> ]
 
 	  <!-- hidden button used to trigger the same event as the href element above -->
 	  <input type="button" id="href_{{record.id}}" style="display:none"
 		     onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
-		              javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '0', '{{ project.short_name.lower }}');
+		              javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
+		            		               '0', '{{ project.short_name.lower }}');
 	  	              return false" />
 
 <!-- Display URL links -->
@@ -44,10 +45,7 @@
 
 	<!-- WGET -->
 	{% elif url.1 == 'application/wget' %}
-		<!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
-		{% if record.fields.project.0 != 'NCPP' %}
-			&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
-		{% endif %}
+		&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.fields.shard.0 }}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
 		
 	<!-- Globus -->
 	{% elif url.1 == 'application/gridftp' %}
@@ -59,11 +57,13 @@
 
     {% endif %}
 
-&nbsp;
-[ <b><a href="http://pcmdi11.llnl.gov:8080/VISUS?dataset_id={{record.id}}">VISUS IDX</a></b> ]
-&nbsp;
+
 
 {% endfor %}
+
+&nbsp;
+[ <b><a href="http://feedback.llnl.gov/cgi-bin/cdat_to_idx_create.cgi?dataset={{record.id}}">VISUS IDX</a></b> ]
+&nbsp;
 
 <!-- display CIM viewer link -->
 {% if project.searchprofile.modelMetadataFlag %}
@@ -91,6 +91,8 @@
         {% endif %}
     {% endfor %}
 </div>
+
+
 
 <!-- files place-holder -->
 <div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>
