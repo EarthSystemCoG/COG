@@ -23,7 +23,8 @@
 * (for reference):
 * dark teal    = #358C92 navigation bar
 * light teal   = #B9E0E3 headers and accordions
-* light blue   = #E9F5F6 footer
+* lightest teal = #E9F5F6 custom header
+* light blue   = #E9F5F6  custom footer
 * dark yellow  = #FAC24A bar with technical support
 * light yellow = #FCE79F headers
 * lightest yellow = #FCF2CE table dividers, some message boxes
@@ -46,6 +47,9 @@ BEGIN MEDIA-SPECIFIC STYLES
 		display: none !important;
 	}
 	div.search-box {
+		display: none !important;
+	}
+	div.peer-nodes-box {
 		display: none !important;
 	}
 	div#top_nav_right {
@@ -99,11 +103,14 @@ body{
     margin-left:    auto;
     vertical-align: baseline; /* this is the default, be we want to control */
     width:          100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
-    height:         100%; 
-
-
+    height:         100%;
 }
 
+
+/* turn off image borders by default */
+img{
+        border: none;
+}
 /*********************************
 BEGIN: Content wrappers
 **********************************/
@@ -142,7 +149,7 @@ div.custom_header_bar {
 
 /* create a white header that is just slightly larger than the main cog site */
 div.custom_header{
-    width:        950px; /* note span-24 = 950px */
+    width:        1140px;
     margin-left:  auto;
     margin-right: auto;
 }
@@ -212,14 +219,14 @@ This sets the styles for the defaults
 
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 div.custom_footer_bar{
-    width:              100%; /* note span-24 = 950px */
+    width:              100%;
     background-color:   #666; /*gray */
     position:           relative;
 }
 
 /* create a custom footer that is slightly larger than the main cog site */
 div.custom_footer {
-    width:        950px; /* note span-24 = 950px */
+    width:        1140px;
     margin-left:  auto;
     margin-right: auto;
     color:        white; /*text color */
@@ -249,7 +256,7 @@ BEGIN: CoG footer
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 
 div.footer_bar{
-    width:              100%;     /* note span-24 = 950px */
+    width:              100%;
     background-color:   #e9f5f6;  /*light blue*/
     clear:              both;     /*this puts the footer on top of any content that might be below it*/
 }
@@ -265,14 +272,14 @@ div.footer{
   margin-left:  auto;
   margin-right: auto;
   height:       40px;
-  width:        950px; /* note span-24 = 950px */
+  width:        1140px;
 }
 
 .footer td{
     vertical-align: middle;
     font:           normal normal 8pt/1.231 Arial,sans-serif;
     color:          #666;
-    padding:       0;  /*ensure the table lines up with the left navigation bar */
+    padding:        0;  /*ensure the table lines up with the left navigation bar */
     padding-top:    3px;  /* nice spacing in the div and between the two table rows */
 }
 
@@ -285,25 +292,19 @@ div.footer{
 BEGIN FIXES FOR IE
 /****************************/
 
-/* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body{
+/* force IE9 and below to center the content in the body
+IE10+ no longer accepts conditionals
+*/
+.ie6 body, .ie7 body, .ie8 body, .ie9 body{
     margin-right:  auto;
 	margin-left:   auto;
-    margin-top:   0;
-	margin-bottom:0;
+    margin-top:    0;
+	margin-bottom: 0;
     text-align:    left;
-
-/* debug: are the IE conditionals even working? */
-        /*background-color: pink;*/
-}
-
-/* turn off image borders by default */
-img{
-        border:none;
 }
 
 /* adjust bullets which are outside by default in IE */
-.ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul, .ie10 ul, .ie11 ul{
+.ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul{
      margin:             0;
      padding:            0;
      list-style-position: inside;
@@ -311,18 +312,42 @@ img{
 
 /*force IE to behave the same as other browsers */
 .ie9 hr {
-        background:   #358C92;
+    background:   #358C92;
 	border:       none;
 	height:        1px;
 	margin-bottom: 4px;
 	margin-top:    4px;
 }
 
-
-/* checkboxes and labels don't align correctly in IE. */
-.ie9 input[type=checkbox], .ie10 input[type=checkbox], .ie11 input[type=checkbox] {
+/* checkboxes and labels don't align correctly in IE9. */
+.ie9 input[type=checkbox]{
     vertical-align: -3px;
 }
+
+/* non-IE version */
+/* used in file upload form */
+td.checkbox_label {
+    vertical-align: middle;
+}
+
+/* IE10+ modifications */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+           input[type=checkbox] {
+               vertical-align: bottom;
+               position:       relative;
+               top:            2px;
+
+           }
+
+           label {
+               vertical-align: bottom;
+           }
+           td.checkbox_label {
+               vertical-align: bottom;
+           }
+       }
+
 
 /*******************************
 BEGIN: headers
@@ -396,13 +421,7 @@ a:hover {
 }
 
 
-.white {
-	background-color: #FFFFFF;
-}
 
-.invisible {
-	display: none;
-}
 /******************************
 END PAGE-LEVEL ELEMENTS
 ******************************/
@@ -420,30 +439,26 @@ em.attribute {font-weight: 700; font-style:normal;} /* style only...for table he
 
 em.bold {font-weight: 700; font-style:normal;} /* misc style only */
 
-/* used on tables that have green header bars */
-th.green {
-    font-weight: bold;
-    vertical-align: middle;
-    font-size: 12px;
+.white {
+	background-color: #FFFFFF;
+}
+
+.gray {
+    background:     #eee;
+
+}
+
+.green
+{
     background: transparent;
-    padding: 4px;
 }
 
-th.white {
-    font-weight: bold;
-    vertical-align: middle;
-    font-size: 12px;
-    background: white;
-    padding: 4px;
+.invisible {
+	display: none;
 }
 
-tbody tr:nth-child(2n) th.gray, tbody tr.even th.gray{
-    font-weight: bold;
-    vertical-align: middle;
-    font-size: 12px;
-    padding: 4px;
-    background-color: #eee /*light-gray */
-}
+
+
 
 /******************************
 BEGIN TABLE ELEMENTS
@@ -456,14 +471,21 @@ BEGIN TABLE ELEMENTS
 table {
         /* prevent nested cells' borders or spacing from accumulating */
 	border-collapse: collapse;
-	border-color: #ccc;
-	margin-bottom:0;
-	margin-left:0;
+	border-color:    #ccc;
+	margin-bottom:   0;
+	margin-left:     0;
+}
+
+tbody tr:nth-child(2n), table tbody tr.even{
+    vertical-align:   middle;
+    font-size:        12px;
+    padding:          4px;
+    background-color: #eee /*light-gray */
 }
 
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
-tbody tr:nth-child(even) td, tbody tr.even td {
+tbody tr:nth-child(even) td, table tbody tr.even td {
 	/* background:       #B9E0E3;/*light-teal */
     background-color: #eee /*light-gray */
 }
@@ -500,8 +522,9 @@ table.odd-color tbody tr:nth-child(even) td, tbody tr.even td {
 }
 
 /* style for all cells in a non-colored (ie: no alternating color) table */
-table.no-color td {
+table.no-color td{
 	background-color: #FFFFFF !important;
+
 }
 
 /* for use in the custom header for JPL */
@@ -509,9 +532,40 @@ table.transparent tbody tr:nth-child(even) td, tbody tr.even td{
     background-color: inherit;
 }
 
-/* for tables that are entirely gray. Used when a table is imbedded in another table with a dark row */
+/* for tables that are entirely gray. Used when a table is embedded in another table with a dark row */
+/* TODO remove the td here */
 table.gray td{
         background-color: #eee !important;
+}
+
+/***************
+* NAME: caption
+* SCOPE: the caption of a table
+* used in lots of places outside of the wiki
+***************/
+
+/* set default for cog outside of the wiki */
+caption {
+	margin:        0;
+	padding:       2px 5px 3px 5px;
+	font-size:     12px; /* this needs to be the same size as other headers on the site */
+	text-align:    left;
+	font-weight:   bold;
+	background:    #B9E0E3;
+	border-bottom: 1px solid #666666;
+	color:         #666;
+}
+
+#cog_post_body caption {
+
+    margin:        0;
+	padding:       2px 5px 3px 5px;
+	font-size:     12px; /* this needs to be the same size as other headers on the site */
+	text-align:    left;
+	font-weight:   bold;
+	background:    #C3D9FF;
+	border-bottom: 1px solid #666666;
+	color:         #666;
 }
 
 /***************
@@ -521,25 +575,21 @@ table.gray td{
 /* set defaults for all tables and headers on the site. Make table data and table headers have the same size */
 td, th {
     margin:         0;
-    font-size:      9pt;
     padding:        4px;
-    vertical-align: top;
+    vertical-align: middle;
+    font-size:      12px;
+    font-weight:    normal; /* override topography.css */
 }
 
-/* default table headers are bold with a cyan background. Change this.*/
-th {
+/* table headers in the wiki */
+#cog_post_body th {
     font-weight: bold;
     background:  none repeat scroll 0 0 #C3D9FF;
-}
-
-/* other CSS can alter the table header's size; this more specific CSS sets it to the proper value */
-#cog_post_body th {
-    padding: 5px;
-    font-size: 9pt;  /*this is different from the font on the page...will need to standardize */
+    padding:     5px;
+    font-size:   inherit;
 }
 
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
-
 
 .long {
 	width:          99%;
@@ -565,6 +615,13 @@ td.tophead {
 	vertical-align: top;
 }
 
+td.caption_mimic{
+    background-color: #B9E0E3;
+    text-align:       left;
+    color:            #666;
+    border-bottom:    1px solid #666;
+}
+
 td.righttop {
 	text-align: right;
 	vertical-align: top;
@@ -584,21 +641,7 @@ td.righttop {
 	vertical-align: middle;
 }
 
-/***************
-* NAME: caption
-* SCOPE: the caption of a table
-* used in lots of places outside of the wiki
-***************/
-caption {
-	margin:        0;
-	padding:       2px 5px 3px 5px;
-	font-size:     9pt; /* this needs to be the same size as other headers on the site */
-	text-align:    left;
-	font-weight:   bold;
-	background:    #B9E0E3;
-	border-bottom: 1px solid #666666;
-	color:         #666;
-}
+
 
 
 /*****************************
@@ -999,10 +1042,10 @@ BEGIN NEWS WIDGET
 	overflow-y: auto;
 }
 
-.news_box table td,th {
+.news_box table td, .news_box table th {
 	font-size: 8pt;
-	padding:0;
-	margin:0;
+	padding:   0;
+	margin:    0;
 }
 
 .news_box table th {
@@ -1088,10 +1131,20 @@ BEGIN USER MESSAGES
 .message-box {
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
-	margin:      5px;
+	margin:      5px 0 5px 0;
 	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
+}
+
+.node-notification-box{
+	background:   #666;
+	color:        white;
+	text-align:   center;
+	padding:      10px;
+	font-size:    11pt;
+	margin-top:   5px;
+	margin-bottom:10px;
 }
 
 /*update openID box. This should be removed when no longer needed */
@@ -1235,6 +1288,29 @@ BEGIN ADVANCED SEARCH PAGE
 END ADVANCED SEARCH PAGE
 ******************************/
 
+/******************************
+BEGIN PEER-NODES-BOX
+******************************/
+
+.peer-nodes-box {
+	background:    #FFFFFF;
+	border:        1px solid #666;
+	font-size:     8pt;
+    margin-bottom: 10px;
+    margin-top:    0;
+}
+
+.peer-nodes-box-body {
+	
+	padding: 4px;
+	max-height: 80px;
+	overflow-y: auto;
+	
+}
+
+/******************************
+END PEER-NODES-BOX
+******************************/
 
 .caption {
 	margin:0;
@@ -1442,15 +1518,15 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 /* TOP NAV */
 .top_nav {
-    width: 100%;
-    height: 20px;
-    margin: 0 auto;
-    padding:  0;
-    background: #FFFFFF;
-    color: #FFFFFF;
-    font-size: 9pt;
+    width:       100%;
+    height:      20px;
+    margin:      0 auto;
+    padding:     0;
+    background:  #FFFFFF;
+    color:       #FFFFFF;
+    font-size:   9pt;
     font-weight: bold;
-    font-style: normal;
+    font-style:  normal;
 }
 
 /*bar that shows up when there is no upper navigation items (e.g. data cart) */
@@ -1464,11 +1540,11 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 #top_subnav_left {
-	padding-top: 2px;
-	padding-left: 6px;
-	width: 100%;
-	background-color: #B9E0E3;
-	float:left;
+	padding-top:     2px;
+	padding-left:    6px;
+	width:           100%;
+	background-color:#B9E0E3;
+	float:           left;
 }
 
 #top_subnav_left a:link, #top_subnav_left a:visited {
@@ -1486,9 +1562,9 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 #top_nav_right a {
-	color: #000000;
-    padding: 0;
-    padding-top:4px;
+	color:         black;
+    padding:       0;
+    padding-top:   4px;
     padding-bottom:4px;
     padding-right: 4px;
 }
@@ -1532,7 +1608,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     /* COG STYLE: TOP NAV BAR TEXT */
     text-decoration: none;
     /* padding: top-right-bottom-left */
-    padding: 2px 6px 6px 6px;
+    padding: 2px 8px 6px 6px;
     font-weight: bold;
     color: #FFFFFF;
     border: none;

@@ -6,6 +6,8 @@ from communication_means import CommunicationMeans
 from search_facet import SearchFacet
 from search_group import SearchGroup
 from post import Post
+from bookmark import Bookmark
+from doc import Doc
 from navbar import PROJECT_PAGES, DEFAULT_TABS
 from django.conf import settings
 from django.utils.timezone import now
@@ -18,6 +20,7 @@ from cog.models.constants import DEFAULT_SEARCH_FACETS
 from project_tab import ProjectTab
 import shutil
 import os
+from urllib import quote
 
 
 # method to retrieve all news for a given project, ordered by original publication date
@@ -305,6 +308,28 @@ def createOrUpdateProjectSubFolders(project, request=None):
         else:
             folder.active = False
         folder.save()
+        
+def getBookmarkFromDoc(doc):
+    '''Returns the first Bookmark with URL matching the Document path.'''
+    
+    url_fragment = quote(doc.path, safe="%/:=&?~#+!$,;'@()*[]")
+    print 'Looking for bookmark that contains URL fragment: %s' % url_fragment
+    bookmarks = Bookmark.objects.filter(url__contains=url_fragment)
+    for bookmark in bookmarks:
+        return bookmark
+    return None # no Bookmark found
+
+def getDocFromBookmark(bookmark):
+    '''Returns the first Doc with path that matches the Bookmark URL.'''
+    
+    if 'site_media/' in bookmark.url:
+        _, url_fragment = bookmark.url.split('site_media/', 1)
+        print 'Looking for doc that contains path: %s' % url_fragment
+        docs = Doc.objects.filter(path__contains=url_fragment)
+        for doc in docs:
+            return doc
+        return None
+    
 
 def delete_doc(doc):
     '''
@@ -318,6 +343,12 @@ def delete_doc(doc):
     posts = Post.objects.filter(docs__id=doc.id)
     for post in posts:
         post.docs.remove(doc)
+        
+    # remove possible associated resource
+    bookmark = getBookmarkFromDoc(doc)
+    if bookmark is not None:
+        print 'Deleting associated bookmark: %s' % bookmark.url
+        bookmark.delete()
         
     # obtain document full path (before deleting object from database)
     fullpath = os.path.join(settings.MEDIA_ROOT, doc.path)
@@ -341,7 +372,6 @@ def delete_doc(doc):
         auxpath = "%s%s%s" % (path, suffix, ext)
         if os.path.isfile(auxpath):
             os.remove(auxpath)
-
 
 def deleteProject(project, dryrun=True, rmdir=False):
     """
@@ -369,6 +399,16 @@ def deleteProject(project, dryrun=True, rmdir=False):
     print '\tDeleting group: %s' % ag
     if not dryrun:
         ag.delete()
+
+    # delete project Contributor group, permissions
+    cg = project.getContributorGroup()
+    for p in cg.permissions.all():
+        print '\tDeleting permission: %s' % p
+        if not dryrun:
+            p.delete()
+    print '\tDeleting group: %s' % cg
+    if not dryrun:
+        cg.delete()
 
     if rmdir:
         media_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())

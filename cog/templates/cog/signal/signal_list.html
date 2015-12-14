@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_left_center.html" %}
 
 {% block main %} 
 
@@ -6,15 +6,18 @@
     {% autopaginate project_signals 20 %}
     
     {% for signal in project_signals %}
-
 	    <div class="mybox">
 		    <table>
-		       <caption>{{ signal.title }}</caption>
 		        <tr>
-		           <td class="long"> <a href="{{ signal.url }}">{{ signal.description }}</a></td>
+                    <td class="mimic_caption">
+                        <strong>{{ signal.title }}</strong>
+                    </td>
+                </tr>
+		        <tr>
+		            <td class="long"> <a href="{{ signal.url }}">{{ signal.description }}</a></td>
 		        </tr>	        
 		        <tr>
-		          <td><em class="message">{{signal.update_date|date:"Y/m/d h:m:s"}} by {{ signal.user }}</em></td>
+		            <td><em class="message">{{signal.update_date|date:"Y/m/d h:m:s"}} by {{ signal.user }}</em></td>
 		        </tr>
 		    </table>
 	    </div>

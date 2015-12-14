@@ -9,6 +9,7 @@ import os
 from django.conf import settings
 
 from cog.models import *
+from cog.models.auth import userHasContributorPermission, userHasAdminPermission
 from cog.models.navbar import TABS, TAB_LABELS
 from cog.models.constants import UPLOAD_DIR_LOGOS, UPLOAD_DIR_PHOTOS
 from cog.forms import *
@@ -18,6 +19,7 @@ from cog.services.membership import addMembership
 from cog.models.utils import *
 from cog.views.views_templated import templated_page_display
 from cog.util.thumbnails import *
+from cog.models.auth import userHasAdminPermission
 
 from constants import PERMISSION_DENIED_MESSAGE
 
@@ -113,7 +115,7 @@ def impacts_update(request, project_short_name, tab):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
 
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # number of empty instances to be displayed
@@ -149,6 +151,9 @@ def impacts_update(request, project_short_name, tab):
                 instance.project = project
                 instance.order = 1
                 instance.save()
+
+            for obj in formset.deleted_objects:
+                obj.delete()
 
             redirect = reverse('aboutus_display', args=[project_short_name, tab])
             return HttpResponseRedirect(redirect)
@@ -226,8 +231,9 @@ def partners_update(request, project_short_name, tab):
     # Organization specific parameters
     clazz = Organization
     formset_factory = modelformset_factory(Organization,
-                                            form=OrganizationForm,  # explicit reference to form to use custom text widgets
-                                            extra=3, can_delete=True, exclude=('project',))
+                                           # explicit reference to form to use custom text widgets
+                                           form=OrganizationForm,
+                                           extra=3, can_delete=True, exclude=('project',))
     queryset = Organization.objects.filter(project=project).order_by('name')
 
     form_template = 'cog/project/partners_form.html'
@@ -284,7 +290,7 @@ def _imageformset_update(request, project, tab,
                 if (instance.id is not None                      # instance is not new (i.e. it's already in database)
                     and instance.image is not None               # instance contains an image
                     and instance.image.name is not None
-                    and not upload_dir in instance.image.name): # image has been newly selected
+                    and not upload_dir in instance.image.name):  # image has been newly selected
                     obj = clazz.objects.get(pk=instance.id)
                     try:
                         deleteImageAndThumbnail(obj)

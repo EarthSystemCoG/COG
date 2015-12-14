@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% extends "cog/common/layout_left_center_right.html" %}
 
 {% block main %}   
 
@@ -52,9 +52,8 @@
                     <td>{{ form.replicaSearchFlag }} </td>
                     <td class="long">
                     	<div style="font-style:italic;">
-                    	   Check to enable users to toggle replicas search on/off.
-                    	   <br/>Search default: always search for ALL replicas.
-                    	   <br/>Use fixed constraint: 'replica=false' to ALWAYS search for non-replicas.
+                    	   Check to enable users to search for BOTH replicas AND non-replicas.
+                    	   <br/>CoG search default: search for non-replicas only (i.e. replica=false).
                            {{ form.replicaSearchFlag.errors }}
                         </div>
                      </td>
@@ -64,9 +63,8 @@
                     <td>{{ form.latestSearchFlag }}</td>
                     <td class="long">
                     	<div style="font-style:italic;">
-                    		Check to enable users to toggle versions search on/off.
-                            <br/>Search default: always search for ALL versions.
-                            <br/>Use fixed constraint: 'latest=true' to ALWAYS search for latest version only.
+                    		Check to enable users to search for BOTH latest AND previous versions.
+                            <br/>CoG search default: search for latest version only (i.e. latest=true) .
                             {{ form.latestSearchFlag.errors }}
                         </div>
                     </td>
@@ -76,9 +74,8 @@
                     <td>{{ form.localSearchFlag }} </td>
                     <td class="long">
                     	<div style="font-style:italic;">
-                    		Check to enable users to toggle all sites search on/off.
-                            <br/>Search default: always search ALL sites.
-                            <br/>Use fixed constraint: 'distrib=false' to ALWAYS search local site only.
+                    		Check to enable users to search ONLY the local node.
+                            <br/>CoG search default: search ALL nodes (i.e. distrib=true).
                             {{ form.localSearchFlag.errors }}
                         </div>
                     </td>
@@ -103,6 +100,12 @@
 	    <div class="mybox">
             <table>
                 <caption>Search Facets</caption>
+                <tr>
+                    <th class="white"><strong>Facet Key</strong></th>
+                    <th class="white"><strong>Facet Label</strong></th>
+                    <th class="white"><strong>Edit?</strong></th>
+                    <th class="white"><strong>Delete?</strong></th>
+                </tr>
                 {% for facet in project.searchprofile.facets %}
                     <tr>
                        <td nowrap="nowrap">{{facet.key}}</td>

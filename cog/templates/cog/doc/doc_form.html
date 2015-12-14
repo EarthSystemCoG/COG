@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_left_center_right.html" %}
 <!--// upload document form //-->
 <!--// LOCATION: /templates/doc/doc_form.html //-->
 
@@ -38,7 +38,7 @@
                          <tr>
                          <td style="vertical-align:middle; text-align:right;"><strong>File</strong></td>
                          <td style="width:30%;vertical-align:middle;">{{ form.instance.file.name }}{{ form.file }}</td>
-                         <td colspan="2" style="vertical-align:middle; font-style:italic;">Max size: 500 MB. The file name can contain only letters, numbers, spaces, and _ - . /</td>
+                         <td style="vertical-align:middle; font-style:italic;">Max size: 500 MB. The file name can contain only letters, numbers, spaces, and _ - . /</td>
                           </tr>
                       {% endif %}
 
@@ -51,9 +51,24 @@
                     <td colspan="2" >{{ form.description }} {{ form.description.errors }} </td>
                 </tr>
                 <tr>
-          			<td nowrap="nowrap" style="text-align:right; vertical-align:middle;">Private?</td>
-          			<td colspan="2">{{ form.is_private }} &nbsp; (<em class="message">if checked, only project members will be able to download this file</em>)</td>
+          			<td class="checkbox_label" nowrap="nowrap" style="text-align:right;">Private?</td>
+          			<td colspan="2">{{ form.is_private }} &nbsp; (<em class="message">if checked, only project members will be able to download this file.</em>)</td>
     			</tr>
+            </table>
+            <table>
+                <!-- CREATE RESOURCE -->
+    			{% if not form.instance.id %}
+    			<!-- only show folder selection when file is first uploaded, later folder can only be changed through the Resources page --><tr>
+                    <td style="text-align: right; width:70px;">Resource?
+                    </td>
+                    <td>
+                        This file can become a Resource by selecting or creating a destination Resource Folder.
+                        <br><br>
+                        {{ form.folder }}&nbsp;&nbsp;<strong>-OR-</strong>
+                        <a href="{% url 'folder_add' project.short_name.lower %}?next={{ request.path }}">&nbsp;Create New</a>
+                    </td>
+    			</tr>
+    			{% endif %}
                 <tr>
                     <td colspan="3" style="text-align:right;">
                         {% if form.instance.id %}

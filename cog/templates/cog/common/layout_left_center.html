@@ -1,0 +1,24 @@
+{% extends "layouts/layout_left_main.html" %}
+
+
+{% block head %}
+    {% include 'cog/common/metatags.html' %} 
+    {% include 'cog/common/yui.html' %} 
+    {% include 'cog/common/yui_panels.html' %}    
+    {% include 'cog/common/cog_js.html' %} 
+    {% include 'cog/common/cim.html' %}  
+    {% include 'cog/common/wiki.html' %}   
+    {% include 'cog/common/google_analytics.html' %}
+    
+{% endblock %}
+
+
+{% block main %}
+	<!--LAYOUT: /common/layout/sidebar_center.html-->
+    {{ project }}
+{% endblock %}
+
+{% block left %}
+    {% include 'cog/project/project_left.html' %} 
+{% endblock %}
+

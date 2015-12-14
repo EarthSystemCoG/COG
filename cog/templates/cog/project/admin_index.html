@@ -1,7 +1,7 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-    <!-- limit visibility to site administrators -->
+    <!-- limit visibility to node administrators -->
     {% if request.user.is_staff %}
     
         {% load pagination_tags %}
@@ -9,15 +9,17 @@
     
 	    <div class="mybox">
 		    <table>
-		        <caption>
-		           Project List
-		        </caption>
+		        <tr>
+                    <td class="caption_mimic">
+		                Project List
+		            </td>
+                </tr>
 		        {% for project in project_list %}
 			        <tr>
-			           <td class="long"><a href="{% url 'project_home' project.short_name.lower %}">{{ project }} &raquo;</a></td>
-			               <td nowrap="true"><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">Update &raquo;</a></td>
-			               <td nowrap="true"><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">Delete &raquo;</a></td>
-			               <td nowrap="true"><a href="{% url 'project_add' %}?parent={{ project.short_name.lower }}" class="addlink">New Child &raquo;</a></td>	                   
+			            <td class="long"><a href="{% url 'project_home' project.short_name.lower %}">{{ project }} &raquo;</a></td>
+			            <td nowrap="true"><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">Update &raquo;</a></td>
+			            <td nowrap="true"><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">Delete &raquo;</a></td>
+			            <td nowrap="true"><a href="{% url 'project_add' %}?parent={{ project.short_name.lower }}" class="addlink">New Child &raquo;</a></td>
 			        </tr>
 		        {% endfor %}   
 		    </table>

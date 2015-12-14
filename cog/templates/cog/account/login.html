@@ -1,54 +1,70 @@
 {% extends "cog/common/layout_center.html" %}
 <!--LOCATION: /cog/templates/cog/account/login.html-->
-<!--looks like this file has been deprecated and should be removed-->
-<!--it does not contain an openID login-->
+
+<!-- template for login2-->
 
 {% load cog_utils %}
 
 {% block main %}
 
-<div class="prepend-7 span-10">
+<div class="prepend-375 span-10">
 
 	<h2>User Login</h2>
 
 	<!-- display extra message if available -->
 	{% if request.GET.message %}
 	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
-	   <p/>
+	   <p></p>
 	{% endif %}
 
 	<!-- display authentication errors -->
 	{% if form.errors %}
-	<p class="errornote">Your username and password didn't match. Please try again.</p>
+	    <p class="errornote">
+            Your username and password didn't match. Please try again.
+        </p>
 	{% endif %}
 
 	<!-- authentication form -->
 	<div style="font-style: italic; text-align:center;">
 		Please note that username and password are case-sensitive.
+        <br>
+        Items in <strong>bold</strong> are required.
 	</div>
 
 	<form method="post">
 	   {% csrf_token %}
 		<div class="mybox">
 			<table>
-				<caption>User Login</caption>
 				<tr>
-				    <td>{{ form.username.label_tag }}</td>
-				    <td>{{ form.username }}</td>
+                    <td colspan="2" class="caption_mimic"><strong>User Login</strong></td>
+                </tr>
+				<tr>
+				    <td scope="row">
+                        <strong>
+                            {{ form.username.label_tag }}
+                        </strong>
+                    </td>
+				    <td>
+                        {{ form.username }}
+                    </td>
 				</tr>
 				<tr>
-				    <td>{{ form.password.label_tag }}</td>
+				    <td scope="row">
+                        <strong>
+                            {{ form.password.label_tag }}
+                        </strong>
+                    </td>
 				    <td>{{ form.password }}</td>
 				</tr>
 			</table>
         </div>
 
 		<div style="position: relative;">
-			<span style="position: absolute; left: 0px;">
+			<span style="position: absolute; left: 0;">
 			  <input type="submit" value="Login" />
 			  <input type="hidden" name="next" value="{{ next }}" />
 			</span>
-			<span style="position: absolute; right: 0px;">
+			<span style="position: absolute; right: 0;">
 			  <a href="{% url 'user_reminder' %}">Forgot Username?</a>
 			  &nbsp;
 			  <a href="{% url 'password_reset' %}">Forgot Password?</a>

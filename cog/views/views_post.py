@@ -1,5 +1,6 @@
 from cog.forms import *
 from cog.models import *
+from cog.models.auth import userHasContributorPermission, userHasAdminPermission, userHasUserPermission
 from cog.utils import *
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
@@ -52,7 +53,7 @@ def post_delete(request, post_id):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     else:
         # check permission: only project members can delete non-predefined project pages
-        if not userHasUserPermission(request.user, project):
+        if not userHasContributorPermission(request.user, project):
             return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -145,46 +146,55 @@ def project_home(request, project_short_name):
 def post_list(request, project_short_name):
     
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
+
     # query by project
     qset = Q(project=project)
-           
+
+    #TODO: remove type query if not needed (type is all posts)
     # query by type
-    type = request.GET.get('type', None)
+    #type = request.GET.get('type', None)
+    type = 'post'
     qset = qset & Q(type=type)
-    list_title = 'All %ss' % type.capitalize()
-    
+    list_title = 'List All Pages'
+
+    #TODO: remove text query if not needed
     # text query
     query = request.GET.get('query', '')
-    if query:
-        qset = qset & (Q(title__icontains=query) | Q(body__icontains=query) | Q(author__first_name__icontains=query) |
-                       Q(author__last_name__icontains=query) | Q(author__username__icontains=query))
-        list_title = "Search Results for '%s'" % query
+    #if query:
+    #    qset = qset & (Q(title__icontains=query) | Q(body__icontains=query) | Q(author__first_name__icontains=query) |
+    #                   Q(author__last_name__icontains=query) | Q(author__username__icontains=query))
+     #   list_title = "Search Results for '%s'" % query
     
     # topic constraint
     topic = request.GET.get('topic', '')
-    if topic:
-        qset = qset & Q(topic__name=topic)
-        list_title += ' [topic=%s]' % topic
+    #if topic:
+    #    qset = qset & Q(topic__name=topic)
+    #    list_title += ' [topic=%s]' % topic
         
     # execute query, order by descending update date or title
     sortby = request.GET.get('sortby', 'title')
     if sortby == 'date':
-        results = Post.objects.filter(qset).distinct().order_by('-update_date')
+        results = Post.objects.filter(project=project).distinct().order_by('-update_date')
+    elif sortby == 'topic':
+        results = Post.objects.filter(project=project).distinct().order_by('-topic')
     else:
-        results = Post.objects.filter(qset).distinct().order_by('title')
+        results = Post.objects.filter(project=project).distinct().order_by('title')
                 
     # list all possible topics for posts of this project, and of given type
     # must follow the foreign key relation Post -> Topic backward (through 'topic.post_set')
+
+	#TODO: remove topic list if not used
     #topic_list = Topic.objects.all().order_by('name')
     topic_list = Topic.objects.filter(Q(post__project=project) & Q(post__type=type)).distinct().order_by('-name')
 
     return render_to_response('cog/post/post_list.html', 
-                              {"object_list": results, 
-                               "title": "%s %ss" % (project.short_name, type.capitalize()),
+                              {"object_list": results,
+                               "title": '%s Pages' % project.short_name,
                                "list_title": list_title,
                                "query": query,  
                                "project": project,
-                               "topic": topic, "topic_list": topic_list},
+                               "topic": topic,
+                               "topic_list": topic_list},
                               context_instance=RequestContext(request))
 
 
@@ -200,7 +210,7 @@ def post_add(request, project_short_name, owner=None):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # retrieve type
@@ -335,7 +345,7 @@ def post_update(request, post_id):
         
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # check lock
     lock = getLock(post)
@@ -426,7 +436,7 @@ def post_add_doc(request, post_id):
     
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # attach doc to post
     post.docs.add(doc)
@@ -447,7 +457,7 @@ def post_remove_doc(request, post_id, doc_id):
     
     # check permission
     if not userCanPost(request.user, post):
-        raise PermissionDenied
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # retrieve doc from database
     doc = get_object_or_404(Doc, pk=doc_id)
@@ -478,21 +488,13 @@ def redirect_to_post(request, post):
 
 # function to check that the user can modify the given post
 def userCanPost(user, post):
-    # project members can modify any page except for the home page
-    #if post.is_home:     
-    #    if not userHasAdminPermission(user, post.project):
-    #        return False
-    #else:
-    #    if not userHasUserPermission(user, post.project):
-    #        return False
-    #return True
     
     # page editing is restricted to project administrators
     if post.is_restricted:
         return userHasAdminPermission(user, post.project)
     # page can be edited by all project members
     else:
-        return userHasUserPermission(user, post.project)
+        return userHasContributorPermission(user, post.project)
 
 
 # function to check whether the user can view the current page

@@ -19,10 +19,10 @@ class ProjectForm(ModelForm):
     # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its
     # styles are controlled in cogstyle.css
 
-    parents = forms.ModelMultipleChoiceField("parents", cache_choices=False, required=False,
+    parents = forms.ModelMultipleChoiceField("parents", required=False,
                                              widget=forms.SelectMultiple(attrs={'size': '20',
                                                                                 'class': 'selectprojects'}))
-    peers = forms.ModelMultipleChoiceField("peers", cache_choices=False, required=False,
+    peers = forms.ModelMultipleChoiceField("peers", required=False,
                                            widget=forms.SelectMultiple(attrs={'size': '20',
                                                                               'class': 'selectprojects'}))
     # filtering of what is see in the form is done down below. 
@@ -46,7 +46,7 @@ class ProjectForm(ModelForm):
         queryset2 = Q(site__id=current_site.id) | Q(site__peersite__enabled=True)
 
         if 'instance' in kwargs:
-            # peer and parent query-set options: exclude the project itself, projects from disabled peer sites
+            # peer and parent query-set options: exclude the project itself, projects from disabled peer nodes
             instance = kwargs.get('instance')
             queryset1 = ~Q(id=instance.id)
             self.fields['parents'].queryset = \
@@ -57,7 +57,7 @@ class ProjectForm(ModelForm):
                 extra(select={'snl': 'lower(short_name)'}, order_by=['snl'])
         
         else:    
-            # peer and parent query-set options: exclude projects from disabled peer sites
+            # peer and parent query-set options: exclude projects from disabled peer nodes
             self.fields['parents'].queryset = \
                 Project.objects.filter(queryset2).distinct().extra(select={'snl': 'lower(short_name)'},
                                                                    order_by=['snl'])
@@ -90,20 +90,21 @@ class ProjectForm(ModelForm):
 
         return short_name
 
+    def clean_long_name(self):
+        
+        long_name = self.cleaned_data['long_name']
+        # do not allow quotation characters in long name (causes problems in browser widget)
+        if '\"' in long_name:
+            raise forms.ValidationError("Quotation characters are not allowed in project long name")
+        
+        return long_name
+        
     class Meta:
         model = Project
         fields = ('short_name', 'long_name', 'author', 'description', 
-                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 'dataSearchEnabled',
-                  'forumNotificationEnabled',
+                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 
+                  'dataSearchEnabled', 'forumNotificationEnabled', 'nodesWidgetEnabled',
                   'site', 'maxUploadSize')
-        # Note: must exclude the many2many field mapped through an intermediary table
-        #exclude = ('topics','mission','values','vision','history','taskPrioritizationStrategy',
-        # 'requirementsIdentificationProcess','governanceOverview',
-        #           'developmentOverview',
-        #           'software_features', 'system_requirements',
-        #           'getting_started',
-        #           'projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved',)
-
 
 class ContactusForm(ModelForm):
 
@@ -117,17 +118,17 @@ class ContactusForm(ModelForm):
     class Meta:
         model = Project
         fields = ('projectContacts', 'technicalSupport', 'meetingSupport', 'getInvolved')
-        widgets = {'projectContacts': Textarea(attrs={'rows': 6}),
-                   'technicalSupport': Textarea(attrs={'rows': 6}),
-                   'meetingSupport': Textarea(attrs={'rows': 6}),
-                   'getInvolved': Textarea(attrs={'rows': 6}), }
+        widgets = {'projectContacts': Textarea(attrs={'rows': 4}),
+                   'technicalSupport': Textarea(attrs={'rows': 4}),
+                   'meetingSupport': Textarea(attrs={'rows': 4}),
+                   'getInvolved': Textarea(attrs={'rows': 4}), }
 
 
 class DevelopmentOverviewForm(ModelForm):
 
     class Meta:
         model = Project
-        widgets = {'developmentOverview': Textarea(attrs={'rows': 6})}
+        widgets = {'developmentOverview': Textarea(attrs={'rows': 8})}
         fields = ('developmentOverview',)
 
 
@@ -135,13 +136,13 @@ class SoftwareForm(ModelForm):
 
     class Meta:
         model = Project
-        widgets = {'software_features': Textarea(attrs={'rows': 6}),
-                   'system_requirements': Textarea(attrs={'rows': 4}),
-                   'license': Textarea(attrs={'rows': 4}),
-                   'implementationLanguage': Textarea(attrs={'rows': 4}),
-                   'bindingLanguage': Textarea(attrs={'rows': 4}),
-                   'supportedPlatforms': Textarea(attrs={'rows': 4}),
-                   'externalDependencies': Textarea(attrs={'rows': 4}),
+        widgets = {'software_features': Textarea(attrs={'rows': 8}),
+                   'system_requirements': Textarea(attrs={'rows': 8}),
+                   'license': Textarea(attrs={'rows': 1}),
+                   'implementationLanguage': Textarea(attrs={'rows': 1}),
+                   'bindingLanguage': Textarea(attrs={'rows': 1}),
+                   'supportedPlatforms': Textarea(attrs={'rows': 8}),
+                   'externalDependencies': Textarea(attrs={'rows': 8}),
                    }
         fields = ('software_features', 'system_requirements', 'license',
                   'implementationLanguage', 'bindingLanguage', 'supportedPlatforms', 'externalDependencies')
@@ -158,7 +159,7 @@ class UsersForm(ModelForm):
 
     class Meta:
         model = Project
-        widgets = {'getting_started': Textarea(attrs={'rows': 10}), }
+        widgets = {'getting_started': Textarea(attrs={'rows': 12}), }
         fields = ('getting_started', )
 
 

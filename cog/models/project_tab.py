@@ -3,11 +3,14 @@ from constants import APPLICATION_LABEL
 from navbar import PROJECT_PAGES, DEFAULT_TABS
 from project import Project
 from django.core.urlresolvers import reverse
+from cog.models.dbutils import UnsavedForeignKey
 
+    
 # Tab displayed in project top navigation menu
 class ProjectTab(models.Model):
         
-    project = models.ForeignKey(Project, blank=False, null=False, related_name="tabs")
+    project = UnsavedForeignKey(Project, blank=False, null=False, related_name="tabs")
+    
     # the URL of a corresponding project page
     url = models.CharField(max_length=200, verbose_name='URL', blank=True, unique=True, default='')
     # the label displayed in the menu

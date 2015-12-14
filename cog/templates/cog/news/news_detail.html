@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_left_center.html" %}
 
 {% block main %} 
 
@@ -7,7 +7,11 @@
     
 	    <div class="mybox">
 		    <table>
-		       <caption>{{news.project.short_name}}: {{ news.title }}</caption>
+		        <tr>
+                    <td class="caption_mimic">
+                        <strong>{{news.project.short_name}}: {{ news.title }}</strong>
+                    </td>
+                </tr>
 		        <tr>
 		            <td class="long"> {{ news.text|urlizetrunc:100|linebreaksbr }} </td>
 		        </tr>	        
@@ -19,9 +23,10 @@
                             {% else %}
                                 {{ news.author }}
                             {% endif %}
-                    </em>
+                        </em>
 		          	<!-- links to update, delete the news -->
-                    {% if user|hasUserPermission:news.project %}
+                    <!-- Must be a Contributor to update or delete news -->
+                    {% if user|hasContributorPermission:news.project %}
                   		<div style="float:right">
                     	     &nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>
                     	     &nbsp;<a href="{% url 'news_delete' news.id %}" class="deletelink">Delete</a>

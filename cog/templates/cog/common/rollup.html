@@ -1,7 +1,8 @@
-{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% extends "cog/common/layout_left_center_right.html" %}
 <!--//START: /cog/templates/cog/common/rollup.html //-->
 
 <!--// This template is used for any page that contains a rollup. It includes templated content and resources //-->
+<!--// Content includes rollup but also social media buttons and "update" link" -->
 
 {% load cog_utils %}
 
@@ -44,36 +45,31 @@
 		vertical-align: top;
 	}
    </style>
-
-
- {% endblock %}
-
-
-
+{% endblock %}
 
 {% block main %} 
 
-	<!-- load the template for the page (e.g. contact_us) -->
+    <!-- load the template for the page (e.g. contact_us) -->
 	{% with project as proj %}
 		{% include template_page %}	
 	{% endwith %}
-	
+
+	<!-- social media buttons -->
+	<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
+	    {% include 'cog/common/cog_social_media.html' %}
+	</div>
+
 	<!-- Edit this project details - access restricted to project administrators -->
 	{% if template_form_pages|length > 0 %}
 		{% if user|hasAdminPermission:project %}
-		   <hr/>
-		   <div style="text-align:center">
-			   {% for template_form_page, template_form_title in template_form_pages.items %}
+            <hr/>
+		    <div style="text-align:center">
+			    {% for template_form_page, template_form_title in template_form_pages.items %}
 			   		&nbsp;<a href="{{ template_form_page }}" class="changelink"> Update Project {{ template_form_title }}</a>&nbsp;
-			   {% endfor %}
-		   </div>
+			    {% endfor %}
+		    </div>
 		{% endif %}
 	{% endif %}
-	
-	<!-- social media buttons -->
-	<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
-		 {% include 'cog/common/cog_social_media.html' %} 
-	</div>	
 	
     <!-- children projects-->    
  	{% if children %}
@@ -87,7 +83,9 @@
 	    			<br/>
 	    			<div class="mybox" style="padding:0;">
 	    				<div class="header-gray">
-	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}}</div>
+	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">
+                                {{ proj.short_name }} Project {{ template_title}}
+                            </div>
 	    				</div>
 						<div style="padding:4px;">
 							{% include template_page %}
@@ -110,7 +108,9 @@
 	    			<br/>
 	    			<div class="mybox" style="padding:0;">
 	    				<div class="header-gray">
-	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">{{ proj.short_name }} Project {{ template_title}} </div>
+	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">
+                                {{ proj.short_name }} Project {{ template_title}}
+                            </div>
 	    				</div>
 	    				<div style="padding:4px;">
 							{% include template_page %}
@@ -120,7 +120,5 @@
 		    {% endfor %}		
 		</div>
 	{% endif %}
-    
-	
 {% endblock %}
 <!--//START: /cog/templates/cog/common/rollup.html //-->

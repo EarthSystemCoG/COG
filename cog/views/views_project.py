@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required, user_passes_test, per
 from django.contrib.auth.models import User, AnonymousUser
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
-from django.forms.models import modelformset_factory, inlineformset_factory
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response, redirect
@@ -24,7 +23,7 @@ from cog.utils import *
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.views.views_templated import templated_page_display
 from cog.views.utils import add_get_parameter
-
+from cog.models.auth import userHasAdminPermission, userHasUserPermission, userHasContributorPermission
 
 # method to add a new project, with optional parent project
 @login_required
@@ -32,7 +31,7 @@ def project_add(request):
     
     if request.method == 'GET':
         
-        # associate project to current site
+        # associate project with current node
         current_site = Site.objects.get_current()
         project = Project(active=False, author=request.user, site=current_site)
         
@@ -45,7 +44,7 @@ def project_add(request):
                 return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
             project.parent = parent
         else:
-            # check permission: only site administrators can create top-level projects
+            # check permission: only node administrators can create top-level projects
             #if not request.user.is_staff:
             #    return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
             parent = None
@@ -85,13 +84,13 @@ def project_add(request):
             # create folders with appropriate state
             createOrUpdateProjectSubFolders(project, request)
             
-            # notify site administrator
+            # notify node administrator
             notifySiteAdminsOfProjectRequest(project, request)
             
             # display confirmation message
             mytitle = 'New Project Confirmation'
             messages = ['Thank you for registering project: %s' % project.short_name,
-                        'Your request will be reviewed by the site administrators as soon as possible,',
+                        'Your request will be reviewed by the node administrators as soon as possible,',
                         'and you will be notified of the outcome by email.']
             return render_to_response('cog/common/message.html',
                                       {'mytitle': 'New Project Confirmation', 'messages': messages},
@@ -133,7 +132,7 @@ def project_index(request, project_short_name):
         return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
         
     # check permission
-    if not userHasAdminPermission(request.user, project) and not request.user.is_staff:
+    if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     errors = {}
@@ -224,7 +223,7 @@ def project_update(request, project_short_name):
         return HttpResponseForbidden(LOCAL_PROJECTS_ONLY_MESSAGE)
             
     # check permission
-    if not userHasAdminPermission(request.user, project) and not request.user.is_staff:
+    if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -317,7 +316,7 @@ def project_delete(request, project_short_name):
     else:
         
         # delete all project objects
-        deleteProject(project)
+        deleteProject(project, dryrun=False, rmdir=True)
         
         # redirect to admin index
         return HttpResponseRedirect(reverse('site_home'))
@@ -387,28 +386,7 @@ def render_contactus_form(request, project, form):
                               context_instance=RequestContext(request))
     
 
-# method to delete a project and all its associated groups, permissions
-def deleteProject(project):
-    
-    print "Deleting project: %s" % project.short_name
-    
-    # note: project posts and tabs are automatically deleted because of one-to-many relationship to project
-        
-    # delete permissions
-    # note: if permissions didn't exit, they would be created first, then deleted
-    project.getUserPermission().delete()
-    project.getAdminPermission().delete()
-    
-    # delete groups
-    # note: if groups didn't exit, they would be created first, then deleted
-    project.getUserGroup().delete()
-    project.getAdminGroup().delete()
-            
-    # delete project
-    project.delete()
-
-
-# function to notify the site administrators that a new project has been requested
+# function to notify the node administrators that a new project has been requested
 def notifySiteAdminsOfProjectRequest(project, request):
     
     url = reverse('project_update', kwargs={'project_short_name': project.short_name.lower()})
@@ -426,7 +404,7 @@ def notifyAuthorOfProjectApproval(project, request):
         url = project.home_page_url()
         url = request.build_absolute_uri(url)
         subject = "New Project Registration Confirmation"
-        message = "Congratulations, the project you requested: %s has been approved by the site administrator(s).\n" \
+        message = "Congratulations, the project you requested: %s has been approved by the node administrator(s).\n" \
                   "The project home page is: %s" \
                   % (project.short_name, url)
         notify(project.author, subject, message)
@@ -445,11 +423,14 @@ def initProject(project):
     
     # create project groups
     uGroup = project.getUserGroup()
+    cGroup = project.getContributorGroup()
     aGroup = project.getAdminGroup()
     
     # create project permissions
-    uPermission = project.getUserPermission()
-    aPermission = project.getAdminPermission()
+    # obsolete ?
+    #uPermission = project.getUserPermission()
+    #cPermission = project.getContributorPermission()
+    #aPermission = project.getAdminPermission()
     
     # assign creator as project administrator
     if project.author is not None:
@@ -628,7 +609,7 @@ def project_browser(request, project_short_name, tab):
 @login_required
 def save_user_tag(request):
     
-    # POST: when local user submits form, GET: when remote user is redirected to this site
+    # POST: when local user submits form, GET: when remote user is redirected to this node
     if request.method == 'POST' or request.method == 'GET':
         
         # retrieve tag
@@ -656,7 +637,7 @@ def save_user_tag(request):
             request.session['PROJECT_BROWSER_TAB'] = 3                
             return HttpResponseRedirect(redirect)
     
-        # redirect request to user home site
+        # redirect request to user home node
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'),
                                                       tagName, redirect)
@@ -672,7 +653,7 @@ def save_user_tag(request):
 @login_required
 def delete_user_tag(request):
     
-    # POST: when local user submits form, GET: when remote user is redirected to this site
+    # POST: when local user submits form, GET: when remote user is redirected to this node
     if request.method == 'POST' or request.method == 'GET':
 
         tagName = request.REQUEST['tag']
@@ -695,7 +676,7 @@ def delete_user_tag(request):
             request.session['PROJECT_BROWSER_TAB'] = 3
             return HttpResponseRedirect(redirect)
                 
-        # redirect request to user home site
+        # redirect request to user home node
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'),
                                                       tagName, redirect)
@@ -819,7 +800,7 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
     for prj in projects:
         prjtags = list(prj.tags.all())
         if prj.isRemoteAndDisabled():
-            # filter out projects from peer sites that are NOT enabled
+            # filter out projects from peer nodes that are NOT enabled
             pass
         elif not prj.active:
             # do not add

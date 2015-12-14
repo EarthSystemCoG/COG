@@ -5,12 +5,15 @@
     <!-- project index -->
     <div class="vertical_menu">
 	    {% for index_item in project|index %}
-	    
 	    	<!-- topic bar -->
 	    	{% if index_item.topic == None %}
-                       <div class="left_upper_widget_header"> {{ project.short_name }}</div>
-                {% else %}
-	    		<div class="left_widget_header">{{ index_item.topic.name }}</div>
+                <div class="left_upper_widget_header">
+                    {{ project.short_name }}
+                </div>
+            {% else %}
+	    		<div class="left_widget_header">
+                    {{ index_item.topic.name }}
+                </div>
 	    	{% endif %}
 	    	
 	    	<!-- topic top-level pages -->
@@ -29,7 +32,7 @@
 	    {% endfor %}
 	    
 	    {% if user|hasAdminPermission:project %}
-		    <hr style="margin:0px"/>
+		    <hr style="margin:0;"/>
 		    <ul>
 		    	<li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li>
 		    </ul>
@@ -38,59 +41,61 @@
         
     <div class="vertical_menu">
     
-       <!-- open access -->
-       <div class="left_widget_header"> Visitors</div>
-       <ul>
-            <!-- <li><a href="{% url 'post_list' project.short_name.lower %}?type=blog" class="listlink">&nbsp;List All Blogs</a></li> -->
+        <!-- Unauthenticated Users -->
+        <div class="left_widget_header">
+            Visitors
+        </div>
+        <ul>
             <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li>
             <li><a href="{% url 'doc_list' project.short_name.lower %}" class="listlink">&nbsp;List All Files</a></li>
-       </ul>       
+        </ul>
  
-       <!-- access restricted to project members -->
-       {% if user|hasUserPermission:project %}
-       <div class="left_widget_header">Members</div>
-       <ul>
-       	    <li><a href="{% url 'news_add' project.short_name.lower %}" class="addlink">&nbsp;Publish News</a></li>
-            <li><a href="{% url 'post_add' project.short_name.lower %}?type=page" class="addlink">&nbsp;Add Page</a></li>
-            <!-- <li><a href="{% url 'post_add' project.short_name.lower %}?type=blog" class="addlink">&nbsp;Add Blog</a></li> -->
-            <li><a href="{% url 'doc_add' project.short_name.lower %}" class="addlink">&nbsp;Add File</a></li>
-            <li><a href="{% url 'bookmark_add' project.short_name.lower %}" class="addlink">&nbsp;Add Resource</a></li>
-       </ul>       
-       {% endif %}
+        <!-- access restricted to project Contributors -->
+        {% if user|hasContributorPermission:project %}
+            <div class="left_widget_header">
+                Contributors
+            </div>
+            <ul>
+                <li><a href="{% url 'post_add' project.short_name.lower %}?type=page" class="addlink">&nbsp;Add Page</a></li>
+       	        <li><a href="{% url 'news_add' project.short_name.lower %}" class="addlink">&nbsp;Publish News</a></li>
+                <li><a href="{% url 'doc_add' project.short_name.lower %}" class="addlink">&nbsp;Add File</a></li>
+                <li><a href="{% url 'bookmark_add' project.short_name.lower %}" class="addlink">&nbsp;Add Resource</a></li>
+            </ul>
+
+        {% endif %}
     
-       <!-- access restricted to project admins -->
-       {% if user|hasAdminPermission:project %}
-       <div class="left_widget_header">Administrators</div>
-       <ul>                       
-            <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
-            <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
-            <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List All Site Users</a></li>   
-        	<!-- <li><a href="/admin/filebrowser/browse?project={{project.short_name}}" class="listlink">&nbsp;Browse Project Uploads</a></li> -->
-        	<li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
-        	
-            <li><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project</a></li>
-            <li><a href="{% url 'tags_update' project.short_name.lower %}" class="changelink">&nbsp;Tag Project</a></li>
-            
-            <!-- <li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li> -->
-            {% if project.dataSearchEnabled %}
-            	<li><a href="{% url 'search_profile_config' project.short_name.lower %}" class="changelink">&nbsp;Configure Search</a></li>
-            {% endif %}
-            <!-- <li><a href="{% url 'project_add' %}?parent={{ project.short_name.lower }}" class="addlink">&nbsp;Add Child Project</a></li> -->
-            <li><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">&nbsp;Delete Project</a></li>             
-       </ul>
-       {% endif %}  
+        <!-- access restricted to Project Administrators-->
+        {% if user|hasAdminPermission:project %}
+            <div class="left_widget_header">
+                Administrators
+            </div>
+            <ul>
+                <li><a href="{% url 'post_list' project.short_name.lower %}" class="listlink">&nbsp;List All Pages</a></li>
+                <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
+                <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
+                <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List
+	                All Node Users</a></li>
+           	    <li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
+                <li><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project</a></li>
+                <li><a href="{% url 'tags_update' project.short_name.lower %}" class="changelink">&nbsp;Tag Project</a></li>
+                {% if project.dataSearchEnabled %}
+            	    <li><a href="{% url 'search_profile_config' project.short_name.lower %}" class="changelink">&nbsp;Configure Search</a></li>
+                {% endif %}
+                <li><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">&nbsp;Delete Project</a></li>
+            </ul>
+        {% endif %}
        
-       <!-- access restricted to site administrators -->
-       {% if user.is_staff %}
-       <div class="left_widget_header">Site Administrators</div>
-       <ul>
-            <li><a href="{% url 'admin_projects' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
-            <li><a href="{% url 'admin_users' %}" class="listlink">&nbsp;List System Users</a></li>
-            <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>      
-			<!-- <li><a href="/admin/filebrowser/browse" class="listlink">&nbsp;Browse All Uploads</a></li> -->      
-       </ul>
-       {% endif %}      
-       
-    </div>
+        <!-- access restricted to Node Administrators -->
+        {% if user.is_staff %}
+            <div class="left_widget_header">Node Administrators</div>
+                <ul>
+                    <li><a href="{% url 'admin_projects' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
+	                <li><a href="{% url 'admin_projects' %}" class="listlink">&nbsp;List All Projects</a>
+                    <li><a href="{% url 'admin_users' %}" class="listlink">&nbsp;List System Users</a></li>
+                    <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="listlink">&nbsp;Django Admin</a></li>
+                </ul>
+        {% endif %}
+    </div> <!--end of vertical menu-->
 
 {% endblock %}

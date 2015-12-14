@@ -1,63 +1,55 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-    <!-- limit visibility to site administrators -->
+    <!-- limit visibility to node administrators -->
     {% if request.user.is_staff %}
     
-      <div class="prepend-5 span-14 last" >
+        <div class="prepend-6 span-680 last" >
       
-      	<h1>CoG Peers Configuration</h1>
+      	    <h1>CoG Peers Configuration</h1>
       	
-      	{% if request.GET.status == 'success' %}
-	   		<p class="message-box">
-	       		Your changes have been saved. The updated Peers configuration is displayed below.
-	   		</p>
-   		{% else %}
-            <p>Use the check-boxes below to enable displaying of projects from remote CoG peers.</p>
-   		{% endif %}
+      	    {% if request.GET.status == 'success' %}
+	   		    <p class="message-box">
+	       		    Your changes have been saved. The updated Peers configuration is displayed below.
+	   		    </p>
+   		    {% else %}
+                <p>Use the check-boxes below to enable displaying of projects from remote CoG peers.</p>
+   		    {% endif %}
       
-       	<form action="" method="post">
+       	    <form action="" method="post">
                 
-            {% csrf_token %}
- 		    {{ formset.management_form }}
+                {% csrf_token %}
+ 		        {{ formset.management_form }}
  		    
- 		    <div class="mybox">
-				<table>
-					<caption>CoG Peer Nodes</caption>
- 		    
- 		    		{% for form in formset.forms %}
- 		    	
- 		    			{{ form.id }}
- 		    			{{ form.site.as_hidden }}
- 		    	
-		            	<tr>
-		            		<td valign="top" nowrap="nowrap"><strong>Site name:</strong> {{ form.instance.site.name }}</td>
-		            		<td valign="top" nowrap="nowrap"><strong>Domain:</strong> {{ form.instance.site.domain }}</td>
-		            		<td valign="top" nowrap="nowrap"><strong>Enabled:</strong> {{ form.enabled }} </td>
-		            	</tr>
-		            			    
- 		    		{% endfor %}  	
- 		    		
- 		    	</table>
- 		    </div>
- 		    	 		    	
- 		    <!-- <div style="float:left"><input type="reset" value="Cancel" onclick="self.location='{% url 'site_home' %}'"/></div> -->
- 		    <div style="float:left"><input type="reset" value="Reset" onclick="self.location='{% url 'admin_peers' %}'"/></div>
-	   		<div style="float:right"><input type="submit" value="Submit"/></div>
- 		    
-        </form>
+ 		        <div class="mybox">
+				    <table>
+					    <caption>CoG Peer Nodes</caption>
+                        <tr>
+                            <th class="white" scope="col"><strong>Node name</strong></th>
+                            <th class="white" scope="col"><strong>Domain</strong></th>
+                            <th class="white" scope="col"><strong>Enable?</strong></th>
+                        </tr>
+ 		    		    {% for form in formset.forms %}
+ 		    			    {{ form.id }}
+ 		    			    {{ form.site.as_hidden }}
+    		            	<tr>
+		            		    <td valign="top" nowrap="nowrap"> {{ form.instance.site.name }}</td>
+		            		    <td valign="top" nowrap="nowrap">{{ form.instance.site.domain }}</td>
+		            		    <td valign="top" nowrap="nowrap">{{ form.enabled }} </td>
+		            	    </tr>
+ 		    		    {% endfor %}
+ 		        	</table>
+ 		        </div>
+ 		        <!-- <div style="float:left"><input type="reset" value="Cancel" onclick="self.location='{% url 'site_home' %}'"/></div> -->
+ 		        <div style="float:left"><input type="reset" value="Reset" onclick="self.location='{% url 'admin_peers' %}'"/></div>
+	   		    <div style="float:right"><input type="submit" value="Submit"/></div>
+            </form>
         
-        <p>&nbsp;<p>
-        <div style="text-align:center">
-        	<a href="{% url 'sync_projects' %}"> Synchronize with Peer CoGs Now</a>
-        	<br/><span style="color:#FF0000">(Please make sure to save your changes first.)</span>
+            <p>&nbsp;<p>
+            <div style="text-align:center">
+        	    <a href="{% url 'sync_projects' %}"> Synchronize with Peer CoGs Now</a>
+        	    <br/><span style="color:#FF0000">(Please make sure to save your changes first.)</span>
+            </div>
         </div>
-        
-        
-      </div>
-        
-        
-   
-    {% endif %}   
-    
+    {% endif %}
 {% endblock %}

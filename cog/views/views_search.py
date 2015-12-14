@@ -22,6 +22,8 @@ from cog.services.SolrSerializer import deserialize
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 from cog.models.utils import get_or_create_default_search_group
 from django.http.response import HttpResponseServerError
+from cog.models.auth import userHasUserPermission
+from cog.models.auth import userHasAdminPermission
 
 
 SEARCH_INPUT  = "search_input"
@@ -189,7 +191,7 @@ def search_get(request, searchInput, searchConfig, extra={}):
             
         except HTTPError:
             print "HTTP Request Error"
-            data = request.session[SEARCH_DATA]
+            #data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
             data[ERROR_MESSAGE] = "Error: HTTP request resulted in error, search may not be properly configured "
             
@@ -427,7 +429,11 @@ def _getSearchConfig(request, project):
         constraints = project.searchprofile.constraints.split('&')
         for constraint in constraints:
             (key,values) = constraint.strip().split('=')
-            _values = values.split(',')
+            # IMPORTANT: DO NOT SPLIT 'localhost:8982/solr,localhost:8983/solr' as 'shards=localhost:8982/solr&shards=localhost:8982/solr'
+            if key == 'shards':
+                _values = [values]
+            else:
+                _values = values.split(',')
             for value in _values:
                 try:
                     fixedConstraints[key].append(value)
@@ -598,14 +604,21 @@ def search_files(request, dataset_id, index_node):
     
     # maximum number of files to query for
     limit = request.GET.get('limit', 20)
+            
+    params = [ ('type',"File"), ('dataset_id',dataset_id), 
+              ("format", "application/solr+json"), ('offset','0'), ('limit',limit) ]
     
     # optional query filter
     query = request.GET.get('query', None)
-    
-    params = [ ('type',"File"), ('dataset_id',dataset_id), ("format", "application/solr+json"), ("distrib", "false"),
-               ('offset','0'), ('limit',limit) ]
     if query is not None and len(query.strip())>0:
         params.append( ('query', query) )
+        
+    # optional shard
+    shard = request.GET.get('shard', '')
+    if shard is not None and len(shard.strip())>0:
+        params.append( ('shards', shard+"/solr") ) # '&shards=localhost:8982/solr'
+    else:
+        params.append( ("distrib", "false") )
  
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
     print 'Searching for files: URL=%s' % url

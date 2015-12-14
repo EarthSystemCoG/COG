@@ -63,7 +63,7 @@ def admin_users(request):
     else:
         users = getUsersThatMatch(request.POST['match'])
 
-    title = 'List Site Users'
+    title = 'List Node Users'
     return render_to_response('cog/admin/admin_users.html',
                               {'users': users, 'title': title},
                               context_instance=RequestContext(request))
@@ -73,7 +73,7 @@ def admin_users(request):
 @user_passes_test(lambda u: u.is_staff)
 def admin_peers(request):
     
-    PeerSiteFormSet = modelformset_factory(PeerSite, extra=0, can_delete=False)
+    PeerSiteFormSet = modelformset_factory(PeerSite, extra=0, can_delete=False, fields="__all__")
     
     if request.method == 'GET':
         

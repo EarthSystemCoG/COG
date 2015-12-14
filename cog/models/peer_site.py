@@ -1,5 +1,5 @@
 '''
-Class representing a peer COG site.
+Class representing a peer node.
 This class is a wrapper around the django 'Site' object
 with additional boolean flag for enabled status.
 '''
@@ -17,14 +17,14 @@ class PeerSite(models.Model):
         app_label= APPLICATION_LABEL
         
     def __unicode__(self):
-        #return "Site name: %s domain: %s enabled: %s" % (self.site.name, self.site.domain, self.enabled)
+        #return "Node name: %s domain: %s enabled: %s" % (self.site.name, self.site.domain, self.enabled)
         return self.site.name
     
 def getPeerSites():
-    '''Returns a list of ENABLED peer site objects.'''
+    '''Returns a list of ENABLED peer node objects.'''
     
     # filter PeerSites by enabled=True
-    return [peer.site for peer in PeerSite.objects.filter(enabled=True)]
+    return [peer.site for peer in PeerSite.objects.filter(enabled=True).order_by('site__name')]
 
 
 

@@ -1,10 +1,9 @@
 <!--START:/cog/templates/cog/search/_search_text.html-->
 <!-- Title -->
-<!--<h1 class="title">{{ project.short_name }} Data Search </h1>
+<!--<h1 class="title">{{ project.short_name }} Data Search </h1> -->
 
 
 {% if project.searchprofile.description %}
-    <h2>Project Specific Search Tips</h2>
     <div>
 		{{ project.searchprofile.description|urlize|linebreaksbr }}
 	</div>
@@ -77,15 +76,15 @@ page. At some point we may want to move this into cogstyle.css //-->
 	{% endif %}
 	{% if local_flag == True %}
 		&nbsp; <input type="checkbox" id="local" name="local" {% if search_input.local %} checked="checked" {% endif %} />
-                    <label for="local"><span style="margin-top:2px;vertical-align:middle;"> Search Local Site Only</span></label>
+                    <label for="local"><span style="margin-top:2px;vertical-align:middle;"> Search Local Node Only</span></label>
 	{% endif %}
 </div>
 
 <!-- Form Errors -->
 {% if error_message %}
 	<p></p>
-    <div class="error-box">{
-        { error_message }}
+    <div class="error-box">
+        {{ error_message }}
     </div>
 {% endif %}
 

@@ -2,9 +2,8 @@
 
 {% load pagination_tags %}
 {% with proj|getPeople as users %}
+{% autopaginate users 50 %}
 
-	{% autopaginate users 50 %}	
-			
 	<table class="no-color">
 	    <tr>
 	    	<td class="tophead" width="40px">&nbsp;</td>
@@ -76,7 +75,8 @@
 		    </tr>
 	    {% endfor %}
 	</table>
-	    
-	{% paginate %}
-      							
+  {% paginate %}
+
 {% endwith %}
+	    
+

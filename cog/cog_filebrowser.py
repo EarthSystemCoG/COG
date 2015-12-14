@@ -5,15 +5,16 @@
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
 
-from cog.models.project import Project, userHasProjectRole
+from cog.models.project import Project, getProjectsForUser
+from cog.models.auth import userHasProjectRole
 
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.models.constants import ROLE_USER, ROLE_ADMIN
-from cog.models.project import getProjectsForUser
+from cog.models.constants import ROLE_USER, ROLE_ADMIN, ROLE_CONTRIBUTOR
 
 from django.template import RequestContext
 
 SYSTEM_DIR = 'system'
+
 
 def mydecorator(func):
     
@@ -24,19 +25,20 @@ def mydecorator(func):
         
     return wrapper
 
+
 def get_browsable_projects(request):
     '''Function to return a list of projects to browse for the current HTTP request.'''
     
     project_short_name = request.GET.get('project', None)
     if project_short_name:
         # show only selected project folder
-        projects = [ get_object_or_404(Project, short_name__iexact=project_short_name) ]
+        projects = [get_object_or_404(Project, short_name__iexact=project_short_name)]
     elif request.user.is_staff:
         # show all projects for administrators
-         projects = Project.objects.all()
+        projects = Project.objects.all()
     else:
         # show only projects available to user
-        projects = getProjectsForUser(request.user, False) # includePending==False
+        projects = getProjectsForUser(request.user, False)  # includePending==False
     return projects
 
 
@@ -56,6 +58,7 @@ def project_filter(fileobject, user, projects):
     # reject this file object
     return False
         
+
 class filebrowser_check(object):
     '''
     Decorator that wraps the filebrowser views by enforcing
@@ -79,7 +82,7 @@ class filebrowser_check(object):
             filename = request.REQUEST.get('filename', None)
             print 'Filename=%s' % filename
             
-            # site administrators can perform any action
+            # node administrators can perform any action
             if request.user.is_staff:
                 return view(_self, *args, **kwargs)
             
@@ -88,12 +91,12 @@ class filebrowser_check(object):
                 project_dir = upload_dir.strip().split('/')[0]
                 print "project dir=%s" % project_dir
              
-                # no action allowed by anybody on 'system/' folder (except site administrators)
+                # no action allowed by anybody on 'system/' folder (except node administrators)
                 if project_dir == SYSTEM_DIR:
-                    return render_to_response('cog/common/message.html', 
-                                          {'mytitle':'Action Restricted', 
-                                           'messages':['Sorry, the system folder can be changed only by the site administrators.'] }, 
-                                            context_instance=RequestContext(request)) 
+                    return render_to_response('cog/common/message.html', {'mytitle': 'Action Restricted',
+                                              'messages': ['Sorry, the system folder can be changed only by the node '
+                                              'administrators.']},
+                                              context_instance=RequestContext(request))
             
                 # project associated with directory  
                 project = get_object_or_404(Project, short_name__iexact=project_dir)
@@ -105,11 +108,12 @@ class filebrowser_check(object):
                     return self._access_denied(request,
                                                ['Sorry, upload to the top-level folder is forbidden.',
                                                 'Please upload to the project specific folder.'])
-                if userHasProjectRole(request.user, project, ROLE_USER):
+                if userHasProjectRole(request.user, project, ROLE_CONTRIBUTOR):
                     return view(_self, *args, **kwargs)           
                 else:
                     # by default, return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-                    return self._access_denied(request, ['Sorry, this action is restricted to members of project: %s.' % project.short_name])
+                    return self._access_denied(request, ['Sorry, this action is restricted to members of project: %s.'
+                                                         % project.short_name])
                 
             # CREATE FOLDER ('/admin/filebrowser/createdir/')
             elif 'createdir' in request_path:
@@ -122,7 +126,8 @@ class filebrowser_check(object):
                         return view(_self, *args, **kwargs)           
                     else:
                         # by default, return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-                        return self._access_denied(request, ['Sorry, this action is restricted to administrators of project: %s.' % project.short_name])
+                        return self._access_denied(request, ['Sorry, this action is restricted to administrators of '
+                                                             'project: %s.' % project.short_name])
                     
             # DELETE FOLDER, FILE ('/admin/filebrowser/delete_confirm/')
             elif 'delete' in request_path:
@@ -134,10 +139,9 @@ class filebrowser_check(object):
                         return view(_self, *args, **kwargs)           
                     else:
                         # by default, return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-                        return self._access_denied(request, ['Sorry, this action is restricted to administrators of project: %s.' % project.short_name])
+                        return self._access_denied(request, ['Sorry, this action is restricted to administrators of '
+                                                             'project: %s.' % project.short_name])
 
-                    
-              
             # DEFAULT  
             else:
                 return self._access_denied(request, ['Sorry, this action is not allowed.'])

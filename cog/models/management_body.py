@@ -33,7 +33,7 @@ class ManagementBody(models.Model):
     termsOfReference = models.TextField(blank=True, verbose_name='Terms of Reference',
                                         help_text='A description of the duties and responsibilities of the '
                                                   'organizational body.')
-    purposes = models.ManyToManyField(ManagementBodyPurpose, null=True, blank=True)
+    purposes = models.ManyToManyField(ManagementBodyPurpose, blank=True)
     other = models.CharField(max_length=200, null=True, blank=True, verbose_name='Other Purpose',
                              help_text='Specify any other purpose(s) not included in the controlled vocabulary.')
     category = models.CharField(max_length=50, blank=True, null=False, default=MANAGEMENT_BODY_CATEGORY_STRATEGIC,

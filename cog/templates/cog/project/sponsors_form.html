@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_left_center.html" %}
 <!-- keep this template as left-center only. It is long -->
 <!-- templates/project/sponsors_form.html -->
 
@@ -10,46 +10,47 @@
 		
 		{% csrf_token %}
 	    {{ formset.management_form }}
-	    
+
+        Required field is in <strong>bold</strong>.
 	    <div class="mybox">
-		  <table>
+		    <table>
 		    	<caption>{{ project.short_name }} Sponsors</caption>
 		    	<tr>
-		    		<td style="font-weight: bold;" nowrap="nowrap">Name</td>
-		    		<td style="font-weight: bold;" nowrap="nowrap">URL</td>
-		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Logo</td>
-		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">(Maximum Size: 1MB)</td>
-		    		<td style="text-align: center; font-weight: bold;" nowrap="nowrap">Delete?</td>
+		    		<th class="white" nowrap="nowrap"><strong>Name</strong></th>
+		    		<th class="white" nowrap="nowrap">URL</th>
+		    		<th class="white" nowrap="nowrap">Logo</th>
+		    		<th class="white" nowrap="nowrap">(Maximum Size: 1MB)</th>
+		    		<th class="white" nowrap="nowrap">Delete?</th>
 		    	</tr>
-		    {% for form in formset %}
-	        	{{ form.id }}
-		        <tr>
-		            <td style="vertical-align: middle;">{{ form.name }} {{ form.name.errors }}</td>
-		            <td style="vertical-align: middle;">{{ form.url }} {{ form.url.errors }}</td>
-		            <td style="vertical-align: middle; text-align: center;">
-		            	<!-- always show picture on disk, not latest value from form -->
-		            	<img src="{{ form.instance|getImage }}" style="border: 1px solid #666666;" width="40px" />
-		            </td>
-		            <td style="vertical-align: middle;">
-		            	{% if not 'notfound' in form.instance|getImage and form.image.errors|length == 0 %}
-                           <!-- If image exists, show only option to remove current picture -->
-		            		{{ form.delete_image }} Delete current logo ?
-		                {% else %}
-                            <!-- if image does not exist, show the image upload widget -->
-		            	    {{ form.image.errors }}{{ form.image }}
-		            	{% endif %}
-		            </td>
-		            <td style="vertical-align: middle; text-align: center;"> {{ form.DELETE }}
-                    </td>
-		        </tr>
-			{% endfor %}
-		  </table>
+		        {% for form in formset %}
+	        	    {{ form.id }}
+		            <tr>
+		                <td style="vertical-align: middle;">{{ form.name }} {{ form.name.errors }}</td>
+		                <td style="vertical-align: middle;">{{ form.url }} {{ form.url.errors }}</td>
+		                <td style="vertical-align: middle; text-align: center;">
+		                	<!-- always show picture on disk, not latest value from form -->
+		            	    <img src="{{ form.instance|getImage }}" style="border: 1px solid #666666;" width="40px" />
+		                </td>
+		                <td style="vertical-align: middle;">
+		            	     {% if not 'notfound' in form.instance|getImage and form.image.errors|length == 0 %}
+                                 <!-- If image exists, show only option to remove current picture -->
+		            		     {{ form.delete_image }} Delete current logo ?
+		                     {% else %}
+                                 <!-- if image does not exist, show the image upload widget -->
+		            	         {{ form.image.errors }}{{ form.image }}
+		            	     {% endif %}
+		                </td>
+		                <td style="vertical-align: middle; text-align: center;"> {{ form.DELETE }}
+                        </td>
+		            </tr>
+			    {% endfor %}
+		    </table>
 		</div>
 	    
-      <div style="text-align:right">
-	      <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name tab %}'"/>
-	      <input type="submit" value="Submit" />
-      </div>
+        <div style="text-align:right">
+	        <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name tab %}'"/>
+	        <input type="submit" value="Submit" />
+        </div>
 	    
 	</form>
 

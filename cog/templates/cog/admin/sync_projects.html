@@ -1,45 +1,55 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-  <!-- limit visibility to site administrators -->
+  <!-- limit visibility to node administrators -->
   {% if request.user.is_staff %}
+      <div class="prepend-3 span-900 last" >
     
-    <div class="prepend-5 span-14 last" >
-    
-    	<h1>CoG Peer Nodes Synchronization</h1>
+          <h1>CoG Peer Nodes Synchronization</h1>
     	
-	    <div class="mybox">
-		    <table>
-		        <caption>
-		           Synchronization Report
-		        </caption>
+	          <div class="mybox">
+		          <table>
+		              <caption>
+		                  Synchronization Report
+		              </caption>
 		        
-		        <!-- header row -->
-		        <tr>
-	                <td class="tophead">Site Name</td>
-	                <td class="tophead">Domain</td>
-	                <td class="tophead">Shared Projects Document</td>
-	                <td class="tophead">Sync Status</td>
-	            </tr>
-				<!-- data rows -->	        
-		        {% for siteid, sitedict in sites.items %}
-			        <tr>
-			           <td>{{ sitedict.name }}</td>
-			           <td>{{ sitedict.domain }}</td>
-			           <td><a href='{{ sitedict.url }}'>Shared Projects</a></td>
-			           <td>
-			           		{% if sitedict.status == 'ERROR' %}
-			           			<span style="color:#FF0000">{{ sitedict.status }}</span>
-			           	   	{% else %}
-			           	   		<span style="color:#358C92">{{ sitedict.status }}</span>
-			           		{% endif %}
-                       </td>
-			        </tr>
-			    {% endfor %}
-		    </table>
-	    </div>
-	    
-	</div>
-       
-  {% endif %}   
+		              <!-- header row -->
+		              <tr>
+	                      <th class="white" scope="col"><strong>Node Name</strong></th>
+	                      <th class="white" scope="col"><strong>Domain</strong></th>
+	                      <th class="white" scope="col"><strong>Number of Projects</strong></th>
+	                      <th class="white" scope="col"><strong>Number of Users</strong></th>
+	                      <th class="white" scope="col"><strong>Report Document</strong></th>
+	                      <th class="white" scope="col"><strong>Sync Status</strong></th>
+	                  </tr>
+				      <!-- data rows -->
+		              {% for siteid, sitedict in sites %}
+			              <tr>
+			                  <td>{{ sitedict.name }}</td>
+			                  <td>{{ sitedict.domain }}</td>
+			                  <td>{{ sitedict.numberOfProjects }}</td>
+			                  <td>{{ sitedict.numberOfUsers }}</td>
+			                  <td><a href='{{ sitedict.url }}'>Shared Projects</a></td>
+			                  <td>
+			           		      {% if sitedict.status == 'ERROR' %}
+			           			      <span style="color:#FF0000">{{ sitedict.status }}</span>
+			           	   	      {% else %}
+			           	   		      <span style="color:#358C92">{{ sitedict.status }}</span>
+			           		      {% endif %}
+                              </td>
+			              </tr>
+			          {% endfor %}
+			          <!-- totals row -->
+			          <tr>
+			          	<td>Total</td>
+			          	<td>&nbsp;</td>
+			          	<td>{{ totalNumberOfProjects }}</td>
+			          	<td>{{ totalNumberOfUsers }}</td>
+			          	<td>&nbsp;</td>
+			          	<td>&nbsp;</td>
+			          </tr>
+		          </table>
+	          </div>
+	  </div>
+  {% endif %}
 {% endblock %}

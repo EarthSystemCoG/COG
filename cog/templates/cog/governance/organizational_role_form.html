@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% extends "cog/common/layout_left_center_right.html" %}
 
 {% block main %}
 
@@ -18,7 +18,7 @@
 					<tr>
 	            		<td valign="top" nowrap="nowrap"><strong>Type</strong></td>
 	            		<td class="long">
-	            			{{ form.type.help_text }}
+	            			{{ form.type.help_text }}<br>
 	            			{{ form.type }}
 	            			{{ form.type.errors }}
 	            		</td>
@@ -43,7 +43,7 @@
 	            		{% if form.instance.id %}
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
-		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
+		            			{{ form.DELETE }} <span style="padding:0;">Delete?</span>
 		            			&nbsp;<a href="{% url 'organizational_role_members' form.instance.id %}" class="changelink" style="float:right">Update Members</a>
 		            		</td>
 		            {% else %}

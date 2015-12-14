@@ -1,14 +1,16 @@
 {% extends "layouts/layout_base.html" %}
-<!--LOCATION: /layouts/templates/layouts/layout_left_main.html-->
-{% block body %}   
-     
-    <div class="span-24 last">
-        {% block title %} {% endblock %}
-    </div>
-    <div class="span-6">
+
+
+
+{% block body %}
+	<!--EXTENDS: /layouts/layout_base.html-->
+    <!--LAYOUT: /layouts/layout_sidebar_center.html-->
+    <div class="span-5">
          {% block left %} Left sidebar {% endblock %}
     </div>
-    <div class="span-18 last">
+
+    <div class="span-940 last">
+         {% block title %} <h1 class="title">{{ title }}</h1> {% endblock %}
          {% block main %} Main content {% endblock %}
     </div>
 

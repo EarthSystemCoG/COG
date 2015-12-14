@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% extends "cog/common/layout_left_center_right.html" %}
 
 {% block main %}
 
@@ -50,6 +50,11 @@
 	    <div class="mybox">
             <table>
                 <caption>Available search facet keys, their associated values.</caption>
+                <tr>
+                    <th class="white"><strong>Facet Key</strong></th>
+                    <th class="white"><strong>Facet Label</strong></th>
+                </tr>
+
                 {% for keyAndFacet in facets|sortdict %}
                 	<!-- only display facets that have some values -->
                 	{% if keyAndFacet.1.values %}

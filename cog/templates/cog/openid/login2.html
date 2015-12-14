@@ -1,6 +1,8 @@
 {% extends "cog/common/layout_center.html" %}
 <!--START: /cog/templates/cog/openid/login2.html-->
 
+<!--TODO: Is this file deprecated??-->
+
 {% block main %}
 
   {% load cog_utils %}
@@ -45,7 +47,11 @@
 	  {% csrf_token %}
       <div class="mybox">
 		<table>
-		<caption>CoG Login</caption>
+		<tr>
+            <td>
+                <strong>CoG Login</strong>
+            </td>
+        </tr>
 		<tr>
 	        <td style="width:10%;vertical-align:middle;text-align:right;">
                 <label for="username"><strong>Username</strong></label>
@@ -111,7 +117,11 @@
 
           <div class="mybox">
 	    	<table>
-	    	  <caption>ESGF Login</caption>
+	    	  <tr>
+                  <td class="caption_mimic" colspan="3">
+                      <strong>ESGF Login</strong>
+                  </td>
+              </tr>
 	    	  <tr>
 	    	    <td style="width:10%;text-align:right; vertical-align:middle;">
                     <label for="openid_identifier"><strong>OpenID</strong></label>

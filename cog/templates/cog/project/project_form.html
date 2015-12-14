@@ -3,9 +3,9 @@
 
 <!--// Loading block main //-->
 {% block main %}
-{% load cog_utils %}
-<script language="javascript">
-// function that selects/deselects tab/subtabs checkboxes to insure consistency
+    {% load cog_utils %}
+    <script language="javascript">
+        // function that selects/deselects tab/subtabs checkboxes to insure consistency
 		function trigger(checkbox) {
 			// if subtab is checked, tab must be checked
 			if (checkbox.checked==true) {
@@ -29,7 +29,14 @@
 				{% endfor %}
 			}
 		}
-</script>
+    </script>
+
+	{% if not form.instance.id %}
+	     <div class="message-box">
+	     You do not need to create a project to download data. <br> Instead
+		     navigate to the project hosting the data of interest and follow their instructions.
+		 </div>
+	{% endif %}
 	 
  <div class="mybox">
     <!-- note: action form can be "add" or "update" -->
@@ -63,6 +70,8 @@
                 </td>
                 <td>
                     {{ form.long_name }} {{ form.long_name.errors }}
+                    <br />
+                    [Project long name must NOT contain quotation marks.]
                 </td>
             </tr>
             <tr>
@@ -76,7 +85,7 @@
                     {% else %}
                         <a href="mailto:{{form.instance.author.email}}">{{ form.instance.author.username }}</a>
                     {% endif %}
-                    <span style="margin-top:2px">[ You may email the project creator for any questions concerning its metadata. ]</span>
+                    <span style="margin-top:2px">[You may email the project creator for any questions concerning its metadata.]</span>
                 {% endif %}
                     {{ form.author.as_hidden }}
                 </td>
@@ -87,6 +96,9 @@
                 </td>
                 <td>
                     {{ form.description }} {{ form.description.errors }}
+	                 <br />
+                    [Please describe your project, including objectives and approach. This text is part of the basis
+	                for project approval. It will also appear on the About Us page.]
                 </td>
             </tr>
 		    <!--// functions used for parents and peers comes from /cog/forms/forms_project.py //-->
@@ -97,7 +109,7 @@
                 <td>
                     {{ form.parents }} {{ form.parents.errors }}
                     <br/>
-                    [ To RETAIN or ADD new selections hold down the "Control" key (Windows), or the "Command" key (Mac).
+                    [To RETAIN or ADD new selections hold down the "Control" key (Windows), or the "Command" key (Mac).
                                  Assigning parent projects is NOT required.]
                         
                 </td>
@@ -109,7 +121,7 @@
                 <td>
                     {{ form.peers }} {{ form.peers.errors }}
                     <br />
-                    [ To RETAIN or ADD new selections hold down the "Control" key (Windows), or the "Command" key (Mac).
+                    [To RETAIN or ADD new selections hold down the "Control" key (Windows), or the "Command" key (Mac).
                                  Assigning peer projects is NOT required.]
                 </td>
             </tr>
@@ -121,7 +133,7 @@
                 </td>
                 <td style="width:85%;vertical-align:middle;">
                     {{ form.logo }} {{ form.logo.errors }}
-                    [ Optional project logo. Maximum height is 150px. ]
+                    [Optional project logo. Maximum height is 150px.]
 		        </td>
 		    </tr>
 	    </table>
@@ -134,12 +146,12 @@
                     {{ form.logo_url }}
                 </td>
 		        <td>
-                    [ optional URL to hyperlink logo, defaults to project home]
+                    [Optional URL to hyperlink logo, defaults to project home.]
                 </td>
             </tr>
 	    </table>
         <table class="odd-color">
-            <!-- only allow site administrators to change the active state of a project  -->
+            <!-- only allow node administrators to change the active state of a project  -->
             {% if request.user.is_staff and action == 'update' %}
 	            <tr>
 	                 <td style="width:15%;">
@@ -148,7 +160,7 @@
 	                 <td style="width:85%; vertical-align:middle;">
 	                     {{ form.active }}
 	                     <span>
-	                        [ Click on the check-box to initialize the project and enable access. Unclick to disable access. ]
+	                        [Click on the check-box to initialize the project and enable access. Unclick to disable access.]
 	                     </span>
 	                     {{ form.active.errors }}
 	                 </td>
@@ -156,7 +168,7 @@
             {% else %}
                 {{ form.active.as_hidden }}
             {% endif %}
-            <!--// Checkbox for private sites   \\-->
+            <!--// Checkbox for private projects   \\-->
             <tr>
 	            <td nowrap="nowrap">
                     Is Private?
@@ -164,7 +176,7 @@
 	            <td style="vertical-align:middle;">
 	                 {{ form.private }}
 	                 <span>
-	                    [ A private project is only visible to project members - users and administrators. ]
+	                    [A private project is only visible to project members - users and administrators.]
 	                 </span>
 	                 {{ form.private.errors }}
 	            </td>
@@ -176,7 +188,7 @@
                 </td>
                 <td>
                     <div style="text-align:left">
-                       [ IMPORTANT: If you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content. ]
+                       [IMPORTANT: If you enable a project "tab" or "subtab", please make sure to populate the corresponding page with content.]
                     </div>
                     <table class="gray">
                 	   {% for tablist in tabs %}
@@ -228,7 +240,7 @@
                 </td>
                 <td class="long">
                     {{ form.dataSearchEnabled }}
-                    [ Check to display the Data Search among the right widgets. ]
+                    [Check to display the Data Search among the right widgets.]
                     {{ form.dataSearchEnabled.errors }}
                 </td>
             </tr>
@@ -238,7 +250,17 @@
                 </td>
                 <td class="long">
                     {{ form.forumNotificationEnabled }}
-                    [ Check to email project administrators about forum postings (requires 'Forum' tab). ]
+                    [Check to email project administrators about forum postings (requires 'Forum' tab).]
+                </td>
+            </tr>
+            <tr>
+                <td nowrap="nowrap">
+                    <span style="margin-top:2px">Enable nodes widget?</span>
+                </td>
+                <td class="long">
+                    {{ form.nodesWidgetEnabled }}
+                    [Check to display the federated nodes widget among the right widgets (will appear on the project home page only).]
+                    {{ form.nodesWidgetEnabled.errors }}
                 </td>
             </tr>
         </table>

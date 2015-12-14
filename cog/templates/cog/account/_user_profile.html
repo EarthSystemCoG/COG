@@ -1,70 +1,102 @@
 <div class="mybox" style="margin-bottom:10px;">
     <table>
-        <caption>User Information</caption>
         <tr>
-         <th scope="row" class="white" nowrap="nowrap">First Name</th>
-         <td class="long">{{ user_profile.user.first_name }}</td>
+            <td colspan="2" class="caption_mimic"><strong>User Information</strong></td>
         </tr>
         <tr>
-            <th scope="row" class="gray" nowrap="nowrap">Last Name</th>
+            <td nowrap="nowrap">
+               <strong>First Name</strong>
+            </td>
+            <td class="long">{{ user_profile.user.first_name }}</td>
+        </tr>
+        <tr>
+            <td nowrap="nowrap">
+                <strong>Last Name</strong>
+            </td>
             <td class="long">{{ user_profile.user.last_name }}</td>
         </tr>
         {% if user.is_staff or user_profile.user == user %}
-        <tr>
-            <th scope="row" class="white" nowrap="nowrap">User Name</th>
-            <td class="long">{{ user_profile.user.username }}</td>
-        </tr>
+            <tr>
+                <td nowrap="nowrap">
+                    <strong>User Name</strong>
+                </td>
+                <td class="long">{{ user_profile.user.username }}</td>
+            </tr>
         {% endif %}
         {% if not request.user.is_anonymous %}
-        <tr>
-            <th scope="row" class="gray" nowrap="nowrap">Email</th>
-            <td class="long">{{ user_profile.user.email|truncatechars:40 }}</td>
-        </tr>
+            <tr>
+                <td nowrap="nowrap">
+                    <strong>Email</strong>
+                </td>
+                <td class="long">{{ user_profile.user.email|truncatechars:40 }}</td>
+            </tr>
         {% endif %}
         <tr>
-            <th scope="row" class="white" nowrap="nowrap">Institution</th>
+            <td nowrap="nowrap">
+                <strong>Institution</strong>
+            </td>
             <td class="long">{{ user_profile.institution }}</td>
         </tr>
         <tr>
-            <th scope="row" class="gray" nowrap="nowrap">Department</th>
+            <td nowrap="nowrap">
+                <strong>Department</strong>
+            </td>
             <td class="long">{{ user_profile.department }}</td>
         </tr>
         <tr>
-            <th scope="row" class="white" nowrap="nowrap">City</th>
+            <td nowrap="nowrap">
+                <strong>City</strong>
+            </td>
             <td class="long">{{ user_profile.city }}</td>
         </tr>
         <tr>
-            <th scope="row" class="gray" nowrap="nowrap">State</th>
+            <td nowrap="nowrap">
+                <strong>State</strong>
+            </td>
             <td class="long">{{ user_profile.state }}</td>
         </tr>
         <tr>
-            <th scope="row" class="white" nowrap="nowrap">Country</th>
+            <td nowrap="nowrap">
+                <strong>Country</strong>
+            </td>
             <td class="long">{{ user_profile.country }}</td>
         </tr>
 
         {% if request.user.is_staff or user_profile.user == request.user %}
 	        <tr>
-	            <th scope="row" class="gray" nowrap="nowrap">CoG Email List</th>
+	            <td nowrap="nowrap">
+                    <strong>CoG Email List</strong>
+                </td>
 	            <td class="long">{% if user_profile.subscribed %}Subscribed{% else %}Not Subscribed{% endif %}</td>
 	        </tr>
 	        <tr>
-	            <th scope="row" class="white" nowrap="nowrap">Listed in Projects</th>
+	            <td nowrap="nowrap">
+                    <strong>Listed in Projects</strong>
+                </td>
 	            <td class="long">{% if user_profile.private %}No{% else %}Yes{% endif %}</td>
 	        </tr>
 	        <tr>
-	            <th scope="row" class="gray" nowrap="nowrap">Home Site</th>
+	            <td nowrap="nowrap">
+                    <strong>Home Node</strong>
+                </td>
 	            <td class="long">{{ user_profile.site.name }}</td>
 	        </tr>
         {% endif %}
     </table>
 </div>
 {% for userurl in user_profile.userurl_set.all %}
-    <div class="span-17 last">
+    <div class="span-12 last">
         <div class="mybox">
             <table>
-               <caption>User Websites</caption>
+               <tr>
+                   <td colspan="2" class="caption_mimic">
+                       <strong>User Websites</strong>
+                   </td>
+               </tr>
 	           <tr>
-	               <th scope="row" class="white" nowrap="nowrap">Web Site</th>
+	               <td nowrap="nowrap">
+                       <strong>Web Site</strong>
+                   </td>
 	               <td class="long"><a href="{{ userurl.url }}">{{ userurl.name }}</a></td>
 	            </tr>
             </table>

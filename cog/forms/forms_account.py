@@ -13,6 +13,7 @@ from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS
 import os.path
 from django_openid_auth.models import UserOpenID
 import imghdr
+from captcha.fields import CaptchaField
 from cog.forms.forms_utils import validate_image
 
 # list of invalid characters in text fields
@@ -82,7 +83,8 @@ class UsernameReminderForm(Form):
 class PasswordChangeForm(Form):
 
     username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the target user
-    requestor = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the user reuesting the change (same as target user, or a site administrator)
+    requestor = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the user requesting the change (
+    # same as target user, or a node administrator)
     old_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }))
     password = CharField(required=True, 
                      # trigger javascript function when input field looses focus
@@ -109,9 +111,10 @@ class PasswordChangeForm(Form):
             # load requestor by username
             requestor = User.objects.get(username=self.cleaned_data.get('requestor'))
             
-            # check OpenID was issued by this site
+            # check OpenID was issued by this node
             if user.profile.localOpenid() is None:
-                self._errors["username"] = self.error_class(["Non local user: password must be changed at site that issued the OpenID."])
+                self._errors["username"] = self.error_class(["Non local user: password must be changed at the node "
+                                                             "that issued the OpenID."])
     
             # normal user: check current password
             old_password = self.cleaned_data.get('old_password')
@@ -165,6 +168,9 @@ class UserForm(ImageForm):
     
     # field that stores redirection URL after account creation
     next = CharField(required=False)
+    
+    # captcha field to prevent submission by web-bots
+    captcha = CaptchaField()
 
     class Meta:
         # note: use User model, not UserProfile
@@ -190,6 +196,10 @@ class UserForm(ImageForm):
         # new user only: validate 'password', 'confirm_password' fields
         if user_id is None:
             validate_password(self)
+            
+        # disable captcha validation if user is updating the form
+        if user_id is not None:
+            del self._errors['captcha']
 
         # validate 'username' field
         validate_username(self, user_id)

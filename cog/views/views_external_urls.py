@@ -13,6 +13,7 @@ from cog.models.constants import *
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS
 from cog.models.external_url_conf import externalUrlManager
+from cog.models.auth import userHasContributorPermission
 
 
 # Generic view to display a given type of external URLs.
@@ -83,7 +84,7 @@ def external_urls_update(request, project_short_name, suburl):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # check permission
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     try:
@@ -117,7 +118,7 @@ def external_urls_update(request, project_short_name, suburl):
         # sorting of the main view occurs in project.py
         if type == 'release_schedule':
             formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
-                                        order_by('-title'))
+                                         order_by('-title'))
         else:
 
             # external_urls are ordered by title when editing to match the order when just viewing.
@@ -128,12 +129,15 @@ def external_urls_update(request, project_short_name, suburl):
     
     # POST
     else:
-
         formset = ExternalUrlFormSet(request.POST)
 
         if formset.is_valid():
             # select instances that have changed, don't save to database yet
             instances = formset.save(commit=False)
+            # must manually delete the instances marked for deletion
+            for obj in formset.deleted_objects:
+                obj.delete()
+            # for all others, assign the project reference and persist changes
             for instance in instances:
                 instance.project = project
                 instance.type = type

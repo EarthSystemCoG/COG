@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_left_center.html" %}
 
 {% block main %} 
 
@@ -18,26 +18,31 @@
 	
 		    <div class="mybox">
 			    <table>
-			       <caption>{{news.project.short_name}}: {{ news.title }}</caption>
+			        <tr>
+                        <td class="caption_mimic">
+                            <strong>{{news.project.short_name}}: {{ news.title }}</strong>
+                        </td>
+                    </tr>
 			        <tr>
 			           <td class="long"> {{ news.text|urlizetrunc:50|linebreaksbr }} </td>
 			        </tr>	        
 			        <tr>
-			          <td>
-			          	<em class="message">{{news.update_date|date:"SHORT_DATETIME_FORMAT"}} by
-                            {% if news.author.username %}
-                                <a href="{% url 'user_detail' news.author.id %}">{{ news.author }}</a>
-                            {% else %}
-                                {{ news.author }}
-                            {% endif %}
-                        </em>
-			          	{% if user|hasUserPermission:news.project %}
-	                  		<div style="float:right">
-	                    	     &nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>
-	                    	     &nbsp;<a href="{% url 'news_delete' news.id %}" class="deletelink">Delete</a>
-	                    	</div>
-	                    {% endif %}
-			          </td>
+			            <td>
+			          	    <em class="message">{{news.update_date|date:"SHORT_DATETIME_FORMAT"}} by
+                                {% if news.author.username %}
+                                     <a href="{% url 'user_detail' news.author.id %}">{{ news.author }}</a>
+                                {% else %}
+                                    {{ news.author }}
+                                {% endif %}
+                            </em>
+                            <!--must be a contributor to update or delete news-->
+			            	{% if user|hasContributorPermission:news.project %}
+	                  		    <div style="float:right">
+	                    	        &nbsp;<a href="{% url 'news_update' news.id %}" class="changelink">Update</a>
+	                    	        &nbsp;<a href="{% url 'news_delete' news.id %}" class="deletelink">Delete</a>
+	                    	    </div>
+	                        {% endif %}
+			            </td>
 			        </tr>
 			    </table>
 		    </div>

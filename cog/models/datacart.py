@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from cog.models.search import Record
 import json
 from django.db import transaction
+from django.core.exceptions import ObjectDoesNotExist
 
 class DataCart(models.Model):
     
@@ -40,10 +41,10 @@ class DataCartItem(models.Model):
         return DataCartItem.create(datacart, record.id, record.fields)
     
     @staticmethod 
-    @transaction.commit_manually
+    @transaction.atomic
     def create(datacart, id, metadata):
         '''Factory method to create and persist a DataCartItem (and related objects) from an identifier and a dictionary of metadata fields.
-           Note that all related objects acre created in a single database transaction'''
+           Note that all related objects are created in a single database transaction'''
 
         # add item to the cart
         item = DataCartItem(cart=datacart, identifier=id)
@@ -62,10 +63,7 @@ class DataCartItem(models.Model):
                     val = value
                 itemValue = DataCartItemMetadataValue(key=itemKey, value=val)
                 itemValue.save()
-                
-        # save the full item
-        transaction.commit()
-                    
+                                    
         return item
 
     def asRecord(self):
@@ -90,10 +88,13 @@ class DataCartItem(models.Model):
     def getValues(self, key):
         
         values = []
-        _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
-        if _key is not None:
-            for _value in  _key.values.all():
-                values.append(_value.value)
+        try:
+            _key = DataCartItemMetadataKey.objects.get(item=self,key=key)
+            if _key is not None:
+                for _value in  _key.values.all():
+                    values.append(_value.value)
+        except ObjectDoesNotExist:
+            pass # key not found in metadata
         
         return values
     

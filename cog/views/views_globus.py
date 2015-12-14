@@ -12,7 +12,7 @@ from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
-from cog.plugins.esgf.idp_whitelist import LocalEndpointDict
+from cog.plugins.esgf.registry import LocalEndpointDict
 import os
 
 # download parameters
@@ -37,11 +37,11 @@ if siteManager.isGlobusEnabled():
 	from getpass import getpass
 	from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
 	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
-	GLOBUS_ENDPOINTS= LocalEndpointDict('/esg/config/esgf_endpoints.xml')
+	GLOBUS_ENDPOINTS= LocalEndpointDict(endpoints_filepath)
 
 def requires_globus(view_func):
 	'''
-	Custom decorator that prevents a view to be invoked unless this site
+	Custom decorator that prevents a view to be invoked unless this node
 	is configured with a [Globus] section in cog_settings.py.
 	'''
 	
@@ -171,7 +171,7 @@ def oauth(request):
 	
 	params = [ ('response_type','code'),
 		       ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
-		       ('redirect_uri', request.build_absolute_uri(reverse("globus_token")) ),]
+		       ('redirect_uri', request.build_absolute_uri(reverse("globus_token")).replace('http:','https:') ),] # MUST force 'https' protocol
 	
 	globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
 	# FIXME: fake the Globus URL

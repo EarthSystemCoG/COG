@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     # user
     user = models.OneToOneField(User, related_name='profile')
     
-    # site
+    # node (using the django site object)
     site = models.ForeignKey(Site, default=1)
 
     # additional mandatory fields
@@ -51,14 +51,14 @@ class UserProfile(models.Model):
     last_password_update = models.DateTimeField('Date and Time when Password was Last Updated', blank=True, null=True)
     
     # list of user-selected project tags
-    tags = models.ManyToManyField(ProjectTag, blank=True, null=True, related_name='users')
+    tags = models.ManyToManyField(ProjectTag, blank=True, related_name='users')
 
 
     def __unicode__(self):
         return "%s" % self.user.get_full_name()
     
     def getAbsoluteUrl(self):
-        '''Returns the absolute URL for this user profile, keeping the home site into account.'''
+        '''Returns the absolute URL for this user profile, keeping the home node into account.'''
         
         return "http://%s%s?openid=%s" % (self.site.domain, reverse('user_byopenid'), self.openid())
     
@@ -116,7 +116,7 @@ def isUserValid(user):
     return True
 
 def isUserLocal(user):
-    '''Method to determine whether a user home site is the current site.'''
+    '''Method to determine whether a user home node is the current node.'''
     
     (profile, _) = UserProfile.objects.get_or_create(user=user)
     return profile.site == Site.objects.get_current()
@@ -124,7 +124,7 @@ def isUserLocal(user):
 def isUserRemote(user):
     '''
     Method to identify remote users as users that:
-    a) do NOT have their home site as their current site
+    a) do NOT have their home node as their current node
     b) do have an OpenID
     '''
     
@@ -138,33 +138,33 @@ def isUserRemote(user):
     else:
         return True
     
-# loops over the peer sites to identify the home site for a given user
+# loops over the peer nodes to identify the home node for a given user
 def discoverSiteForUser(openid):
-    '''IMPORTANT: call this function ONLY at account creation as it makes requests to all peer sites.'''
+    '''IMPORTANT: call this function ONLY at account creation as it makes requests to all peer nodes.'''
         
-    for site in getPeerSites():  # loop over enabled peer sites
+    for site in getPeerSites():  # loop over enabled peer nodes
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
         jobj = getJson(url)
         if jobj is not None:
             for key, value in jobj['users'].items():
                 if str(value['home_site_domain']) == site.domain:
-                    return site  # site found
+                    return site  # node found
             
-    # site not found
+    # node not found
     return None
         
 def isOpenidLocal(openid):
-    '''Utility method to determine whether the given openid is issued by this site.'''
+    '''Utility method to determine whether the given openid is issued by this node.'''
     
     return settings.ESGF_HOSTNAME in openid
 
-# loops over the peer sites to retrieve the data cart size
+# loops over the peer nodes to retrieve the data cart size
 def getDataCartsForUser(openid):
         
-    dcs = {} # dictionary of (site_name, datacart_size) items
+    dcs = {}  # dictionary of (site_name, datacart_size) items
     
-    #for site in Site.objects.all():  # loop over all sites in database. Note: includes current site
-    for site in getPeerSites(): # loop over sites that are federated
+    #for site in Site.objects.all():  # loop over all sites (e.g. nodes) in database. Note: includes current node
+    for site in getPeerSites():  # loop over nodes that are federated
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
         print 'Querying for datacart: url=%s' % url
         jobj = getJson(url)
@@ -174,5 +174,20 @@ def getDataCartsForUser(openid):
             
     return dcs
         
+        
+def createUsername(username):
+    '''Selects the first available username in the CoG database starting with a given string.'''
+    
+    for ext in [""] + [str(i) for i in range(1,100)]:
+        username = username + ext
+        try:
+            # load user by username
+            user = User.objects.get(username=username)
+        except:
+            # this username is available
+            return username 
+        
+    return None
+    
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name

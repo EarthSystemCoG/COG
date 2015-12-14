@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from constants import PERMISSION_DENIED_MESSAGE, BAD_REQUEST
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from views_post import post_add
+from cog.models.auth import userHasContributorPermission
 
 
 def _hasBookmarks(project):
@@ -73,7 +74,7 @@ def bookmark_add(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     if request.method == 'GET':
@@ -110,7 +111,7 @@ def bookmark_add2(request, project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     response_data = {}
@@ -149,7 +150,7 @@ def bookmark_delete(request, project_short_name, bookmark_id):
     project = bookmark.folder.project
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
         
     # delete notes (recursively)
@@ -171,7 +172,7 @@ def bookmark_update(request, project_short_name, bookmark_id):
     project = bookmark.folder.project
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
         
     if request.method == 'GET':
@@ -188,6 +189,14 @@ def bookmark_update(request, project_short_name, bookmark_id):
         if form.is_valid():
             
             bookmark = form.save()
+            
+            # update associated Doc, if any
+            doc = getDocFromBookmark(bookmark)
+            if doc is not None:
+                print 'Updating associated doc: %s' % doc
+                doc.title = bookmark.name
+                doc.description = bookmark.description
+                doc.save()
             
             # redirect to bookmarks listing
             return HttpResponseRedirect(reverse('bookmark_list', args=[project.short_name.lower()]))
@@ -206,7 +215,7 @@ def folder_add(request, project_short_name):
     user = request.user
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
@@ -220,8 +229,10 @@ def folder_add(request, project_short_name):
         folder.parent = topfolder
                      
         # create form from instance
-        # project, user are used to sub-select the parent folder options
-        form = FolderForm(project, instance=folder)
+        # project is used to sub-select the parent folder options
+        form = FolderForm(project, 
+                          instance=folder, 
+                          initial={'redirect': request.GET.get('next', None)})
         return render_folder_form(request, project, form)
     
     else:
@@ -236,8 +247,12 @@ def folder_add(request, project_short_name):
             folder.active = True
             folder.save()
             
-            # redirect to bookmark add page
-            return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()]))
+            redirect = form.cleaned_data['redirect']
+            if redirect is not None and redirect.lower() != 'none' and len(redirect.strip()) > 0:
+                return HttpResponseRedirect(redirect)
+            else:
+                # redirect to bookmark add page
+                return HttpResponseRedirect(reverse('bookmark_add', args=[project.short_name.lower()]))
             
         else:
             # return to view
@@ -252,7 +267,7 @@ def folder_update(request, project_short_name, folder_id):
     folder = get_object_or_404(Folder, pk=folder_id)
     
     # security check
-    if not userHasUserPermission(request.user, folder.project):
+    if not userHasContributorPermission(request.user, folder.project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     if request.method == 'GET':
@@ -288,7 +303,7 @@ def folder_delete(request, project_short_name, folder_id):
     parentFolder = folder.topParent()
     
     # security check
-    if not userHasUserPermission(request.user, project):
+    if not userHasContributorPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if folder.parent == None:
@@ -330,6 +345,7 @@ def render_bookmark_form(request, project, form):
                               {'project': project, 'form': form, 'title': 'Resource Form'},
                               context_instance=RequestContext(request))     
     
+
 @login_required
 def bookmark_add_notes(request, project_short_name, bookmark_id):
     

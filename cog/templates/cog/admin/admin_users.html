@@ -1,12 +1,13 @@
 {% extends "cog/common/layout_center.html" %}
-
+<!--begin system users template-->
 {% block main %}
 
    {% load cog_utils %}
    {% load pagination_tags %}
    {% autopaginate users 50 %}
 
-<p>Below is the list of system users. Click on the name to visit their profile (includes home site). Click on the email to contact the user. </p>
+<p>Below is the list of system users. Click on the name to visit their profile (includes home node). Click on the email
+	to contact the user. </p>
    
        <table style="margin-left:125px; width:700px;">
            <tr>
@@ -29,11 +30,11 @@
             <caption>System Users</caption>
             <!-- <br/> tags in table are to align text to the bottom -->
             <tr>
-                <th scope="col" class="white">Last Name</th>
-                <th scope="col" class="white">First Name</th>
-                <th scope="col" class="white">User Name</th>
-                <th scope="col" class="white">Email</th>
-                <th scope="col" class="white">Last Login</th>
+                <th scope="col" class="white"><strong>Last Name</strong></th>
+                <th scope="col" class="white"><strong>First Name</strong></th>
+                <th scope="col" class="white"><strong>User Name</strong></th>
+                <th scope="col" class="white"><strong>Email</strong></th>
+                <th scope="col" class="white"><strong>Last Login</strong></th>
             </tr>
             {% for user in users %}
                 <tr>
