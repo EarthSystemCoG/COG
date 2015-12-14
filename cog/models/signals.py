@@ -27,7 +27,8 @@ def account_created_receiver(sender, **kwargs):
     if created and userp.openid() is not None: # only for new accounts created with external openid
         if userp.user.username.startswith("openiduser"): # typically from "https://ceda.ac.uk/openid/..." 
             # change the username
-            username = createUsername(userp.user.username)
+            lastPartOfOpenid = userp.openid().split("/")[-1]
+            username = createUsername(lastPartOfOpenid)
             print "New user: changing the username from: %s to: %s" % (userp.user.username, username)
             userp.user.username = username
             userp.user.save()
