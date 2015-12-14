@@ -174,5 +174,20 @@ def getDataCartsForUser(openid):
             
     return dcs
         
+        
+def createUsername(username):
+    '''Selects the first available username in the CoG database starting with a given string.'''
+    
+    for ext in [""] + [str(i) for i in range(1,100)]:
+        username = username + ext
+        try:
+            # load user by username
+            user = User.objects.get(username=username)
+        except:
+            # this username is available
+            return username 
+        
+    return None
+    
 # NOTE: monkey-patch User __unicode__() method to show full name
 User.__unicode__ = User.get_full_name
