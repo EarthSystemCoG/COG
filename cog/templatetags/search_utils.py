@@ -89,12 +89,12 @@ def recordUrls(record):
             urls.append(value)
         
     # add special WGET endpoint
-    urls.append( ("javascript:wgetScript('%s','%s')" % (record.fields['index_node'][0], record.id) , 
+    urls.append( ("javascript:wgetScript('%s','%s','%s')" % (record.fields['index_node'][0], record.fields.get('shard', [''])[0], record.id) , 
                   "application/wget", 
                   "WGET Script") )
     
     # add GridFTP endpoint
-    if siteManager.isGlobusEnabled(): # only if this site has been registered with Globus
+    if siteManager.isGlobusEnabled():  # only if this node has been registered with Globus
         if 'access' in record.fields and 'index_node' in record.fields and 'data_node' in record.fields:
             index_node = record.fields['index_node'][0]
             data_node = record.fields['data_node'][0]

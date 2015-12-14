@@ -17,7 +17,8 @@
    <tr>
         <td class="col1" style="vertical-align: middle;">Label</td>
         <td style="width:200px;">{{ form.label }}</td>
-	<td style="vertical-align:middle;">&nbsp; <em class="message">Optional shorter label for left menu, max 25 characters, defaults to page title</em> {{ form.label.errors }}</td>
+	<td style="vertical-align:middle;">&nbsp; <em class="message">Optional shorter label for left menu, max 28 characters,
+		defaults to page title</em> {{ form.label.errors }}</td>
     </tr>
 </table>
 <table class="odd-color">
@@ -25,18 +26,20 @@
         <td class="col1" style="vertical-align: middle;">
            <strong>URL</strong>
         </td>
-        <td style="max-width:300px; vertical-align:middle;" nowrap="nowrap">
-             /projects/{{project.short_name|lower }}/
+        <td style="vertical-align:middle;padding-right:0;" nowrap="nowrap">
+             <div style="display:block;float:left;max-width:200px;">/projects/{{ project.short_name|lower }}/</div>
+
         </td>
-        <td style="width:300px; vertical-align: middle;">
-            {{ form.url }}
+        <td style="vertical-align:middle;padding-left:0;" nowrap="nowrap">
+           <div style="display:block;float:left;width:150px;">{{ form.url }}</div>
         </td>
+
        {% if form.url.errors|length == 0 %}
-	       <td style="width:400px;vertical-align:middle;">
-              <em class="message">Use only letters, numbers, '_', '-' and '/'</em>
+	       <td style="vertical-align:middle;width:750px;">
+              <em class="message" style="text-align: center;">Use only letters, numbers, '_', '-' and '/'</em>
            </td>
        {%  else %}
-           <td style="width:400px;vertical-align:middle;">
+           <td style="width:750px;vertical-align:middle;">
               {{ form.url.errors }}
            </td>
        {% endif %}
@@ -66,14 +69,14 @@
  </table>
  <table class="odd-color">
     <tr>
-          <td class="col1" nowrap="nowrap" style="vertical-align: middle;">Not Viewable?</td>
+          <td class="col1" nowrap="nowrap">Not Viewable?</td>
           <td style="vertical-align: middle;">{{form.is_private }}
                (<em class="message">If checked, only project members will be able to view this page.</em>)
           </td>
     </tr>
     {% if user|hasAdminPermission:project %}
     	<tr>
-          <td class="col1" nowrap="nowrap" style="vertical-align: middle;">Not Editable?</td>
+          <td class="col1" nowrap="nowrap">Not Editable?</td>
           <td style="vertical-align: middle;">{{form.is_restricted}}
                (<em class="message">If checked, only project administrators will be able to edit this page. 
                     If not checked, all project members can edit this page.</em>)

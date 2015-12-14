@@ -63,7 +63,7 @@ def admin_users(request):
     else:
         users = getUsersThatMatch(request.POST['match'])
 
-    title = 'List Site Users'
+    title = 'List Node Users'
     return render_to_response('cog/admin/admin_users.html',
                               {'users': users, 'title': title},
                               context_instance=RequestContext(request))

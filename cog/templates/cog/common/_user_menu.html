@@ -7,7 +7,7 @@
 
      <!-- display project membership -->
      {% if request.user.is_staff %}
-           | You are a <strong> {{ site.name }} Site Administrator</strong>
+           | You are a <strong> {{ site.name }} Node Administrator</strong>
      {% else %}
 	     {% if project %}
 	        {% if project|hasUserPending:request.user %}
@@ -16,7 +16,7 @@
 		        {% if request.user|isEnrolled:project.getAdminGroup %}
                             | You are a <strong>project administrator</strong>
 		        {% else %}
-		            {% if request.user|isEnrolled:project.getUserGroup %}
+		            {% if project|hasUser:request.user %}
 		                | You are a <strong>project member</strong>
 		            {% else %}
 		                | <a href="{% url 'membership_request' project.short_name|lower %}">Join the {{ project.short_name }} project</a>
@@ -26,11 +26,6 @@
 	     {% endif %}
      {% endif %}
 
-
-     {% if request.user.is_staff %}
-         | <a href="{% url 'admin:index' %}">Django Admin</a>
-         | <a href="{% url 'admin_projects' %}">CoG Admin</a>
-     {% endif %}
      | <a href="{% url 'project_add' %}">Register a New Project</a>
      | <a href="{% url 'user_profile_redirect' request.user.id %}">My Profile</a>
      | <a href="{% url 'logout' %}?next={{ request.path }}">Log out</a>

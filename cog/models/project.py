@@ -134,6 +134,11 @@ class Project(models.Model):
     forumNotificationEnabled = models.BooleanField(default=False, blank=False, null=False,
                                                    help_text='Enable forum notifications to project administrators ?')
     
+    # flag to enable the peer widget
+    nodesWidgetEnabled = models.BooleanField(default=False, blank=False, null=False, 
+                                             help_text='Enable federated nodes widget ?')
+    
+    
     maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
     
@@ -145,7 +150,7 @@ class Project(models.Model):
                 
     def getAbsoluteUrl(self):
         """
-        Returns the absolute home page URL for this project, keeping its site into account.
+        Returns the absolute home page URL for this project, keeping its node into account.
         """
         
         return "http://%s%s" % (self.site.domain, reverse('project_home', args=[self.short_name.lower()]))
@@ -316,7 +321,7 @@ class Project(models.Model):
     
     def isRemoteAndDisabled(self):
         """
-        Returns True if the project is NOT local and its remote site is disabled.
+        Returns True if the project is NOT local and its remote node is disabled.
         """
         return not self.isLocal() and not self.site.peersite.enabled
     
@@ -360,7 +365,7 @@ class Project(models.Model):
 
 # PROJECT UTILITY METHODS
 
-# function to return the site administrators (aka web masters) for this site
+# function to return the node administrators (aka web masters) for this node
 def getSiteAdministrators():
     return User.objects.filter(is_staff=True)
 
@@ -451,6 +456,5 @@ def create_upload_directory(project):
     if not os.path.exists(fb_upload_dir):
         os.makedirs(fb_upload_dir)
         print 'Project Upload directory created: %s' % fb_upload_dir
-
 
 

@@ -64,15 +64,17 @@
 
         {% endif %}
     
-        <!-- access restricted to Project Adminstrators-->
+        <!-- access restricted to Project Administrators-->
         {% if user|hasAdminPermission:project %}
             <div class="left_widget_header">
                 Administrators
             </div>
             <ul>
+                <li><a href="{% url 'post_list' project.short_name.lower %}" class="listlink">&nbsp;List All Pages</a></li>
                 <li><a href="{% url 'membership_list_requested' project.short_name.lower %}" class="listlink">&nbsp;List Pending Users</a></li>
                 <li><a href="{% url 'membership_list_enrolled' project.short_name.lower %}" class="listlink">&nbsp;List Current Users</a></li>
-                <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List All Site Users</a></li>
+                <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List
+	                All Node Users</a></li>
            	    <li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
                 <li><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project</a></li>
                 <li><a href="{% url 'tags_update' project.short_name.lower %}" class="changelink">&nbsp;Tag Project</a></li>
@@ -83,13 +85,15 @@
             </ul>
         {% endif %}
        
-        <!-- access restricted to Site Administrators -->
+        <!-- access restricted to Node Administrators -->
         {% if user.is_staff %}
-            <div class="left_widget_header">Site Administrators</div>
+            <div class="left_widget_header">Node Administrators</div>
                 <ul>
                     <li><a href="{% url 'admin_projects' %}?active=False" class="listlink">&nbsp;Activate Projects</a></li>
+	                <li><a href="{% url 'admin_projects' %}" class="listlink">&nbsp;List All Projects</a>
                     <li><a href="{% url 'admin_users' %}" class="listlink">&nbsp;List System Users</a></li>
                     <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="listlink">&nbsp;Django Admin</a></li>
                 </ul>
         {% endif %}
     </div> <!--end of vertical menu-->

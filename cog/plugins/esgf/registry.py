@@ -1,5 +1,5 @@
 '''
-Module containing API and implementation for OpenID white-listing.
+Module containing API and implementation for registry-type objects.
 '''
 
 from xml.etree.ElementTree import fromstring, ParseError
@@ -10,6 +10,10 @@ import abc
 from cog.utils import file_modification_datetime
 from django.conf import settings
 import os
+from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
+
+from cog.models import PeerSite
 
 NS = "http://www.esgf.org/whitelist"
 
@@ -54,6 +58,7 @@ class LocalEndpointDict(EndpointDict):
     
     def __init__(self, filepath):
         
+        self.filepath = None
         self.endpoints = {}
         self.init = False
         
@@ -70,31 +75,33 @@ class LocalEndpointDict(EndpointDict):
     def _reload(self, force=False):
         '''Internal method to reload the dictionary of endpoints if the file has changed since it was last read'''
 
-        modtime = file_modification_datetime(self.filepath)
-
-        if force or modtime > self.modtime:
-
-            print 'Loading endpoints from: %s, last modified: %s' % (self.filepath, modtime)
-            self.modtime = modtime
-            endpoints = {}
-
-            # read XML file
-            with open (self.filepath, "r") as myfile:
-                xml=myfile.read().replace('\n', '')
-                
-            # <endpoints xmlns="http://www.esgf.org/whitelist">
-            root = fromstring(xml)
-            # <endpoint name="esg#jpl" gridftp="esg-datanode.jpl.nasa.gov:2811" />
-            for endpoint in root.findall("{%s}endpoint" % NS):
-                gridftp = endpoint.attrib['gridftp']
-                name = endpoint.attrib['name']                   # mandatory attribute
-                path_out = endpoint.attrib.get('path_out', None) # optional attribute
-                path_in = endpoint.attrib.get('path_in', None)   # optional attribute
-                endpoints[ gridftp ] = Endpoint(name, path_out=path_out, path_in=path_in)
-                print 'Using Globus endpoint %s : %s (%s --> %s)'  % (gridftp, name, path_out, path_in)
-
-            # switch the dictionary of endpoints after reading
-            self.endpoints = endpoints
+        if self.filepath: # only if endpoints file exists
+            
+            modtime = file_modification_datetime(self.filepath)
+    
+            if force or modtime > self.modtime:
+    
+                print 'Loading endpoints from: %s, last modified: %s' % (self.filepath, modtime)
+                self.modtime = modtime
+                endpoints = {}
+    
+                # read XML file
+                with open (self.filepath, "r") as myfile:
+                    xml=myfile.read().replace('\n', '')
+                    
+                # <endpoints xmlns="http://www.esgf.org/whitelist">
+                root = fromstring(xml)
+                # <endpoint name="esg#jpl" gridftp="esg-datanode.jpl.nasa.gov:2811" />
+                for endpoint in root.findall("{%s}endpoint" % NS):
+                    gridftp = endpoint.attrib['gridftp']
+                    name = endpoint.attrib['name']                   # mandatory attribute
+                    path_out = endpoint.attrib.get('path_out', None) # optional attribute
+                    path_in = endpoint.attrib.get('path_in', None)   # optional attribute
+                    endpoints[ gridftp ] = Endpoint(name, path_out=path_out, path_in=path_in)
+                    print 'Using Globus endpoint %s : %s (%s --> %s)'  % (gridftp, name, path_out, path_in)
+    
+                # switch the dictionary of endpoints after reading
+                self.endpoints = endpoints
     
     def endpointDict(self):
         
@@ -161,9 +168,10 @@ class LocalKnownProvidersDict(KnownProvidersDict):
                 #  </OP>
                 for idp in root.findall("OP"):
                     name = idp.find('NAME').text
-                    url = idp.find('URL').text
-                    idps[name] = url
-                    print 'Using known IdP: name=%s url=%s' % (name, url)
+                    if name is not None and len(name.strip()) > 0:
+                        url = idp.find('URL').text
+                        idps[name] = url
+                        print 'Using known IdP: name=%s url=%s' % (name, url)
     
                 # switch the dictionary of knwon providers
                 self.idps = idps
@@ -240,3 +248,66 @@ class LocalWhiteList(WhiteList):
 
         # don't trust this openid
         return False
+    
+class PeerNodesList(object):
+    '''
+    Class that updates the peer nodes in the database from an XML configuration file.
+    '''
+    
+    def __init__(self, filepath):
+        self.filepath = filepath
+        
+    def reload(self, delete=False):
+        
+        if os.path.exists(self.filepath):
+            
+            print('Updating list of CoG sites from: %s (delete: %s)' % (self.filepath, delete) )
+            
+            # current site - must not be updated from file list
+            current_site = Site.objects.get_current()
+                        
+            # read esgf_cogs.xml 
+            with open (self.filepath, "r") as myfile:
+                
+                xml=myfile.read().replace('\n', '')
+    
+                # <sites>
+                root = fromstring(xml)
+                
+                # update/insert all sites found in file
+                domains = [] # list of site domains found in file
+                for site in root.findall("site"):
+                    name = site.attrib['name']
+                    domain = site.attrib['domain']
+                    domains.append(domain)
+                    print 'Updating site domain: %s name: %s' % (domain, name)
+                    
+                    # update Site objects
+                    try:
+                        _site = Site.objects.get(domain=domain)
+                        if _site != current_site:
+                            # update site
+                            _site.name = name
+                            _site.save()
+                            print('Updated site: %s' % _site)
+                    except ObjectDoesNotExist:
+                        _site = Site.objects.create(name=name, domain=domain)
+                        print 'Created site: %s' % _site
+                        
+                    # update PeerSite objects
+                    try:
+                        peersite = PeerSite.objects.get(site=_site)
+                    except ObjectDoesNotExist:
+                        peersite = PeerSite.objects.create(site=_site, enabled=False)
+                    print '\tPeer site: %s' % peersite
+                            
+            # clean up stale sites
+            if delete:
+                for peer in PeerSite.objects.all():
+                    if peer.site.domain not in domains:
+                        if peer.site != current_site:
+                            print 'Stale peer site found at domain: %s' % peer.site.domain + ", deleting it..."
+                            peer.site.delete() # will also delete the PeerSite object on cascade
+
+        else:
+            print 'WARNING: File %s does not exist, skipping update of ESGF peer nodes' % self.filepath
