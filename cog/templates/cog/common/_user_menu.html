@@ -16,7 +16,7 @@
 		        {% if request.user|isEnrolled:project.getAdminGroup %}
                             | You are a <strong>project administrator</strong>
 		        {% else %}
-		            {% if request.user|isEnrolled:project.getUserGroup %}
+		            {% if project|hasUser:request.user %}
 		                | You are a <strong>project member</strong>
 		            {% else %}
 		                | <a href="{% url 'membership_request' project.short_name|lower %}">Join the {{ project.short_name }} project</a>
