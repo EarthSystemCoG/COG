@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.conf import settings
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.models import UserProfile, ProjectTag, getProjectForGroup
+from cog.models.user_profile import createUsername
 from cog.utils import getJson
 from cog.views.utils import get_all_projects_for_user
 from django.core.exceptions import ObjectDoesNotExist
@@ -21,6 +22,16 @@ def account_created_receiver(sender, **kwargs):
     created = kwargs['created']
 
     print 'Signal received: UserProfile post_save: username=%s created=%s openids=%s' % (userp.user.username, created, userp.openids())
+
+    # if username is like "openiduserXXX", then change it to the last part of the openid (+XXX if necessary)
+    if created and userp.openid() is not None: # only for new accounts created with external openid
+        if userp.user.username.startswith("openiduser"): # typically from "https://ceda.ac.uk/openid/..." 
+            # change the username
+            lastPartOfOpenid = userp.openid().split("/")[-1]
+            username = createUsername(lastPartOfOpenid)
+            print "New user: changing the username from: %s to: %s" % (userp.user.username, username)
+            userp.user.username = username
+            userp.user.save()
 
     # create ESGF user: only when user profile is first created
     # from a COG registration, and only if the user does NOT have an openid already
