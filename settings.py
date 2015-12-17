@@ -264,6 +264,9 @@ if PRODUCTION_SERVER:
 # FIXME: necessary for openid-auth since django 1.6.5 otherwise session is not serialized correctly
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
+# default size limit of files uploaded by users
+MAX_UPLOAD_SIZE = 52428800
+
 #=== django-comments-contrib settings ======================================
 
 # The maximum length of the comment field, in characters. Comments longer than this will be rejected. Defaults to 3000.
