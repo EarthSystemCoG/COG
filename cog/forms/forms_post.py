@@ -64,11 +64,9 @@ class PostForm(ModelForm):
             # do NOT allow URLs that are part of templated URLs
             # url='contactus/' --> _url='contactus'
             _url = url.split('/')[0] # compare first part of user URL...
-            print 'FIRSTPART=%s' % _url 
             # predefined_pages=[(u'TestProject Home', u'/projects/testproject/'), 
             #                   ('About Us', u'/projects/testproject/aboutus/'), 
             #                   ('Mission', u'/projects/testproject/mission/'), ...
-            print project.predefined_pages()
             for ppage in project.predefined_pages():
                 # [-1] location is empty string because templates URLs always end in '/'
                 __url = str(ppage[1]).split("/")[-2] # to last part of project templated URL... 
