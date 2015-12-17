@@ -16,18 +16,10 @@ from django.template import RequestContext
 SYSTEM_DIR = 'system'
 
 
-def mydecorator(func):
-    
-    def wrapper(fb, *args, **kwargs):
-        request = args[0]
-        print 'Wrapping request: %s' % request
-        return func(fb, *args, **kwargs)
-        
-    return wrapper
-
-
 def get_browsable_projects(request):
     '''Function to return a list of projects to browse for the current HTTP request.'''
+    
+    print "\n\n\nHERLLO"
     
     project_short_name = request.GET.get('project', None)
     if project_short_name:
@@ -73,6 +65,9 @@ class filebrowser_check(object):
         # method that wraps the view invocation - same signature as the view + the instance reference (_self)
         def wrapper(_self, *args, **kwargs):
             
+            raise Exception("filebrowser_check was invoked")
+        
+            '''
             # extract HTTP request parameters
             request = args[0]
             upload_dir = request.REQUEST.get('dir', None)
@@ -147,6 +142,7 @@ class filebrowser_check(object):
                 return self._access_denied(request, ['Sorry, this action is not allowed.'])
                                                    
         return wrapper
+        '''
             
     def _access_denied(self, request, messages):
         return render_to_response('cog/common/message.html', 
