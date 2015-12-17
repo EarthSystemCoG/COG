@@ -139,7 +139,7 @@ class Project(models.Model):
                                              help_text='Enable federated nodes widget ?')
     
     
-    maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
+    maxUploadSize = models.IntegerField(default=settings.MAX_UPLOAD_SIZE, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
     
     # test field

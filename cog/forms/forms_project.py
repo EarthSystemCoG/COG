@@ -97,6 +97,11 @@ class ProjectForm(ModelForm):
         if '\"' in long_name:
             raise forms.ValidationError("Quotation characters are not allowed in project long name")
         
+        # check for non-ascii characters
+        try:
+            long_name.decode('ascii')
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            raise forms.ValidationError("Project long name contains invalid non-ASCII characters")
         return long_name
         
     class Meta:

@@ -27,6 +27,7 @@ import collections
 import logging
 import os
 import time
+from django.utils.crypto import get_random_string
 
 from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, 
@@ -137,7 +138,7 @@ class CogConfig(object):
         self._safeSet('SITE_NAME', hostName.upper())
         self._safeSet('SITE_DOMAIN', hostName)
         self._safeSet('TIME_ZONE', 'America/Denver')
-        self._safeSet('SECRET_KEY','<change this to a random sequence of characters 20 or more and dont share it>')
+        self._safeSet('SECRET_KEY', get_random_string(length=128))
         self._safeSet('COG_MAILING_LIST','cog_info@list.woc.noaa.gov')
         if self.esgf: # ESGF: use postgres by default
             self._safeSet('DJANGO_DATABASE','postgres')
