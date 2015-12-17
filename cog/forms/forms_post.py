@@ -59,6 +59,22 @@ class PostForm(ModelForm):
         if type == Post.TYPE_PAGE:
 
             url = cleaned_data.get("url")
+            project = cleaned_data.get("project")
+                        
+            # do NOT allow URLs that are part of templated URLs
+            # url='contactus/' --> _url='contactus'
+            _url = url.split('/')[0] # compare first part of user URL...
+            print 'FIRSTPART=%s' % _url 
+            # predefined_pages=[(u'TestProject Home', u'/projects/testproject/'), 
+            #                   ('About Us', u'/projects/testproject/aboutus/'), 
+            #                   ('Mission', u'/projects/testproject/mission/'), ...
+            print project.predefined_pages()
+            for ppage in project.predefined_pages():
+                # [-1] location is empty string because templates URLs always end in '/'
+                __url = str(ppage[1]).split("/")[-2] # to last part of project templated URL... 
+                if _url == __url:
+                    self._errors["url"] = self.error_class(["The term '%s' is reserved for standard project URLs" % _url])
+            
             # only allows letters, numbers, '-', '_' and '/'
             if re.search("[^a-zA-Z0-9_\-/]", url):
                 self._errors["url"] = self.error_class(["Page URL contains invalid characters"])
