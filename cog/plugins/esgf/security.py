@@ -261,5 +261,28 @@ class ESGFDatabaseManager():
                     session.add(esgfUser)
                     session.commit()
                     session.close()
+                    
+    def updateUser(self, user_profile):
+        '''Updates the user data in the ESGF database.'''
+                
+        for openid in user_profile.openids():
+            
+            # openid must match the configured ESGF host name
+            if settings.ESGF_HOSTNAME in openid:
+                esgfUser = self.getUserByOpenid(openid)
+                if esgfUser is not None:
+                    session = self.Session()
+                    esgfUser.firstname = user_profile.user.first_name
+                    esgfUser.lastname = user_profile.user.last_name
+                    esgfUser.email = user_profile.user.email
+                    #esgfUser.username # ESGF username may be different than CoG username
+                    esgfUser.organization = user_profile.institution
+                    esgfUser.city = user_profile.city
+                    esgfUser.state = user_profile.state
+                    esgfUser.country = user_profile.country
+                    print 'Updated ESGF data for user with openid: %s' % openid
+                    session.add(esgfUser)
+                    session.commit()
+                    session.close()
             
 esgfDatabaseManager = ESGFDatabaseManager()

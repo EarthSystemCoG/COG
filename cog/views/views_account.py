@@ -455,7 +455,7 @@ def user_update(request, user_id):
             # old user profile
             user_profile = get_object_or_404(UserProfile, user=user)
             
-            # capture user profile status before t is updated
+            # capture user profile status before it is updated
             oldValidFlag = isUserValid(user)
             oldSubscribed = user_profile.subscribed
             
@@ -522,6 +522,10 @@ def user_update(request, user_id):
                     
             elif oldSubscribed == False and form.cleaned_data['subscribed']:
                 subscribeUserToMailingList(user, request)
+
+            # update ESGF user object in ESGF database
+            if settings.ESGF_CONFIG:
+                esgfDatabaseManager.updateUser(user_profile)
 
             # redirect user profile page
             response = HttpResponseRedirect(reverse('user_detail', kwargs={'user_id': user.id}))
