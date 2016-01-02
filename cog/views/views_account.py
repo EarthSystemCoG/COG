@@ -3,7 +3,7 @@ import urllib
 from urlparse import urlparse
 
 from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import is_password_usable
 from django.contrib.auth.views import login
 from django.contrib.sites.models import Site
@@ -397,7 +397,29 @@ def user_image(request):
 
     else:
         return HttpResponseNotAllowed(['GET'])
+
+@user_passes_test(lambda u: u.is_staff)
+def user_delete(request, user_id):
     
+    # get user
+    user = get_object_or_404(User, pk=user_id)
+    
+    if request.method == 'GET':
+        return render_to_response('cog/account/user_delete.html', 
+                                  {'user': user, 'title': 'Delete User'},
+                                  context_instance=RequestContext(request))
+    else:
+        
+        # delete ESGF user and all related objects
+        if settings.ESGF_CONFIG:
+            esgfDatabaseManager.deleteUser(user)
+
+        # delete CoG user and all related objects
+        user.delete()
+                
+        # redirect to user listings
+        return HttpResponseRedirect(reverse('admin_users'))
+
 
 @login_required
 def user_update(request, user_id):

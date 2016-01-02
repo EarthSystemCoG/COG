@@ -53,6 +53,7 @@ urlpatterns = patterns('',
     # user management
     url(r'^user/add/$', 'cog.views.user_add', name='user_add' ),
     url(r'^user/update/(?P<user_id>\d+)/$', 'cog.views.user_update', name='user_update' ),
+    url(r'^user/delete/(?P<user_id>\d+)/$', 'cog.views.user_delete', name='user_delete' ),
     url(r'^user/detail/(?P<user_id>\d+)/$', 'cog.views.user_detail', name='user_detail'),
     url(r'^password/update/(?P<user_id>\d+)/$', 'cog.views.password_update', name='password_update'),
     url(r'^password/reset/$', 'cog.views.password_reset', name='password_reset'),
