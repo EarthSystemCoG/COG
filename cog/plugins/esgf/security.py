@@ -7,7 +7,7 @@ from uuid import uuid4
 from django_openid_auth.models import UserOpenID
 
 
-from cog.plugins.esgf.objects import ESGFGroup, ESGFRole, ESGFUser
+from cog.plugins.esgf.objects import ESGFGroup, ESGFRole, ESGFUser, ESGFPermission
 from cog.plugins.esgf.permissionDAO import PermissionDAO
 from cog.plugins.esgf.groupDao import GroupDAO
 
@@ -284,5 +284,25 @@ class ESGFDatabaseManager():
                     session.add(esgfUser)
                     session.commit()
                     session.close()
-            
+                    
+    def deleteUser(self, user):
+        '''Deletes the user from the ESGF database.'''
+                
+        for openid in user.profile.openids():
+            # openid must match the configured ESGF host name
+            if settings.ESGF_HOSTNAME in openid:
+                esgfUser = self.getUserByOpenid(openid)
+                
+                if esgfUser is not None:
+                    print 'Deleting ESGF user with openid=%s' % openid    
+                    session = self.Session()
+                    # delete user permissions
+                    permissions = session.query(ESGFPermission).filter(ESGFPermission.user_id==esgfUser.id)
+                    for p in permissions:
+                        session.delete(p)
+                    # delete user
+                    session.delete(esgfUser)
+                    session.commit()
+                    session.close()    
+                    
 esgfDatabaseManager = ESGFDatabaseManager()
