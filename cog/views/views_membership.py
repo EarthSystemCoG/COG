@@ -206,7 +206,6 @@ def membership_remove(request, project_short_name):
 # @login_required
 def membership_process(request, project_short_name):
     # load project
-    print 'in membership process'
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     # check permission
     if not userHasAdminPermission(request.user, project):
@@ -214,8 +213,7 @@ def membership_process(request, project_short_name):
 
     print 'items', request.REQUEST.items()
     for (name, value) in request.REQUEST.items():
-        print '**************************************'
-        print 'name is ', name
+
         if name.startswith(NEW_MEMBERSHIP) or name.startswith(OLD_MEMBERSHIP) or name.startswith(NO_MEMBERSHIP):
             (prefix, group_name, user_id) = name.split(":")
             
@@ -225,7 +223,6 @@ def membership_process(request, project_short_name):
             # HTTP POST parameter from form check-box, all checks are treated as new
             # process checkbox as a new user
             if name.startswith(NEW_MEMBERSHIP):
-                print 'new', user.get_full_name(), group_name
                 status = addMembership(user, group)
 
                 #only email if user not already a member
@@ -237,12 +234,9 @@ def membership_process(request, project_short_name):
             # if user has a role, then {{isEnrolled}} turns on the hidden field with value = "on"
 
             elif name.startswith(OLD_MEMBERSHIP):
-                print 'old', user.get_full_name(), group_name
                 try:
                     # don't delete from group if checkbox is still checked  (e.g. new membership)
                     new_membership = request.REQUEST[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
-                    if new_membership:
-                        print 'checkbox is there', group_name
                 except KeyError:
                     # checkbox is empty, so remove from group
                     status = cancelMembership(user, group)
@@ -251,9 +245,7 @@ def membership_process(request, project_short_name):
              
             # HTTP GET parameter (when delete link clicked)
             elif name.startswith(NO_MEMBERSHIP):
-                #TODO check group here, should remove from all groups
-                print 'method on delete ', request.method
-                print 'none', user.get_full_name()
+                # TODO check group here, should remove from all groups
                 status = cancelMembership(user, group)
                 if status == RESULT_SUCCESS:
                     notifyUserOfGroupRemoval(project, group, user)
