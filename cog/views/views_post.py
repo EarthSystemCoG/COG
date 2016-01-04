@@ -189,7 +189,7 @@ def post_list(request, project_short_name):
     topic_list = Topic.objects.filter(Q(post__project=project) & Q(post__type=type)).distinct().order_by('-name')
 
     return render_to_response('cog/post/post_list.html', 
-                              {"object_list": paginate(results, request, max_counts_per_page=2),
+                              {"object_list": paginate(results, request, max_counts_per_page=50),
                                "title": '%s Pages' % project.short_name,
                                "list_title": list_title,
                                "query": query,  

@@ -20,7 +20,6 @@ setup(
                       'django==1.8.3',
                       'django-grappelli==2.4.5',
                       'django-openid-auth==0.5',
-                      'django-pagination==1.0.7',
                       'sqlalchemy==0.9.2',
                       'south==1.0.0',
                       'psycopg2==2.5.2',
