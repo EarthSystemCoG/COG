@@ -1,8 +1,5 @@
 {% load cog_utils %}
-
-{% load pagination_tags %}
 {% with proj|getPeople as users %}
-{% autopaginate users 50 %}
 
 	<table class="no-color">
 	    <tr>
@@ -12,7 +9,8 @@
 	        <td class="tophead" width="100px">Institution</td>
 	        <td class="tophead">Interest Keywords</td>
 	    </tr>
-	    {% for user in users %}
+	    {% for user in users|paginate_filter:request %}
+	    
             {% if forloop.last %}
                <tr>
             {% else %}
@@ -75,7 +73,10 @@
 		    </tr>
 	    {% endfor %}
 	</table>
-  {% paginate %}
+  
+  	{% with users|paginate_filter:request as results_page %}
+ 		{% include 'cog/common/_pagination.html' %}
+	{% endwith %}
 
 {% endwith %}
 	    
