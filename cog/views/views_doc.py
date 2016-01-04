@@ -18,6 +18,7 @@ from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
 from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
 import os
+from cog.views.utils import getQueryDict
 
 
 @csrf_exempt
@@ -205,7 +206,7 @@ def doc_remove(request, doc_id):
     delete_doc(doc)
         
     # redirect to original page, or to project home if not found
-    redirect = request.REQUEST.get('redirect', None)
+    redirect = getQueryDict(request).get('redirect', None)
     if redirect is None:
         redirect = reverse('project_home', kwargs={'project_short_name': project.short_name.lower()})
     
