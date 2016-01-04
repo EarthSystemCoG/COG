@@ -664,7 +664,7 @@ def list_project_tags(project):
 
 @register.filter
 def projectNews(project):
-    return news(project)
+    return project_news(project)
 
 
 @register.filter

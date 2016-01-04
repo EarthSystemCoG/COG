@@ -24,7 +24,7 @@ from urllib import quote
 
 
 # method to retrieve all news for a given project, ordered by original publication date
-def news(project):
+def project_news(project):
     qset = Q(project=project) | Q(other_projects=project)
     return News.objects.filter(qset).distinct().order_by('-publication_date')
 
