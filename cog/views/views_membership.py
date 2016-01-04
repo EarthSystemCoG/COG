@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test, per
 from cog.views.utils import getUsersThatMatch, getQueryDict
 from django.contrib.sites.models import Site
 from cog.models.auth import userHasAdminPermission
+from cog.views.utils import paginate
 
 from cog.notification import notify
 from constants import PERMISSION_DENIED_MESSAGE
@@ -147,7 +148,9 @@ def render_membership_page(request, project, users, title, view_name):
     groups = project.getGroups()
         
     return render_to_response('cog/membership/membership_list.html', 
-                              {'project': project, 'users': users, 'groups': groups,
+                              {'project': project, 
+                               'users': paginate(users, request, max_counts_per_page=50),
+                               'groups': groups,
                                'view_name': view_name,
                                'title': title, 'list_title': '%s Membership' % project.short_name},
                               context_instance=RequestContext(request))

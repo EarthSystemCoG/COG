@@ -3,8 +3,6 @@
 {% block main %}
 
    {% load cog_utils %}
-   {% load pagination_tags %}
-   {% autopaginate users 50 %}
          
    {% if request.GET.status == 'success' %}
 	   <p class="message-box">
@@ -38,13 +36,16 @@
                         <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email</strong>:</label>
                         <input style="vertical-align: middle; width:30%;" type="text" name="match" id="match" value="{{request.POST.match}}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
-	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
+	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.path }}'"/>
                    </form>
                </td>
            </tr>
        </table>
    
-   {% paginate %}
+   <!-- pagination -->
+   {% with users as results_page %}
+   	{% include 'cog/common/_pagination.html' %}
+   {% endwith %}
     
    <form name="membershipForm" action="{% url 'membership_process' project.short_name|lower %}" method="post"> 
        {% csrf_token %}
