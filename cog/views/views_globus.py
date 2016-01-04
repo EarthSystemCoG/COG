@@ -14,6 +14,7 @@ from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
 from cog.plugins.esgf.registry import LocalEndpointDict
 import os
+from cog.views.utils import getQueryDict
 
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
@@ -67,9 +68,9 @@ def download(request):
 	'''
 		
 	# retrieve request parameters
-	datasets = request.REQUEST.get('dataset','').split(",")
+	datasets = getQueryDict(request).get('dataset','').split(",")
 	# optional query filter
-	query = request.REQUEST.get('query',None)
+	query = getQueryDict(request).get('query',None)
 	# maximum number of files to query for, if specified
 	limit = request.GET.get('limit', DOWNLOAD_LIMIT)
 	
@@ -165,9 +166,9 @@ def oauth(request):
 	# retrieve destination parameters from Globus redirect
 	# example URL with added parameters from Globus redirect: 
 	# /globus/oauth/?label=&verify_checksum=on&submitForm=&folder[0]=tmp&endpoint=cinquiniluca#mymac&path=/~/&ep=GC&lock=ep&method=get&folderlimit=1&action=http://localhost:8000/globus/oauth/
-	request.session[TARGET_ENDPOINT] = request.REQUEST.get('endpoint','#')
-	request.session[TARGET_FOLDER] = request.REQUEST.get('path','/~/') + request.REQUEST.get('folder[0]','/~/')  # default value: user home directory
-	print 'User selected destionation endpoint:%s, path:%s, folder:%s' % (request.session[TARGET_ENDPOINT], request.REQUEST.get('path','/~/'), request.session[TARGET_FOLDER])
+	request.session[TARGET_ENDPOINT] = getQueryDict(request).get('endpoint','#')
+	request.session[TARGET_FOLDER] = getQueryDict(request).get('path','/~/') + getQueryDict(request).get('folder[0]','/~/')  # default value: user home directory
+	print 'User selected destionation endpoint:%s, path:%s, folder:%s' % (request.session[TARGET_ENDPOINT], getQueryDict(request).get('path','/~/'), request.session[TARGET_FOLDER])
 	
 	params = [ ('response_type','code'),
 		       ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
