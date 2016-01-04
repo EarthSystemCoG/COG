@@ -51,7 +51,7 @@ def admin_projects(request):
 
     # retrieve top-level projects, ordered alphabetically by short name. Only list those on the current site.
     return render_to_response('cog/admin/admin_projects.html',
-                              {'project_list': paginate(project_list, 2, request),
+                              {'project_list': paginate(project_list, request),
                                'title': '%s Projects Administration' % site.name,
                                }, context_instance=RequestContext(request))
 

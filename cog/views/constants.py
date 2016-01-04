@@ -8,3 +8,6 @@ SAVED = "Saved"
 
 VALID_ORDER_BY_VALUES = ['title', '-title', 'update_date', '-update_date']
 VALID_FILTER_BY_VALUES = ['all','image','text','presentation','program']
+
+# default counts for object pagination
+MAX_COUNTS_PER_PAGE = 20

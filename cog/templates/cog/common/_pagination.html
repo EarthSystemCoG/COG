@@ -5,14 +5,14 @@
 
 <!-- pagination -->
 <div class="pagination">
-	Total # of Results: {{ results_page.paginator.count }} &nbsp;
+	Total # of Results: {{ results_page.paginator.count }}, &nbsp;
 	
 	{% if results_page.has_previous %}
 	    <a href="?page={{ results_page.previous_page_number }}">&#171; Previous |</a>
 	{% endif %}
 	
 	<span class="current">
-	    Results: {{ results_page.start_index }} - {{ results_page.end_index }}.
+	    Showing Results: {{ results_page.start_index }} - {{ results_page.end_index }}.
 	</span>
 	
 	{% if results_page.has_next %}

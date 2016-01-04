@@ -13,16 +13,17 @@ from collections import OrderedDict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from cog.plugins.esgf.registry import LocalKnownProvidersDict
+from cog.views.constants import MAX_COUNTS_PER_PAGE
 
 # module-scope object that holds list of known ESGF Identity Providers
 # included here because login view is part of django-openid-auth module
 esgf_known_providers = LocalKnownProvidersDict()
 
-def paginate(objects, max_per_page, request):
+def paginate(objects, request, max_counts_per_page=MAX_COUNTS_PER_PAGE):
     '''Utility method to paginate a list of objects before they are rendered in a template.'''
     
     page = getQueryDict(request).get('page')
-    paginator = Paginator(objects, max_per_page) # show at most 'max_per_page'
+    paginator = Paginator(objects, max_counts_per_page) # show at most 'max_counts_per_page'
     
     try:
         _objects = paginator.page(page)
