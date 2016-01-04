@@ -257,7 +257,7 @@ def datacart_delete(request, site_id, user_id):
         raise Exception("User not authorized to modify datacart")
     
     # TODO:: check node, redirect in case
-    identifier = request.REQUEST['item']
+    identifier = request.POST['item']
     
     # NOTE: make sure this item belongs to the user's data cart
     (datacart, _) = DataCart.objects.get_or_create(user=user)
