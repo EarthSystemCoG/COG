@@ -20,7 +20,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 import urlparse
 import string
-from cog.views.utils import getKnownIdentityProviders, getQueryDict
+from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
+from cog.views.constants import MAX_COUNTS_PER_PAGE
 
 register = template.Library()
 
@@ -803,3 +804,9 @@ def get_peer_sites(project):
     """
     
     return getPeerSites()
+
+@register.filter
+def paginate_filter(objects, request):
+    
+    # must use max_counts_per_page=MAX_COUNTS_PER_PAGE since a filter accepts at most 2 parameters
+    return paginate(objects, request) 
