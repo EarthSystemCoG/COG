@@ -88,3 +88,11 @@ def getJson(url):
         print e
         print 'Error retrieving URL=%s' % url
         return None
+    
+def getQueryDict(request):
+    '''Utiity method to return the query dictionary for a GET or POST request.'''
+    
+    if request.method == 'POST':
+        return request.POST
+    else:
+        return request.GET
