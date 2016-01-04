@@ -21,7 +21,6 @@ from django.core.exceptions import ObjectDoesNotExist
 import urlparse
 import string
 from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
-from cog.views.constants import MAX_COUNTS_PER_PAGE
 
 register = template.Library()
 
@@ -810,3 +809,17 @@ def paginate_filter(objects, request):
     
     # must use max_counts_per_page=MAX_COUNTS_PER_PAGE since a filter accepts at most 2 parameters
     return paginate(objects, request) 
+
+@register.filter
+def pagination_url(request, page_number):
+    '''Constructs the previous/next URL for a paginated page including all GET request parameters.'''
+    
+    # copy all current request parameters
+    params = request.GET.copy()
+    
+    # replace/add 'page' parameter
+    params['page'] = page_number
+    
+    # build full URL
+    return '%s?%s' %  (request.path, params.urlencode())
+        

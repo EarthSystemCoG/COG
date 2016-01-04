@@ -18,7 +18,7 @@ from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
 from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
 import os
-from cog.views.utils import getQueryDict
+from cog.views.utils import getQueryDict, paginate
 
 
 @csrf_exempt
@@ -301,7 +301,8 @@ def doc_list(request, project_short_name):
     list_title = "Total Number of Matching Documents: %d" % len(results)
    
     return render_to_response('cog/doc/doc_list.html', 
-                              {"object_list": results, 'project': project, 'title': '%s Files' % project.short_name,
+                              {"object_list": paginate(results, request, max_counts_per_page=100),
+                               'project': project, 'title': '%s Files' % project.short_name,
                                "query": query, "order_by": order_by, "filter_by": filter_by, "list_title":
                                   list_title},
                               context_instance=RequestContext(request))

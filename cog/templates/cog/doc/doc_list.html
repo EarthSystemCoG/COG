@@ -9,8 +9,6 @@
     {% endwith %}
 
     {% load comments %}
-    {% load pagination_tags %}
-    {% autopaginate object_list 100 %}
 
     <div class="mybox">
 	    <table>
@@ -59,5 +57,9 @@
              </tr>
 		</table>
 	</div>
-    {% paginate %}
+   
+   {% with object_list as results_page %}
+   		{% include 'cog/common/_pagination.html' %}
+   {% endwith %}
+    
 {% endblock %}
