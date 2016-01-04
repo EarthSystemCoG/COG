@@ -11,6 +11,7 @@ from django.views.decorators.http import require_GET, require_POST, require_http
 from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 from django.core.exceptions import ObjectDoesNotExist
 from django_openid_auth.models import UserOpenID
+from cog.views.utils import getQueryDict
 
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
@@ -198,7 +199,8 @@ def datacart_wget(request, site_id, user_id):
         raise Exception("User not authorized to use datacart")
     
     # retrieve list of selected dataset ids
-    ids = request.REQUEST.getlist('id')
+    queryDict = getQueryDict(request)
+    ids = queryDict.getlist('id')
         
     # map of dataset ids grouped by index node 
     response_data = {}
