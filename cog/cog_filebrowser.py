@@ -70,11 +70,11 @@ class filebrowser_check(object):
             '''
             # extract HTTP request parameters
             request = args[0]
-            upload_dir = request.REQUEST.get('dir', None)
+            upload_dir = getQueryDict(request).get('dir', None)
             print 'Upload directory=%s' % upload_dir
             request_path = request.path
             print 'Request path=%s' % request_path
-            filename = request.REQUEST.get('filename', None)
+            filename = getQueryDict(request).get('filename', None)
             print 'Filename=%s' % filename
             
             # node administrators can perform any action
