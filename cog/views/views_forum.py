@@ -16,6 +16,7 @@ from constants import PERMISSION_DENIED_MESSAGE
 from cog.forms.forms_forum import ForumThreadForm, MyCommentForm, ForumTopicForm
 from django_comments.models import Comment
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from cog.views.utils import paginate
 
 
 def forum_detail(request, project_short_name):
@@ -47,7 +48,7 @@ def forum_detail(request, project_short_name):
         form = ForumTopicForm()
         
         # display forum index
-        return _render_forum_template(topics, project, form, request)
+        return _render_forum_template(paginate(topics, request), project, form, request)
                 
     # POST request to create new thread
     else:
@@ -70,7 +71,7 @@ def forum_detail(request, project_short_name):
             return HttpResponseRedirect(reverse('forum_detail', kwargs={'project_short_name': project.short_name}))
         else:
             # display forum index with errors
-            return _render_forum_template(topics, project, form, request)
+            return _render_forum_template(paginate(topics, request), project, form, request)
 
 
 def topic_detail(request, project_short_name, topic_id):

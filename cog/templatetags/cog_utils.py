@@ -808,7 +808,7 @@ def get_peer_sites(project):
 def paginate_filter(objects, request):
     
     # must use max_counts_per_page=MAX_COUNTS_PER_PAGE since a filter accepts at most 2 parameters
-    return paginate(objects, request) 
+    return paginate(objects, request)
 
 @register.filter
 def pagination_url(request, page_number):
