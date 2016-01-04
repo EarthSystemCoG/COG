@@ -8,7 +8,7 @@
 			// show the error message
 			alert("{{error}}");
 		{% endif %}
-		window.parent.CKEDITOR.tools.callFunction( '{{ request.REQUEST.CKEditorFuncNum }}' , '{{ url }}' );
+		window.parent.CKEDITOR.tools.callFunction( '{{ request.GET.CKEditorFuncNum }}' , '{{ url }}' );
 	</script>
 
 {% endblock %}

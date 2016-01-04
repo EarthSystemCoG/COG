@@ -19,8 +19,6 @@ SYSTEM_DIR = 'system'
 def get_browsable_projects(request):
     '''Function to return a list of projects to browse for the current HTTP request.'''
     
-    print "\n\n\nHERLLO"
-    
     project_short_name = request.GET.get('project', None)
     if project_short_name:
         # show only selected project folder
