@@ -19,7 +19,7 @@ from django.utils.timezone import now
 from cog.models.utils import delete_doc
 from django.conf import settings
 import os
-from cog.views.utils import getQueryDict
+from cog.views.utils import getQueryDict, paginate
 
 
 # view to render a generic post
@@ -189,7 +189,7 @@ def post_list(request, project_short_name):
     topic_list = Topic.objects.filter(Q(post__project=project) & Q(post__type=type)).distinct().order_by('-name')
 
     return render_to_response('cog/post/post_list.html', 
-                              {"object_list": results,
+                              {"object_list": paginate(results, request, max_counts_per_page=2),
                                "title": '%s Pages' % project.short_name,
                                "list_title": list_title,
                                "query": query,  

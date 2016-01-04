@@ -4,9 +4,6 @@
     {% load cog_utils %}
     {% url post_list as url %}
     {% load comments %}
-    {% load pagination_tags %}
-    {% autopaginate object_list 50 %}
-
                 
     <div class="mybox">
 	    <table>
@@ -63,6 +60,8 @@
 		</table>
 	</div>
 	
-	{% paginate %}	
+	{% with object_list as results_page %}
+		{% include 'cog/common/_pagination.html' %}
+	{% endwith %}
 		
 {% endblock %}
