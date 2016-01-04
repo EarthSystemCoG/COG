@@ -24,6 +24,7 @@ from cog.models.utils import get_or_create_default_search_group
 from django.http.response import HttpResponseServerError
 from cog.models.auth import userHasUserPermission
 from cog.models.auth import userHasAdminPermission
+from cog.views.utils import getQueryDict
 
 SEARCH_INPUT  = "search_input"
 SEARCH_OUTPUT = "search_output"
@@ -80,12 +81,14 @@ def search(request, project_short_name):
 def _buildSearchInput(request, searchConfig):
     """Assembles the search input from the HTTP request and the project specific configuration."""
     
+    queryDict = getQueryDict(request)
+    
     # populate input with search constraints from HTTP request
     searchInput = SearchInput()
     for facetGroup in searchConfig.facetProfile.facetGroups:
         for key in facetGroup.getKeys():
-            if request.REQUEST.get(key, None):
-                for value in request.REQUEST.getlist(key):
+            if queryDict.get(key, None):
+                for value in queryDict.getlist(key):
                     if value:
                         searchInput.addConstraint(key, value)
     
@@ -94,26 +97,26 @@ def _buildSearchInput(request, searchConfig):
             searchInput.setConstraint(key, values)
             
     # text
-    if request.REQUEST.get('query', None):
-        searchInput.query = request.REQUEST['query']
+    if queryDict.get('query', None):
+        searchInput.query = queryDict['query']
     # type
-    if request.REQUEST.get('type', None):
-        searchInput.type = request.REQUEST['type']
+    if queryDict.get('type', None):
+        searchInput.type = queryDict['type']
     # replica=True/False
-    if request.REQUEST.get('replica', None) == 'on':
+    if queryDict.get('replica', None) == 'on':
         searchInput.replica = True
     # latest=True/False
-    if request.REQUEST.get('latest', None) == 'on':
+    if queryDict.get('latest', None) == 'on':
         searchInput.latest = False
     # local=True/False
-    if request.REQUEST.get('local', None) == 'on':
+    if queryDict.get('local', None) == 'on':
         searchInput.local = True
 
     # offset, limit
-    if request.REQUEST.get('offset', 0):
-        searchInput.offset = int(request.REQUEST['offset'])
-    if request.REQUEST.get('limit', 0):
-        searchInput.limit = int(request.REQUEST['limit'])
+    if queryDict.get('offset', 0):
+        searchInput.offset = int(queryDict['offset'])
+    if queryDict.get('limit', 0):
+        searchInput.limit = int(queryDict['limit'])
 
     return searchInput
 
@@ -134,11 +137,12 @@ def search_config(request, searchConfig, extra={}):
     searchInput = _buildSearchInput(request, searchConfig)
         
     # GET/POST switch
+    queryDict = getQueryDict(request)
     print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
                                                                                                 request.session.get(SEARCH_REDIRECT, None), 
-                                                                                                request.REQUEST)
+                                                                                                queryDict)
     if request.method == 'GET':
-        if len(request.REQUEST.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: 
+        if len(queryDict.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: 
             # GET pre-seeded search URL -> redirect to POST immediately
             return search_post(request, searchInput, searchConfig, extra)
         else:
@@ -244,6 +248,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
     
     facetProfile = searchConfig.facetProfile
     searchService = searchConfig.searchService
+    queryDict = getQueryDict(request)
     
     # valid user input
     if (searchInput.isValid()):
@@ -294,7 +299,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
     # for key, values in searchInput.constraints.items():
     # note: request parameters do NOT include the project fixed constraints
     req_constraints = []  # latest constraints from request
-    for key, value in request.REQUEST.items():
+    for key, value in queryDict.items():
         if not key in SEARCH_PATH_EXCLUDE and value != 'on':  # value from 'checkbox_...'
             if value is not None and len(value) > 0:  # disregard empty facet
                 print 'key=%s value=%s' % (key, value)
