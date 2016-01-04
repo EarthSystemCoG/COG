@@ -1,9 +1,6 @@
 {% extends "cog/common/layout_left_center.html" %}
 
 {% block main %} 
-
-    {% load pagination_tags %}
-    {% autopaginate project_signals 20 %}
     
     {% for signal in project_signals %}
 	    <div class="mybox">
@@ -24,6 +21,8 @@
     
       {% endfor %}
     
-    {% paginate %}
+      {% with project_signals as results_page %}
+      	{% include 'cog/common/_pagination.html' %}
+      {% endwith %}
 
 {% endblock %}
