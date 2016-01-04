@@ -134,7 +134,6 @@ def get_all_projects_for_user(user, includeCurrentSite=True):
     # sort by project short name
     return projects
 
-
 def add_get_parameter(url, key, value):
     """
     Utility method to add an HTTP request parameter to a GET request
@@ -144,3 +143,11 @@ def add_get_parameter(url, key, value):
         return url + "&%s" % urllib.urlencode([(key, value)])
     else:
         return url + "?%s" % urllib.urlencode([(key, value)])
+    
+def getQueryDict(request):
+    '''Utiity method to return the query dictionary for a GET or POST request.'''
+    
+    if request.method == 'POST':
+        return request.POST
+    else:
+        return request.GET

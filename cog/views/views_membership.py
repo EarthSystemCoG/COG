@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from utils import getUsersThatMatch
+from cog.views.utils import getUsersThatMatch, getQueryDict
 from django.contrib.sites.models import Site
 from cog.models.auth import userHasAdminPermission
 
@@ -211,8 +211,9 @@ def membership_process(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
-    print 'items', request.REQUEST.items()
-    for (name, value) in request.REQUEST.items():
+    queryDict = getQueryDict(request)
+    
+    for (name, value) in queryDict.items():
 
         if name.startswith(NEW_MEMBERSHIP) or name.startswith(OLD_MEMBERSHIP) or name.startswith(NO_MEMBERSHIP):
             (prefix, group_name, user_id) = name.split(":")
@@ -236,7 +237,7 @@ def membership_process(request, project_short_name):
             elif name.startswith(OLD_MEMBERSHIP):
                 try:
                     # don't delete from group if checkbox is still checked  (e.g. new membership)
-                    new_membership = request.REQUEST[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
+                    new_membership = queryDict[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
                 except KeyError:
                     # checkbox is empty, so remove from group
                     status = cancelMembership(user, group)
@@ -251,7 +252,7 @@ def membership_process(request, project_short_name):
                     notifyUserOfGroupRemoval(project, group, user)
 
     # redirect to the original listing that submitted the processing
-    view_name = request.REQUEST['view_name']
+    view_name = queryDict['view_name']
     return HttpResponseRedirect(reverse(view_name,
                                         kwargs={'project_short_name': project_short_name})+"?status=success")
 
