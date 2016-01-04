@@ -22,7 +22,7 @@ from cog.services.membership import addMembership
 from cog.utils import *
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.views.views_templated import templated_page_display
-from cog.views.utils import add_get_parameter
+from cog.views.utils import add_get_parameter, getQueryDict
 from cog.models.auth import userHasAdminPermission, userHasUserPermission, userHasContributorPermission
 
 # method to add a new project, with optional parent project
@@ -613,8 +613,9 @@ def save_user_tag(request):
     if request.method == 'POST' or request.method == 'GET':
         
         # retrieve tag
-        tagName = request.REQUEST['tag']
-        redirect = request.REQUEST['redirect']
+        queryDict = getQueryDict(request)
+        tagName = queryDict['tag']
+        redirect = queryDict['redirect']
         print 'Saving user tag: %s' % tagName
         print 'Eventually redirecting to: %s' % redirect
         
@@ -656,8 +657,9 @@ def delete_user_tag(request):
     # POST: when local user submits form, GET: when remote user is redirected to this node
     if request.method == 'POST' or request.method == 'GET':
 
-        tagName = request.REQUEST['tag']
-        redirect = request.REQUEST['redirect']
+        queryDict = getQueryDict(request)
+        tagName = queryDict['tag']
+        redirect = queryDict['redirect']
         print 'Deleting user tag: %s' % tagName
         print 'Eventually redirecting to: %s' % redirect
         
