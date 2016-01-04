@@ -68,7 +68,7 @@ def admin_users(request):
 
     title = 'List Node Users'
     return render_to_response('cog/admin/admin_users.html',
-                              {'users': users, 'title': title},
+                              {'users': paginate(users, request, max_counts_per_page=50), 'title': title},
                               context_instance=RequestContext(request))
 
     
