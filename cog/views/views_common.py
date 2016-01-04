@@ -10,12 +10,14 @@ from django_comments.models import Comment
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from constants import PERMISSION_DENIED_MESSAGE
 from cog.models.project import userHasAdminPermission
+from cog.views.utils import getQueryDict
 
 @login_required
 def deleteComment(request, id):
     
     comment = get_object_or_404(Comment, id=id)
-    redirect_url = request.REQUEST['next']
+    queryDict = getQueryDict(request)
+    redirect_url = queryDict['next']
     
     # comments can only be deleted by the original authors, or project administrators
     project = comment.content_object.getProject()
