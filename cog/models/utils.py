@@ -21,7 +21,6 @@ from project_tab import ProjectTab
 import shutil
 import os
 from urllib import quote
-from cog.utils import getQueryDict
 
 
 # method to retrieve all news for a given project, ordered by original publication date
@@ -273,21 +272,6 @@ def setActiveProjectTabs(tabs, request, save=False):
             #print "Saved project tab=%s to database" % tab
                         
     return tabs
-
-
-def getUnsavedProjectSubFolders(project, request):
-    """
-    Function to create the project top-level sub-folders, in the appropriate state,
-    WITHOUT PERSISTING THEM TO THE DATABASE.
-    """
-    
-    folders = []
-    for key, value in TOP_SUB_FOLDERS.items():
-        folder = Folder(name=value, project=project, active=False)
-        if request is not None and ("folder_%s" % value) in getQueryDict(request).keys():
-            folder.active = True
-        folders.append(folder)
-    return folders
 
 
 def createOrUpdateProjectSubFolders(project, request=None):

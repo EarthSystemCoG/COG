@@ -53,7 +53,7 @@ def project_add(request):
         tabs = get_or_create_project_tabs(project, save=False)
         
         # create list of unsaved project folders
-        folders = getUnsavedProjectSubFolders(project, request)
+        folders = _getUnsavedProjectSubFolders(project, request)
 
         # set project to be private by default on start-up
         project.private = True
@@ -108,7 +108,7 @@ def project_add(request):
                 setActiveProjectTabs(tablist, request, save=False)
                 
             # rebuild list of unsaved project folders
-            folders = getUnsavedProjectSubFolders(project, request)
+            folders = _getUnsavedProjectSubFolders(project, request)
 
             return render_to_response('cog/project/project_form.html', 
                                       {'form': form, 'title': 'Register New Project', 'action': 'add', 'tabs': tabs,
@@ -943,3 +943,17 @@ def render_development_form(request, project, form):
                               {'title' : 'Development Overview Update', 'project': project, 'form':form},
                                context_instance=RequestContext(request))
 
+
+def _getUnsavedProjectSubFolders(project, request):
+    """
+    Function to create the project top-level sub-folders, in the appropriate state,
+    WITHOUT PERSISTING THEM TO THE DATABASE.
+    """
+    
+    folders = []
+    for key, value in TOP_SUB_FOLDERS.items():
+        folder = Folder(name=value, project=project, active=False)
+        if request is not None and ("folder_%s" % value) in getQueryDict(request).keys():
+            folder.active = True
+        folders.append(folder)
+    return folders
