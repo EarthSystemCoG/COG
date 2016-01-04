@@ -10,6 +10,7 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 import urllib
 from collections import OrderedDict
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from cog.plugins.esgf.registry import LocalKnownProvidersDict
 
@@ -17,6 +18,22 @@ from cog.plugins.esgf.registry import LocalKnownProvidersDict
 # included here because login view is part of django-openid-auth module
 esgf_known_providers = LocalKnownProvidersDict()
 
+def paginate(objects, max_per_page, request):
+    '''Utility method to paginate a list of objects before they are rendered in a template.'''
+    
+    page = getQueryDict(request).get('page')
+    paginator = Paginator(objects, max_per_page) # show at most 'max_per_page'
+    
+    try:
+        _objects = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        _objects = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        _objects = paginator.page(paginator.num_pages)
+    
+    return _objects
 
 def getKnownIdentityProviders():
     # sort dictionary by key

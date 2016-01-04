@@ -9,7 +9,7 @@ import ast
 from django.contrib.sites.models import Site  
 from cog.models import PeerSite
 from django.forms.models import modelformset_factory
-from utils import getUsersThatMatch, get_projects_by_name
+from cog.views.utils import getUsersThatMatch, get_projects_by_name, paginate
 
 
 def site_home(request):
@@ -51,7 +51,7 @@ def admin_projects(request):
 
     # retrieve top-level projects, ordered alphabetically by short name. Only list those on the current site.
     return render_to_response('cog/admin/admin_projects.html',
-                              {'project_list': project_list,
+                              {'project_list': paginate(project_list, 2, request),
                                'title': '%s Projects Administration' % site.name,
                                }, context_instance=RequestContext(request))
 

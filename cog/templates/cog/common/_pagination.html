@@ -1,22 +1,21 @@
 <!-- 
     Template snippet for object pagination 
-     @param results_page: a page returned by the Paginator object
-     @param query: query text string (optional)
+    @param results_page: a page returned by the Paginator object
 -->
 
 <!-- pagination -->
-<div class="paginator">
-	# of items: {{ results_page.paginator.count }} |
+<div class="pagination">
+	Total # of Results: {{ results_page.paginator.count }} &nbsp;
 	
 	{% if results_page.has_previous %}
-	    <a href="?page={{ results_page.previous_page_number }}&amp;q={{ query }}">&#171; Previous |</a>
+	    <a href="?page={{ results_page.previous_page_number }}">&#171; Previous |</a>
 	{% endif %}
 	
 	<span class="current">
-	    Page {{ results_page.number }} of {{ results_page.paginator.num_pages }}.
+	    Results: {{ results_page.start_index }} - {{ results_page.end_index }}.
 	</span>
 	
 	{% if results_page.has_next %}
-	    <a href="?page={{ results_page.next_page_number }}&amp;q={{ query }}">| Next &#187;</a>
+	    <a href="?page={{ results_page.next_page_number }}">| Next &#187;</a>
 	{% endif %}
 </div>

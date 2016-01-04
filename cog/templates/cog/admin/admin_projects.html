@@ -4,9 +4,6 @@
     <!-- limit visibility to node administrators -->
     {% if request.user.is_staff %}
     
-        {% load pagination_tags %}
-        {% autopaginate project_list 20 %}
-
 	    <table style="margin-left:375px; width:390px;">
            <tr>
                <td>
@@ -49,6 +46,8 @@
 		        {% endfor %}   
 		    </table>
 	    </div>
-        {% paginate %}
+        {% with project_list as results_page %}
+        	{% include 'cog/common/_pagination.html' %}
+        {% endwith %}
     {% endif %}
 {% endblock %}
