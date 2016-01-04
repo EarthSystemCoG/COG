@@ -20,7 +20,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 import urlparse
 import string
-from cog.views.utils import getKnownIdentityProviders
+from cog.views.utils import getKnownIdentityProviders, getQueryDict
 
 register = template.Library()
 
@@ -777,8 +777,9 @@ def get_openid(request):
     or the request cookies.
     """
     
-    if request.REQUEST.get('openid', None):
-        return request.REQUEST['openid']
+    queryDict = getQueryDict(request)
+    if queryDict.get('openid', None):
+        return queryDict['openid']
     elif request.COOKIES.get('openid', None):
         return request.COOKIES['openid']
     else:
