@@ -27,8 +27,8 @@ setup(
                       'passlib==1.6.2',
                       'pysqlite==2.6.3',        
                       'django-contrib-comments==1.6.1',   
-                      'globusonline-transfer-api-client==0.10.16',     
-                      'pillow==2.8.2',
+                      'globusonline-transfer-api-client==0.10.16',   
+                      "pillow==2.8.2",
                       'django-simple-captcha==0.4.5'
                       ],
     long_description=read('README.md'),
@@ -42,6 +42,6 @@ setup(
     #cmdclass={ 'install': CustomInstallCommand },
     entry_points = {
      "distutils.commands": [ "setup_cog = cog.installation.setup:CogSetupCommand"]
-    }
-
+    },
+    dependency_links = ["http://effbot.org/downloads/"],
 )
