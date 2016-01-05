@@ -16,7 +16,8 @@ setup(
     url = "https://github.com/EarthSystemCoG/COG",
     packages=find_packages(exclude=[]),
     include_package_data=True,
-    install_requires=['django==1.8.3',
+    install_requires=['pil==1.1.7',
+                      'django==1.8.3',
                       'django-grappelli==2.4.5',
                       'django-openid-auth==0.5',
                       'django-pagination==1.0.7',
@@ -27,8 +28,8 @@ setup(
                       'passlib==1.6.2',
                       'pysqlite==2.6.3',        
                       'django-contrib-comments==1.6.1',   
-                      'globusonline-transfer-api-client==0.10.16',     
-                      'pillow==3.1.0',
+                      'globusonline-transfer-api-client==0.10.16',   
+                      "pillow==2.8.2",
                       'django-simple-captcha==0.4.5'
                       ],
     long_description=read('README.md'),
@@ -42,6 +43,6 @@ setup(
     #cmdclass={ 'install': CustomInstallCommand },
     entry_points = {
      "distutils.commands": [ "setup_cog = cog.installation.setup:CogSetupCommand"]
-    }
-
+    },
+    dependency_links = ["http://effbot.org/downloads/"],
 )
