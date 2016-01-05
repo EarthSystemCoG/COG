@@ -1,7 +1,7 @@
 # CoG module to manage image thumbnails
 
 import os
-import Image
+from PIL import Image
 import shutil
 from django.conf import settings
 from cog.models.constants import DEFAULT_IMAGES
