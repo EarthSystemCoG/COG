@@ -6,7 +6,6 @@ It uses the configuration settings from $COG_CONFIG_DIR/cog_settings.cfg
 import os
 import cog
 from cog.constants import SECTION_EMAIL
-os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
         
 from django.contrib.auth.models import User
@@ -24,7 +23,6 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 from django_openid_auth.models import UserOpenID
 from django.core.exceptions import ObjectDoesNotExist
 
-from django import setup as django_setup
 from django.core import management
 import sqlalchemy
 import datetime
@@ -38,10 +36,7 @@ class CoGInstall(object):
     '''
     
     def __init__(self):
-        
-        # in stand-alone scripts, must explicitly invoke django.setup() to populate the application registry before anything can be done
-        django_setup()
-        
+                
         # read cog_settings.cfg
         self.siteManager = SiteManager()
     

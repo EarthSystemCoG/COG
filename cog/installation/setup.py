@@ -3,6 +3,7 @@ Main installation script for CoG application.
 '''
 from distutils.core import Command
 import logging
+import os
 logging.basicConfig(level=logging.INFO)
 
 class CogSetupCommand(Command):
@@ -22,6 +23,12 @@ class CogSetupCommand(Command):
             self.esgf = False
     
     def run(self):
+        
+        # in stand-alone scripts, must explicitly invoke django.setup() to populate the application registry before anything can be done
+        print 'Setting up Django applications registry'
+        os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+        import django
+        django.setup()
             
         # create/update cog_settings.cfg
         from config import CogConfig
