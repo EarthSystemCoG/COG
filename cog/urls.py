@@ -109,7 +109,7 @@ urlpatterns = [
     url(r'^post/remove_doc/(?P<post_id>\d+)/(?P<doc_id>\d+)/$', cog.views.post_remove_doc, name='post_remove_doc'),
 
     # signals
-    url(r'^signal/list/(?P<project_short_name>.+)/$', 'cog.views.signal_list', name='signal_list'),
+    url(r'^signal/list/(?P<project_short_name>.+)/$', cog.views.signal_list, name='signal_list'),
 
     # project membership
     url(r'^membership/request/(?P<project_short_name>[^/]+)/$', cog.views.membership_request, name='membership_request' ),
