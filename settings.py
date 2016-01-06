@@ -207,7 +207,6 @@ INSTALLED_APPS = (
     'filebrowser',
     'django.contrib.admin.apps.SimpleAdminConfig',
     'django_comments',
-    'django.contrib.webdesign',
     'django.contrib.staticfiles',
     'captcha',
     'layouts',

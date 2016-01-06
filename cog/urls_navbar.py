@@ -1,10 +1,10 @@
 '''
 Module containing URL mappong for project upper Navigational Bar.
 '''
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url
 import cog.views
 
-urlpatterns = patterns('',
+urlpatterns = [
                        
     # "ABOUT US"
     url(r'^projects/(?P<project_short_name>[^/]+)/(?P<tab>aboutus)/$', cog.views.aboutus_display, name='aboutus_display'),
@@ -128,4 +128,4 @@ urlpatterns = patterns('',
     
     url(r'^comments/(?P<comment_id>[^/]+)/update/$', cog.views.comment_update, name='comment_update'),  
           
-)
+]

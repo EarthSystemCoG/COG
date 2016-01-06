@@ -6,7 +6,7 @@ import django.views
 from cog.models import settings
 
 
-urlpatterns = patterns('',
+urlpatterns = [
 
     # FIXME: top-level index
     #url(r'^index/$', TemplateView.as_view(template_name="cog/index.html")),
@@ -50,7 +50,7 @@ urlpatterns = patterns('',
     # force redirection to login page after logout
     #url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     # use next=... to redirect to previous page after logout
-    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
+    url(r'^logout/$', django.contrib.auth.views.logout, name='logout'),
 
     # user management
     url(r'^user/add/$', cog.views.user_add, name='user_add' ),
@@ -138,7 +138,7 @@ urlpatterns = patterns('',
     url(r'^project_browser/delete_user_tag/', cog.views.delete_user_tag, name='delete_user_tag'),
 
     # NAVBAR URLs
-    (r'', include('cog.urls_navbar')),
+    url(r'', include('cog.urls_navbar')),
 
     # project generic pages
     # Note: these URLs must come last because the last URL matches everything within the project!
@@ -175,4 +175,4 @@ urlpatterns = patterns('',
     url(r'^globus/submit/$', cog.views.views_globus.submit, name='globus_submit'),
     url(r'^globus/script/$', cog.views.views_globus.script, name='globus_script'),
 
-)
+]
