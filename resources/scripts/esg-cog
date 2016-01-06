@@ -1,5 +1,4 @@
 #!/bin/bash
-# script to install CoG on an ESGF node
 
 #==== SITE SPECIFIC PARAMETERS - CHANGE AS NEEDED =====
 
@@ -71,6 +70,10 @@ cd $INSTALLPATH
 virtualenv -p /opt/esgf/python/bin/python2.7 venv
 source venv/bin/activate
 echo 'Using Python:' `which python`
+
+# pre-requisites: install from wheel otherwise it does not work on MacOSX
+pip install wheel
+pip install --use-wheel Pillow==3.1.0
 
 # initial checkout CoG software stack
 cd $INSTALLPATH
