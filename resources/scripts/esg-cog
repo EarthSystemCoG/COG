@@ -65,13 +65,17 @@ mkdir -p $COG_CONFIG_DIR
 # will be created during git checkout
 COG_INSTALL_DIR=$INSTALLPATH/cog_install
 
-# use Python virtual environment
+# use Python virtual environment (rebuild from scratch each time)
 cd $INSTALLPATH
+rm -rf venv
 virtualenv -p /opt/esgf/python/bin/python2.7 venv
 source venv/bin/activate
 echo 'Using Python:' `which python`
 
-# pre-requisites: install from wheel otherwise it does not work on MacOSX
+# pre-requisite: update pip
+pip install -U pip
+
+# pre-requisite: install from wheel otherwise it does not work on MacOSX
 pip install wheel
 pip install --use-wheel Pillow==3.1.0
 

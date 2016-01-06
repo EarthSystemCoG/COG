@@ -19,4 +19,5 @@ from cog.views.views_share import *
 from cog.views.views_access_control import *
 from cog.views.views_forum import *
 from cog.views.views_common import *
+from cog.views.views_globus import *
 from cog.views.utils import *
