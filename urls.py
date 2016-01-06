@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
-from django.views.generic import TemplateView
+import django.views.static, django.views.generic
+import cog.views
 
 from filebrowser.sites import site
 
@@ -11,10 +12,10 @@ admin.autodiscover()
 urlpatterns = patterns('',
                        
     # robots.txt file
-    url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), name='robots.txt'),
+    url(r'^robots\.txt$', django.views.generic.TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), name='robots.txt'),
                                                       
     # site index
-    url(r'^$', 'cog.views.site_home', name='site_home'),
+    url(r'^$', cog.views.site_home, name='site_home'),
                            
     # Grappelli
     (r'^grappelli/', include('grappelli.urls')),
@@ -41,10 +42,10 @@ urlpatterns = patterns('',
     
     # other media (when NOT served through the Apache web server)
     # Note: the media must be located under <application>/static/<application>, not static/<application>
-    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT} ),
-    url(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT} ),
-    url(r'^static_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT} ),    
-    url(r'^mymedia/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MYMEDIA } ),
+    url(r'^static/(?P<path>.*)$', django.views.static.serve, {'document_root': settings.STATIC_ROOT} ),
+    url(r'^site_media/(?P<path>.*)$', django.views.static.serve, {'document_root': settings.MEDIA_ROOT} ),
+    url(r'^static_media/(?P<path>.*)$', django.views.static.serve, {'document_root': settings.STATIC_ROOT} ),    
+    url(r'^mymedia/(?P<path>.*)$', django.views.static.serve, {'document_root': settings.MYMEDIA } ),
 
 
 )
