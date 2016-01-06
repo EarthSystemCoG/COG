@@ -19,16 +19,16 @@ setup(
     install_requires=['django==1.9.1',
                       'django-grappelli==2.7.2',
                       'django-openid-auth==0.7', # must be installed independently from fork
-                      'sqlalchemy==0.9.2',
-                      'south==1.0.0',
+                      'sqlalchemy==1.0.11',
+                      'south==1.0.2',
                       'psycopg2==2.5.2',
                       'python-openid==2.2.5',
-                      'passlib==1.6.2',
-                      'pysqlite==2.6.3',        
+                      'passlib==1.6.5',
+                      'pysqlite==2.8.1',        
                       'django-contrib-comments==1.6.2',   
                       'globusonline-transfer-api-client==0.10.16',   
                       "pillow==3.1.0", # must be installed with --use-wheel on MAC-OSX
-                      'django-simple-captcha==0.4.5'
+                      'django-simple-captcha==0.5.1'
                       ],
     long_description=read('README.md'),
     classifiers=[
