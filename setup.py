@@ -16,8 +16,8 @@ setup(
     url = "https://github.com/EarthSystemCoG/COG",
     packages=find_packages(exclude=[]),
     include_package_data=True,
-    install_requires=['django==1.8.3',
-                      'django-grappelli==2.4.5',
+    install_requires=['django==1.9.1',
+                      'django-grappelli==2.7.2',
                       'django-openid-auth==0.7', # must be installed independently from fork
                       'sqlalchemy==0.9.2',
                       'south==1.0.0',
@@ -25,7 +25,7 @@ setup(
                       'python-openid==2.2.5',
                       'passlib==1.6.2',
                       'pysqlite==2.6.3',        
-                      'django-contrib-comments==1.6.1',   
+                      'django-contrib-comments==1.6.2',   
                       'globusonline-transfer-api-client==0.10.16',   
                       "pillow==3.1.0", # must be installed with --use-wheel on MAC-OSX
                       'django-simple-captcha==0.4.5'
