@@ -5,7 +5,7 @@ from django.forms import (Form, ModelForm, CharField, PasswordInput, TextInput, 
 from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
-from django.contrib.auth.models import check_password
+from django.contrib.auth.hashers import check_password
 from os.path import exists
 from cog.models.constants import UPLOAD_DIR_PHOTOS
 from cog.forms.forms_image import ImageForm
