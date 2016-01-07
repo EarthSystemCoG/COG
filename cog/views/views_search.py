@@ -25,6 +25,7 @@ from django.http.response import HttpResponseServerError
 from cog.models.auth import userHasUserPermission
 from cog.models.auth import userHasAdminPermission
 from cog.views.utils import getQueryDict
+from django.views.decorators.http import require_http_methods
 
 SEARCH_INPUT  = "search_input"
 SEARCH_OUTPUT = "search_output"
@@ -467,6 +468,29 @@ def _getSearchConfig(request, project):
     return SearchConfig(facetProfile, fixedConstraints, searchService,
                         profile.replicaSearchFlag, profile.latestSearchFlag, profile.localSearchFlag)
     
+@require_http_methods (["POST"])
+def search_profile_export(request, project_short_name):
+
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # security check
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+
+    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=search_config_exported")
+
+@require_http_methods (["POST"])
+def search_profile_import(request, project_short_name):
+
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # security check
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+
+    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=search_config_imported")
 
 def search_profile_config(request, project_short_name):
     

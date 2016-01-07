@@ -4,6 +4,31 @@
 
     {% load cog_utils %}
 
+	<!-- import/export configuration -->
+	{% if request.GET.message %}
+	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
+	   <p></p>
+	{% endif %}
+	<div class="mybox" >
+		<table >
+			<tr>
+				<td align="right">
+					<form method="post" action="{% url 'search_profile_import' project.short_name %}" name="import_form">
+						{% csrf_token %}
+						<input type="submit" value="Import Search Configuration"/>
+					</form>
+				</td>
+				<td align="left">
+					<form method="post" action="{% url 'search_profile_export' project.short_name %}" name="export_form">
+						{% csrf_token %}
+						<input type="submit" value="Export Search Configuration"/>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<p></p>
+	
     <!-- search profile form -->
     <div class="mybox">
         <form method="post" action="">
