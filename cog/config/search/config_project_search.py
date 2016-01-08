@@ -112,7 +112,6 @@ class SearchConfigParser():
                     facet_label = parts[1]
                     searchFacet = SearchFacet(group=searchGroup, key=facet_key, order=facet_order, label=facet_label)
                     searchFacet.save()
-                    print "%s" % searchFacet
             
 if __name__ == '__main__':
     

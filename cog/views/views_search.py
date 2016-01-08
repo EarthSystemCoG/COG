@@ -480,7 +480,6 @@ def search_profile_export(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     scp = SearchConfigParser(project)
-    scp.write()
     try:
         scp.write()
         message = 'search_config_exported'

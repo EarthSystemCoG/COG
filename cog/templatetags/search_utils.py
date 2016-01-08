@@ -122,7 +122,7 @@ def showSearchConfigMessage(message, project):
         return "The project search configuration could not be imported from: " + _getProjectSearchConfigFilePath(project)
 
     else:
-        return message
+        raise Exception("Invalid Message")
 
 def _getProjectSearchConfigFilePath(project):
     
