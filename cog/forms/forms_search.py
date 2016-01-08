@@ -23,6 +23,19 @@ class SearchFacetForm(ModelForm):
     class Meta:
         model = SearchFacet
         fields = "__all__" 
+        
+    # override __init__ method to sub-select the available facet groups
+    def __init__(self, project, *args, **kwargs):
+        
+        super(SearchFacetForm, self).__init__(*args, **kwargs)
+        
+        # filter search groups by project
+        # order by name in the form pull down
+        self.fields['group'].queryset = SearchGroup.objects.filter(profile__project=project).distinct().order_by('order')
+                
+        # remove the empty option
+        self.fields['group'].empty_label = None
+
     
     # execute combined validation on form id and key
     # for each project, the search facet key and label must be unique

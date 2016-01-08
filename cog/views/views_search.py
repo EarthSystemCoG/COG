@@ -622,12 +622,12 @@ def search_facet_update(request, facet_id):
     facets = _queryFacets(request, project)
     
     if request.method == 'GET':
-        form = SearchFacetForm(instance=facet)    
+        form = SearchFacetForm(project, instance=facet)    
         return render_search_facet_form(request, project, form, facets)
         
     else:
         
-        form = SearchFacetForm(request.POST, instance=facet)
+        form = SearchFacetForm(project, request.POST, instance=facet)
         
         if form.is_valid():            
             facet = form.save()

@@ -29,6 +29,15 @@
                     <td valign="top" nowrap="nowrap">&nbsp;</td>
                     <td class="long"><em class="message">The facet label displayed in the user interface.</em></td>
 	            </tr>
+	            <tr>
+	                <td valign="top" nowrap="nowrap"><strong>Facet Group</strong></td>
+	                <td class="long">{{ form.group }} {{ form.group.errors }}</td>
+	            </tr>
+                <tr>
+                   <td valign="top" nowrap="nowrap">&nbsp;</td>
+                   <td class="long"><em class="message">A custom group used to order the facets, or the "default" group.</em></td>
+                </tr>
+	            
                 <tr>
                      <td class="long" colspan="2"><em class="message">Please note: the characters
 	                 {{ project|getInvalidCharacters }} are not allowed.</em></td>
@@ -37,7 +46,6 @@
 	    
 	        <!-- fields not editable by the user -->
 	        {{ form.order.as_hidden }}
-		    {{ form.group.as_hidden }}
 	    	    
 	        <div style="text-align:right">
 	            <input type="button" value="Cancel" onclick="window.location=
