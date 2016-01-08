@@ -815,7 +815,7 @@ BEGIN SPECIFIC ACTIONS
 
 .addlink {
 	padding-left: 12px;
-	background: url(/static/admin/img/icon_addlink.gif) 0 .2em no-repeat;
+	background: url(/static/cog/img/icon_addlink.gif) 0 .2em no-repeat;
 }
 
 .listlink {
@@ -825,7 +825,7 @@ BEGIN SPECIFIC ACTIONS
 
 .changelink {
 	padding-left: 12px;
-	background: url(/static/admin/img/icon_changelink.gif) 0 .2em no-repeat;
+	background: url(/static/cog/img/icon_changelink.gif) 0 .2em no-repeat;
 }
 
 .privatelink {
@@ -842,7 +842,7 @@ BEGIN SPECIFIC ACTIONS
 
 .deletelink {
 	padding-left: 12px;
-	background: url(/static/admin/img/icon_deletelink.gif) 0 .25em no-repeat;
+	background: url(/static/cog/img/icon_deletelink.gif) 0 .25em no-repeat;
 }
 
 .arrowrightlink {
