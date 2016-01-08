@@ -5,6 +5,7 @@ from cog.models import Project, SearchGroup, SearchFacet
 SECTION_GLOBAL = 'GLOBAL'
 
 class SearchConfigParser():
+    '''Class that enables import/export of project search configuration to local Python configuration files.'''
     
     def __init__(self, project):
         self.project = project
@@ -21,6 +22,7 @@ class SearchConfigParser():
 
 
     def write(self):
+        '''Writes the project search configuration to the file $COG_CONFIG_DIR/projects/<project_short_name>/search.cfg'''
         
         print 'Writing search configuration for project=%s' % self.project.short_name
         
@@ -51,7 +53,9 @@ class SearchConfigParser():
             projConfig.add_section(section)
             
             for facet in SearchFacet.objects.filter(group=group).order_by('order'):
-                projConfig.set(section, facet.key, facet.label)
+                key=facet.order
+                value = "%s|%s" % (facet.key, facet.label) 
+                projConfig.set(section, key, value)
         
         with open(self.config_file_path,'w') as config_file:
             projConfig.write(config_file)
@@ -59,6 +63,7 @@ class SearchConfigParser():
 
     
     def read(self):
+        '''Reads the project search configuration from the file $COG_CONFIG_DIR/projects/<project_short_name>/search.cfg'''
         
         print 'Reading search configuration for project=%s' % self.project.short_name
         
@@ -69,7 +74,7 @@ class SearchConfigParser():
         # remove existing groups of facets
         for group in search_profile.groups.all():
             print 'Deleting search group=%s' % group
-            #group.delete() # FIXME
+            group.delete()
         
         # read project configuration
         projConfig = self._getConfigParser()
@@ -79,15 +84,15 @@ class SearchConfigParser():
             print "Configuration file %s not found" % self.config_file_path
             raise e
         
-        # loop over groups
+        # loop over configuration sections
         for section in projConfig.sections():
                         
             # global search configuration
             if section==SECTION_GLOBAL:
-                if projConfig.has_option(section, 'url'):
-                    print 'url=%s' % projConfig.get(section, 'url')
-                if projConfig.has_option(section, 'constraints'):
-                    print 'constraints=%s' % projConfig.get(section, 'constraints')
+                for key in ['url', 'constraints', 'modelMetadataFlag', 'replicaSearchFlag', 'latestSearchFlag', 'localSearchFlag']:
+                    if projConfig.has_option(section, key):
+                        setattr(search_profile, key, projConfig.get(section, key))
+                search_profile.save()
                 
             # facet configuration
             else:
@@ -96,7 +101,7 @@ class SearchConfigParser():
                 group_order = parts[0]
                 group_name=parts[1]
                 searchGroup = SearchGroup(name=group_name, order=int(group_order), profile=search_profile)
-                #searchGroup.save() # FIXME
+                searchGroup.save()
         
                 for option in projConfig.options(section):
                     value = projConfig.get(section, option)
@@ -106,7 +111,7 @@ class SearchConfigParser():
                     facet_key = parts[0]
                     facet_label = parts[1]
                     searchFacet = SearchFacet(group=searchGroup, key=facet_key, order=facet_order, label=facet_label)
-                    #searchFacet.save() # FIXME
+                    searchFacet.save()
                     print "%s" % searchFacet
             
 if __name__ == '__main__':
