@@ -102,6 +102,7 @@
             <table>
                 <caption>Search Facets</caption>
                 <tr>
+                	<th class="white"><strong>Facet Group</strong></th>
                     <th class="white"><strong>Facet Key</strong></th>
                     <th class="white"><strong>Facet Label</strong></th>
                     <th class="white"><strong>Edit?</strong></th>
@@ -109,7 +110,8 @@
                 </tr>
                 {% for facet in project.searchprofile.facets %}
                     <tr>
-                       <td nowrap="nowrap">{{facet.key}}</td>
+                       <td nowrap="nowrap">{{facet.group.order}}. {{facet.group.name}}</td>
+                       <td nowrap="nowrap">{{facet.order}}. {{facet.key}}</td>
                        <td nowrap="nowrap">{{facet.label}}</td>
                        <td nowrap="nowrap"><a class="changelink" href="{% url 'search_facet_update' facet.id %}">Edit</a></td>
                        <td nowrap="nowrap"><a href="{% url 'search_facet_delete' facet.id %}" class="deletelink"
