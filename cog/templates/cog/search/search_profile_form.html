@@ -3,10 +3,11 @@
 {% block main %}   
 
     {% load cog_utils %}
+    {% load search_utils %}
 
 	<!-- import/export configuration -->
 	{% if request.GET.message %}
-	   <div class="message-box"> {{ request.GET.message|showMessage }}</div>
+	   <div class="message-box"> {{ request.GET.message|showSearchConfigMessage:project }}</div>
 	   <p></p>
 	{% endif %}
 	<div class="mybox" >

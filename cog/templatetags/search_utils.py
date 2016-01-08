@@ -108,3 +108,22 @@ def recordUrls(record):
                                           'GridFTP') )
             
     return sorted(urls, key = lambda url: url_order(url[1]))
+
+@register.filter
+def showSearchConfigMessage(message, project):
+    
+    if message == "search_config_exported":
+        return "The project search configuration has been exported to: " + _getProjectSearchConfigFilePath(project)
+    
+    elif message == "search_config_imported":
+        return "The project search configuration has been imported from: " + _getProjectSearchConfigFilePath(project)
+    
+    elif message == "search_config_not_found":
+        return "The project search configuration could not be imported from: " + _getProjectSearchConfigFilePath(project)
+
+    else:
+        return message
+
+def _getProjectSearchConfigFilePath(project):
+    
+    return "$COG_CONFIG/myprojects/%s/search.cfg" % project.short_name.lower()

@@ -150,9 +150,10 @@ STATIC_ROOT = rel('static/')
 # absolute path to root directory containing projects data
 DATA_ROOT = os.path.join(MEDIA_ROOT, "data/")
 
-# custom template and media directories
+# custom template, media and configuration directories
 MYTEMPLATES = os.path.join(siteManager.cog_config_dir, 'mytemplates')
 MYMEDIA = os.path.join(siteManager.cog_config_dir, 'mymedia')
+MYPROJECTS = os.path.join(siteManager.cog_config_dir, 'myprojects')
 
 print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDIA)
 

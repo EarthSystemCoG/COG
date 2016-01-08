@@ -716,12 +716,6 @@ def showMessage(message):
     elif message == "password_expired":
         return "Your password has expired. Please choose a new password conforming to the requirements below."
     
-    elif message == "search_config_exported":
-        return "The project search configuration has been exported to the standard location."
-    
-    elif message == "search_config_imported":
-        return "The project search configuration has been imported from the standard location."
-
     else:
         raise Exception("Invalid message")
 

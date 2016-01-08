@@ -26,6 +26,7 @@ from cog.models.auth import userHasUserPermission
 from cog.models.auth import userHasAdminPermission
 from cog.views.utils import getQueryDict
 from django.views.decorators.http import require_http_methods
+from cog.config.search import SearchConfigParser
 
 SEARCH_INPUT  = "search_input"
 SEARCH_OUTPUT = "search_output"
@@ -478,7 +479,16 @@ def search_profile_export(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
-    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=search_config_exported")
+    scp = SearchConfigParser(project)
+    scp.write()
+    try:
+        scp.write()
+        message = 'search_config_exported'
+    except Exception as e:
+        print "ERROR: %s" % e
+        message = e       
+
+    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
 
 @require_http_methods (["POST"])
 def search_profile_import(request, project_short_name):
@@ -489,8 +499,16 @@ def search_profile_import(request, project_short_name):
     # security check
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    scp = SearchConfigParser(project)
+    try:
+        scp.read()
+        message = 'search_config_imported'
+    except Exception as e:
+        print "ERROR: %s" % e
+        message = 'search_config_not_found'        
 
-    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=search_config_imported")
+    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
 
 def search_profile_config(request, project_short_name):
     
