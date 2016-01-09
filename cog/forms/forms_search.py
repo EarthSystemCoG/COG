@@ -61,3 +61,27 @@ class SearchFacetForm(ModelForm):
     
     def clean_label(self):
         return default_clean_field(self, 'label')
+    
+class SearchGroupForm(ModelForm):
+    
+    class Meta:
+        model = SearchGroup
+        fields = "__all__" 
+
+    def clean_name(self):
+        return default_clean_field(self, 'name')
+
+    def clean(self):
+        
+        cleaned_data = self.cleaned_data
+        name = cleaned_data.get("name", None)
+        profile = cleaned_data.get("profile", None)
+        try:
+            groups = SearchGroup.objects.filter(profile=profile)
+            for group in groups:
+                if name.lower() == group.name.lower():
+                    self._errors["name"] = self.error_class(["Search Facet Group wit this name already exists in project"])
+        except:
+            pass
+                                
+        return cleaned_data

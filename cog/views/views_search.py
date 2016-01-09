@@ -587,12 +587,12 @@ def search_facet_add(request, project_short_name):
         # assign facet to default search group
         order = group.size()
         facet = SearchFacet(order=order, group=group)
-        form = SearchFacetForm(instance=facet)    
+        form = SearchFacetForm(project, instance=facet)    
         
         return render_search_facet_form(request, project, form, facets)
         
     else:
-        form = SearchFacetForm(request.POST)
+        form = SearchFacetForm(project, request.POST)
         
         if form.is_valid():            
             facet = form.save()
@@ -606,6 +606,37 @@ def search_facet_add(request, project_short_name):
             
             return render_search_facet_form(request, project, form, facets)
         
+def search_group_add(request, project_short_name):
+    '''View to add a search facet group.'''
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+    
+    # security check
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+    
+    if request.method == 'GET':
+
+        search_profile = project.searchprofile
+        order = len(search_profile.groups.all())
+
+        form = SearchGroupForm(initial={'profile':search_profile, 'order':order, 'name':'' })
+        return render_search_group_form(request, project, form)
+
+    else:
+        
+        form = SearchGroupForm(request.POST)
+        
+        if form.is_valid():            
+            form.save()
+            return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
+        
+        else:     
+            print 'Form is invalid: %s' % form.errors
+                        
+            return render_search_group_form(request, project, form)
+
 
 # method to update an existing facet
 def search_facet_update(request, facet_id):
@@ -723,3 +754,8 @@ def render_search_facet_form(request, project, form, facets):
     return render_to_response('cog/search/search_facet_form.html', 
                               {'project': project, 'form': form, 'title': 'Search Facet Configuration',
                                'facets': facets}, context_instance=RequestContext(request))
+
+def render_search_group_form(request, project, form):
+    return render_to_response('cog/search/search_group_form.html', 
+                              {'project': project, 'form': form, 'title': 'Search Facet Group'}, 
+                              context_instance=RequestContext(request))

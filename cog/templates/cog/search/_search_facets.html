@@ -62,8 +62,10 @@
 				    {% endif %}
 			    {% endwith %}
 			{% endfor %}
-	        {% if facet_group.name %}
+	        {% if facet_group.name and facet_group.name != 'default' %}
 	            </fieldset>
+	        {% else %}
+	        	<p></p>
 	        {% endif %}
 	    {% endfor %}
 	</div>

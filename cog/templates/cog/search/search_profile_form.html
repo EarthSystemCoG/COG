@@ -121,7 +121,12 @@
             </table>
             <hr/>
             <div>
-                &nbsp;<a href="{% url 'search_facet_add' project.short_name|lower %}" class="addlink">Add New Search Facet</a>
+            	<span style="padding-left:10px">
+            		<a href="{% url 'search_group_add' project.short_name|lower %}" class="addlink">Add New Search Facet Group</a>
+            	</span>
+            	<span style="float:right; padding-right:10px">
+                	<a href="{% url 'search_facet_add' project.short_name|lower %}" class="addlink">Add New Search Facet</a>
+                </span>
             </div>
          </div>
         
