@@ -146,22 +146,22 @@
     
     <!-- import/export configuration -->
 	{% if request.GET.message %}
-	   <div class="message-box"> {{ request.GET.message|showSearchConfigMessage:project }}</div>
 	   <p></p>
+	   <div class="message-box"> {{ request.GET.message|showSearchConfigMessage:project }}</div>
 	{% endif %}
 	<div class="mybox" >
 		<table >
 			<tr>
-				<td align="right">
+				<td style="text-align:left; padding:10px">
 					<form method="post" action="{% url 'search_profile_import' project.short_name %}" name="import_form">
 						{% csrf_token %}
 						<input type="submit" value="Import Search Configuration"/>
 					</form>
 				</td>
-				<td align="left">
+				<td style="text-align:right; padding:10px">
 					<form method="post" action="{% url 'search_profile_export' project.short_name %}" name="export_form">
 						{% csrf_token %}
-						<input type="submit" value="Export Search Configuration"/> (save the configuration first)
+						<input type="submit" value="Export Search Configuration"/>
 					</form>
 				</td>
 			</tr>
