@@ -436,9 +436,9 @@ def _getSearchConfig(request, project):
     
     # configure facet profile
     facet_groups = []
-    for search_group in profile.groups.all():
+    for search_group in profile.groups.all().order_by('order'):
         facets = []
-        for facet in search_group.facets.all():
+        for facet in search_group.facets.all().order_by('order'):
             facets.append((facet.key, facet.label))
         facet_groups.append( FacetGroup(facets, search_group.name))
     # facets = []
@@ -517,6 +517,9 @@ def search_profile_config(request, project_short_name):
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
+    # retrieve ordered list of search groups and facets
+    search_groups = _get_search_groups(project)
+    
     # security check
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
@@ -531,7 +534,7 @@ def search_profile_config(request, project_short_name):
             
         form = SearchProfileForm(instance=profile)
             
-        return render_search_profile_form(request, project, form)
+        return render_search_profile_form(request, project, form, search_groups)
         
     else:
         
@@ -552,7 +555,7 @@ def search_profile_config(request, project_short_name):
             
         else:
             print 'Form is invalid: %s' % form
-            return render_search_profile_form(request, project, form)
+            return render_search_profile_form(request, project, form, search_groups)
             
 
 def _queryFacets(request, project):
@@ -642,6 +645,34 @@ def search_group_add(request, project_short_name):
                         
             return render_search_group_form(request, project, form)
 
+# method to update an existing search facet group
+@login_required
+def search_group_update(request, group_id):
+    
+    # retrieve group from database
+    group = get_object_or_404(SearchGroup, pk=group_id)
+       
+    # security check
+    project = group.profile.project
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+        
+    if request.method == 'GET':
+        form = SearchGroupForm(instance=group)    
+        return render_search_group_form(request, project, form)
+        
+    else:
+        
+        form = SearchGroupForm(request.POST, instance=group)
+        
+        if form.is_valid():            
+            group = form.save()
+            return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
+        
+        else:     
+            print 'Form is invalid: %s' % form.errors
+            return render_search_group_form(request, project, form)
+
 
 # method to update an existing facet
 @login_required
@@ -674,6 +705,7 @@ def search_facet_update(request, facet_id):
             print 'Form is invalid: %s' % form.errors
             return render_search_facet_form(request, project, form, facets)
 
+
 @login_required
 def search_facet_delete(request, facet_id):
          
@@ -701,9 +733,39 @@ def search_facet_delete(request, facet_id):
         facet.save()
         count += 1
         
-    # redirect to project home (GET-POST-REDIRECT)
+    # redirect to search profile configuration page (GET-POST-REDIRECT)
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
 
+@login_required
+def search_group_delete(request, group_id):
+         
+    # retrieve group from database
+    group = get_object_or_404(SearchGroup, pk=group_id)
+        
+    # retrieve associated project
+    project = group.profile.project
+    
+    # security check
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+        
+    # delete all facets in this group
+    for facet in group.facets.all():
+        facet.delete()
+    
+    # delete group
+    group.delete()
+    
+    # re-order all groups in this project
+    groups = SearchGroup.objects.filter(profile__project=project).order_by('order')
+    count = 0
+    for group in groups:
+        group.order = count
+        group.save()
+        count += 1
+        
+    # redirect to search profile configuration page (GET-POST-REDIRECT)
+    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
 
 def search_files(request, dataset_id, index_node):
     """View that searches for all files of a given dataset, and returns the response as JSON"""
@@ -750,11 +812,14 @@ def search_reload(request):
                                   context_instance=RequestContext(request))
 
 def _get_search_groups(project):
-    '''Builds a copy of the project search groups so their order can be changed without being persisted to the database.'''
+    '''
+    Builds a copy of the project search groups and facets 
+    so their order can be changed without being persisted to the database.
+    '''
     
-    search_groups = []
+    search_groups = OrderedDict()
     for group in project.searchprofile.groups.all().order_by('order'):
-        search_groups.append(group)
+        search_groups[group] = list( group.facets.all().order_by('order') )
         
     return search_groups
     
@@ -763,7 +828,7 @@ def search_profile_order(request, project_short_name):
     
     # must reflect name of select widgets in search_order_form.html
     SEARCH_GROUP_KEY = "group_name_"
-    #PAGE_ID = "_page_id_"
+    SEARCH_FACET_KEY = "_facet_key_"
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -793,7 +858,7 @@ def search_profile_order(request, project_short_name):
         valid = True  # form data validation flag
         errors = {} # form validation errors
         
-        for group in groups:
+        for group, facets in groups.items():
                         
             group_key = SEARCH_GROUP_KEY + str(group.name)
             group_order = request.POST[group_key]
@@ -804,13 +869,28 @@ def search_profile_order(request, project_short_name):
                 errors[group_key] = "Duplicate search facet number: %d" % int(group_order)
             else:
                 groupOrderMap[group_key] = group_order
-                                 
+                
+            facetOrderMap = {}
+            for facet in facets:
+                
+                facet_key = group_key + SEARCH_FACET_KEY + str(facet.key)
+                facet_order = request.POST[facet_key]
+                facet.order = facet_order
+                # validate facet order within this group
+                if facet_order in facetOrderMap.values():
+                    valid = False
+                    errors[facet_key] = "Duplicate facet number: %d" % int(facet_order)
+                else:
+                    facetOrderMap[facet_key] = facet_order
+                
         # form data is valid              
         if valid:
             
-            # save new ordering for groups
-            for group in groups:
+            # save new ordering for groups, facets
+            for group, facets in groups.items():
                 group.save()
+                for facet in facets:
+                    facet.save()
                             
             # redirect to search profile configuration (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
@@ -822,11 +902,14 @@ def search_profile_order(request, project_short_name):
                                        'groups': groups,
                                        'title': 'Order Search Facets and Groups', 
                                        'errors':errors }, 
-                                      context_instance=RequestContext(request))
+                                       context_instance=RequestContext(request))
             
-def render_search_profile_form(request, project, form):
+def render_search_profile_form(request, project, form, search_groups):
     return render_to_response('cog/search/search_profile_form.html', 
-                              {'project': project, 'form': form, 'title': 'Project Search Configuration'},
+                              {'project': project, 
+                               'form': form, 
+                               'search_groups':search_groups,
+                               'title': 'Project Search Configuration'},
                               context_instance=RequestContext(request))
     
 
