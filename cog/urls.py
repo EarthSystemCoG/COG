@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^search_facet/update/(?P<facet_id>.+)/$', cog.views.search_facet_update, name='search_facet_update'),
     url(r'^search_facet/delete/(?P<facet_id>.+)/$', cog.views.search_facet_delete, name='search_facet_delete'),
     url(r'^search_group/add/(?P<project_short_name>.+)/$', cog.views.search_group_add, name='search_group_add'),
+    url(r'^search_group/update/(?P<group_id>.+)/$', cog.views.search_group_update, name='search_group_update'),
     url(r'^search_group/delete/(?P<group_id>.+)/$', cog.views.search_group_delete, name='search_group_delete'),
     url(r'^search_files/(?P<dataset_id>.+)/(?P<index_node>.+)/$', cog.views.search_files, name='search_files'),
     url(r'^metadata_display/(?P<project_short_name>.+)/$', cog.views.metadata_display, name='metadata_display' ),

@@ -645,6 +645,34 @@ def search_group_add(request, project_short_name):
                         
             return render_search_group_form(request, project, form)
 
+# method to update an existing search facet group
+@login_required
+def search_group_update(request, group_id):
+    
+    # retrieve group from database
+    group = get_object_or_404(SearchGroup, pk=group_id)
+       
+    # security check
+    project = group.profile.project
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+        
+    if request.method == 'GET':
+        form = SearchGroupForm(instance=group)    
+        return render_search_group_form(request, project, form)
+        
+    else:
+        
+        form = SearchGroupForm(request.POST, instance=group)
+        
+        if form.is_valid():            
+            group = form.save()
+            return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
+        
+        else:     
+            print 'Form is invalid: %s' % form.errors
+            return render_search_group_form(request, project, form)
+
 
 # method to update an existing facet
 @login_required
@@ -676,6 +704,7 @@ def search_facet_update(request, facet_id):
         else:     
             print 'Form is invalid: %s' % form.errors
             return render_search_facet_form(request, project, form, facets)
+
 
 @login_required
 def search_facet_delete(request, facet_id):
