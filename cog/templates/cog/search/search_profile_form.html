@@ -108,16 +108,27 @@
                     <th class="white"><strong>Edit?</strong></th>
                     <th class="white"><strong>Delete?</strong></th>
                 </tr>
-                {% for facet in project.searchprofile.facets %}
-                    <tr>
-                       <td nowrap="nowrap">{{facet.group.order}}. {{facet.group.name}}</td>
-                       <td nowrap="nowrap">{{facet.order}}. {{facet.key}}</td>
-                       <td nowrap="nowrap">{{facet.label}}</td>
-                       <td nowrap="nowrap"><a class="changelink" href="{% url 'search_facet_update' facet.id %}">Edit</a></td>
-                       <td nowrap="nowrap"><a href="{% url 'search_facet_delete' facet.id %}" class="deletelink"
-                                              onclick="return urlConfirmationDialog('Delete Facet Confirmation', 'Are you sure you want to delete this facet?', this)">Delete</a></td>
-                    </tr>
-                {% endfor %}   
+                {% for group, facets in search_groups.items %}
+               		<tr>
+	            		<td nowrap="nowrap">{{group.order}}. {{group.name}}</td>
+	            		<td>&nbsp;</td>
+	            		<td>&nbsp;</td>
+	            		<td>&nbsp;</td>
+	            		<td><a href="{% url 'search_group_delete' group.id %}" class="deletelink"
+		                       onclick="return urlConfirmationDialog('Delete Facet Group Confirmation', 
+		                    		   'Are you sure you want to delete this group (and all its facets)?', this)">Delete</a></td>
+	            	</tr>             
+		                {% for facet in facets %}
+		                    <tr>
+		                       	<td>&nbsp;</td>
+		                       <td nowrap="nowrap">{{facet.order}}. {{facet.key}}</td>
+		                       <td nowrap="nowrap">{{facet.label}}</td>
+		                       <td nowrap="nowrap"><a class="changelink" href="{% url 'search_facet_update' facet.id %}">Edit</a></td>
+		                       <td nowrap="nowrap"><a href="{% url 'search_facet_delete' facet.id %}" class="deletelink"
+		                                              onclick="return urlConfirmationDialog('Delete Facet Confirmation', 'Are you sure you want to delete this facet?', this)">Delete</a></td>
+		                    </tr>
+		                {% endfor %}   
+                {% endfor %}
             </table>
             <hr/>
             <div>

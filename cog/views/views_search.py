@@ -517,6 +517,9 @@ def search_profile_config(request, project_short_name):
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
+    # retrieve ordered list of search groups and facets
+    search_groups = _get_search_groups(project)
+    
     # security check
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
@@ -531,7 +534,7 @@ def search_profile_config(request, project_short_name):
             
         form = SearchProfileForm(instance=profile)
             
-        return render_search_profile_form(request, project, form)
+        return render_search_profile_form(request, project, form, search_groups)
         
     else:
         
@@ -552,7 +555,7 @@ def search_profile_config(request, project_short_name):
             
         else:
             print 'Form is invalid: %s' % form
-            return render_search_profile_form(request, project, form)
+            return render_search_profile_form(request, project, form, search_groups)
             
 
 def _queryFacets(request, project):
@@ -701,9 +704,39 @@ def search_facet_delete(request, facet_id):
         facet.save()
         count += 1
         
-    # redirect to project home (GET-POST-REDIRECT)
+    # redirect to search profile configuration page (GET-POST-REDIRECT)
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
 
+@login_required
+def search_group_delete(request, group_id):
+         
+    # retrieve group from database
+    group = get_object_or_404(SearchGroup, pk=group_id)
+        
+    # retrieve associated project
+    project = group.profile.project
+    
+    # security check
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+        
+    # delete all facets in this group
+    for facet in group.facets.all():
+        facet.delete()
+    
+    # delete group
+    group.delete()
+    
+    # re-order all groups in this project
+    groups = SearchGroup.objects.filter(profile__project=project).order_by('order')
+    count = 0
+    for group in groups:
+        group.order = count
+        group.save()
+        count += 1
+        
+    # redirect to search profile configuration page (GET-POST-REDIRECT)
+    return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
 
 def search_files(request, dataset_id, index_node):
     """View that searches for all files of a given dataset, and returns the response as JSON"""
@@ -842,9 +875,12 @@ def search_profile_order(request, project_short_name):
                                        'errors':errors }, 
                                        context_instance=RequestContext(request))
             
-def render_search_profile_form(request, project, form):
+def render_search_profile_form(request, project, form, search_groups):
     return render_to_response('cog/search/search_profile_form.html', 
-                              {'project': project, 'form': form, 'title': 'Project Search Configuration'},
+                              {'project': project, 
+                               'form': form, 
+                               'search_groups':search_groups,
+                               'title': 'Project Search Configuration'},
                               context_instance=RequestContext(request))
     
 
