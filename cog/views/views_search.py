@@ -436,9 +436,9 @@ def _getSearchConfig(request, project):
     
     # configure facet profile
     facet_groups = []
-    for search_group in profile.groups.all():
+    for search_group in profile.groups.all().order_by('order'):
         facets = []
-        for facet in search_group.facets.all():
+        for facet in search_group.facets.all().order_by('order'):
             facets.append((facet.key, facet.label))
         facet_groups.append( FacetGroup(facets, search_group.name))
     # facets = []
@@ -750,11 +750,14 @@ def search_reload(request):
                                   context_instance=RequestContext(request))
 
 def _get_search_groups(project):
-    '''Builds a copy of the project search groups so their order can be changed without being persisted to the database.'''
+    '''
+    Builds a copy of the project search groups and facets 
+    so their order can be changed without being persisted to the database.
+    '''
     
-    search_groups = []
+    search_groups = OrderedDict()
     for group in project.searchprofile.groups.all().order_by('order'):
-        search_groups.append(group)
+        search_groups[group] = list( group.facets.all().order_by('order') )
         
     return search_groups
     
@@ -763,7 +766,7 @@ def search_profile_order(request, project_short_name):
     
     # must reflect name of select widgets in search_order_form.html
     SEARCH_GROUP_KEY = "group_name_"
-    #PAGE_ID = "_page_id_"
+    SEARCH_FACET_KEY = "_facet_key_"
     
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -793,7 +796,7 @@ def search_profile_order(request, project_short_name):
         valid = True  # form data validation flag
         errors = {} # form validation errors
         
-        for group in groups:
+        for group, facets in groups.items():
                         
             group_key = SEARCH_GROUP_KEY + str(group.name)
             group_order = request.POST[group_key]
@@ -804,13 +807,28 @@ def search_profile_order(request, project_short_name):
                 errors[group_key] = "Duplicate search facet number: %d" % int(group_order)
             else:
                 groupOrderMap[group_key] = group_order
-                                 
+                
+            facetOrderMap = {}
+            for facet in facets:
+                
+                facet_key = group_key + SEARCH_FACET_KEY + str(facet.key)
+                facet_order = request.POST[facet_key]
+                facet.order = facet_order
+                # validate facet order within this group
+                if facet_order in facetOrderMap.values():
+                    valid = False
+                    errors[facet_key] = "Duplicate facet number: %d" % int(facet_order)
+                else:
+                    facetOrderMap[facet_key] = facet_order
+                
         # form data is valid              
         if valid:
             
-            # save new ordering for groups
-            for group in groups:
+            # save new ordering for groups, facets
+            for group, facets in groups.items():
                 group.save()
+                for facet in facets:
+                    facet.save()
                             
             # redirect to search profile configuration (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
@@ -822,7 +840,7 @@ def search_profile_order(request, project_short_name):
                                        'groups': groups,
                                        'title': 'Order Search Facets and Groups', 
                                        'errors':errors }, 
-                                      context_instance=RequestContext(request))
+                                       context_instance=RequestContext(request))
             
 def render_search_profile_form(request, project, form):
     return render_to_response('cog/search/search_profile_form.html', 

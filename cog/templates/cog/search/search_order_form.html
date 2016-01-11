@@ -8,8 +8,8 @@
 		<form method="post" action="">
 		    {% csrf_token %}
 		    	     
-		    	<!--  loop over facet groups -->
-			    {% for group in groups %}
+		    	<!--  loop over groups and their facets -->
+			    {% for group, facets in groups.items %}
 			    				    				    
 			    	<!--  group header -->
 			    	<h3>	    		         		    		     	
@@ -35,6 +35,34 @@
 		    			{% endwith %}
 			    	</h3>		    	
 			    	
+				    <!-- loop over search facets for that group -->
+			    	<ul>
+				    	{% for facet in facets %}
+				    		<li>		    						    				
+			    			   {% with "group_name_"|concat:group.name|concat:"_facet_key_"|concat:facet.key as facet_key %}
+			    			    {% with facets|length as length %}
+			    				 {% with length|add:"-1" as lastNumber %}
+			    				   {% with facet.order as selectedNumber %}
+			    				     
+			    					   &nbsp;&nbsp;&nbsp;
+				    				   <select name="{{facet_key}}">
+											{{ lastNumber|numberOptionsZeroBased:selectedNumber }}			
+				    				   </select>	
+				    				   &nbsp;{{ facet.label }}
+			   					    			   
+					    			{% if errors|dictKeyLookup:facet_key %}
+					    				<span class="errornote">{{ errors|dictKeyLookup:facet_key }}</span>
+					    			{% endif %}
+		
+					    			{% endwith %}
+					    		   {% endwith %}
+			    			     {% endwith %}
+			    			   {% endwith %}
+				    			  
+			    			</li>
+				    	{% endfor %}
+			    	</ul>
+				    	
 			{% endfor %}
 		    
 		    <div style="text-align:right">
