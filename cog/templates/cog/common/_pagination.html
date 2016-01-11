@@ -8,7 +8,7 @@
 {% load cog_utils %}
 
 <div class="pagination">
-	Total # of Results: {{ results_page.paginator.count }}, &nbsp;
+	Total Number of Results: {{ results_page.paginator.count }}, &nbsp;
 	
 	{% if results_page.has_previous %}
 	    <a href="{{ request|pagination_url:results_page.previous_page_number }}">&#171; Previous |</a>
