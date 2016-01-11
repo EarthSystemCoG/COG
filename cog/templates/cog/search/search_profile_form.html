@@ -132,15 +132,13 @@
             </table>
             <hr/>
             <div>
-            	<span style="padding-left:10px">
-            		<a href="{% url 'search_group_add' project.short_name|lower %}" class="addlink">Add New Search Facet Group</a>
-            	</span>
-            	<span style="float:middle; padding:10px">
-                	<a href="{% url 'search_facet_add' project.short_name|lower %}" class="addlink">Add New Search Facet</a>
-                </span>
-                <span style="float:right; padding-right:10px">
-                	<a href="{% url 'search_profile_order' project.short_name|lower %}" class="addlink">Order Search Groups and Facets</a>
-                </span>
+            	<table>
+            		<tr>
+            			<td style="text-align:left"><a href="{% url 'search_group_add' project.short_name|lower %}" class="addlink">Add New Search Facet Group</a></td>
+            			<td style="text-align:middle"><a href="{% url 'search_facet_add' project.short_name|lower %}" class="addlink">Add New Search Facet</a></td>
+            			<td style="text-align:right"><a href="{% url 'search_profile_order' project.short_name|lower %}" class="addlink">Order Search Groups and Facets</a></td>
+            		</tr>
+            	</table>
             </div>
          </div>
         
