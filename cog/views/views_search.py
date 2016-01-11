@@ -469,6 +469,7 @@ def _getSearchConfig(request, project):
     return SearchConfig(facetProfile, fixedConstraints, searchService,
                         profile.replicaSearchFlag, profile.latestSearchFlag, profile.localSearchFlag)
     
+@login_required
 @require_http_methods (["POST"])
 def search_profile_export(request, project_short_name):
 
@@ -489,6 +490,7 @@ def search_profile_export(request, project_short_name):
 
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
 
+@login_required
 @require_http_methods (["POST"])
 def search_profile_import(request, project_short_name):
 
@@ -509,6 +511,7 @@ def search_profile_import(request, project_short_name):
 
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
 
+@login_required
 def search_profile_config(request, project_short_name):
     
     # retrieve project from database
@@ -567,6 +570,7 @@ def _queryFacets(request, project):
     
 
 # method to add a new facet
+@login_required
 def search_facet_add(request, project_short_name):
     
     # retrieve project from database
@@ -606,6 +610,7 @@ def search_facet_add(request, project_short_name):
             
             return render_search_facet_form(request, project, form, facets)
         
+@login_required
 def search_group_add(request, project_short_name):
     '''View to add a search facet group.'''
     
@@ -639,6 +644,7 @@ def search_group_add(request, project_short_name):
 
 
 # method to update an existing facet
+@login_required
 def search_facet_update(request, facet_id):
     
     # retrieve facet from database
@@ -668,7 +674,7 @@ def search_facet_update(request, facet_id):
             print 'Form is invalid: %s' % form.errors
             return render_search_facet_form(request, project, form, facets)
 
-
+@login_required
 def search_facet_delete(request, facet_id):
          
     # retrieve facet from database
@@ -743,6 +749,80 @@ def search_reload(request):
                                    'messages': ['Your last search page could not be found.']},
                                   context_instance=RequestContext(request))
 
+def _get_search_groups(project):
+    '''Builds a copy of the project search groups so their order can be changed without being persisted to the database.'''
+    
+    search_groups = []
+    for group in project.searchprofile.groups.all().order_by('order'):
+        search_groups.append(group)
+        
+    return search_groups
+    
+@login_required
+def search_profile_order(request, project_short_name):
+    
+    # must reflect name of select widgets in search_order_form.html
+    SEARCH_GROUP_KEY = "group_name_"
+    #PAGE_ID = "_page_id_"
+    
+    # retrieve project from database
+    project = get_object_or_404(Project, short_name__iexact=project_short_name)
+            
+    # check permission
+    if not userHasAdminPermission(request.user, project):
+        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
+        
+    # current list of search groups
+    groups = _get_search_groups(project)
+    
+    # GET
+    if request.method == 'GET':
+        
+        return render_to_response('cog/search/search_order_form.html', 
+                                  {'project': project, 
+                                   'groups': groups,
+                                   'title': 'Order Search Facets and Groups', 
+                                   'errors':{} }, 
+                                  context_instance=RequestContext(request))
+
+    # POST
+    else:
+        
+        # map (group, new group order)
+        groupOrderMap = {} 
+        valid = True  # form data validation flag
+        errors = {} # form validation errors
+        
+        for group in groups:
+                        
+            group_key = SEARCH_GROUP_KEY + str(group.name)
+            group_order = request.POST[group_key]
+            group.order = int(group_order) # reassign the group orde WITHOUT saving to the database for now
+            # validate group order
+            if group_order in groupOrderMap.values():
+                valid = False
+                errors[group_key] = "Duplicate search facet number: %d" % int(group_order)
+            else:
+                groupOrderMap[group_key] = group_order
+                                 
+        # form data is valid              
+        if valid:
+            
+            # save new ordering for groups
+            for group in groups:
+                group.save()
+                            
+            # redirect to search profile configuration (GET-POST-REDIRECT)
+            return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
+
+        else:
+            # return to form to fix validation errors
+            return render_to_response('cog/search/search_order_form.html', 
+                                      {'project': project, 
+                                       'groups': groups,
+                                       'title': 'Order Search Facets and Groups', 
+                                       'errors':errors }, 
+                                      context_instance=RequestContext(request))
             
 def render_search_profile_form(request, project, form):
     return render_to_response('cog/search/search_profile_form.html', 

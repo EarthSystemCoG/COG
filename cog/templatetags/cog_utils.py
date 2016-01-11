@@ -330,7 +330,8 @@ def relatedPostSorted(post, related_posts):
 
 @register.filter
 def numberOptions(lastNumber, selectedNumber):
-    lastNumberPlusOne = int(lastNumber)
+    '''Builds number options for select widget: 1-lastNumber.'''
+
     selectedNumber = int(selectedNumber)
     html = ""
     for n in range(1, lastNumber + 1):
@@ -341,6 +342,19 @@ def numberOptions(lastNumber, selectedNumber):
     # mark the result as safe from further escaping
     return mark_safe(html)
 
+@register.filter
+def numberOptionsZeroBased(lastNumber, selectedNumber):
+    '''Builds number options for select widget: 0-lastNumber.'''
+    
+    selectedNumber = int(selectedNumber)
+    html = ""
+    for n in range(0, lastNumber + 1):
+        html += "<option value='%d'" % n
+        if n == selectedNumber:
+            html += "selected='selected'"
+        html += ">%d</option>" % n
+    # mark the result as safe from further escaping
+    return mark_safe(html)
 
 def getTopTabUrl(project, request):
     """

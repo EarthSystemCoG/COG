@@ -1,0 +1,49 @@
+{% extends "cog/common/layout_left_center_right.html" %}
+
+{% block main %}
+
+	{% load cog_utils %}
+		
+	<div class="vertical_menu">
+		<form method="post" action="">
+		    {% csrf_token %}
+		    	     
+		    	<!--  loop over facet groups -->
+			    {% for group in groups %}
+			    				    				    
+			    	<!--  group header -->
+			    	<h3>	    		         		    		     	
+		    			 {% with "group_name_"|concat:group.name as group_key %}	    			
+		    			  {% with groups|length as length %}
+			    			<select name="{{ group_key }}">
+				    				{% with length|add:"-1" as lastNumber %}
+				    					{% with group.order as selectedNumber %}
+				    						{{ lastNumber|numberOptionsZeroBased:selectedNumber }}
+				    					{% endwith %}
+				    				{% endwith %}			    				
+			    			</select>
+			    			&nbsp; 
+			    			{% if group.name.lower == 'default' %}
+			    				&nbsp; <!-- display no group name -->
+			    			{% else %}
+			    				{{ group.name }}
+			    			{% endif %} 
+			    			{% if errors|dictKeyLookup:group_key %}
+			    				<span class="errornote">{{ errors|dictKeyLookup:group_key }}</span>
+			    			{% endif %}
+		    			 {% endwith %}
+		    			{% endwith %}
+			    	</h3>		    	
+			    	
+			{% endfor %}
+		    
+		    <div style="text-align:right">
+		    	<input type="button" value="Cancel" onclick="window.location='{% url 'search_profile_config' project.short_name|lower %}'"/>
+		    	<input type="button" value="Reset" onclick="window.location='{% url 'search_profile_order' project.short_name|lower %}'"/>
+	            <input type="submit" value="Submit" />
+	        </div>
+		       
+		</form>
+	</div>
+
+{% endblock %}

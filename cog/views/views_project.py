@@ -116,8 +116,6 @@ def project_add(request):
                                       context_instance=RequestContext(request))
             
 # method to reorganize the project index menu
-
-
 @login_required
 def project_index(request, project_short_name):
     

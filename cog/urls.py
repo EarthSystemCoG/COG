@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^search_profile/config/(?P<project_short_name>.+)/$', cog.views.search_profile_config, name='search_profile_config'),
     url(r'^search_profile/export/(?P<project_short_name>.+)/$', cog.views.search_profile_export, name='search_profile_export'),
     url(r'^search_profile/import/(?P<project_short_name>.+)/$', cog.views.search_profile_import, name='search_profile_import'),
+    url(r'^search_profile/order/(?P<project_short_name>.+)/$', cog.views.search_profile_order, name='search_profile_order' ),
     url(r'^search_facet/add/(?P<project_short_name>.+)/$', cog.views.search_facet_add, name='search_facet_add'),
     url(r'^search_facet/update/(?P<facet_id>.+)/$', cog.views.search_facet_update, name='search_facet_update'),
     url(r'^search_facet/delete/(?P<facet_id>.+)/$', cog.views.search_facet_delete, name='search_facet_delete'),
