@@ -1635,6 +1635,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 /* Test styles for tabbed rollup */
+/* This are currently not used but we may turn on the tabbed rollup again, so keep for now */
 
 .rollover {
     display:       inline;

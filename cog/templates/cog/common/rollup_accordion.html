@@ -1,0 +1,123 @@
+{% extends "cog/common/layout_left_center_right.html" %}
+<!--//START: /cog/templates/cog/common/rollup.html //-->
+
+<!--// This template is used for any page that contains a rollup. It includes templated content and resources //-->
+<!--// Content includes rollup but also social media buttons and "update" link" -->
+
+{% load cog_utils %}
+
+{% block extrahead %}
+
+    <!--// styles and scripts for the resources page. Loaded from /cog/templates/cog/common/rollup.html //-->
+    <!-- note: pixel styles must be adjusted to specific icons -->
+    <!--// note: don't use scoped for this style because it is one level above the location where it is used //-->
+    <style type="text/css">
+    /** the padding-left controls how far the text is from the icon **/
+    /** the background size controls the size of the image. We are starting with a 22x22 image that can be shrunk slightly. **/
+         .folder {display:table-cell; height:22px;  vertical-align:middle; padding-left:27px; font-weight:bold; background: url({{STATIC_URL}}cog/img/folder_icon.png) no-repeat; background-size: 22px 22px; }
+         .bookmark {margin-bottom:4px; display:block; padding-left: 24px; background: transparent url({{STATIC_URL}}cog/img/bookmark_16x16.png) 4px 0 no-repeat;}
+    </style>
+
+    <script>
+       //<![CDATA[
+
+       // function to initialize the resource tree object
+       var tree;
+       function bookmarkTreeInit() {
+
+           treeId = this.id
+           tree = new YAHOO.widget.TreeView(document.getElementById(treeId));
+           tree.subscribe('clickEvent',tree.onEventToggleHighlight);
+           //tree.setNodesProperty('propagateHighlightUp',true);
+           tree.setNodesProperty('propagateHighlightDown',true);
+           //tree.singleNodeHighlight = true;
+           tree.render();
+       }
+      //]]>
+   </script>
+   <!--// css for the governance page. Loaded from /cog/templates/cog/common/rollup.html //-->
+   <!--// note: don't use scoped for this style because it is one level above the location where it is used //-->
+   <style type="text/css">
+	.leftcolumn {
+		width: 130px;
+		text-align: right;
+		vertical-align: top;
+	}
+   </style>
+{% endblock %}
+
+{% block main %}
+
+    <!-- load the template for the page (e.g. contact_us) -->
+	{% with project as proj %}
+		{% include template_page %}
+	{% endwith %}
+
+	<!-- social media buttons -->
+	<div style="text-align:center; padding-top: 4px; padding-bottom:8px;">
+	    {% include 'cog/common/cog_social_media.html' %}
+	</div>
+
+	<!-- Edit this project details - access restricted to project administrators -->
+	{% if template_form_pages|length > 0 %}
+		{% if user|hasAdminPermission:project %}
+            <hr/>
+		    <div style="text-align:center">
+			    {% for template_form_page, template_form_title in template_form_pages.items %}
+			   		&nbsp;<a href="{{ template_form_page }}" class="changelink"> Update Project {{ template_form_title }}</a>&nbsp;
+			    {% endfor %}
+		    </div>
+		{% endif %}
+	{% endif %}
+
+    <!-- children projects-->
+ 	{% if children %}
+		<p></p>
+		<div class="header_bar">
+		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;View Child Project {{ template_title}} ({{ children|length }})</a>
+		</div>
+		<div id="children_rollup" style="display:none">
+		    {% for child in children %}
+	    		{% with child as proj %}
+	    			<br/>
+	    			<div class="mybox" style="padding:0;">
+	    				<div class="header-gray">
+	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">
+                                {{ proj.short_name }} Project {{ template_title}}
+                            </div>
+	    				</div>
+						<div style="padding:4px;">
+							{% include template_page %}
+						</div>
+					</div>
+				{% endwith %}
+		    {% endfor %}
+		</div>
+	{% endif %}
+
+    <!-- peer projects-->
+ 	{% if peers %}
+		<p></p>
+		<div class="header_bar">
+		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;View Peer Project {{ template_title}} ({{ peers|length }})</a>
+		</div>
+		<div id="peer_rollup" style="display:none">
+		    {% for peer in peers %}
+	    		{% with peer as proj %}
+	    			<br/>
+	    			<div class="mybox" style="padding:0;">
+	    				<div class="header-gray">
+	    					<div style="text-align:center; font-weight:bold; padding-top:1px;">
+                                {{ proj.short_name }} Project {{ template_title}}
+                            </div>
+	    				</div>
+	    				<div style="padding:4px;">
+							{% include template_page %}
+						</div>
+					</div>
+				{% endwith %}
+		    {% endfor %}
+		</div>
+	{% endif %}
+{% endblock %}
+<!--//START: /cog/templates/cog/common/rollup.html //-->

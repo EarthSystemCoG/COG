@@ -106,9 +106,16 @@ def templated_page_display(request, project_short_name, tab, template_page, temp
 
 def render_templated_page(request, project, tab, template_page, template_title, template_form_pages, children, peers):
 
-    return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': template_title, 'tab': tab,
-                               'template_page': template_page, 'template_title': template_title,
+    # to change to tabbed rollup, load 'cog/common/rollup_tabbed.html'
+
+    return render_to_response('cog/common/rollup_accordion.html',
+                              {'project': project,
+                               'title': '%s %s' % (project.short_name, template_title),
+                               # 'title': template_title,
+                               'tab': tab,
+                               'template_page': template_page,
+                               'template_title': template_title,
                                'template_form_pages': template_form_pages,
-                               'children': children, 'peers': peers},
+                               'children': children,
+                               'peers': peers},
                               context_instance=RequestContext(request))
