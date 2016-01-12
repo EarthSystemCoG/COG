@@ -4,6 +4,34 @@
 
     {% load cog_utils %}
     {% load search_utils %}
+    
+    <!-- import/export configuration - restricted to node administrators -->
+    {% if user.is_staff %}
+		{% if request.GET.message %}
+		   <p></p>
+		   <div class="message-box"> {{ request.GET.message|showSearchConfigMessage:project }}</div>
+		{% endif %}
+		<div class="mybox" >
+			<table >
+				<tr>
+					<td style="text-align:left; padding:10px">
+						<form method="post" action="{% url 'search_profile_import' project.short_name %}" name="import_form">
+							{% csrf_token %}
+							<input type="submit" value="Import Search Configuration"/>
+						</form>
+					</td>
+					<td style="text-align:right; padding:10px">
+						<form method="post" action="{% url 'search_profile_export' project.short_name %}" name="export_form">
+							{% csrf_token %}
+							<input type="submit" value="Export Search Configuration"/>
+						</form>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<p></p>
+	{% endif %}
+    
 	
     <!-- search profile form -->
     <div class="mybox">
@@ -110,7 +138,7 @@
                 </tr>
                 {% for group, facets in search_groups.items %}
                		<tr>
-	            		<td nowrap="nowrap">{{group.order}}. {{group.name}}</td>
+	            		<td nowrap="nowrap" style="font-weight:bold;">{{group.order}}. {{group.name}}</td>
 	            		<td>&nbsp;</td>
 	            		<td>&nbsp;</td>
 	            		<td><a class="changelink" href="{% url 'search_group_update' group.id %}">Edit</a></td>
@@ -143,32 +171,7 @@
          </div>
         
     {% endif %}
-    
-    <!-- import/export configuration -->
-	{% if request.GET.message %}
-	   <p></p>
-	   <div class="message-box"> {{ request.GET.message|showSearchConfigMessage:project }}</div>
-	{% endif %}
-	<div class="mybox" >
-		<table >
-			<tr>
-				<td style="text-align:left; padding:10px">
-					<form method="post" action="{% url 'search_profile_import' project.short_name %}" name="import_form">
-						{% csrf_token %}
-						<input type="submit" value="Import Search Configuration"/>
-					</form>
-				</td>
-				<td style="text-align:right; padding:10px">
-					<form method="post" action="{% url 'search_profile_export' project.short_name %}" name="export_form">
-						{% csrf_token %}
-						<input type="submit" value="Export Search Configuration"/>
-					</form>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<p></p>
-    
+        
     <!-- anchor for confirmation dialog -->
     <div id="myDialog" class="yui-skin-sam"></div>
     
