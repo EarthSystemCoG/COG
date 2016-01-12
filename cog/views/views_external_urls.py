@@ -44,10 +44,12 @@ def external_urls_display(request, project_short_name, suburl):
     
     # build list of peers with with external urls of this type
     peers = _subSelectProjects(project.peers.all(), externalUrlConf, request.user)
-             
-    return render_to_response('cog/common/rollup.html', 
+
+    # to change to tabbed rollups, load 'cog/common/rollup_tabbed.html'
+    return render_to_response('cog/common/rollup_accordion.html',
                               {'project': project, 
-                               'title': template_title,
+                               'title': '%s %s' % (project.short_name, template_title),
+                               # 'title': template_title,
                                'template_page': 'cog/project/_external_urls_list.html', 
                                'template_title': template_title, 
                                'template_form_pages': template_form_pages,
