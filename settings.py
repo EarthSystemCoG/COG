@@ -153,7 +153,10 @@ DATA_ROOT = os.path.join(MEDIA_ROOT, "data/")
 # custom template, media and configuration directories
 MYTEMPLATES = os.path.join(siteManager.cog_config_dir, 'mytemplates')
 MYMEDIA = os.path.join(siteManager.cog_config_dir, 'mymedia')
-MYPROJECTS = os.path.join(siteManager.cog_config_dir, 'myprojects')
+
+# project-specific configuration directories
+# must be writable by web server
+PROJECT_CONFIG_DIR = os.path.join(MEDIA_ROOT, 'config')
 
 print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDIA)
 

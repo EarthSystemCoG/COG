@@ -126,4 +126,4 @@ def showSearchConfigMessage(message, project):
 
 def _getProjectSearchConfigFilePath(project):
     
-    return "$COG_CONFIG/myprojects/%s/search.cfg" % project.short_name.lower()
+    return "$MEDIA_ROOT/config/%s/search.cfg" % project.short_name.lower()
