@@ -86,17 +86,19 @@ class PostForm(ModelForm):
             else:
                 if url == '':
                     self._errors["url"] = self.error_class(["Invalid URL for project page"])
+                elif '//' in url:
+                    self._errors["url"] = self.error_class(["Invalid URL for project page: cannot have two consecutive '/'"])
                 else:
                     # verify uniqueness: URL not used by any other existing instance
                     project = cleaned_data.get("project")
                     full_url = get_project_page_full_url(project, url)
-                    try:
-                        # perform case-insensitive lookup
-                        post = Post.objects.all().get(url__iexact=full_url)
-                        if post and (post.id != self.instance.id):
-                            self._errors["url"] = self.error_class(["URL already used"])
-                    except ObjectDoesNotExist:
-                        pass
+                    # check this URL is unique
+                    self._check_url_is_unique(full_url)
+                    # also check with or without the trailing '/'
+                    if full_url.endswith("/"):
+                        self._check_url_is_unique(full_url[-1])
+                    else:
+                        self._check_url_is_unique(full_url+"/")
 
         # validate "template"
         # must be not null for every page
@@ -125,6 +127,18 @@ class PostForm(ModelForm):
         # always return the full collection of cleaned data.
         return cleaned_data
 
+    def _check_url_is_unique(self, full_url):
+        '''Checks whether the provided URL already exists in the database.'''
+        
+        try:
+            # perform case-insensitive lookup
+            post = Post.objects.all().get(url__iexact=full_url)
+            if post and (post.id != self.instance.id):
+                self._errors["url"] = self.error_class(["URL already used"])
+        except ObjectDoesNotExist:
+            pass
+
+        
     class Meta:
         model = Post
         exclude = ('author', 'publication_date', 'update_date',)
