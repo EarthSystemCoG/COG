@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from os.path import basename
 import re
 from cog.utils import *
+from cog.models.navbar import TABS
 from django.db.models import Q
 
 POST_TEMPLATES = (("cog/post/page_template_sidebar_center_right.html", "Left Menu, Main Content, Right Widgets"),
@@ -71,7 +72,10 @@ class PostForm(ModelForm):
                 # [-1] location is empty string because templates URLs always end in '/'
                 __url = str(ppage[1]).split("/")[-2] # to last part of project templated URL... 
                 if _url == __url:
-                    self._errors["url"] = self.error_class(["The term '%s' is reserved for standard project URLs" % _url])
+                    # MUST allow creation of the following template pages because they are wikis
+                    if _url.lower() not in (TABS["LOGISTICS"], TABS["REGISTRATION"], TABS["LOCATION"],
+                                            TABS["LODGING"], TABS["TRANSPORTATION"], TABS["COMPUTING"]):                          
+                        self._errors["url"] = self.error_class(["The term '%s' is reserved for standard project URLs" % _url])
             
             # only allows letters, numbers, '-', '_' and '/'
             if re.search("[^a-zA-Z0-9_\-/]", url):
