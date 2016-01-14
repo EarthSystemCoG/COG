@@ -11,7 +11,7 @@ import urllib, urllib2
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.services.search import SolrSearchService
 from cog.models.search import SearchOutput, Record, Facet, FacetProfile
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from copy import copy, deepcopy
 from urllib2 import HTTPError
@@ -466,7 +466,7 @@ def _getSearchConfig(request, project):
     return SearchConfig(facetProfile, fixedConstraints, searchService,
                         profile.replicaSearchFlag, profile.latestSearchFlag, profile.localSearchFlag)
     
-@login_required
+@user_passes_test(lambda u: u.is_staff)
 @require_http_methods (["POST"])
 def search_profile_export(request, project_short_name):
 
@@ -487,7 +487,7 @@ def search_profile_export(request, project_short_name):
 
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
 
-@login_required
+@user_passes_test(lambda u: u.is_staff)
 @require_http_methods (["POST"])
 def search_profile_import(request, project_short_name):
 
