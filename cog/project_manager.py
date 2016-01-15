@@ -24,18 +24,23 @@ class ProjectManager(object):
         allSites.append( local_site )
         for site in allSites:
             url = "http://%s/share/projects/" % site.domain
+            numberOfUsers = 0
+            numberOfProjects = 0
             jobj = getJson(url)
             if jobj is None:
                 status = 'ERROR'
             else:
                 status = 'OK'
+                numberOfProjects = len( jobj["projects"])
+                numberOfUsers = int( jobj.get("users",0) )
                 if site != local_site:
+                    # harvest projects, tags from remote site
                     self._harvest(jobj)
-            numberOfUsers = int( jobj.get("users",0) )
+                    
             sites[site.id] = { 'name': site.name, 'domain':site.domain, 'url': url, 'status':status,
-                               'numberOfProjects': len( jobj["projects"]), 'numberOfUsers': numberOfUsers  }
+                               'numberOfProjects': numberOfProjects, 'numberOfUsers': numberOfUsers  }
             
-            totalNumberOfProjects += len(jobj["projects"])
+            totalNumberOfProjects += numberOfProjects
             totalNumberOfUsers += numberOfUsers
             
         return sites, totalNumberOfProjects, totalNumberOfUsers
