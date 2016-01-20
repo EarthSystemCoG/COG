@@ -229,7 +229,7 @@ AUTHENTICATION_BACKENDS = (
 #X_FRAME_OPTIONS = 'DENY'
 
 # login page URL (default: '/accounts/login')
-LOGIN_URL = '/login'
+LOGIN_URL = '/login/'
 
 # OpenID login page
 #LOGIN_URL = '/openid/login/'
