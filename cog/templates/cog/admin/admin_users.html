@@ -8,7 +8,7 @@
 <p>Below is the list of system users. Click on the name to visit their profile (includes home node). Click on the email
 	to contact the user. </p>
    
-       <table style="margin-left:125px; width:700px;">
+       <table style="margin-left:234px; width:672px;">
            <tr>
                <td>
                    <form name="lookupUserForm" action="" method="post">
@@ -16,7 +16,8 @@
                         <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email:</strong></label>
                         <input style="vertical-align: middle; width:30%;" type="text" alt="text" name="match" id="match" value="{{request.POST.match}}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
-	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.path }}'"/>
+	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window
+				                .location='{{ request.path }}'"/>
                    </form>
                </td>
            </tr>
