@@ -25,7 +25,8 @@
 		        </caption>
                 <tr>
                     <th class="white" scope="col"><strong>Name</strong></th>
-                    <th class="white" scope="col"><strong>Status</strong></th>
+	                <th class="white" scope="col"><strong>Status</strong></th>
+	                <th class="white" scope="col"><strong>Private?</strong></th>
                     <th class="white" scope="col"><strong>Update?</strong></th>
                     <th class="white" scope="col"><strong>Delete?</strong></th>
                 </tr>
@@ -38,6 +39,13 @@
 			                   Active
 			               {% else %}
 			                   Not Active
+			               {% endif %}
+			           </td>
+			           <td nowrap="true" style="text-align: center">
+			               {% if project.private %}
+			                   Private
+			               {% else %}
+			                   Public
 			               {% endif %}
 			           </td>
 			           <td nowrap="true"><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">Update &raquo;</a></td>
