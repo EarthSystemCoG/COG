@@ -273,12 +273,9 @@ def search_post(request, searchInput, searchConfig, extra={}):
             print "HTTP Request Error"
             data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
-            if searchConfig.localFlag:
-                data[ERROR_MESSAGE] = "Search returned no results. Data may not be local. Uncheck the " \
-                                      "local flag and try your search again."
-            else:
-                data[ERROR_MESSAGE] = "Request Error: search may not be properly configured. Contact the Project " \
-                                      "Administrator."
+
+            data[ERROR_MESSAGE] = "Error: search may not be properly configured. Contact the Project " \
+                                  "Administrator."
     # invalid user input
     else:
         print "Invalid Search Input"

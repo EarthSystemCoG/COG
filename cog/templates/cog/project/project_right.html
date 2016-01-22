@@ -149,7 +149,7 @@
 
    <!--display project tags-->
     <!-- font size has to be the same as the #user_menu -->
-   <div style="font-size: 12px; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
+   <div id="project_tags" style="font-size: 12px; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
 
        {% if project.tags.all|length > 0 %}
            <strong>{{ project.short_name }} Tags:</strong>

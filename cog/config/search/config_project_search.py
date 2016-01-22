@@ -9,7 +9,7 @@ class SearchConfigParser():
     
     def __init__(self, project):
         self.project = project
-        self.config_file_path = '%s/%s/search.cfg' % (settings.MYPROJECTS, project.short_name.lower())
+        self.config_file_path = '%s/%s/search.cfg' % (settings.PROJECT_CONFIG_DIR, project.short_name.lower())
         
     def _getConfigParser(self):
         
