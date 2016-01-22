@@ -32,6 +32,9 @@ def serialize_project(project):
     # public or private
     pdict["private"] = str(project.private)
     
+    # shared or local
+    pdict["shared"] = str(project.shared)
+    
     # tags
     tags = []
     for tag in project.tags.all():
@@ -85,7 +88,7 @@ def share_projects(request):
         
         # list projects from this node
         projects = {}
-        print 'Listing active, public projects for current site=%s' % current_site
+        print 'Listing ACTIVE projects for current site=%s' % current_site
         for project in Project.objects.filter(active=True).filter(site=current_site):
             projects[project.short_name] = serialize_project(project)
             
@@ -147,10 +150,7 @@ def share_user(request):
 @user_passes_test(lambda u: u.is_staff)
 def sync_projects(request):
     '''Updates the list of remote projects in current database.'''
-    
-    if not request.user.is_staff:
-        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
+        
     sites, totalNumberOfProjects, totalNumberOfUsers = projectManager.sync()
     
     return render_to_response('cog/admin/sync_projects.html', 

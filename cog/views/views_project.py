@@ -808,6 +808,9 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         elif not prj.active:
             # do not add
             pass
+        elif not prj.isLocal() and not prj.shared:
+            # filter out projects from remote sites that are not shared
+            pass
         # only display projects that are visible to the user
         elif prj.isNotVisible(user):
             # do not add
