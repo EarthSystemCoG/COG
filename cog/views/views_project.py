@@ -58,6 +58,9 @@ def project_add(request):
         # set project to be private by default on start-up
         project.private = True
         
+        # set project to be shared by default
+        project.shared = True
+        
         form = ProjectForm(instance=project)
 
         return render_to_response('cog/project/project_form.html',

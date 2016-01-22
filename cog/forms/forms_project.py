@@ -107,7 +107,7 @@ class ProjectForm(ModelForm):
     class Meta:
         model = Project
         fields = ('short_name', 'long_name', 'author', 'description', 
-                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 
+                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 'shared',
                   'dataSearchEnabled', 'forumNotificationEnabled', 'nodesWidgetEnabled',
                   'site', 'maxUploadSize')
 

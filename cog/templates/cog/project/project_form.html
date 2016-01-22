@@ -183,6 +183,19 @@
 	                 {{ form.private.errors }}
 	            </td>
 	        </tr>
+	        <!--// Checkbox for shared projects   \\-->
+            <tr>
+	            <td nowrap="nowrap">
+                    Is Shared?
+                </td>
+	            <td style="vertical-align:middle;">
+	                 {{ form.shared }}
+	                 <span>
+	                    [A shared project is visible to all CoG nodes across the federation.]
+	                 </span>
+	                 {{ form.shared.errors }}
+	            </td>
+	        </tr>
 	        <!--// Turn on/off tabs and sub-tabs \\-->	    
 	        <tr>
                 <td nowrap="nowrap">

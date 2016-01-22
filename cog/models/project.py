@@ -115,6 +115,10 @@ class Project(models.Model):
     # by default all projects are public, and must be explicitly made private
     private = models.BooleanField(default=False, blank=False, null=False)
     
+    # a shared project is visible to all CoGs across the federation
+    # by default all projects are shared
+    shared = models.BooleanField(default=True, blank=False, null=False)
+    
     # optional custom logo
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     
