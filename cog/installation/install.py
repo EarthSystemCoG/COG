@@ -68,7 +68,7 @@ class CoGInstall(object):
         management.call_command("makemigrations","django_comments") 
         management.call_command("migrate","--fake-initial")
         management.call_command("migrate")
-        management.call_command("collectstatic", interactive=False)
+        management.call_command("collectstatic", interactive=False, verbosity=0)
         
         # custom management commands
         management.call_command("init_site")
