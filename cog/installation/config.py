@@ -210,6 +210,7 @@ class CogConfig(object):
         cfgfile = open(CONFIGFILEPATH,'w')
         self.cogConfig.write(cfgfile)
         cfgfile.close()
+        logging.info("Written CoG configuration file: %s" % CONFIGFILEPATH) 
         
     
 if __name__ == '__main__':

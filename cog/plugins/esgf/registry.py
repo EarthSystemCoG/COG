@@ -259,7 +259,7 @@ class PeerNodesList(object):
         
     def reload(self, delete=False):
         
-        if os.path.exists(self.filepath):
+        if self.filepath is not None and os.path.exists(self.filepath):
             
             print('Updating list of CoG sites from: %s (delete: %s)' % (self.filepath, delete) )
             

@@ -101,7 +101,7 @@ DATABASES = {
 
 DATABASES['default'] = DATABASES[DJANGO_DATABASE]
 
-logging.info('Using Django Database=%s' % DJANGO_DATABASE)
+logging.info('>>> Using Django database=%s' % DJANGO_DATABASE)
 if DJANGO_DATABASE == 'sqllite3':
     logging.info("Database path=%s" % DATABASE_PATH)
 
