@@ -331,7 +331,8 @@ def search_post(request, searchInput, searchConfig, extra={}):
     # use POST-REDIRECT-GET pattern
     # flag the redirect in session
     request.session[SEARCH_REDIRECT] = True
-    return HttpResponseRedirect(request.get_full_path())  # relative search page URL + optional query string
+    #return HttpResponseRedirect(request.get_full_path())  # relative search page URL + optional query string
+    return HttpResponseRedirect(request.path)   # relative search page URL (remove optional query string)
 
 
 def metadata_display(request, project_short_name):
