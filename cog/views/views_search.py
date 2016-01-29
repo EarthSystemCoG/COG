@@ -10,7 +10,7 @@ import urllib, urllib2
 
 from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from cog.services.search import SolrSearchService
-from cog.models.search import SearchOutput, Record, Facet, FacetProfile
+from cog.models.search import SearchOutput, Record, Facet, FacetProfile,SearchInput
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from copy import copy, deepcopy
@@ -79,13 +79,25 @@ def search(request, project_short_name):
                                                               'title2': 'Data Search'},
                                   context_instance=RequestContext(request))
 
+def _addConfigConstraints(searchInput, searchConfig):
+    '''Returns a COPY of the search input object with added project fixed constraints.'''
+    
+    _searchInput = deepcopy(searchInput)
+    
+    # add fixed constraints - but do NOT override previous values
+    for key, values in searchConfig.fixedConstraints.items():
+        if not _searchInput.hasConstraint(key):
+            _searchInput.setConstraint(key, values)            
+    return _searchInput
+    
 
 def _buildSearchInput(request, searchConfig):
-    """Assembles the search input from the HTTP request and the project specific configuration."""
+    """Assembles the search input from the HTTP request only (NO project fixed constraints yet)."""
     
     queryDict = getQueryDict(request)
     
     # populate input with search constraints from HTTP request
+    # only use facet keys from project configuration
     searchInput = SearchInput()
     for facetGroup in searchConfig.facetProfile.facetGroups:
         for key in facetGroup.getKeys():
@@ -93,11 +105,7 @@ def _buildSearchInput(request, searchConfig):
                 for value in queryDict.getlist(key):
                     if value:
                         searchInput.addConstraint(key, value)
-    
-    # add fixed constraints - override previous values
-    for key, values in searchConfig.fixedConstraints.items():
-            searchInput.setConstraint(key, values)
-            
+                
     # text
     if queryDict.get('query', None):
         searchInput.query = queryDict['query']
@@ -132,11 +140,13 @@ def search_config(request, searchConfig, extra={}):
     """
         
     # print extra arguments
-    for key, value in extra.items():
-        print 'extra key=%s value=%s' % (key, value)
+    #for key, value in extra.items():
+    #    print 'extra key=%s value=%s' % (key, value)
     
-    # create search input object
+    # create search input object from request parameters ONLY
     searchInput = _buildSearchInput(request, searchConfig)
+    print 'User provided search constraints:'
+    searchInput.printme()
         
     # GET/POST switch
     queryDict = getQueryDict(request)
@@ -175,23 +185,28 @@ def search_get(request, searchInput, searchConfig, extra={}):
         # remove POST redirect flag
         del request.session[SEARCH_REDIRECT]
     
-    # direct GET request
+    # direct GET request: must query for all facet values with project-specific constraints
     else:
         
         # reset the search path
         request.session[SEARCH_PATH] = []
         
+        # add project fixed constraints
+        print 'Search GET: adding fixed project constraints'
+        _searchInput = _addConfigConstraints(searchInput, searchConfig)
+        _searchInput.printme()
+        
         # set retrieval of all facets in profile
         # but do not retrieve any results
-        searchInput.facets = facetProfile.getAllKeys()
-        searchInput.limit = 0  # don't query for results
-        searchInput.offset = 0
+        _searchInput.facets = facetProfile.getAllKeys()
+        _searchInput.limit = 0  # don't query for results
+        _searchInput.offset = 0
         
         try:
-            (url, xml) = searchService.search(searchInput)
+            (url, xml) = searchService.search(_searchInput)
             searchOutput = deserialize(xml, facetProfile)
             
-            data[SEARCH_INPUT] = searchInput
+            data[SEARCH_INPUT] = searchInput    # IMPORTANT: store in session the ORIGINAL search input WITHOUT project constraints
             data[SEARCH_OUTPUT] = searchOutput
             data[SEARCH_URL] = url
             data[FACET_PROFILE] = facetProfile
@@ -251,19 +266,24 @@ def search_post(request, searchInput, searchConfig, extra={}):
     
     # valid user input
     if (searchInput.isValid()):
-        
+                
+        # add project fixed constraints
+        print 'Search POST: adding fixed project constraints'
+        _searchInput = _addConfigConstraints(searchInput, searchConfig)
+        _searchInput.printme()
+    
         # set retrieval of all facets in profile
-        searchInput.facets = facetProfile.getAllKeys()
+        _searchInput.facets = facetProfile.getAllKeys()
     
         # execute query for results, facets
         try:
-            (url, xml) = searchService.search(searchInput)
+            (url, xml) = searchService.search(_searchInput)
             searchOutput = deserialize(xml, facetProfile)
             # searchOutput.printme()
             
             # initialize new session data from extra argument dictionary
             data = extra
-            data[SEARCH_INPUT] = searchInput
+            data[SEARCH_INPUT] = searchInput  # IMPORTANT: store in session the ORIGINAL search input WITHOUT project constraints
             data[SEARCH_OUTPUT] = searchOutput
             data[SEARCH_URL] = url
             data[FACET_PROFILE] = facetProfile
