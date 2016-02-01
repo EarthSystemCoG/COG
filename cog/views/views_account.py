@@ -658,12 +658,12 @@ def user_reminder(request):
                 subject = "Username/OpenID Reminder"
                 message = ""
                 for user in users:
-                    message += "Your username is: %s\n" % user.username
+                    message += "\nYour username is: %s\n" % user.username
 
                     for openid in user.profile.openids():
                         message += "Your OpenID is: %s\n" % openid
 
-                    notify(user, subject, message)
+                sendEmail(email, subject, message)
 
                 # redirect to login page with special message
                 return HttpResponseRedirect(reverse('login')+"?message=user_reminder")

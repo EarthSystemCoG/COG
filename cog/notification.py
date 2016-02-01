@@ -40,15 +40,17 @@ class EmailConfig:
 emailConfig = EmailConfig()
 
 def notify(toUser, subject, message, mime_type='plain'):  # send 'plain' email by default
+    '''Notifies a specific user by email.'''
     
     # send email in separate thread, do not wait   
     emailThread = EmailThread(toUser.email, subject, message, mime_type=mime_type)
     emailThread.start()
 
-def sendEmail(fromAddress, toAddress, subject, message):
+def sendEmail(toAddress, subject, message, fromAddress=None, mime_type='plain'):
+    '''Sends email to a specific address.'''
     
     # send email in separate thread, do not wait
-    emailThread = EmailThread(toAddress, subject, message, fromAddress=fromAddress)
+    emailThread = EmailThread(toAddress, subject, message, fromAddress, mime_type)
     emailThread.start()
 
         
