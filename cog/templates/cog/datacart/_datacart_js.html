@@ -169,7 +169,7 @@
 					if (field == 'checksum' || field == 'size' || field == 'tracking_id') {
 						keys[keys.length] = field;
 					} else {
-						if (field != 'score') {
+						if (field != 'score' && field != '_version_') {
 							keys2[keys2.length] = field;
 						}
 					}
