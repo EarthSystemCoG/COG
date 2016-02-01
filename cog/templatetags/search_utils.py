@@ -103,8 +103,11 @@ def recordUrls(record):
                 if value.lower() == 'gridftp':
                     # data_node must appear in list of valid Globus endpoints (example: "esg-datanode.jpl.nasa.gov:2811")
                     for gridftp_url in GLOBUS_ENDPOINTS.endpointDict().keys():
+                    	gurl = '/globus/download?dataset=%s@%s' %(record.id, index_node)
+                    	if record.fields.get('shard', None):
+                    		gurl += "&shard="+record.fields.get('shard')[0]
                         if data_node in gridftp_url:
-                            urls.append( ('/globus/download?dataset=%s@%s' %(record.id, index_node),
+                            urls.append( (gurl,
                                           'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
                                           'GridFTP') )
             

@@ -83,10 +83,19 @@ def download(request):
 		# query each index_node for all files belonging to that dataset
 		(dataset_id, index_node) = str(dataset).split('@')
 		
-		params = [ ('type',"File"), ('dataset_id',dataset_id), ("distrib", "false"),
+		params = [ ('type',"File"), ('dataset_id',dataset_id),
 				   ('offset','0'), ('limit',limit), ('fields','url'), ("format", "application/solr+json") ]
+		
 		if query is not None and len(query.strip())>0:
 			params.append( ('query', query) )
+			
+		# optional shard
+		shard = request.GET.get('shard', '')
+		if shard is not None and len(shard.strip()) > 0:
+			params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
+		else:
+			params.append(("distrib", "false"))
+
 			
 		url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
 		print 'Searching for files at URL: %s' % url
