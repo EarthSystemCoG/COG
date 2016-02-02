@@ -15,6 +15,8 @@ from django_openid_auth.models import UserOpenID
 import imghdr
 from captcha.fields import CaptchaField
 from cog.forms.forms_utils import validate_image
+from cog.plugins.esgf.security import esgfDatabaseManager
+from cog.models.user_profile import createUsername
 
 # list of invalid characters in text fields
 #INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
@@ -249,6 +251,8 @@ def validate_username(form, user_id):
         cleaned_data = form.cleaned_data
 
         username = cleaned_data.get("username")
+        
+        # validate username string
         if username:
             if len(username) < 5:
                 form._errors["username"] = form.error_class(["'Username' must contain at least 5 characters."])
@@ -256,13 +260,23 @@ def validate_username(form, user_id):
                 form._errors["username"] = form.error_class(["'Username' must not exceed 30 characters."])
             elif re.search(INVALID_USERNAME_CHARS, username):
                 form._errors["username"] = form.error_class(["'Username' can only contain letters, digits and @/./+/-/_"])
-            try:
-                # perform case-insensitive lookup of username, compare with id from form instance
-                user =  User.objects.all().get(username__iexact=username)
-                if user!=None and user.id != user_id:
-                    form._errors["username"] = form.error_class(["Username already taken in database."])
-            except ObjectDoesNotExist:
-                pass
+                
+            # check that the corresponding OpenID is available in the local CoG database
+            if user_id is None: # do not check when instance is updated
+                openid = esgfDatabaseManager.buildOpenid(username)
+                
+                if esgfDatabaseManager.checkOpenid(openid):
+                    form._errors["username"] = form.error_class(["Username/OpenID already taken in database."])
+                    
+                else:
+                    # save this openid in the form data so it can be used by the view POST method
+                    form.cleaned_data['openid'] = openid      
+                    
+                    # once the openid is validated, choose the closest possible username
+                    _username = createUsername(username)
+                    print 'Created username=%s from=%s' % (_username, username)
+                    cleaned_data['username'] = _username # override form data
+              
 
 # method to validate a generic field against bad characters
 def validate_field(form, field_name, field_value):

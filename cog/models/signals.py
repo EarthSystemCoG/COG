@@ -33,13 +33,6 @@ def account_created_receiver(sender, **kwargs):
             userp.user.username = username
             userp.user.save()
 
-    # create ESGF user: only when user profile is first created
-    # from a COG registration, and only if the user does NOT have an openid already
-    # (as a result of logging in with an ESGF openid)
-    if settings.ESGF_CONFIG and created and len(userp.openids())==0:
-        print 'Inserting user into ESGF security database'
-        esgfDatabaseManager.insertUser(userp)
-
 def update_user_projects_at_login(sender, user, request, **kwargs):
     '''Updates the user projects every time the user logs in.'''
     

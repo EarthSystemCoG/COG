@@ -215,13 +215,21 @@ def user_add(request):
 
             # create a user from the form but don't save it to the database yet because the password is not encoded yet
             user = form.save(commit=False)
+            
             # must reset the password through the special method that encodes it correctly
             clearTextPassword = form.cleaned_data['password']
             user.set_password(clearTextPassword)
-
+                        
             # save user to database
             user.save()
-            print 'Created user=%s' % user.get_full_name()
+            print 'Created user=%s' % user.username
+            
+            # create openid
+            openid = form.cleaned_data['openid']
+            print 'Creating openid=%s' % openid
+            userOpenID = UserOpenID.objects.create(user=user, claimed_id=openid, display_id=openid)
+            print 'Added openid=%s for user=%s into COG database' % (openid, user.username)
+
 
             # use additional form fields to create user profile
             userp = UserProfile(user=user,
@@ -237,10 +245,15 @@ def user_add(request):
                                 image=form.cleaned_data['image'],
                                 last_password_update=datetime.datetime.now())
 
-            userp.clearTextPassword = clearTextPassword  # NOTE: this field is NOT persisted
             
-            # save user profile --> will trigger userProfile post_save and consequent creation of openid
+            # save user profile --> will trigger userProfile post_save
             userp.save()
+            
+            # NOTE: this field is NOT persisted in the CoG database but it is used by insertEsgfUser() below
+            userp.clearTextPassword = clearTextPassword  
+            # insert into ESGF database
+            if settings.ESGF_CONFIG:
+                esgfDatabaseManager.insertEsgfUser(userp)
 
             # create user data cart
             datacart = DataCart(user=user)
@@ -278,6 +291,7 @@ def user_add(request):
             # append openid to initial login_url
             if userp.openid() is not None:
                 login_url += "&openid=%s" % urllib.quote_plus(userp.openid())
+            login_url += "&username=%s" % urllib.quote_plus(userp.user.username)
             
             response = HttpResponseRedirect(login_url)
             

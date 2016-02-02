@@ -117,6 +117,55 @@ class ESGFDatabaseManager():
         
         return created
             
+    def insertEsgfUser(self, userProfile):
+        ''' Creates an ESGF user in the ESGF database from a CoG user in the CoG database.'''
+        
+        openid = userProfile.openid()
+        
+        # do NOT override ESGF database
+        esgfUser = self.getUserByOpenid(openid)
+
+        if esgfUser is None:
+            session = self.Session()
+    
+            try:
+                
+                # encrypt password with MD5_CRYPT
+                clearTextPassword = userProfile.clearTextPassword
+                if clearTextPassword is not None and len(clearTextPassword)>0:
+                    encPassword = md5_crypt.encrypt(clearTextPassword)
+                else:
+                    encPassword = None
+    
+                username = openid[ openid.rfind('/')+1: ]  # ESGF usernames are NOT unique in the same database
+                esgfUser = ESGFUser(firstname=userProfile.user.first_name, 
+                                    lastname=userProfile.user.last_name,
+                                    email=userProfile.user.email, 
+                                    username=username, 
+                                    password=encPassword,
+                                    dn='', 
+                                    openid=openid, 
+                                    organization=userProfile.institution, 
+                                    organization_type='',
+                                    city=userProfile.city, 
+                                    state=userProfile.state, 
+                                    country=userProfile.country,
+                                    status_code=1, 
+                                    verification_token=str(uuid4()), 
+                                    notification_code=0)
+    
+                session.add(esgfUser)
+                session.commit()
+                print 'Inserted user with openid=%s into ESGF database' % openid
+    
+            finally:
+                session.close()
+
+        else:
+            print 'User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid
+            pass
+
+        
     def insertUser(self, userProfile):
         
         # use existing openid...
