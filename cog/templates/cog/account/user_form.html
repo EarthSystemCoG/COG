@@ -104,8 +104,7 @@
 	            <!-- NOTE: form cannot be submitted unless password meets criteria -->
 	            <form action="" method="post" enctype="multipart/form-data" onsubmit="return checkPassword();">
                     {% csrf_token %}
-	                {{ formset1.management_form }}
-	                {{ formset2.management_form }}
+	                {{ formset.management_form }}
 
                     <!-- user information -->
 	                <table> <!--layout only-->
@@ -317,33 +316,7 @@
                         {% endif %}
                     </table>
 
-                    <!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
-              	    {% if form.instance.id %}
-              		    {% for openidform in formset2 %}
-                            <table>
-                                <tr>
-                                    <td colspan="2" class="caption_mimic" style="border-top: 1px solid #666;"><strong>Open IDs</strong></td>
-                                </tr>
-	              			    <tr>
-	              				    {{ openidform.id }}
-	              				    <td style="width:200px;" nowrap="nowrap">
-                                        <label for="id_claimed_id">
-                                            ESGF OpenID
-                                        </label>
-                                    </td>
-	              				    <td style="width:500px;vertical-align:middle;">
-	              					    {{ openidform.instance.claimed_id }}
-	              					    {{ openidform.claimed_id.as_hidden }}
-	              					    {{ openidform.display_id.as_hidden }}
-	              					    {{ openidform.user.as_hidden }}
-	              				    </td>
-	              			    </tr>
-                            </table>
-			    	    {% endfor %}
-		    	    {% endif %}
-
                     <!--web URLs-->
-
                     <table>
                         <tr>
 				            <td colspan="5" class="caption_mimic" style="border-top: 1px solid #666;">
@@ -354,7 +327,7 @@
 		    	            <tr>
               	                <td colspan="6">[Optional web sites associated with this COG user account: (e.g. 'Home Page', 'My Blog') ]</td>
                             </tr>
-                            {% for urlform in formset1 %}{{ urlform.id }}
+                            {% for urlform in formset %}{{ urlform.id }}
 				                <tr>
 			                        <td style="width:60px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-url">Web URL:</label></td>
 				                    <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
