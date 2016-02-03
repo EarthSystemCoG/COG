@@ -225,11 +225,11 @@ def user_add(request):
             print 'Created user=%s' % user.username
             
             # create openid
-            openid = form.cleaned_data['openid']
-            print 'Creating openid=%s' % openid
-            userOpenID = UserOpenID.objects.create(user=user, claimed_id=openid, display_id=openid)
-            print 'Added openid=%s for user=%s into COG database' % (openid, user.username)
-
+            if settings.ESGF_CONFIG:
+                openid = form.cleaned_data['openid']
+                print 'Creating openid=%s' % openid
+                userOpenID = UserOpenID.objects.create(user=user, claimed_id=openid, display_id=openid)
+                print 'Added openid=%s for user=%s into COG database' % (openid, user.username)
 
             # use additional form fields to create user profile
             userp = UserProfile(user=user,
