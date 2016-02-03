@@ -46,36 +46,6 @@ class ESGFDatabaseManager():
         return ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", username)        
         
         
-    def createOpenid(self, userProfile):
-        '''Selects the first available ESGF openid starting from the CoG username, and saves it in the CoG database'''
-        
-        openid = self.buildOpenid(userProfile.user.username)
-        session = self.Session()
-        
-        try:
-            
-            # try N times
-            for ext in OPENID_EXTENSIONS:
-                _openid = openid + ext
-                try:
-                    result = session.query(ESGFUser).filter(ESGFUser.openid==_openid).one()
-                    print 'User with openid=%s already exists, trying another one' % _openid
-    
-                except MultipleResultsFound:
-                    # problem in ESGF database, but ignore here
-                    print 'Warning: found multiple users with openid=%s' % _openid
-    
-                except NoResultFound:    
-                    # this openid is available
-                    userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
-                    print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user.username)
-                    return userOpenID.claimed_id
-                
-        finally:
-            session.close()
-            
-        return None # openid not assigned
-    
     def checkOpenid(self, openid):
         '''Returns true if the given openid exists in the ESGF database, false otherwise.'''
         
@@ -124,7 +94,6 @@ class ESGFDatabaseManager():
         
         # do NOT override ESGF database
         esgfUser = self.getUserByOpenid(openid)
-
         if esgfUser is None:
             session = self.Session()
     
@@ -164,53 +133,6 @@ class ESGFDatabaseManager():
         else:
             print 'User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid
             pass
-
-        
-    def insertUser(self, userProfile):
-        
-        # use existing openid...
-        _openid = userProfile.openid()
-        #_openid = userProfile.localOpenid()
-        
-        # ...or create new local openid and insert into CoG database
-        if _openid is None:
-            _openid = self.createOpenid(userProfile)
-
-        # do NOT override ESGF database
-        esgfUser = self.getUserByOpenid(_openid)
-
-        if esgfUser is None:
-            
-            session = self.Session()
-    
-            try:
-                
-                # encrypt password with MD5_CRYPT
-                clearTextPassword = userProfile.clearTextPassword
-                if clearTextPassword is not None and len(clearTextPassword)>0:
-                    encPassword = md5_crypt.encrypt(clearTextPassword)
-                else:
-                    encPassword = None
-    
-                _username = _openid[ _openid.rfind('/')+1: ]
-                esgfUser = ESGFUser(firstname=userProfile.user.first_name, lastname=userProfile.user.last_name,
-                                    email=userProfile.user.email, username=_username, password=encPassword,
-                                    dn='', openid=_openid, organization=userProfile.institution, organization_type='',
-                                    city=userProfile.city, state=userProfile.state, country=userProfile.country,
-                                    status_code=1, verification_token=str(uuid4()), notification_code=0)
-    
-                session.add(esgfUser)
-                session.commit()
-                print 'Inserted user with openid=%s into ESGF database' % _openid
-    
-            finally:
-                session.close()
-
-        else:
-            #print 'User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid
-            pass
-            
-        return esgfUser
 
     def getUserByOpenid(self, openid):
         '''Retrieves a user by the unique openid value.'''
