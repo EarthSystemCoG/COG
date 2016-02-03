@@ -117,7 +117,7 @@ def share_groups(request):
         print 'Listing visible groups for current site=%s' % current_site
         groups = {}
         for group in registrationService.listGroups():
-            if group['visible']:
+            if group['visible'] and group['name'].lower() != 'wheel':
                 groups[ group['name'] ] = group          
         response_data["groups"] = groups
         
