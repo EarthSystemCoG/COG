@@ -59,9 +59,13 @@
 
 {% endfor %}
 
-<!-- display CIM viewer link -->
+<!-- display ES-DOC viewer link (CMIP5 datasets only for now) -->
 {% if project.searchprofile.modelMetadataFlag %}
-&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.instance_id.0}}')"><strong>Model Metadata</strong> </a> ]
+	{% if record.fields.project.0|lower = 'cmip5' %}
+		&nbsp; [ <a href="http://view.es-doc.org/?renderMethod=datasetid&project={{record.fields.project.0}}&id={{record.fields.instance_id.0}}" target="_blank">
+				 	<strong>Model Metadata</strong> 
+				</a> ]
+	{% endif %}
 {% endif %}
 
 

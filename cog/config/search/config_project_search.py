@@ -1,6 +1,7 @@
 import sys, os, ConfigParser
 from django.conf import settings
 from cog.models import Project, SearchGroup, SearchFacet
+from cog.utils import str2bool
 
 SECTION_GLOBAL = 'GLOBAL'
 
@@ -91,7 +92,11 @@ class SearchConfigParser():
             if section==SECTION_GLOBAL:
                 for key in ['url', 'constraints', 'modelMetadataFlag', 'replicaSearchFlag', 'latestSearchFlag', 'localSearchFlag']:
                     if projConfig.has_option(section, key):
-                        setattr(search_profile, key, projConfig.get(section, key))
+                        if key in ['modelMetadataFlag', 'replicaSearchFlag', 'latestSearchFlag', 'localSearchFlag']:
+                            value = str2bool( projConfig.get(section, key) ) # must convert string value to boolean
+                        else:
+                            value = projConfig.get(section, key)
+                        setattr(search_profile, key, value)
                 search_profile.save()
                 
             # facet configuration
