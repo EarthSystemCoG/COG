@@ -327,7 +327,11 @@ class Project(models.Model):
         """
         Returns True if the project is NOT local and its remote node is disabled.
         """
-        return not self.isLocal() and not self.site.peersite.enabled
+        
+        try:
+            return not self.isLocal() and not self.site.peersite.enabled
+        except:
+            return True # do NOT display in case of error
     
     # method to return an ordered list of the project predefined pages
     # the page URLs returned start with the project home page base URL
