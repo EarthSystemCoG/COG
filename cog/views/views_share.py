@@ -14,6 +14,7 @@ from django.template import RequestContext
 
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.models.user_profile import UserProfile
+from django.core.exceptions import ObjectDoesNotExist
 
 JSON = "application/json"
 
@@ -68,10 +69,14 @@ def serialize_user(user):
     # only include local projects
     udict['projects'] = getProjectsAndRolesForUsers(user, includeRemote=False)
     
-    
     # data cart
     (dc, created) = DataCart.objects.get_or_create(user=user)
     udict['datacart'] = { 'size': len( dc.items.all() ) }
+    
+    # ESGF access control group
+    groups = registrationService.listByOpenid(user.profile.openid())
+    udict['groups'] = groups
+    
     return udict
     
 
@@ -134,9 +139,14 @@ def share_user(request):
         
         # load User object by openid
         openid = request.GET['openid']
-        userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
-        
-        users = { openid : serialize_user( userOpenid.user ) }
+        try:
+            userOpenid = UserOpenID.objects.get(claimed_id=openid)
+            users = { openid : serialize_user( userOpenid.user ) }
+             
+        except ObjectDoesNotExist:
+            # return empty dictionary
+            print 'User with openid=%s found at this site' % openid
+            users = {}
         
         response_data["users"] = users
 

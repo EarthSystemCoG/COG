@@ -42,6 +42,9 @@ def sortdict(the_dict):
         tuples.append((key, value))
     return sorted(tuples, key=lambda tuple: tuple[0])
 
+@register.filter
+def sortlist(the_list):
+    return sorted(the_list)
 
 @register.filter
 def dictKeyLookup(the_dict, key):

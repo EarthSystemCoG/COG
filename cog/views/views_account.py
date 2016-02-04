@@ -21,7 +21,7 @@ from cog.models import *
 from cog.notification import notify, sendEmail
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.util.thumbnails import *
-from cog.views.utils import set_openid_cookie, get_all_projects_for_user
+from cog.views.utils import set_openid_cookie, get_all_shared_user_info
 from django.http.response import HttpResponseForbidden
 
 
@@ -319,15 +319,15 @@ def user_detail(request, user_id):
         user_profile.save()
         print "Created empty profile for user=%s" % user
         
-    # retrieve map of (project, groups) for this user
-    projTuples = get_all_projects_for_user(user)
-    # ignore roles
-    _projects = [p[0] for p in projTuples]
-    # sort projects alphabetically
-    projects = sorted(_projects, key=lambda x: x.short_name)
+    # retrieve map of (project, roles) for this user
+    (projTuples, groupTuples) = get_all_shared_user_info(user)
+        
+    # sort projects, groups alphabetically
+    projects = sorted(projTuples, key=lambda x: x[0].short_name)
+    groups = sorted(groupTuples, key=lambda x: x[0])
             
     return render_to_response('cog/account/user_detail.html',
-                              {'user_profile': user_profile, 'projects': projects, 'title': 'User Profile'},
+                              {'user_profile': user_profile, 'projects': projects, 'groups':groups, 'title': 'User Profile'},
                               context_instance=RequestContext(request))
 
 
