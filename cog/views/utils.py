@@ -154,19 +154,21 @@ def get_all_shared_user_info(user, includeCurrentSite=True):
     # restructure information as list of (project object, user roles) and (group name, group roles) tuples
     projects = []
     groups = []
-    for psite, pdict in userDict.items():
-        for pname, proles in pdict["projects"].items():
-            try:
-                proj = Project.objects.get(short_name__iexact=pname)
-                projects.append((proj, proles))
-            except ObjectDoesNotExist:
-                pass
-        for gname, gdict in pdict["groups"].items():
-            groles = []
-            for grole, approved in gdict.items():
-                if approved:
-                    groles.append(grole)
-            groups.append((gname,groles))
+    for usite, udict in userDict.items():
+        if udict.get('projects', None):
+            for pname, proles in udict["projects"].items():
+                try:
+                    proj = Project.objects.get(short_name__iexact=pname)
+                    projects.append((proj, proles))
+                except ObjectDoesNotExist:
+                    pass
+        if udict.get('groups', None):
+            for gname, gdict in udict["groups"].items():
+                groles = []
+                for grole, approved in gdict.items():
+                    if approved:
+                        groles.append(grole)
+                groups.append((gname,groles))
 
     # sort by project short name
     return (projects, groups)
