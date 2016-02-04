@@ -9,7 +9,7 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.models import UserProfile, ProjectTag, getProjectForGroup
 from cog.models.user_profile import createUsername
 from cog.utils import getJson
-from cog.views.utils import get_all_projects_for_user
+from cog.views.utils import get_all_shared_user_info
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
@@ -52,7 +52,7 @@ def update_user_projects(user):
         ugroups = user.groups.all()
          
         # retrieve map of (project, groups) for this user
-        projTuples = get_all_projects_for_user(user, includeCurrentSite=False)
+        (projTuples, grpTuples) = get_all_shared_user_info(user, includeCurrentSite=False)
         
         # add new memberships for remote projects
         remoteGroups = [] # updated list of remote groups

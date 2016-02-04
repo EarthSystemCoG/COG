@@ -86,6 +86,12 @@
 	            <!--keep at span-11, cuz there is not room for span-12-->
                 <div class="span-11 last" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_projects.html' %}
+                   
+                   <!-- ESGF groups -->
+                   {% if request.user.id == user_profile.user.id or request.user.is_staff %}
+                   		{% include 'cog/account/_user_groups.html' %}
+                   {% endif %}
+                   
                 </div>
 
 	        </div>

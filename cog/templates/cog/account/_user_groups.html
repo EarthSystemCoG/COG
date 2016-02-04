@@ -1,0 +1,24 @@
+{% load cog_utils %}
+
+<div class="mybox">
+	<table>
+		<tr>
+			<td colspan="2" class="caption_mimic">
+				<strong>ESGF Access Control Groups</strong></td>
+		</tr>
+		<tr>
+			<td>Group</td>
+			<td>Roles</td>
+		</tr>
+		{% for group, roles in groups %}
+			{% if roles|length > 0 %}
+				<tr>
+					<td nowrap="nowrap">{{ group }}</td>
+					<td nowrap="nowrap">
+						{% for role in roles|sortlist %}{% if not forloop.first %}, {% endif %} {{ role }}{% endfor %}
+					</td>
+				</tr>
+			{% endif %}
+		{% endfor %}
+	</table>
+</div>
