@@ -33,9 +33,12 @@
 
 	        </tr>
 			{% for object in object_list %}
-
 			   <tr>
-			      <td valign="top">{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
+			      <td valign="top">
+                    {% with object_list as results_page %}
+                        {{ results_page.start_index|add:forloop.counter|add:-1 }}
+				    {% endwith %}
+			      </td>
 			      <td valign="top"><strong><a href="{% url 'post_detail' object.id %}">{{ object.title }}</a></strong></td>
 			      <td valign="top" align="left">
 				      {% if object.author%}
