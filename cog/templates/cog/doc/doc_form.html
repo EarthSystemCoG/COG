@@ -18,7 +18,7 @@
             <table>
 
                 <tr>
-                    <td style="text-align:right;">Publisher</td>
+                    <td style="text-align:right;width:90px;">Publisher</td>
                     <td colspan="2" >{{ request.user }} </td>
                 </tr>
 
@@ -54,10 +54,11 @@
     			</tr>
             </table>
             <table>
+                <tr>
                 <!-- CREATE RESOURCE -->
     			{% if not form.instance.id %}
     			<!-- only show folder selection when file is first uploaded, later folder can only be changed through the Resources page --><tr>
-                    <td style="text-align: right; width:70px;">Resource?
+                    <td style="text-align: right; width:90px;">Resource?
                     </td>
                     <td>
                         This file can become a Resource by selecting or creating a destination Resource Folder.
