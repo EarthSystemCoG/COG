@@ -9,10 +9,12 @@
       	    <h1>ESGF-CoG Peer Node Configuration</h1>
       	
       	    {% if request.GET.status == 'success' %}
+	            <br> <!-- add space around box -->
 	   		    <p class="message-box">
 	       		    Your changes have been saved. The updated peers configuration is displayed below. You may now
 			        proceed to step 3 and synchronize projects.
 	   		    </p>
+	            <br><br>
    		    {% endif %}
       
        	    <form action="" method="post">
