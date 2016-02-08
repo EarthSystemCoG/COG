@@ -180,7 +180,7 @@ MIDDLEWARE_CLASSES = (
     'cog.middleware.init_middleware.InitMiddleware',
     'cog.middleware.login_middleware.LoginMiddleware',
     'cog.middleware.session_middleware.SessionMiddleware',
-    'cog.middleware.password_middleware.PasswordMiddleware'
+    #'cog.middleware.password_middleware.PasswordMiddleware'
     #'django.contrib.sites.middleware.CurrentSiteMiddleware' # django 1.7
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
