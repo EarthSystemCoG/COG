@@ -6,18 +6,22 @@
     
         <div class="prepend-6 span-680 last" >
       
-      	    <h1>CoG Peers Configuration</h1>
+      	    <h1>ESGF-CoG Peer Node Configuration</h1>
       	
       	    {% if request.GET.status == 'success' %}
+	            <br> <!-- add space around box -->
 	   		    <p class="message-box">
-	       		    Your changes have been saved. The updated Peers configuration is displayed below.
+	       		    Your changes have been saved. The updated peers configuration is displayed below. You may now
+			        proceed to step 3 and synchronize projects.
 	   		    </p>
-   		    {% else %}
-                <p>Use the check-boxes below to enable displaying of projects from remote CoG peers.</p>
+	            <br><br>
    		    {% endif %}
       
        	    <form action="" method="post">
-                
+                Step 1: Use the check-boxes below to enable displaying of projects from remote peer nodes.<br>
+                Step 2: <input type="submit" value="Save your selections"/><br>
+                Step 3: <a href="{% url 'sync_projects' %}">Synchronize projects.</a><br>
+                <br><br>
                 {% csrf_token %}
  		        {{ formset.management_form }}
  		    
@@ -41,15 +45,11 @@
  		        	</table>
  		        </div>
  		        <!-- <div style="float:left"><input type="reset" value="Cancel" onclick="self.location='{% url 'site_home' %}'"/></div> -->
- 		        <div style="float:left"><input type="reset" value="Reset" onclick="self.location='{% url 'admin_peers' %}'"/></div>
-	   		    <div style="float:right"><input type="submit" value="Submit"/></div>
+ 		        <div style="float:right"><input type="reset" value="Reset" onclick="self.location=
+			            '{% url 'admin_peers' %}'"/></div>
             </form>
-        
-            <p>&nbsp;<p>
-            <div style="text-align:center">
-        	    <a href="{% url 'sync_projects' %}"> Synchronize with Peer CoGs Now</a>
-        	    <br/><span style="color:#FF0000">(Please make sure to save your changes first.)</span>
-            </div>
+
+
         </div>
     {% endif %}
 {% endblock %}
