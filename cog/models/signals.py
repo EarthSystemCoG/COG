@@ -21,7 +21,7 @@ def account_created_receiver(sender, **kwargs):
     userp = kwargs['instance']
     created = kwargs['created']
 
-    print 'Signal received: UserProfile post_save: username=%s created=%s openids=%s' % (userp.user.username, created, userp.openids())
+    #print 'Signal received: UserProfile post_save: username=%s created=%s openids=%s' % (userp.user.username, created, userp.openids())
 
     # if username is like "openiduserXXX", then change it to the last part of the openid (+XXX if necessary)
     if created and userp.openid() is not None: # only for new accounts created with external openid
