@@ -11,6 +11,7 @@ from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from django_openid_auth.models import UserOpenID
 from django.contrib.auth.decorators import user_passes_test
 from django.template import RequestContext
+from django.conf import settings
 
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.models.user_profile import UserProfile
@@ -73,9 +74,12 @@ def serialize_user(user):
     (dc, created) = DataCart.objects.get_or_create(user=user)
     udict['datacart'] = { 'size': len( dc.items.all() ) }
     
-    # ESGF access control group
-    groups = registrationService.listByOpenid(user.profile.openid())
-    udict['groups'] = groups
+    # ESGF access control group - only if CoG installation is backed up by ESGF database
+    if settings.ESGF_CONFIG:
+        groups = registrationService.listByOpenid(user.profile.openid())
+        udict['groups'] = groups
+    else:
+        udict['groups'] = {}
     
     return udict
     
