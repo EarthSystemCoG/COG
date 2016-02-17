@@ -55,20 +55,36 @@ def admin_projects(request):
                                'title': '%s Projects Administration' % site.name,
                                }, context_instance=RequestContext(request))
 
+
 # admin page for listing all system users
 @user_passes_test(lambda u: u.is_staff)
 def admin_users(request):
 
+    # get sort command if it exists
+    sortby = request.GET.get('sortby', 'title')
+
     # load all users
     if request.method == 'GET':
-        users = User.objects.all().order_by('last_name')
-    # lookup specific user
-    else:
-        users = getUsersThatMatch(request.POST['match'])
+
+        # display and sort based on lower case last name
+        users = User.objects.all().extra(select={'last_name': 'lower(last_name)'})
+        users = users.extra(select={'first_name': 'lower(first_name)'})
+
+        if sortby == 'last_login':
+            results = users.order_by('last_login')
+        elif sortby == 'last_name':
+            results = users.order_by('last_name')
+        elif sortby == 'email':
+            results = users.order_by('email')
+        else:
+            results = users.order_by('last_name')  # default
+
+    else:  # lookup specific user
+        results = getUsersThatMatch(request.POST['match'])
 
     title = 'List Node Users'
     return render_to_response('cog/admin/admin_users.html',
-                              {'users': paginate(users, request, max_counts_per_page=50), 'title': title},
+                              {'users': paginate(results, request, max_counts_per_page=50), 'title': title},
                               context_instance=RequestContext(request))
 
     

@@ -3,10 +3,12 @@
 {% block main %}
 
    {% load cog_utils %}
+	{% url admin_users as url %}
 
 
-<p>Below is the list of system users. Click on the name to visit their profile (includes home node). Click on the email
-	to contact the user. </p>
+
+<p>Below is the users with an account on this node. Click on the name to visit their profile (includes home node). Click
+	on the email to contact the user. Sort by "Last Login" to find stale accounts.  </p>
    
        <table style="margin-left:234px; width:672px;">
            <tr>
@@ -29,7 +31,18 @@
 
    <div class="mybox">
         <table>
-            <caption>System Users</caption>
+            <caption>
+	            System Users
+                <span style="float: right;">
+	                Sort by:
+	                <a href="{{ url }}?sortby=email&amp;query={{request.GET.query}}">Email</a> |
+	                <a href="{{ url }}?sortby=last_login&amp;query={{request.GET.query}}">Last
+	                Login</a> |
+	                <a href="{{ url }}?sortby=last_name&amp;query={{request.GET.query}}">Last
+	                Name</a>
+                </span>
+
+            </caption>
             <!-- <br/> tags in table are to align text to the bottom -->
             <tr>
                 <th scope="col" class="white"><strong>Last Name</strong></th>
@@ -40,6 +53,7 @@
                 <th scope="col" class="white"><strong>Delete Account</strong></th>
             </tr>
             {% for user in users %}
+
                 <tr>
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a></td>
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
