@@ -64,6 +64,12 @@
                     Note: CoG keeps users logged in via a cookie. Last Login may be different from last access.
                 </td>
             </tr>
+
+            <tr>
+               <td colspan="2" style="text-align: center;">
+	               <a href="{% url 'user_delete' user_profile.user.id %}" class="deletelink"> Delete User</a>
+               </td>
+            </tr>
         </table>
     </div>
 {% endif %}
