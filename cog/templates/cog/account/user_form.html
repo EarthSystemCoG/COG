@@ -316,30 +316,6 @@
                         {% endif %}
                     </table>
 
-                    <!--web URLs-->
-                    <table>
-                        <tr>
-				            <td colspan="5" class="caption_mimic" style="border-top: 1px solid #666;">
-                                <strong>Web Sites</strong>
-                            </td>
-                        </tr>
-		    	        <!-- URLs -->
-		    	            <tr>
-              	                <td colspan="6">[Optional web sites associated with this COG user account: (e.g. 'Home Page', 'My Blog') ]</td>
-                            </tr>
-                            {% for urlform in formset %}{{ urlform.id }}
-				                <tr>
-			                        <td style="width:60px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-url">Web URL:</label></td>
-				                    <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
-			                        <td style="width:30px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-name">Title:</label></td>
-				                    <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
-			                        <td style="vertical-align:middle;">{{ urlform.DELETE }} <label for="id_url-{{forloop.counter0}}-DELETE">Delete?</label></td>
-				                </tr>
-		                    {% endfor %}
- 	                    </table>
-
-
-
                     <!--captcha and buttons-->
 
                     <!-- captcha - only when user first register -->
