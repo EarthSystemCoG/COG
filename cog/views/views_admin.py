@@ -77,7 +77,7 @@ def admin_users(request):
         elif sortby == 'email':
             results = users.order_by('email')
         else:
-            results = users.order_by('last_name')  # default
+            results = User.objects.all().extra(select={'last_name': 'lower(last_name)'}).order_by('last_name')  # default
 
     else:  # lookup specific user
         results = getUsersThatMatch(request.POST['match'])
