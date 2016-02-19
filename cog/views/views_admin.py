@@ -67,15 +67,17 @@ def admin_users(request):
     if request.method == 'GET':
 
         # display and sort based on lower case last name
-        users = User.objects.all().extra(select={'last_name': 'lower(last_name)'})
-        users = users.extra(select={'first_name': 'lower(first_name)'})
+
+        # TODO: This works locally but causes a YSD on cu-dev when passed to the order by
+        # users = User.objects.all().extra(select={'last_name': 'lower(last_name)'})
+        # users = users.extra(select={'first_name': 'lower(first_name)'})
 
         if sortby == 'last_login':
-            results = users.order_by('last_login')
+            results = User.objects.all().order_by('last_login')
         elif sortby == 'last_name':
-            results = users.order_by('last_name')
+            results = User.objects.all().order_by('last_name')
         elif sortby == 'email':
-            results = users.order_by('email')
+            results = User.objects.all().order_by('email')
         else:
             results = User.objects.all().order_by('last_name')  # default
 
