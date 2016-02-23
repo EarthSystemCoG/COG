@@ -44,12 +44,13 @@
  		    		    {% endfor %}
  		        	</table>
  		        </div>
- 		        <!-- <div style="float:left"><input type="reset" value="Cancel" onclick="self.location='{% url 'site_home' %}'"/></div> -->
+
+                <div style="float:left;"><input type="button" value="Cancel" onclick="self.location=
+		                '{% url 'site_home' %}'"/></div>
  		        <div style="float:right"><input type="reset" value="Reset" onclick="self.location=
 			            '{% url 'admin_peers' %}'"/></div>
             </form>
-
-
         </div>
+
     {% endif %}
 {% endblock %}
