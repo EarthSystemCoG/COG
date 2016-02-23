@@ -49,6 +49,7 @@
                 <th scope="col" class="white"><strong>First Name</strong></th>
                 <th scope="col" class="white"><strong>User Name</strong></th>
                 <th scope="col" class="white"><strong>Email</strong></th>
+	            <th scope="col" class="white"><strong>Date Joined</strong></th>
                 <th scope="col" class="white"><strong>Last Login</strong></th>
                 <th scope="col" class="white"><strong>Delete Account</strong></th>
             </tr>
@@ -59,6 +60,7 @@
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
                     <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+	                <td>{{ user.date_joined }}</td>
                     <td>{{ user.last_login }}</td>
                     <td><a href="{% url 'user_delete' user.id %}" class="deletelink"> Delete</a></td>
                 </tr>
