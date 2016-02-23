@@ -245,7 +245,8 @@ def token(request):
 
 	# use 'code' to obtain an 'access_token'
 	code = request.GET['code']	
-	access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code)
+	#access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code)
+	access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code, redirect_uri=request.build_absolute_uri(reverse("globus_token")).replace('http:','https:'))
 
 	# validate access_token
 	alias, client_id, nexus_host = user_client.goauth_validate_token(access_token)
