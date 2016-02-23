@@ -9,12 +9,15 @@
 	        Federated ESGF-CoG Nodes
 	    </span>
     </div>
-
 	<div class="peer-nodes-box-body">
-		{% for peer in project|get_peer_sites %}
-			{% if forloop.counter > 1 %}<br/>{% endif %}
-			<a href="http://{{ peer.domain }}/">{{ peer.name }}</a>
-		{% endfor %}
+	    {% if project|get_peer_sites %}
+		    {% for peer in project|get_peer_sites %}
+		        {% if forloop.counter > 1 %}<br/>{% endif %}
+			        <a href="http://{{ peer.domain }}/">{{ peer.name }}</a>
+	   		{% endfor %}
+	    {% else %}
+			Not federated with any nodes.
+	    {% endif %}
 	</div>
 
 </div>
