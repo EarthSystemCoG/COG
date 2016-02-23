@@ -112,13 +112,14 @@ def external_urls_update(request, project_short_name, suburl):
         # create formset instance backed by current saved instances
         # must provide the initial data to all the extra instances, 
         # which come in the list after the database instances
-        #queryset = ExternalUrl.objects.filter(project=project, type=type)
-        #initial_data = [ {'project':project, 'type':type } for count in xrange(len(queryset)+nextras)]
-        #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)
 
-        # if template is release schedules, which are dates, reverse order of the urls
-        # sorting of the main view occurs in project.py
+        # if template is release schedules or prioritization, which are dates, reverse order of the urls
+        # sorting of the view occurs in models/project.py/get_external_urls()
         if type == 'release_schedule':
+            formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
+                                         order_by('-title'))
+
+        elif type == 'prioritization':
             formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
                                          order_by('-title'))
         else:
