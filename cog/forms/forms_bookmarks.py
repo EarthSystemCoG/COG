@@ -51,7 +51,7 @@ class FolderForm(ModelForm):
                 
         # filter parent posts by project and type
         self.fields['parent'].queryset = Folder.objects.filter(project=project, active=True)\
-	        .exclude(id=self.instance.id).distinct().order_by('order')
+            .exclude(id=self.instance.id).distinct().order_by('order')
         # exclude the option for no parent - all folders created after the first must have parent
         self.fields['parent'].empty_label = None
 
@@ -60,7 +60,7 @@ class FolderForm(ModelForm):
         name = self.cleaned_data['name']
         project = self.cleaned_data['project']
 
-        #make sure name is unique with the project
+        # make sure name is unique with the project
         try:
             n = Folder.objects.filter(project=project).get(name__iexact=name)
             raise forms.ValidationError("The folder name: %s already exists, please try again. "
@@ -68,7 +68,7 @@ class FolderForm(ModelForm):
         except Folder.DoesNotExist:
             pass
 
-        #looks for invalid characters
+        # looks for invalid characters
         name = default_clean_field(self, 'name')
 
         return name
