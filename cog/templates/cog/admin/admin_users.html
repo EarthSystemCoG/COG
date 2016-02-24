@@ -9,13 +9,15 @@
 
 <p>Below is the users with an account on this node. Click on the name to visit their profile (includes home node). Click
 	on the email to contact the user. Sort by "Last Login" to find stale accounts.  </p>
-   
-       <table style="margin-left:234px; width:672px;">
+       <!-- pad left margin by 2px beyond half to account for invisible right margin around button -->
+       <table style="margin-left:183px; width:778px;">
            <tr>
                <td>
                    <form name="lookupUserForm" action="" method="post">
                    	    {% csrf_token %}
-                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email:</strong></label>
+                        <label for="match" style="width:70%; vertical-align: middle;">Lookup user by
+	                        <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>,
+	                        <strong>Email</strong>, or <strong>Year Joined:</strong></label>
                         <input style="vertical-align: middle; width:30%;" type="text" alt="text" name="match" id="match" value="{{request.POST.match}}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
 	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window
