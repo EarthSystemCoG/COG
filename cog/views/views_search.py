@@ -145,8 +145,8 @@ def search_config(request, searchConfig, extra={}):
     
     # create search input object from request parameters ONLY
     searchInput = _buildSearchInput(request, searchConfig)
-    print 'User provided search constraints:'
-    searchInput.printme()
+    #print 'User provided search constraints:'
+    #searchInput.printme()
         
     # GET/POST switch
     queryDict = getQueryDict(request)
@@ -577,12 +577,16 @@ def _queryFacets(request, project):
     """Executes a query for all available facets for a given project."""
     
     searchConfig = _getSearchConfig(request, project)
+    # build input from HTTP parameters
     searchInput = _buildSearchInput(request, searchConfig)
     searchInput.limit = 0  # no results
+    # add project fixed constraints
+    _searchInput = _addConfigConstraints(searchInput, searchConfig)
+    _searchInput.printme()
     searchService = searchConfig.searchService
-    (url, xml) = searchService.search(searchInput, allFacets=True)  # uses facets='*'
+    (url, xml) = searchService.search(_searchInput, allFacets=True)  # uses facets='*'
     searchOutput = deserialize(xml, searchConfig.facetProfile)
-    searchOutput.printme()
+    #searchOutput.printme()
     
     return searchOutput.facets
     
