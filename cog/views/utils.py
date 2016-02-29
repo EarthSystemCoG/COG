@@ -79,7 +79,9 @@ def getUsersThatMatch(match):
     """Returns the list of users that match a given expression."""
     
     return User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) |
-                                Q(last_name__icontains=match) | Q(email__icontains=match)))
+                                Q(last_name__icontains=match) | Q(email__icontains=match)) |
+                               Q(date_joined__icontains=match)
+                               )
 
 
 def get_projects_by_name(match):

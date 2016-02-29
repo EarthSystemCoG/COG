@@ -309,8 +309,12 @@ class Project(models.Model):
     # generic method to return a list of the project's external URLs of a given type, ordered by their title.
     # unfortunately, external_url has no date created function or other field we can order by. Before 2.10, modification
     # of an external_url could result in random ordering. This at least forces them to be alphabetical.
+
+    # we want the form to reflect the same. That is done in views/external_urls.py/external_urls_update()
     def get_external_urls(self, type):
         if type == 'release_schedule':
+            return self.externalurl_set.filter(project=self, type=type).order_by('-title')
+        elif type == 'prioritization':
             return self.externalurl_set.filter(project=self, type=type).order_by('-title')
         else:
             return self.externalurl_set.filter(project=self, type=type).order_by('title')

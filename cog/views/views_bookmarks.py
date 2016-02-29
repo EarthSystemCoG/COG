@@ -25,7 +25,7 @@ def _hasBookmarks(project):
 
 def bookmark_list(request, project_short_name):
 
-    #order of bookmarks occurs in /forms_bookmarks.py
+    # order of bookmarks occurs in /forms_bookmarks.py
         
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -37,7 +37,7 @@ def bookmark_list(request, project_short_name):
         return getProjectNotVisibleRedirect(request, project)
         
     # get or create top-level folder
-    folder = getTopFolder(project)
+    # folder = getTopFolder(project)
     
     # build list of children with bookmarks that are visible to user
     children = []
@@ -218,7 +218,7 @@ def folder_add(request, project_short_name):
     
     # retrieve project from request, user from session
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    user = request.user
+    # user = request.user
     
     # security check
     if not userHasContributorPermission(request.user, project):
@@ -306,7 +306,7 @@ def folder_delete(request, project_short_name, folder_id):
     # retrieve folder from request
     folder = get_object_or_404(Folder, pk=folder_id)
     project = folder.project
-    parentFolder = folder.topParent()
+    # parentFolder = folder.topParent()
     
     # security check
     if not userHasContributorPermission(request.user, project):
