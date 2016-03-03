@@ -7,7 +7,7 @@ from cog.models import Post
 class Bookmark(models.Model):   
     
     url = models.URLField('URL', blank=False, max_length=1000)
-    name = models.CharField(max_length=200, blank=False)
+    name = models.CharField(max_length=1000, blank=False)
     folder = models.ForeignKey('Folder', blank=False, null=False)
     description = models.TextField(max_length=200, blank=True, null=True)
     order = models.IntegerField(blank=True, default=0)
