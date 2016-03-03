@@ -15,7 +15,7 @@
 				<th><strong>Variables</strong></th>
 				<th><strong>Tech Note</strong></th>
 			</tr>
-          	{% for record in search_output.results %}
+          	{% for record in search_output.results|sortResults:'source_id' %}
           		<tr>
           			<td><strong>{{ record.fields.source_id.0 }}</strong></td>
           			<td> {{ record.fields.title.0}} </td>

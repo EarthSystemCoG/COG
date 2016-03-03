@@ -114,6 +114,11 @@ def recordUrls(record):
     return sorted(urls, key = lambda url: url_order(url[1]))
 
 @register.filter
+def sortResults(results, fieldName):
+    
+    return sorted(results, key = lambda result: result.fields[fieldName][0])
+
+@register.filter
 def showSearchConfigMessage(message, project):
     
     if message == "search_config_exported":
