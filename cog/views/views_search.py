@@ -41,8 +41,9 @@ LOCAL_FLAG    = "local_flag"
 SEARCH_PATH   = "search_path"
 SEARCH_URL    = 'search_url'         # stores ESGF search URL
 LAST_SEARCH_URL = "last_search_url"  # stores CoG last search URL (including project)
-# constraints excluded from bread crums display
+# constraints excluded from bread crumbs display
 SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type"]
+TEMPLATE='template'
               
       
 def search(request, project_short_name):
@@ -69,8 +70,10 @@ def search(request, project_short_name):
     if config:        
         # config.printme()
         # pass on project as extra argument to search
-        return search_config(request, config, extra={'project': project, 'title2': '%s Data Search'
-                                                                                   % project.short_name})
+        # also include possible custom template
+        return search_config(request, config, extra={'project': project, 
+                                                     'title2': '%s Data Search'% project.short_name,
+                                                     'template':getQueryDict(request).get(TEMPLATE,None) })
     # search is not configured for this project
     else:
         messages = ['Searching is not enabled for this project.',
@@ -147,7 +150,7 @@ def search_config(request, searchConfig, extra={}):
     # create search input object from request parameters ONLY
     # NOTE: HTTP parameters MUST be part of project sarch configuration
     searchInput = _buildSearchInputFromHttpRequest(request, searchConfig)
-        
+            
     # GET/POST switch
     queryDict = getQueryDict(request)
     print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
@@ -249,8 +252,12 @@ def search_get(request, searchInput, searchConfig, extra={}):
     data[REPLICA_FLAG] = searchConfig.replicaFlag
     data[LATEST_FLAG] = searchConfig.latestFlag
     data[LOCAL_FLAG] = searchConfig.localFlag
-        
-    return render_to_response('cog/search/search.html', data, context_instance=RequestContext(request))    
+
+    # render results        
+    template = 'cog/search/search.html' # default template
+    if data.get(TEMPLATE, None):
+        template = 'cog/search/%s.html' % data[TEMPLATE] # custom template
+    return render_to_response(template, data, context_instance=RequestContext(request))    
 
 
 def search_post(request, searchInput, searchConfig, extra={}):
@@ -307,7 +314,6 @@ def search_post(request, searchInput, searchConfig, extra={}):
         data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS
              
     # store data in session 
-    # data['title'] = 'Advanced Data Search'
     request.session[SEARCH_DATA] = data
     
     # update search path
@@ -332,7 +338,12 @@ def search_post(request, searchInput, searchConfig, extra={}):
     # flag the redirect in session
     request.session[SEARCH_REDIRECT] = True
     #return HttpResponseRedirect(request.get_full_path())  # relative search page URL + optional query string
-    return HttpResponseRedirect(request.path)   # relative search page URL (remove optional query string)
+    
+    # GET redirect
+    if extra.get(TEMPLATE, None):
+        return HttpResponseRedirect(request.get_full_path()) # keep the query parameters
+    else:
+        return HttpResponseRedirect(request.path) # remove query parameters
 
 
 def metadata_display(request, project_short_name):

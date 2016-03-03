@@ -1,0 +1,41 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% load cog_utils %}
+{% load search_utils %}
+
+{% block main %}
+	  
+     <div class="yui-skin-sam">
+     		<h1>Obs4MIPs Data Table</h1>
+     		
+     	<table>
+			<tr>
+				<th><strong>Instrument</strong></th>
+				<th><strong>Dataset Name</strong></th>
+				<th><strong>Variables</strong></th>
+				<th><strong>Tech Note</strong></th>
+			</tr>
+          	{% for record in search_output.results %}
+          		<tr>
+          			<td><strong>{{ record.fields.source_id.0 }}</strong></td>
+          			<td> {{ record.fields.title.0}} </td>
+          			<td> 
+          				{% for variable in record.fields.variable_long_name %} 
+          					{{ variable }} <br/>
+          				{% endfor %}
+          			</td>
+          			<td> 
+          				{% for url in record|recordUrls %}
+          					{% if url.2 == 'Tech Note' %}
+          						<a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> 
+          					{% endif %}
+          				{% endfor %}
+          			</td>
+     			</tr>
+     		{% endfor %}
+     	
+     	</table>
+     		
+	</div>	
+    
+{% endblock %}
