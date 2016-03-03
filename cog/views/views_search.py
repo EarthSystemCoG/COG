@@ -91,7 +91,7 @@ def _addConfigConstraints(searchInput, searchConfig):
     return _searchInput
     
 
-def _buildSearchInput(request, searchConfig):
+def _buildSearchInputFromHttpRequest(request, searchConfig):
     """Assembles the search input from the HTTP request only (NO project fixed constraints yet)."""
     
     queryDict = getQueryDict(request)
@@ -145,9 +145,8 @@ def search_config(request, searchConfig, extra={}):
     #    print 'extra key=%s value=%s' % (key, value)
     
     # create search input object from request parameters ONLY
-    searchInput = _buildSearchInput(request, searchConfig)
-    #print 'User provided search constraints:'
-    #searchInput.printme()
+    # NOTE: HTTP parameters MUST be part of project sarch configuration
+    searchInput = _buildSearchInputFromHttpRequest(request, searchConfig)
         
     # GET/POST switch
     queryDict = getQueryDict(request)
@@ -579,7 +578,7 @@ def _queryFacets(request, project):
     
     searchConfig = _getSearchConfig(request, project)
     # build input from HTTP parameters
-    searchInput = _buildSearchInput(request, searchConfig)
+    searchInput = _buildSearchInputFromHttpRequest(request, searchConfig)
     searchInput.limit = 0  # no results
     # add project fixed constraints
     _searchInput = _addConfigConstraints(searchInput, searchConfig)
