@@ -118,9 +118,10 @@ def _buildSearchInput(request, searchConfig):
     # latest=True/False
     if queryDict.get('latest', None) == 'on':
         searchInput.latest = False
-    # local=True/False
+    # local=True/False + replica=True
     if queryDict.get('local', None) == 'on':
         searchInput.local = True
+        searchInput.replica = True # NEW: local search ALWAYS implies ALL replicas
 
     # offset, limit
     if queryDict.get('offset', 0):
