@@ -214,6 +214,7 @@ class UserForm(ImageForm):
                       'researchInterests', 'researchKeywords']:
             try:
                 validate_field(self, field, cleaned_data[field])
+                validate_ascii(self, field, cleaned_data[field])
             except KeyError: # field not set (validation occurs later)
                 pass
 
@@ -285,4 +286,12 @@ def validate_username(form, user_id):
 def validate_field(form, field_name, field_value):
     if field_value:
         if re.search(INVALID_CHARS, field_value):
+            form._errors[field_name] = form.error_class(["'%s' contains invalid characters." % field_name])
+            
+# method to check that a field does NOT have non-ascii characters
+def validate_ascii(form, field_name, field_value):
+    if field_value:
+        try:
+            field_value.decode('ascii')
+        except (UnicodeDecodeError, UnicodeEncodeError):
             form._errors[field_name] = form.error_class(["'%s' contains invalid characters." % field_name])
