@@ -9,7 +9,7 @@ import ast
 from django.contrib.sites.models import Site  
 from cog.models import PeerSite
 from django.forms.models import modelformset_factory
-from cog.views.utils import getUsersThatMatch, get_projects_by_name, paginate
+from cog.views.utils import getUsersThatMatch, get_projects_by_name, paginate, getQueryDict
 
 
 def site_home(request):
@@ -60,33 +60,19 @@ def admin_projects(request):
 @user_passes_test(lambda u: u.is_staff)
 def admin_users(request):
 
-    # get sort command if it exists
-    sortby = request.GET.get('sortby', 'title')
+    # optional parameters (via GET or POST)
+    queryDict = getQueryDict(request)
+    sortby = queryDict.get('sortby', 'last_name') # default to sort by 'last_name'
+    match = queryDict.get('match', None)
 
-    # load all users
-    if request.method == 'GET':
-
-        # display and sort based on lower case last name
-
-        # TODO: This works locally but causes a YSD on cu-dev when passed to the order by
-        # users = User.objects.all().extra(select={'last_name': 'lower(last_name)'})
-        # users = users.extra(select={'first_name': 'lower(first_name)'})
-
-        if sortby == 'last_login':
-            results = User.objects.all().order_by('last_login')
-        elif sortby == 'last_name':
-            results = User.objects.all().order_by('last_name')
-        elif sortby == 'email':
-            results = User.objects.all().order_by('email')
-        else:
-            results = User.objects.all().order_by('last_name')  # default
-
-    else:  # lookup specific user
-        results = getUsersThatMatch(request.POST['match'])
+    if match:
+        users = getUsersThatMatch(match)
+    else:
+        users = User.objects.all().order_by(sortby)  
 
     title = 'List Node Users'
     return render_to_response('cog/admin/admin_users.html',
-                              {'users': paginate(results, request, max_counts_per_page=50), 'title': title},
+                              {'users': paginate(users, request, max_counts_per_page=50), 'title': title},
                               context_instance=RequestContext(request))
 
     
