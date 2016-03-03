@@ -831,8 +831,8 @@ def paginate_filter(objects, request):
 def pagination_url(request, page_number):
     '''Constructs the previous/next URL for a paginated page including all GET request parameters.'''
     
-    # copy all current request parameters
-    params = request.GET.copy()
+    # copy all current GET/POST request parameters
+    params = getQueryDict(request).copy()
     
     # replace/add 'page' parameter
     params['page'] = page_number
@@ -840,3 +840,9 @@ def pagination_url(request, page_number):
     # build full URL
     return '%s?%s' %  (request.path, params.urlencode())
         
+@register.filter
+def getHttpParamValue(request, name):
+    '''Retrieves an HTTP parameter value from either the GET or POST request dictionary.'''
+    
+    return getQueryDict(request).get(name, '')
+    

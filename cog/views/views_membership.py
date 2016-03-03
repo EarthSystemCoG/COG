@@ -68,18 +68,16 @@ def membership_list_all(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    # load all users
-    if request.method == 'GET':
-        users = User.objects.all().order_by('last_name')    
-    
-    # lookup specific user
+    # load all users - that match...
+    match = getQueryDict(request).get('match', None) # works for GET or POST
+    if match:
+        users = getUsersThatMatch(match)
     else:
-        users = getUsersThatMatch(request.POST['match'])
-        
+        users = User.objects.all().order_by('last_name')  
+                  
     title = 'List All Users'
     view_name = 'membership_list_all'
     return render_membership_page(request, project, users, title, view_name)
-    #return render_system_users_page(request, project, users, title, view_name)
 
 
 # View to list the memberships for all users enrolled in the project

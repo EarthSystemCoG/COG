@@ -78,9 +78,9 @@ def set_openid_cookie(response, openid):
 def getUsersThatMatch(match):
     """Returns the list of users that match a given expression."""
     
-    return User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) |
+    return User.objects.filter((Q(username__icontains=match)  | Q(first_name__icontains=match) |
                                 Q(last_name__icontains=match) | Q(email__icontains=match)) |
-                               Q(date_joined__icontains=match)
+                                Q(date_joined__icontains=match)
                                )
 
 
