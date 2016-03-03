@@ -61,13 +61,13 @@
                 <tr>
                     {% if user.last_name %}
                         <td>
-                            <a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a> |
-                            <a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a> |
-                            <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                            <a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a>,
+                            <a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a>
+                            (<a href="mailto:{{ user.email }}">{{ user.email }})</a>
                         </td>
                     {% else %}
                         <td>
-                            <a href="{% url 'user_detail' user.id %}">{{ user.profile.openids }}</a> |
+                            <a href="{% url 'user_detail' user.id %}">{{ user.profile.openid() }}</a>
                         </td>
                     {% endif %}
 
