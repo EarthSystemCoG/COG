@@ -13,15 +13,15 @@
        <table style="margin-left:183px; width:778px;">
            <tr>
                <td>
-                   <form name="lookupUserForm" action="" method="post">
+               	   <!-- important: action=request.path removes ?page=... parameter from URL -->
+                   <form name="lookupUserForm" action="{{ request.path }}" method="post">
                    	    {% csrf_token %}
                         <label for="match" style="width:70%; vertical-align: middle;">Lookup user by
 	                        <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>,
 	                        <strong>Email</strong>, or <strong>Year Joined:</strong></label>
                         <input style="vertical-align: middle; width:30%;" type="text" alt="text" name="match" id="match" value="{{request.POST.match}}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
-	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window
-				                .location='{{ request.path }}'"/>
+	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.path }}'"/>
                    </form>
                </td>
            </tr>

@@ -29,7 +29,8 @@
        <table style="margin-left:234px; width:672px;">
            <tr>
                <td>
-                   <form name="lookupUserForm" action="" method="post">
+               	   <!-- important: action=request.path removes ?page=... parameter from URL -->
+                   <form name="lookupUserForm" action="{{ request.path }}" method="post"> 
                    	    {% csrf_token %}
                         <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email</strong>:</label>
                         <input style="vertical-align: middle; width:30%;" type="text" name="match" id="match" value="{{ request|getHttpParamValue:'match' }}" />

@@ -81,7 +81,7 @@ def getUsersThatMatch(match):
     return User.objects.filter((Q(username__icontains=match)  | Q(first_name__icontains=match) |
                                 Q(last_name__icontains=match) | Q(email__icontains=match)) |
                                 Q(date_joined__icontains=match)
-                               )
+                               ).order_by('last_name')  
 
 
 def get_projects_by_name(match):
