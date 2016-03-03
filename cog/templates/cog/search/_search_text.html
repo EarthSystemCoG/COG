@@ -67,16 +67,25 @@
 page. At some point we may want to move this into cogstyle.css //-->
 <div style="text-align:center">
 	{% if replica_flag == True %}
-		&nbsp; <input type="checkbox" id="replica" name="replica" {% if search_input.replica %} checked="checked" {% endif %} />
-                    <label for="replica"><span style="margin-top:2px;vertical-align:middle;"> Show All Replicas &nbsp;</span></label>
+		&nbsp; 
+		<input type="checkbox" id="replica" name="replica" 
+		       {% if search_input.replica %} checked="checked" {% endif %}
+		       onclick="javascript:searchit(0)"/> <!-- must reset the search offset -->
+        <label for="replica"><span style="margin-top:2px;vertical-align:middle;"> Show All Replicas &nbsp;</span></label>
 	{% endif %}
 	{% if latest_flag == True %}
-		&nbsp; <input type="checkbox" id="latest" name="latest" {% if not search_input.latest %} checked="checked" {% endif %} />
-                    <label for="latest"><span style="margin-top:2px;vertical-align:middle;"> Show All Versions &nbsp;</span></label>
+		&nbsp; 
+		<input type="checkbox" id="latest" name="latest" 
+		       {% if not search_input.latest %} checked="checked" {% endif %} 
+		       onclick="javascript:searchit(0)"/> <!-- must reset the search offset -->
+        <label for="latest"><span style="margin-top:2px;vertical-align:middle;"> Show All Versions &nbsp;</span></label>
 	{% endif %}
 	{% if local_flag == True %}
-		&nbsp; <input type="checkbox" id="local" name="local" {% if search_input.local %} checked="checked" {% endif %} />
-                    <label for="local"><span style="margin-top:2px;vertical-align:middle;"> Search Local Node Only (including All Replicas)</span></label>
+		&nbsp; 
+		<input type="checkbox" id="local" name="local" 
+		       {% if search_input.local %} checked="checked" {% endif %} 
+		       onclick="javascript:searchit(0)"/> <!-- must reset the search offset -->
+        <label for="local"><span style="margin-top:2px;vertical-align:middle;"> Search Local Node Only (including All Replicas)</span></label>
 	{% endif %}
 </div>
 
