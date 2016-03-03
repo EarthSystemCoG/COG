@@ -787,10 +787,10 @@ def get_target_url_with_next_url(request, target_url_name):
     
     return "%s?next=%s" % (target_url, next_url)
 
+
 @register.filter
 def get_first_openid(user):
-    openid = user.profile.openid()
-    return openid
+    return user.profile.openid()
 
 @register.filter
 def get_openid(request):
