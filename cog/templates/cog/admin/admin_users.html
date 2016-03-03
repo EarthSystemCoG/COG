@@ -47,10 +47,11 @@
             </caption>
             <!-- <br/> tags in table are to align text to the bottom -->
             <tr>
-                <th scope="col" class="white"><strong>Last Name</strong></th>
-                <th scope="col" class="white"><strong>First Name</strong></th>
-                <th scope="col" class="white"><strong>User Name</strong></th>
+
+
+                <th scope="col" class="white"><strong>Identifying Info</strong></th>
                 <th scope="col" class="white"><strong>Email</strong></th>
+                <th scope="col" class="white"><strong>Home</strong></th>
 	            <th scope="col" class="white"><strong>Date Joined</strong></th>
                 <th scope="col" class="white"><strong>Last Login</strong></th>
                 <th scope="col" class="white"><strong>Delete Account</strong></th>
@@ -58,12 +59,22 @@
             {% for user in users %}
 
                 <tr>
-                    <td><a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a></td>
-                    <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
+                    {% if user.last_name %}
+                        <td>
+                            <a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a> |
+                            <a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a> |
+                            <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+                        </td>
+                    {% else %}
+                        <td>
+                            <a href="{% url 'user_detail' user.id %}">{{ user.profile.openids }}</a> |
+                        </td>
+                    {% endif %}
+
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
-                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-	                <td>{{ user.date_joined }}</td>
-                    <td>{{ user.last_login }}</td>
+                    <td>{{ user.profile.site.name }}</td>
+	                <td>{{ user.date_joined|date:'m/j/Y'}}</td> <!--mm/dd/yy-->
+                    <td>{{ user.last_login|date:'m/j/Y' }}</td>
                     <td><a href="{% url 'user_delete' user.id %}" class="deletelink"> Delete</a></td>
                 </tr>
             {% endfor %}
