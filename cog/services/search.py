@@ -19,9 +19,9 @@ class SolrSearchService:
             params.append( ('query', searchInput.query.strip()) )
         if searchInput.type:
             params.append( ('type', searchInput.type) )
-        if not searchInput.replica: # service default: replica=True+False
+        if not searchInput.replica: # ESGF service default: no replica constraint (i.e. replica=true+false)
             params.append( ('replica', "false") )
-        if searchInput.latest:      # service default: latest=True+False
+        if searchInput.latest:      # ESGF service default: no latest constraint (i.e. latest=True+False)
             params.append( ('latest', "true") )
         if searchInput.local: # service default: distrib='true'
             params.append( ('distrib', "false") )
