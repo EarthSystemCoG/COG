@@ -67,7 +67,7 @@
                         </td>
                     {% else %}
                         <td>
-                            <a href="{% url 'user_detail' user.id %}">{{ user.profile.openid() }}</a>
+                            <a href="{% url 'user_detail' user.id %}">{{ user|get_first_openid }}</a>
                         </td>
                     {% endif %}
 
