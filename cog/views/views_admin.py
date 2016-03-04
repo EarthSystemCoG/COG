@@ -62,7 +62,7 @@ def admin_users(request):
 
     # optional parameters (via GET or POST)
     queryDict = getQueryDict(request)
-    sortby = queryDict.get('sortby', 'user_name')  # default to sort by 'user_name'
+    sortby = queryDict.get('sortby', 'username')  # default to sort by 'username'
     match = queryDict.get('match', None)
 
     if match:
