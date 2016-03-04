@@ -48,8 +48,8 @@
             <tr>
 
 
-                <th scope="col" class="white"><strong>Identifying Info</strong></th>
                 <th scope="col" class="white"><strong>Username</strong></th>
+                <th scope="col" class="white"><strong>Identifying Info</strong></th>
                 <th scope="col" class="white"><strong>Home Node</strong></th>
 	            <th scope="col" class="white"><strong>Date Joined</strong></th>
                 <th scope="col" class="white"><strong>Last Login</strong></th>
@@ -58,20 +58,21 @@
             {% for user in users %}
 
                 <tr>
-                    {% if user.last_name %}
-                        <td>
+                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
+                    <td>
+                        {% if user.last_name %}
+
                             <a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a>,
                             <a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a>
                             &nbsp;&nbsp;
                             (<a href="mailto:{{ user.email }}">{{ user.email }}</a>)
-                        </td>
-                    {% else %}
-                        <td>
-                            <a href="{% url 'user_detail' user.id %}">{{ user|get_first_openid }}</a>
-                        </td>
-                    {% endif %}
 
-                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
+                        {% else %}
+
+                            <a href="{% url 'user_detail' user.id %}">{{ user|get_first_openid }}</a>
+
+                        {% endif %}
+                    </td>
                     <td>{{ user.profile.site.name }}</td>
 	                <td>{{ user.date_joined|date:'m/d/Y'}}</td> <!--mm/dd/yy-->
                     <td>{{ user.last_login|date:'m/d/Y' }}</td>
