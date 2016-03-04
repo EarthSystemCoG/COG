@@ -75,13 +75,16 @@ def set_openid_cookie(response, openid):
                         httponly=True)
 
 
-def getUsersThatMatch(match):
-    """Returns the list of users that match a given expression."""
+def getUsersThatMatch(match, sortby='last_name'):
+    """
+    Returns the list of users that match a given expression.
+    By default it sorts by last_name.
+    """
     
     return User.objects.filter((Q(username__icontains=match)  | Q(first_name__icontains=match) |
                                 Q(last_name__icontains=match) | Q(email__icontains=match)) |
                                 Q(date_joined__icontains=match)
-                               ).order_by('last_name')  
+                               ).order_by(sortby)  
 
 
 def get_projects_by_name(match):

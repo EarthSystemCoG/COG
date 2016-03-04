@@ -66,7 +66,7 @@ def admin_users(request):
     match = queryDict.get('match', None)
 
     if match:
-        users = getUsersThatMatch(match)
+        users = getUsersThatMatch(match, sortby=sortby)
     else:
         users = User.objects.all().order_by(sortby)  
 
