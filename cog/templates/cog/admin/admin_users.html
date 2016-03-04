@@ -74,8 +74,8 @@
 
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
                     <td>{{ user.profile.site.name }}</td>
-	                <td>{{ user.date_joined|date:'m/j/Y'}}</td> <!--mm/dd/yy-->
-                    <td>{{ user.last_login|date:'m/j/Y' }}</td>
+	                <td>{{ user.date_joined|date:'m/d/Y'}}</td> <!--mm/dd/yy-->
+                    <td>{{ user.last_login|date:'m/d/Y' }}</td>
                     <td><a href="{% url 'user_delete' user.id %}" class="deletelink"> Delete</a></td>
                 </tr>
             {% endfor %}
