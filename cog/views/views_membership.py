@@ -91,16 +91,17 @@ def membership_list_enrolled(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    # load all project users
-    # (must return a list for pagination)
-    if request.method == 'GET':
-        users = list(project.getUsers())
-        
-    # lookup specific user
-    else:
-        _users = getUsersThatMatch(request.POST['match'])
+    # optional 'match' argument
+    match = getQueryDict(request).get('match', None) # works for GET or POST
+    
+    if match:
+        # filter all users by 'match'
+        _users = getUsersThatMatch(match)
+        # filter all users by project
         users = [user for user in _users if (user in project.getUserGroup().user_set.all() 
                                              or user in project.getAdminGroup().user_set.all())]     
+    else:
+        users = list(project.getUsers())
     
     title = '%s Current Users' % project.short_name
     view_name = 'membership_list_enrolled'
@@ -121,20 +122,20 @@ def membership_list_requested(request, project_short_name):
     # load user group
     group = project.getUserGroup()
     
-    # load all users that have requested membership
-    # order by username
-    if request.method == 'GET':
-        users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
-    
-    # lookup specific user
-    else:
+    # optional 'match' argument
+    match = getQueryDict(request).get('match', None) # works for GET or POST
+
+    if match:
+        # lookup specific user
         _users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
-        match = request.POST['match'].lower()
         users = [user for user in _users if (match in user.first_name.lower()
                                              or match in user.last_name.lower()
                                              or match in user.username.lower()
                                              or match in user.email.lower())]
-        
+    else:
+        # load all users that have requested membership
+        users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
+             
     title = '%s Pending Users' % project.short_name   
     view_name = 'membership_list_requested'
     return render_membership_page(request, project, users, title, view_name)

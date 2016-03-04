@@ -841,6 +841,9 @@ def pagination_url(request, page_number):
     
     # replace/add 'page' parameter
     params['page'] = page_number
+    # remove 'csrfmiddlewaretoken' from GET URL
+    if params.get('csrfmiddlewaretoken', None):
+        del params['csrfmiddlewaretoken'] 
     
     # build full URL
     return '%s?%s' %  (request.path, params.urlencode())
