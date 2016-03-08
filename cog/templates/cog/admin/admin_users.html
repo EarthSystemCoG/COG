@@ -10,7 +10,7 @@
 <p>Below is the users with an account on this node. Click on the name to visit their profile (includes home node). Click
 	on the email to contact the user. Sort by "Last Login" to find stale accounts.  </p>
        <!-- pad left margin by 2px beyond half to account for invisible right margin around button -->
-       <table style="margin-left:183px; width:778px;">
+       <table style="margin-left:124px; width:890px;">
            <tr>
                <td>
                	   <!-- important: action=request.path removes ?page=... parameter from URL -->
@@ -18,7 +18,7 @@
                    	    {% csrf_token %}
                         <label for="match" style="width:70%; vertical-align: middle;">Lookup user by
 	                        <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>,
-	                        <strong>Email</strong>, or <strong>Year Joined:</strong></label>
+	                        <strong>Email</strong>, <strong>Home Node</strong>, </strong>or <strong>Year Joined:</strong></label>
                         <input style="vertical-align: middle; width:30%;" type="text" alt="text" name="match" id="match" value="{{ request|getHttpParamValue:'match' }}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
 	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.path }}'"/>
