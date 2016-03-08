@@ -6,36 +6,39 @@
 {% block main %}
 	  
      <div class="yui-skin-sam">
-     		<h1>Obs4MIPs Data Table</h1>
-     		
-     	<table>
-			<tr>
-				<th><strong>Instrument</strong></th>
-				<th><strong>Dataset Name</strong></th>
-				<th><strong>Variables</strong></th>
-				<th><strong>Tech Note</strong></th>
-			</tr>
-          	{% for record in search_output.results|sortResults:'source_id' %}
-          		<tr>
-          			<td><strong>{{ record.fields.source_id.0 }}</strong></td>
-          			<td> {{ record.fields.title.0}} </td>
-          			<td> 
-          				{% for variable in record.fields.variable_long_name %} 
-          					{{ variable }} <br/>
-          				{% endfor %}
-          			</td>
-          			<td> 
-          				{% for url in record|recordUrls %}
-          					{% if url.2 == 'Tech Note' %}
-          						<a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> 
-          					{% endif %}
-          				{% endfor %}
-          			</td>
-     			</tr>
-     		{% endfor %}
-     	
-     	</table>
-     		
-	</div>	
+     <h1> Supplemental Search Results</h1>
+     <p>The information in the table below was automatically harvested from Obs4MIPs data holdings.</p>
+     	 <table>
+             <!-- For section 508 compliance, data tables are requidred to have captions, column headers, and a tbdoy
+             around the data itself -->
+             <caption>Obs4MIPs Metadata</caption>
+			 <tr>
+				 <th><strong>Instrument</strong></th>
+				 <th><strong>Dataset Name</strong></th>
+				 <th><strong>Variables</strong></th>
+				 <th><strong>Tech Note</strong></th>
+			 </tr>
+           	 {% for record in search_output.results|sortResults:'source_id' %}
+                 <tbody>
+          		     <tr>
+          			     <td>{{ record.fields.source_id.0 }}</td>
+          			     <td> {{ record.fields.title.0}} </td>
+          			     <td>
+          				     {% for variable in record.fields.variable_long_name %}
+          					    {{ variable }} <br/>
+          				     {% endfor %}
+                         </td>
+          			     <td>
+          				     {% for url in record|recordUrls %}
+          					     {% if url.2 == 'Tech Note' %}
+          						     <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a>
+          					     {% endif %}
+          				     {% endfor %}
+          			     </td>
+     			     </tr>
+                 </tbody>
+             {% endfor %}
+     	 </table>
+	 </div>
     
 {% endblock %}
