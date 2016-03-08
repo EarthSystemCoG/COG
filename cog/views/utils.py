@@ -75,10 +75,10 @@ def set_openid_cookie(response, openid):
                         httponly=True)
 
 
-def getUsersThatMatch(match, sortby='last_name'):
+def getUsersThatMatch(match, sortby='username'):
     """
     Returns the list of users that match a given expression.
-    By default it sorts by last_name.
+    By default it sorts by username.
     """
     
     return User.objects.filter((Q(username__icontains=match) | Q(first_name__icontains=match) |
