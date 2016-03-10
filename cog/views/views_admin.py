@@ -9,7 +9,7 @@ import ast
 from django.contrib.sites.models import Site  
 from cog.models import PeerSite
 from django.forms.models import modelformset_factory
-from cog.views.utils import getUsersThatMatch, get_projects_by_name, paginate, getQueryDict
+from cog.views.utils import getAdminUsersThatMatch, get_projects_by_name, paginate, getQueryDict
 
 
 def site_home(request):
@@ -66,11 +66,11 @@ def admin_users(request):
     match = queryDict.get('match', None)
 
     if match:
-        users = getUsersThatMatch(match, sortby=sortby)
+        users = getAdminUsersThatMatch(match, sortby=sortby)
     else:
         users = User.objects.all().order_by(sortby)  
 
-    title = 'List Node Users'
+    title = 'List System Users'
     return render_to_response('cog/admin/admin_users.html',
                               {'users': paginate(users, request, max_counts_per_page=50), 'title': title},
                               context_instance=RequestContext(request))
