@@ -16,8 +16,8 @@ setup(
     url = "https://github.com/EarthSystemCoG/COG",
     packages=find_packages(exclude=[]),
     include_package_data=True,
-    install_requires=['django==1.9.1',
-                      'django-grappelli==2.7.2',
+    install_requires=['django==1.9.4',
+                      'django-grappelli==2.8.1',
                       #'django-openid-auth==0.7', # must be installed independently from fork
                       'sqlalchemy==1.0.11',
                       'south==1.0.2',
