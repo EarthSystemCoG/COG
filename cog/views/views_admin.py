@@ -70,7 +70,7 @@ def admin_users(request):
     else:
         users = User.objects.all().order_by(sortby)  
 
-    title = 'List System Users'
+    title = 'List System/Node Users'
     return render_to_response('cog/admin/admin_users.html',
                               {'users': paginate(users, request, max_counts_per_page=50), 'title': title},
                               context_instance=RequestContext(request))
