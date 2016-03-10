@@ -75,7 +75,7 @@ def membership_list_all(request, project_short_name):
     else:
         users = User.objects.all().order_by('last_name')  
                   
-    title = 'List All Users'
+    title = 'Assign Project Members From "List Of All Node Users"'
     view_name = 'membership_list_all'
     return render_membership_page(request, project, users, title, view_name)
 
