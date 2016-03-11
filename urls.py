@@ -6,7 +6,6 @@ import cog.views
 
 from filebrowser.sites import site
 
-
 admin.autodiscover()
 
 urlpatterns = [
