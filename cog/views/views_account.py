@@ -147,31 +147,32 @@ def notifyUserOfRegistration(user):
 
 def subscribeUserToMailingList(user, request):
     """
-    Method to notify administrators of user subscription request.
+    Method to subscribe a user to the CoG mailing list.
+    User will receive a confirmation email.
     """
 
-    notifyAdminsOfUserSubscription(user, request, 'join')
-
+    _sendSubsriptionEmail(user, 'subscribe')
 
 def unSubscribeUserToMailingList(user, request):
     """
-    Method to notify administrators of user un-subscription.
+    Method to unsubscribe a user to the CoG mailing list.
+    User will receive a confirmation email.
     """
 
-    notifyAdminsOfUserSubscription(user, request, 'leave')
+    _sendSubsriptionEmail(user, 'unsubscribe')
 
-
-def notifyAdminsOfUserSubscription(user, request, action):
-
-    subject = 'User request to %s the email list %s' % (action, settings.COG_MAILING_LIST)
-    message = 'User: %s has requested to %s the email list: %s' % (user.get_full_name(), action,
-                                                                   settings.COG_MAILING_LIST)
-
-    url = reverse('user_detail', kwargs={'user_id': user.id})
-    url = request.build_absolute_uri(url)
-    message += '\nUser profile: %s\n' % url
-    for admin in getSiteAdministrators():
-        notify(admin, subject, message)
+def _sendSubsriptionEmail(user, action):
+    '''Common functionality to send email to the CoG mailing list.'''
+    
+    # cog-info-request@list.woc.noaa.gov
+    toAddress = settings.COG_MAILING_LIST.replace('@','-request@')
+    # subscribe address=<email address>
+    subject = '%s address=%s' % (action, user.email)
+    # body
+    message = ''
+    
+    print 'Sending subscription email: To=%s Subject=%s' % (toAddress, subject)
+    sendEmail(toAddress, subject, message, fromAddress=user.email)
 
 
 # view to create a user account
