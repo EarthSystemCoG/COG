@@ -29,16 +29,33 @@ TARGET_ENDPOINT = 'target_endpoint'
 TARGET_FOLDER = 'target_folder'
 
 # external URLs
-GLOBUS_NEXUS_URL = 'nexus.api.globusonline.org'
-GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/xfer/BrowseEndpoint'
-GLOBUS_OAUTH_URL = 'https://www.globus.org/OAuth'
+GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/app/browse-endpoint'
+GLOBUS_AUTH_URL = 'https://auth.globus.org'
 
-if siteManager.isGlobusEnabled():	
-	from nexus import GlobusOnlineRestClient
-	from getpass import getpass
-	from cog.plugins.globus.transfer import submiTransfer, get_access_token, generateGlobusDownloadScript
+if siteManager.isGlobusEnabled():
+
+	from base64 import urlsafe_b64encode
+	from oauth2client import client as oauth_client
+	from cog.plugins.globus.transfer import submiTransfer, generateGlobusDownloadScript
+
+	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
+	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
 	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
+
 	GLOBUS_ENDPOINTS= LocalEndpointDict(endpoints_filepath)
+
+
+def establishFlow(request):
+	basic_auth_str = urlsafe_b64encode("{}:{}".format(client_id, client_secret))
+	auth_header = "Basic " + basic_auth_str
+	return oauth_client.OAuth2WebServerFlow(
+		client_id = client_id,
+		authorization_header = auth_header,
+		scope = 'urn:globus:auth:scope:transfer.api.globus.org:all',
+		redirect_uri = request.build_absolute_uri(reverse("globus_token")).replace('http:','https:'),
+		auth_uri = GLOBUS_AUTH_URL + '/v2/oauth2/authorize',
+		token_uri = GLOBUS_AUTH_URL + '/v2/oauth2/token')
+
 
 def requires_globus(view_func):
 	'''
@@ -175,56 +192,15 @@ def oauth(request):
 	# retrieve destination parameters from Globus redirect
 	# example URL with added parameters from Globus redirect: 
 	# /globus/oauth/?label=&verify_checksum=on&submitForm=&folder[0]=tmp&endpoint=cinquiniluca#mymac&path=/~/&ep=GC&lock=ep&method=get&folderlimit=1&action=http://localhost:8000/globus/oauth/
+	print request.GET
 	request.session[TARGET_ENDPOINT] = getQueryDict(request).get('endpoint','#')
-	request.session[TARGET_FOLDER] = getQueryDict(request).get('path','/~/') + getQueryDict(request).get('folder[0]','/~/')  # default value: user home directory
-	print 'User selected destionation endpoint:%s, path:%s, folder:%s' % (request.session[TARGET_ENDPOINT], getQueryDict(request).get('path','/~/'), request.session[TARGET_FOLDER])
-	
-	params = [ ('response_type','code'),
-		       ('client_id', siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS)),
-		       ('redirect_uri', request.build_absolute_uri(reverse("globus_token")).replace('http:','https:') ),] # MUST force 'https' protocol
-	
-	globus_url = GLOBUS_OAUTH_URL + "?" + urllib.urlencode(params)
-	# FIXME: fake the Globus URL
-	#globus_url = request.build_absolute_uri( reverse("globus_oauth2") ) + "?" + urllib.urlencode(params)
+	request.session[TARGET_FOLDER] = getQueryDict(request).get('path','/~/') + getQueryDict(request).get('folder[0]', '')  # default value: user home directory
+	print 'User selected destionation endpoint:%s, path:%s, folder:%s' % (request.session[TARGET_ENDPOINT], getQueryDict(request).get('path','/~/'), getQueryDict(request).get('folder[0]', ''))
 
-	# redirect to Globus OAuth URL
-	print "Redirecting to: %s" % globus_url
-	return HttpResponseRedirect(globus_url)
-	
-@requires_globus
-@login_required
-def oauth2(request):
-	'''View that mimics the Globus OAuth page. Not ordinarily invoked unless developing on localhost.'''
-	
-	client_id = request.GET['client_id']
-	redirect_uri = request.GET['redirect_uri']
-	print 'Issuing request_token for client_id=%s' % client_id
-	
-	# token can be re-used multiple times
-	token = get_access_token()
-
-	# CoG portal
-	user_client = GlobusOnlineRestClient(config_file=os.path.join(os.path.expanduser("~"), 'user_client_config.yml'))
-	
-	# human user
-	alias_client = GlobusOnlineRestClient(config_file=os.path.join(os.path.expanduser("~"), 'alias_client_config.yml'))
-	
-	# Validate the token:
-	try:
-		alias, client_id, nexus_host = alias_client.goauth_validate_token(token)
-		print "Using valid token for alias=%s" % alias
-	except:
-		raise Exception("That is not a valid authorization code")
-	
-	print("As " + alias + ", get a request token for client " + user_client.client + " using rsa authentication:")
-	response = alias_client.goauth_rsa_get_request_token(alias, user_client.client, lambda: getpass("Private Key Password"))
-	
-	# code can only be used once
-	code = response['code']
-	print 'Obtained request code=%s for identity=%s' % (code, user_client.client )
-	
-	# Note: 'code' is a one-time credential issued by Globus Nexus to CoG portal to act on the user behalf
-	return HttpResponseRedirect( redirect_uri + "?code=%s" % code)
+	# Redirect the user to Globus OAuth server to get an authorization code if the user approves the access request.
+	globus_authorize_url = establishFlow(request).step1_get_authorize_url()
+	print "Redirecting to: %s" % globus_authorize_url
+	return HttpResponseRedirect(globus_authorize_url)
 
 
 @requires_globus
@@ -232,30 +208,20 @@ def oauth2(request):
 def token(request):
 	'''View that uses the request_token found in parameter 'code' (can only be used once) 
 	   to obtain an 'access_token' from Globus (can be used multiple times).'''
-	
-	# CoG portal
-	# FIXME: instantiate at module scope ?
-	#user_client = GlobusOnlineRestClient(config_file=os.path.join(os.path.expanduser("~"), 'user_client_config.yml'))
-	user_client = GlobusOnlineRestClient(config={'server': GLOBUS_NEXUS_URL,
-                                                 'client': siteManager.get('PORTAL_GO_USERNAME', section=SECTION_GLOBUS),
-                                                 'client_secret': siteManager.get('PORTAL_GO_PASSWORD', section=SECTION_GLOBUS),
-                                                 'verify_ssl':False,
-                                                 'cache':{'class': 'nexus.token_utils.InMemoryCache', 'args': [],} 
-                                             })
 
 	# use 'code' to obtain an 'access_token'
-	code = request.GET['code']	
-	#access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code)
-	access_token, refresh_token, expires_in = user_client.goauth_get_access_token_from_code(code, redirect_uri=request.build_absolute_uri(reverse("globus_token")).replace('http:','https:'))
+	globus_auth_code = request.GET['code']
+	print 'Globus OAuth code: %s' % globus_auth_code
 
-	# validate access_token
-	alias, client_id, nexus_host = user_client.goauth_validate_token(access_token)
-	print "%s claims this is a valid token issued by %s for %s" % (nexus_host, alias, client_id)
-	
+	globus_credentials = establishFlow(request).step2_exchange(globus_auth_code)
+	id_token = globus_credentials.id_token
+	access_token = globus_credentials.access_token
+	#print 'id_token: %s, access_token: %s' % (id_token, access_token)
+
 	# store token into session
 	request.session[GLOBUS_ACCESS_TOKEN] = access_token
-	request.session[GLOBUS_USERNAME] = alias
-	
+	request.session[GLOBUS_USERNAME] = id_token['preferred_username']
+
 	return HttpResponseRedirect( reverse('globus_submit') )
 
 @requires_globus

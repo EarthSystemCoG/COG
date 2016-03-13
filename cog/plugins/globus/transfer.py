@@ -26,20 +26,6 @@ def generateGlobusDownloadScript(download_map):
     script = script.replace('{}##GENDPOINTDICT##', str(download_map))
 
     return script
-    
-
-def get_access_token():
-    '''Utility function to read an access_token for a client portal that is not registered with Globus.'''
-    
-    filepath = os.path.join(os.path.expanduser("~"), ACCESS_TOKEN_FILE)
-    
-    try:
-        with open(filepath, 'r') as f:
-            access_token = f.read().strip()
-            return access_token
-    except IOError:
-        print "Access token file not found: %s" % filepath
-        return None
 
 
 def submiTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_directory):
