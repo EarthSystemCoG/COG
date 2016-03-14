@@ -55,6 +55,12 @@ def search(request, project_short_name):
     # store this URL at session scope so other pages can reload the last search
     request.session[LAST_SEARCH_URL] = request.get_full_path()  # relative search page URL + optional query string
     
+    fromRedirectFlag = False
+    if request.session.get(SEARCH_REDIRECT, None):
+        fromRedirectFlag = True
+        # remove POST redirect flag from session
+        del request.session[SEARCH_REDIRECT]
+
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
         
@@ -73,7 +79,8 @@ def search(request, project_short_name):
         # also include possible custom template
         return search_config(request, config, extra={'project': project, 
                                                      'title2': '%s Data Search'% project.short_name,
-                                                     'template':getQueryDict(request).get(TEMPLATE,None) })
+                                                     'template':getQueryDict(request).get(TEMPLATE,None) },
+                             fromRedirectFlag=fromRedirectFlag)
     # search is not configured for this project
     else:
         messages = ['Searching is not enabled for this project.',
@@ -135,7 +142,7 @@ def _buildSearchInputFromHttpRequest(request, searchConfig):
     return searchInput
 
 
-def search_config(request, searchConfig, extra={}):
+def search_config(request, searchConfig, extra={}, fromRedirectFlag=False):
     """
     Project-specific search view that processes all GET/POST requests.
     Parses GET/POST requests parameters and combines them with the project fixed constraints.
@@ -153,24 +160,23 @@ def search_config(request, searchConfig, extra={}):
             
     # GET/POST switch
     queryDict = getQueryDict(request)
-    print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
-                                                                                                request.session.get(SEARCH_REDIRECT, None), 
-                                                                                                queryDict)
+    print "Search() view: HTTP Request method=%s fromRedirectFlag flag=%s HTTP parameters=%s" % (request.method, fromRedirectFlag, queryDict)
+    
     if request.method == 'GET':
-        if len(queryDict.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: 
-            # GET pre-seeded search URL -> redirect to POST immediately
+        # GET pre-seeded search URL -> invoke POST immediately
+        if len(queryDict.keys()) > 0 and not fromRedirectFlag: 
             return search_post(request, searchInput, searchConfig, extra)
         else:
-            return search_get(request, searchInput, searchConfig, extra)
+            return search_get(request, searchInput, searchConfig, extra, fromRedirectFlag)
     else:
         return search_post(request, searchInput, searchConfig, extra)
         
 
-def search_get(request, searchInput, searchConfig, extra={}):
+def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=False):
     """
     View that processes search GET requests.
     If invoked directly, it executes a query for facets but no results.
-    After a POST redirect, it retrieves results from the session and removes the SEARCH_REDIRECT flag.
+    After a POST redirect, it retrieves results from the session.
     """
     
     facetProfile = searchConfig.facetProfile
@@ -180,14 +186,11 @@ def search_get(request, searchInput, searchConfig, extra={}):
     data = extra
     
     # GET request after POST redirection
-    if request.session.get(SEARCH_REDIRECT, None):
+    if fromRedirectFlag:
         
         print "Retrieving search data from session"
         data = request.session.get(SEARCH_DATA)
-        
-        # remove POST redirect flag
-        del request.session[SEARCH_REDIRECT]
-    
+            
     # direct GET request: must query for all facet values with project-specific constraints
     else:
         
