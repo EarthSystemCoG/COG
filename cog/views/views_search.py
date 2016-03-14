@@ -13,12 +13,12 @@ from cog.models.utils import get_or_create_default_search_group
 from cog.services.SolrSerializer import deserialize
 from cog.services.search import SolrSearchService
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
-from cog.views.constants import PERMISSION_DENIED_MESSAGE
+from cog.views.constants import PERMISSION_DENIED_MESSAGE, TEMPLATE_NOT_FOUND_MESSAGE
 from cog.views.utils import getQueryDict
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.http.response import HttpResponseServerError
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -272,9 +272,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
             del request.session[SEARCH_REDIRECT]
             
         # redirect to project search page with error message
-        data[ERROR_MESSAGE] = "Error: search template: %s does NOT exist." % template
-        request.session[SEARCH_DATA] = data
-        return HttpResponseRedirect(reverse('search', args=[extra['project'].short_name.lower()]))
+        return HttpResponseBadRequest(TEMPLATE_NOT_FOUND_MESSAGE)
 
 
 
