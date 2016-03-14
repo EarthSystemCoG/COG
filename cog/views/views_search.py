@@ -1,32 +1,30 @@
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
-
-from cog.forms.forms_search import *
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from copy import copy, deepcopy
 import json
 import urllib, urllib2
-
-
-from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.services.search import SolrSearchService
-from cog.models.search import SearchOutput, Record, Facet, FacetProfile,SearchInput
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.urlresolvers import reverse
-from copy import copy, deepcopy
 from urllib2 import HTTPError
 
-from cog.models.search import *
-from cog.services.SolrSerializer import deserialize
-
-from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
-from cog.models.utils import get_or_create_default_search_group
-from django.http.response import HttpResponseServerError
-from cog.models.auth import userHasUserPermission
-from cog.models.auth import userHasAdminPermission
-from cog.views.utils import getQueryDict
-from django.views.decorators.http import require_http_methods
 from cog.config.search import SearchConfigParser
+from cog.forms.forms_search import *
+from cog.models.auth import userHasAdminPermission
+from cog.models.auth import userHasUserPermission
+from cog.models.search import *
+from cog.models.search import SearchOutput, Record, Facet, FacetProfile, SearchInput
+from cog.models.utils import get_or_create_default_search_group
+from cog.services.SolrSerializer import deserialize
+from cog.services.search import SolrSearchService
+from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
+from cog.views.constants import PERMISSION_DENIED_MESSAGE
+from cog.views.utils import getQueryDict
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.http.response import HttpResponseServerError
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.template.exceptions import TemplateDoesNotExist
+from django.views.decorators.http import require_http_methods
+
 
 SEARCH_INPUT  = "search_input"
 SEARCH_OUTPUT = "search_output"
@@ -232,7 +230,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
     # build pagination links
     offset = data[SEARCH_INPUT].offset
     limit = data[SEARCH_INPUT].limit
-    if limit > 0:
+    if limit > 0 and data.get(SEARCH_OUTPUT, None):
         currentPage = offset/limit + 1
         numResults = len(data[SEARCH_OUTPUT].results)
         totResults = data[SEARCH_OUTPUT].counts
@@ -260,7 +258,24 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
     template = 'cog/search/search.html' # default template
     if data.get(TEMPLATE, None):
         template = 'cog/search/%s.html' % data[TEMPLATE] # custom template
-    return render_to_response(template, data, context_instance=RequestContext(request))    
+        del data[TEMPLATE] # remove temp,ate from session
+
+    try:
+        return render_to_response(template, data, context_instance=RequestContext(request))   
+     
+    except TemplateDoesNotExist:
+        
+        # invalidate this search session
+        if request.session.get(SEARCH_DATA, None):
+            del request.session[SEARCH_DATA]
+        if request.session.get(SEARCH_REDIRECT, None):
+            del request.session[SEARCH_REDIRECT]
+            
+        # redirect to project search page with error message
+        data[ERROR_MESSAGE] = "Error: search template: %s does NOT exist." % template
+        request.session[SEARCH_DATA] = data
+        return HttpResponseRedirect(reverse('search', args=[extra['project'].short_name.lower()]))
+
 
 
 def search_post(request, searchInput, searchConfig, extra={}):
