@@ -116,7 +116,7 @@ def recordUrls(record):
 @register.filter
 def sortResults(results, fieldName):
     
-    return sorted(results, key = lambda result: result.fields.get(fieldName[0],""))
+    return sorted(results, key = lambda result: result.fields.get(fieldName,""))
 
 @register.filter
 def showSearchConfigMessage(message, project):
