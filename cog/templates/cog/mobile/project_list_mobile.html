@@ -7,7 +7,7 @@
 
 
      <div style="background-color:#eee; height:100px; padding:10px;">
-          <h3 style="text-align: center;">Change Project</h3>
+          <h2 style="text-align: center;">Change Project</h2>
           <select id="project_select" style="width:100%" onchange="loadURL()">
               <option value="%">----------</option>
               {% for project in project_list %}
@@ -17,7 +17,7 @@
      </div>
 
      <div style="background-color:#B9E0E3; height:100px; padding:10px;">
-          <h3 style="text-align: center;" >Select Page</h3>
+          <h2 style="text-align: center;" >Select Page</h2>
           <select id="page_select" style="width:100%" onchange="renderWiki()">
               <option value="%">----------</option>
               {% for page in project.short_name|get_page_list %}
