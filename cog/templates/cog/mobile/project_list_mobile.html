@@ -1,0 +1,87 @@
+
+{% load cog_utils %}
+{% load mobile %}
+
+{% get_project_list as project_list %}
+
+
+
+     <div style="background-color:#eee; height:60px; padding:10px;">
+          <h3 style="text-align: center;">Change Project</h3>
+          <select id="project_select" style="width:100%" onchange="loadURL()">
+              <option value="%">----------</option>
+              {% for project in project_list %}
+                  <option value="{% url 'project_home' project.short_name.lower %}">{{ project.short_name }}</option>
+              {% endfor %}
+          </select>
+     </div>
+
+     <div style="background-color:#B9E0E3; height:60px; padding:10px;">
+          <h3 style="text-align: center;" >Select Page</h3>
+          <select id="page_select" style="width:100%" onchange="renderWiki()">
+              <option value="%">----------</option>
+              {% for page in project.short_name|get_page_list %}
+
+                   <option id="page_choice" data-body="{{page.body}}"
+                           data-author="{{ page.author }}" data-pubdate="{{ page.publication_date|date:"d M Y,H:m" }}"
+                           data-update="{{ page.update_date }}">{{ page.title }}
+                   </option>
+              {% endfor %}
+          </select>
+
+     </div>
+
+    <div id="description" style="background-color:#eee; display:block; padding:5px;">
+        <div style="text-align: center; margin-bottom: 10px; margin-top:10px;">
+            <strong>Project Description</strong>
+        </div>
+        {{ project.description }}
+    </div>
+
+    <div id="author" style=" display:none; padding:4px; margin-bottom: 10px; background-color:#E9F5F6;">
+
+    </div>
+
+
+    <div id="body_txt" style="background-color:#eee; padding:5px;">
+
+    </div>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+
+    function renderWiki() {
+
+        var input_page = document.getElementById('page_select');
+        var selected = input_page.options[input_page.selectedIndex];
+        var title = document.getElementById('page_select').value;
+        var update_date = selected.getAttribute('data-update');
+        var author = selected.getAttribute('data-author');
+        var main_text = selected.getAttribute('data-body');
+        var pub_date = selected.getAttribute('data-pubdate');
+
+        //input_page = document.getElementById('page_choice');
+        //var update_date = input_page.dataset.update;
+        //var main_text = input_page.dataset.body;
+        //var author = input_page.dataset.author;
+        //var pub_date = input_page.dataset.pubdate;
+
+        document.getElementById("description").style.display = "none";
+        document.getElementById("author").style.display = "block";
+
+
+        document.getElementById("author").innerHTML =
+                "Created by <br> " + author + "<br>" + pub_date + "<br> Last updated on <br> " + update_date;
+
+        document.getElementById("body_txt").innerHTML = title +"<br><br>" + main_text;
+    }
+
+    function loadURL() {
+        this.document.location.href = document.getElementById('project_select').value;
+    }
+</script>
+
+
+
+
