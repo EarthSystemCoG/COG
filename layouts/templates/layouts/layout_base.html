@@ -36,6 +36,17 @@ These are then used in the CSS to fix specific issues-->
     </head>
     
     <body>
+        <!--- provide different content for mobile devices -->
+        {% load mobile %}
+            {% if request.META.HTTP_USER_AGENT|detect_mobile  %}
+                 <div style="margin-left:10px;width:200px;"> <!--master container -->
+                     {% include 'cog/common/right_column_css.html' %}
+                     {% include 'cog/mobile/cog_header_mobile.html' %}
+                     {% include 'cog/mobile/project_list_mobile.html' %}
+                     {% include 'cog/mobile/cog_footer_mobile.html' %}
+                  </div>
+            {% else %}
+
         <div class="content_wrapper"><!--// makes the footers always at the bottom of the window //-->
             <div class="custom_header_bar">
                 {% block custom_header %}
@@ -72,5 +83,7 @@ These are then used in the CSS to fix specific issues-->
             {% endblock %}
         </div> <!--// end div.custom_footer_bar //-->
         <!--END: /layouts/templates/layouts/layout_base.html-->
+        {% endif  %}
+
     </body>
 </html>
