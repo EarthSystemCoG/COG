@@ -9,7 +9,6 @@
      <div style="background-color:#eee; height:100px; padding:10px;">
           <h2 style="text-align: center;">Change Project</h2>
           <select id="project_select" style="width:100%" onchange="loadURL()">
-              <option value="%">----------</option>
               {% for project in project_list %}
                   <option value="{% url 'project_home' project.short_name.lower %}">{{ project.short_name }}</option>
               {% endfor %}
