@@ -39,7 +39,7 @@ These are then used in the CSS to fix specific issues-->
         <!--- provide different content for mobile devices -->
         {% load mobile %}
             {% if request.META.HTTP_USER_AGENT|detect_mobile  %}
-                 <div style="margin-left:10px;width:480px;"> <!--master container -->
+                 <div style="margin-left:10px;width:800px; font-size:13px;"> <!--master container -->
                      {% include 'cog/common/right_column_css.html' %}
                      {% include 'cog/mobile/cog_header_mobile.html' %}
                      {% include 'cog/mobile/project_list_mobile.html' %}
