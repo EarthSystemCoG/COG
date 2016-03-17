@@ -24,7 +24,6 @@ from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
 
 register = template.Library()
 
-
 @register.filter
 def knownIdentityProviders(request):
     return getKnownIdentityProviders().items()
