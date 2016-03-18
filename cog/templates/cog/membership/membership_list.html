@@ -57,10 +57,8 @@
 	            <caption>{{ list_title }}</caption>
 	            <!-- <br/> tags in table are to align text to the bottom -->
 	            <tr>
-	                <th scope="col" class="white">&nbsp;<br/><strong>Last Name</strong></th>
-	                <th scope="col" class="white">&nbsp;<br/><strong>First Name</strong></th>
-	                <th scope="col" class="white">&nbsp;<br/><strong>User Name</strong></th>
-	                <th scope="col" class="white">&nbsp;<br/><strong>Email</strong></th>
+	                <th scope="col" class="white"><strong>Username</strong></th>
+                    <th scope="col" class="white"><strong>Identifying Info</strong></th>
                     <th scope="col" class="white" style="text-align: center;"><strong>User<br/>Group</strong></th>
                     <th scope="col" class="white" style="text-align: center;"><strong>Contributor<br/>Group</strong></th>
 	                <th scope="col" class="white" style="text-align: center;"><strong>Admin<br/>Group</strong></th>
@@ -69,10 +67,21 @@
 	            </tr>
 	            {% for user in users %}
 	                <tr>
-	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a></td>
-	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
 	                    <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
-	                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                    <td>
+                        {% if user.last_name %}
+
+                            <a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a>,
+                            <a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a>
+                            &nbsp;&nbsp;
+                            (<a href="mailto:{{ user.email }}">{{ user.email }}</a>)
+
+                        {% else %}
+
+                            <a href="{% url 'user_detail' user.id %}">{{ user|get_first_openid }}</a>
+
+                        {% endif %}
+                    </td>
 
                         <!-- encode HTTP parameters for new and old membership in USERS group -->
 	                    <td style="text-align:center">
