@@ -6,19 +6,17 @@
 
 
 
-     <div style="background-color:#eee; height:50px; padding:10px;">
-          <h3 style="text-align: center;">Change Project</h3>
+     <div style="background-color:#B9E0E3; height:50px; padding:10px;">
+
           <select id="project_select" style="width:100%" onchange="loadURL()">
+              <option>Change Project</option>
               {% for project in project_list %}
                   <option value="{% url 'project_home' project.short_name.lower %}">{{ project.short_name }}</option>
               {% endfor %}
           </select>
-     </div>
 
-     <div style="background-color:#B9E0E3; height:50px; padding:10px;">
-          <h3 style="text-align: center;" >Select Page</h3>
           <select id="page_select" style="width:100%" onchange="renderWiki()">
-              <option value="%">----------</option>
+              <option value="%">Select Page</option>
               {% for page in project.short_name|get_page_list %}
 
                    <option id="page_choice" data-body="{{page.body}}"
