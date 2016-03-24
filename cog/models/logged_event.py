@@ -3,6 +3,7 @@ from constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UP
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django_comments.signals import comment_was_posted
+from django.core.signals import request_finished
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 from post import Post, post_signal
@@ -30,7 +31,7 @@ def log_instance_event(sender, **kwargs):
     user = instance.author
     project = instance.project
     classname = instance.__class__.__name__
-    if kwargs['created'] == True:
+    if kwargs['created']:
         title = 'New %s created' % get_display_name(instance, classname)
     else:
         title = '%s updated' % get_display_name(instance, classname)
@@ -59,6 +60,21 @@ def log_comment_event(sender, **kwargs):
         event.save()
 
 
+def log_membership_event(sender, **kwargs):
+
+    print 'arguments are ', kwargs
+
+    # sender is a MembershipRequest object
+    user = sender
+    project = kwargs['project']
+    group = kwargs['group']
+    #title = 'User %s added to group %s' % user, group
+    #if user is not None:
+        #event = LoggedEvent.objects.create(user=user, project=project, title=title, description='Member Added',
+                                          #sender='%s' % sender)
+        #event.save()
+
+
 def get_display_name(instance, classname):
     if classname == 'Doc':
         return 'Document'
@@ -68,12 +84,15 @@ def get_display_name(instance, classname):
         return classname
 
 
+# These are all the receivers for the various signals. We could do this with a @receiver before each function as well
 # Note: must use a unique string for "dispatch_id" to prevent functions from being called again every time the
 # module is imported
 # post_save.connect(log_instance_event, sender=Post, dispatch_uid="log_post_event")
 post_save.connect(log_instance_event, sender=Doc, dispatch_uid="log_doc_event")
 post_save.connect(log_instance_event, sender=News, dispatch_uid="log_news_event")
 comment_was_posted.connect(log_comment_event, dispatch_uid="log_comment_event")
+request_finished.connect(log_membership_event, dispatch_uid="log_membership_event")
+
 
 
 # callback receiver function for Post update events
