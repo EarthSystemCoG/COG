@@ -39,14 +39,19 @@ These are then used in the CSS to fix specific issues-->
     <body>
         <!--- provide different content for mobile devices -->
         {% load mobile %}
-            {% if request.META.HTTP_USER_AGENT|detect_mobile  %}
-                 <div style="font-size:15px;"> <!--master container -->
-                     {% include 'cog/common/right_column_css.html' %}
-                     {% include 'cog/mobile/cog_header_mobile.html' %}
-                     {% include 'cog/mobile/project_list_mobile.html' %}
-                     {% include 'cog/mobile/cog_footer_mobile.html' %}
-                  </div>
-            {% else %}
+        {% if request.META.HTTP_USER_AGENT|detect_mobile  %}
+
+            <div style="font-size:15px;"> <!--master container -->
+                {% include 'cog/mobile/cog_header_mobile.html' %}
+                {% if not request.META.QUERY_STRING|mobile_toggle %}
+                    {% include 'cog/mobile/mobile_toggle.html' %}
+                {% else %}
+                    {% include 'cog/common/right_column_css.html' %}
+                    {% include 'cog/mobile/project_list_mobile.html' %}
+                {% endif %}
+                {% include 'cog/mobile/cog_footer_mobile.html' %}
+            </div>
+        {% endif %}
 
         <div class="content_wrapper"><!--// makes the footers always at the bottom of the window //-->
             <div class="custom_header_bar">
@@ -84,7 +89,6 @@ These are then used in the CSS to fix specific issues-->
             {% endblock %}
         </div> <!--// end div.custom_footer_bar //-->
         <!--END: /layouts/templates/layouts/layout_base.html-->
-        {% endif  %}
 
     </body>
 </html>
