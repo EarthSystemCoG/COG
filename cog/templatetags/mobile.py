@@ -10,10 +10,15 @@ register = template.Library()
 
 @register.filter(name='detect_mobile')
 def detect_mobile(ua_string):
-    # ua_string = 'BlackBerry9700/5.0.0.862 Profile/MIDP-2.1 Configuration/CLDC-1.1 VendorID/331 UNTRUSTED/1.0 3gpp-gba'
     user_agent = user_agents.parse(ua_string)
-    return user_agent.is_mobile
-    # return True
+    #return user_agent.is_mobile
+    return True
+
+
+@register.filter(name='mobile_toggle')
+def detect_mobile(query_string):
+    if query_string == "mobile":
+        return True
 
 @register.assignment_tag(name='get_project_list')
 def get_project_list():
@@ -26,4 +31,6 @@ def get_page_list(project_short_name):
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     page_list = Post.objects.filter(project=project).distinct().order_by('title')
     return page_list
+
+
 

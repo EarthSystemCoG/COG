@@ -1,0 +1,18 @@
+{% load cog_utils %}
+{% load mobile %}
+
+         <div style="background-color:#B9E0E3; height:150px; padding:10px;">
+             <form name="goMobile" action="" method="post" style="text-align: center;">
+                 {% csrf_token %}
+                 <p>CoG's Mobile site allows you to navigate between projects and view wiki pages.</p>
+                 <br>
+                 <input name="mobile" type="button" value="Go Mobile" onclick="loadMobile()"/>
+             </form>
+         </div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    function loadMobile() {
+       this.document.location.href = this.document.location.href + "?mobile";
+    }
+</script>
