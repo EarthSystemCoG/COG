@@ -1,0 +1,20 @@
+{% extends 'layouts/layout_base.html' %}
+
+{% load mobile %}
+
+{% block mobile_content %}
+
+    <div style="font-size:15px;"> <!--master container -->
+        {% include 'cog/mobile/cog_header_mobile.html' %}
+
+        <!-- first time the user lands on the site, they get presented with a choice of staying mobile or not
+        if they opt IN to mobile a query string is added to each page, which keeps them in the mobile world -->
+        {% if not request.META.QUERY_STRING|mobile_string_present %}
+            {% include 'cog/mobile/_go_mobile_question.html' %}
+        {% else %}
+             {% include 'cog/common/right_column_css.html' %}
+             {% include 'cog/mobile/project_list_mobile.html' %}
+        {% endif %}
+        {% include 'cog/mobile/cog_footer_mobile.html' %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'layouts/layout_base.html' %}
+
+<!-- this is the previous layout_base, just pulled out and put into a block for the new mobile design -->
+{% block normal_content %}
+
+    <div class="content_wrapper"><!--// makes the footers always at the bottom of the window //-->
+        <div class="custom_header_bar">
+            {% block custom_header %}
+             {% include 'cog/common/cog_header_custom.html' %}
+          {% endblock %}
+         </div> <!--// end div.custom_header //-->
+        <div class="container"> <!--// django class //-->
+
+            <!-- load optional notification banner -->
+            {% block notification %}
+                {% include 'cog/common/cog_notification_custom.html' %}
+            {% endblock %}
+            <!-- load cog upper navigation bar and user menu -->
+            {% block header %}
+                {% include 'cog/common/cog_header.html' %}
+            {% endblock %}
+
+            <!--Load block body from layout_main, layout_left_main_right, etc -->
+            {% block body %}
+                <!--inside body block of _layout_desktop.html-->
+            {% endblock %}
+        </div> <!--// end div.container //-->
+        <!--// pushes the content wrapper down enough to hold the footer //-->
+        <div class="push"></div> <!--// end div.push //-->
+    </div> <!--// end div.content_wrapper //-->
+    <div class="footer_bar">
+        <!--adds a margin above the footer-->
+        <div class="footer_spacer"></div> <!--// end footer spacer //-->
+        {% block footer %}
+            {% include 'cog/common/cog_footer_bar_only.html' %}
+        {% endblock %}
+    </div> <!--// end footer_bar //-->
+    <div class="custom_footer_bar">
+        {% block custom_footer %}
+            {% include 'cog/common/cog_footer_custom.html' %}
+        {% endblock %}
+    </div> <!--// end div.custom_footer_bar //-->
+
+{% endblock %}
