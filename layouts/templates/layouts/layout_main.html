@@ -1,8 +1,10 @@
-{% extends "layouts/layout_base.html" %}
+{% extends "layouts/_layout_desktop.html" %}
 <!-- don't put comments above the extends or it ends up above the doctype. This throws IE into quirks mode -->
 
-{% block body %}  
+{% block body %}
+
     <!--// LAYOUT: /layouts/layouts/layout_main.html //-->
+    <!--//extends layouts/layout_base.html -->
 
     <div class="span-max last">
         {% block title %} <h1 class="title"> {{ title }} </h1> {% endblock %}

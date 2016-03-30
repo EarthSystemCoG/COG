@@ -38,57 +38,24 @@ These are then used in the CSS to fix specific issues-->
     
     <body>
         <!--- provide different content for mobile devices -->
+        <!-- there are now two intermediary templates _layout_desktop.html and _layout_mobile.html
         {% load mobile %}
-        {% if request.META.HTTP_USER_AGENT|detect_mobile  %}
+        <!-- there are two choices...to get desktop content, the user needs to be ON a desktop (second clause) or
+        they are on a mobile device but the request has a VERSION key (set in the middleware), which indicates they
+        want to stay on the desktop version -->
+        {% if request|stay_desktop or request.META.HTTP_USER_AGENT|detect_mobile != True %}
+                <!-- on mobile device but stay desktop  OR on desktop device. Both mean show normal content-->
+                {% block normal_content %}
+                    {% include 'layouts/_layout_desktop.html' %}
+                {% endblock %}
 
-            <div style="font-size:15px;"> <!--master container -->
-                {% include 'cog/mobile/cog_header_mobile.html' %}
-                {% if not request.META.QUERY_STRING|mobile_toggle %}
-                    {% include 'cog/mobile/mobile_toggle.html' %}
-                {% else %}
-                    {% include 'cog/common/right_column_css.html' %}
-                    {% include 'cog/mobile/project_list_mobile.html' %}
-                {% endif %}
-                {% include 'cog/mobile/cog_footer_mobile.html' %}
-            </div>
+                <!--on mobile device and stay mobile -->
+        {% elif request.META.HTTP_USER_AGENT|detect_mobile  %}
+                 {% block mobile_content %}
+                     {% include 'layouts/_layout_mobile.html' %}
+                 {% endblock %}
         {% endif %}
 
-        <div class="content_wrapper"><!--// makes the footers always at the bottom of the window //-->
-            <div class="custom_header_bar">
-                {% block custom_header %}
-                    {% include 'cog/common/cog_header_custom.html' %}
-                {% endblock %}
-            </div> <!--// end div.custom_header //-->
-            <div class="container"> <!--// django class //-->
-
-                <!-- load optional notification banner -->
-                {% block notification %}
-	                 {% include 'cog/common/cog_notification_custom.html' %}
-                {% endblock %}
-                <!-- load cog upper navigation bar and user menu -->
-  	            {% block header %}
-                    {% include 'cog/common/cog_header.html' %}
-                {% endblock %}
-	 
-                <!--Load block body from various templates -->
-                {% block body %} {% endblock %}
-            </div> <!--// end div.container //-->
-            <!--// pushes the content wrapper down enough to hold the footer //-->
-            <div class="push"></div> <!--// end div.push //-->
-        </div> <!--// end div.content_wrapper //-->
-        <div class="footer_bar">
-            <!--adds a margin above the footer-->
-            <div class="footer_spacer"></div> <!--// end footer spacer //-->
-	        {% block footer %}
-                {% include 'cog/common/cog_footer_bar_only.html' %}
-            {% endblock %}
-        </div> <!--// end footer_bar //-->
-        <div class="custom_footer_bar">
-            {% block custom_footer %}
-                {% include 'cog/common/cog_footer_custom.html' %}
-            {% endblock %}
-        </div> <!--// end div.custom_footer_bar //-->
-        <!--END: /layouts/templates/layouts/layout_base.html-->
-
+    <!--END: /layouts/templates/layouts/layout_base.html-->
     </body>
 </html>
