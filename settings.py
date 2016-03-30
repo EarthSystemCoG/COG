@@ -180,6 +180,7 @@ MIDDLEWARE_CLASSES = (
     'cog.middleware.init_middleware.InitMiddleware',
     'cog.middleware.login_middleware.LoginMiddleware',
     'cog.middleware.session_middleware.SessionMiddleware',
+    'cog.middleware.mobile_middleware.MobileMiddleware',
     #'cog.middleware.password_middleware.PasswordMiddleware'
     #'django.contrib.sites.middleware.CurrentSiteMiddleware' # django 1.7
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
@@ -314,3 +315,30 @@ CAPTCHA_BACKGROUND_COLOR = '#FAC24A' # matches CoG dark yellow
 #CAPTCHA_FOREGROUND_COLOR = "#666666" # matches CoG dark gray
 CAPTCHA_IMAGE_SIZE = (100, 40)
 #CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+
+
+
+
+# Caching...
+#DEFAULT_CACHE_PORT = "11211"  # (standard memcached port)
+
+#if PRODUCTION_SERVER:
+#    CACHE_HOST = SITE_DOMAIN
+#    CACHE_PORT = DEFAULT_CACHE_PORT
+#    # SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+#    SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+#else:
+    #CACHE_HOST = 'localhost'
+    #CACHE_PORT = '8000'
+    #SESSION_ENGINE = "django.contrib.sessions.backends.file"
+
+#CACHES = {
+    #'default': {
+        #'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        #'LOCATION': CACHE_HOST + ":" + CACHE_PORT,
+        #'TIMEOUT': 300,
+        #'OPTIONS': {
+            #'MAX_ENTRIES': 1000,  # allow some more entries (default is 300)
+           # },
+    #}
+#}
