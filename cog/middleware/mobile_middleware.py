@@ -18,8 +18,12 @@ class MobileMiddleware(object):
 
         #request.session['VERSION'] = 'desktop'  # add only adds if it does not exist already
 
+        # we will only do this if the user is on a mobile device...for now forced true to develop on a desktop
         if mobile:
             try:
+                # when a user says "No Thanks" on the mobile question, a ?desktop query string is added to the url,
+                # we then want to set something on the session that persists so the user is not asked the question
+                # again until they start a new session
                 if request.META['QUERY_STRING'] == "desktop":
                     request.session['VERSION'] = 'desktop'    # FIXME: we want to only do this once
                     request.session.save()

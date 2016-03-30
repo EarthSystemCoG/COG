@@ -5,20 +5,17 @@
                  {% csrf_token %}
                  <p>CoG's Mobile site allows you to navigate between projects and view wiki pages.</p>
                  <br>
+                 <!-- if they go mobile, add the ?mobile query tag and reload the pag -->
                  <input name="mobile" type="button" value="Go Mobile" onclick="window.location='{{ request.get_full_path }}?mobile'"/>
+
+                 <!-- if they stay desktop, add the ?desktop query tag, run through the mobile middleware, and set the VERSION key -->
                  <input name="no_mobile" type="button" value="No Thanks" onclick="window.location='{{ request.get_full_path }}?desktop'"/>
              </form>
          </div>
 
-<script type="text/javascript">
-    //<![CDATA[
-    function loadMobile() {
-        //var myWindow1 = window.open("", "MsgWindow", "width=600, height=600");
-        //myWindow1.document.write('in loadMobile');
-        //myWindow1.document.write(window.location.href);
-        window.location = window.location.href +'?mobile';
-    }
-</script>
+
+
+<!-- obsolete javascript function to do what the middleware is now doing...add VERSION -->
 
 <script type="text/javascript">
     //<![CDATA[
