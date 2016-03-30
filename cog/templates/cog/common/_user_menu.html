@@ -1,5 +1,6 @@
 <!--//START: /cog/templates/cog/common/_user_menu.html //-->
 {% load cog_utils %}
+{% load mobile %}
 
 {% if request.user.is_authenticated %}
 
@@ -30,10 +31,12 @@
      | <a href="{% url 'user_profile_redirect' request.user.id %}">My Profile</a>
      | <a href="{% url 'logout' %}?next={{ request.path }}">Log out</a>
 
+
 {% else %}
      Welcome, <strong>Guest</strong>.
      | <a href="{{ request|get_target_url_with_next_url:'login' }}"> Login</a>
      <!-- | <a href="{% url 'openid-login' %}?next={{ request.build_absolute_uri }}">OpenID Login</a> -->
      | <a href="{{ request|get_target_url_with_next_url:'user_add' }}">Create Account</a>
+     | <a href="#" onclick="window.location='{{ request|delete_desktop_cookie }}'">Go Mobile</a> <!-- temporary link to toggle back to the mobile version -->
 {% endif %}
 <!--//END: /cog/templates/cog/common/_user_menu.html //-->
