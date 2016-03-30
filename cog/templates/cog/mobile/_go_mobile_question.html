@@ -1,0 +1,34 @@
+{% load cog_utils %}
+{% load mobile %}
+         <div style="background-color:#B9E0E3; height:150px; padding:10px;">
+             <form name="goMobile" action="" method="post" style="text-align: center;">
+                 {% csrf_token %}
+                 <p>CoG's Mobile site allows you to navigate between projects and view wiki pages.</p>
+                 <br>
+                 <input name="mobile" type="button" value="Go Mobile" onclick="window.location='{{ request.get_full_path }}?mobile'"/>
+                 <input name="no_mobile" type="button" value="No Thanks" onclick="window.location='{{ request.get_full_path }}?desktop'"/>
+             </form>
+         </div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    function loadMobile() {
+        //var myWindow1 = window.open("", "MsgWindow", "width=600, height=600");
+        //myWindow1.document.write('in loadMobile');
+        //myWindow1.document.write(window.location.href);
+        window.location = window.location.href +'?mobile';
+    }
+</script>
+
+<script type="text/javascript">
+    //<![CDATA[
+    function loadRegular() {
+        var myWindow = window.open("", "MsgWindow", "width=600, height=600");
+        myWindow.document.write('in loadRegular');
+        document.cookie="VERSION=desktop";
+        myWindow.document.write(document.cookie);
+        window.location.reload();
+
+
+    }
+</script>
