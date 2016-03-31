@@ -43,6 +43,7 @@ These are then used in the CSS to fix specific issues-->
         <!-- there are two choices...to get desktop content, the user needs to be ON a desktop (second clause) or
         they are on a mobile device but the request has a VERSION key (set in the middleware), which indicates they
         want to stay on the desktop version -->
+
         {% if request|stay_desktop or request.META.HTTP_USER_AGENT|detect_mobile != True %}
                 <!-- on mobile device but stay desktop  OR on desktop device. Both mean show normal content-->
                 {% block normal_content %}
