@@ -1,9 +1,15 @@
 <!--// START: /cog/templates/common/cog_header.html //-->
 {% load cog_utils %}
-
+{% load mobile %}
 
 <div style="margin-top:10px;margin-bottom:15px;">
    <img style="vertical-align:middle; width:95%; text-align:center; padding-left:10px;" src="/static/cog/img/cog_esgf_small.png" alt="ESGF logo"/>
 </div>
 <div style="text-align: center">Node: {{ site.name }}</div>
 <div style="text-align: center">Project: {{ project.long_name }}</div>
+
+{% if request.META.QUERY_STRING|mobile_string_present %}
+    <div style="text-align: center">
+        <input name="go_desktop" type="button" value="Leave Mobile" onclick="window.location='{{ request.path }}?desktop'">
+    </div>
+{% endif %}

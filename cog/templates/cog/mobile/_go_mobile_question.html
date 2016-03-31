@@ -6,10 +6,10 @@
                  <p>CoG's Mobile site allows you to navigate between projects and view wiki pages.</p>
                  <br>
                  <!-- if they go mobile, add the ?mobile query tag and reload the pag -->
-                 <input name="mobile" type="button" value="Go Mobile" onclick="window.location='{{ request.get_full_path }}?mobile'"/>
+                 <input name="mobile" type="button" value="Go Mobile" onclick="window.location='{{ request.path }}?mobile'"/>
 
                  <!-- if they stay desktop, add the ?desktop query tag, run through the mobile middleware, and set the VERSION key -->
-                 <input name="no_mobile" type="button" value="No Thanks" onclick="window.location='{{ request.get_full_path }}?desktop'"/>
+                 <input name="no_mobile" type="button" value="No Thanks" onclick="window.location='{{ request.path }}?desktop'"/>
              </form>
          </div>
 
@@ -25,7 +25,5 @@
         document.cookie="VERSION=desktop";
         myWindow.document.write(document.cookie);
         window.location.reload();
-
-
     }
 </script>

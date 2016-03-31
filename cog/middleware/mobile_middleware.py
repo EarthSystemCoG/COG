@@ -10,15 +10,15 @@ class MobileMiddleware(object):
         Method called before processing of the view.
         Used to check if a user on a mobile device want to stay mobile
         """
+
         ua_string = request.META['HTTP_USER_AGENT']
         user_agent = user_agents.parse(ua_string)
         mobile = user_agent.is_mobile
-        mobile = True
-        print '****************** in MobileMiddleware ********************'
+        #mobile = True
 
-        #request.session['VERSION'] = 'desktop'  # add only adds if it does not exist already
+        print user_agent.is_mobile
+        print ua_string
 
-        # we will only do this if the user is on a mobile device...for now forced true to develop on a desktop
         if mobile:
             try:
                 # when a user says "No Thanks" on the mobile question, a ?desktop query string is added to the url,
@@ -27,6 +27,16 @@ class MobileMiddleware(object):
                 if request.META['QUERY_STRING'] == "desktop":
                     request.session['VERSION'] = 'desktop'    # FIXME: we want to only do this once
                     request.session.save()
+                else:
+                    print 'No Query string', request.session.keys()
+
+            except ObjectDoesNotExist:
+                pass
+
+            try:
+                if request.META['QUERY_STRING'] == "mobile":
+                    if 'VERSION' in request.session.keys():
+                        del request.session['VERSION']
 
             except ObjectDoesNotExist:
                 pass

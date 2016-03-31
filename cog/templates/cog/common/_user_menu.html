@@ -37,6 +37,25 @@
      | <a href="{{ request|get_target_url_with_next_url:'login' }}"> Login</a>
      <!-- | <a href="{% url 'openid-login' %}?next={{ request.build_absolute_uri }}">OpenID Login</a> -->
      | <a href="{{ request|get_target_url_with_next_url:'user_add' }}">Create Account</a>
-     | <a href="#" onclick="window.location='{{ request|delete_desktop_cookie }}'">Go Mobile</a> <!-- temporary link to toggle back to the mobile version -->
+
+
+{% endif %}
+
+{% if request.META.QUERY_STRING|mobile_string_present or request.META.QUERY_STRING|desktop_string_present %}
+
+    <div style="margin-top:20px; float:left;">
+        <input name="go_mobile" type="button" value="Go Mobile" onclick="window.location='{{ request.path }}?mobile'">
+    </div>
 {% endif %}
 <!--//END: /cog/templates/cog/common/_user_menu.html //-->
+
+<script type="text/javascript">
+    //<![CDATA[
+    function removeCookie() {
+        //var myWindow = window.open("", "MsgWindow", "width=600, height=600");
+        document.cookie = 'VERSION' + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        //myWindow.document.write(document.location.href + '<br><br>');
+
+
+    }
+</script>

@@ -6,15 +6,16 @@ from django.shortcuts import get_object_or_404
 
 register = template.Library()
 
+
 @register.filter(name='detect_mobile')
 def detect_mobile(ua_string):
     # function to determine if a user is on a mobile device
     # uses the python library user agents (this had to be added to cog)
     user_agent = user_agents.parse(ua_string)
-    # return user_agent.is_mobile
+    return user_agent.is_mobile
 
     # setting this to true to emulate mobile device while developing
-    return True
+    #return True
 
 
 @register.filter(name='stay_desktop')
@@ -23,18 +24,9 @@ def stay_desktop(request):
     # this key is added if the user comes in on a mobile device but wants to stay on the desktop version
 
     if 'VERSION' in request.session.keys():
-        print '     ********* VERSION SET ***************', request.session.keys()
         return True
     else:
-        print '     ******** VERSION KEY NOT SET *************'
         return False
-
-
-@register.filter(name='delete_desktop_cookie')
-def delete_desktop_cookie(request):
-    # function to remove the session key if the user no longer wants to stay on the desktop version
-    del request.session['VERSION']
-    return request.path
 
 
 @register.filter(name='mobile_string_present')
@@ -43,6 +35,15 @@ def mobile_string_present(query_string):
     # this query string is added with each page load inside the mobile version
     # if the query string is present the user stays in mobile mode
     if query_string == "mobile":
+        return True
+
+
+@register.filter(name='desktop_string_present')
+def desktop_string_present(query_string):
+    # function to determine if the ?mobile query string is on the url
+    # this query string is added with each page load inside the mobile version
+    # if the query string is present the user stays in mobile mode
+    if query_string == "desktop":
         return True
 
 
