@@ -28,7 +28,7 @@ class MobileMiddleware(object):
                     request.session['VERSION'] = 'desktop'    # FIXME: we want to only do this once
                     request.session.save()
                 else:
-                    print 'No Query string', request.session.keys()
+                    pass
 
             except ObjectDoesNotExist:
                 pass
