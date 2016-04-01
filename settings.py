@@ -2,18 +2,18 @@ import os
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 import logging
 import re
+from cog.site_manager import siteManager
+from cog.constants import SECTION_ESGF
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
-''' 
+"""
 SITE SPECIFIC CONFIGURATION
 These parameters are read from file 'cog_settings.cfg' 
 located in directory COG_CONFIG_DIR (or by default '/usr/local/cog/cog_config').
 Each parameter has a default value.
-'''
+"""
 
-from cog.site_manager import siteManager
-from cog.constants import SECTION_ESGF
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
@@ -64,7 +64,7 @@ if ESGF_CONFIG:
     ESGF_VERSION = siteManager.get('ESGF_VERSION', section=SECTION_ESGF)
 # FIXME
 
-#====================== standard django settings.py ======================
+# ====================== standard django settings.py ======================
 
 
 # IMPORTANT: this setting must be set to True if using COG behind a proxy server,
@@ -112,9 +112,9 @@ if DJANGO_DATABASE == 'sqllite3':
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-#TIME_ZONE = 'America/Denver'
+# TIME_ZONE = 'America/Denver'
 # use the system time zone, wherever the application is installed
-#TIME_ZONE = None
+# TIME_ZONE = None
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -133,12 +133,12 @@ USE_L10N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-#MEDIA_ROOT = rel('site_media/')
+# MEDIA_ROOT = rel('site_media/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-#MEDIA_URL = 'http://localhost:8000/site_media/'
+# MEDIA_URL = 'http://localhost:8000/site_media/'
 MEDIA_URL = '/site_media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a trailing slash.
@@ -161,13 +161,13 @@ PROJECT_CONFIG_DIR = os.path.join(MEDIA_ROOT, 'config')
 print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDIA)
 
 # Make this unique, and don't share it with anybody.
-#SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
+# SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-    #'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -181,19 +181,19 @@ MIDDLEWARE_CLASSES = (
     'cog.middleware.login_middleware.LoginMiddleware',
     'cog.middleware.session_middleware.SessionMiddleware',
     'cog.middleware.mobile_middleware.MobileMiddleware',
-    #'cog.middleware.password_middleware.PasswordMiddleware'
-    #'django.contrib.sites.middleware.CurrentSiteMiddleware' # django 1.7
-    #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    #  'cog.middleware.password_middleware.PasswordMiddleware'
+    # 'django.contrib.sites.middleware.CurrentSiteMiddleware' # django 1.7
+    # 'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-#ROOT_URLCONF = 'COG.urls'
+# ROOT_URLCONF = 'COG.urls'
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    #os.path.join(os.path.basename(__file__), 'templates'),
+    # os.path.join(os.path.basename(__file__), 'templates'),
     # IMPORTANT: no leading or trailing '/' for 'mytemplates'
     # default: '/usr/local/cog/cog_config/mytemplates'
     MYTEMPLATES,
@@ -219,7 +219,7 @@ INSTALLED_APPS = (
     'cog.templatetags',
 )
 
-MIGRATION_MODULES = { 'django_openid_auth': 'cog.db_migrations.django_openid_auth' }
+MIGRATION_MODULES = {'django_openid_auth': 'cog.db_migrations.django_openid_auth'}
 
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
@@ -227,16 +227,16 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # Use stricter policy for X_FRAME_OPTIONS: default is X_FRAME_OPTIONS='SAMEORIGIN'
-#X_FRAME_OPTIONS = 'DENY'
+# X_FRAME_OPTIONS = 'DENY'
 
 # login page URL (default: '/accounts/login')
 LOGIN_URL = '/login/'
 
 # OpenID login page
-#LOGIN_URL = '/openid/login/'
+# LOGIN_URL = '/openid/login/'
 
 # page to redirect after successful authentication, if 'next' parameter is not provided
-#LOGIN_REDIRECT_URL='/cog/' # COG projects index
+# LOGIN_REDIRECT_URL='/cog/' # COG projects index
 LOGIN_REDIRECT_URL = '/'  # welcome page
 
 # Custom user profile
@@ -252,16 +252,16 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 if PRODUCTION_SERVER:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # CSS styles
-#COLOR_DARK_TEAL = "#358C92"
-#COLOR_LIGHT_TEAL = "#B9E0E3"
+# COLOR_DARK_TEAL = "#358C92"
+# COLOR_LIGHT_TEAL = "#B9E0E3"
 
-#COLOR_DARK_YELLOW = "#FAC2A4";
-#COLOR_LIGHT_YELLOW = "#FCE79F";
+# COLOR_DARK_YELLOW = "#FAC2A4";
+# COLOR_LIGHT_YELLOW = "#FCE79F";
 
-#COLOR_DARK_GRAY = "#666666";
+# COLOR_DARK_GRAY = "#666666";
 
 # FIXME: necessary for openid-auth since django 1.6.5 otherwise session is not serialized correctly
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
@@ -269,12 +269,12 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 # default size limit of files uploaded by users
 MAX_UPLOAD_SIZE = 52428800
 
-#=== django-comments-contrib settings ======================================
+# === django-comments-contrib settings ======================================
 
 # The maximum length of the comment field, in characters. Comments longer than this will be rejected. Defaults to 3000.
 COMMENT_MAX_LENGTH = 10000
 
-#=== django filebrowser settings =========================
+# === django filebrowser settings =========================
 
 # Filebrowser directory relative to MEDIA_ROOT (IMPORTANT: must have trailing slash)
 FILEBROWSER_DIRECTORY = "projects/"
@@ -283,10 +283,10 @@ FILEBROWSER_DIRECTORY = "projects/"
 FILEBROWSER_VERSIONS = {
     'admin_thumbnail': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
     'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
-    #'small': {'verbose_name': 'Small (2 col)', 'width': 140, 'height': '', 'opts': ''},
-    #'medium': {'verbose_name': 'Medium (4col )', 'width': 300, 'height': '', 'opts': ''},
-    #'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': ''},
-    #'large': {'verbose_name': 'Large (8 col)', 'width': 680, 'height': '', 'opts': ''},
+    # 'small': {'verbose_name': 'Small (2 col)', 'width': 140, 'height': '', 'opts': ''},
+    # 'medium': {'verbose_name': 'Medium (4col )', 'width': 300, 'height': '', 'opts': ''},
+    # 'big': {'verbose_name': 'Big (6 col)', 'width': 460, 'height': '', 'opts': ''},
+    # 'large': {'verbose_name': 'Large (8 col)', 'width': 680, 'height': '', 'opts': ''},
 }
 
 # versions selectable through admin interface
@@ -295,7 +295,7 @@ FILEBROWSER_ADMIN_VERSIONS = ['thumbnail']
 # absolute path to directory containing project specific media
 PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
 
-#=== django_openid_auth settings =========================
+# === django_openid_auth settings =========================
 
 # create user account after first openid authentication
 OPENID_CREATE_USERS = True
@@ -306,12 +306,12 @@ OPENID_UPDATE_DETAILS_FROM_SREG = True
 # list of allowed hosts to redirect to after successful openid login
 # this is because django-openid-auth does not allow redirection to full URLs by default,
 # unless the host is specifically enabled
-ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = [re.sub(':\d+','', SITE_DOMAIN) ]
+ALLOWED_EXTERNAL_OPENID_REDIRECT_DOMAINS = [re.sub(':\d+', '', SITE_DOMAIN)]
 
-#===== django-simpla-captcha =========
+# ===== django-simpla-captcha =========
 
-#CAPTCHA_LETTER_ROTATION = None
-CAPTCHA_BACKGROUND_COLOR = '#FAC24A' # matches CoG dark yellow
-#CAPTCHA_FOREGROUND_COLOR = "#666666" # matches CoG dark gray
+# CAPTCHA_LETTER_ROTATION = None
+CAPTCHA_BACKGROUND_COLOR = '#FAC24A'  # matches CoG dark yellow
+# CAPTCHA_FOREGROUND_COLOR = "#666666" # matches CoG dark gray
 CAPTCHA_IMAGE_SIZE = (100, 40)
-#CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
