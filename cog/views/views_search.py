@@ -1,32 +1,30 @@
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
-
-from cog.forms.forms_search import *
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from copy import copy, deepcopy
 import json
 import urllib, urllib2
-
-
-from cog.views.constants import PERMISSION_DENIED_MESSAGE
-from cog.services.search import SolrSearchService
-from cog.models.search import SearchOutput, Record, Facet, FacetProfile,SearchInput
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.urlresolvers import reverse
-from copy import copy, deepcopy
 from urllib2 import HTTPError
 
-from cog.models.search import *
-from cog.services.SolrSerializer import deserialize
-
-from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
-from cog.models.utils import get_or_create_default_search_group
-from django.http.response import HttpResponseServerError
-from cog.models.auth import userHasUserPermission
-from cog.models.auth import userHasAdminPermission
-from cog.views.utils import getQueryDict
-from django.views.decorators.http import require_http_methods
 from cog.config.search import SearchConfigParser
+from cog.forms.forms_search import *
+from cog.models.auth import userHasAdminPermission
+from cog.models.auth import userHasUserPermission
+from cog.models.search import *
+from cog.models.search import SearchOutput, Record, Facet, FacetProfile, SearchInput
+from cog.models.utils import get_or_create_default_search_group
+from cog.services.SolrSerializer import deserialize
+from cog.services.search import SolrSearchService
+from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
+from cog.views.constants import PERMISSION_DENIED_MESSAGE, TEMPLATE_NOT_FOUND_MESSAGE
+from cog.views.utils import getQueryDict
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
+from django.http.response import HttpResponseServerError
+from django.shortcuts import get_object_or_404, render_to_response
+from django.template import RequestContext
+from django.template.exceptions import TemplateDoesNotExist
+from django.views.decorators.http import require_http_methods
+
 
 SEARCH_INPUT  = "search_input"
 SEARCH_OUTPUT = "search_output"
@@ -55,6 +53,12 @@ def search(request, project_short_name):
     # store this URL at session scope so other pages can reload the last search
     request.session[LAST_SEARCH_URL] = request.get_full_path()  # relative search page URL + optional query string
     
+    fromRedirectFlag = False
+    if request.session.get(SEARCH_REDIRECT, None):
+        fromRedirectFlag = True
+        # remove POST redirect flag from session
+        del request.session[SEARCH_REDIRECT]
+
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
         
@@ -73,7 +77,8 @@ def search(request, project_short_name):
         # also include possible custom template
         return search_config(request, config, extra={'project': project, 
                                                      'title2': '%s Data Search'% project.short_name,
-                                                     'template':getQueryDict(request).get(TEMPLATE,None) })
+                                                     'template':getQueryDict(request).get(TEMPLATE,None) },
+                             fromRedirectFlag=fromRedirectFlag)
     # search is not configured for this project
     else:
         messages = ['Searching is not enabled for this project.',
@@ -135,7 +140,7 @@ def _buildSearchInputFromHttpRequest(request, searchConfig):
     return searchInput
 
 
-def search_config(request, searchConfig, extra={}):
+def search_config(request, searchConfig, extra={}, fromRedirectFlag=False):
     """
     Project-specific search view that processes all GET/POST requests.
     Parses GET/POST requests parameters and combines them with the project fixed constraints.
@@ -153,24 +158,23 @@ def search_config(request, searchConfig, extra={}):
             
     # GET/POST switch
     queryDict = getQueryDict(request)
-    print "Search() view: HTTP Request method=%s search_redirect flag=%s HTTP parameters=%s" % (request.method, 
-                                                                                                request.session.get(SEARCH_REDIRECT, None), 
-                                                                                                queryDict)
+    print "Search() view: HTTP Request method=%s fromRedirectFlag flag=%s HTTP parameters=%s" % (request.method, fromRedirectFlag, queryDict)
+    
     if request.method == 'GET':
-        if len(queryDict.keys()) > 0 and request.session.get(SEARCH_REDIRECT, None) is None: 
-            # GET pre-seeded search URL -> redirect to POST immediately
+        # GET pre-seeded search URL -> invoke POST immediately
+        if len(queryDict.keys()) > 0 and not fromRedirectFlag: 
             return search_post(request, searchInput, searchConfig, extra)
         else:
-            return search_get(request, searchInput, searchConfig, extra)
+            return search_get(request, searchInput, searchConfig, extra, fromRedirectFlag)
     else:
         return search_post(request, searchInput, searchConfig, extra)
         
 
-def search_get(request, searchInput, searchConfig, extra={}):
+def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=False):
     """
     View that processes search GET requests.
     If invoked directly, it executes a query for facets but no results.
-    After a POST redirect, it retrieves results from the session and removes the SEARCH_REDIRECT flag.
+    After a POST redirect, it retrieves results from the session.
     """
     
     facetProfile = searchConfig.facetProfile
@@ -180,14 +184,11 @@ def search_get(request, searchInput, searchConfig, extra={}):
     data = extra
     
     # GET request after POST redirection
-    if request.session.get(SEARCH_REDIRECT, None):
+    if fromRedirectFlag:
         
         print "Retrieving search data from session"
         data = request.session.get(SEARCH_DATA)
-        
-        # remove POST redirect flag
-        del request.session[SEARCH_REDIRECT]
-    
+            
     # direct GET request: must query for all facet values with project-specific constraints
     else:
         
@@ -229,7 +230,7 @@ def search_get(request, searchInput, searchConfig, extra={}):
     # build pagination links
     offset = data[SEARCH_INPUT].offset
     limit = data[SEARCH_INPUT].limit
-    if limit > 0:
+    if limit > 0 and data.get(SEARCH_OUTPUT, None):
         currentPage = offset/limit + 1
         numResults = len(data[SEARCH_OUTPUT].results)
         totResults = data[SEARCH_OUTPUT].counts
@@ -257,7 +258,22 @@ def search_get(request, searchInput, searchConfig, extra={}):
     template = 'cog/search/search.html' # default template
     if data.get(TEMPLATE, None):
         template = 'cog/search/%s.html' % data[TEMPLATE] # custom template
-    return render_to_response(template, data, context_instance=RequestContext(request))    
+        del data[TEMPLATE] # remove temp,ate from session
+
+    try:
+        return render_to_response(template, data, context_instance=RequestContext(request))   
+     
+    except TemplateDoesNotExist:
+        
+        # invalidate this search session
+        if request.session.get(SEARCH_DATA, None):
+            del request.session[SEARCH_DATA]
+        if request.session.get(SEARCH_REDIRECT, None):
+            del request.session[SEARCH_REDIRECT]
+            
+        # redirect to project search page with error message
+        return HttpResponseBadRequest(TEMPLATE_NOT_FOUND_MESSAGE)
+
 
 
 def search_post(request, searchInput, searchConfig, extra={}):
