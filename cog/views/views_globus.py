@@ -15,6 +15,7 @@ from functools import wraps
 from cog.plugins.esgf.registry import LocalEndpointDict
 import os
 from cog.views.utils import getQueryDict
+import re
 
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
@@ -36,7 +37,7 @@ if siteManager.isGlobusEnabled():
 
 	from base64 import urlsafe_b64encode
 	from oauth2client import client as oauth_client
-	from cog.plugins.globus.transfer import submiTransfer, generateGlobusDownloadScript
+	from cog.plugins.globus.transfer import submitTransfer, generateGlobusDownloadScript
 
 	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
 	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
@@ -121,31 +122,48 @@ def download(request):
 		# parse response for GridFTP URls
 		if jobj is not None:
 			for doc in jobj['response']['docs']:
+				access = {}
 				for url in doc['url']:
-					# example URL: "gsiftp://esg-datanode.jpl.nasa.gov:2811//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc|application/gridftp|GridFTP"
+					# example URLs:
+					# 'http://esg-datanode.jpl.nasa.gov/thredds/fileServer/esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc|application/netcdf|HTTPServer'
+					# 'http://esg-datanode.jpl.nasa.gov/thredds/dodsC/esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc.html|application/opendap-html|OPENDAP'
+					# 'globus:8a3f3166-e9dc-11e5-97d6-22000b9da45e//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc|Globus|Globus'
+					# 'gsiftp://esg-datanode.jpl.nasa.gov:2811//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc|application/gridftp|GridFTP'
 					parts = url.split('|')
-					if parts[2].lower()=='gridftp':
-						# example or urlparse output:
-						# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
-						o = urlparse(parts[0])
-						hostname = str(o.netloc)
-						epDict = GLOBUS_ENDPOINTS.endpointDict()
-						# {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
-						#  'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
-						if (hostname in epDict):
-							gendpoint_name = epDict[hostname].name
-							gendpoint_path_out = epDict[hostname].path_out
-							gendpoint_path_in = epDict[hostname].path_in
-							if not gendpoint_name in download_map:
-								download_map[gendpoint_name] = [] # insert empty list of URLs
-							gfilepath = str(o.path).replace('//','/')
-							if gendpoint_path_out is not None:
-								gfilepath = gfilepath.replace(gendpoint_path_out, '')
-							if gendpoint_path_in is not None:
-								gfilepath = gendpoint_path_in + gfilepath
-							download_map[gendpoint_name].append(gfilepath)
-						else:
-							print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
+					access[parts[2].lower()] = parts[0]
+				if 'globus' in access:
+					m = re.match('globus:([^/]*)(.*)', access['globus'])
+					if m:
+						gendpoint_name = m.group(1)
+						path = m.group(2)
+						if not gendpoint_name in download_map:
+							download_map[gendpoint_name] = [] # insert empty list of paths
+						download_map[gendpoint_name].append(path)
+						break
+				elif 'gridftp' in access:
+					# example or urlparse output:
+					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
+					o = urlparse(access['gridftp'])
+					hostname = str(o.netloc)
+					epDict = GLOBUS_ENDPOINTS.endpointDict()
+					# {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
+					#  'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
+					if (hostname in epDict):
+						gendpoint_name = epDict[hostname].name
+						gendpoint_path_out = epDict[hostname].path_out
+						gendpoint_path_in = epDict[hostname].path_in
+						if not gendpoint_name in download_map:
+							download_map[gendpoint_name] = [] # insert empty list of paths
+						gfilepath = str(o.path).replace('//','/')
+						if gendpoint_path_out is not None:
+							gfilepath = gfilepath.replace(gendpoint_path_out, '')
+						if gendpoint_path_in is not None:
+							gfilepath = gendpoint_path_in + gfilepath
+						download_map[gendpoint_name].append(gfilepath)
+					else:
+						print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
+				else:
+					print 'The file is not accessible through Globus/GridFTP'
 		else:
 			return HttpResponseServerError("Error querying for files URL")
 						
@@ -245,7 +263,7 @@ def submit(request):
 	for source_endpoint, source_files in download_map.items():
 			
 		# submit transfer request
-		task_id = submiTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
+		task_id = submitTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
 		
 		task_ids.append(task_id)
 	
