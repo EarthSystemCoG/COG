@@ -147,6 +147,15 @@ div.custom_header_bar {
 
 }
 
+@media only screen and (max-device-width: 480px) {
+    div.custom_header_bar {
+        width:            1140px;
+        margin-top:       0;
+        margin-bottom:    2px;
+        background-color: peachpuff;
+    }
+}
+
 /* create a white header that is just slightly larger than the main cog site */
 div.custom_header{
     width:        1140px;
