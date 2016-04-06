@@ -147,12 +147,14 @@ div.custom_header_bar {
 
 }
 
+/* since the normal header bar is 100% this gets rendered as only the size of the mobile device, which makes looking
+at the headers on mobile shorter than the rest of th site. Force the size to be the same.  */
 @media only screen and (max-device-width: 480px) {
     div.custom_header_bar {
         width:            1140px;
         margin-top:       0;
         margin-bottom:    2px;
-        background-color: peachpuff;
+        background-color: #E9F5F6; /*light blue*/
     }
 }
 
@@ -233,6 +235,15 @@ div.custom_footer_bar{
     position:           relative;
 }
 
+
+@media only screen and (max-device-width: 480px) {
+  div.custom_footer_bar{
+    width:              1140px;
+    background-color:   #666; /*gray */
+    position:           relative;
+}
+}
+
 /* create a custom footer that is slightly larger than the main cog site */
 div.custom_footer {
     width:        1140px;
@@ -268,6 +279,15 @@ div.footer_bar{
     width:              100%;
     background-color:   #e9f5f6;  /*light blue*/
     clear:              both;     /*this puts the footer on top of any content that might be below it*/
+}
+
+@media only screen and (max-device-width: 480px) {
+  div.footer_bar{
+    width:              1140px;
+    background-color:   #e9f5f6;  /*light blue*/
+    clear:              both;     /*this puts the footer on top of any content that might be below it*/
+}
+
 }
 
 /* gives the footer a margin below the content of the page */
