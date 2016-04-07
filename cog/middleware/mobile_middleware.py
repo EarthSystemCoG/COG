@@ -16,9 +16,6 @@ class MobileMiddleware(object):
         mobile = user_agent.is_mobile
         #mobile = True
 
-        print user_agent.is_mobile
-        print ua_string
-
         if mobile:
             try:
                 # when a user says "No Thanks" on the mobile question, a ?desktop query string is added to the url,
