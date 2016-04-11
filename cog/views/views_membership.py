@@ -205,7 +205,7 @@ def membership_remove(request, project_short_name):
 
 #view to bulk-process group membership operations from the pending_users or current_users template
 #this view can be invoked as either GET or POST,  following a GET request to a membership listing
-# @login_required
+@login_required
 def membership_process(request, project_short_name):
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -226,7 +226,7 @@ def membership_process(request, project_short_name):
             # HTTP POST parameter from form check-box, all checks are treated as new
             # process checkbox as a new user
             if name.startswith(NEW_MEMBERSHIP):
-                status = addMembership(user, group)
+                status = addMembership(user, group, admin=request.user)
 
                 #only email if user not already a member
                 if status == RESULT_SUCCESS:
@@ -242,7 +242,7 @@ def membership_process(request, project_short_name):
                     new_membership = queryDict[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
                 except KeyError:
                     # checkbox is empty, so remove from group
-                    status = cancelMembership(user, group)
+                    status = cancelMembership(user, group, admin=request.user)
                     if status == RESULT_SUCCESS:
                         notifyUserOfGroupRemoval(project, group, user)
              

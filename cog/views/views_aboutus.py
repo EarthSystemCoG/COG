@@ -15,7 +15,6 @@ from cog.models.constants import UPLOAD_DIR_LOGOS, UPLOAD_DIR_PHOTOS
 from cog.forms import *
 from cog.utils import *
 from cog.notification import notify
-from cog.services.membership import addMembership
 from cog.models.utils import *
 from cog.views.views_templated import templated_page_display
 from cog.util.thumbnails import *

@@ -11,6 +11,7 @@ from doc import Doc
 from news import News
 
 class LoggedEvent(models.Model):
+    '''Class that represents an important event that is logged to the database.'''
 
     user = models.ForeignKey(User, blank=False)
     project = models.ForeignKey('Project', blank=False)
@@ -23,7 +24,7 @@ class LoggedEvent(models.Model):
     class Meta:
         app_label= APPLICATION_LABEL
 
-# Handler for instance creation/update events
+# receiver function for instance creation/update events
 def log_instance_event(sender, **kwargs):
     instance = kwargs['instance']
     user = instance.author

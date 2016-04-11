@@ -8,7 +8,7 @@ and reference projects, as opposed to groups.
 """
 from django.contrib.auth.models import User, Group, Permission
 from cog.models import (MembershipRequest, ManagementBodyMember, OrganizationalRoleMember, 
-                        getProjectForGroup, CommunicationMeansMember)
+                        getProjectForGroup, CommunicationMeansMember, LoggedEvent)
 from django.core.urlresolvers import reverse
 
 # return codes
@@ -44,7 +44,7 @@ def cancelMembershipRequests(user, project):
         cancelMembershipRequest(user, group)
         
 # Method to enroll a user in a group (with no role specification)
-def addMembership(user, group):
+def addMembership(user, group, admin=None):
     
     project = getProjectForGroup(group)
     
@@ -52,6 +52,12 @@ def addMembership(user, group):
         user.groups.add(group)
         print "Enrolled user=%s in group=%s" % (user.username, group.name)
         cancelMembershipRequests(user, project)
+        # log event
+        if admin is not None:
+            event = LoggedEvent.objects.create(user=admin, project=project, 
+                                               title="Membership added", 
+                                               description="Administrator: %s added user: %s to group: %s" % (admin, user, group.name))
+            event.save()
         return RESULT_SUCCESS
     
     else:
@@ -61,7 +67,7 @@ def addMembership(user, group):
 
 # Method to disenroll a user from a group
 # Will also remove the user from any governance role for that project
-def cancelMembership(user, group):
+def cancelMembership(user, group, admin=None):
      
     # cancel all requests for that project
     project = getProjectForGroup(group)
@@ -91,7 +97,15 @@ def cancelMembership(user, group):
             for obj in objs:
                 print 'Deleting CommunicationMeansMember for project=%s user=%s communicationMeans=%s' % (project, user, obj.communicationMeans.title)
                 obj.delete()
-                
+            
+        # log event
+        if admin is not None:
+            event = LoggedEvent.objects.create(user=admin, project=project, 
+                                               title="Membership canceled", 
+                                               description="Administrator: %s removed user: %s from group: %s" % (admin, user, group.name))
+            event.save()
+
+            
         return RESULT_SUCCESS
     
     else:

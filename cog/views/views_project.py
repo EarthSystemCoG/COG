@@ -435,7 +435,7 @@ def initProject(project):
     
     # assign creator as project administrator
     if project.author is not None:
-        addMembership(project.author, aGroup)
+        addMembership(project.author, aGroup) # admin=None (membership added by the system)
     
     # configure the project search with the default behavior
     create_project_search_profile(project)

@@ -11,7 +11,13 @@
                     </td>
                 </tr>
 		        <tr>
-		            <td class="long"> <a href="{{ signal.url }}">{{ signal.description }}</a></td>
+		            <td class="long"> 
+		            	{% if signal.url %}
+		            		<a href="{{ signal.url }}">{{ signal.description }}</a>
+		            	{% else %}
+		            		{{ signal.description }}
+		            	{% endif %}
+		            </td>
 		        </tr>	        
 		        <tr>
 		            <td><em class="message">{{signal.update_date|date:"Y/m/d h:m:s"}} by {{ signal.user }}</em></td>
