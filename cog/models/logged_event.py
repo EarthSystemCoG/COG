@@ -61,21 +61,6 @@ def log_comment_event(sender, **kwargs):
         event.save()
 
 
-def log_membership_event(sender, **kwargs):
-
-    print 'arguments are ', kwargs
-
-    # sender is a MembershipRequest object
-    user = sender
-    project = kwargs['project']
-    group = kwargs['group']
-    #title = 'User %s added to group %s' % user, group
-    #if user is not None:
-        #event = LoggedEvent.objects.create(user=user, project=project, title=title, description='Member Added',
-                                          #sender='%s' % sender)
-        #event.save()
-
-
 def get_display_name(instance, classname):
     if classname == 'Doc':
         return 'Document'
@@ -92,8 +77,6 @@ def get_display_name(instance, classname):
 post_save.connect(log_instance_event, sender=Doc, dispatch_uid="log_doc_event")
 post_save.connect(log_instance_event, sender=News, dispatch_uid="log_news_event")
 comment_was_posted.connect(log_comment_event, dispatch_uid="log_comment_event")
-request_finished.connect(log_membership_event, dispatch_uid="log_membership_event")
-
 
 
 # callback receiver function for Post update events
