@@ -20,6 +20,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 import urlparse
 import string
+import bleach
 from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
 
 register = template.Library()
@@ -854,3 +855,7 @@ def getHttpParamValue(request, name):
     
     return getQueryDict(request).get(name, '')
     
+@register.filter
+def bleachtags(htmlstring):
+    
+    return str( bleach.clean(htmlstring) ) # unicode --> string)

@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name = "cog",
-    version = "3.4.0",
+    version = "3.5.0",
     author = "CoG Development Team",
     author_email = "cog_support@list.woc.noaa.gov",
     description = ("Earth System CoG: web interface for the Earth System Grid Federation"),
@@ -28,7 +28,8 @@ setup(
                       'django-contrib-comments==1.6.2',   
                       'globusonline-transfer-api-client==0.10.16',   
                       #'pillow==3.1.0', # pre-requisite: must be installed with --use-wheel on MAC-OSX
-                      'django-simple-captcha==0.5.1'
+                      'django-simple-captcha==0.5.1',
+                      'bleach==1.4.2',
                       ],
     long_description=read('README.md'),
     classifiers=[
