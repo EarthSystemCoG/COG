@@ -10,6 +10,7 @@ from django.contrib.auth.models import User, Group, Permission
 from cog.models import (MembershipRequest, ManagementBodyMember, OrganizationalRoleMember, 
                         getProjectForGroup, CommunicationMeansMember, LoggedEvent)
 from django.core.urlresolvers import reverse
+import django.dispatch
 
 # return codes
 RESULT_SUCCESS = 'SUCCESS'
