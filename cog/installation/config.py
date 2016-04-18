@@ -182,6 +182,8 @@ class CogConfig(object):
         esgfVersion = self._safeGet("version", default=None)
         if esgfVersion:
             self._safeSet('ESGF_VERSION', esgfVersion, override=True)
+        # option to disable CAPTCHA for creating account in automatic testing
+        self._safeSet('USE_CAPTCHA', True)
 
         
         #[ESGF]

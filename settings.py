@@ -1,6 +1,7 @@
 import os
 import logging
 import re
+from cog.utils import str2bool
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -44,12 +45,10 @@ print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
 KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
 print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
 PEER_NODES = siteManager.get('PEER_NODES', default=None)
+USE_CAPTCHA = str2bool(siteManager.get('USE_CAPTCHA', default='True'))
 print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
 # DEVELOPMENT/PRODUCTION server switch
-if siteManager.get('PRODUCTION_SERVER', default='False').lower() == 'true':
-    PRODUCTION_SERVER = True
-else:
-    PRODUCTION_SERVER = False
+PRODUCTION_SERVER = str2bool(siteManager.get('PRODUCTION_SERVER', default='False'))
 print 'Production server flag=%s' % PRODUCTION_SERVER
 
 
