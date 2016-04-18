@@ -318,8 +318,8 @@
 
                     <!--captcha and buttons-->
 
-                    <!-- captcha - only when user first register -->
-                    {% if not form.instance.id %}
+                    <!-- captcha - only when user first register and when USE_CAPTCHA = True -->
+                    {% if not form.instance.id and 'USE_CAPTCHA'|settings_value == True %}
                         <hr style="background-color:#666; margin-top:0;"/>
                         <div style="text-align:right;">
                             <div id="captcha_element">

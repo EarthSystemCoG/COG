@@ -6,12 +6,14 @@ import os
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
+
 def get_upload_path(instance, filename):
-    '''Function to determine the upload path dynamically at runtime.'''
+    """Function to determine the upload path dynamically at runtime."""
     return os.path.join(getattr(settings, "FILEBROWSER_DIRECTORY"), str(instance.project.short_name.lower()), filename)
 
+
 class OverridingFileStorage(FileSystemStorage):
-    '''Subclass of FileSystemStorage that overrides existing files (in the same folder).'''
+    """Subclass of FileSystemStorage that overrides existing files (in the same folder)."""
 
     # This method is actually defined in Storage
     def save(self, name, content):
@@ -29,10 +31,12 @@ class OverridingFileStorage(FileSystemStorage):
   
 ofs = OverridingFileStorage()
 
+
 # A generic document that can be uploaded to the server and attached to a Post
 class Doc(models.Model):
     
-    author = models.ForeignKey(User, related_name='documents', verbose_name='Publisher', blank=False, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, related_name='documents', verbose_name='Publisher', blank=False, null=True,
+                               on_delete=models.SET_NULL)
     title = models.CharField(max_length=200, blank=True)
     # path == 'file.name' but stored in the database for searching
     path = models.CharField(max_length=400, blank=True)
@@ -52,4 +56,4 @@ class Doc(models.Model):
             return os.path.basename(self.file.name)
     
     class Meta:
-        app_label= APPLICATION_LABEL
+        app_label = APPLICATION_LABEL

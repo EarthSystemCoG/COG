@@ -61,10 +61,16 @@
 			   </tr>
 			{% endfor %}
 		</table>
+
 	</div>
+
 	
 	{% with object_list as results_page %}
 		{% include 'cog/common/_pagination.html' %}
 	{% endwith %}
-		
+
+
+    <div style="float:right;">
+        <input type="button" value="Return Home" onclick="self.location='{% url 'site_home' %}'"/>
+    </div>
 {% endblock %}

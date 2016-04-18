@@ -46,6 +46,7 @@ def notify(toUser, subject, message, mime_type='plain'):  # send 'plain' email b
     emailThread = EmailThread(toUser.email, subject, message, mime_type=mime_type)
     emailThread.start()
 
+
 def sendEmail(toAddress, subject, message, fromAddress=None, mime_type='plain'):
     '''Sends email to a specific address.'''
     

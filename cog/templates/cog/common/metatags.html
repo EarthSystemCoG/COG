@@ -18,10 +18,10 @@
         <title>{{ project.short_name }} - Home | ESGF-CoG </title>
     {% else %}
         {% if title %}
-            <title>{{ title|removetags:"h2"|safe|truncatechars:38 }} | {{ project.short_name }} | ESGF-CoG</title>
+            <title>{{ title|bleachtags|safe|truncatechars:38 }} | {{ project.short_name }} | ESGF-CoG</title>
         {% else%}
             {% if title2 %}
-                <title>{{ title2|removetags:"h2"|safe|truncatechars:38 }} | {{ project.short_name }} | ESGF-CoG</title>
+                <title>{{ title2|bleachtags|safe|truncatechars:38 }} | {{ project.short_name }} | ESGF-CoG</title>
             {% else %}
                 <title>{{ project.short_name }} | ESGF-CoG </title>
             {% endif %}
@@ -30,10 +30,10 @@
 {% else %}
 
     {% if title %}
-        <title>{{ title|removetags:"h2"|safe|truncatechars:60 }} | ESGF-CoG</title>
+        <title>{{ title|bleachtags|safe|truncatechars:60 }} | ESGF-CoG</title>
     {% else%}
         {% if title2 %}
-            <title>{{ title2|removetags:"h2"|safe|truncatechars:60 }} | ESGF-CoG</title>
+            <title>{{ title2|bleachtags|safe|truncatechars:60 }} | ESGF-CoG</title>
         {% endif %}
     {% endif %}
     <title>ESGF-CoG</title>

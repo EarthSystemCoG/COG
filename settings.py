@@ -1,7 +1,7 @@
 import os
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 import logging
 import re
+from cog.utils import str2bool
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -38,7 +38,6 @@ if siteManager.get('DEBUG', default='False').lower() == 'true':
     DEBUG = True
 else:
     DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS', default=SITE_DOMAIN).split(",")
 print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
 IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
@@ -46,12 +45,10 @@ print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
 KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
 print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
 PEER_NODES = siteManager.get('PEER_NODES', default=None)
+USE_CAPTCHA = str2bool(siteManager.get('USE_CAPTCHA', default='True'))
 print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
 # DEVELOPMENT/PRODUCTION server switch
-if siteManager.get('PRODUCTION_SERVER', default='False').lower() == 'true':
-    PRODUCTION_SERVER = True
-else:
-    PRODUCTION_SERVER = False
+PRODUCTION_SERVER = str2bool(siteManager.get('PRODUCTION_SERVER', default='False'))
 print 'Production server flag=%s' % PRODUCTION_SERVER
 
 
@@ -163,12 +160,32 @@ print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDI
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    #'django.template.loaders.eggs.Loader',
-)
+# new TEMPLATES settings
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+                 MYTEMPLATES,
+                 rel('templates/'),
+                 rel('static/'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+                'cog.context_processors.cog_settings',
+            ],
+            'debug': DEBUG,
+        },
+    },
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -187,18 +204,6 @@ MIDDLEWARE_CLASSES = (
 
 #ROOT_URLCONF = 'COG.urls'
 ROOT_URLCONF = 'urls'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    #os.path.join(os.path.basename(__file__), 'templates'),
-    # IMPORTANT: no leading or trailing '/' for 'mytemplates'
-    # default: '/usr/local/cog/cog_config/mytemplates'
-    MYTEMPLATES,
-    rel('templates/'),
-    rel('static/'),
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -241,11 +246,6 @@ LOGIN_REDIRECT_URL = '/'  # welcome page
 # Custom user profile
 AUTH_PROFILE_MODULE = "cog.UserProfile"
 
-# makes 'request' object available in templates
-TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.core.context_processors.request',
-    'cog.context_processors.cog_settings'
-)
 
 # HTTPS support: can only send cookies via SSL connections
 if PRODUCTION_SERVER:
