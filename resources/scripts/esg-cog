@@ -108,6 +108,8 @@ python setup.py install
 # install mkproxy. Mkproxy is used by Globus Transfer API client to create an X.509 proxy credential. (Globus Transfer REST API sends a public key. Mkproxy signs the public key using a private key extracted from an ESGF X.509 user credential.)
 cd $COG_DIR
 git clone https://github.com/globusonline/transfer-api-client-python.git
+cd transfer-api-client-python
+git pull
 cd mkproxy
 make
 cp mkproxy $INSTALLPATH/venv/lib/python2.7/site-packages/globusonline_transfer_api_client-0.10.16-py2.7.egg/globusonline/transfer/api_client/x509_proxy/
