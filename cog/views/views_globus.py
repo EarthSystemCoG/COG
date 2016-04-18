@@ -139,7 +139,6 @@ def download(request):
 						if not gendpoint_name in download_map:
 							download_map[gendpoint_name] = [] # insert empty list of paths
 						download_map[gendpoint_name].append(path)
-						break
 				elif 'gridftp' in access:
 					# example or urlparse output:
 					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
