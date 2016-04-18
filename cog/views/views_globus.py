@@ -259,16 +259,20 @@ def submit(request):
 	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
 	# loop over source endpoints, submit one transfer for each source endpoint
-	task_ids = [] # list of submitted task ids
+	task_ids = []  # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
-			
-		# submit transfer request
-		task_id = submitTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
 		
+		# submit transfer request
+		_source_files = []
+		for sf in source_files:
+			_source_files.append( sf.replace('/esg_dataroot', ''))
+		print 'SOURCE_FILE=%s' % _source_files
+		openid = request.user.profile.openid()
+		task_id = submitTransfer(openid, username, access_token, source_endpoint, _source_files, target_endpoint, target_folder)
 		task_ids.append(task_id)
 	
 	# display confirmation page
-	return render_to_response('cog/globus/confirmation.html', 
+	return render_to_response('cog/globus/confirmation.html',
 						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
 						        context_instance=RequestContext(request))	
 
