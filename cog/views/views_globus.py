@@ -262,12 +262,8 @@ def submit(request):
 	for source_endpoint, source_files in download_map.items():
 		
 		# submit transfer request
-		# FIXME
-		_source_files = []
-		for sf in source_files:
-			_source_files.append( sf.replace('/esg_dataroot', ''))
 		openid = request.user.profile.openid()
-		task_id = submitTransfer(openid, username, access_token, source_endpoint, _source_files, target_endpoint, target_folder)
+		task_id = submitTransfer(openid, username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
 		task_ids.append(task_id)
 	
 	# display confirmation page
