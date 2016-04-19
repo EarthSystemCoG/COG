@@ -26,7 +26,7 @@ INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
 # NOTE: must be same as JavaScript pattern in _password_check.html
 PASSWORD_PATTERN = r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$'
 PASSWORD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one upper case letter, one number, and one special symbol. '\
-                      + 'All characters are allowed.'
+                      + 'All characters are allowed EXCEPT for double quote (").'
 CONFIRM_PASSWORD_INSTRUCTIONS = 'Must match the password above.'
 
 class UserUrlForm(ModelForm):
@@ -235,6 +235,9 @@ def validate_password(form):
                 form._errors["password"] = form.error_class(["'Password' must contain at least 8 characters."])
             elif re.match(PASSWORD_PATTERN, password) is None:
                 form._errors["password"] = form.error_class(["'Password' does not match the required criteria."])
+                
+        if '"' in password:
+            form._errors["password"] = form.error_class(["'Password'cannot contain the \" character."])
 
         if confirm_password is None:
             form._errors["confirm_password"] = form.error_class(["'Confirm Password' is a required field."])
