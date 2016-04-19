@@ -81,7 +81,7 @@
             {% endfor %}
         </table>
    </div>
-   <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='/'"/></div>
+   <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='{% url 'site_home' %}'"/></div>
    <div id="myDialog" class="yui-skin-sam"></div>
 
 {% endblock %}
