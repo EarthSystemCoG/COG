@@ -76,7 +76,6 @@
                 <li><a href="{% url 'membership_list_all' project.short_name.lower %}" class="listlink">&nbsp;List
 	                All Node Users</a></li>
                 <li><a href="{% url 'signal_list' project.short_name.lower %}" class="listlink">&nbsp;List Project Activity</a></li>
-                <li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
                 <li><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">&nbsp;Update Project</a></li>
                 <li><a href="{% url 'tags_update' project.short_name.lower %}" class="changelink">&nbsp;Tag Project</a></li>
                 {% if project.dataSearchEnabled %}
@@ -94,6 +93,7 @@
 	                <li><a href="{% url 'admin_projects' %}" class="listlink">&nbsp;List All Projects</a>
                     <li><a href="{% url 'admin_users' %}" class="listlink">&nbsp;List System Users</a></li>
                     <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>
+                    <li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
                     <li><a href="{% url 'admin:index' %}" class="listlink">&nbsp;Django Admin</a></li>
                 </ul>
         {% endif %}
