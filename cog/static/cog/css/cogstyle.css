@@ -1298,7 +1298,7 @@ END ADVANCED SEARCH PAGE
 BEGIN PEER-NODES-BOX
 ******************************/
 
-.peer-nodes-box {
+.peer_nodes_box {
 	background:    #FFFFFF;
 	border:        1px solid #666;
 	font-size:     8pt;
@@ -1306,12 +1306,10 @@ BEGIN PEER-NODES-BOX
     margin-top:    0;
 }
 
-.peer-nodes-box-body {
-	
-	padding: 4px;
-	max-height: 80px;
-	overflow-y: auto;
-	
+.peer_nodes_box_body {
+	padding:       4px;
+	max-height:    112px; /* same as news box but subtract out the 4px top/bottom padding */
+	overflow-y:    auto; /* turns on scroll bar */
 }
 
 /******************************
