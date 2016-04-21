@@ -30,11 +30,34 @@ def getConstraints(constraints, key):
     try:
         values = str(constraints[key][0])
         if ',' in values:
-            return [values] + values.split(',')
+            return splitValue(values)
         else:
             return [values]
     except KeyError:
         return []
+    
+def splitValue(value):
+    '''Method to split a list of values by comma, but keep intact a string like 'CESM1(CAM5.1,FV2)'.'''
+    
+    values = value.split(',')
+    _values = []
+    
+    for i, value in enumerate(values):
+        
+        if i < len(values)-1:
+            nextValue = values[i+1]
+            if '(' in value and not ')' in value and ')' in nextValue and not '(' in nextValue:
+                _values.append(value+","+nextValue)
+            elif '[' in value and not ']' in value and ']' in nextValue and not '[' in nextValue:
+                i += 1 # skip next value
+            elif '{' in value and not '}' in value and '}' in nextValue and not '{' in nextValue:
+                i += 1 # skip next value
+            else:
+                _values.append(value)
+        else:
+            _values.append(value)
+            
+    return _values
 
 @register.filter
 def getFacetOptionLabel(facet_key, facet_value):
