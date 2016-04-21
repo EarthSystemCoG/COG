@@ -23,7 +23,7 @@ GROUP=apache
 
 # the specific CoG branch OR version to install
 # ESGF version
-VERSION=v3.4.0
+VERSION=v3.5.1
 
 #COG_TAG=devel
 COG_TAG=$VERSION
@@ -105,7 +105,9 @@ git pull
 cd $COG_INSTALL_DIR
 python setup.py install
 
-# install mkproxy. Mkproxy is used by Globus Transfer API client to create an X.509 proxy credential. (Globus Transfer REST API sends a public key. Mkproxy signs the public key using a private key extracted from an ESGF X.509 user credential.)
+# install mkproxy. Mkproxy is used by Globus Transfer API client to create an X.509 proxy credential. 
+# (Globus Transfer REST API sends a public key. i
+# Mkproxy signs the public key using a private key extracted from an ESGF X.509 user credential.)
 cd $COG_DIR
 git clone https://github.com/globusonline/transfer-api-client-python.git
 cd transfer-api-client-python
