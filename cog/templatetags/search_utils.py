@@ -26,9 +26,13 @@ def getSelectedState(constraints, key):
 @register.filter
 def getConstraints(constraints, key):
     # example: Constraint key=realm value(s)=[u'atmos,ocean']
+    # NOTE: must also add the original value so to match model=CESM1(CAM5.1,FV2)
     try:
         values = str(constraints[key][0])
-        return values.split(',')
+        if ',' in values:
+            return [values] + values.split(',')
+        else:
+            return [values]
     except KeyError:
         return []
 
