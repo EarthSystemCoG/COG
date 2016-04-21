@@ -48,6 +48,7 @@
         <ul>
             <li><a href="{% url 'news_list' project.short_name.lower %}" class="listlink">&nbsp;List All News</a></li>
             <li><a href="{% url 'doc_list' project.short_name.lower %}" class="listlink">&nbsp;List All Files</a></li>
+            <li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
         </ul>
  
         <!-- access restricted to project Contributors -->
@@ -93,7 +94,6 @@
 	                <li><a href="{% url 'admin_projects' %}" class="listlink">&nbsp;List All Projects</a>
                     <li><a href="{% url 'admin_users' %}" class="listlink">&nbsp;List System Users</a></li>
                     <li><a href="{% url 'admin_peers' %}" class="listlink">&nbsp;Configure Peers</a></li>
-                    <li><a href="{% url 'ac_list' %}" class="listlink">&nbsp;List ESGF Data Groups</a></li>
                     <li><a href="{% url 'admin:index' %}" class="listlink">&nbsp;Django Admin</a></li>
                 </ul>
         {% endif %}
