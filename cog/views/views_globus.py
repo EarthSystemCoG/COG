@@ -14,8 +14,8 @@ from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
 from cog.plugins.esgf.registry import LocalEndpointDict
 import os
-from cog.views.utils import getQueryDict
 import re
+from cog.views.utils import getQueryDict
 
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
@@ -28,6 +28,7 @@ GLOBUS_ACCESS_TOKEN = 'globus_access_token'
 GLOBUS_USERNAME = 'globus_username'
 TARGET_ENDPOINT = 'target_endpoint'
 TARGET_FOLDER = 'target_folder'
+ESGF_PASSWORD = 'password'
 
 # external URLs
 GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/app/browse-endpoint'
@@ -37,7 +38,8 @@ if siteManager.isGlobusEnabled():
 
 	from base64 import urlsafe_b64encode
 	from oauth2client import client as oauth_client
-	from cog.plugins.globus.transfer import submitTransfer, generateGlobusDownloadScript
+	from cog.plugins.globus.transfer import activateEndpoint, submitTransfer, generateGlobusDownloadScript
+	from globusonline.transfer.api_client import TransferAPIClient
 
 	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
 	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
@@ -229,7 +231,7 @@ def token(request):
 
 	# use 'code' to obtain an 'access_token'
 	globus_auth_code = request.GET['code']
-	print 'Globus OAuth code: %s' % globus_auth_code
+	#print 'Globus OAuth code: %s' % globus_auth_code
 
 	globus_credentials = establishFlow(request).step2_exchange(globus_auth_code)
 	id_token = globus_credentials.id_token
@@ -242,14 +244,39 @@ def token(request):
 
 	return HttpResponseRedirect( reverse('globus_submit') )
 
+
+@requires_globus
+@login_required
+def password(request):
+	'''View to ask for an ESGF password. The password is needed to obtain an X.509 credential
+	   to activate the source Globusendpoint, if the endpoints cannot be autoactivated. '''
+
+	openid = request.user.profile.openid()
+
+	password = request.POST.get(ESGF_PASSWORD)
+	if password:
+	    request.session[ESGF_PASSWORD] = password
+	    return HttpResponseRedirect(reverse('globus_submit'))
+
+	return render_to_response('cog/globus/password.html',
+				{ 'openid': openid },
+				context_instance=RequestContext(request))
+
+
 @requires_globus
 @login_required
 def submit(request):
 	'''View to submit a Globus transfer request.
 	   The access token and files to download are retrieved from the session. '''
-	
+
+	openid = request.user.profile.openid()
 	# retrieve all data transfer request parameters from session
 	username = request.session[GLOBUS_USERNAME]
+	password = None
+	if ESGF_PASSWORD in request.session:
+	    password = request.session[ESGF_PASSWORD]
+	    del request.session[ESGF_PASSWORD]
+	    request.session.modified = True
 	access_token = request.session[GLOBUS_ACCESS_TOKEN]
 	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 	target_endpoint = request.session[TARGET_ENDPOINT]
@@ -258,12 +285,21 @@ def submit(request):
 	print 'Downloading files=%s' % download_map.items()
 	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
+	api_client = TransferAPIClient(username, goauth=access_token)
+
+	# loop over source endpoints and autoactivate them
+	# if the autoactivation fails, redirect to a form asking for a password
+	activateEndpoint(api_client, target_endpoint)
+	for source_endpoint, source_files in download_map.items():
+	    if not activateEndpoint(api_client, source_endpoint, openid, password):
+		return HttpResponseRedirect(reverse('globus_password'))
+
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = [] # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
 			
 		# submit transfer request
-		task_id = submitTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
+		task_id = submitTransfer(api_client, source_endpoint, source_files, target_endpoint, target_folder)
 		
 		task_ids.append(task_id)
 	
@@ -271,6 +307,7 @@ def submit(request):
 	return render_to_response('cog/globus/confirmation.html', 
 						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
 						        context_instance=RequestContext(request))	
+
 
 @requires_globus
 @login_required
