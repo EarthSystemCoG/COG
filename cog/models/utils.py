@@ -38,15 +38,17 @@ def site_index(project):
     
     index = []
     
+    post_type_query = Q(type=Post.TYPE_PAGE) | Q(type=Post.TYPE_HYPERLINK)
+    
     # first pages with no topic
-    pages = Post.objects.filter(project=project).filter(parent=None).filter(type='page').\
+    pages = Post.objects.filter(project=project).filter(parent=None).filter(post_type_query).\
         filter(topic=None).order_by('order')
     index.append(Project.IndexItem(None, 0, pages))
     
     # then pages by topic, ordered
     projectTopics = ProjectTopic.objects.filter(project=project).order_by('order')
     for projectTopic in projectTopics:
-        pages = Post.objects.filter(project=project).filter(parent=None).filter(type='page')\
+        pages = Post.objects.filter(project=project).filter(parent=None).filter(post_type_query)\
             .filter(topic=projectTopic.topic).order_by('order')
         # only display topics that have associated pages
         if pages.all():

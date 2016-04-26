@@ -43,8 +43,13 @@ class PostForm(ModelForm):
 
         #self.fields['parent'].queryset[0]=Q(is_home="true")
         self.fields['parent'].empty_label = "Top Level Page (no parent)"
-        # limit topic selection to current project and post type
-        self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project) &
+        # limit topic selection to current project and post type(s)
+        if type==Post.TYPE_PAGE or type==Post.TYPE_HYPERLINK:
+            self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project))\
+                                                         .filter( Q(post__type=Post.TYPE_PAGE) | Q(post__type=Post.TYPE_HYPERLINK))\
+                                                         .distinct().order_by('name')
+        else:
+            self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project) &
                                                              Q(post__type=type)).distinct().order_by('name')
 
     # override form clean() method to execute combined validation on multiple fields
@@ -100,6 +105,12 @@ class PostForm(ModelForm):
                     else:
                         self._check_url_is_unique(full_url+"/")
 
+        # validate full URLs
+        if type == Post.TYPE_HYPERLINK:
+            url = cleaned_data.get("url").lower()
+            if not url.startswith('http://') and not url.startswith('https://'):
+                self._errors["url"] = self.error_class(["Invalid URL: must start with http(s)://..."])
+            
         # validate "template"
         # must be not null for every page
         if type == Post.TYPE_PAGE:
