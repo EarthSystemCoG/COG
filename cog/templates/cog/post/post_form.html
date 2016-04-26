@@ -70,11 +70,16 @@
 		          {% include 'cog/post/_post_form_notes.html' %}
 		    {% endif %}
 		    
-		    
 		    <!-- TYPE_BLOG -->
 		    {% if form.instance.type == 'blog' %}
 		          {% include 'cog/post/_post_form_blog.html' %}
 		    {% endif %}
+		    
+		    <!-- TYPE_HYPERLINK -->
+		    {% if form.instance.type == 'hyperlink' %}
+		          {% include 'cog/post/_post_form_hyperlink.html' %}
+		    {% endif %}
+		    
 		    
 		    <!-- update to existing form -->
 			{% if form.instance.id %}

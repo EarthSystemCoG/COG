@@ -59,6 +59,11 @@
 											{{ lastNumber|numberOptions:selectedNumber }}			
 				    				   </select>	
 				    				   &nbsp;{{ page.title }}
+				    				   <div style="float:right">
+				    				   		&nbsp;<a href="{% url 'post_update' page.id %}" class="changelink">&nbsp;Update</a>
+                        			   		&nbsp;<a href="{% url 'post_delete' page.id %}" class="deletelink">Delete</a>
+                        			   		&nbsp;
+                        			   </div>
 				    				{% endif %}	    				   					    			   
 					    			{% if errors|dictKeyLookup:page_key %}
 					    				<span class="errornote">{{ errors|dictKeyLookup:page_key }}</span>
