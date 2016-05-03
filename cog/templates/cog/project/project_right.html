@@ -106,7 +106,7 @@
                 <div style="text-align: left; width:181px; margin:0; margin-left:4px; padding:0; margin-top:4px;">
 
                     <!-- SAVE: land on Tags -->
-                	{% if not request.user.is_anonymous %}
+                	{% if request.user.is_authenticated %}
                      <input class="right_go" style="width:60px; margin:0;margin-left:0;" type="submit" value="Save Tag" id="saveUserTag"
 	                         onclick="saveUserTag();gotoTab(3);"/>
 	                {% endif %}

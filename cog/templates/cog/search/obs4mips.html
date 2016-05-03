@@ -23,14 +23,14 @@
              <tbody>
            	     {% for record in search_output.results|sortResults:'source_id' %}
           		     <tr>
-          			     <td>{{ record.fields.source_id.0 }}</td>
+          			     <td style="width:130px;">{{ record.fields.source_id.0 }}</td>
           			     <td> {{ record.fields.title.0}} </td>
           			     <td>
           				     {% for variable in record.fields.variable_long_name %}
           					    {{ variable }} <br/>
           				     {% endfor %}
                          </td>
-          			     <td>
+          			     <td style="width:60px;">
           				     {% for url in record|recordUrls %}
           					     {% if url.2 == 'Tech Note' %}
           						     <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a>
