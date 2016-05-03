@@ -24,7 +24,7 @@
            	     {% for record in search_output.results|sortResults:'source_id' %}
           		     <tr>
           			     <td style="width:130px;">{{ record.fields.source_id.0 }}</td>
-          			     <td> {{ record.fields.title.0}} </td>
+          			     <td><a href="/search/obs4mips/?query=id:{{record.id}}">{{ record.fields.title.0}}</a></td>
           			     <td>
           				     {% for variable in record.fields.variable_long_name %}
           					    {{ variable }} <br/>
