@@ -265,19 +265,16 @@ def submit(request):
 	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
 	api_client = TransferAPIClient(username, goauth=access_token)
-	print "PRETUTAJ"
 	# loop over source endpoints and autoactivate them
 	# if the autoactivation fails, redirect to a form asking for a password
 	activateEndpoint(api_client, target_endpoint)
 	for source_endpoint, source_files in download_map.items():
-		print "TUTAJ"
 		status, message = activateEndpoint(api_client, source_endpoint, openid, password)
-		print "STATUS: %s, %s" % (status, message)
 		if not status:
 			return render_to_response('cog/globus/password.html',
 				{ 'openid': openid, 'message': message },
 				context_instance=RequestContext(request))
-	print "POSTUTAJ"
+
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = [] # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
