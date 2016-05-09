@@ -32,38 +32,47 @@ def generateGlobusDownloadScript(download_map):
 
 def activateEndpoint(api_client, endpoint, openid=None, password=None):
 
-    # Try to autoactivate the endpoint
-    code, reason, result = api_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
+    if not openid or not password:
+        # Try to autoactivate the endpoint
+        code, reason, result = api_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
+        print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
+        if result["code"] == "AutoActivationFailed":
+            return (False, "")
+        return (True, "")
 
-    if result["code"] == "AutoActivationFailed" and openid and password:
-        openid_parsed = urlparse.urlparse(openid)
-        hostname = openid_parsed.hostname
-        username = os.path.basename(openid_parsed.path)
-        reqs = result
+    openid_parsed = urlparse.urlparse(openid)
+    hostname = openid_parsed.hostname
+    username = os.path.basename(openid_parsed.path)
+    code, reason, reqs = api_client.endpoint_activation_requirements(endpoint)
 
-        # Activate the endpoint using an X.509 user credential stored by esgf-idp in /tmp/x509up_<idp_hostname>_<username>
-        #cred_file = "/tmp/x509up_%s_%s" % (hostname, username)
-        #public_key = reqs.get_requirement_value("delegate_proxy", "public_key")
-        #try:
-        #    proxy = x509_proxy.create_proxy_from_file(cred_file, public_key, lifetime_hours=72)
-        #except Exception as e:
-        #    print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
-        #    return False
-        #reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
+    # Activate the endpoint using an X.509 user credential stored by esgf-idp in /tmp/x509up_<idp_hostname>_<username>
+    #cred_file = "/tmp/x509up_%s_%s" % (hostname, username)
+    #public_key = reqs.get_requirement_value("delegate_proxy", "public_key")
+    #try:
+    #    proxy = x509_proxy.create_proxy_from_file(cred_file, public_key, lifetime_hours=72)
+    #except Exception as e:
+    #    print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
+    #    return False
+    #reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
 
-        # Activate the endpoint using MyProxy server method
-        reqs.set_requirement_value("myproxy", "hostname", hostname)
-        reqs.set_requirement_value("myproxy", "username", username)
-        reqs.set_requirement_value("myproxy", "passphrase", password)
-        reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
+    # Activate the endpoint using MyProxy server method
+    reqs.set_requirement_value("myproxy", "hostname", hostname)
+    reqs.set_requirement_value("myproxy", "username", username)
+    reqs.set_requirement_value("myproxy", "passphrase", password)
+    reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
 
+    try:
         code, reason, result = api_client.endpoint_activate(endpoint, reqs)
-        if code != 200:
-            print "Could not aactivate the endpoint: %s. Error: %s - %s" % (endpoint, result["code"], result["message"])
-            return False
+    except Exception as e:
+        print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
+        return (False, str(e))
+    if code != 200:
+        print "Could not aactivate the endpoint: %s. Error: %s - %s" % (endpoint, result["code"], result["message"])
+        return (False, result["message"])
 
     print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
-    return True
+
+    return (True, "")
 
 
 def submitTransfer(api_client, source_endpoint, source_files, target_endpoint, target_directory):

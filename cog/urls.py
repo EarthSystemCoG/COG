@@ -177,7 +177,6 @@ urlpatterns = [
     url(r'^globus/transfer/$', cog.views.views_globus.transfer, name='globus_transfer'),
     url(r'^globus/oauth/$', cog.views.views_globus.oauth, name='globus_oauth'),
     url(r'^globus/token/$', cog.views.views_globus.token, name='globus_token'),
-    url(r'^globus/password/$', cog.views.views_globus.password, name='globus_password'),
     url(r'^globus/submit/$', cog.views.views_globus.submit, name='globus_submit'),
     url(r'^globus/script/$', cog.views.views_globus.script, name='globus_script'),
 

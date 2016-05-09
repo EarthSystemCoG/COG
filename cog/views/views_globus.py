@@ -247,36 +247,15 @@ def token(request):
 
 @requires_globus
 @login_required
-def password(request):
-	'''View to ask for an ESGF password. The password is needed to obtain an X.509 credential
-	   to activate the source Globusendpoint, if the endpoints cannot be autoactivated. '''
-
-	openid = request.user.profile.openid()
-
-	password = request.POST.get(ESGF_PASSWORD)
-	if password:
-	    request.session[ESGF_PASSWORD] = password
-	    return HttpResponseRedirect(reverse('globus_submit'))
-
-	return render_to_response('cog/globus/password.html',
-				{ 'openid': openid },
-				context_instance=RequestContext(request))
-
-
-@requires_globus
-@login_required
 def submit(request):
 	'''View to submit a Globus transfer request.
 	   The access token and files to download are retrieved from the session. '''
 
 	openid = request.user.profile.openid()
+	# get a password if authoactivation failed and a user was asked for a password
+	password = request.POST.get(ESGF_PASSWORD)
 	# retrieve all data transfer request parameters from session
 	username = request.session[GLOBUS_USERNAME]
-	password = None
-	if ESGF_PASSWORD in request.session:
-	    password = request.session[ESGF_PASSWORD]
-	    del request.session[ESGF_PASSWORD]
-	    request.session.modified = True
 	access_token = request.session[GLOBUS_ACCESS_TOKEN]
 	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 	target_endpoint = request.session[TARGET_ENDPOINT]
@@ -286,14 +265,19 @@ def submit(request):
 	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
 	api_client = TransferAPIClient(username, goauth=access_token)
-
+	print "PRETUTAJ"
 	# loop over source endpoints and autoactivate them
 	# if the autoactivation fails, redirect to a form asking for a password
 	activateEndpoint(api_client, target_endpoint)
 	for source_endpoint, source_files in download_map.items():
-	    if not activateEndpoint(api_client, source_endpoint, openid, password):
-		return HttpResponseRedirect(reverse('globus_password'))
-
+		print "TUTAJ"
+		status, message = activateEndpoint(api_client, source_endpoint, openid, password)
+		print "STATUS: %s, %s" % (status, message)
+		if not status:
+			return render_to_response('cog/globus/password.html',
+				{ 'openid': openid, 'message': message },
+				context_instance=RequestContext(request))
+	print "POSTUTAJ"
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = [] # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
