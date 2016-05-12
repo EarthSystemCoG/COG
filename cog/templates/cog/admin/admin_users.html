@@ -3,51 +3,85 @@
 {% block main %}
 
    {% load cog_utils %}
-   {% load pagination_tags %}
-   {% autopaginate users 50 %}
+	{% url admin_users as url %}
 
-<p>Below is the list of system users. Click on the name to visit their profile (includes home node). Click on the email
-	to contact the user. </p>
-   
-       <table style="margin-left:125px; width:700px;">
+
+
+<p>Below is a list of users with an account on this node. Click on their username to visit their profile. Click
+	on the email to contact the user. Sort by "Last Login" to find stale accounts.  </p>
+       <!-- pad left margin by 2px beyond half to account for invisible right margin around button -->
+       <table style="margin-left:124px; width:890px;">
            <tr>
                <td>
-                   <form name="lookupUserForm" action="" method="post">
+               	   <!-- important: action=request.path removes ?page=... parameter from URL -->
+                   <form name="lookupUserForm" action="{{ request.path }}" method="post">
                    	    {% csrf_token %}
-                        <label for="match" style="width:60%; vertical-align: middle;">Lookup user by <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>, or <strong>Email:</strong></label>
-                        <input style="vertical-align: middle; width:30%;" type="text" alt="text" name="match" id="match" value="{{request.POST.match}}" />
+                        <label for="match" style="width:70%; vertical-align: middle;">Lookup user by
+	                        <strong>User Name</strong>, <strong>First Name</strong>, <strong>Last Name</strong>,
+	                        <strong>Email</strong>, <strong>Home Node</strong>, </strong>or <strong>Year Joined:</strong></label>
+                        <input style="vertical-align: middle; width:30%;" type="text" alt="text" name="match" id="match" value="{{ request|getHttpParamValue:'match' }}" />
 	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
-	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
+	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.path }}'"/>
                    </form>
                </td>
            </tr>
        </table>
 
-   {% paginate %}
+   {% with users as results_page %}
+   		{% include 'cog/common/_pagination.html' %}
+   {% endwith %}
 
    <div class="mybox">
         <table>
-            <caption>System Users</caption>
+            <caption>
+	            System Users
+                <span style="float: right;">
+	                Sort by:
+	                <a href="{{ url }}?sortby=email&amp;match={{ request|getHttpParamValue:'match' }}">Email</a> |
+	                <a href="{{ url }}?sortby=last_login&amp;match={{ request|getHttpParamValue:'match' }}">Last Login</a> |
+	                <a href="{{ url }}?sortby=last_name&amp;match={{ request|getHttpParamValue:'match' }}">Last
+	                Name</a>
+                </span>
+
+            </caption>
             <!-- <br/> tags in table are to align text to the bottom -->
             <tr>
-                <th scope="col" class="white"><strong>Last Name</strong></th>
-                <th scope="col" class="white"><strong>First Name</strong></th>
-                <th scope="col" class="white"><strong>User Name</strong></th>
-                <th scope="col" class="white"><strong>Email</strong></th>
+
+
+                <th scope="col" class="white"><strong>Username</strong></th>
+                <th scope="col" class="white"><strong>Identifying Info</strong></th>
+                <th scope="col" class="white"><strong>Home Node</strong></th>
+	            <th scope="col" class="white"><strong>Date Joined</strong></th>
                 <th scope="col" class="white"><strong>Last Login</strong></th>
+                <th scope="col" class="white"><strong>Delete Account</strong></th>
             </tr>
             {% for user in users %}
+
                 <tr>
-                    <td><a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a></td>
-                    <td><a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a></td>
                     <td><a href="{% url 'user_detail' user.id %}">{{ user.username }}</a></td>
-                    <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-                    <td>{{ user.last_login }}</td>
+                    <td>
+                        {% if user.last_name %}
+
+                            <a href="{% url 'user_detail' user.id %}">{{ user.last_name }}</a>,
+                            <a href="{% url 'user_detail' user.id %}">{{ user.first_name }}</a>
+                            &nbsp;&nbsp;
+                            (<a href="mailto:{{ user.email }}">{{ user.email }}</a>)
+
+                        {% else %}
+
+                            <a href="{% url 'user_detail' user.id %}">{{ user|get_first_openid }}</a>
+
+                        {% endif %}
+                    </td>
+                    <td>{{ user.profile.site.name }}</td>
+	                <td>{{ user.date_joined|date:'m/d/Y'}}</td> <!--mm/dd/yy-->
+                    <td>{{ user.last_login|date:'m/d/Y' }}</td>
+                    <td><a href="{% url 'user_delete' user.id %}" class="deletelink"> Delete</a></td>
                 </tr>
             {% endfor %}
         </table>
    </div>
-   <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='/'"/></div>
+   <div style="float:right;"><input type="reset" value="Cancel" onclick="self.location='{% url 'site_home' %}'"/></div>
    <div id="myDialog" class="yui-skin-sam"></div>
 
 {% endblock %}

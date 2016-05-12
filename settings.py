@@ -1,7 +1,7 @@
 import os
-from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 import logging
 import re
+from cog.utils import str2bool
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -38,7 +38,6 @@ if siteManager.get('DEBUG', default='False').lower() == 'true':
     DEBUG = True
 else:
     DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS', default=SITE_DOMAIN).split(",")
 print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
 IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
@@ -46,12 +45,10 @@ print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
 KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
 print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
 PEER_NODES = siteManager.get('PEER_NODES', default=None)
+USE_CAPTCHA = str2bool(siteManager.get('USE_CAPTCHA', default='True'))
 print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
 # DEVELOPMENT/PRODUCTION server switch
-if siteManager.get('PRODUCTION_SERVER', default='False').lower() == 'true':
-    PRODUCTION_SERVER = True
-else:
-    PRODUCTION_SERVER = False
+PRODUCTION_SERVER = str2bool(siteManager.get('PRODUCTION_SERVER', default='False'))
 print 'Production server flag=%s' % PRODUCTION_SERVER
 
 
@@ -101,7 +98,7 @@ DATABASES = {
 
 DATABASES['default'] = DATABASES[DJANGO_DATABASE]
 
-logging.info('Using Django Database=%s' % DJANGO_DATABASE)
+logging.info('>>> Using Django database=%s' % DJANGO_DATABASE)
 if DJANGO_DATABASE == 'sqllite3':
     logging.info("Database path=%s" % DATABASE_PATH)
 
@@ -150,21 +147,45 @@ STATIC_ROOT = rel('static/')
 # absolute path to root directory containing projects data
 DATA_ROOT = os.path.join(MEDIA_ROOT, "data/")
 
-# custom template and media directories
+# custom template, media and configuration directories
 MYTEMPLATES = os.path.join(siteManager.cog_config_dir, 'mytemplates')
 MYMEDIA = os.path.join(siteManager.cog_config_dir, 'mymedia')
+
+# project-specific configuration directories
+# must be writable by web server
+PROJECT_CONFIG_DIR = os.path.join(MEDIA_ROOT, 'config')
 
 print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDIA)
 
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    #'django.template.loaders.eggs.Loader',
-)
+# new TEMPLATES settings
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+                 MYTEMPLATES,
+                 rel('templates/'),
+                 rel('static/'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
+                'cog.context_processors.cog_settings',
+            ],
+            'debug': DEBUG,
+        },
+    },
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -173,29 +194,16 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'pagination.middleware.PaginationMiddleware',
     'cog.middleware.init_middleware.InitMiddleware',
     'cog.middleware.login_middleware.LoginMiddleware',
     'cog.middleware.session_middleware.SessionMiddleware',
-    'cog.middleware.password_middleware.PasswordMiddleware'
+    #'cog.middleware.password_middleware.PasswordMiddleware'
     #'django.contrib.sites.middleware.CurrentSiteMiddleware' # django 1.7
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 #ROOT_URLCONF = 'COG.urls'
 ROOT_URLCONF = 'urls'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    #os.path.join(os.path.basename(__file__), 'templates'),
-    # IMPORTANT: no leading or trailing '/' for 'mytemplates'
-    # default: '/usr/local/cog/cog_config/mytemplates'
-    MYTEMPLATES,
-    rel('templates/'),
-    rel('static/'),
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -208,9 +216,7 @@ INSTALLED_APPS = (
     'filebrowser',
     'django.contrib.admin.apps.SimpleAdminConfig',
     'django_comments',
-    'django.contrib.webdesign',
     'django.contrib.staticfiles',
-    'pagination',
     'captcha',
     'layouts',
     'cog.apps.CogConfig',
@@ -228,7 +234,7 @@ AUTHENTICATION_BACKENDS = (
 #X_FRAME_OPTIONS = 'DENY'
 
 # login page URL (default: '/accounts/login')
-LOGIN_URL = '/login'
+LOGIN_URL = '/login/'
 
 # OpenID login page
 #LOGIN_URL = '/openid/login/'
@@ -240,11 +246,6 @@ LOGIN_REDIRECT_URL = '/'  # welcome page
 # Custom user profile
 AUTH_PROFILE_MODULE = "cog.UserProfile"
 
-# makes 'request' object available in templates
-TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.core.context_processors.request',
-    'cog.context_processors.cog_settings'
-)
 
 # HTTPS support: can only send cookies via SSL connections
 if PRODUCTION_SERVER:
@@ -263,6 +264,9 @@ if PRODUCTION_SERVER:
 
 # FIXME: necessary for openid-auth since django 1.6.5 otherwise session is not serialized correctly
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+# default size limit of files uploaded by users
+MAX_UPLOAD_SIZE = 52428800
 
 #=== django-comments-contrib settings ======================================
 

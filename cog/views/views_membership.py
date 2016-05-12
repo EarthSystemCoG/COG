@@ -6,9 +6,10 @@ from django.template import RequestContext
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from utils import getUsersThatMatch
+from cog.views.utils import getUsersThatMatch, getQueryDict
 from django.contrib.sites.models import Site
 from cog.models.auth import userHasAdminPermission
+from cog.views.utils import paginate
 
 from cog.notification import notify
 from constants import PERMISSION_DENIED_MESSAGE
@@ -67,18 +68,16 @@ def membership_list_all(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    # load all users
-    if request.method == 'GET':
-        users = User.objects.all().order_by('last_name')    
-    
-    # lookup specific user
+    # load all users - that match...
+    match = getQueryDict(request).get('match', None) # works for GET or POST
+    if match:
+        users = getUsersThatMatch(match)
     else:
-        users = getUsersThatMatch(request.POST['match'])
-        
-    title = 'List All Users'
+        users = User.objects.all().order_by('last_name')  
+                  
+    title = 'Assign Project Members From "List Of All Node Users"'
     view_name = 'membership_list_all'
     return render_membership_page(request, project, users, title, view_name)
-    #return render_system_users_page(request, project, users, title, view_name)
 
 
 # View to list the memberships for all users enrolled in the project
@@ -92,16 +91,17 @@ def membership_list_enrolled(request, project_short_name):
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
-    # load all project users
-    # (must return a list for pagination)
-    if request.method == 'GET':
-        users = list(project.getUsers())
-        
-    # lookup specific user
-    else:
-        _users = getUsersThatMatch(request.POST['match'])
+    # optional 'match' argument
+    match = getQueryDict(request).get('match', None) # works for GET or POST
+    
+    if match:
+        # filter all users by 'match'
+        _users = getUsersThatMatch(match)
+        # filter all users by project
         users = [user for user in _users if (user in project.getUserGroup().user_set.all() 
                                              or user in project.getAdminGroup().user_set.all())]     
+    else:
+        users = list(project.getUsers())
     
     title = '%s Current Users' % project.short_name
     view_name = 'membership_list_enrolled'
@@ -122,20 +122,20 @@ def membership_list_requested(request, project_short_name):
     # load user group
     group = project.getUserGroup()
     
-    # load all users that have requested membership
-    # order by username
-    if request.method == 'GET':
-        users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
-    
-    # lookup specific user
-    else:
+    # optional 'match' argument
+    match = getQueryDict(request).get('match', None) # works for GET or POST
+
+    if match:
+        # lookup specific user
         _users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
-        match = request.POST['match'].lower()
         users = [user for user in _users if (match in user.first_name.lower()
                                              or match in user.last_name.lower()
                                              or match in user.username.lower()
                                              or match in user.email.lower())]
-        
+    else:
+        # load all users that have requested membership
+        users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
+             
     title = '%s Pending Users' % project.short_name   
     view_name = 'membership_list_requested'
     return render_membership_page(request, project, users, title, view_name)
@@ -147,7 +147,9 @@ def render_membership_page(request, project, users, title, view_name):
     groups = project.getGroups()
         
     return render_to_response('cog/membership/membership_list.html', 
-                              {'project': project, 'users': users, 'groups': groups,
+                              {'project': project, 
+                               'users': paginate(users, request, max_counts_per_page=50),
+                               'groups': groups,
                                'view_name': view_name,
                                'title': title, 'list_title': '%s Membership' % project.short_name},
                               context_instance=RequestContext(request))
@@ -203,19 +205,18 @@ def membership_remove(request, project_short_name):
 
 #view to bulk-process group membership operations from the pending_users or current_users template
 #this view can be invoked as either GET or POST,  following a GET request to a membership listing
-# @login_required
+@login_required
 def membership_process(request, project_short_name):
     # load project
-    print 'in membership process'
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     # check permission
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
-    print 'items', request.REQUEST.items()
-    for (name, value) in request.REQUEST.items():
-        print '**************************************'
-        print 'name is ', name
+    queryDict = getQueryDict(request)
+    
+    for (name, value) in queryDict.items():
+
         if name.startswith(NEW_MEMBERSHIP) or name.startswith(OLD_MEMBERSHIP) or name.startswith(NO_MEMBERSHIP):
             (prefix, group_name, user_id) = name.split(":")
             
@@ -225,8 +226,7 @@ def membership_process(request, project_short_name):
             # HTTP POST parameter from form check-box, all checks are treated as new
             # process checkbox as a new user
             if name.startswith(NEW_MEMBERSHIP):
-                print 'new', user.get_full_name(), group_name
-                status = addMembership(user, group)
+                status = addMembership(user, group, admin=request.user)
 
                 #only email if user not already a member
                 if status == RESULT_SUCCESS:
@@ -237,29 +237,24 @@ def membership_process(request, project_short_name):
             # if user has a role, then {{isEnrolled}} turns on the hidden field with value = "on"
 
             elif name.startswith(OLD_MEMBERSHIP):
-                print 'old', user.get_full_name(), group_name
                 try:
                     # don't delete from group if checkbox is still checked  (e.g. new membership)
-                    new_membership = request.REQUEST[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
-                    if new_membership:
-                        print 'checkbox is there', group_name
+                    new_membership = queryDict[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
                 except KeyError:
                     # checkbox is empty, so remove from group
-                    status = cancelMembership(user, group)
+                    status = cancelMembership(user, group, admin=request.user)
                     if status == RESULT_SUCCESS:
                         notifyUserOfGroupRemoval(project, group, user)
              
             # HTTP GET parameter (when delete link clicked)
             elif name.startswith(NO_MEMBERSHIP):
-                #TODO check group here, should remove from all groups
-                print 'method on delete ', request.method
-                print 'none', user.get_full_name()
+                # TODO check group here, should remove from all groups
                 status = cancelMembership(user, group)
                 if status == RESULT_SUCCESS:
                     notifyUserOfGroupRemoval(project, group, user)
 
     # redirect to the original listing that submitted the processing
-    view_name = request.REQUEST['view_name']
+    view_name = queryDict['view_name']
     return HttpResponseRedirect(reverse(view_name,
                                         kwargs={'project_short_name': project_short_name})+"?status=success")
 

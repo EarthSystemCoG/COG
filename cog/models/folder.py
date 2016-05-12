@@ -60,7 +60,7 @@ def getTopFolder(project):
     """
 
     # get or create top-level folder
-    #name = "%s %s" % (project.short_name, TOP_FOLDER)
+    # name = "%s %s" % (project.short_name, TOP_FOLDER)
     folder, created = Folder.objects.get_or_create(name=TOP_FOLDER, parent=None, project=project, active=True)
     if created:
         print 'Project=%s: created Top-Level folder=%s' % (project.short_name, folder.name)

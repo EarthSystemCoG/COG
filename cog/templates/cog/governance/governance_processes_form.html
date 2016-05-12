@@ -8,38 +8,37 @@
 	         
 	     {% csrf_token %}
 	     
-	        <div class="mybox">
-				<table>
-	            	<tr>
-	            		<td>
-                            <strong>Task Prioritization Strategy:</strong>
+	         <div class="mybox">
+				 <table>
+	            	 <tr>
+	            		 <td>
+                            Task Prioritization Strategy:
+                         </td>
 
-                        </td>
-
-	            		<td class="long">
+	            		 <td class="long">
                             {{ form.taskPrioritizationStrategy.help_text }}
 	            			{{ form.taskPrioritizationStrategy }}
 	            			{{ form.taskPrioritizationStrategy.errors }}
-	            		</td>
-	            	</tr>
-                </table>
-            </div>
-            <p></p>
-            <div class="mybox">
-                <table>
-	            	<tr>
-	            		<td>
-                            <strong>Requirements Identification Process:</strong>
-                        </td>
+	            		 </td>
+	            	 </tr>
+                 </table>
+             </div>
+             <p></p>
+             <div class="mybox">
+                 <table>
+	            	 <tr>
+	            		 <td>
+                            Requirements Identification Process:
+                         </td>
 
-	            		<td class="long">
+	            		 <td class="long">
                             {{ form.requirementsIdentificationProcess.help_text }}
 	            			{{ form.requirementsIdentificationProcess }}
 	            			{{ form.requirementsIdentificationProcess.errors }}
-	            		</td>
-	            	</tr>
-				</table>
-		    </div>
+	            		 </td>
+	            	 </tr>
+				 </table>
+		     </div>
 		 {{ form.project.as_hidden }}
 	     
 	    <div style="text-align:right">

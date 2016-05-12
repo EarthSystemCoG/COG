@@ -10,9 +10,6 @@
     	<p>This project has no news.</p>
     
     {% else %}
-
-	    {% load pagination_tags %}
-	    {% autopaginate project_news 10 %}
 	    
 	    {% for news in project_news %}
 	
@@ -49,7 +46,9 @@
 	    
 	      {% endfor %}
 	    
-	    {% paginate %}
+        {% with project_news as results_page %}
+        	{% include 'cog/common/_pagination.html' %}
+        {% endwith %}
     
     {% endif %}
 

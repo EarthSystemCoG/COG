@@ -14,7 +14,7 @@
       <td>{{ request.user }} </td>		          
     </tr>
     <tr>
-        <td class="col1"><strong>Title</strong></td>
+        <td class="col1"><strong>*Title</strong></td>
         <td>{{ form.title }} </td>
         <td style="vertical-align: middle;">{{ form.title.errors }}</td>
     </tr>
@@ -22,7 +22,7 @@
 <table class="post_home">
     <!-- allow changing of the template, except for the home page -->
     <tr>
-         <td class="col1"><strong>Template</strong></td>
+         <td class="col1"><strong>*Template</strong></td>
          <td class="long">
          <select id="id_template" name="template">
 		 	<option value="cog/post/page_template_center_right.html" 
@@ -48,7 +48,7 @@
 	    </tr>   
     {% endif %}
     <tr>
-        <td style="vertical-align:top;" class="col1"><strong>Body</strong></td>
+        <td style="vertical-align:top;" class="col1"><strong>*Body</strong></td>
         <td>{{ form.body }} {{ form.body.errors }}</td>
     </tr>
     

@@ -57,7 +57,7 @@
                 <label for="username"><strong>Username</strong></label>
             </td>
 	        <td style="width:90%;vertical-align:middle;">
-		        <input type="text" id="username" name="username" alt="username" value="{{ request.REQUEST.username }}" size="30"/>
+		        <input type="text" id="username" name="username" alt="username" value="{{ request.GET.username }}" size="30"/>
 	        </td>
 		</tr>
 		<tr>
@@ -127,7 +127,7 @@
                     <label for="openid_identifier"><strong>OpenID</strong></label>
                 </td>
 		        <td style="width:80%; vertical-align:middle;">
-                    <input type="text" id="openid_identifier" alt="openid_identifier" name="openid_identifier" value="{{ request.REQUEST.openid }}" size="70"/>
+                    <input type="text" id="openid_identifier" alt="openid_identifier" name="openid_identifier" value="{{ request.GET.openid }}" size="70"/>
                 </td>
 	    	    <td style="width:10%;">
                     <input name="bsignin" type="submit" value="Login">

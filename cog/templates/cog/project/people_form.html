@@ -13,14 +13,14 @@
 		
 		{% csrf_token %}
 	    {{ formset.management_form }}
-	    
+	    * indicates a required field
 	    <div class="mybox">
 		    <table>
 		    	<caption>{{ project.short_name }} External Collaborators</caption>
 		    	<tr>
-		    		<th class="white"  nowrap="nowrap"><strong>First Name</strong></th>
-		    		<th class="white"  nowrap="nowrap"><strong>Last Name</strong></th>
-		    		<th class="white"  nowrap="nowrap"><strong>Institution</strong></th>
+		    		<th class="white"  nowrap="nowrap"><strong>*First Name</strong></th>
+		    		<th class="white"  nowrap="nowrap"><strong>*Last Name</strong></th>
+		    		<th class="white"  nowrap="nowrap"><strong>*Institution</strong></th>
 		    		<th class="white"  nowrap="nowrap">Interests (max 60 chars)</th>
 		    		<th class="white"  nowrap="nowrap">Picture</th>
 		    		<th class="white"  nowrap="nowrap">(maximum size: 1MB)</th>

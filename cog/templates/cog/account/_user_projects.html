@@ -1,30 +1,32 @@
 {% load cog_utils %}
-<!--in _user_projects.html -->
-    <div class="mybox">
-	    <table>
-	        <tr>
-                <td colspan="2" class="caption_mimic">
-                    <strong>Project Affiliations</strong>
-                </td>
-            </tr>
-                <tr>
-                    <td>Project Name</td>
-                    <td>Cancel Membership</td>
-                </tr>
-            {% for project in projects %}
-	            {% if not project.private or request.user == user_profile.user or request.user.is_staff == True or request.user|hasAdminPermission:project %}
-                    <!--TODO: adjust colors to match rest of page -->
 
-	                    <tr>
-	                        <td nowrap="nowrap"><a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a></td>
-	                        <td nowrap="nowrap">
-	                            {% if request.user.id == user_profile.user.id %}
-	                                 <a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a>
-	                            {% endif %}
-	                        </td>
-                        </tr>
-
-	            {% endif %}
-	        {% endfor %}
-	    </table>
-    </div>
+<div class="mybox">
+	<table>
+		<tr>
+			<td colspan="3" class="caption_mimic">
+				<strong>Project Affiliations</strong></td>
+		</tr>
+		<tr>
+			<td>Project</td>
+			<td>Roles</td>
+			<td>Cancel</td>
+		</tr>
+		{% for project, roles in projects %} 
+			{% if not project.private or request.user == user_profile.user or request.user.is_staff == True or request.user|hasAdminPermission:project %}
+				<tr>
+					<td nowrap="nowrap">
+						<a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a>
+					</td>
+					<td nowrap="nowrap">
+						{% for role in roles|sortlist %}{% if not forloop.first %}, {% endif %} {{ role }}{% endfor %}
+					</td>
+					<td nowrap="nowrap">
+						{% if request.user.id == user_profile.user.id %} 
+							<a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a> 
+						{% endif %}
+					</td>
+				</tr>
+			{% endif %} 
+		{% endfor %}
+	</table>
+</div>

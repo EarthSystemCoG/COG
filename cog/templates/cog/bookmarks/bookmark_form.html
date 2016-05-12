@@ -4,14 +4,16 @@
 
     {% load cog_utils %}
 
+	* indicates a required field
     <div class="mybox">
+
 	    <form method="post" action="">
 	    
 	       {% csrf_token %}
 	       
 	       <table>
 	       	   <tr>
-                    <td class="right required" nowrap="nowrap">Choose Folder</td>
+                    <td class="right required" nowrap="nowrap">*Choose Folder</td>
                     <td class="long">
                         {{ form.folder }}{{ form.folder.errors }}
                         &nbsp; <span style="vertical-align:middle;"> <strong>-OR-</strong>&nbsp;</span>
@@ -19,11 +21,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="right required" nowrap="nowrap">URL</td>
+                    <td class="right required" nowrap="nowrap">*URL</td>
                     <td class="long">{{ form.url }}{{ form.url.errors }}</td>
                 </tr>
                 <tr>
-                    <td class="right required" nowrap="nowrap">Name</td>
+                    <td class="right required" nowrap="nowrap">*Name</td>
                     <td class="long">{{ form.name }}{{ form.name.errors }}</td>
                 </tr>
                 <tr>

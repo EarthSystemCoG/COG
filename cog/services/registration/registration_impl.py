@@ -40,6 +40,15 @@ class ESGFRegistrationServiceImpl(RegistrationService):
         
         return self.esgfDatabaseManager.permissionDao.readPermissions(userOpenid, groupName) 
 
+    def listByOpenid(self, userOpenid):
+        
+        gdict = {}
+        groups = self.listGroups()
+        for group in groups:
+            gname = group['name']
+            if gname.lower() != 'wheel':
+                gdict[gname] = self.esgfDatabaseManager.permissionDao.readPermissions(userOpenid, gname)
+        return gdict
     
     def createGroup(self, name, description='', visible=True, automatic_approval=False):
         

@@ -7,7 +7,7 @@
 <div id="record_{{record.id}}">
 	<strong>{{record.fields.title.0}}</strong>
 	<div id="message_{{record.id}}" style="display:none; color: #FF0000;">Message</div>
-	{% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 }}{% endif %}
+	{% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 |urlizetrunc:30|linebreaksbr }}{% endif %}
 	{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }}{% endif %}
 	{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
 	{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
@@ -61,13 +61,21 @@
 
 {% endfor %}
 
+
 &nbsp;
 [ <b><a href="http://feedback.llnl.gov/cgi-bin/cdat_to_idx_create.cgi?dataset={{record.id}}">VISUS IDX</a></b> ]
 &nbsp;
 
 <!-- display CIM viewer link -->
+
+<!-- display ES-DOC viewer link (CMIP5 datasets only for now) -->
+
 {% if project.searchprofile.modelMetadataFlag %}
-&nbsp; [ <a href="#" onClick="onDatasetClicked('{{record.fields.project.0}}', '{{record.fields.instance_id.0}}')"><strong>Model Metadata</strong> </a> ]
+	{% if record.fields.project.0|lower == 'cmip5' %}
+		&nbsp; [ <a href="http://view.es-doc.org/?renderMethod=datasetid&project={{record.fields.project.0}}&id={{record.fields.instance_id.0}}" target="_blank">
+				 	<strong>Model Metadata</strong> 
+				</a> ]
+	{% endif %}
 {% endif %}
 
 

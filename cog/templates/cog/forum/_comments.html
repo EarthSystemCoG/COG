@@ -7,17 +7,15 @@
 -->
 
 {% load comments %}
-{% load pagination_tags %}
 {% load cog_utils %}
 
 {% get_comment_count for object as comment_count %}
 {% get_comment_list for object as comment_list %}
-{% autopaginate comment_list 20 %}
 
 <hr class="white"/>
 
 {% if comment_list %}
-	{% for comment in comment_list %}
+    {% for comment in comment_list|paginate_filter:request %}
 		<div class="mybox">
 		   <div id="comment_{{ comment.id }}" class="box-comment2">
 		       <div class="caption">
@@ -59,7 +57,11 @@
 	<em class="message">This thread has no posts yet.</em>
 {% endif %}
 
-{% paginate %}
+<!-- pagination -->
+{% with comment_list|paginate_filter:request as results_page %}
+ 	{% include 'cog/common/_pagination.html' %}
+{% endwith %}
+
 		
 <!-- only authenticated users can comment -->
 <!-- for now, do not need to be a Contributor to comment -->

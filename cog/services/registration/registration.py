@@ -109,6 +109,25 @@ class RegistrationService(object):
         return {}
     
     @abc.abstractmethod
+    def listByOpenid(self, userOpenid):
+        '''
+        Method to list all groups, permissions for a given user.
+        Example of returned dictionary:
+        {u'HIWPP': {}, u'NCPP DIP': {u'admin': True, u'publisher': True, u'super': True, u'user': True}, u'NOAA ESRL': {u'super': True}}
+        
+        :param userOpenid: the user openid (must exist)
+        :type userOpenid: string
+
+        :returns: a nested dictionary containing the group names as keys, 
+                  mapped to a dictionary of roles as keys, corresponding boolean approved status as values 
+                  (or None if that permission does not exist)
+        :rtype: (string, boolean) dictionary
+        
+        '''
+        
+        return {}
+    
+    @abc.abstractmethod
     def listGroups(self):
         '''
         Method to list all access control groups managed by the current site.

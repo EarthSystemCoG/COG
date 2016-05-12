@@ -1,0 +1,26 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+    <div class="prepend-295 span-14">
+
+        <h2>{{ mytitle }}</h2>
+
+        <div class="instruction-box">
+            Are you sure you want to permanently delete the account for user:<br/>{{ user }}?
+        </div>
+
+        <p></p>
+        <div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div style="text-align:center; margin:5px">
+                    <input type="button" value="Cancel" onclick="window.location='{% url 'admin_users' %}'"/>
+                    &nbsp; &nbsp;
+                    <input type="submit" value="Submit" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

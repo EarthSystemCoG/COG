@@ -19,6 +19,7 @@ from django.utils.timezone import now
 from cog.models.utils import delete_doc
 from django.conf import settings
 import os
+from cog.views.utils import getQueryDict, paginate
 
 
 # view to render a generic post
@@ -188,7 +189,7 @@ def post_list(request, project_short_name):
     topic_list = Topic.objects.filter(Q(post__project=project) & Q(post__type=type)).distinct().order_by('-name')
 
     return render_to_response('cog/post/post_list.html', 
-                              {"object_list": results,
+                              {"object_list": paginate(results, request, max_counts_per_page=50),
                                "title": '%s Pages' % project.short_name,
                                "list_title": list_title,
                                "query": query,  
@@ -214,7 +215,7 @@ def post_add(request, project_short_name, owner=None):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # retrieve type
-    type = request.REQUEST.get('type')
+    type = getQueryDict(request).get('type')
   
     if request.method == 'GET':
         
@@ -372,8 +373,9 @@ def post_update(request, post_id):
         form = PostForm(post.type, post.project, request.POST, instance=post)
 
         # check versions       
-        if post.version != int(request.REQUEST.get('version', -1)):
-            print 'database version=%s form version=%s' % (post.version, request.REQUEST.get('version', -1))
+        queryDict = getQueryDict(request)
+        if post.version != int(queryDict.get('version', -1)):
+            print 'database version=%s form version=%s' % (post.version, queryDict.get('version', -1))
             return getLostLockRedirect(request, post.project, post, lock)
 
         #print "1 PAGE URL=%s" % form.data['url']

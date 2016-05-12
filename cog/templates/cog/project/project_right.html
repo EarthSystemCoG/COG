@@ -33,7 +33,9 @@
 		            <!-- <input type="hidden" name="limit" value="10" /> -->
 		            <input type="hidden" name="type" value="Dataset" />
                    <!--original width: 137px;-->
-	                <input type="text" name="query" size="24" value="" style="width:142px; font-size:8.5pt; padding:0; margin:0; padding-left:2px;" placeholder="Simple Text Search"/>
+	                <label for="query" style="display:none;">Simple Text Search:</label>
+			        <input type="text" name="query" size="24" value="" style="width:142px;
+	                font-size:8.5pt; padding:0; margin:0; padding-left:2px;" placeholder="Simple Text Search"/>
                     <input class="right_go" type="submit" value="Go"/>
                     <!--<input class="search_help" type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />-->
 
@@ -147,7 +149,7 @@
 
    <!--display project tags-->
     <!-- font size has to be the same as the #user_menu -->
-   <div style="font-size: 12px; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
+   <div id="project_tags" style="font-size: 12px; margin-top: 3px; margin-left: 4px; color:#666666; font-style:italic;">
 
        {% if project.tags.all|length > 0 %}
            <strong>{{ project.short_name }} Tags:</strong>

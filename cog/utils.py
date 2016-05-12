@@ -18,6 +18,9 @@ def hasText(str):
     '''Utility function to establish whether a string has any non-empty characters.'''
     return str is not None and len(str.strip()) > 0
 
+def str2bool(s):
+    '''Utility methid to parse a string into a boolean.'''
+    return s.lower() in ("yes", "true", "t", "1")
 
 def file_modification_datetime(filename):
     t = os.path.getmtime(filename)

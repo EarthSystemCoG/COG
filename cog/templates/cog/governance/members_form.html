@@ -11,33 +11,33 @@
 	     	     
 	     {% for form in formset.forms %}
 	     	
-     	    {{ form.id }}
-	        
-	        <div class="mybox">
-				<table>
-	            	<tr>
-	            		<td valign="top" nowrap="nowrap"><strong>User</strong></td>
-	            		<td class="long" style="padding:2px">
-	            			{{ form.user }} 
-	            			{{ form.user.errors }}
-	            		</td>
-	            	</tr>            	
-	            	{% if form.instance.id %}
-		            	<tr>
-		            		<td valign="top">&nbsp;</td>
-		            		<td class="long">
+     	     {{ form.id }}
+
+
+	         <div class="mybox">
+				 <table>
+	            	 <tr>
+	            		 <td valign="top" nowrap="nowrap">User</td>
+	            		 <td class="long" style="padding:2px">
+	            			 {{ form.user }}
+	            			 {{ form.user.errors }}
+	            		 </td>
+	            	 </tr>
+	            	 {% if form.instance.id %}
+		            	 <tr>
+		            		 <td valign="top">&nbsp;</td>
+		            		 <td class="long">
 		            			 {{ form.DELETE }} <span style="padding:0px">Delete?</span>
-		            		</td>
-		            	</tr>
-	            	{% endif %}
-	            	
-	            </table>
+		            		 </td>
+		            	 </tr>
+	            	 {% endif %}
+	             </table>
 	            
-	            <ul class="errorlist">
-		            {% for error in form|get_form_global_errors %}
+	             <ul class="errorlist">
+		             {% for error in form|get_form_global_errors %}
 		            	<li>{{ error }}</li>
-	            	{% endfor %}
-            	</ul>
+	            	 {% endfor %}
+            	 </ul>
 	            
             </div>
             	     		     	

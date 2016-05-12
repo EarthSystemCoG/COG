@@ -4,9 +4,6 @@
     {% load cog_utils %}
     {% url post_list as url %}
     {% load comments %}
-    {% load pagination_tags %}
-    {% autopaginate object_list 50 %}
-
                 
     <div class="mybox">
 	    <table>
@@ -36,11 +33,20 @@
 
 	        </tr>
 			{% for object in object_list %}
-
 			   <tr>
-			      <td valign="top">{{ page_obj.start_index|add:forloop.counter|add:-1}}</td>
+			      <td valign="top">
+                    {% with object_list as results_page %}
+                        {{ results_page.start_index|add:forloop.counter|add:-1 }}
+				    {% endwith %}
+			      </td>
 			      <td valign="top"><strong><a href="{% url 'post_detail' object.id %}">{{ object.title }}</a></strong></td>
-			      <td valign="top" align="left">{{ object.author }} </td>
+			      <td valign="top" align="left">
+				      {% if object.author%}
+					      {{ object.author }}
+				      {% else %}
+                           deleted user
+                      {% endif %}
+			      </td>
 			      <td valign="top">{{ object.update_date|date:"d M Y, H:m" }} </td>
 			      <td valign="top">{{ object.topic }} </td>
 
@@ -55,8 +61,16 @@
 			   </tr>
 			{% endfor %}
 		</table>
+
 	</div>
+
 	
-	{% paginate %}	
-		
+	{% with object_list as results_page %}
+		{% include 'cog/common/_pagination.html' %}
+	{% endwith %}
+
+
+    <div style="float:right;">
+        <input type="button" value="Return Home" onclick="self.location='{% url 'project_home' project.short_name.lower %}'"/>
+    </div>
 {% endblock %}

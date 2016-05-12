@@ -57,6 +57,12 @@ class SearchInput:
     def setConstraint(self, name, values):
         self.constraints[name] = values
         
+    def hasConstraint(self, name):
+        return name in self.constraints
+    
+    def getConstraint(self, name):
+        return self.constraints.get(name, None)
+        
     def isValid(self):
         for c in INVALID_CHARACTERS:
             if c in self.query:

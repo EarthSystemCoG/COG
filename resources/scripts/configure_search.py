@@ -4,7 +4,7 @@ import sys, os, ConfigParser
 sys.path.append( os.path.abspath(os.path.dirname('.')) )
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
-from cog.config.search import config_project_search
+from cog.config.search import read_config
 #from django.conf import settings
 
 print 'Upgrading COG'
@@ -16,4 +16,4 @@ configs = { 'StandardDistribution': 'cog/config/search/standard_distribution.cfg
           }
 
 for key in configs:
-    config_project_search(key, configs[key])
+    read_config(key, configs[key])

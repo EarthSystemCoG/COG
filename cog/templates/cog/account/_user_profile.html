@@ -84,22 +84,3 @@
         {% endif %}
     </table>
 </div>
-{% for userurl in user_profile.userurl_set.all %}
-    <div class="span-12 last">
-        <div class="mybox">
-            <table>
-               <tr>
-                   <td colspan="2" class="caption_mimic">
-                       <strong>User Websites</strong>
-                   </td>
-               </tr>
-	           <tr>
-	               <td nowrap="nowrap">
-                       <strong>Web Site</strong>
-                   </td>
-	               <td class="long"><a href="{{ userurl.url }}">{{ userurl.name }}</a></td>
-	            </tr>
-            </table>
-        </div>
-    </div>
-{% endfor %}

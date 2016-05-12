@@ -26,11 +26,38 @@ def getSelectedState(constraints, key):
 @register.filter
 def getConstraints(constraints, key):
     # example: Constraint key=realm value(s)=[u'atmos,ocean']
+    # NOTE: must also add the original value so to match model=CESM1(CAM5.1,FV2)
     try:
         values = str(constraints[key][0])
-        return values.split(',')
+        if ',' in values:
+            return splitValue(values)
+        else:
+            return [values]
     except KeyError:
         return []
+    
+def splitValue(value):
+    '''Method to split a list of values by comma, but keep intact a string like 'CESM1(CAM5.1,FV2)'.'''
+    
+    values = value.split(',')
+    _values = []
+    
+    for i, value in enumerate(values):
+        
+        if i < len(values)-1:
+            nextValue = values[i+1]
+            if '(' in value and not ')' in value and ')' in nextValue and not '(' in nextValue:
+                _values.append(value+","+nextValue)
+            elif '[' in value and not ']' in value and ']' in nextValue and not '[' in nextValue:
+                i += 1 # skip next value
+            elif '{' in value and not '}' in value and '}' in nextValue and not '{' in nextValue:
+                i += 1 # skip next value
+            else:
+                _values.append(value)
+        else:
+            _values.append(value)
+            
+    return _values
 
 @register.filter
 def getFacetOptionLabel(facet_key, facet_value):
@@ -45,6 +72,7 @@ def displayMetadataKey(key):
     #return (key != 'score' and key != 'index_node' and key != 'data_node' \
     #        and key != 'dataset_id' and key != 'replica' and key!= 'latest')
     return (key != 'score' and key != 'description' and key != 'title' \
+            and key != 'version' and key != '_version_' \
             and key != 'url' and key != 'type' and key!= 'replica' and key != 'latest')
 
  
@@ -98,13 +126,53 @@ def recordUrls(record):
         if 'access' in record.fields and 'index_node' in record.fields and 'data_node' in record.fields:
             index_node = record.fields['index_node'][0]
             data_node = record.fields['data_node'][0]
+            
+            # try adding "Globus" access first
+            globusAccess = False
             for value in record.fields['access']:
-                if value.lower() == 'gridftp':
-                    # data_node must appear in list of valid Globus endpoints (example: "esg-datanode.jpl.nasa.gov:2811")
-                    for gridftp_url in GLOBUS_ENDPOINTS.endpointDict().keys():
-                        if data_node in gridftp_url:
-                            urls.append( ('/globus/download?dataset=%s@%s' %(record.id, index_node),
-                                          'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
-                                          'GridFTP') )
+            	if value.lower() == 'globus':
+                	gurl = '/globus/download?dataset=%s@%s' %(record.id, index_node)
+                	if record.fields.get('shard', None):
+                		gurl += "&shard="+record.fields.get('shard')[0]
+                	urls.append( (gurl, 'application/gridftp', 'GridFTP') )
+                	globusAccess = True
+                	
+            # if not found, try to add GridFTP access
+            if not globusAccess:
+	            for value in record.fields['access']:
+					if value.lower() == 'gridftp':
+						# data_node must appear in list of valid Globus endpoints (example: "esg-datanode.jpl.nasa.gov:2811")
+						for gridftp_url in GLOBUS_ENDPOINTS.endpointDict().keys():
+							gurl = '/globus/download?dataset=%s@%s' %(record.id, index_node)
+							if record.fields.get('shard', None):
+								gurl += "&shard="+record.fields.get('shard')[0]
+							if data_node in gridftp_url:
+								urls.append( (gurl,
+											  'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
+											  'GridFTP') )
             
     return sorted(urls, key = lambda url: url_order(url[1]))
+
+@register.filter
+def sortResults(results, fieldName):
+    
+    return sorted(results, key = lambda result: result.fields.get(fieldName,""))
+
+@register.filter
+def showSearchConfigMessage(message, project):
+    
+    if message == "search_config_exported":
+        return "The project search configuration has been exported to: " + _getProjectSearchConfigFilePath(project)
+    
+    elif message == "search_config_imported":
+        return "The project search configuration has been imported from: " + _getProjectSearchConfigFilePath(project)
+    
+    elif message == "search_config_not_found":
+        return "The project search configuration could not be imported from: " + _getProjectSearchConfigFilePath(project)
+
+    else:
+        raise Exception("Invalid Message")
+
+def _getProjectSearchConfigFilePath(project):
+    
+    return "$MEDIA_ROOT/config/%s/search.cfg" % project.short_name.lower()

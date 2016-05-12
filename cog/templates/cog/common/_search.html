@@ -11,6 +11,7 @@
 <!--LOCATION:/cog/templates/cog/common/_search.html-->
 
 <!--File search-->
+<!-- Data search widget located in /project/project_right.html -->
  
 <div class="box-colored">
     
@@ -73,6 +74,7 @@
             	</select>
             </td>
             <td style="vertical-align:top;"><input type="submit" value="Search"></td>
+            <td style="vertical-align:top;"><input type="button" value="Reset" onclick="window.location='{{ request.path }}'"></td>
            </tr>
         </table>
     </form>

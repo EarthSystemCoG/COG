@@ -9,7 +9,7 @@ import ast
 from django.contrib.sites.models import Site  
 from cog.models import PeerSite
 from django.forms.models import modelformset_factory
-from utils import getUsersThatMatch
+from cog.views.utils import getAdminUsersThatMatch, get_projects_by_name, paginate, getQueryDict
 
 
 def site_home(request):
@@ -30,42 +30,49 @@ def site_home(request):
 @user_passes_test(lambda u: u.is_staff)
 def admin_projects(request):
     """
-    Only lists local projects.
-    :param request:
-    :return:
+    Lists local projects in a table with links to edit or delete
     """
-    
+    site = Site.objects.get_current()
+
     # optional active=True|False filter
     active = request.GET.get('active', None)
     if active != None:
         project_list = Project.objects.filter(site=Site.objects.get_current()).filter(active=ast.literal_eval(active))\
             .order_by('short_name')
     else:
-        project_list = Project.objects.filter(site=Site.objects.get_current()).order_by('short_name')
-    
+        if request.method == 'GET':
+            project_list = Project.objects.filter(site=Site.objects.get_current()).order_by('short_name')
+        else:
+            # list project by search criteria. Search function located in utils.py
+            # get list of all projects
+            project_list = get_projects_by_name(request.POST['match'])
+            # filter projects to include local site only
+            project_list = project_list.filter(site=Site.objects.get_current()).order_by('short_name')
+
+    # retrieve top-level projects, ordered alphabetically by short name. Only list those on the current site.
     return render_to_response('cog/admin/admin_projects.html',
-                              {
-                              # retrieve top-level projects, ordered alphabetically
-                              'project_list': project_list,
-                              'title': 'COG Projects Administration'
-                              }, 
-                              context_instance=RequestContext(request))    
+                              {'project_list': paginate(project_list, request),
+                               'title': '%s Projects Administration' % site.name,
+                               }, context_instance=RequestContext(request))
 
 
 # admin page for listing all system users
 @user_passes_test(lambda u: u.is_staff)
 def admin_users(request):
 
-    # load all users
-    if request.method == 'GET':
-        users = User.objects.all().order_by('last_name')
-    # lookup specific user
-    else:
-        users = getUsersThatMatch(request.POST['match'])
+    # optional parameters (via GET or POST)
+    queryDict = getQueryDict(request)
+    sortby = queryDict.get('sortby', 'username')  # default to sort by 'username'
+    match = queryDict.get('match', None)
 
-    title = 'List Node Users'
+    if match:
+        users = getAdminUsersThatMatch(match, sortby=sortby)
+    else:
+        users = User.objects.all().order_by(sortby)  
+
+    title = 'List System/Node Users'
     return render_to_response('cog/admin/admin_users.html',
-                              {'users': users, 'title': title},
+                              {'users': paginate(users, request, max_counts_per_page=50), 'title': title},
                               context_instance=RequestContext(request))
 
     

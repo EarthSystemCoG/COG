@@ -56,7 +56,7 @@ def ac_subscribe(request, group_name):
         except ObjectDoesNotExist:
             # user does not exist in ESGF database
             print 'Inserting user into ESGF security database'
-            esgfDatabaseManager.insertUser(request.user.profile)
+            esgfDatabaseManager.insertEsgfUser(request.user.profile)
             status = None
         
         licenseTxt = None

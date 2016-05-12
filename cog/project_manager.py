@@ -4,9 +4,10 @@ Class responsible for listing and serving federation-wide projects.
 
 from django.contrib.sites.models import Site
 from cog.models import Project, ProjectTag, deleteProject
-from cog.utils import getJson
+from cog.utils import getJson, str2bool
 
 from cog.models import getPeerSites
+from distutils.util import strtobool
 
 class ProjectManager(object):
   
@@ -24,18 +25,23 @@ class ProjectManager(object):
         allSites.append( local_site )
         for site in allSites:
             url = "http://%s/share/projects/" % site.domain
+            numberOfUsers = 0
+            numberOfProjects = 0
             jobj = getJson(url)
             if jobj is None:
                 status = 'ERROR'
             else:
                 status = 'OK'
+                numberOfProjects = len( jobj["projects"])
+                numberOfUsers = int( jobj.get("users",0) )
                 if site != local_site:
+                    # harvest projects, tags from remote site
                     self._harvest(jobj)
-            numberOfUsers = int( jobj.get("users",0) )
+                    
             sites[site.id] = { 'name': site.name, 'domain':site.domain, 'url': url, 'status':status,
-                               'numberOfProjects': len( jobj["projects"]), 'numberOfUsers': numberOfUsers  }
+                               'numberOfProjects': numberOfProjects, 'numberOfUsers': numberOfUsers  }
             
-            totalNumberOfProjects += len(jobj["projects"])
+            totalNumberOfProjects += numberOfProjects
             totalNumberOfUsers += numberOfUsers
             
         return sites, totalNumberOfProjects, totalNumberOfUsers
@@ -107,6 +113,7 @@ class ProjectManager(object):
                 long_name = pdict['long_name']
                 site_domain = pdict['site_domain']
                 private = pdict.get('private', 'False')
+                shared = pdict.get('shared', 'True')
                 
                 # check site
                 if site_domain==remote_site.domain: # check project belongs to remote site
@@ -120,11 +127,11 @@ class ProjectManager(object):
                         project.long_name = long_name
                         
                         # public/private
-                        if private.lower()=='true':
-                            project.private=True
-                        else:
-                            project.private=False
-                        
+                        project.private = strtobool(private)
+                            
+                        # shared/local
+                        project.shared = strtobool(shared)
+                                                
                         # update project tags
                         project.tags.clear()
                         for tagname in pdict['tags']:

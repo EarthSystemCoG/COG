@@ -104,8 +104,7 @@
 	            <!-- NOTE: form cannot be submitted unless password meets criteria -->
 	            <form action="" method="post" enctype="multipart/form-data" onsubmit="return checkPassword();">
                     {% csrf_token %}
-	                {{ formset1.management_form }}
-	                {{ formset2.management_form }}
+	                {{ formset.management_form }}
 
                     <!-- user information -->
 	                <table> <!--layout only-->
@@ -125,7 +124,10 @@
 	                	    {% else %}
 	                   		    <td>
                                    {{ form.username }}
-	                        	   <em class="message">[ 5 to 30 characters, letters, digits and @/./+/-/_ only ]</em><br>{{ form.username.errors }}
+	                        	   <em class="message">[ 5 to 30 characters, letters, digits and @/./+/-/_ only. 
+	                        	                         Please note that the username is used to build a unique OpenID that you will use to login. 
+	                        	                         If your chosen username is not available, you will be automatically assigned a similar one. ]
+	                        	   <br>{{ form.username.errors }}
 	                    	    </td>
 	                        {% endif %}
 	                    </tr>
@@ -314,60 +316,10 @@
                         {% endif %}
                     </table>
 
-                    <!-- OpenIDs: NOT for new accounts (since an OpenID is generated automatically) -->
-              	    {% if form.instance.id %}
-              		    {% for openidform in formset2 %}
-                            <table>
-                                <tr>
-                                    <td colspan="2" class="caption_mimic" style="border-top: 1px solid #666;"><strong>Open IDs</strong></td>
-                                </tr>
-	              			    <tr>
-	              				    {{ openidform.id }}
-	              				    <td style="width:200px;" nowrap="nowrap">
-                                        <label for="id_claimed_id">
-                                            ESGF OpenID
-                                        </label>
-                                    </td>
-	              				    <td style="width:500px;vertical-align:middle;">
-	              					    {{ openidform.instance.claimed_id }}
-	              					    {{ openidform.claimed_id.as_hidden }}
-	              					    {{ openidform.display_id.as_hidden }}
-	              					    {{ openidform.user.as_hidden }}
-	              				    </td>
-	              			    </tr>
-                            </table>
-			    	    {% endfor %}
-		    	    {% endif %}
-
-                    <!--web URLs-->
-
-                    <table>
-                        <tr>
-				            <td colspan="5" class="caption_mimic" style="border-top: 1px solid #666;">
-                                <strong>Web Sites</strong>
-                            </td>
-                        </tr>
-		    	        <!-- URLs -->
-		    	            <tr>
-              	                <td colspan="6">[Optional web sites associated with this COG user account: (e.g. 'Home Page', 'My Blog') ]</td>
-                            </tr>
-                            {% for urlform in formset1 %}{{ urlform.id }}
-				                <tr>
-			                        <td style="width:60px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-url">Web URL:</label></td>
-				                    <td style="width:300px;vertical-align:middle;">{{ urlform.url }} {{ urlform.url.errors }}</td>
-			                        <td style="width:30px;vertical-align:middle;"><label for="id_url-{{forloop.counter0}}-name">Title:</label></td>
-				                    <td style="width:200px;vertical-align:middle;">{{ urlform.name }} {{ urlform.name.errors }}</td>
-			                        <td style="vertical-align:middle;">{{ urlform.DELETE }} <label for="id_url-{{forloop.counter0}}-DELETE">Delete?</label></td>
-				                </tr>
-		                    {% endfor %}
- 	                    </table>
-
-
-
                     <!--captcha and buttons-->
 
-                    <!-- captcha - only when user first register -->
-                    {% if not form.instance.id %}
+                    <!-- captcha - only when user first register and when USE_CAPTCHA = True -->
+                    {% if not form.instance.id and 'USE_CAPTCHA'|settings_value == True %}
                         <hr style="background-color:#666; margin-top:0;"/>
                         <div style="text-align:right;">
                             <div id="captcha_element">

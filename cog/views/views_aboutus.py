@@ -15,7 +15,6 @@ from cog.models.constants import UPLOAD_DIR_LOGOS, UPLOAD_DIR_PHOTOS
 from cog.forms import *
 from cog.utils import *
 from cog.notification import notify
-from cog.services.membership import addMembership
 from cog.models.utils import *
 from cog.views.views_templated import templated_page_display
 from cog.util.thumbnails import *
@@ -52,6 +51,7 @@ def aboutus_display(request, project_short_name, tab):
         template_form_pages = {reverse('people_update', args=[project_short_name, tab]): 'People'}
     else:
         template_form_pages = {reverse('aboutus_update', args=[project_short_name, tab]): 'About Us'}
+
     template_title = TAB_LABELS[tab]
     return templated_page_display(request, project_short_name, tab, template_page, template_title, template_form_pages)
 

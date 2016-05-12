@@ -1,0 +1,77 @@
+{% extends "cog/common/layout_left_center_right.html" %}
+
+{% block main %}
+
+	{% load cog_utils %}
+		
+	<div class="vertical_menu">
+		<form method="post" action="">
+		    {% csrf_token %}
+		    	     
+		    	<!--  loop over groups and their facets -->
+			    {% for group, facets in groups.items %}
+			    				    				    
+			    	<!--  group header -->
+			    	<h3>	    		         		    		     	
+		    			 {% with "group_name_"|concat:group.name as group_key %}	    			
+		    			  {% with groups|length as length %}
+			    			<select name="{{ group_key }}">
+				    				{% with length|add:"-1" as lastNumber %}
+				    					{% with group.order as selectedNumber %}
+				    						{{ lastNumber|numberOptionsZeroBased:selectedNumber }}
+				    					{% endwith %}
+				    				{% endwith %}			    				
+			    			</select>
+			    			&nbsp; 
+			    			{% if group.name.lower == 'default' %}
+			    				&nbsp; <!-- display no group name -->
+			    			{% else %}
+			    				{{ group.name }}
+			    			{% endif %} 
+			    			{% if errors|dictKeyLookup:group_key %}
+			    				<span class="errornote">{{ errors|dictKeyLookup:group_key }}</span>
+			    			{% endif %}
+		    			 {% endwith %}
+		    			{% endwith %}
+			    	</h3>		    	
+			    	
+				    <!-- loop over search facets for that group -->
+			    	<ul>
+				    	{% for facet in facets %}
+				    		<li>		    						    				
+			    			   {% with "group_name_"|concat:group.name|concat:"_facet_key_"|concat:facet.key as facet_key %}
+			    			    {% with facets|length as length %}
+			    				 {% with length|add:"-1" as lastNumber %}
+			    				   {% with facet.order as selectedNumber %}
+			    				     
+			    					   &nbsp;&nbsp;&nbsp;
+				    				   <select name="{{facet_key}}">
+											{{ lastNumber|numberOptionsZeroBased:selectedNumber }}			
+				    				   </select>	
+				    				   &nbsp;{{ facet.label }}
+			   					    			   
+					    			{% if errors|dictKeyLookup:facet_key %}
+					    				<span class="errornote">{{ errors|dictKeyLookup:facet_key }}</span>
+					    			{% endif %}
+		
+					    			{% endwith %}
+					    		   {% endwith %}
+			    			     {% endwith %}
+			    			   {% endwith %}
+				    			  
+			    			</li>
+				    	{% endfor %}
+			    	</ul>
+				    	
+			{% endfor %}
+		    
+		    <div style="text-align:right">
+		    	<input type="button" value="Cancel" onclick="window.location='{% url 'search_profile_config' project.short_name|lower %}'"/>
+		    	<input type="button" value="Reset" onclick="window.location='{% url 'search_profile_order' project.short_name|lower %}'"/>
+	            <input type="submit" value="Submit" />
+	        </div>
+		       
+		</form>
+	</div>
+
+{% endblock %}

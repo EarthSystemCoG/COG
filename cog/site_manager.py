@@ -28,6 +28,7 @@ class SiteManager(object):
        IDP_WHITELIST=/esg/config/esgf_idp.xml, /esg/config/esgf_idp_static.xml
        # dev/prod server switch
        PRODUCTION_SERVER = True
+       USE_CAPTCHA = True
 
        [ESGF]
        ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov

@@ -3,8 +3,6 @@
 {% block main %}
 
     {% load comments %}
-    {% load pagination_tags %}
-    {% autopaginate topics 20 %}
     {% load cog_utils %}
     
     <!-- one table per topic -->
@@ -58,7 +56,9 @@
     	<em class="message">This Forum has no Topics yet.</em>
     {% endfor %}
     
-	{% paginate %}
+    {% with topics as results_page %}
+    	{% include 'cog/common/_pagination.html' %}
+    {% endwith %}
 	
 	<br/>
 	Forum Topics can only be created by project administrators. Project members can create new Threads for each Topic, after they <a href="{% url 'login' %}?next={{ request.path }}"> login</a>.

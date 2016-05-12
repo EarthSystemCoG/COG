@@ -9,7 +9,10 @@ from cog.site_manager import siteManager
 if siteManager.isGlobusEnabled():    
     from globusonline.transfer.api_client import Transfer
     from globusonline.transfer.api_client import TransferAPIClient
+    from globusonline.transfer.api_client import TransferAPIError
+    from globusonline.transfer.api_client import x509_proxy
 import os
+import urlparse
 
 ACCESS_TOKEN_FILE = ".goauth-token.secret"
 DOWNLOAD_SCRIPT = "download.py"
@@ -26,38 +29,48 @@ def generateGlobusDownloadScript(download_map):
     script = script.replace('{}##GENDPOINTDICT##', str(download_map))
 
     return script
-    
-
-def get_access_token():
-    '''Utility function to read an access_token for a client portal that is not registered with Globus.'''
-    
-    filepath = os.path.join(os.path.expanduser("~"), ACCESS_TOKEN_FILE)
-    
-    try:
-        with open(filepath, 'r') as f:
-            access_token = f.read().strip()
-            return access_token
-    except IOError:
-        print "Access token file not found: %s" % filepath
-        return None
 
 
-def submiTransfer(username, access_token, source_endpoint, source_files, target_endpoint, target_directory):
+def activateEndpoint(api_client, endpoint, openid=None):
+
+    # Try to autoactivate the endpoint
+    code, reason, result = api_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
+
+    if result["code"] == "AutoActivationFailed" and openid:
+        # Activate the endpoint using an X.509 user credential stored by esgf-idp in /tmp/x509up_<idp_hostname>_<username>
+        openid_parsed = urlparse.urlparse(openid)
+        hostname = openid_parsed.hostname
+        username = os.path.basename(openid_parsed.path)
+        cred_file = "/tmp/x509up_%s_%s" % (hostname, username)
+        reqs = result
+        public_key = reqs.get_requirement_value("delegate_proxy", "public_key")
+        try:
+            proxy = x509_proxy.create_proxy_from_file(cred_file, public_key, lifetime_hours=72)
+        except Exception as e:
+            print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
+            return
+        reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
+        code, reason, result = api_client.endpoint_activate(endpoint, reqs)
+        if code != 200:
+            print "Could not aactivate the endpoint: %s. Error: %s - %s" % (endpoint, result["code"], result["message"])
+
+    print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
+
+
+def submitTransfer(openid, username, access_token, source_endpoint, source_files, target_endpoint, target_directory):
     '''
     Method to submit a data transfer request to Globus.
     '''
     
-    # instantiate GO client
-    goapi_client = TransferAPIClient(username, goauth=access_token)
-        
-    # must automatically activate the endpoints using cached credentials
-    code, reason, result = goapi_client.endpoint_autoactivate(source_endpoint, if_expires_in=600)
-    print "Source Endpoint Activation: : %s (%s)" % (result["code"], result["message"])
-    code, reason, result = goapi_client.endpoint_autoactivate(target_endpoint, if_expires_in=600)
-    print "Target Endpoint Activation: : %s (%s)" % (result["code"], result["message"])
-        
+    # instantiate Globus Transfer API client
+    api_client = TransferAPIClient(username, goauth=access_token)
+
+    # must activate the endpoints using cached credentials
+    activateEndpoint(api_client, source_endpoint, openid)
+    activateEndpoint(api_client, target_endpoint)
+
     # obtain a submission id from Globus
-    code, message, data = goapi_client.transfer_submission_id()
+    code, message, data = api_client.transfer_submission_id()
     submission_id = data["value"]
     print "Obtained transfer submission id: %s" % submission_id
     
@@ -72,8 +85,12 @@ def submiTransfer(username, access_token, source_endpoint, source_files, target_
         transfer_task.add_item(source_file, target_file)
     
     # submit the transfer request
-    code, reason, data = goapi_client.transfer(transfer_task)
-    task_id = data["task_id"]
-    print "Submitted transfer task with id: %s" % task_id
+    try:
+        code, reason, data = api_client.transfer(transfer_task)
+        task_id = data["task_id"]
+        print "Submitted transfer task with id: %s" % task_id
+    except Exception as e:
+        print "Could not submit the transfer. Error: %s" % str(e)
+        task_id = "Could not submit the transfer. Please contact the ESGF node admin to investigate the issue."
     
     return task_id
