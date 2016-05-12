@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center.html" %}
+{% extends "cog/common/layout_left_center.html" %}
 
 {% block extrahead %}
 
@@ -26,13 +26,20 @@
 	<style type="text/css">
 
 	    #parent_projects ul, #peer_projects ul, #child_projects ul {
-		    margin: 0;
-		    padding: 0;
-		    padding-left: 18px; /* indent checkbox */
+		    margin:          0;
+		    padding:         0;
+		    padding-left:    18px; /* indent checkbox */
 		    list-style-type: none;
 		}
 
-	</style>
+       /* align box and text */
+       input {
+           vertical-align: bottom;
+           position:       relative;
+           top:            -1px;
+       }
+       </style>
+
 
 {% endblock %}
 
@@ -75,17 +82,23 @@
 
                         <input type="checkbox" id="parent_project" name="parent_project" onclick="toggle_projects(this)">
                             <label for="parent_project"><strong>Parent Projects</strong></label>
-                        <div id="parent_projects">{{ form.parent_projects }}</div>
+                        <div id="parent_projects">
+                            {{ form.parent_projects }}
+                        </div>
 
                         <!-- peer projects -->
                         <input type="checkbox" id="peer_project" name="peer_project" onclick="toggle_projects(this)">
                              <label for="peer_project"><strong>Peer Projects</strong></label>
-                        <div id="peer_projects">{{ form.peer_projects }}</div>
+                        <div id="peer_projects">
+                            {{ form.peer_projects }}
+                        </div>
 
                         <!-- child projects -->
                         <input type="checkbox" id="child project" name="child_project" onclick="toggle_projects(this)">
                              <label for="child project"><strong>Child Projects</strong></label>
-                        <div id="child_projects">{{ form.child_projects }}</div>
+                        <div id="child_projects">
+                            {{ form.child_projects }}
+                        </div>
 
                     </td>
                 </tr>

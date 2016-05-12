@@ -1,6 +1,7 @@
 from django.forms import Form, ModelForm, CharField
 from cog.models import *
 from cog.utils import default_clean_field, clean_url_field
+from django import forms
 
 
 class BookmarkForm(ModelForm):
@@ -46,13 +47,30 @@ class FolderForm(ModelForm):
     def __init__(self, project, *args, **kwargs):
         
         super(FolderForm, self).__init__(*args, **kwargs)
+        self.project = kwargs.pop('project', None)
                 
         # filter parent posts by project and type
-        self.fields['parent'].queryset = Folder.objects.filter(project=project, active=True).exclude(id=self.instance.id).distinct().order_by('order')
+        self.fields['parent'].queryset = Folder.objects.filter(project=project, active=True)\
+	        .exclude(id=self.instance.id).distinct().order_by('order')
         # exclude the option for no parent - all folders created after the first must have parent
         self.fields['parent'].empty_label = None
-        
+
     def clean_name(self):
-        return default_clean_field(self, 'name')
+
+        name = self.cleaned_data['name']
+        project = self.cleaned_data['project']
+
+        #make sure name is unique with the project
+        try:
+            n = Folder.objects.filter(project=project).get(name__iexact=name)
+            raise forms.ValidationError("The folder name: %s already exists, please try again. "
+                                        % n.name)
+        except Folder.DoesNotExist:
+            pass
+
+        #looks for invalid characters
+        name = default_clean_field(self, 'name')
+
+        return name
 
 

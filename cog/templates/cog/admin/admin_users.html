@@ -1,12 +1,13 @@
 {% extends "cog/common/layout_center.html" %}
-
+<!--begin system users template-->
 {% block main %}
 
    {% load cog_utils %}
    {% load pagination_tags %}
    {% autopaginate users 50 %}
 
-<p>Below is the list of system users. Click on the name to visit their profile (includes home site). Click on the email to contact the user. </p>
+<p>Below is the list of system users. Click on the name to visit their profile (includes home node). Click on the email
+	to contact the user. </p>
    
        <table style="margin-left:125px; width:700px;">
            <tr>

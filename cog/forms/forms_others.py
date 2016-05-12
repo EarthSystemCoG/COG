@@ -23,7 +23,7 @@ class NewsForm(ModelForm):
     peer_projects = ModelMultipleChoiceField(queryset=Project.objects.all(), required=False,
                                              widget=CheckboxSelectMultiple)
     parent_projects = ModelMultipleChoiceField(queryset=Project.objects.all(), required=False,
-                                               widget=CheckboxSelectMultiple)
+                                               widget=CheckboxSelectMultiple(attrs={'vertical-align': 'bottom'}))
     child_projects = ModelMultipleChoiceField(queryset=Project.objects.all(), required=False,
                                               widget=CheckboxSelectMultiple)
 

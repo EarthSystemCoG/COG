@@ -23,7 +23,8 @@
 * (for reference):
 * dark teal    = #358C92 navigation bar
 * light teal   = #B9E0E3 headers and accordions
-* light blue   = #E9F5F6 footer
+* lightest teal = #E9F5F6 custom header
+* light blue   = #E9F5F6  custom footer
 * dark yellow  = #FAC24A bar with technical support
 * light yellow = #FCE79F headers
 * lightest yellow = #FCF2CE table dividers, some message boxes
@@ -102,11 +103,14 @@ body{
     margin-left:    auto;
     vertical-align: baseline; /* this is the default, be we want to control */
     width:          100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
-    height:         100%; 
-
-
+    height:         100%;
 }
 
+
+/* turn off image borders by default */
+img{
+        border: none;
+}
 /*********************************
 BEGIN: Content wrappers
 **********************************/
@@ -145,7 +149,7 @@ div.custom_header_bar {
 
 /* create a white header that is just slightly larger than the main cog site */
 div.custom_header{
-    width:        950px; /* note span-24 = 950px */
+    width:        1140px;
     margin-left:  auto;
     margin-right: auto;
 }
@@ -215,14 +219,14 @@ This sets the styles for the defaults
 
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 div.custom_footer_bar{
-    width:              100%; /* note span-24 = 950px */
+    width:              100%;
     background-color:   #666; /*gray */
     position:           relative;
 }
 
 /* create a custom footer that is slightly larger than the main cog site */
 div.custom_footer {
-    width:        950px; /* note span-24 = 950px */
+    width:        1140px;
     margin-left:  auto;
     margin-right: auto;
     color:        white; /*text color */
@@ -252,7 +256,7 @@ BEGIN: CoG footer
 /*the footer bar goes across the entire browser window while the footer stays within the Django grid span-24 */
 
 div.footer_bar{
-    width:              100%;     /* note span-24 = 950px */
+    width:              100%;
     background-color:   #e9f5f6;  /*light blue*/
     clear:              both;     /*this puts the footer on top of any content that might be below it*/
 }
@@ -268,14 +272,14 @@ div.footer{
   margin-left:  auto;
   margin-right: auto;
   height:       40px;
-  width:        950px; /* note span-24 = 950px */
+  width:        1140px;
 }
 
 .footer td{
     vertical-align: middle;
     font:           normal normal 8pt/1.231 Arial,sans-serif;
     color:          #666;
-    padding:       0;  /*ensure the table lines up with the left navigation bar */
+    padding:        0;  /*ensure the table lines up with the left navigation bar */
     padding-top:    3px;  /* nice spacing in the div and between the two table rows */
 }
 
@@ -288,25 +292,19 @@ div.footer{
 BEGIN FIXES FOR IE
 /****************************/
 
-/* force IE to center the content in the body*/
-.ie6 body,.ie7 body, .ie8 body, .ie9 body, .ie10 body, .ie11 body{
+/* force IE9 and below to center the content in the body
+IE10+ no longer accepts conditionals
+*/
+.ie6 body, .ie7 body, .ie8 body, .ie9 body{
     margin-right:  auto;
 	margin-left:   auto;
-    margin-top:   0;
-	margin-bottom:0;
+    margin-top:    0;
+	margin-bottom: 0;
     text-align:    left;
-
-/* debug: are the IE conditionals even working? */
-        /*background-color: pink;*/
-}
-
-/* turn off image borders by default */
-img{
-        border:none;
 }
 
 /* adjust bullets which are outside by default in IE */
-.ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul, .ie10 ul, .ie11 ul{
+.ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul{
      margin:             0;
      padding:            0;
      list-style-position: inside;
@@ -314,18 +312,42 @@ img{
 
 /*force IE to behave the same as other browsers */
 .ie9 hr {
-        background:   #358C92;
+    background:   #358C92;
 	border:       none;
 	height:        1px;
 	margin-bottom: 4px;
 	margin-top:    4px;
 }
 
-
-/* checkboxes and labels don't align correctly in IE. */
-.ie9 input[type=checkbox], .ie10 input[type=checkbox], .ie11 input[type=checkbox] {
+/* checkboxes and labels don't align correctly in IE9. */
+.ie9 input[type=checkbox]{
     vertical-align: -3px;
 }
+
+/* non-IE version */
+/* used in file upload form */
+td.checkbox_label {
+    vertical-align: middle;
+}
+
+/* IE10+ modifications */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+           input[type=checkbox] {
+               vertical-align: bottom;
+               position:       relative;
+               top:            2px;
+
+           }
+
+           label {
+               vertical-align: bottom;
+           }
+           td.checkbox_label {
+               vertical-align: bottom;
+           }
+       }
+
 
 /*******************************
 BEGIN: headers
@@ -454,7 +476,7 @@ table {
 	margin-left:     0;
 }
 
-tbody tr:nth-child(2n), tbody tr.even{
+tbody tr:nth-child(2n), table tbody tr.even{
     vertical-align:   middle;
     font-size:        12px;
     padding:          4px;
@@ -463,7 +485,7 @@ tbody tr:nth-child(2n), tbody tr.even{
 
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
-tbody tr:nth-child(even) td, tbody tr.even td {
+tbody tr:nth-child(even) td, table tbody tr.even td {
 	/* background:       #B9E0E3;/*light-teal */
     background-color: #eee /*light-gray */
 }
@@ -500,8 +522,9 @@ table.odd-color tbody tr:nth-child(even) td, tbody tr.even td {
 }
 
 /* style for all cells in a non-colored (ie: no alternating color) table */
-table.no-color td {
+table.no-color td{
 	background-color: #FFFFFF !important;
+
 }
 
 /* for use in the custom header for JPL */
@@ -509,7 +532,8 @@ table.transparent tbody tr:nth-child(even) td, tbody tr.even td{
     background-color: inherit;
 }
 
-/* for tables that are entirely gray. Used when a table is imbedded in another table with a dark row */
+/* for tables that are entirely gray. Used when a table is embedded in another table with a dark row */
+/* TODO remove the td here */
 table.gray td{
         background-color: #eee !important;
 }
@@ -1107,10 +1131,20 @@ BEGIN USER MESSAGES
 .message-box {
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
-	margin:      5px;
+	margin:      5px 0 5px 0;
 	border:      1px solid #666;
 	font-weight: bold;
 	text-align:  center;
+}
+
+.node-notification-box{
+	background:   #666;
+	color:        white;
+	text-align:   center;
+	padding:      10px;
+	font-size:    11pt;
+	margin-top:   5px;
+	margin-bottom:10px;
 }
 
 /*update openID box. This should be removed when no longer needed */
@@ -1269,6 +1303,8 @@ BEGIN PEER-NODES-BOX
 .peer-nodes-box-body {
 	
 	padding: 4px;
+	max-height: 80px;
+	overflow-y: auto;
 	
 }
 
@@ -1482,15 +1518,15 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 /* TOP NAV */
 .top_nav {
-    width: 100%;
-    height: 20px;
-    margin: 0 auto;
-    padding:  0;
-    background: #FFFFFF;
-    color: #FFFFFF;
-    font-size: 9pt;
+    width:       100%;
+    height:      20px;
+    margin:      0 auto;
+    padding:     0;
+    background:  #FFFFFF;
+    color:       #FFFFFF;
+    font-size:   9pt;
     font-weight: bold;
-    font-style: normal;
+    font-style:  normal;
 }
 
 /*bar that shows up when there is no upper navigation items (e.g. data cart) */
@@ -1504,11 +1540,11 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 #top_subnav_left {
-	padding-top: 2px;
-	padding-left: 6px;
-	width: 100%;
-	background-color: #B9E0E3;
-	float:left;
+	padding-top:     2px;
+	padding-left:    6px;
+	width:           100%;
+	background-color:#B9E0E3;
+	float:           left;
 }
 
 #top_subnav_left a:link, #top_subnav_left a:visited {
@@ -1526,9 +1562,9 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 }
 
 #top_nav_right a {
-	color: #000000;
-    padding: 0;
-    padding-top:4px;
+	color:         black;
+    padding:       0;
+    padding-top:   4px;
     padding-bottom:4px;
     padding-right: 4px;
 }
@@ -1572,7 +1608,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     /* COG STYLE: TOP NAV BAR TEXT */
     text-decoration: none;
     /* padding: top-right-bottom-left */
-    padding: 2px 6px 6px 6px;
+    padding: 2px 8px 6px 6px;
     font-weight: bold;
     color: #FFFFFF;
     border: none;

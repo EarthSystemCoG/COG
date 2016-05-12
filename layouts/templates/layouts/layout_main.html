@@ -1,17 +1,16 @@
 {% extends "layouts/layout_base.html" %}
 <!-- don't put comments above the extends or it ends up above the doctype. This throws IE into quirks mode -->
-<!--LOCATION: /layouts//templates/layouts/layout_main.html-->
 
 {% block body %}  
-    <!--// START: /layouts/templates/layouts/layout_main.html //-->
-    <!--// add page title above "block main" //-->
-    <div class="span-24 last">
+    <!--// LAYOUT: /layouts/layouts/layout_main.html //-->
+
+    <div class="span-max last">
         {% block title %} <h1 class="title"> {{ title }} </h1> {% endblock %}
-    </div> <!--// closing div.span-24 last //-->
+    </div> <!--// closing div.span-max last //-->
 
     <!--load block main-->
-    <div class="span-24 last">
+    <div class="span-max last">
          {% block main %} Main content {% endblock %}
-    </div> <!--// closing div.span-24 last //-->
+    </div> <!--// closing div.span-max last //-->
    <!--//END: /layouts/templates/layouts/layout_main.html-->
 {% endblock %}

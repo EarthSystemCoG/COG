@@ -9,8 +9,9 @@ from cog.models.peer_site import getPeerSites
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 import urllib
+from collections import OrderedDict
 
-from cog.plugins.esgf.idp_whitelist import LocalKnownProvidersDict
+from cog.plugins.esgf.registry import LocalKnownProvidersDict
 
 # module-scope object that holds list of known ESGF Identity Providers
 # included here because login view is part of django-openid-auth module
@@ -18,7 +19,9 @@ esgf_known_providers = LocalKnownProvidersDict()
 
 
 def getKnownIdentityProviders():
-    return esgf_known_providers.idpDict()
+    # sort dictionary by key
+    return OrderedDict(sorted(esgf_known_providers.idpDict().items()))
+    #return esgf_known_providers.idpDict()
 
 
 # function to return an error message if a project is not active
@@ -64,7 +67,7 @@ def getUsersThatMatch(match):
 def get_all_projects_for_user(user, includeCurrentSite=True):
     """Queries all nodes (including local node) for projects the user belongs to.
        Returns a list of dictionaries but does NOT update the local database.
-       Example of JSON data retrieved from each site:
+       Example of JSON data retrieved from each node:
       {
         "users": {
             "https://hydra.fsl.noaa.gov/esgf-idp/openid/rootAdmin": {
@@ -89,8 +92,8 @@ def get_all_projects_for_user(user, includeCurrentSite=True):
                 .....
     """
 
-    # dictionary of information retrieved from each site, including current site
-    projDict = {}  # site --> dictionary
+    # dictionary of information retrieved from each node, including current node
+    projDict = {}  # node --> dictionary
     
     try:
         if user.profile.openid() is not None:
@@ -98,7 +101,7 @@ def get_all_projects_for_user(user, includeCurrentSite=True):
             openid = user.profile.openid()
             print 'Updating projects for user with openid=%s' % openid
             
-            # loop over remote (enabled) sites, possibly add current site
+            # loop over remote (enabled) nodes, possibly add current node
             sites = list(getPeerSites())
             if includeCurrentSite:
                 sites = sites + [Site.objects.get_current()]

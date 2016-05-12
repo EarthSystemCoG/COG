@@ -5,17 +5,18 @@ python manage.py sync_sites [--delete]
 '''
 
 from optparse import make_option
-import os
 from xml.etree.ElementTree import fromstring
 
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 
-from cog.models import PeerSite
+from cog.plugins.esgf.registry import PeerNodesList
+from cog.site_manager import siteManager
 
 
-FILENAME = "sites.xml" # located in same directory as this command
+# read /esg/config/esgf_cogs.xml
+FILEPATH = siteManager.get('PEER_NODES') 
 
 class Command(BaseCommand):
     
@@ -33,54 +34,5 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         
-        
-        self.stdout.write('Updating list of CoG sites (delete=%s)' % options['delete'])
-        
-        # current site - must not be updated from file list
-        current_site = Site.objects.get_current()
-                    
-        # read sites.xml file located in this directory    
-        filepath = os.path.join(os.path.dirname(__file__), FILENAME)
-        with open (filepath, "r") as myfile:
-            
-            xml=myfile.read().replace('\n', '')
-
-            # <sites>
-            root = fromstring(xml)
-            
-            # update/insert all sites found in file
-            domains = [] # list of site domains found in file
-            for site in root.findall("site"):
-                name = site.attrib['name']
-                domain = site.attrib['domain']
-                domains.append(domain)
-                self.stdout.write('Updating site domain: %s name: %s' % (domain, name) )
-                
-                # update Site objects
-                try:
-                    _site = Site.objects.get(domain=domain)
-                    if _site != current_site:
-                        # update site
-                        _site.name = name
-                        _site.save()
-                        self.stdout.write('Updated site: %s' % _site)
-                except ObjectDoesNotExist:
-                    _site = Site.objects.create(name=name, domain=domain)
-                    self.stdout.write('Created site: %s' % _site)
-                    
-                # update PeerSite objects
-                try:
-                    peersite = PeerSite.objects.get(site=_site)
-                except ObjectDoesNotExist:
-                    peersite = PeerSite.objects.create(site=_site, enabled=False)
-                self.stdout.write('\tPeer site: %s' % peersite)
-                        
-        # clean up stale sites
-        if options['delete']:
-            for peer in PeerSite.objects.all():
-                if peer.site.domain not in domains:
-                    if peer.site != current_site:
-                        self.stdout.write('Stale peer site found at domain: %s' % peer.site.domain + ", deleting it...")
-                        peer.site.delete() # will also delete the PeerSite object on cascade
-
-                
+        pnl = PeerNodesList(FILEPATH)
+        pnl.reload(delete=options['delete'])

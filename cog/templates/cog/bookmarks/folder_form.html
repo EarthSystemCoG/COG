@@ -1,4 +1,4 @@
-{% extends "cog/common/layout_sidebar_center_right.html" %}
+{% extends "cog/common/layout_left_center_right.html" %}
 
 {% block main %}
 
@@ -6,14 +6,14 @@
 
 <div class="mybox">
     <form method="post" action="">
-        
            {% csrf_token %}
-           
+
             <table>
                 <tr>
                     <td valign="top" nowrap="nowrap"><strong>Name</strong></td>
                     <!--ordering of the folders in the form occurs in /forms_bookmarks.py -->
                     <td class="long">{{ form.name }}{{ form.name.errors }}</td>
+
                 </tr>
                 <tr>
                     <td valign="top" nowrap="nowrap"><strong>Parent Folder</strong></td>

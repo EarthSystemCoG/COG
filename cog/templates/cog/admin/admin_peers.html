@@ -1,10 +1,10 @@
 {% extends "cog/common/layout_center.html" %}
 
 {% block main %}
-    <!-- limit visibility to site administrators -->
+    <!-- limit visibility to node administrators -->
     {% if request.user.is_staff %}
     
-        <div class="prepend-5 span-14 last" >
+        <div class="prepend-6 span-680 last" >
       
       	    <h1>CoG Peers Configuration</h1>
       	
@@ -25,7 +25,7 @@
 				    <table>
 					    <caption>CoG Peer Nodes</caption>
                         <tr>
-                            <th class="white" scope="col"><strong>Site name</strong></th>
+                            <th class="white" scope="col"><strong>Node name</strong></th>
                             <th class="white" scope="col"><strong>Domain</strong></th>
                             <th class="white" scope="col"><strong>Enable?</strong></th>
                         </tr>

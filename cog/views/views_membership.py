@@ -26,13 +26,14 @@ def membership_request(request, project_short_name):
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
-    title = '%s Group Membership Request' % project.short_name
+    title = '%s Project Membership Request' % project.short_name
     template = 'cog/membership/membership_request.html'
 
     # display submission form
-    if request.method=='GET':
+    if request.method == 'GET':
         
-        return render_to_response(template, {'project':project,'title': title }, context_instance=RequestContext(request))
+        return render_to_response(template, {'project': project, 'title': title},
+                                  context_instance=RequestContext(request))
         
     # process submission form
     else:
@@ -47,13 +48,14 @@ def membership_request(request, project_short_name):
         status = requestMembership(user, group)
         
         # notify all project administrators
-        if status==RESULT_SUCCESS:
-            notifyAdminsOfMembershipRequest(project, group, user, request)
+        if status == RESULT_SUCCESS:
+            notifyAdminsOfMembershipRequest(project, user, request)
                 
         return render_to_response(template, 
-                                  {'project':project, 'group':group, 'user':user, 'status':status, 'title': title }, 
+                                  {'project': project, 'group': group, 'user': user, 'status': status, 'title': title},
                                   context_instance=RequestContext(request))
     
+
 # View to list the project memberships for all system users
 @login_required
 def membership_list_all(request, project_short_name):
@@ -77,6 +79,7 @@ def membership_list_all(request, project_short_name):
     view_name = 'membership_list_all'
     return render_membership_page(request, project, users, title, view_name)
     #return render_system_users_page(request, project, users, title, view_name)
+
 
 # View to list the memberships for all users enrolled in the project
 @login_required
@@ -128,14 +131,15 @@ def membership_list_requested(request, project_short_name):
     else:
         _users = [mr.user for mr in MembershipRequest.objects.filter(group=group).order_by('user__last_name')]
         match = request.POST['match'].lower()
-        users = [ user for user in _users if (match in user.first_name.lower() 
-                                              or match in user.last_name.lower() 
-                                              or match in user.username.lower() 
-                                              or match in user.email.lower())]
+        users = [user for user in _users if (match in user.first_name.lower()
+                                             or match in user.last_name.lower()
+                                             or match in user.username.lower()
+                                             or match in user.email.lower())]
         
     title = '%s Pending Users' % project.short_name   
     view_name = 'membership_list_requested'
     return render_membership_page(request, project, users, title, view_name)
+
 
 def render_membership_page(request, project, users, title, view_name):
     
@@ -145,20 +149,11 @@ def render_membership_page(request, project, users, title, view_name):
     return render_to_response('cog/membership/membership_list.html', 
                               {'project': project, 'users': users, 'groups': groups,
                                'view_name': view_name,
-                               'title': title, 'list_title': '%s Membership' % project.short_name },
+                               'title': title, 'list_title': '%s Membership' % project.short_name},
                               context_instance=RequestContext(request))
 
-def render_system_users_page(request, project, users, title, view_name):
 
-    # load project groups
-    groups = project.getGroups()
-
-    return render_to_response('cog/membership/system_list.html',
-                              {'project': project, 'users': users,
-                               'view_name': view_name, 'title': title},
-                              context_instance=RequestContext(request))
-    
-# view to cancel user's own membership in a project
+# view to cancel membership in a project...initiated by the user from their profile page
 # this view acts on the currently logged-in user
 @login_required
 def membership_remove(request, project_short_name):
@@ -166,27 +161,31 @@ def membership_remove(request, project_short_name):
     # load project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     
-    # redirect to project home site?
+    # redirect to project home node?
     if project.site != Site.objects.get_current():
-        url = 'http://%s%s' % (project.site.domain, reverse('membership_remove', kwargs={'project_short_name': project.short_name}) ) 
-        return HttpResponseRedirect( url )
+        url = 'http://%s%s' % (project.site.domain, reverse('membership_remove',
+                                                            kwargs={'project_short_name': project.short_name}))
+        return HttpResponseRedirect(url)
     
     template = 'cog/membership/membership_cancel.html'
+
     # display submission form
-    if request.method=='GET':
+    if request.method == 'GET':
         
         title = 'Cancel %s Membership Request' % project.short_name
-        return render_to_response(template, {'project':project,'title': title}, context_instance=RequestContext(request))
+        return render_to_response(template, {'project': project, 'title': title},
+                                  context_instance=RequestContext(request))
         
     # process submission form
     else:
         
-        for group in [project.getAdminGroup(), project.getUserGroup()]:
+        for group in [project.getAdminGroup(), project.getUserGroup(), project.getContributorGroup()]:
             # user is enrolled in group
             if group in request.user.groups.all():
                 status = cancelMembership(request.user, group)
-                if status==RESULT_SUCCESS:
-                    notifyUserOfMembershipSelfCanceled(project, group, request.user)
+                if status == RESULT_SUCCESS:
+                    notifyUserOfMembershipSelfCanceled(project, request.user)
+
             # user is pending approval in group
             else:
                 cancelMembershipRequest(request.user, group)
@@ -196,94 +195,129 @@ def membership_remove(request, project_short_name):
         
         # redirect to confirmation page
         #title = 'Cancel %s Membership Confirmation' % project.short_name
-        #return render_to_response(template, {'project':project,'title': title }, context_instance=RequestContext(request))   
-        # redirect to user profile (on proper site)
-        return HttpResponseRedirect( reverse('user_profile_redirect', kwargs={'user_id': request.user.id }) )
+        #return render_to_response(template, {'project':project,'title': title },
+        # context_instance=RequestContext(request))
+        # redirect to user profile (on proper node)
+        return HttpResponseRedirect(reverse('user_profile_redirect', kwargs={'user_id': request.user.id}))
     
-# view to bulk-process group membership operations
-# this view can be invoked as either GET or POST,  following a GET request to a membership listing
-@login_required
+
+#view to bulk-process group membership operations from the pending_users or current_users template
+#this view can be invoked as either GET or POST,  following a GET request to a membership listing
+# @login_required
 def membership_process(request, project_short_name):
-    
     # load project
+    print 'in membership process'
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    
     # check permission
     if not userHasAdminPermission(request.user, project):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
+
+    print 'items', request.REQUEST.items()
     for (name, value) in request.REQUEST.items():
-                
+        print '**************************************'
+        print 'name is ', name
         if name.startswith(NEW_MEMBERSHIP) or name.startswith(OLD_MEMBERSHIP) or name.startswith(NO_MEMBERSHIP):
             (prefix, group_name, user_id) = name.split(":")
             
             group = get_object_or_404(Group, name=group_name)
             user = get_object_or_404(User, pk=user_id)
             
-            # HTTP POST parameter from form check-box
+            # HTTP POST parameter from form check-box, all checks are treated as new
+            # process checkbox as a new user
             if name.startswith(NEW_MEMBERSHIP):
+                print 'new', user.get_full_name(), group_name
                 status = addMembership(user, group)
-                if status==RESULT_SUCCESS:
+
+                #only email if user not already a member
+                if status == RESULT_SUCCESS:
                     notifyUserOfMembershipGranted(project, group, user, request)
-                
+
+            # process hidden input field that indicates current membership
             # HTTP POST parameter from form hidden field
+            # if user has a role, then {{isEnrolled}} turns on the hidden field with value = "on"
+
             elif name.startswith(OLD_MEMBERSHIP):
+                print 'old', user.get_full_name(), group_name
                 try:
-                    # do not remove is new_membership parameter is found
-                    new_membership = request.REQUEST[encodeMembershipPar(NEW_MEMBERSHIP, group.name,user.id)]
+                    # don't delete from group if checkbox is still checked  (e.g. new membership)
+                    new_membership = request.REQUEST[encodeMembershipPar(NEW_MEMBERSHIP, group.name, user.id)]
+                    if new_membership:
+                        print 'checkbox is there', group_name
                 except KeyError:
+                    # checkbox is empty, so remove from group
                     status = cancelMembership(user, group)
-                    if status==RESULT_SUCCESS:
-                        notifyUserOfMembershipCanceled(project, group, user)
+                    if status == RESULT_SUCCESS:
+                        notifyUserOfGroupRemoval(project, group, user)
              
-            # HTTP GET parameter       
+            # HTTP GET parameter (when delete link clicked)
             elif name.startswith(NO_MEMBERSHIP):
+                #TODO check group here, should remove from all groups
+                print 'method on delete ', request.method
+                print 'none', user.get_full_name()
                 status = cancelMembership(user, group)
-                if status==RESULT_SUCCESS:
-                    notifyUserOfMembershipCanceled(project, group, user)
-        
-    # redirect to the original listing that submitted the processing   
+                if status == RESULT_SUCCESS:
+                    notifyUserOfGroupRemoval(project, group, user)
+
+    # redirect to the original listing that submitted the processing
     view_name = request.REQUEST['view_name']
-    return HttpResponseRedirect( reverse(view_name, kwargs={'project_short_name': project_short_name })+"?status=success" )
+    return HttpResponseRedirect(reverse(view_name,
+                                        kwargs={'project_short_name': project_short_name})+"?status=success")
+
 
 # Utility method to encode a membership HTTP parameter as "action:group_name:user_id"
 def encodeMembershipPar(action, group_name, user_id):
     return "%s:%s:%s" % (action, group_name, user_id)
 
-def notifyAdminsOfMembershipRequest(project, group, user, request):
-    url = reverse('membership_list_requested', kwargs={ 'project_short_name':project.short_name.lower() })
+
+def notifyAdminsOfMembershipRequest(project, user, request):
+    url = reverse('membership_list_requested', kwargs={'project_short_name': project.short_name.lower()})
     url = request.build_absolute_uri(url)
     subject = "[%s] Membership Request" % project.short_name
-    message = "User: %s has requested to join project: %s.\nPlease process the membership request at: %s ." \
-            % (user.username, project.short_name, url)
+    message = "User: %s has requested to join your ESGF-CoG Project: %s." \
+              "\nYou may process this membership request at: %s." \
+              % (user.username, project.short_name, url)
     for admin in list(project.getAdminGroup().user_set.all())+list(getSiteAdministrators()):
         notify(admin, subject, message)
-
 
 def notifyUserOfMembershipGranted(project, group, user, request):
     
     subject = "[%s] Membership Granted" % project.short_name
-    message = "You have been granted membership in group: %s.\nThank you for your interest in project: %s." % (group.name, project.short_name)
+    message = "Welcome %s! You have been granted membership in the ESGF-CoG Project: %s," \
+              " and assigned to the %s permissions group." % (user.first_name, project.short_name, _getGroupDescription(group.name))
     
     url = project.home_page_url()
     url = request.build_absolute_uri(url)
-    message += "\nPlease visit the %s project workspace at: %s" % (project.short_name, url)
+
+    message += "\nPlease login and collaborate with us at: %s." % url
     notify(user, subject, message)
 
-def notifyUserOfMembershipCanceled(project, group, user):
+
+def notifyUserOfGroupRemoval(project, group, user):
     
-    subject = "[%s] Membership Canceled" % project.short_name
-    message = "We are sorry to inform you that your membership in group: %s has been canceled.\nPlease contact the administrators of project: %s for any questions." % (group.name, project.short_name)
+    subject = "[%s] Permissions Group Modification" % project.short_name
+    message = "Greetings %s. Your permissions in the ESGF-CoG Project: %s have changed." \
+              "\nYou have been removed from the %s permissions group." % (user.first_name, project.short_name,
+                                                                         _getGroupDescription(group.name) )
     notify(user, subject, message)
     
-def notifyUserOfMembershipSelfCanceled(project, group, user):
+
+def notifyUserOfMembershipSelfCanceled(project, user):
     
     subject = "[%s] Membership Canceled" % project.short_name
-    message = "As you requested, your membership in group: %s has been canceled.\nPlease contact the administrators of project: %s immediately if you did not request this cancellation." % (group.name, project.short_name)
+    message = "As you requested, your membership in the ESGF-CoG Project: %s has been canceled." \
+              "\nPlease contact the [%s] project administrators if you did not " \
+              "request this action." % project.short_name
     notify(user, subject, message)
     
+def _getGroupDescription(group_name):
+    '''Returns a human readable description for a permissions group.'''
+    
+    parts = group_name.split('_')
+    return parts[1].capitalize()
+
+
 def notifyAdminsOfMembershipCanceled(project, user):
-    
+
     subject = "[%s] Membership Canceled" % project.short_name
     message = "User %s has decided to cancel his/her membership in project %s." % (user.username, project.short_name)
     

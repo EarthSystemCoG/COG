@@ -28,7 +28,7 @@
 
 {% block main %}
 
-<!--pull down menu of other data carts-->
+    <!--pull down menu of other data carts-->
     <h1>My DataCart</h1>
 	<div style="text-align:center; font-weight:bold">
 		
@@ -59,108 +59,125 @@
 		{% endif %}
 		
 		<!-- optional message -->
-		<div id="message" class="message-box" style="display:none"></div>
-		
-		
+		<div id="message" class="message-box" style="display:none">
+
+		</div>
 	</div>
 	
-	
-	
-<!-- local data cart -->
+    <!-- local data cart -->
 	{% if datacart.items.all|length > 0 %}
-    <br><br>
+        <br><br>
+	    <!-- skeleton form to empty the data cart via POST -->
+	    <form name="emptyDataCartForm" action='{% url 'datacart_empty' site.id request.user.id %}' method='post'>
 
-	  <!-- skeleton form to empty the data cart via POST -->
-	  <form name="emptyDataCartForm" action='{% url 'datacart_empty' site.id request.user.id %}' method='post'></form>
+	    </form>
 	  
-	  <!-- form for submitting Globus download for multiple datasets -->
-	  <form name="goForm" method="post" action="{% url 'globus_download' %}" >
-	  	{% csrf_token %}
-		<input type="hidden" name="dataset"/>
-		<input type="hidden" name="query"/>
-	  </form>
+	    <!-- form for submitting Globus download for multiple datasets -->
+	    <form name="goForm" method="post" action="{% url 'globus_download' %}" >
+	  	    {% csrf_token %}
+		    <input type="hidden" name="dataset"/>
+		    <input type="hidden" name="query"/>
+	    </form>
 
-	  <!-- data cart form -->
-	  <form name="dataCartForm">
-	  	<!-- data cart table -->
-                <br/> <!--// a little extra space //-->
-		<table class="no-color" id="datacart-table" style="width:100%;">
+	    <!-- data cart form -->
+	    <form name="dataCartForm">
+	        <!-- data cart table -->
+            <br/> <!--// a little extra space //-->
+		    <table class="no-color" id="datacart-table" style="width:100%;">
 
-			<!-- Header: services -->
-			<tr>
-				<td colspan="3" style="vertical-align: middle;"><strong>Collective Services for All Selected Datasets: </strong>
-					[ <strong><a href="" onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script', 'Hide WGET Script'); return false">WGET Script</a></strong> ]
-	      			&nbsp; 
-	      			[ <strong><a href="" onclick="javascript:lasDatasets(); return false;">LAS Visualization</a></strong> ]
-	      			&nbsp; 
-	      			[ <strong><a href="" onclick="javascript:goDatasets(); return false">Globus Download</a></strong> ]	      			
-				</td>
-			</tr> 
-			
-			<tr>
-			<td style="width:72%;vertical-align:middle;">
-			    When 'Show Files' is clicked, or when using WGET or Globus, you may use an optional string to sub-select the filenames:
-			</td>
-			<td style="width:14%;vertical-align:middle;">
-			    <input type="text" name="query-filter" alt="query-filter" id="query-filter" placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter(); return false; }" />
-			</td>
-			<td style="width:14%;vertical-align:middle;display:inline;"> 
-	  	        &nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return false;"/>
-	  		&nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter(); return false;"/>
-			</td>
-			</tr>
-		</table>
-		<table class="no-color" id="datacart-table">
-			<tr >
-			   <td colspan="4" >
-			   <!-- wget scripts place-holder  -->
-			      <div style="width:500px;display:none;margin-left:auto;margin-right:auto;" class="padded-box" id="wget-scripts"></div>
-			   </td>
-			</tr>
-			<tr id="item_{{ item.identifier }}_hr">
-			   <td colspan="4">
-                   <hr/>
-               </td>
-			</tr>
-			<tr>
-				<td style="text-align:left; width:10px;">
-					<input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"/>
-				</td>
-				<td style="text-align:left; width:90%; vertical-align: middle;"><label for="datacart-checkbox"><strong>Select All Datasets</strong></label></td>
-				<td style="text-align:left; width:100px;" nowrap="nowrap">
-				  <a href="javascript:document.forms['emptyDataCartForm'].submit();"
-				  onclick="return urlConfirmationDialog('Empty Data Cart Confirmation','Are you sure you want to remove ALL items from the cart ?', this)">
-				  <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
+		        <!-- Header: services -->
+			    <tr>
+				     <td colspan="3" style="vertical-align: middle;"><strong>Collective Services for All Selected
+				         Datasets: </strong>
+					     [ <strong><a href="" onclick="javascript:wgetDatasets('wget-scripts', this, 'WGET Script',
+					     'Hide WGET Script'); return false">WGET Script</a></strong> ]
+	      			     &nbsp;
+	      			     [ <strong><a href="" onclick="javascript:lasDatasets(); return false;">LAS
+						 Visualization</a></strong> ]
+	      			     &nbsp;
+	      			     [ <strong><a href="" onclick="javascript:goDatasets(); return false">Globus
+						 Download</a></strong> ]
+				     </td>
+			    </tr>
+			    <!--this row must be set explicitly to white since the td, which is white does not fill up the entire
+			     row, which is gray -->
+			    <tr style="background-color: white;">
+			         <td style="width:72%;vertical-align:middle;">
+			              When 'Show Files' is clicked, or when using WGET or Globus,
+				          you may use an optional string to
+				          sub-select the filenames:
+			         </td>
+			         <td style="width:14%;vertical-align:middle;">
+			             <input type="text" name="query-filter" alt="query-filter" id="query-filter"
+			             placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter();
+			             return false; }" />
+			         </td>
+			         <td style="width:14%;vertical-align:middle;display:inline; ">
+	  	                  &nbsp;<input type="button" value="Apply" onclick="javascript:applyQueryFilter(); return
+	  	                  false;"/>
+	  		              &nbsp;<input type="button" value="Reset" onclick="document.getElementById('query-filter')
+	  		              .value=''; javascript:applyQueryFilter(); return false;"/>
+			         </td>
+			    </tr>
+		    </table>
+
+		    <table class="no-color" id="datacart-table">
+			    <tr>
+			        <td colspan="4" >
+			            <!-- wget scripts place-holder  -->
+			            <div style="width:500px;display:none;margin-left:auto;margin-right:auto;" class="padded-box" id="wget-scripts"></div>
+			        </td>
+			    </tr>
+			    <tr id="item_{{ item.identifier }}_hr">
+			        <td colspan="4">
+                        <hr/>
+                    </td>
+			    </tr>
+			    <tr>
+				    <td style="text-align:left; width:10px;">
+					      <input type="checkbox" id="datacart-checkbox" onclick="javascript:toggleAllDataCartItems()"/>
+				    </td>
+				    <td style="text-align:left; width:90%; vertical-align: middle;"><label for="datacart-checkbox"><strong>Select All
+					         Datasets</strong></label></td>
+				    <td style="text-align:left; width:100px;" nowrap="nowrap">
+				         <a href="javascript:document.forms['emptyDataCartForm'].submit();"
+				         onclick="return urlConfirmationDialog('Empty Data Cart Confirmation',
+				         'Are you sure you want to remove ALL items from the cart ?', this)">
+				         <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;">
                                   Remove All</a>
-				</td>
-			</tr>
-                 </table>
-                 <table class="no-color" id="datacart-table">
-		 <!-- items stored in the Data Cart -->
-			{% for item in datacart.items.all %}
-				<tr id="item_{{ item.identifier }}_hr">
-					<td colspan="4"><hr/></td>
-				</tr>
-				<tr id="item_{{ item.identifier }}">
-					<td style="text-align:center;">
-                        <label style="display:none;" for="dataitem-checkbox_{{ item.identifier }}">dataset checkbox</label>
-						<input type="checkbox" id="dataitem-checkbox_{{ item.identifier }}" name="{{ item.identifier }}"/>
-					</td>
-					<td style="text-align:left;">
-						<!-- datacart item display -->
-	                    {% with item.asRecord as record %}
-							{% include 'cog/search/_record_display.html' %}
-						{% endwith %}
-					</td>
-					<td style="text-align:left;">
-					<a href="javascript:deleteFromCart('{{ item.identifier }}')">
-					<img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;"/>Remove</a>
-					</td>
-				</tr>
-			{% endfor %}
+				    </td>
+			    </tr>
+            </table>
 
-		</table>
-	  </form>
+		    <table class="no-color" id="datacart-table">
+		        <!-- items stored in the Data Cart -->
+			    {% for item in datacart.items.all %}
+				    <tr id="item_{{ item.identifier }}_hr">
+					    <td colspan="4">
+						    <hr/>
+					    </td>
+				    </tr>
+				    <tr id="item_{{ item.identifier }}">
+					    <td style="text-align:center;">
+                            <label style="display:none;" for="dataitem-checkbox_{{ item.identifier }}">dataset
+	                                checkbox</label>
+						    <input type="checkbox" id="dataitem-checkbox_{{ item.identifier }}" name=
+								 "{{ item.identifier }}"/>
+					    </td>
+					    <td style="text-align:left;">
+						    <!-- datacart item display -->
+	                        {% with item.asRecord as record %}
+							     {% include 'cog/search/_record_display.html' %}
+						    {% endwith %}
+					    </td>
+					    <td style="text-align:left;">
+					        <a href="javascript:deleteFromCart('{{ item.identifier }}')">
+					        <img src="{{STATIC_URL}}cog/img/datacart-delete.png" height="20px" style="vertical-align:middle; padding-right:2px; padding-bottom:4px;
+					           "/>Remove</a>
+					    </td>
+				    </tr>
+			    {% endfor %}
+		    </table>
+	    </form>
 	{% endif %}
-	
 {% endblock %}

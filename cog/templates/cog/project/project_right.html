@@ -4,8 +4,12 @@
 {% block right %}
 {% load cog_utils %}
 
-	<!-- Peer Nodes widget -->
-	{% include 'cog/common/_peer_nodes.html' %}
+  <!-- Peer Nodes widget -->
+  {% if project.nodesWidgetEnabled %}
+  	{% if request|is_home_page:project %}
+		{% include 'cog/common/_peer_nodes.html' %}
+	{% endif %}
+  {% endif %}
  
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}

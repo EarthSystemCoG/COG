@@ -606,11 +606,18 @@ def getThumbnailById(id, type):
 @register.filter
 def getThumbnail(user):
 
+    # try returning image URL at user home node
+    if isinstance(user, User):
+        openid = user.profile.openid()
+        if openid is not None:
+            url = 'http://%s%s?openid=%s&thumbnail=true' % (user.profile.site.domain, 
+                                                            reverse('user_image'), openid)
+            return url
+        
+    # default: return image path on local system
     imagePath = getImage(user)
-    thumbnailPath = getThumbnailPath(imagePath)
-    print thumbnailPath
+    thumbnailPath = getThumbnailPath(imagePath, mustExist=True)
     return thumbnailPath
-
 
 @register.filter
 def doc_redirect(doc):
@@ -791,8 +798,7 @@ def delete_from_session(session, key):
 @register.filter
 def get_peer_sites(project):
     """
-    Returns a list of ENABLED peer sites, ordered alphabetically by name.
+    Returns a list of ENABLED peer nodes, ordered alphabetically by name.
     """
     
-    print 'SITES=%s' % getPeerSites()
     return getPeerSites()

@@ -45,6 +45,15 @@ IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
 print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
 KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
 print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
+PEER_NODES = siteManager.get('PEER_NODES', default=None)
+print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
+# DEVELOPMENT/PRODUCTION server switch
+if siteManager.get('PRODUCTION_SERVER', default='False').lower() == 'true':
+    PRODUCTION_SERVER = True
+else:
+    PRODUCTION_SERVER = False
+print 'Production server flag=%s' % PRODUCTION_SERVER
+
 
 # FIXME
 # ESGF specific settings
@@ -52,12 +61,11 @@ ESGF_CONFIG = siteManager.isEsgfEnabled()
 if ESGF_CONFIG:
     ESGF_HOSTNAME = siteManager.get('ESGF_HOSTNAME', section=SECTION_ESGF, default='')
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=SECTION_ESGF)
+    ESGF_VERSION = siteManager.get('ESGF_VERSION', section=SECTION_ESGF)
 # FIXME
 
 #====================== standard django settings.py ======================
 
-# DEV/PROD switch
-server_type = os.environ.get("SERVER_TYPE", "DEV")
 
 # IMPORTANT: this setting must be set to True if using COG behind a proxy server,
 # otherwise redirects won't work properly
@@ -160,11 +168,13 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'cog.middleware.init_middleware.InitMiddleware',
     'cog.middleware.login_middleware.LoginMiddleware',
     'cog.middleware.session_middleware.SessionMiddleware',
     'cog.middleware.password_middleware.PasswordMiddleware'
@@ -214,6 +224,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
+# Use stricter policy for X_FRAME_OPTIONS: default is X_FRAME_OPTIONS='SAMEORIGIN'
+#X_FRAME_OPTIONS = 'DENY'
+
 # login page URL (default: '/accounts/login')
 LOGIN_URL = '/login'
 
@@ -234,10 +247,10 @@ TEMPLATE_CONTEXT_PROCESSORS += (
 )
 
 # HTTPS support: can only send cookies via SSL connections
-if server_type == 'PROD':
+if PRODUCTION_SERVER:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+    #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # CSS styles
 #COLOR_DARK_TEAL = "#358C92"
@@ -282,8 +295,8 @@ PROJECTS_ROOT = os.path.join(MEDIA_ROOT, FILEBROWSER_DIRECTORY)
 # create user account after first openid authentication
 OPENID_CREATE_USERS = True
 
-# do NOT keep updating the user profile from the IdP
-OPENID_UPDATE_DETAILS_FROM_SREG = False
+# do / do NOT keep updating the user profile from the IdP
+OPENID_UPDATE_DETAILS_FROM_SREG = True
 
 # list of allowed hosts to redirect to after successful openid login
 # this is because django-openid-auth does not allow redirection to full URLs by default,
