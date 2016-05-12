@@ -115,6 +115,10 @@ class Project(models.Model):
     # by default all projects are public, and must be explicitly made private
     private = models.BooleanField(default=False, blank=False, null=False)
     
+    # a shared project is visible to all CoGs across the federation
+    # by default all projects are shared
+    shared = models.BooleanField(default=True, blank=False, null=False)
+    
     # optional custom logo
     logo = models.ImageField(upload_to='logos/', blank=True, null=True)
     
@@ -139,7 +143,7 @@ class Project(models.Model):
                                              help_text='Enable federated nodes widget ?')
     
     
-    maxUploadSize = models.IntegerField(default=52428800, blank=True, null=False,
+    maxUploadSize = models.IntegerField(default=settings.MAX_UPLOAD_SIZE, blank=True, null=False,
                                         help_text='Maximum upload size in bytes')
     
     # test field
@@ -305,8 +309,12 @@ class Project(models.Model):
     # generic method to return a list of the project's external URLs of a given type, ordered by their title.
     # unfortunately, external_url has no date created function or other field we can order by. Before 2.10, modification
     # of an external_url could result in random ordering. This at least forces them to be alphabetical.
+
+    # we want the form to reflect the same. That is done in views/external_urls.py/external_urls_update()
     def get_external_urls(self, type):
         if type == 'release_schedule':
+            return self.externalurl_set.filter(project=self, type=type).order_by('-title')
+        elif type == 'prioritization':
             return self.externalurl_set.filter(project=self, type=type).order_by('-title')
         else:
             return self.externalurl_set.filter(project=self, type=type).order_by('title')
@@ -323,7 +331,11 @@ class Project(models.Model):
         """
         Returns True if the project is NOT local and its remote node is disabled.
         """
-        return not self.isLocal() and not self.site.peersite.enabled
+        
+        try:
+            return not self.isLocal() and not self.site.peersite.enabled
+        except:
+            return True # do NOT display in case of error
     
     # method to return an ordered list of the project predefined pages
     # the page URLs returned start with the project home page base URL

@@ -35,6 +35,7 @@
 
 	        <div class="span-max last" style="margin-bottom:10px;" >
 	        
+	        	<!-- update links -->
 	            {% if request.user.id == user_profile.user.id or request.user.is_staff %}
 	                <div style="text-align:center;">
 	                    <a href="{% url 'user_update' user_profile.user.id %}">Update profile |</a>
@@ -52,16 +53,19 @@
 	                    {% endif %}
 	                </div>
 	            {% endif %}
+	            
 	        </div>
 
+			
 	        <div class="span-max last" style="margin-bottom:10px;" >
+	        
+	        	<!--  left column: photo and joined information  -->
 		        <div class="span-5">
-                   <img  style="border-radius: 10px; max-width:190px; display:block;margin:auto;" src=
-		                   "{{ user_profile.user|getImage }}"
-		                   {% if user_profile.image %}
-		                class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %} />
-                   <p style="font-size:16pt;margin-bottom:5px; text-align:center; text-overflow: ellipsis;
-                   overflow:hidden;">
+                   <img  style="border-radius: 10px; max-width:190px; display:block;margin:auto;" 
+                   		src="{{ user_profile.user|getImage }}" 
+                   		{% if user_profile.image %}
+		                	class="myimage" alt="picture of {{ user_profile.user.get_full_name }}" {% endif %} />
+                   <p style="font-size:16pt;margin-bottom:5px; text-align:center; text-overflow: ellipsis; overflow:hidden;">
 			            <strong>
 				            {{ user_profile.user.first_name }}
 				            {{ user_profile.user.last_name }}
@@ -74,115 +78,37 @@
 			               </strong>
                        </p>
 			       {%  endif %}
-
-		           <p style="font-size:13px;text-align:center;"> Joined on: <br> {{ user_profile.user.date_joined }}
+		           <p style="font-size:13px;text-align:center;"> Joined on: <br> {{ user_profile.user.date_joined }}     
 	            </div>
-                <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main
-                pages. Note .mybox has a 5px margin. Just adding 5px; -->
+	            
+                <!-- extra style here is to ensure spacing between the boxes matches the spacing (e.g. 10px) on the main pages. 
+                     Note .mybox has a 5px margin. Just adding 5px; -->
+                     
+                <!--  center column -->
                 <div class="span-12" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_profile.html' %}
+                   {% include 'cog/account/_user_openids.html' %}
+                   {% include 'cog/account/_user_research.html' %}
+                   
+                   <!-- Extra block for Node Admins to display key user info we don't show the public-->
+                   {% include 'cog/account/_user_extra_info.html' %}
+                   
                 </div>
 
-	            <!--keep at span-11, cuz there is not room for span-12-->
+	            <!-- right column -->
                 <div class="span-11 last" style="margin-bottom:5px;">
                    {% include 'cog/account/_user_projects.html' %}
+                   
+                   <!-- ESGF groups -->
+                   {% if request.user.id == user_profile.user.id or request.user.is_staff %}
+                   		{% include 'cog/account/_user_groups.html' %}
+                   {% endif %}
+                   
                 </div>
 
-	        </div>
-
-
-            <div class="span-max last" style="margin-bottom:10px;" >
-                <div class="prepend-5 span-12 last" style="margin-bottom:5px;" >
-                    {% include 'cog/account/_user_openids.html' %}
-                </div>
-	        </div>
-
-            <div class="span-max last" style="margin-bottom:10px;" >
-	            <div class="prepend-5 span-12 last" style="margin-bottom:5px;" >
-                    {% include 'cog/account/_user_research.html' %}
-                </div>
 	        </div>
 
         {% endif %}
     </div>
-    
-    <!-- Extra block for Node Admins to display key user info we don't show the public-->
-
-    {% if request.user.is_staff %}
-	    {% if user_profile.user|isRemote %}
-		    <!--align with left column when present-->
-	        <div class="prepend-335 span-12 last" style="margin-bottom:20px;">
-	    {% else %}
-		    <!--center under banner when the table is the only thing on the page-->
-	        <div class="prepend-5 span-12 last" style="margin-bottom:20px;">
-        {% endif %}
-
-            <div class="mybox">
-                <table>
-                    <tr>
-                        <td class="caption_mimic" colspan="2">
-                            <strong>Extra User Information (Node Administrators Only)</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Email</strong>
-                        </td>
-                        <td>
-                            {{ user_profile.user.email }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <strong>Subscribed to cog_info?</strong>
-                        </td>
-                        <td>
-                            {% if user_profile.subscribed %}
-                                Yes
-                            {% else %}
-                                No
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Home Node</strong>
-                        </td>
-                        <td>{{ user_profile.site.name }}</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Account Created</strong></td>
-                        <td>{{ user_profile.user.date_joined }}
-
-                    <tr>
-                        <td>
-                            <strong>Last Login</strong>
-                        </td>
-                        <td>{{ user_profile.user.last_login }}</td>
-                    </tr>
-                    {% if user_profile.user.date_joined == user_profile.user.last_login  %}
-                         <tr>
-                             <td colspan="2">
-                                POSSIBLE FAKE OR DUPLICATE ACCOUNT
-                             </td>
-                         </tr>
-                    {% endif %}
-                    <tr>
-                        <td>
-                            <strong>Last Password Update</strong>
-                        </td>
-                        <td>{{ user_profile.last_password_update }}</td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2" style="text-align: center;">
-                            Note: CoG keeps users logged in via a cookie. Last Login may be different from last access.
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    {% endif %}
     
 {% endblock %}

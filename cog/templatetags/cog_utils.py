@@ -20,7 +20,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 import urlparse
 import string
-from cog.views.utils import getKnownIdentityProviders
+import bleach
+from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
 
 register = template.Library()
 
@@ -42,6 +43,9 @@ def sortdict(the_dict):
         tuples.append((key, value))
     return sorted(tuples, key=lambda tuple: tuple[0])
 
+@register.filter
+def sortlist(the_list):
+    return sorted(the_list)
 
 @register.filter
 def dictKeyLookup(the_dict, key):
@@ -330,7 +334,8 @@ def relatedPostSorted(post, related_posts):
 
 @register.filter
 def numberOptions(lastNumber, selectedNumber):
-    lastNumberPlusOne = int(lastNumber)
+    '''Builds number options for select widget: 1-lastNumber.'''
+
     selectedNumber = int(selectedNumber)
     html = ""
     for n in range(1, lastNumber + 1):
@@ -341,6 +346,19 @@ def numberOptions(lastNumber, selectedNumber):
     # mark the result as safe from further escaping
     return mark_safe(html)
 
+@register.filter
+def numberOptionsZeroBased(lastNumber, selectedNumber):
+    '''Builds number options for select widget: 0-lastNumber.'''
+    
+    selectedNumber = int(selectedNumber)
+    html = ""
+    for n in range(0, lastNumber + 1):
+        html += "<option value='%d'" % n
+        if n == selectedNumber:
+            html += "selected='selected'"
+        html += ">%d</option>" % n
+    # mark the result as safe from further escaping
+    return mark_safe(html)
 
 def getTopTabUrl(project, request):
     """
@@ -664,7 +682,7 @@ def list_project_tags(project):
 
 @register.filter
 def projectNews(project):
-    return news(project)
+    return project_news(project)
 
 
 @register.filter
@@ -715,7 +733,7 @@ def showMessage(message):
 
     elif message == "password_expired":
         return "Your password has expired. Please choose a new password conforming to the requirements below."
-
+    
     else:
         raise Exception("Invalid message")
 
@@ -770,6 +788,11 @@ def get_target_url_with_next_url(request, target_url_name):
     
     return "%s?next=%s" % (target_url, next_url)
 
+
+@register.filter
+def get_first_openid(user):
+    return user.profile.openid()
+
 @register.filter
 def get_openid(request):
     """
@@ -777,8 +800,9 @@ def get_openid(request):
     or the request cookies.
     """
     
-    if request.REQUEST.get('openid', None):
-        return request.REQUEST['openid']
+    queryDict = getQueryDict(request)
+    if queryDict.get('openid', None):
+        return queryDict['openid']
     elif request.COOKIES.get('openid', None):
         return request.COOKIES['openid']
     else:
@@ -802,3 +826,36 @@ def get_peer_sites(project):
     """
     
     return getPeerSites()
+
+@register.filter
+def paginate_filter(objects, request):
+    
+    # must use max_counts_per_page=MAX_COUNTS_PER_PAGE since a filter accepts at most 2 parameters
+    return paginate(objects, request)
+
+@register.filter
+def pagination_url(request, page_number):
+    '''Constructs the previous/next URL for a paginated page including all GET request parameters.'''
+    
+    # copy all current GET/POST request parameters
+    params = getQueryDict(request).copy()
+    
+    # replace/add 'page' parameter
+    params['page'] = page_number
+    # remove 'csrfmiddlewaretoken' from GET URL
+    if params.get('csrfmiddlewaretoken', None):
+        del params['csrfmiddlewaretoken'] 
+    
+    # build full URL
+    return '%s?%s' %  (request.path, params.urlencode())
+        
+@register.filter
+def getHttpParamValue(request, name):
+    '''Retrieves an HTTP parameter value from either the GET or POST request dictionary.'''
+    
+    return getQueryDict(request).get(name, '')
+    
+@register.filter
+def bleachtags(htmlstring):
+    
+    return str( bleach.clean(htmlstring) ) # unicode --> string)

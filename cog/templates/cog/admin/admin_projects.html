@@ -4,8 +4,20 @@
     <!-- limit visibility to node administrators -->
     {% if request.user.is_staff %}
     
-        {% load pagination_tags %}
-        {% autopaginate project_list 10 %}
+	    <table style="margin-left:315px; width:550px;">
+           <tr>
+               <td>
+                   <form name="lookupProjectForm" action="" method="post">
+                   	    {% csrf_token %}
+                        <label for="match" style="width:60%; vertical-align: middle;">Lookup project by <strong>Name</strong>:</label>
+                        <input style="vertical-align: middle; width:30%;" type="text" name="match" id="match" value="{{request.POST.match}}" />
+	   		            <input style="vertical-align: middle;" type="submit" value="Submit"/>
+	   		            <input style="vertical-align: middle;" type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
+                        <input style="vertical-align: middle;" type="button" value="Return Home" onclick="self.location='{% url 'site_home' %}'"/>
+                   </form>
+               </td>
+           </tr>
+       </table>
     
 	    <div class="mybox">
 		    <table>
@@ -13,10 +25,11 @@
 		           Project List
 		        </caption>
                 <tr>
-                    <th class="white" scope="col">Name</th>
-                    <th class="white" scope="col">Status</th>
-                    <th class="white" scope="col">Update?</th>
-                    <th class="white" scope="col">Delete?</th>
+                    <th class="white" scope="col"><strong>Name</strong></th>
+	                <th class="white" scope="col"><strong>Status</strong></th>
+	                <th class="white" scope="col"><strong>Private?</strong></th>
+                    <th class="white" scope="col"><strong>Update?</strong></th>
+                    <th class="white" scope="col"><strong>Delete?</strong></th>
                 </tr>
 
 		        {% for project in project_list %}
@@ -29,12 +42,21 @@
 			                   Not Active
 			               {% endif %}
 			           </td>
+			           <td nowrap="true" style="text-align: center">
+			               {% if project.private %}
+			                   Private
+			               {% else %}
+			                   Public
+			               {% endif %}
+			           </td>
 			           <td nowrap="true"><a href="{% url 'project_update' project.short_name.lower %}" class="changelink">Update &raquo;</a></td>
 			           <td nowrap="true"><a href="{% url 'project_delete' project.short_name.lower %}" class="deletelink">Delete &raquo;</a></td>
 			        </tr>
 		        {% endfor %}   
 		    </table>
 	    </div>
-        {% paginate %}
+        {% with project_list as results_page %}
+        	{% include 'cog/common/_pagination.html' %}
+        {% endwith %}
     {% endif %}
 {% endblock %}

@@ -1,0 +1,32 @@
+nexus-client==0.0.1
+  - httplib2 [required: ==0.9.0, installed: 0.9]
+  - oauth2 [required: ==1.5.167, installed: 1.5.167]
+    - httplib2 [installed: 0.9]
+  - requests [required: ==1.2.3, installed: 1.2.3]
+  - PyYAML [required: ==3.10, installed: 3.10]
+  - rsa [required: ==3.0.1, installed: 3.0.1]
+    - pyasn1 [required: >=0.0.13, installed: 0.1.9]
+pywps==3.2.1
+wsgiref==0.1.2
+python-dateutil==2.4.2
+  - six [required: >=1.5, installed: 1.9.0]
+cog==2.14.0
+  - pil [required: ==1.1.7, installed: 1.1.7]
+  - django [required: ==1.8.3, installed: 1.8.3]
+  - django-grappelli [required: ==2.4.5, installed: 2.4.5]
+  - django-openid-auth [required: ==0.5, installed: 0.5]
+  - django-pagination [required: ==1.0.7, installed: 1.0.7]
+  - sqlalchemy [required: ==0.9.2, installed: 0.9.2]
+  - south [required: ==1.0.0, installed: 1.0]
+  - psycopg2 [required: ==2.5.2, installed: 2.5.2]
+  - python-openid [required: ==2.2.5, installed: 2.2.5]
+  - passlib [required: ==1.6.2, installed: 1.6.2]
+  - pysqlite [required: ==2.6.3, installed: 2.6.3]
+  - django-contrib-comments [required: ==1.6.1, installed: 1.6.1]
+    - Django [required: >=1.6, installed: 1.8.3]
+  - globusonline-transfer-api-client [required: ==0.10.16, installed: 0.10.16]
+  - pillow [required: ==2.8.2, installed: 3.0.0]
+  - django-simple-captcha [required: ==0.4.5, installed: 0.4.5]
+    - setuptools
+    - six [required: >=1.2.0, installed: 1.9.0]
+    - Django [required: >=1.4, installed: 1.8.3]

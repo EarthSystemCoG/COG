@@ -641,7 +641,13 @@ td.righttop {
 	vertical-align: middle;
 }
 
+/* used on templated content, both views and forms */
+td.leftcolumn {
+        width: 160px;
+		text-align: right;
+		vertical-align: top;
 
+}
 
 
 /*****************************
@@ -676,7 +682,7 @@ BEGIN FORM ELEMENTS
 .button,input[type=submit],input[type=button],input[type=reset],input[type=file],.submit-row input {
         /* force a white background by combining a color with a white image */
         /* TODO: why is this forcing needed here, but not on other form elements? */
-	background:   white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+	background:   white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
 	padding:      3px 5px;
 	color:        black;
 	border:       1px solid #666;
@@ -686,7 +692,7 @@ BEGIN FORM ELEMENTS
 }
 
 input.right_go{
-	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+	background:     white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
     width:          28px;
 	margin-right:   0;
     margin-left:    3px;
@@ -702,7 +708,7 @@ input.right_go{
 
 
 input.search_help{
-	background:     white url(/static/admin/img/nav-bg.gif) bottom repeat-x;
+	background:     white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
     width:          35px;
 	margin-right:   0;
     margin-left:    2px;
@@ -809,7 +815,7 @@ BEGIN SPECIFIC ACTIONS
 
 .addlink {
 	padding-left: 12px;
-	background: url(/static/admin/img/icon_addlink.gif) 0 .2em no-repeat;
+	background: url(/static/cog/img/icon_addlink.gif) 0 .2em no-repeat;
 }
 
 .listlink {
@@ -819,7 +825,7 @@ BEGIN SPECIFIC ACTIONS
 
 .changelink {
 	padding-left: 12px;
-	background: url(/static/admin/img/icon_changelink.gif) 0 .2em no-repeat;
+	background: url(/static/cog/img/icon_changelink.gif) 0 .2em no-repeat;
 }
 
 .privatelink {
@@ -836,7 +842,7 @@ BEGIN SPECIFIC ACTIONS
 
 .deletelink {
 	padding-left: 12px;
-	background: url(/static/admin/img/icon_deletelink.gif) 0 .25em no-repeat;
+	background: url(/static/cog/img/icon_deletelink.gif) 0 .25em no-repeat;
 }
 
 .arrowrightlink {
@@ -1213,7 +1219,7 @@ BEGIN SEARCH WIDGET
 	background-color: #FCE79F;
 	/* COG STYLE: RIGHT WIDGETS HEADER BORDER COLOR */
 	border-bottom: 1px solid #666666;
-	/* background: #7CA0C7 url(/static/admin/img/default-bg.gif) top left repeat-x; */
+	/* background: #7CA0C7 url(/static/cog/img/default-bg.gif) top left repeat-x; */
 	color: #666;
 	display: block;
 }
@@ -1382,7 +1388,7 @@ ul.messagelist li {
 	margin: 0 0 3px 0;
 	border-bottom: 1px solid #ddd;
 	color: #666;
-	background: #ffc url(/static/admin/img/icon_success.gif) 5px .3em no-repeat;
+	background: #ffc url(/static/cog/img/icon_success.gif) 5px .3em no-repeat;
 }
 
 
@@ -1409,7 +1415,7 @@ ul.errorlist {
 	margin: 0 0 3px 0;
 	border: 1px solid red;
 	color: white;
-	background: red url(/static/admin/img/icon_alert.gif) 5px .3em no-repeat;
+	background: red url(/static/cog/img/icon_alert.gif) 5px .3em no-repeat;
 }
 
 /* ensure the styles apply to errors even when they are w/in tables */
@@ -1626,4 +1632,43 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 	margin:0;
 	text-align: center;
 	font-size: 8.5pt;
+}
+
+/* Test styles for tabbed rollup */
+/* This are currently not used but we may turn on the tabbed rollup again, so keep for now */
+
+.rollover {
+    display:       inline;
+    border:        solid;
+    border-color:  #cdcdcd;
+    padding-top:   5px;
+    padding-left:  10px;
+    padding-right: 10px;
+    padding-bottom:10px;
+    color:         #666;
+    font-size:     15px;}
+
+.tab_1_selected {
+    border-width:  1px 1px 0 1px;
+    border-radius: 2px;
+}
+
+.tab_1_not {
+    border-width: 0 0 1px 0;
+}
+
+.tab_not {
+    border-width: 0 0 1px 0;
+}
+
+.tab_selected {
+    border-width: 1px 1px 0 1px;
+}
+
+a.nolink{
+    color:#666;
+}
+
+a.islink{
+    color: #358c92;;
 }

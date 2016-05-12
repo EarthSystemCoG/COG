@@ -18,11 +18,14 @@
 	<div class="myAccordion">
 	    <!-- loop over facets returned -->
         {% for facet_group in facet_profile.facetGroups %}
+          {% if facet_group.getKeys|length > 0 %}
+          
             <!-- facets grouping -->
             {% if facet_group.name and facet_group.name != 'default' %}
                 <fieldset class="fieldset_box">
 	            <legend class="fieldset_legend">{{ facet_group.name }}</legend>
 	        {% endif %}
+	        
    		    {% for key in facet_group.getKeys %}
 		        {% with search_output.facets|hash:key as facet %}
 			        {% if facet %}
@@ -62,9 +65,14 @@
 				    {% endif %}
 			    {% endwith %}
 			{% endfor %}
-	        {% if facet_group.name %}
+			
+	        {% if facet_group.name and facet_group.name != 'default' %}
 	            </fieldset>
+	        {% else %}
+	        	<p></p>
 	        {% endif %}
+	      
+	      {% endif %}
 	    {% endfor %}
 	</div>
 {% endif %}

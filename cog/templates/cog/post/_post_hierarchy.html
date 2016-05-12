@@ -1,4 +1,4 @@
-<!--// START: /cog/templates//cog/post/_post_heirarchy.html //-->
+<!--// START: /cog/templates//cog/post/_post_hierarchy.html //-->
 <!--// Related Pages //-->
 {% load cog_utils %}
 
@@ -17,7 +17,7 @@
 	              {% if post.parent %}
 	                <tr>
 	                    <td>
-	                       Parent {{ post.type|capfirst }}: <a href="{% url 'post_detail' post.parent.id %}">{{ post.parent }}</a>{{ post.parent|is_locked:request }}          
+	                       Parent {{ post.type|capfirst }}: <a href="{{ child.url }}">{{ post.parent }}</a>{{ post.parent|is_locked:request }}
 	                   </td>
 	                </tr>
 	              {% endif %}
@@ -26,7 +26,7 @@
                   <!--// Child Pages: //-->
 	                <tr>
 	                   <td>
-	                     Child {{ post.type|capfirst }}: <a href="{% url 'post_detail' child.id %}">{{ child }}</a>{{ child|is_locked:request }}
+	                     Child {{ post.type|capfirst }}: <a href="{{child.url}}">{{ child }}</a>{{ child|is_locked:request }}
 	                   </td>
 	                </tr>
 	              {% endfor %}

@@ -47,32 +47,33 @@
 
     {% load cog_utils %}
 
-    Please note: this form is to be used for ONE news item at a time.
-    <br/>&nbsp;
-
+	* indicates a required field
     <div class="mybox">
+    <p style="margin-top:10px; text-align: center;">
+	    Please note: this form is to be used for ONE news item at a time.
+    </p>
         <form action="" method="post">
 
             {% csrf_token %}
             <table>
                 <tr>
-                    <td><strong>Title</strong></td>
+                    <td><strong>*Title</strong></td>
                     <td>{{ form.title }} {{ form.title.errors }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Text</strong></td>
+                    <td><strong>*Text</strong></td>
                     <td>{{ form.text }} {{ form.text.errors }}</td>
                 </tr>
 
                 <tr>
-                    <td><strong>Author</strong></td>
+                    <td>Author</td>
                     <td>
                         {{ request.user }}
                         <input type="hidden" name="author" value="{{request.user.id}}"/>
                     </td>
                 </tr>
-                 <tr>
-                    <td style="vertical-align:top;"><strong>Publish to</strong></td>
+	            <tr>
+                    <td style="vertical-align:top;">Publish to</td>
                     <td>
                     	<!-- this project -->
                         {{ form.instance.project }}

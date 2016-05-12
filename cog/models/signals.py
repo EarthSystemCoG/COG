@@ -9,7 +9,7 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.models import UserProfile, ProjectTag, getProjectForGroup
 from cog.models.user_profile import createUsername
 from cog.utils import getJson
-from cog.views.utils import get_all_projects_for_user
+from cog.views.utils import get_all_shared_user_info
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
@@ -21,23 +21,17 @@ def account_created_receiver(sender, **kwargs):
     userp = kwargs['instance']
     created = kwargs['created']
 
-    print 'Signal received: UserProfile post_save: username=%s created=%s openids=%s' % (userp.user.username, created, userp.openids())
+    #print 'Signal received: UserProfile post_save: username=%s created=%s openids=%s' % (userp.user.username, created, userp.openids())
 
     # if username is like "openiduserXXX", then change it to the last part of the openid (+XXX if necessary)
     if created and userp.openid() is not None: # only for new accounts created with external openid
         if userp.user.username.startswith("openiduser"): # typically from "https://ceda.ac.uk/openid/..." 
             # change the username
-            username = createUsername(userp.user.username)
+            lastPartOfOpenid = userp.openid().split("/")[-1]
+            username = createUsername(lastPartOfOpenid)
             print "New user: changing the username from: %s to: %s" % (userp.user.username, username)
             userp.user.username = username
             userp.user.save()
-
-    # create ESGF user: only when user profile is first created
-    # from a COG registration, and only if the user does NOT have an openid already
-    # (as a result of logging in with an ESGF openid)
-    if settings.ESGF_CONFIG and created and len(userp.openids())==0:
-        print 'Inserting user into ESGF security database'
-        esgfDatabaseManager.insertUser(userp)
 
 def update_user_projects_at_login(sender, user, request, **kwargs):
     '''Updates the user projects every time the user logs in.'''
@@ -58,7 +52,7 @@ def update_user_projects(user):
         ugroups = user.groups.all()
          
         # retrieve map of (project, groups) for this user
-        projTuples = get_all_projects_for_user(user, includeCurrentSite=False)
+        (projTuples, grpTuples) = get_all_shared_user_info(user, includeCurrentSite=False)
         
         # add new memberships for remote projects
         remoteGroups = [] # updated list of remote groups

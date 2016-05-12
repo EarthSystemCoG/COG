@@ -7,7 +7,7 @@ from uuid import uuid4
 from django_openid_auth.models import UserOpenID
 
 
-from cog.plugins.esgf.objects import ESGFGroup, ESGFRole, ESGFUser
+from cog.plugins.esgf.objects import ESGFGroup, ESGFRole, ESGFUser, ESGFPermission
 from cog.plugins.esgf.permissionDAO import PermissionDAO
 from cog.plugins.esgf.groupDao import GroupDAO
 
@@ -46,36 +46,6 @@ class ESGFDatabaseManager():
         return ESGF_OPENID_TEMPLATE.replace("<ESGF_HOSTNAME>", settings.ESGF_HOSTNAME).replace("<ESGF_USERNAME>", username)        
         
         
-    def createOpenid(self, userProfile):
-        '''Selects the first available ESGF openid starting from the CoG username, and saves it in the CoG database'''
-        
-        openid = self.buildOpenid(userProfile.user.username)
-        session = self.Session()
-        
-        try:
-            
-            # try N times
-            for ext in OPENID_EXTENSIONS:
-                _openid = openid + ext
-                try:
-                    result = session.query(ESGFUser).filter(ESGFUser.openid==_openid).one()
-                    print 'User with openid=%s already exists, trying another one' % _openid
-    
-                except MultipleResultsFound:
-                    # problem in ESGF database, but ignore here
-                    print 'Warning: found multiple users with openid=%s' % _openid
-    
-                except NoResultFound:    
-                    # this openid is available
-                    userOpenID = UserOpenID.objects.create(user=userProfile.user, claimed_id=_openid, display_id=_openid)
-                    print 'Added openid=%s for user=%s into COG database' % (_openid, userProfile.user.username)
-                    return userOpenID.claimed_id
-                
-        finally:
-            session.close()
-            
-        return None # openid not assigned
-    
     def checkOpenid(self, openid):
         '''Returns true if the given openid exists in the ESGF database, false otherwise.'''
         
@@ -117,21 +87,14 @@ class ESGFDatabaseManager():
         
         return created
             
-    def insertUser(self, userProfile):
+    def insertEsgfUser(self, userProfile):
+        ''' Creates an ESGF user in the ESGF database from a CoG user in the CoG database.'''
         
-        # use existing openid...
-        _openid = userProfile.openid()
-        #_openid = userProfile.localOpenid()
+        openid = userProfile.openid()
         
-        # ...or create new local openid and insert into CoG database
-        if _openid is None:
-            _openid = self.createOpenid(userProfile)
-
         # do NOT override ESGF database
-        esgfUser = self.getUserByOpenid(_openid)
-
+        esgfUser = self.getUserByOpenid(openid)
         if esgfUser is None:
-            
             session = self.Session()
     
             try:
@@ -143,25 +106,33 @@ class ESGFDatabaseManager():
                 else:
                     encPassword = None
     
-                _username = _openid[ _openid.rfind('/')+1: ]
-                esgfUser = ESGFUser(firstname=userProfile.user.first_name, lastname=userProfile.user.last_name,
-                                    email=userProfile.user.email, username=_username, password=encPassword,
-                                    dn='', openid=_openid, organization=userProfile.institution, organization_type='',
-                                    city=userProfile.city, state=userProfile.state, country=userProfile.country,
-                                    status_code=1, verification_token=str(uuid4()), notification_code=0)
+                username = openid[ openid.rfind('/')+1: ]  # ESGF usernames are NOT unique in the same database
+                esgfUser = ESGFUser(firstname=userProfile.user.first_name, 
+                                    lastname=userProfile.user.last_name,
+                                    email=userProfile.user.email, 
+                                    username=username, 
+                                    password=encPassword,
+                                    dn='', 
+                                    openid=openid, 
+                                    organization=userProfile.institution, 
+                                    organization_type='',
+                                    city=userProfile.city, 
+                                    state=userProfile.state, 
+                                    country=userProfile.country,
+                                    status_code=1, 
+                                    verification_token=str(uuid4()), 
+                                    notification_code=0)
     
                 session.add(esgfUser)
                 session.commit()
-                print 'Inserted user with openid=%s into ESGF database' % _openid
+                print 'Inserted user with openid=%s into ESGF database' % openid
     
             finally:
                 session.close()
 
         else:
-            #print 'User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid
+            print 'User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid
             pass
-            
-        return esgfUser
 
     def getUserByOpenid(self, openid):
         '''Retrieves a user by the unique openid value.'''
@@ -261,5 +232,48 @@ class ESGFDatabaseManager():
                     session.add(esgfUser)
                     session.commit()
                     session.close()
+                    
+    def updateUser(self, user_profile):
+        '''Updates the user data in the ESGF database.'''
+                
+        for openid in user_profile.openids():
             
+            # openid must match the configured ESGF host name
+            if settings.ESGF_HOSTNAME in openid:
+                esgfUser = self.getUserByOpenid(openid)
+                if esgfUser is not None:
+                    session = self.Session()
+                    esgfUser.firstname = user_profile.user.first_name
+                    esgfUser.lastname = user_profile.user.last_name
+                    esgfUser.email = user_profile.user.email
+                    #esgfUser.username # ESGF username may be different than CoG username
+                    esgfUser.organization = user_profile.institution
+                    esgfUser.city = user_profile.city
+                    esgfUser.state = user_profile.state
+                    esgfUser.country = user_profile.country
+                    print 'Updated ESGF data for user with openid: %s' % openid
+                    session.add(esgfUser)
+                    session.commit()
+                    session.close()
+                    
+    def deleteUser(self, user):
+        '''Deletes the user from the ESGF database.'''
+                
+        for openid in user.profile.openids():
+            # openid must match the configured ESGF host name
+            if settings.ESGF_HOSTNAME in openid:
+                esgfUser = self.getUserByOpenid(openid)
+                
+                if esgfUser is not None:
+                    print 'Deleting ESGF user with openid=%s' % openid    
+                    session = self.Session()
+                    # delete user permissions
+                    permissions = session.query(ESGFPermission).filter(ESGFPermission.user_id==esgfUser.id)
+                    for p in permissions:
+                        session.delete(p)
+                    # delete user
+                    session.delete(esgfUser)
+                    session.commit()
+                    session.close()    
+                    
 esgfDatabaseManager = ESGFDatabaseManager()

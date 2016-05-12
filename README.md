@@ -13,3 +13,4 @@ The CoG project created the CoG environment - this website - as a way of promoti
 and organizations in the Earth system sciences.  Its structure encourages information sharing among projects, transparency and trust.
 
 For more information, visit: http://earthsystemcog.org/
+

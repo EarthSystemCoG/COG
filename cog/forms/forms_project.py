@@ -97,12 +97,17 @@ class ProjectForm(ModelForm):
         if '\"' in long_name:
             raise forms.ValidationError("Quotation characters are not allowed in project long name")
         
+        # check for non-ascii characters
+        try:
+            long_name.decode('ascii')
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            raise forms.ValidationError("Project long name contains invalid non-ASCII characters")
         return long_name
         
     class Meta:
         model = Project
         fields = ('short_name', 'long_name', 'author', 'description', 
-                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 
+                  'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 'shared',
                   'dataSearchEnabled', 'forumNotificationEnabled', 'nodesWidgetEnabled',
                   'site', 'maxUploadSize')
 

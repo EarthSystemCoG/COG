@@ -22,7 +22,7 @@ from cog.services.membership import addMembership
 from cog.utils import *
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.views.views_templated import templated_page_display
-from cog.views.utils import add_get_parameter
+from cog.views.utils import add_get_parameter, getQueryDict
 from cog.models.auth import userHasAdminPermission, userHasUserPermission, userHasContributorPermission
 
 # method to add a new project, with optional parent project
@@ -53,10 +53,13 @@ def project_add(request):
         tabs = get_or_create_project_tabs(project, save=False)
         
         # create list of unsaved project folders
-        folders = getUnsavedProjectSubFolders(project, request)
+        folders = _getUnsavedProjectSubFolders(project, request)
 
         # set project to be private by default on start-up
         project.private = True
+        
+        # set project to be shared by default
+        project.shared = True
         
         form = ProjectForm(instance=project)
 
@@ -108,7 +111,7 @@ def project_add(request):
                 setActiveProjectTabs(tablist, request, save=False)
                 
             # rebuild list of unsaved project folders
-            folders = getUnsavedProjectSubFolders(project, request)
+            folders = _getUnsavedProjectSubFolders(project, request)
 
             return render_to_response('cog/project/project_form.html', 
                                       {'form': form, 'title': 'Register New Project', 'action': 'add', 'tabs': tabs,
@@ -116,8 +119,6 @@ def project_add(request):
                                       context_instance=RequestContext(request))
             
 # method to reorganize the project index menu
-
-
 @login_required
 def project_index(request, project_short_name):
     
@@ -434,7 +435,7 @@ def initProject(project):
     
     # assign creator as project administrator
     if project.author is not None:
-        addMembership(project.author, aGroup)
+        addMembership(project.author, aGroup) # admin=None (membership added by the system)
     
     # configure the project search with the default behavior
     create_project_search_profile(project)
@@ -613,8 +614,9 @@ def save_user_tag(request):
     if request.method == 'POST' or request.method == 'GET':
         
         # retrieve tag
-        tagName = request.REQUEST['tag']
-        redirect = request.REQUEST['redirect']
+        queryDict = getQueryDict(request)
+        tagName = queryDict['tag']
+        redirect = queryDict['redirect']
         print 'Saving user tag: %s' % tagName
         print 'Eventually redirecting to: %s' % redirect
         
@@ -656,8 +658,9 @@ def delete_user_tag(request):
     # POST: when local user submits form, GET: when remote user is redirected to this node
     if request.method == 'POST' or request.method == 'GET':
 
-        tagName = request.REQUEST['tag']
-        redirect = request.REQUEST['redirect']
+        queryDict = getQueryDict(request)
+        tagName = queryDict['tag']
+        redirect = queryDict['redirect']
         print 'Deleting user tag: %s' % tagName
         print 'Eventually redirecting to: %s' % redirect
         
@@ -805,6 +808,9 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         elif not prj.active:
             # do not add
             pass
+        elif not prj.isLocal() and not prj.shared:
+            # filter out projects from remote sites that are not shared
+            pass
         # only display projects that are visible to the user
         elif prj.isNotVisible(user):
             # do not add
@@ -941,3 +947,17 @@ def render_development_form(request, project, form):
                               {'title' : 'Development Overview Update', 'project': project, 'form':form},
                                context_instance=RequestContext(request))
 
+
+def _getUnsavedProjectSubFolders(project, request):
+    """
+    Function to create the project top-level sub-folders, in the appropriate state,
+    WITHOUT PERSISTING THEM TO THE DATABASE.
+    """
+    
+    folders = []
+    for key, value in TOP_SUB_FOLDERS.items():
+        folder = Folder(name=value, project=project, active=False)
+        if request is not None and ("folder_%s" % value) in getQueryDict(request).keys():
+            folder.active = True
+        folders.append(folder)
+    return folders

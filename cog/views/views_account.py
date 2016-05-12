@@ -3,7 +3,7 @@ import urllib
 from urlparse import urlparse
 
 from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import is_password_usable
 from django.contrib.auth.views import login
 from django.contrib.sites.models import Site
@@ -21,7 +21,7 @@ from cog.models import *
 from cog.notification import notify, sendEmail
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.util.thumbnails import *
-from cog.views.utils import set_openid_cookie, get_all_projects_for_user
+from cog.views.utils import set_openid_cookie, get_all_shared_user_info
 from django.http.response import HttpResponseForbidden
 
 
@@ -147,31 +147,32 @@ def notifyUserOfRegistration(user):
 
 def subscribeUserToMailingList(user, request):
     """
-    Method to notify administrators of user subscription request.
+    Method to subscribe a user to the CoG mailing list.
+    User will receive a confirmation email.
     """
 
-    notifyAdminsOfUserSubscription(user, request, 'join')
-
+    _sendSubsriptionEmail(user, 'subscribe')
 
 def unSubscribeUserToMailingList(user, request):
     """
-    Method to notify administrators of user un-subscription.
+    Method to unsubscribe a user to the CoG mailing list.
+    User will receive a confirmation email.
     """
 
-    notifyAdminsOfUserSubscription(user, request, 'leave')
+    _sendSubsriptionEmail(user, 'unsubscribe')
 
-
-def notifyAdminsOfUserSubscription(user, request, action):
-
-    subject = 'User request to %s the email list %s' % (action, settings.COG_MAILING_LIST)
-    message = 'User: %s has requested to %s the email list: %s' % (user.get_full_name(), action,
-                                                                   settings.COG_MAILING_LIST)
-
-    url = reverse('user_detail', kwargs={'user_id': user.id})
-    url = request.build_absolute_uri(url)
-    message += '\nUser profile: %s\n' % url
-    for admin in getSiteAdministrators():
-        notify(admin, subject, message)
+def _sendSubsriptionEmail(user, action):
+    '''Common functionality to send email to the CoG mailing list.'''
+    
+    # cog-info-request@list.woc.noaa.gov
+    toAddress = settings.COG_MAILING_LIST.replace('@','-request@')
+    # subscribe address=<email address>
+    subject = '%s address=%s' % (action, user.email)
+    # body
+    message = ''
+    
+    print 'Sending subscription email: To=%s Subject=%s' % (toAddress, subject)
+    sendEmail(toAddress, subject, message, fromAddress=user.email)
 
 
 # view to create a user account
@@ -189,39 +190,41 @@ def user_add(request):
         return HttpResponseRedirect(redirect_url)
 
     # create URLs formset
-    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
-                                                 extra=2)
-    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=2,
-                                                    fields="__all__")
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), 
+                                                 can_delete=True, extra=2)
             
     if request.method == 'GET':
 
         form = UserForm(initial={'next': _next})  # initialize form with redirect URL
-        formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')           # empty formset
-        # NOTE: currently openid formset is not really used when first creating COG users
-        formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.none(), prefix='openid')  # empty formset
+        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.none(), prefix='url')           # empty formset
 
-        return render_user_form(request, form, formset1, formset2, title='Create User Profile')
+        return render_user_form(request, form, formset, title='Create User Profile')
 
     else:
         # form with bounded data
         form = UserForm(request.POST, request.FILES,)
         # formset with bounded data
-        formset1 = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.none(), prefix='url')
-        # formset with bounded data
-        formset2 = UserOpenidFormsetFactory(request.POST, queryset=UserOpenID.objects.none(), prefix='openid')
+        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.none(), prefix='url')
 
-        if form.is_valid() and formset1.is_valid() and formset2.is_valid():
+        if form.is_valid() and formset.is_valid():
 
             # create a user from the form but don't save it to the database yet because the password is not encoded yet
             user = form.save(commit=False)
+            
             # must reset the password through the special method that encodes it correctly
             clearTextPassword = form.cleaned_data['password']
             user.set_password(clearTextPassword)
-
+                        
             # save user to database
             user.save()
-            print 'Created user=%s' % user.get_full_name()
+            print 'Created user=%s' % user.username
+            
+            # create openid
+            if settings.ESGF_CONFIG:
+                openid = form.cleaned_data['openid']
+                print 'Creating openid=%s' % openid
+                userOpenID = UserOpenID.objects.create(user=user, claimed_id=openid, display_id=openid)
+                print 'Added openid=%s for user=%s into COG database' % (openid, user.username)
 
             # use additional form fields to create user profile
             userp = UserProfile(user=user,
@@ -237,17 +240,22 @@ def user_add(request):
                                 image=form.cleaned_data['image'],
                                 last_password_update=datetime.datetime.now())
 
-            userp.clearTextPassword = clearTextPassword  # NOTE: this field is NOT persisted
             
-            # save user profile --> will trigger userProfile post_save and consequent creation of openid
+            # save user profile --> will trigger userProfile post_save
             userp.save()
+            
+            # NOTE: this field is NOT persisted in the CoG database but it is used by insertEsgfUser() below
+            userp.clearTextPassword = clearTextPassword  
+            # insert into ESGF database
+            if settings.ESGF_CONFIG:
+                esgfDatabaseManager.insertEsgfUser(userp)
 
             # create user data cart
             datacart = DataCart(user=user)
             datacart.save()
 
             # must assign URL to this user
-            urls = formset1.save(commit=False)
+            urls = formset.save(commit=False)
             for url in urls:
                 url.profile = userp
                 url.save()
@@ -278,6 +286,7 @@ def user_add(request):
             # append openid to initial login_url
             if userp.openid() is not None:
                 login_url += "&openid=%s" % urllib.quote_plus(userp.openid())
+            login_url += "&username=%s" % urllib.quote_plus(userp.user.username)
             
             response = HttpResponseRedirect(login_url)
             
@@ -290,11 +299,9 @@ def user_add(request):
         else:
             if not form.is_valid():
                 print "Form is invalid: %s" % form.errors
-            elif not formset1.is_valid():
-                print "URL formset is invalid: %s" % formset1.errors
-            elif not formset2.is_valid():
-                print "OpenID formset is invalid: %s" % formset2.errors
-            return render_user_form(request, form, formset1, formset2, title='Create User Profile')
+            elif not formset.is_valid():
+                print "URL formset is invalid: %s" % formset.errors
+            return render_user_form(request, form, formset, title='Create User Profile')
 
 
 # view to display user data
@@ -313,15 +320,15 @@ def user_detail(request, user_id):
         user_profile.save()
         print "Created empty profile for user=%s" % user
         
-    # retrieve map of (project, groups) for this user
-    projTuples = get_all_projects_for_user(user)
-    # ignore roles
-    _projects = [p[0] for p in projTuples]
-    # sort projects alphabetically
-    projects = sorted(_projects, key=lambda x: x.short_name)
+    # retrieve map of (project, roles) for this user
+    (projTuples, groupTuples) = get_all_shared_user_info(user)
+        
+    # sort projects, groups alphabetically
+    projects = sorted(projTuples, key=lambda x: x[0].short_name)
+    groups = sorted(groupTuples, key=lambda x: x[0])
             
     return render_to_response('cog/account/user_detail.html',
-                              {'user_profile': user_profile, 'projects': projects, 'title': 'User Profile'},
+                              {'user_profile': user_profile, 'projects': projects, 'groups':groups, 'title': 'User Profile'},
                               context_instance=RequestContext(request))
 
 
@@ -397,7 +404,29 @@ def user_image(request):
 
     else:
         return HttpResponseNotAllowed(['GET'])
+
+@user_passes_test(lambda u: u.is_staff)
+def user_delete(request, user_id):
     
+    # get user
+    user = get_object_or_404(User, pk=user_id)
+    
+    if request.method == 'GET':
+        return render_to_response('cog/account/user_delete.html', 
+                                  {'user': user, 'title': 'Delete User'},
+                                  context_instance=RequestContext(request))
+    else:
+        
+        # delete ESGF user and all related objects
+        if settings.ESGF_CONFIG:
+            esgfDatabaseManager.deleteUser(user)
+
+        # delete CoG user and all related objects
+        user.delete()
+                
+        # redirect to user listings
+        return HttpResponseRedirect(reverse('admin_users'))
+
 
 @login_required
 def user_update(request, user_id):
@@ -411,10 +440,8 @@ def user_update(request, user_id):
     profile = get_object_or_404(UserProfile, user=user)
 
     # create URLs formset
-    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), can_delete=True,
-                                                 extra=2)
-    UserOpenidFormsetFactory = modelformset_factory(UserOpenID, form=UserOpenidForm, can_delete=True, extra=0,
-                                                    fields="__all__")
+    UserUrlFormsetFactory = modelformset_factory(UserUrl, form=UserUrlForm, exclude=('profile',), 
+                                                 can_delete=True, extra=2)
 
     if request.method == 'GET':
 
@@ -433,21 +460,17 @@ def user_update(request, user_id):
                                                 'type': profile.type})
 
         # retrieve existing URLs and OpenIDs associated to this user
-        formset1 = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')
-        formset2 = UserOpenidFormsetFactory(queryset=UserOpenID.objects.filter(user=profile.user), prefix='openid')
+        formset = UserUrlFormsetFactory(queryset=UserUrl.objects.filter(profile=profile), prefix='url')
 
-        return render_user_form(request, form, formset1, formset2, title='Update User Profile')
+        return render_user_form(request, form, formset, title='Update User Profile')
 
     else:
         # form with bounded data
         form = UserForm(request.POST, request.FILES, instance=user)
         # formset with bounded data
-        formset1 = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')
-        # formset with bounded data
-        formset2 = UserOpenidFormsetFactory(request.POST, queryset=UserOpenID.objects.filter(user=profile.user),
-                                            prefix='openid')
+        formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')
 
-        if form.is_valid() and formset1.is_valid() and formset2.is_valid():
+        if form.is_valid() and formset.is_valid():
 
             # update user
             user = form.save()
@@ -455,7 +478,7 @@ def user_update(request, user_id):
             # old user profile
             user_profile = get_object_or_404(UserProfile, user=user)
             
-            # capture user profile status before t is updated
+            # capture user profile status before it is updated
             oldValidFlag = isUserValid(user)
             oldSubscribed = user_profile.subscribed
             
@@ -497,19 +520,13 @@ def user_update(request, user_id):
             user_profile.save()
 
             # must assign URL to this user
-            urls = formset1.save(commit=False)
+            urls = formset.save(commit=False)
             for url in urls:
                 url.profile = profile
                 url.save()
 
-            for obj in formset1.deleted_objects:
+            for obj in formset.deleted_objects:
                 obj.delete()
-
-            # must assign OpenIDs to this user
-            openids = formset2.save(commit=False)
-            for openid in openids:
-                openid.user = profile.user
-                openid.save()
 
             # generate thumbnail - after picture has been saved
             if _generateThumbnail:
@@ -523,6 +540,10 @@ def user_update(request, user_id):
             elif oldSubscribed == False and form.cleaned_data['subscribed']:
                 subscribeUserToMailingList(user, request)
 
+            # update ESGF user object in ESGF database
+            if settings.ESGF_CONFIG:
+                esgfDatabaseManager.updateUser(user_profile)
+
             # redirect user profile page
             response = HttpResponseRedirect(reverse('user_detail', kwargs={'user_id': user.id}))
             
@@ -534,12 +555,10 @@ def user_update(request, user_id):
         else:
             if not form.is_valid():
                 print "Form is invalid: %s" % form.errors
-            elif not formset1.is_valid():
-                print "URL formset is invalid: %s" % formset1.errors
-            elif not formset2.is_valid():
-                print "OpenID formset is invalid: %s" % formset2.errors
-
-            return render_user_form(request, form, formset1, formset2, title='Update User Profile')
+            elif not formset.is_valid():
+                print "URL formset is invalid: %s" % formset.errors
+                
+            return render_user_form(request, form, formset, title='Update User Profile')
 
 
 @login_required
@@ -632,12 +651,12 @@ def user_reminder(request):
                 subject = "Username/OpenID Reminder"
                 message = ""
                 for user in users:
-                    message += "Your username is: %s\n" % user.username
+                    message += "\nYour username is: %s\n" % user.username
 
                     for openid in user.profile.openids():
                         message += "Your OpenID is: %s\n" % openid
 
-                    notify(user, subject, message)
+                sendEmail(email, subject, message)
 
                 # redirect to login page with special message
                 return HttpResponseRedirect(reverse('login')+"?message=user_reminder")
@@ -761,9 +780,9 @@ def password_reset(request):
             return render_password_reset_form(request, form, message)
 
 
-def render_user_form(request, form, formset1, formset2, title=''):
+def render_user_form(request, form, formset, title=''):
     return render_to_response('cog/account/user_form.html',
-                              {'form': form, 'formset1': formset1, 'formset2': formset2, 'mytitle': title},
+                              {'form': form, 'formset': formset, 'mytitle': title},
                               context_instance=RequestContext(request))
 
 

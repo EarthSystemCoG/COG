@@ -121,6 +121,8 @@
             {% else %}
 	            <div class="message-box">
 	                {{ request.GET.message|showMessage|safe }}
+	                <br/>Your OpenID is: {{ request.GET.openid|escape }}
+	                <br/>Your local username is: {{ request.GET.username|escape }} 
 	            </div>
             {% endif %}
 	        <p></p>
@@ -150,6 +152,7 @@
 		    <div class="mybox">
     	        <table>
     	            <tr>
+		                <!-- data tables are required to have a caption -->
                         <td class="caption_mimic" colspan="3">
                             <strong>ESGF-CoG Login</strong>
                         </td>

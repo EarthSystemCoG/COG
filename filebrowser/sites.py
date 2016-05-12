@@ -135,7 +135,7 @@ class FileBrowserSite(object):
     def get_urls(self):
         from django.conf.urls import patterns, url, include  
 
-        urlpatterns = patterns('',
+        urlpatterns = [
     
             # filebrowser urls (views)
             url(r'^browse/$', path_exists(self, self.filebrowser_view(self.browse)), name="fb_browse"),
@@ -149,7 +149,7 @@ class FileBrowserSite(object):
             #url(r'^upload_file/$', staff_member_required(csrf_exempt(self._upload_file)), name="fb_do_upload"),
             url(r'^upload_file/$', login_required(csrf_exempt(self._upload_file)), name="fb_do_upload"),
         
-        )
+        ]
 
         return urlpatterns
 

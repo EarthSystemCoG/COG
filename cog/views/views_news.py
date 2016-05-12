@@ -8,6 +8,7 @@ from cog.models import *
 from cog.models.auth import userHasContributorPermission
 from cog.forms import *
 from constants import PERMISSION_DENIED_MESSAGE
+from cog.views.utils import paginate
 
 
 def news_list(request, project_short_name):
@@ -17,9 +18,9 @@ def news_list(request, project_short_name):
     return render_to_response('cog/news/news_list.html', 
                               {'project': project, 
                                'title': '%s News' % project.short_name,
-                               'project_news': news(project)},
+                               'project_news': paginate(project_news(project), request, max_counts_per_page=10)},
                               context_instance=RequestContext(request))
-
+ 
 
 def news_detail(request, news_id):
     

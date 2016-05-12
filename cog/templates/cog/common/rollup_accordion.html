@@ -20,19 +20,18 @@
 
     <script>
        //<![CDATA[
-          
+
        // function to initialize the resource tree object
        var tree;
        function bookmarkTreeInit() {
-           
+
            treeId = this.id
            tree = new YAHOO.widget.TreeView(document.getElementById(treeId));
-           tree.subscribe('clickEvent',tree.onEventToggleHighlight);  
-           //tree.setNodesProperty('propagateHighlightUp',true); 
-           tree.setNodesProperty('propagateHighlightDown',true); 
-           //tree.singleNodeHighlight = true; 
+           tree.subscribe('clickEvent',tree.onEventToggleHighlight);
+           //tree.setNodesProperty('propagateHighlightUp',true);
+           tree.setNodesProperty('propagateHighlightDown',true);
+           //tree.singleNodeHighlight = true;
            tree.render();
-
        }
       //]]>
    </script>
@@ -47,11 +46,11 @@
    </style>
 {% endblock %}
 
-{% block main %} 
+{% block main %}
 
     <!-- load the template for the page (e.g. contact_us) -->
 	{% with project as proj %}
-		{% include template_page %}	
+		{% include template_page %}
 	{% endwith %}
 
 	<!-- social media buttons -->
@@ -70,14 +69,14 @@
 		    </div>
 		{% endif %}
 	{% endif %}
-	
-    <!-- children projects-->    
+
+    <!-- children projects-->
  	{% if children %}
 		<p></p>
-		<div class="header_bar"> 
+		<div class="header_bar">
 		     <a href="" onclick="javascript:toggle_visibility('children_rollup'); return false;" class="listlink">&nbsp;View Child Project {{ template_title}} ({{ children|length }})</a>
 		</div>
-		<div id="children_rollup" style="display:none">	   	    
+		<div id="children_rollup" style="display:none">
 		    {% for child in children %}
 	    		{% with child as proj %}
 	    			<br/>
@@ -92,17 +91,17 @@
 						</div>
 					</div>
 				{% endwith %}
-		    {% endfor %}		
+		    {% endfor %}
 		</div>
 	{% endif %}
- 
-    <!-- peer projects-->    
+
+    <!-- peer projects-->
  	{% if peers %}
 		<p></p>
-		<div class="header_bar"> 
+		<div class="header_bar">
 		     <a href="" onclick="javascript:toggle_visibility('peer_rollup'); return false;" class="listlink">&nbsp;View Peer Project {{ template_title}} ({{ peers|length }})</a>
 		</div>
-		<div id="peer_rollup" style="display:none">	   	    
+		<div id="peer_rollup" style="display:none">
 		    {% for peer in peers %}
 	    		{% with peer as proj %}
 	    			<br/>
@@ -117,7 +116,7 @@
 						</div>
 					</div>
 				{% endwith %}
-		    {% endfor %}		
+		    {% endfor %}
 		</div>
 	{% endif %}
 {% endblock %}

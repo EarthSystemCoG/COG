@@ -4,19 +4,20 @@
 
 {% load cog_utils %}
 
+* indicates a required field
 <div class="mybox">
     <form method="post" action="">
            {% csrf_token %}
 
             <table>
                 <tr>
-                    <td valign="top" nowrap="nowrap"><strong>Name</strong></td>
+                    <td valign="top" nowrap="nowrap"><strong>*Name</strong></td>
                     <!--ordering of the folders in the form occurs in /forms_bookmarks.py -->
                     <td class="long">{{ form.name }}{{ form.name.errors }}</td>
 
                 </tr>
                 <tr>
-                    <td valign="top" nowrap="nowrap"><strong>Parent Folder</strong></td>
+                    <td valign="top" nowrap="nowrap"><strong>*Parent Folder</strong></td>
                     <td class="long">{{ form.parent }}{{ form.parent.errors }}</td>
                 </tr>
                 <tr>

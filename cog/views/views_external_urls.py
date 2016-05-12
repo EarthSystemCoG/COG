@@ -44,10 +44,12 @@ def external_urls_display(request, project_short_name, suburl):
     
     # build list of peers with with external urls of this type
     peers = _subSelectProjects(project.peers.all(), externalUrlConf, request.user)
-             
-    return render_to_response('cog/common/rollup.html', 
+
+    # to change to tabbed rollups, load 'cog/common/rollup_tabbed.html'
+    return render_to_response('cog/common/rollup_accordion.html',
                               {'project': project, 
-                               'title': '%s %s' % (project.short_name, template_title), 
+                               'title': '%s %s' % (project.short_name, template_title),
+                               # 'title': template_title,
                                'template_page': 'cog/project/_external_urls_list.html', 
                                'template_title': template_title, 
                                'template_form_pages': template_form_pages,
@@ -110,13 +112,14 @@ def external_urls_update(request, project_short_name, suburl):
         # create formset instance backed by current saved instances
         # must provide the initial data to all the extra instances, 
         # which come in the list after the database instances
-        #queryset = ExternalUrl.objects.filter(project=project, type=type)
-        #initial_data = [ {'project':project, 'type':type } for count in xrange(len(queryset)+nextras)]
-        #formset = ExternalUrlFormSet(queryset=queryset,initial=initial_data)
 
-        # if template is release schedules, which are dates, reverse order of the urls
-        # sorting of the main view occurs in project.py
+        # if template is release schedules or prioritization, which are dates, reverse order of the urls
+        # sorting of the view occurs in models/project.py/get_external_urls()
         if type == 'release_schedule':
+            formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
+                                         order_by('-title'))
+
+        elif type == 'prioritization':
             formset = ExternalUrlFormSet(queryset=ExternalUrl.objects.filter(project=project, type=type).
                                          order_by('-title'))
         else:

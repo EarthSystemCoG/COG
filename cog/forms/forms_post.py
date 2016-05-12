@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from os.path import basename
 import re
 from cog.utils import *
+from cog.models.navbar import TABS
 from django.db.models import Q
 
 POST_TEMPLATES = (("cog/post/page_template_sidebar_center_right.html", "Left Menu, Main Content, Right Widgets"),
@@ -59,6 +60,23 @@ class PostForm(ModelForm):
         if type == Post.TYPE_PAGE:
 
             url = cleaned_data.get("url")
+            project = cleaned_data.get("project")
+                        
+            # do NOT allow URLs that are part of templated URLs
+            # url='contactus/' --> _url='contactus'
+            _url = url.split('/')[0] # compare first part of user URL...
+            # predefined_pages=[(u'TestProject Home', u'/projects/testproject/'), 
+            #                   ('About Us', u'/projects/testproject/aboutus/'), 
+            #                   ('Mission', u'/projects/testproject/mission/'), ...
+            for ppage in project.predefined_pages():
+                # [-1] location is empty string because templates URLs always end in '/'
+                __url = str(ppage[1]).split("/")[-2] # to last part of project templated URL... 
+                if _url == __url:
+                    # MUST allow creation of the following template pages because they are wikis
+                    if _url.lower() not in (TABS["LOGISTICS"], TABS["REGISTRATION"], TABS["LOCATION"],
+                                            TABS["LODGING"], TABS["TRANSPORTATION"], TABS["COMPUTING"]):                          
+                        self._errors["url"] = self.error_class(["The term '%s' is reserved for standard project URLs" % _url])
+            
             # only allows letters, numbers, '-', '_' and '/'
             if re.search("[^a-zA-Z0-9_\-/]", url):
                 self._errors["url"] = self.error_class(["Page URL contains invalid characters"])
@@ -68,17 +86,19 @@ class PostForm(ModelForm):
             else:
                 if url == '':
                     self._errors["url"] = self.error_class(["Invalid URL for project page"])
+                elif '//' in url:
+                    self._errors["url"] = self.error_class(["Invalid URL for project page: cannot have two consecutive '/'"])
                 else:
                     # verify uniqueness: URL not used by any other existing instance
                     project = cleaned_data.get("project")
                     full_url = get_project_page_full_url(project, url)
-                    try:
-                        # perform case-insensitive lookup
-                        post = Post.objects.all().get(url__iexact=full_url)
-                        if post and (post.id != self.instance.id):
-                            self._errors["url"] = self.error_class(["URL already used"])
-                    except ObjectDoesNotExist:
-                        pass
+                    # check this URL is unique
+                    self._check_url_is_unique(full_url)
+                    # also check with or without the trailing '/'
+                    if full_url.endswith("/"):
+                        self._check_url_is_unique(full_url[-1])
+                    else:
+                        self._check_url_is_unique(full_url+"/")
 
         # validate "template"
         # must be not null for every page
@@ -107,6 +127,18 @@ class PostForm(ModelForm):
         # always return the full collection of cleaned data.
         return cleaned_data
 
+    def _check_url_is_unique(self, full_url):
+        '''Checks whether the provided URL already exists in the database.'''
+        
+        try:
+            # perform case-insensitive lookup
+            post = Post.objects.all().get(url__iexact=full_url)
+            if post and (post.id != self.instance.id):
+                self._errors["url"] = self.error_class(["URL already used"])
+        except ObjectDoesNotExist:
+            pass
+
+        
     class Meta:
         model = Post
         exclude = ('author', 'publication_date', 'update_date',)

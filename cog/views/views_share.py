@@ -11,9 +11,11 @@ from cog.views.constants import PERMISSION_DENIED_MESSAGE
 from django_openid_auth.models import UserOpenID
 from django.contrib.auth.decorators import user_passes_test
 from django.template import RequestContext
+from django.conf import settings
 
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.models.user_profile import UserProfile
+from django.core.exceptions import ObjectDoesNotExist
 
 JSON = "application/json"
 
@@ -31,6 +33,9 @@ def serialize_project(project):
     
     # public or private
     pdict["private"] = str(project.private)
+    
+    # shared or local
+    pdict["shared"] = str(project.shared)
     
     # tags
     tags = []
@@ -65,10 +70,17 @@ def serialize_user(user):
     # only include local projects
     udict['projects'] = getProjectsAndRolesForUsers(user, includeRemote=False)
     
-    
     # data cart
     (dc, created) = DataCart.objects.get_or_create(user=user)
     udict['datacart'] = { 'size': len( dc.items.all() ) }
+    
+    # ESGF access control group - only if CoG installation is backed up by ESGF database
+    if settings.ESGF_CONFIG:
+        groups = registrationService.listByOpenid(user.profile.openid())
+        udict['groups'] = groups
+    else:
+        udict['groups'] = {}
+    
     return udict
     
 
@@ -85,7 +97,7 @@ def share_projects(request):
         
         # list projects from this node
         projects = {}
-        print 'Listing active, public projects for current site=%s' % current_site
+        print 'Listing ACTIVE projects for current site=%s' % current_site
         for project in Project.objects.filter(active=True).filter(site=current_site):
             projects[project.short_name] = serialize_project(project)
             
@@ -114,7 +126,7 @@ def share_groups(request):
         print 'Listing visible groups for current site=%s' % current_site
         groups = {}
         for group in registrationService.listGroups():
-            if group['visible']:
+            if group['visible'] and group['name'].lower() != 'wheel':
                 groups[ group['name'] ] = group          
         response_data["groups"] = groups
         
@@ -131,9 +143,14 @@ def share_user(request):
         
         # load User object by openid
         openid = request.GET['openid']
-        userOpenid = get_object_or_404(UserOpenID, claimed_id=openid)
-        
-        users = { openid : serialize_user( userOpenid.user ) }
+        try:
+            userOpenid = UserOpenID.objects.get(claimed_id=openid)
+            users = { openid : serialize_user( userOpenid.user ) }
+             
+        except ObjectDoesNotExist:
+            # return empty dictionary
+            print 'User with openid=%s found at this site' % openid
+            users = {}
         
         response_data["users"] = users
 
@@ -147,10 +164,7 @@ def share_user(request):
 @user_passes_test(lambda u: u.is_staff)
 def sync_projects(request):
     '''Updates the list of remote projects in current database.'''
-    
-    if not request.user.is_staff:
-        return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
-    
+        
     sites, totalNumberOfProjects, totalNumberOfUsers = projectManager.sync()
     
     return render_to_response('cog/admin/sync_projects.html', 

@@ -16,8 +16,16 @@ import os, sys
 sys.path.insert(0, '/usr/local/cog/cog_install')
 
 os.environ["COG_CONFIG_DIR"] = "/usr/local/cog/cog_config"
+os.environ['HTTPS'] = "on" # instructs Django to prepend 'https' to fully generated links
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+
+# print debugging information
+print 'Using Python version: %s' % sys.version
+print 'Using Python path: %s' % sys.path
+print 'PYTHONPATH=%s' % os.environ.get('PYTHONPATH', None)
+print 'LD_LIBRARY_PATH=%s' % os.environ.get('LD_LIBRARY_PATH', None)
+print 'SSL_CERT_DIR=%s' % os.environ.get('SSL_CERT_DIR', None)
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION

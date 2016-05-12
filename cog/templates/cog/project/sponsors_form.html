@@ -5,18 +5,17 @@
 {% load cog_utils %}
 
 {% block main %}
-
+    * indicates a required field
 	<form method="post" action="" enctype="multipart/form-data">
 		
 		{% csrf_token %}
 	    {{ formset.management_form }}
 
-        Required field is in <strong>bold</strong>.
 	    <div class="mybox">
 		    <table>
 		    	<caption>{{ project.short_name }} Sponsors</caption>
 		    	<tr>
-		    		<th class="white" nowrap="nowrap"><strong>Name</strong></th>
+		    		<th class="white" nowrap="nowrap"><strong>*Name</strong></th>
 		    		<th class="white" nowrap="nowrap">URL</th>
 		    		<th class="white" nowrap="nowrap">Logo</th>
 		    		<th class="white" nowrap="nowrap">(Maximum Size: 1MB)</th>
@@ -51,7 +50,6 @@
 	        <input type="button" value="Cancel" onclick="window.location='{% url 'aboutus_display' project.short_name tab %}'"/>
 	        <input type="submit" value="Submit" />
         </div>
-	    
 	</form>
 
 

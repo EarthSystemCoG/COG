@@ -4,6 +4,7 @@
 
 {% block main %}
 
+    * indicates a required field
 	<div class="mybox">
 		<form action="" method="post" enctype="multipart/form-data">
 		
@@ -15,18 +16,15 @@
 		    
 		    <!-- upload document form fields -->
             <table>
-                <tr>
-                    <td colspan="3" style="text-align:center;">Required fields are in <strong>bold</strong>.</td>
 
-                </tr>
                 <tr>
-                    <td style="text-align:right;">Publisher</td>
+                    <td style="text-align:right;width:90px;">Publisher</td>
                     <td colspan="2" >{{ request.user }} </td>
                 </tr>
 
                       {% if form.file.errors %}
                          <tr>
-                         <td style="vertical-align:middle; text-align:right;"><strong>File</strong></td>
+                         <td style="vertical-align:middle; text-align:right;"><strong>*File</strong></td>
                          <td style="width:30%;vertical-align:middle;">{{ form.file }}</td>
                          <td style="vertical-align:middle;text-align:left;">Filename: {{ form.instance.file.name }}</td>
                          </tr>
@@ -36,7 +34,7 @@
                          </tr>
                       {% else %}
                          <tr>
-                         <td style="vertical-align:middle; text-align:right;"><strong>File</strong></td>
+                         <td style="vertical-align:middle; text-align:right;"><strong>*File</strong></td>
                          <td style="width:30%;vertical-align:middle;">{{ form.instance.file.name }}{{ form.file }}</td>
                          <td style="vertical-align:middle; font-style:italic;">Max size: 500 MB. The file name can contain only letters, numbers, spaces, and _ - . /</td>
                           </tr>
@@ -56,10 +54,11 @@
     			</tr>
             </table>
             <table>
+                <tr>
                 <!-- CREATE RESOURCE -->
     			{% if not form.instance.id %}
     			<!-- only show folder selection when file is first uploaded, later folder can only be changed through the Resources page --><tr>
-                    <td style="text-align: right; width:70px;">Resource?
+                    <td style="text-align: right; width:90px;">Resource?
                     </td>
                     <td>
                         This file can become a Resource by selecting or creating a destination Resource Folder.

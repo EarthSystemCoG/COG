@@ -24,7 +24,7 @@ from urllib import quote
 
 
 # method to retrieve all news for a given project, ordered by original publication date
-def news(project):
+def project_news(project):
     qset = Q(project=project) | Q(other_projects=project)
     return News.objects.filter(qset).distinct().order_by('-publication_date')
 
@@ -272,21 +272,6 @@ def setActiveProjectTabs(tabs, request, save=False):
             #print "Saved project tab=%s to database" % tab
                         
     return tabs
-
-
-def getUnsavedProjectSubFolders(project, request):
-    """
-    Function to create the project top-level sub-folders, in the appropriate state,
-    WITHOUT PERSISTING THEM TO THE DATABASE.
-    """
-    
-    folders = []
-    for key, value in TOP_SUB_FOLDERS.items():
-        folder = Folder(name=value, project=project, active=False)
-        if request is not None and ("folder_%s" % value) in request.REQUEST.keys():
-            folder.active = True
-        folders.append(folder)
-    return folders
 
 
 def createOrUpdateProjectSubFolders(project, request=None):

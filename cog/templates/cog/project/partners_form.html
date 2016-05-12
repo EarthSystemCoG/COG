@@ -6,18 +6,19 @@
 
 {% block main %}
 
+
+    * indicates a required field
 	<form method="post" action="" enctype="multipart/form-data">
 		
 		{% csrf_token %}
 	    {{ formset.management_form }}
 
-        Required field is in <strong>bold</strong>.
 	    <div class="mybox">
 		    <table>
 		    	<caption>{{ project.short_name }} Partners</caption>
                 <!--table headers-->
 		    	<tr>
-		    		<th class="white" scope="col"  nowrap="nowrap"><strong>Name</strong></th>
+		    		<th class="white" scope="col"  nowrap="nowrap"><strong>*Name</strong></th>
 		    		<th class="white" scope="col"  nowrap="nowrap">URL</th>
 		    		<th class="white" scope="col"  nowrap="nowrap">Logo</th>
 		    		<th class="white" scope="col"  nowrap="nowrap">Choose Image (Maximum Size: 1MB)</th>

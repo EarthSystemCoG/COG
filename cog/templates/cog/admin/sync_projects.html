@@ -26,7 +26,7 @@
 		              {% for siteid, sitedict in sites %}
 			              <tr>
 			                  <td>{{ sitedict.name }}</td>
-			                  <td>{{ sitedict.domain }}</td>
+			                  <td><a href='http://{{ sitedict.domain }}'>{{ sitedict.domain }}</a></td>
 			                  <td>{{ sitedict.numberOfProjects }}</td>
 			                  <td>{{ sitedict.numberOfUsers }}</td>
 			                  <td><a href='{{ sitedict.url }}'>Shared Projects</a></td>
@@ -50,6 +50,8 @@
 			          </tr>
 		          </table>
 	          </div>
+              <div style="float:right;"><input type="button" value="Return Home" onclick="self.location=
+		       '{% url 'site_home' %}'"/></div>
 	  </div>
   {% endif %}
 {% endblock %}

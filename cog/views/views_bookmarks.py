@@ -25,7 +25,7 @@ def _hasBookmarks(project):
 
 def bookmark_list(request, project_short_name):
 
-    #order of bookmarks occurs in /forms_bookmarks.py
+    # order of bookmarks occurs in /forms_bookmarks.py
         
     # load the project
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
@@ -37,7 +37,7 @@ def bookmark_list(request, project_short_name):
         return getProjectNotVisibleRedirect(request, project)
         
     # get or create top-level folder
-    folder = getTopFolder(project)
+    # folder = getTopFolder(project)
     
     # build list of children with bookmarks that are visible to user
     children = []
@@ -56,11 +56,17 @@ def bookmark_list(request, project_short_name):
     template_title = "Resources"
     template_form_name = None
 
-    return render_to_response('cog/common/rollup.html', 
-                              {'project': project, 'title': '%s %s' % (project.short_name, template_title), 
-                               'template_page': template_page, 'template_title': template_title, 'template_form_name':
-                                  template_form_name,
-                               'children': children, 'peers': peers},
+    # change render template to 'cog/common/rollup_tabbed.html' to turn on tabbed rollups.
+
+    return render_to_response('cog/common/rollup_accordion.html',
+                              {'project': project,
+                               'title': '%s %s' % (project.short_name, template_title),
+                               # 'title': template_title,
+                               'template_page': template_page,
+                               'template_title': template_title,
+                               'template_form_name': template_form_name,
+                               'children': children,
+                               'peers': peers},
                               context_instance=RequestContext(request))
 
     
@@ -212,7 +218,7 @@ def folder_add(request, project_short_name):
     
     # retrieve project from request, user from session
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    user = request.user
+    # user = request.user
     
     # security check
     if not userHasContributorPermission(request.user, project):
@@ -300,7 +306,7 @@ def folder_delete(request, project_short_name, folder_id):
     # retrieve folder from request
     folder = get_object_or_404(Folder, pk=folder_id)
     project = folder.project
-    parentFolder = folder.topParent()
+    # parentFolder = folder.topParent()
     
     # security check
     if not userHasContributorPermission(request.user, project):
@@ -356,5 +362,5 @@ def bookmark_add_notes(request, project_short_name, bookmark_id):
     project = bookmark.folder.project
     
     # invoke generic view
-    #return add_notes(request, project, bookmark)
+    # return add_notes(request, project, bookmark)
     return post_add(request, project.short_name, owner=bookmark)

@@ -3,7 +3,8 @@
 {% block main %}
 
 	{% load cog_utils %}
-	
+
+	* indicates a required field
 	<div class="mybox">
 		 <form action="" method="post">
 		         
@@ -19,7 +20,7 @@
 			         </td>
 		         </tr>	     
 			     <tr>
-			        <td nowrap="nowrap"><strong>Technical Support</strong></td>
+			        <td nowrap="nowrap">Technical Support</td>
 			        <td class="long">
 			        	{{ form.technicalSupport.help_text }}
 			            {{ form.technicalSupport }} 
@@ -27,7 +28,7 @@
 			         </td>
 		         </tr>
 		         <tr>
-			        <td nowrap="nowrap"><strong>Meeting Support</strong></td>
+			        <td nowrap="nowrap">Meeting Support</td>
 			        <td class="long">
 			        	{{ form.meetingSupport.help_text }}
 			            {{ form.meetingSupport }} 
@@ -35,7 +36,7 @@
 			         </td>
 		         </tr>
 		         <tr>
-			        <td nowrap="nowrap"><strong>Get Involved</strong></td>
+			        <td nowrap="nowrap">Get Involved</td>
 			        <td class="long">
 			        	{{ form.getInvolved.help_text }}
 			            {{ form.getInvolved }} 

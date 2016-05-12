@@ -11,70 +11,68 @@
 
 	     {% for form in formset.forms %}
 
-     	    {{ form.id }}
+     	     {{ form.id }}
 
-	        <div class="mybox">
-				<table>
-	            	<tr>
-	            		<td valign="top" nowrap="nowrap"><strong>Title</strong></td>
+             * indicates a required field
+	         <div class="mybox" style="margin-bottom:20px;">
+				 <table>
+	            	 <tr>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>*Title</strong></td>
 	            		<td class="long">
 	            			{{ form.title.help_text }}
 	            			{{ form.title }}
 	            			{{ form.title.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
-	            		<td valign="top" nowrap="nowrap"><strong>Description</strong></td>
+	            	 </tr>
+	            	 <tr>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>*Description</strong></td>
 	            		<td class="long">
 	            			{{ form.description.help_text }}
 	            			{{ form.description }}
 	            			{{ form.description.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Purpose(s)</td>
+	            	 </tr>
+	            	 <tr>
+	            		<td class="leftcolumn" nowrap="nowrap">Purpose(s)</td>
 	            		<td class="long">
 	            			{{ form.purposes.help_text }}
 	            			{{ form.purposes }}
 	            			{{ form.purposes.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Other Purpose(s)</td>
+	            	 </tr>
+	            	 <tr>
+	            		<td class="leftcolumn" nowrap="nowrap">Other Purpose(s)</td>
 	            		<td class="long">
 	            			{{ form.other.help_text }}
 	            			{{ form.other }}
 	            			{{ form.other.errors }}
 	            		</td>
-	            	</tr>
-	            	<tr>
-	            		<td valign="top" nowrap="nowrap">Terms of Reference</td>
+	            	 </tr>
+	            	 <tr>
+	            		<td class="leftcolumn" nowrap="nowrap">Terms of Reference</td>
 	            		<td class="long">
 	            			{{ form.termsOfReference.help_text }}
 	            			{{ form.termsOfReference }}
 	            			{{ form.termsOfReference.errors }}
 	            		</td>
-	            	</tr>
-	            	{% if form.instance.id %}
-		            	<tr>
+	            	 </tr>
+	            	 {% if form.instance.id %}
+		            	 <tr>
 		            		<td valign="top">&nbsp;</td>
 		            		<td class="long">
 		            			{{ form.DELETE }} <span style="padding:0px">Delete?</span>
 		            			&nbsp;<a href="{% url 'management_body_members' project.short_name|lower form.instance.id %}" class="changelink" style="float:right">Update Members</a>
 		            		</td>
-		            	</tr>
-	            	{% endif %}
-
+		            	 </tr>
+	            	 {% endif %}
 	            </table>
-            </div>
-
+             </div>
 	     {% endfor %}
 
     	 <div style="text-align:right">
 	         <input type="button" value="Cancel" onclick="window.location='{% url 'governance_display' project.short_name|lower 'bodies' %}'"/>
 	         <input type="submit" value="Submit" />
          </div>
-
     </form>
 
 {% endblock %}

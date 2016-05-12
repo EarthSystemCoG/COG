@@ -1,0 +1,46 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% load cog_utils %}
+{% load search_utils %}
+
+{% block main %}
+	  
+     <div class="yui-skin-sam">
+     <h1>Obs4MIPs Data Table</h1>
+     <p>The following table is automatically updated with Obs4MIPs datasets available throughout the Earth System Grid Federation.</p>
+     	 <table>
+             <!-- For section 508 compliance, data tables are required to have captions, column headers, and a tbdoy
+             around the data itself -->
+             <caption>Obs4MIPs Datasets</caption>
+
+			 <tr>
+				 <th><strong>Instrument</strong></th>
+				 <th><strong>Dataset Name</strong></th>
+				 <th><strong>Variables</strong></th>
+				 <th><strong>Tech Note</strong></th>
+			 </tr>
+
+             <tbody>
+           	     {% for record in search_output.results|sortResults:'source_id' %}
+          		     <tr>
+          			     <td>{{ record.fields.source_id.0 }}</td>
+          			     <td> {{ record.fields.title.0}} </td>
+          			     <td>
+          				     {% for variable in record.fields.variable_long_name %}
+          					    {{ variable }} <br/>
+          				     {% endfor %}
+                         </td>
+          			     <td>
+          				     {% for url in record|recordUrls %}
+          					     {% if url.2 == 'Tech Note' %}
+          						     <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a>
+          					     {% endif %}
+          				     {% endfor %}
+          			     </td>
+     			     </tr>
+                 {% endfor %}
+             </tbody>
+     	 </table>
+	 </div>
+    
+{% endblock %}

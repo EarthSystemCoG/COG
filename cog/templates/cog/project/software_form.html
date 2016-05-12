@@ -3,7 +3,8 @@
 {% block main %} 
 
 	{% load cog_utils %}
-    
+
+    * indicates a required field
 	<form action="" method="post">
 	         
 	     {% csrf_token %}
@@ -11,7 +12,7 @@
 	        <div class="mybox">
 				<table>
 					<tr>
-	            		<td valign="top"><strong>Features</strong></td>
+	            		<td class="leftcolumn" nowrap="nowrap"><strong>*Features</strong></td>
 	            		<td class="long">
 	            			{% if form.software_features.help_text %} {{ form.software_features.help_text }} {% endif %}
 	            			{{ form.software_features }} 
@@ -19,7 +20,7 @@
 	            		</td>
 	            	</tr>
 	            	<tr>
-	            		<td valign="top">System Requirements</td>
+	            		<td class="leftcolumn" nowrap="nowrap">System Requirements</td>
 	            		<td class="long">
 	            			{% if form.system_requirements.help_text %} {{ form.system_requirements.help_text }} {% endif %}
 	            			{{ form.system_requirements }} 
@@ -27,7 +28,7 @@
 	            		</td>	            		
 	            	</tr>
 	            	<tr>
-	            		<td valign="top">License</td>
+	            		<td class="leftcolumn" nowrap="nowrap">License</td>
 	            		<td class="long">
 	            			{{ form.license.help_text }}
 	            			{{ form.license }} 
@@ -35,7 +36,7 @@
 	            		</td>	            		
 	            	</tr>
 	            	<tr>
-	            		<td valign="top">Implementation Language</td>
+	            		<td class="leftcolumn" nowrap="nowrap">Implementation Language</td>
 	            		<td class="long">
 	            			{{ form.implementationLanguage.help_text }}
 	            			{{ form.implementationLanguage }} 
@@ -43,7 +44,7 @@
 	            		</td>	            		
 	            	</tr>
 					<tr>
-	            		<td valign="top">Binding Language</td>
+	            		<td class="leftcolumn" nowrap="nowrap">Binding Language</td>
 	            		<td class="long">
 	            			{{ form.bindingLanguage.help_text }}
 	            			{{ form.bindingLanguage }} 
@@ -51,7 +52,7 @@
 	            		</td>	            		
 	            	</tr>
 					<tr>
-	            		<td valign="top">Supported Platforms</td>
+	            		<td class="leftcolumn" nowrap="nowrap">Supported Platforms</td>
 	            		<td class="long">
 	            			{{ form.supportedPlatforms.help_text }}
 	            			{{ form.supportedPlatforms }} 
@@ -59,7 +60,7 @@
 	            		</td>	            		
 	            	</tr>
 	            	<tr>
-	            		<td valign="top">External Dependencies</td>
+	            		<td class="leftcolumn" nowrap="nowrap">External Dependencies</td>
 	            		<td class="long">
 	            			{{ form.externalDependencies.help_text }}
 	            			{{ form.externalDependencies }} 

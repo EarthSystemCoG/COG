@@ -16,7 +16,8 @@ class SearchGroup(models.Model):
         return len(list(self.facets.all()))
     
     def __unicode__(self):
-        return "Search Group name='%s', order='%s'" % (self.name, self.order)
+        #return "Search Group name='%s', order='%s'" % (self.name, self.order)
+        return self.name
     
     class Meta:
         app_label= APPLICATION_LABEL

@@ -1,0 +1,34 @@
+{% extends "cog/common/layout_left_center_right.html" %}
+
+{% block main %}
+
+{% load cog_utils %}
+
+* indicates a required field
+<div class="mybox">
+    <form method="post" action="">
+           {% csrf_token %}
+
+            <table>
+                <tr>
+                    <td valign="top" nowrap="nowrap"><strong>*Name</strong></td>
+                    <td class="long">{{ form.name }}{{ form.name.errors }}</td>
+                </tr>
+                <tr>
+                    <td class="long" colspan="2"><em class="message">Please note: the characters {{ project|getInvalidCharacters }} are not allowed.</em></td>
+                </tr>                       
+            </table>
+            
+            <!-- hidden fields -->
+            {{ form.profile.as_hidden }}
+            {{ form.order.as_hidden }}
+            
+            <div style="text-align:right">
+                <input type="button" value="Cancel" onclick="window.location='{% url 'search_profile_config' project.short_name|lower %}'"/>
+                <input type="submit" value="Submit" />
+            </div>
+
+    </form>
+</div>
+
+{% endblock %}
