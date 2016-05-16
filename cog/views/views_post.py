@@ -215,14 +215,14 @@ def post_add(request, project_short_name, owner=None):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
 
     # retrieve type
-    type = getQueryDict(request).get('type')
+    postType = getQueryDict(request).get('type')
   
     if request.method == 'GET':
         
         # create empty Post object, pre-populate project and type
         post = Post()
         post.project = project
-        post.type = type
+        post.type = postType
         
         # optionally assign parent Post
         parent_id = request.GET.get('parent_id', None)
@@ -230,15 +230,21 @@ def post_add(request, project_short_name, owner=None):
             ppost = get_object_or_404(Post, pk=parent_id)
             post.parent = ppost
             post.topic = ppost.topic
+            
+        # set fixed fields for hyperlinks
+        #if postType == Post.TYPE_HYPERLINK:
+        #    post.template = None
+        #    post.is_private = False
+        #    post.is_restricted = False
              
         # create form from instance
         # note extra argument project to customize the queryset!
-        form = PostForm(type, project, instance=post)
-        return render_post_form(request, form, project, type)
+        form = PostForm(postType, project, instance=post)
+        return render_post_form(request, form, project, postType)
     
     else:
         # create form object from form data
-        form = PostForm(type, project, request.POST)
+        form = PostForm(postType, project, request.POST)
         if form.is_valid():
             # create a new post object but don't save it to the database yet
             post = form.save(commit=False)
@@ -250,14 +256,14 @@ def post_add(request, project_short_name, owner=None):
             # page: build full page URL
             if post.type == Post.TYPE_PAGE:
                 post.url = get_project_page_full_url(project, post.url)
-            else:
+            elif post.type != Post.TYPE_HYPERLINK:
                 # assign temporary value before object id is assigned
                 post.url = datetime.now()
             # assign post order, if top-level
             # note that the post.topic may be None
             if post.parent is None:
                 pages = Post.objects.filter(project=project).filter(topic=post.topic).filter(parent=None).\
-                    filter(type='page').order_by('order')
+                    filter(Q(type=Post.TYPE_PAGE) | Q(type=Post.TYPE_HYPERLINK)).order_by('order')
                 post.order = len(pages)+1
             else:
                 post.order = 0
@@ -281,12 +287,16 @@ def post_add(request, project_short_name, owner=None):
             post.send_signal(SIGNAL_OBJECT_CREATED)
                 
             # redirect to post (GET-POST-REDIRECT)
-            return redirect_to_post(request, post)
+            if post.type != Post.TYPE_HYPERLINK:
+                return redirect_to_post(request, post)
+            # or to project home page
+            else:
+                return HttpResponseRedirect(reverse('project_home', args=[project_short_name.lower()]))
                 
         # invalid data
         else:
             print form.errors
-            return render_post_form(request, form, project, type)
+            return render_post_form(request, form, project, postType)
 
 
 def createProjectTopicIfNotExisting(project, topic):
@@ -419,7 +429,11 @@ def post_update(request, post_id):
                 post.send_signal(SIGNAL_OBJECT_UPDATED)
 
                 # redirect to post (GET-POST-REDIRECT)
-                return redirect_to_post(request, post)
+                if post.type != Post.TYPE_HYPERLINK:
+                    return redirect_to_post(request, post)
+                # or to project home page
+                else:
+                    return HttpResponseRedirect(reverse('project_home', args=[post.project.short_name.lower()]))
 
         else:
             print form.errors

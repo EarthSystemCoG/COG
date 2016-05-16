@@ -27,6 +27,6 @@
     </table>
   </div>
   <label for="cancel" style="display:none;">Cancel</label>
-  <div style="float:right;"><input id="cancel" type="reset" value="Cancel" onclick="self.location='/'"/></div>
+  <div style="float:right;"><input id="cancel" type="reset" value="Cancel" onclick="self.location='{% url 'site_home' %}'"/></div>
 
 {% endblock %}

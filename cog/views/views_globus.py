@@ -141,7 +141,6 @@ def download(request):
 						if not gendpoint_name in download_map:
 							download_map[gendpoint_name] = [] # insert empty list of paths
 						download_map[gendpoint_name].append(path)
-						break
 				elif 'gridftp' in access:
 					# example or urlparse output:
 					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
@@ -276,16 +275,15 @@ def submit(request):
 				context_instance=RequestContext(request))
 
 	# loop over source endpoints, submit one transfer for each source endpoint
-	task_ids = [] # list of submitted task ids
+	task_ids = []  # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
 			
 		# submit transfer request
 		task_id = submitTransfer(api_client, source_endpoint, source_files, target_endpoint, target_folder)
-		
 		task_ids.append(task_id)
 	
 	# display confirmation page
-	return render_to_response('cog/globus/confirmation.html', 
+	return render_to_response('cog/globus/confirmation.html',
 						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
 						        context_instance=RequestContext(request))	
 

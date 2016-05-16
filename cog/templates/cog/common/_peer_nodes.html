@@ -2,14 +2,14 @@
 
 {% load cog_utils %}
 
-<div class="peer-nodes-box">
+<div class="peer_nodes_box">
 
 	<div class="right_widget_header" style="border-bottom:1px solid black;">
 	    <span style="vertical-align: middle;">
 	        Federated ESGF-CoG Nodes
 	    </span>
     </div>
-	<div class="peer-nodes-box-body">
+	<div class="peer_nodes_box_body">
 	    {% if project|get_peer_sites %}
 		    {% for peer in project|get_peer_sites %}
 		        {% if forloop.counter > 1 %}<br/>{% endif %}
