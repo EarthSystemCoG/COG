@@ -2,6 +2,7 @@
 Session-related middleware
 '''
 
+import threading
 from datetime import datetime
 from django.conf import settings
 from cog.models import update_user_projects, update_user_tags, isUserRemote
@@ -30,16 +31,27 @@ class SessionMiddleware(object):
                     s['LAST_ACCESSED'] = now_seconds
                     s.save()
                                         
-                    # update the user tags from their home site
-                    if isUserRemote(request.user):
-                        update_user_tags(request.user)
-                        
-                    # update the user's projects across the federation                
-                    update_user_projects(request.user)
-
+                    # update the user status in a separate thread
+                    t = threading.Thread(target=update_user, args=(request.user,))
+                    t.start()
+                    # don't wait for completion
                     
         except ObjectDoesNotExist:
             pass # no profile
                 
         # keep on processing this request
         return None
+    
+def update_user(user):
+    '''Function that updates the user status on the local site by querying all remote sites.
+       This function is meant to be run as the target of a separate thread.'''
+    
+    # update the user tags from their home site
+    if isUserRemote(user):
+        update_user_tags(user)
+        
+    # update the user's projects across the federation                
+    update_user_projects(user)
+
+    
+    
