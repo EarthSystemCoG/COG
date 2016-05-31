@@ -101,12 +101,12 @@ def _custom_login(request, response):
     return response
 
 
-def notifyAdminsOfUserRegistration(user):
+def notifyAdminsOfUserRegistration(user,request):
 
     subject = "New User Registration"
 
     profile_url = reverse('user_profile_redirect', kwargs={'user_id': user.id})  # go to the right node
-    profile_url = user.request.build_absolute_uri(profile_url)
+    profile_url = request.build_absolute_uri(profile_url)
 
     message = "User %s has created a new account." % user.get_full_name()
     message += "\nView home node profile at: %s" % profile_url
@@ -276,7 +276,7 @@ def user_add(request):
 
             # notify user, node administrators of new registration
             notifyUserOfRegistration(user)
-            notifyAdminsOfUserRegistration(user)
+            notifyAdminsOfUserRegistration(user,request)
 
             # subscribe to mailing list ?
             if userp.subscribed:
