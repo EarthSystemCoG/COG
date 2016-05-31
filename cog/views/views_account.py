@@ -103,26 +103,33 @@ def _custom_login(request, response):
 
 def notifyAdminsOfUserRegistration(user):
 
-    subject = 'New User Registration'
-    message = 'User %s has created a new account' % user.get_full_name()
+    subject = "New User Registration"
+
+    profile_url = reverse('user_profile_redirect', kwargs={'user_id': user.id})  # go to the right node
+    profile_url = user.request.build_absolute_uri(profile_url)
+
+    message = "User %s has created a new account." % user.get_full_name()
+    message += "\nView home node profile at: %s" % profile_url
+
+    # openid
+    message += "\n\nOpenID is: %s" % user.profile.openid()
 
     # user attributes
-    message += "\nFirst Name: %s" % user.first_name
+    message += "\n\nFirst Name: %s" % user.first_name
     message += "\nLast Name: %s" % user.last_name
     message += "\nUser Name: %s" % user.username
     message += "\nEmail: %s" % user.email
-    
-    # openid
-    message += "\nOpenID is: %s" % user.profile.openid()
 
     # user profile attributes
     profile = UserProfile.objects.get(user=user)
-    message += "\nInstitution: %s" % profile.institution
+    message += "\n\nInstitution: %s" % profile.institution
     message += "\nDepartment: %s" % profile.department
     message += "\nCity: %s" % profile.city
     message += "\nState: %s" % profile.state
     message += "\nCountry: %s" % profile.country
     message += "\nSubscribe to COG email list? %s" % profile.subscribed
+    message += "\nResearch Interests: %s" % profile.researchInterests
+    message += "\nResearch Keywords: %s" % profile.researchKeywords
 
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
