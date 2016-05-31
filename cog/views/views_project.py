@@ -392,12 +392,14 @@ def notifySiteAdminsOfProjectRequest(project, request):
     
     url = reverse('project_update', kwargs={'project_short_name': project.short_name.lower()})
     url = request.build_absolute_uri(url)
+
+    profile = reverse('user_detail', kwargs={'user.id': request.user.id})
     subject = "New Project Request"
     message = "Project Short Name: %s \n" \
               "Project Description: %s \n" \
               "Profile of Requester: %s \n" \
-              "Home site of Requester: %s \n" \
-              "Process this Request: %s" % (project.short_name, project.description, request.user.profile,
+              "Home Site of Requester: %s \n" \
+              "Process this Request: %s" % (project.short_name, project.description, profile,
                                             request.user.profile.site.name, url)
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
