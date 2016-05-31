@@ -393,7 +393,7 @@ def notifySiteAdminsOfProjectRequest(project, request):
     url = reverse('project_update', kwargs={'project_short_name': project.short_name.lower()})
     url = request.build_absolute_uri(url)
 
-    profile = reverse('user_detail', kwargs={'user.id': request.user.id})
+    profile = reverse('user_profile_redirect', kwargs={'user_id': request.user.id})  # go to the right node
     subject = "New Project Request"
     message = "Project Short Name: %s \n" \
               "Project Description: %s \n" \
