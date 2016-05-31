@@ -398,7 +398,7 @@ def notifySiteAdminsOfProjectRequest(project, request):
               "Profile of Requester: %s \n" \
               "Home site of Requester: %s \n" \
               "Process this Request: %s" % (project.short_name, project.description, request.user.profile,
-                                            request.user.profile.site_name, url)
+                                            request.user.profile.site.name, url)
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
 
