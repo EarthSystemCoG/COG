@@ -44,9 +44,10 @@ class PostForm(ModelForm):
         #self.fields['parent'].queryset[0]=Q(is_home="true")
         self.fields['parent'].empty_label = "Top Level Page (no parent)"
         # limit topic selection to current project and post type(s)
-        if type==Post.TYPE_PAGE or type==Post.TYPE_HYPERLINK:
+        if type == Post.TYPE_PAGE or type == Post.TYPE_HYPERLINK:
             self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project))\
-                                                         .filter( Q(post__type=Post.TYPE_PAGE) | Q(post__type=Post.TYPE_HYPERLINK))\
+                                                         .filter(Q(post__type=Post.TYPE_PAGE) |
+                                                                 Q(post__type=Post.TYPE_HYPERLINK))\
                                                          .distinct().order_by('name')
         else:
             self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project) &
