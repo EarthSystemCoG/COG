@@ -40,7 +40,7 @@
 		</div>
 	{% endif %}
 
-    {% if form.type == 'hyperlink' %}
+    {% if form.instance.type == 'hyperlink' %}
        <p>
          Use this form to create a link in the left navigation bar. This link does not have to be a CoG page.
        </p>
@@ -74,11 +74,6 @@
 		    <!-- TYPE_NOTES -->
 		    {% if form.instance.type == 'notes' %}
 		          {% include 'cog/post/_post_form_notes.html' %}
-		    {% endif %}
-		    
-		    <!-- TYPE_BLOG -->
-		    {% if form.instance.type == 'blog' %}
-		          {% include 'cog/post/_post_form_blog.html' %}
 		    {% endif %}
 		    
 		    <!-- TYPE_HYPERLINK -->
