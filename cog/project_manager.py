@@ -95,7 +95,7 @@ class ProjectManager(object):
                 # check site
                 if site_domain==remote_site.domain: # check project belongs to remote site
                     
-                    if not Project.objects.filter(short_name=short_name).exists(): # avoid conflicts with existing projects, from ANY site
+                    if not Project.objects.filter(short_name__iexact=short_name).exists(): # avoid conflicts with existing projects, from ANY site
                         # create new project
                         print 'Creating project=%s (%s) for site=%s in local database' % (short_name, long_name, remote_site)
                         try:
