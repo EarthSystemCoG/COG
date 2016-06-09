@@ -82,8 +82,8 @@ class ProjectManager(object):
                 print 'Created remote site: %s' % remote_site
             else:
                 print 'Remote site %s already existing' % remote_site
-            remote_site.name = sdict["name"]
-            remote_site.save()
+            #remote_site.name = sdict["name"] # don't change the site 'name', keep value from esgf_cogs.xml instead
+            #remote_site.save()
                         
             # first loop to create ALL projects first
             for key, pdict in jobj["projects"].items():
