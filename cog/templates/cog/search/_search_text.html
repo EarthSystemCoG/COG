@@ -1,7 +1,6 @@
 <!--START:/cog/templates/cog/search/_search_text.html-->
-<!-- Title -->
-<!--<h1 class="title">{{ project.short_name }} Data Search </h1> -->
 
+{% load cog_utils %}
 
 {% if project.searchprofile.description %}
     <div>
@@ -53,7 +52,16 @@
           <label for="limit">results per page</label>
 
 		  <!-- More Search Options control -->
-		  &nbsp;&nbsp;&nbsp;[ <strong><a href="" onclick="javascript:openclose('more_search_options_panel', this, 'More Search Options', 'Less Search Options'); return false;">More Search Options</a></strong> ]
+		  &nbsp;&nbsp;&nbsp;
+		  [ <strong><a href="" onclick="javascript:document.getElementById( 'max_version_query' ).value=''; javascript:openclose('more_search_options_panel', this, 'More Search Options', 'Less Search Options'); 
+		                                return false;">
+		  {% if search_input.max_version %}
+		    Less Search Options 	
+		  {% else %}
+		  	More Search Options
+		  {% endif %}
+		  </a></strong> ]
+		  
 
 	     </td>
         </tr>
@@ -62,14 +70,15 @@
     </td>
     </tr>
     
+    
     <!-- More Search Options panel -->
     <tr>
     	<td colspan="2">
-    		<div style="background-color:#EEEEEE; border:1px solid #666; padding-right:5px; display: none;" id="more_search_options_panel">
+    		<div style="background-color:#EEEEEE; border:1px solid #666; padding-right:5px; display: {{ search_input.max_version|getDisplayStatus }}" id="more_search_options_panel">
 
 		        <table>
 			      <tr>
-			       <td style="width:20%; text-aligh:right; vertical-align:middle; white-space: nowrap;"><label for="max_version_query">Search for versions less than YYYYMMDD:</label></td>
+			       <td style="width:20%; text-aligh:right; vertical-align:middle; white-space: nowrap;"><label for="max_version_query">Search for versions less or equal to: YYYYMMDD:</label></td>
 			       <td style="width:20%; text-aling:left; vertical-align:middle;">
 		               <input type="text" id="max_version_query" alt="max_version_query" name="max_version" size="10" value="{{search_input.max_version}}"/>
 		           </td>

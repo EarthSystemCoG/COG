@@ -76,10 +76,11 @@ class SearchInput:
                 return (False, ERROR_MESSAGE_INVALID_TEXT)
         
         # validate max version date
-        try:
-            datetime.strptime( self.max_version, "%Y%M%d" )
-        except ValueError:
-            return (False, ERROR_MESSAGE_INVALID_DATE)
+        if self.max_version:
+            try:
+                datetime.strptime( self.max_version, "%Y%M%d" )
+            except ValueError:
+                return (False, ERROR_MESSAGE_INVALID_DATE)
             
         return (True, '')
     
