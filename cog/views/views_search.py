@@ -40,7 +40,7 @@ SEARCH_PATH   = "search_path"
 SEARCH_URL    = 'search_url'         # stores ESGF search URL
 LAST_SEARCH_URL = "last_search_url"  # stores CoG last search URL (including project)
 # constraints excluded from bread crumbs display
-SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type"]
+SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type","max_version"]
 TEMPLATE='template'
               
       
@@ -136,6 +136,10 @@ def _buildSearchInputFromHttpRequest(request, searchConfig):
         searchInput.offset = int(queryDict['offset'])
     if queryDict.get('limit', 0):
         searchInput.limit = int(queryDict['limit'])
+        
+    # max_version
+    if queryDict.get('max_version', ''):
+        searchInput.max_version = queryDict['max_version'].strip()
 
     return searchInput
 
@@ -287,8 +291,9 @@ def search_post(request, searchInput, searchConfig, extra={}):
     searchService = searchConfig.searchService
     queryDict = getQueryDict(request)
     
-    # valid user input
-    if (searchInput.isValid()):
+    # validate user input
+    (valid, error_message) = searchInput.isValid()
+    if valid:
                 
         # add project fixed constraints
         print 'Search POST: adding fixed project constraints'
@@ -327,7 +332,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
         # override search input from request
         data[SEARCH_INPUT] = searchInput
         # add error
-        data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS
+        data[ERROR_MESSAGE] = error_message
              
     # store data in session 
     request.session[SEARCH_DATA] = data

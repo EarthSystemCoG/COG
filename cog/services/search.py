@@ -25,6 +25,8 @@ class SolrSearchService:
             params.append( ('latest', "true") )
         if searchInput.local: # service default: distrib='true'
             params.append( ('distrib', "false") )
+        if searchInput.max_version:
+            params.append( ('max_version', searchInput.max_version.strip()) )
         for key, values in searchInput.constraints.items():
             for value in values:
                 params.append( (key, value) )

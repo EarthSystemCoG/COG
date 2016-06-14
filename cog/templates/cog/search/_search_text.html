@@ -12,7 +12,7 @@
 
 <!-- Search Text Box-->
 <table>
-    <tr>
+  <tr>
     <td>
       <div style="background-color:#EEEEEE;border:1px solid #666; padding-right:5px;height:41px;">
         <table>
@@ -43,8 +43,6 @@
            <!--&nbsp; <input type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />-->
 	      {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
 
-
-
 	      Display
 	      <select name="limit" id="limit">
 	         <option value="10" {% if search_input.limit == 10 %} selected="selected" {% endif %}>10</option>
@@ -53,12 +51,36 @@
 	         <option value="100" {% if search_input.limit == 100 %} selected="selected" {% endif %}>100</option>
 	      </select>
           <label for="limit">results per page</label>
+
+		  <!-- More Search Options control -->
+		  &nbsp;&nbsp;&nbsp;[ <strong><a href="" onclick="javascript:openclose('more_search_options_panel', this, 'More Search Options', 'Less Search Options'); return false;">More Search Options</a></strong> ]
+
 	     </td>
         </tr>
         </table>
       </div>
     </td>
     </tr>
+    
+    <!-- More Search Options panel -->
+    <tr>
+    	<td colspan="2">
+    		<div style="background-color:#EEEEEE; border:1px solid #666; padding-right:5px; display: none;" id="more_search_options_panel">
+
+		        <table>
+			      <tr>
+			       <td style="width:20%; text-aligh:right; vertical-align:middle; white-space: nowrap;"><label for="max_version_query">Search for versions less than YYYYMMDD:</label></td>
+			       <td style="width:20%; text-aling:left; vertical-align:middle;">
+		               <input type="text" id="max_version_query" alt="max_version_query" name="max_version" size="10" value="{{search_input.max_version}}"/>
+		           </td>
+		           <td style="width:60%; text-aling:left; vertical-align:middle;">&nbsp;</td>
+		          </tr>
+		        </table>
+
+			</div>
+    	</td>
+    </tr>
+    
 </table>
 
 <!-- optional checkbox flags -->
