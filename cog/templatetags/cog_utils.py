@@ -861,10 +861,10 @@ def bleachtags(htmlstring):
     return str( bleach.clean(htmlstring) ) # unicode --> string)
 
 @register.filter
-def getDisplayStatus(flag):
-    '''Return the display status of an HTML panel by evaluating a variable to True or False.'''
+def getDisplayStatus(flag1, flag2):
+    '''Return the display status of an HTML panel by evaluating the logical OR of two variables.'''
     
-    if flag:
+    if flag1 or flag2:
         return 'block'
     else:
         return 'none'

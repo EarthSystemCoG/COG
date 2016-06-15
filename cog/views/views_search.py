@@ -40,7 +40,7 @@ SEARCH_PATH   = "search_path"
 SEARCH_URL    = 'search_url'         # stores ESGF search URL
 LAST_SEARCH_URL = "last_search_url"  # stores CoG last search URL (including project)
 # constraints excluded from bread crumbs display
-SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type","max_version"]
+SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type","max_version", "min_version"]
 TEMPLATE='template'
               
       
@@ -137,9 +137,12 @@ def _buildSearchInputFromHttpRequest(request, searchConfig):
     if queryDict.get('limit', 0):
         searchInput.limit = int(queryDict['limit'])
         
-    # max_version
+    # max_version, min_version
     if queryDict.get('max_version', ''):
         searchInput.max_version = queryDict['max_version'].strip()
+    if queryDict.get('min_version', ''):
+        searchInput.min_version = queryDict['min_version'].strip()
+
 
     return searchInput
 
