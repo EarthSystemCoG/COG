@@ -82,8 +82,8 @@ class ProjectManager(object):
                 print 'Created remote site: %s' % remote_site
             else:
                 print 'Remote site %s already existing' % remote_site
-            remote_site.name = sdict["name"]
-            remote_site.save()
+            #remote_site.name = sdict["name"] # don't change the site 'name', keep value from esgf_cogs.xml instead
+            #remote_site.save()
                         
             # first loop to create ALL projects first
             for key, pdict in jobj["projects"].items():
@@ -95,7 +95,7 @@ class ProjectManager(object):
                 # check site
                 if site_domain==remote_site.domain: # check project belongs to remote site
                     
-                    if not Project.objects.filter(short_name=short_name).exists(): # avoid conflicts with existing projects, from ANY site
+                    if not Project.objects.filter(short_name__iexact=short_name).exists(): # avoid conflicts with existing projects, from ANY site
                         # create new project
                         print 'Creating project=%s (%s) for site=%s in local database' % (short_name, long_name, remote_site)
                         try:

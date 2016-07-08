@@ -277,6 +277,11 @@ def _imageformset_update(request, project, tab,
 
                 except ValueError as error:
                     print error
+                    
+                # delete object
+                if form.cleaned_data.get('DELETE', False):
+                    print 'Deleting instance=%s' % form.instance
+                    form.instance.delete()
 
             # persist formset data
             # Note: only objects that have changed are returned

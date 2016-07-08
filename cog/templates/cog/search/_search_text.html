@@ -1,7 +1,6 @@
 <!--START:/cog/templates/cog/search/_search_text.html-->
-<!-- Title -->
-<!--<h1 class="title">{{ project.short_name }} Data Search </h1> -->
 
+{% load cog_utils %}
 
 {% if project.searchprofile.description %}
     <div>
@@ -11,8 +10,8 @@
 {% endif %}
 
 <!-- Search Text Box-->
-<table>
-    <tr>
+<table>    
+  <tr>
     <td>
       <div style="background-color:#EEEEEE;border:1px solid #666; padding-right:5px;height:41px;">
         <table>
@@ -43,8 +42,6 @@
            <!--&nbsp; <input type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />-->
 	      {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
 
-
-
 	      Display
 	      <select name="limit" id="limit">
 	         <option value="10" {% if search_input.limit == 10 %} selected="selected" {% endif %}>10</option>
@@ -53,12 +50,53 @@
 	         <option value="100" {% if search_input.limit == 100 %} selected="selected" {% endif %}>100</option>
 	      </select>
           <label for="limit">results per page</label>
+
+		  <!-- More Search Options control -->
+		  &nbsp;&nbsp;&nbsp;
+		  [ <strong><a href="" onclick="javascript:document.getElementById( 'max_version_query' ).value=''; 
+			                            javascript:document.getElementById( 'min_version_query' ).value=''; 
+		                                javascript:openclose('more_search_options_panel', this, 'More Search Options', 'Less Search Options'); 
+		                                return false;">
+		  {% if search_input.max_version or search_input.min_version %}
+		    Less Search Options 	
+		  {% else %}
+		  	More Search Options
+		  {% endif %}
+		  </a></strong> ]
+		  
 	     </td>
         </tr>
         </table>
       </div>
     </td>
     </tr>
+    
+    
+    <!-- More Search Options panel -->
+    <tr>
+    	<td colspan="2" style="background-color:#FFFFFF">
+    		<div style="background-color:#EEEEEE; border:1px solid #666; padding-right:5px; display: {{ search_input.max_version|getDisplayStatus:search_input.min_version }}" 
+    		     id="more_search_options_panel">
+
+		        <table>
+			      <tr>
+			       
+			      <td style="width:20%; text-aling:left; vertical-align:middle;">
+		               <input type="text" id="min_version_query" alt="min_version_query" name="min_version" size="10" value="{{search_input.min_version}}"/>
+		           </td>
+			       <td style="width:20%; text-aligh:right; vertical-align:middle; white-space: nowrap;"><label for="max_version_query">&le; dataset version (as 'YYYYMMDD' date) &le; </label></td>
+			       
+			       <td style="width:20%; text-aling:left; vertical-align:middle;">
+		               <input type="text" id="max_version_query" alt="max_version_query" name="max_version" size="10" value="{{search_input.max_version}}"/>
+		           </td>
+		           <td style="width:40%; text-aling:left; vertical-align:middle;">&nbsp;</td>
+		          </tr>
+		        </table>
+
+			</div>
+    	</td>
+    </tr>
+    
 </table>
 
 <!-- optional checkbox flags -->

@@ -859,3 +859,12 @@ def getHttpParamValue(request, name):
 def bleachtags(htmlstring):
     
     return str( bleach.clean(htmlstring) ) # unicode --> string)
+
+@register.filter
+def getDisplayStatus(flag1, flag2):
+    '''Return the display status of an HTML panel by evaluating the logical OR of two variables.'''
+    
+    if flag1 or flag2:
+        return 'block'
+    else:
+        return 'none'

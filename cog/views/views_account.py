@@ -474,10 +474,17 @@ def user_update(request, user_id):
     else:
         # form with bounded data
         form = UserForm(request.POST, request.FILES, instance=user)
+        
         # formset with bounded data
         formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')
 
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
+            
+            # delete UserUrls if found
+            urls = UserUrl.objects.filter(profile=profile)
+            for url in urls:
+                print 'Deleting user URL: %s' % url.url
+                url.delete()
 
             # update user
             user = form.save()
@@ -527,13 +534,13 @@ def user_update(request, user_id):
             user_profile.save()
 
             # must assign URL to this user
-            urls = formset.save(commit=False)
-            for url in urls:
-                url.profile = profile
-                url.save()
+            #urls = formset.save(commit=False)
+            #for url in urls:
+            #    url.profile = profile
+            #    url.save()
 
-            for obj in formset.deleted_objects:
-                obj.delete()
+            #for obj in formset.deleted_objects:
+            #    obj.delete()
 
             # generate thumbnail - after picture has been saved
             if _generateThumbnail:
