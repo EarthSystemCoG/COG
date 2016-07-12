@@ -17,7 +17,7 @@ class SiteManager(object):
        SECRET_KEY=yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#
        DATABASE_NAME=cogdb
        DATABASE_USER=database_user
-       DATABASE_PORT=database_port
+       DATABASE_HOST=localhost
        DATABASE_PORT=5432
        MY_PROJECTS_REFRESH_SECONDS=3600
        # optional number of days after which password expire
