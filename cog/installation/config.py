@@ -134,7 +134,7 @@ class CogConfig(object):
         '''Method that assigns the CoG settings.'''
         
         # [DEFAULT]        
-        hostName = self._safeGet("esgf.host", default='localhost') 
+        hostName = self._safeGet("esgf.host", default='dbhost') 
         self._safeSet('SITE_NAME', hostName.upper())
         self._safeSet('SITE_DOMAIN', hostName)
         self._safeSet('TIME_ZONE', 'America/Denver')
