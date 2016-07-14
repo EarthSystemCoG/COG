@@ -80,8 +80,9 @@ class CoGInstall(object):
         dbname = self.siteManager.get('DATABASE_NAME')
         dbuser = self.siteManager.get('DATABASE_USER')
         dbpassword = self.siteManager.get('DATABASE_PASSWORD')
+        dbhost = self.siteManager.get('DATABASE_HOST')
         dbport = self.siteManager.get('DATABASE_PORT')
-        dburl = 'postgresql://%s:%s@localhost:%s/postgres' % (dbuser, dbpassword, dbport)
+        dburl = 'postgresql://%s:%s@%s:%s/postgres' % (dbuser, dbpassword, dbhost, dbport)
     
         # connect to the 'postgres' database
         engine = sqlalchemy.create_engine(dburl)

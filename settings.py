@@ -26,6 +26,7 @@ DATABASE_PATH = siteManager.get('DATABASE_PATH', default="%s/django.data" % site
 DATABASE_NAME = siteManager.get('DATABASE_NAME', default='cogdb')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
+DATABASE_HOST = siteManager.get('DATABASE_HOST', default='localhost')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
 MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600))  # one hour
 PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0))  # 0: no expiration
@@ -89,8 +90,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': DATABASE_NAME,
         'USER': DATABASE_USER,                      # Not used with sqlite3.
-        'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': DATABASE_PASSWORD,              # Not used with sqlite3.
+        'HOST': DATABASE_HOST,                      # Defaults to 'localhost'
         'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
     }
 
