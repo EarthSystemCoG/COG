@@ -14,7 +14,7 @@
   <!-- Data Search widget -->
   {% if project.dataSearchEnabled %}
 	  <div class="search-box">
-	       <div class="right_widget_header" style="border-bottom:1px solid black;">
+	       <div class="right_widget_header">
                <span style="vertical-align: middle;">
                    Search &amp; Download Data
                </span>
@@ -59,92 +59,91 @@
 
    <!-- Project Browser widget -->
    <div class="yui-skin-sam">
-     <div class="project_widget">
+        <div id="project_widget">
+            <div id="project_views" class="yui-navset">
+                <div class="right_widget_header" style="border-color:#FCE79F;">
+                    Browse Projects
+                </div>
 
-       <div id="project_views" class="yui-navset">
-          <div class="right_widget_header">Browse Projects</div>
+                <ul class="yui-nav">
+                    <!--// urls in the list below don't go anywhere. Some sort of link is required to get the javascript
+                    to work, but it can be anything. It shows up in the hover, so it is made descriptive. -->
+                    <li class="selected">&nbsp;&nbsp;<a href="/project_browser/this/"><em><strong>This</strong></em></a>&nbsp;&nbsp;</li>
+                    <li>&nbsp;&nbsp;<a href="/project_browser/all/"><em><strong>All</strong></em></a>&nbsp;&nbsp;</li>
+                    <li>&nbsp;&nbsp;<a href="/project_browser/my/"><em><strong>My</strong></em></a>&nbsp;&nbsp;</li>
+                    <li>&nbsp;&nbsp;<a href="/project_browser/tags/"><em><strong>Tags</strong></em></a>&nbsp;&nbsp;</li>
+                </ul>
+                <!-- actual list of projects under their accordions -->
+                <div class="yui-content">
+                    <div id="thisProjectsBrowser">&nbsp;</div>
+                    <div id="allProjectsBrowser">&nbsp;</div>
+                    <div id="myProjectsBrowser">&nbsp;</div>
+                    <div id="tagsProjectsBrowser">&nbsp;</div>
+                </div>
+            </div> <!--// end div id=project_views //-->
 
-          <ul class="yui-nav">
-              <!--// urls in the list below don't go anywhere. Some sort of link is required to get the javascript
-              to work, but it can be anything. It shows up in the hover, so it is made descriptive. -->
-              <li class="selected">&nbsp;&nbsp;<a href="/project_browser/this/"><em><strong>This</strong></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/all/"><em><strong>All</strong></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/my/"><em><strong>My</strong></em></a>&nbsp;&nbsp;</li>
-              <li>&nbsp;&nbsp;<a href="/project_browser/tags/"><em><strong>Tags</strong></em></a>&nbsp;&nbsp;</li>
-          </ul>
-           <!-- actual list of projects under their accordions -->
-          <div class="yui-content">
-              <div id="thisProjectsBrowser">&nbsp;</div>
-              <div id="allProjectsBrowser">&nbsp;</div>
-              <div id="myProjectsBrowser">&nbsp;</div>
-              <div id="tagsProjectsBrowser">&nbsp;</div>
-          </div>
-       </div> <!--// end div id=project_views //-->
+            <!-- project tagging -->
+            <!-- Note, the style of the YUI divs were modified significantly from their defaults in order to match up with the Django divs in the search widget. The main items involved
+            changing the position back to static and display back to inline. -->
 
-       <!-- project tagging -->
-       <!-- Note, the style of the YUI divs were modified significantly from their defaults in order to match up with the Django divs in the search widget. The main items involved
-       changing the position back to static and display back to inline. -->
+	        <div id="project_browser_controls">
+	            <div id="tag_entry" style="padding:0; padding-bottom: 2px; margin:0; width:188px;">
+                    <!--class=yui-ac-->
+		            <div id="tagAutoComplete" style="margin:0; padding:0; width:188px; position:static; display:inline;">
 
-	   <div id="project_browser_controls">
-	       <div id="tag_entry" style="padding:0; padding-bottom: 2px; margin:0; width:188px;">
-                <!--class=yui-ac-->
-		        <div id="tagAutoComplete" style="margin:0; padding:0; width:188px; position:static; display:inline;">
-
-			        <!--class=yui-ac-input-->
-                    <label for="projectBrowserText" style="display:none;">Enter Tag</label>
-                    <!--ONCLICK: land on All -->
-                    <!-- width includes size of box + margins -->
-                    <!--176px + 4px left margin = 180px, which leaves 4px either side from 188px-->
-		            <input type="text" onclick="gotoTab(1);" id="projectBrowserText" placeholder="Enter Tag" style="width:176px; position:static;
+			             <!--class=yui-ac-input-->
+                         <label for="projectBrowserText" style="display:none;">Enter Tag</label>
+                         <!--ONCLICK: land on All -->
+                         <!-- width includes size of box + margins -->
+                         <!--176px + 4px left margin = 180px, which leaves 4px either side from 188px-->
+		                 <input type="text" onclick="gotoTab(1);" id="projectBrowserText" placeholder="Enter Tag" style="width:176px; position:static;
 		             font-size:8.5pt; padding:0; padding-left:2px; margin:0; margin-left:4px; margin-top:4px;" alt="projectBrowserText" />
 
-		            <div style="width:177px" id="tagContainer"> <!-- make size 1px smaller than input above -->
-
+		                 <div style="width:177px" id="tagContainer"> <!-- make size 1px smaller than input above -->
+		                 </div>
 		            </div>
-		        </div>
-               <!-- add buttons -->
-                <div style="text-align: left; width:181px; margin:0; margin-left:4px; padding:0; margin-top:4px;">
+                    <!-- add buttons -->
+                    <div style="text-align: left; width:181px; margin:0; margin-left:4px; padding:0; margin-top:4px;">
 
-                    <!-- SAVE: land on Tags -->
-                	{% if request.user.is_authenticated %}
-                     <input class="right_go" style="width:60px; margin:0;margin-left:0;" type="submit" value="Save Tag" id="saveUserTag"
-	                         onclick="saveUserTag();gotoTab(3);"/>
-	                {% endif %}
+                         <!-- SAVE: land on Tags -->
+                	     {% if request.user.is_authenticated %}
+                              <input class="right_go" style="width:60px; margin:0;margin-left:0;" type="submit" value="Save Tag" id="saveUserTag"
+	                              onclick="saveUserTag();gotoTab(3);"/>
+	                     {% endif %}
 
-                    <!--RESET: Land on This-->
-	                <input class="right_go" style="width:45px; margin:0; margin-left:0px;"
-	                   type="submit" value="Reset" id="resetProjectBrowserButton" 
-	                   onclick="document.getElementById('projectBrowserText').value='';
-                               loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
+                         <!--RESET: Land on This-->
+	                     <input class="right_go" style="width:45px; margin:0; margin-left:0px;"
+	                          type="submit" value="Reset" id="resetProjectBrowserButton"
+	                          onclick="document.getElementById('projectBrowserText').value='';
+                                      loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
 
-                    <!--GO: Land on All-->
-                    <input class="right_go" style="float:right; margin:0;margin-right:1px;"
-	                   type="submit" value="Go" id="projectBrowserButton"
-	                   onclick="document.getElementById('projectBrowserText'); loadProjectBrowser('{{project.short_name}}');gotoTab(1);  "/>
+                         <!--GO: Land on All-->
+                         <input class="right_go" style="float:right; margin:0;margin-right:1px;"
+	                         type="submit" value="Go" id="projectBrowserButton"
+	                         onclick="document.getElementById('projectBrowserText');
+                                     loadProjectBrowser('{{project.short_name}}');gotoTab(1);  "/>
 	                   
-	                <!-- form to save a user tag -->
-	                <form action="{% url 'save_user_tag' %}" method="post" id="save-user-tag-form">
-	            		{% csrf_token %}
-			            <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
-			            <input type="hidden" name="tag" value="" />
-		       		</form>
+	                     <!-- form to save a user tag -->
+	                     <form action="{% url 'save_user_tag' %}" method="post" id="save-user-tag-form">
+	            		     {% csrf_token %}
+			                 <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
+			                 <input type="hidden" name="tag" value="" />
+		       		     </form>
 		       		                   
-	                <!-- form to delete a user tag -->
-	                <form action="{% url 'delete_user_tag' %}" method="post" id="delete-user-tag-form">
-	            		{% csrf_token %}
-			            <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
-			            <input type="hidden" name="tag" value="" />
-		       		</form>
-	                   
+	                     <!-- form to delete a user tag -->
+	                     <form action="{% url 'delete_user_tag' %}" method="post" id="delete-user-tag-form">
+	            		     {% csrf_token %}
+			                 <input type="hidden" name="redirect" value="{{ request.build_absolute_uri }}" />
+			                 <input type="hidden" name="tag" value="" />
+		       		     </form>
+                    </div>
+		        </div>
+                <!-- add help text-->
+	            <div style="text-align:left; font-style: italic; margin-left: 5px; padding-bottom:2px; padding-top:1px;">
+                     Start typing, or use the 'Delete' key to show all available tags.
                 </div>
-		   </div>
-           <!-- add help text-->
-	       <div style="text-align:left; font-style: italic; margin-left: 5px; padding-bottom:2px; padding-top:1px;">
-                Start typing, or use the 'Delete' key to show all available tags.
-           </div>
-       </div><!--// end div id=project_browser_controls //-->
-
-     </div><!--end div id=project_widget //-->
+            </div><!--// end div id=project_browser_controls //-->
+        </div><!--end div id=project_widget //-->
    </div><!--end div id=yui-skin-sam // -->
 
    <!--display project tags-->
