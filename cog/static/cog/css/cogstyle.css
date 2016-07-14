@@ -586,7 +586,8 @@ td, th {
 /* table headers in the wiki */
 #cog_post_body th {
     font-weight: bold;
-    background:  none repeat scroll 0 0 #C3D9FF;
+    /*background:  none repeat scroll 0 0 #C3D9FF;*/
+    background: none repeat scroll 0 0 #B9E0E3;
     padding:     5px;
     font-size:   inherit;
 }
