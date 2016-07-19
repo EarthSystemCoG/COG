@@ -32,7 +32,7 @@
 	    {% endfor %}
 	    
 	    {% if user|hasAdminPermission:project %}
-		    <hr style="margin:0;"/>
+		    <hr style="margin:0; background-color:#CCCCCC;"/>
 		    <ul>
 		    	<li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li>
 		    </ul>

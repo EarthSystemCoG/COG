@@ -28,9 +28,9 @@
 * dark yellow  = #FAC24A bar with technical support
 * light yellow = #FCE79F headers
 * lightest yellow = #FCF2CE table dividers, some message boxes
-* dark gray    = #666666
-* middle gray  = #666
-* light gray   = #333
+* dark gray    = #666
+* light gray   = #CCCCCC
+
 
 ******************************/
 
@@ -471,7 +471,7 @@ BEGIN TABLE ELEMENTS
 table {
         /* prevent nested cells' borders or spacing from accumulating */
 	border-collapse: collapse;
-	border-color:    #ccc;
+	border-color:    #CCCCCC;
 	margin-bottom:   0;
 	margin-left:     0;
 }
@@ -552,7 +552,8 @@ caption {
 	text-align:    left;
 	font-weight:   bold;
 	background:    #B9E0E3;
-	border-bottom: 1px solid #666666;
+	/*border-bottom: 1px solid #666666;*/
+    border-bottom: 1px solid #CCCCCC;
 	color:         #666;
 }
 
@@ -564,7 +565,8 @@ caption {
 	text-align:    left;
 	font-weight:   bold;
 	background:    #C3D9FF;
-	border-bottom: 1px solid #666666;
+	/*border-bottom: 1px solid #666666;*/
+	border-bottom: 1px solid #CCCCCC;
 	color:         #666;
 }
 
@@ -584,7 +586,8 @@ td, th {
 /* table headers in the wiki */
 #cog_post_body th {
     font-weight: bold;
-    background:  none repeat scroll 0 0 #C3D9FF;
+    /*background:  none repeat scroll 0 0 #C3D9FF;*/
+    background: none repeat scroll 0 0 #B9E0E3;
     padding:     5px;
     font-size:   inherit;
 }
@@ -619,7 +622,7 @@ td.caption_mimic{
     background-color: #B9E0E3;
     text-align:       left;
     color:            #666;
-    border-bottom:    1px solid #666;
+    border-bottom: 1px solid #CCCCCC;
 }
 
 td.righttop {
@@ -685,7 +688,7 @@ BEGIN FORM ELEMENTS
 	background:   white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
 	padding:      3px 5px;
 	color:        black;
-	border:       1px solid #666;
+    border: 1px solid #CCCCCC;
 	margin-bottom:5px;
 	margin-right: 2px;
 	margin-top:   5px;
@@ -702,7 +705,7 @@ input.right_go{
     padding-left:   3px;
     padding-right:  3px;
 	color:          black;
-	border:         1px solid #666666;
+    border: 1px solid #CCCCCC;
 	font-size:      8.5pt;
 }
 
@@ -718,7 +721,7 @@ input.search_help{
     padding-left:   3px;
     padding-right:  3px;
 	color:          black;
-	border:         1px solid #666666;
+    border: 1px solid #CCCCCC;
 	font-size:      8.5pt;
 }
 
@@ -729,7 +732,7 @@ input.search_help{
 
 
 input[type=text] {
-	border:       1px solid #666666;
+    border: 1px solid #CCCCCC;
 	background:   #FFFFFF;
 	color:        #5D781D;
 	width:        99%; /* same width as all other types of inputs */
@@ -744,7 +747,7 @@ input[type=checkbox]{
 
 
 input[type=password] {
-	border:       1px solid #666666;
+    border: 1px solid #CCCCCC;
 	background:   #FFFFFF;
 	color:        #5D781D;
     width:        99%; /* same width as all other types of inputs */
@@ -753,7 +756,7 @@ input[type=password] {
 }
 
 input[type=url] {
-    border:       1px solid #666666;
+    border: 1px solid #CCCCCC;
 	background:   #FFFFFF;
 	color:        #5D781D;
     width:        99%; /* same width as all other types of inputs */
@@ -767,9 +770,9 @@ input[type=url] {
 }
 
 textarea {
-        /* display scrollbars as needed */
+    /* display scrollbars as needed */
 	overflow:     auto;
-	border:       1px solid #666666;
+    border: 1px solid #CCCCCC;
 	width:        99%; /* not 100% because it provides a nice margin inside a table */
     padding-left: 2px; /* space before text starts */
 }
@@ -866,8 +869,10 @@ BEGIN COLUMN ELEMENTS & ROLLUPS
 BEGIN VERTICAL MENU (LEFT NAVBAR)
 ******************************/
 
+/* the box around the entire menu */
 .vertical_menu {
-	border: 1px solid #358C92;
+	/*border: 1px solid #358C92;*/
+    border: 1px solid #cccccc;
 	border-top: 0;
 	margin-bottom: 10px;
 	margin-top: 0;
@@ -908,11 +913,13 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	    font-weight:   bold;
 	    color:         #666;
 	    background-color: #FCE79F; /* dark yellow */
+        border-bottom: 1px solid #CCCCCC;
 
 }
 
+/* left nav bar section headers (light teal) */
 .left_widget_header {
-            margin:          0;
+        margin:           0;
 	    padding-top:      2px;
 	    padding-bottom:   2px;
 	    padding-right:    5px;
@@ -922,14 +929,11 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	    font-weight:      bold;
 	    color:            #666;
 	    background-color: #B9E0E3; /*light teal*/
-	    border-top:       1px solid #358C92;
-	    border-bottom:    1px solid #358C92;
-
 }
-/*first section of the left nav bar is in dark teal */
+/* left nav bar project header (dark teal) */
 .left_upper_widget_header {
-            margin:          0;
-            padding-top:      2px;
+        margin:          0;
+        padding-top:      2px;
 	    padding-bottom:   2px;
 	    padding-right:    5px;
 	    padding-left:     5px;
@@ -938,12 +942,9 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	    font-weight:      bold;
 	    color:            white;
 	    background-color: #358C92; /*dark teal*/
-	    border-top:       1px solid #358C92;
-	    border-bottom:    1px solid #358C92;
-
 }
 
-
+/* TODO is this even used anymore?? */
 /* prevent body heading styles from affecting vertical_menu content */
 .vertical_menu h3 {
 	margin:     0;
@@ -964,10 +965,6 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	padding-bottom:0;
 	list-style:     none;
 }
-
-
-
-
 
 .vertical_menu li {
         /* line-height tweaked to match project browser elements */
@@ -1004,7 +1001,7 @@ END VERTICAL MENU (LEFT NAVBAR)
 
 #id_tags{
    min-width:200px;              /*when there are no tags the box has no size*/
-   border: 1px solid #666;
+   border: 1px solid #CCCCCC;
    margin-left: 0;              /* chrome actually adds a margin to all select boxes. Remove this. */
 }
 
@@ -1015,7 +1012,7 @@ END VERTICAL MENU (LEFT NAVBAR)
 /* used on the update project page */
 .selectprojects{
     min-width:300px;              /*when there are no tags the box has no size*/
-    border: 1px solid black;
+    border: 1px solid #CCCCCC;
     margin-bottom: 5px; /* some extra space before the help text */
     /*required:False;  TODO: this css does not make sense*/
 
@@ -1031,7 +1028,7 @@ BEGIN NEWS WIDGET
 ******************************/
 
 .news_box {
-	border: 1px solid #666666;
+    border: 1px solid #CCCCCC;
 	margin-bottom:    10px;
     margin-top:       0;
 	background:       #FFFFFF;
@@ -1069,8 +1066,8 @@ BEGIN NEWS WIDGET
 	font-weight: bold;
 	background-color: #FCE79F;
 	color: #666666;
-	border: 0 solid #666666;
-	border-top: 1px solid #666666;
+    border: 0;
+    border-top: 1px solid #CCCCCC;
 	display: block;
 }
 
@@ -1083,14 +1080,14 @@ END NEWS WIDGET
 .box-comment {
 	padding:    5px;
 	margin:     2px;
-	border:     0 solid #417690;
-	background: #FFFFFF;
+	border:     0;
+    background: #FFFFFF;
 }
 
 .box-comment .caption {
     color:         #666;
 	background:    #B9E0E3;
-	border:        1px solid #666;
+	border:        1px solid #CCCCCCC;
 	margin-bottom: 3px;
 	font-weight:   bold;
 	font-style:    italic;
@@ -1099,14 +1096,14 @@ END NEWS WIDGET
 .box-comment2 {
 	padding:    0;
 	margin:     0;
-	border:     0 solid #417690;
+	border:     0;
 	background: #FFFFFF;
 }
 
 .box-comment2 .caption {
 	color:         #666;
 	background:    #B9E0E3;
-	border-bottom: 1px solid #666;
+    border-bottom: 1px solid #CCCCCC;
 	margin-bottom: 3px;
 	font-weight:   bold;
 	font-style:    italic;
@@ -1127,7 +1124,7 @@ BEGIN USER MESSAGES
 .instruction-box {
     background:  #B9E0E3; /* light-teal */
 	padding:     5px;
-	border:      1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1138,7 +1135,7 @@ BEGIN USER MESSAGES
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
 	margin:      5px 0 5px 0;
-	border:      1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1162,7 +1159,7 @@ BEGIN USER MESSAGES
 	margin-left: auto;
     margin-right:auto;
     width:       80%;
-	border:      1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
 }
@@ -1174,7 +1171,7 @@ BEGIN USER MESSAGES
     background:  red;
 	padding:     5px;
 	margin:      5px;
-    border:      1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
     color:       white;
@@ -1187,7 +1184,7 @@ BEGIN USER MESSAGES
 	display:     block;
 	padding:     5px;
 	margin:      4px;
-	border:      1px solid #666;
+    border: 1px solid #CCCCCC;
 	color:       white;
 	font-weight: bold;
 	background:  red;
@@ -1203,7 +1200,7 @@ BEGIN SEARCH WIDGET
 /* defines the box around the search widget */
 .search-box {
 	background:    #FFFFFF;
-	border:        1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-size:     8pt;
     margin-bottom: 10px;
     margin-top:    0;
@@ -1218,7 +1215,7 @@ BEGIN SEARCH WIDGET
 	/* COG STYLE: RIGHT WIDGETS HEADER BACKGROUND COLOR */
 	background-color: #FCE79F;
 	/* COG STYLE: RIGHT WIDGETS HEADER BORDER COLOR */
-	border-bottom: 1px solid #666666;
+    border-bottom: 1px solid #CCCCCC;
 	/* background: #7CA0C7 url(/static/cog/img/default-bg.gif) top left repeat-x; */
 	color: #666;
 	display: block;
@@ -1227,13 +1224,13 @@ BEGIN SEARCH WIDGET
 /* Data Text Search */
 .box-colored {
 	background: #FCE79F; /*light yellow*/
-	border:     1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-size:  8pt;
 }
 
 .box-globus {
 	background: #FCE79F; /*light yellow*/
-	border:     1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-size:  10pt;
 	padding: 4px;
 	height: 80px;
@@ -1244,7 +1241,7 @@ BEGIN SEARCH WIDGET
     background:  #fce79f; /* light yellow*/
 	padding:     10px;
 	margin:      10px;
-	border:      1px solid #666;
+    border: 1px solid #CCCCCC;
 	width:       720px;
 	text-align:  left;
 }
@@ -1254,7 +1251,7 @@ BEGIN SEARCH WIDGET
 	background: #FFFFFF;
 	padding:    5px;
 	margin-top: 5px;
-	border:     1px solid #417690;
+	border:     1px solid #CCCCCC;
 	text-align: left;
 }
 
@@ -1276,7 +1273,8 @@ BEGIN ADVANCED SEARCH PAGE
 }
 
 .fieldset_box {
-	border: 1px solid #358C92;
+	/*border: 1px solid #358C92;*/
+    border: 1px solid #CCCCCC;
 	padding: 5px;
 	text-align:left;
 	margin-top:-10px;
@@ -1300,7 +1298,7 @@ BEGIN PEER-NODES-BOX
 
 .peer_nodes_box {
 	background:    #FFFFFF;
-	border:        1px solid #666;
+    border: 1px solid #CCCCCC;
 	font-size:     8pt;
     margin-bottom: 10px;
     margin-top:    0;
@@ -1341,7 +1339,6 @@ END PEER-NODES-BOX
 	background-color: #B9E0E3;
 	color: #666;
 	display: block;
-	border: 1px solid #666666;
 }
 
 /******************************
@@ -1384,7 +1381,8 @@ ul.messagelist li {
 	display: block;
 	padding: 4px 5px 4px 25px;
 	margin: 0 0 3px 0;
-	border-bottom: 1px solid #ddd;
+	/*border-bottom: 1px solid #ddd;*/
+    border-bottom: 1px solid #CCCCCC;
 	color: #666;
 	background: #ffc url(/static/cog/img/icon_success.gif) 5px .3em no-repeat;
 }
@@ -1471,12 +1469,11 @@ div.last ol {
 /* limit the maximum width the user profile image */
 .myimage {
   display:block; /* does this fix IE issue? */
-  /*width: 100%; */
   max-width: 200px;
   /* max-height: 200px; */
  /* width: expression(this.width > 200 ? "200"+"px" : true);*/
   /* height: expression(this.height > 200 ? "200"+"px" : true); */
-  border: 1px solid #666666;
+    border: 1px solid #CCCCCC;
 }
 
 /* YUI treeview introduces a bug when user is logged the background of the tree is teal, */
@@ -1488,12 +1485,12 @@ END SPECIFIC CSS FIXES
 ******************************/
 
 .mybox {
-	border: 1px solid #666666;
+    border: 1px solid #CCCCCC;
 	margin-bottom: 5px;
 	background: #FFFFFF;}
 
 .header-gray {
-	border-bottom: 1px solid #666666;
+    border-bottom: 1px solid #CCCCCC;
 	margin-bottom:0;
 	background: #EEEEEE;
 	text-align: left;
