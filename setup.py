@@ -30,6 +30,7 @@ setup(
                       'globusonline-transfer-api-client==0.10.16',   
                       #'pillow==3.1.0', # pre-requisite: must be installed with --use-wheel on MAC-OSX
                       'django-simple-captcha==0.5.1',
+                      'html5lib==1.0b8',
                       'bleach==1.4.2',
                       ],
     long_description=read('README.md'),
