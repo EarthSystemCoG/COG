@@ -36,6 +36,7 @@
 	        <div class="span-max last" style="margin-bottom:10px;" >
 	        
 	        	<!-- update links -->
+                <div style="text-align: center;"><a href="http://{{ site.domain }}">Return to {{site.name}} Home Page.</a></div>
 	            {% if request.user.id == user_profile.user.id or request.user.is_staff %}
 	                <div style="text-align:center;">
 	                    <a href="{% url 'user_update' user_profile.user.id %}">Update profile |</a>
