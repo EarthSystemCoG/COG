@@ -29,11 +29,21 @@
 {% block main %}
 
     <!--pull down menu of other data carts-->
-    <h1>My DataCart</h1>
+    <h1>My Data Cart</h1>
+    <p>
+        <strong>About Data Carts:</strong> You have a Data Cart on every ESGF node you have logged into. This is your
+        Data Cart on the <a href="http://{{ site.domain }}">{{ site.domain }} </a> node.
+        {% if datacars.items|length > 0  %}
+            Use the pull down menu below to navigate between Data Carts.
+        {%  endif %}
+        The items in this cart will persist until removed.
+    </p>
 	<div style="text-align:center; font-weight:bold">
 		
 		<!-- local data cart -->
 		Number of Items (<span id="datacart_size2">{{ datacart.items.all|length }})</span>
+        &nbsp; | &nbsp;
+        <a href="http://{{site.domain}}">Start a new search</a>
 				
 		<!-- remote data carts -->
 		{% if datacarts.items|length > 0 %}
@@ -50,6 +60,13 @@
 					{% endfor %}
 				{% endfor %}				
 			</select>
+
+        {% else %}
+            <br><br>
+            <div class="mybox">
+                 <br>
+                 <p>This datacart is empty.</p>
+            </div>
 		{% endif %}
 		
 		<!-- link back to search -->
