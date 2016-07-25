@@ -2,19 +2,16 @@
 <script type="text/javascript">
   //<![CDATA[
              
-    function log(msg) {
-    	console.log(msg);
-	}
              
-    // function to post data to a URL
+    // function to POST data to a URL
 	function post_to_url(path, params) {
 	
-	    // The rest of this code assumes you are not using a library.
-	    // It can be made less wordy if you use one.
 	    var form = document.createElement("form");
 	    form.setAttribute("method", 'post');
 	    form.setAttribute("action", path);
 	
+	 	// method will happend many "hidden" elements to the form
+	 	// with the name "name", different "value"
 	    var addField = function( key, value ){
 	        var hiddenField = document.createElement("input");
 	        hiddenField.setAttribute("type", "hidden");
@@ -38,16 +35,13 @@
 	    }
 	
 	    document.body.appendChild(form);
-	    // FIXME
-	    elements = form.elements;
-	    for (var i = 0, element; element = elements[i++];) {
-	    	log("form element type="+element.type+" name="+element.name+" value="+element.value);
-	    }
  	    form.submit();
 	}
     
-    // function that converts the HTTP GET request parameters into a POST dictionary
+    // function that converts the HTTP GET request parameters into a POST dictionary of (key, values[]) pairs
+    // example: { 'dataset_id' : ["abc", "cde", "123"], "distrib":["false"] }
     function URLToArray(url) {
+    	
         var params = {};
         var pairs = url.substring(url.indexOf('?') + 1).split('&');
         for (var i = 0; i < pairs.length; i++) {
@@ -57,9 +51,11 @@
             if (params[pair[0]]==null) {
             	params[pair[0]] = new Array();
             }
-            params[pair[0]].push(pair[1]);
+            // NOTE: POST parameters must NOT be encoded
+            params[decodeURI(pair[0])].push(decodeURI(pair[1]));
          }
          return params;
+    
     }
 
 	// function to execute a request to a single index node
@@ -88,16 +84,13 @@
 		url += "&dataset_id="+encodeURIComponent(ids[i]);
 	  }
 	  
-	  // add high limit
-	  url += "&limit=10000";
-
 	  // execute synchronous request for one wget script
-	  //window.location.href = url;
-	  // transform into HTTP POST request
-	  base_url = url.substring(0, url.indexOf('?'));
-	  log(base_url);
-	  params = URLToArray(url);
-	  post_to_url(base_url, params);
+	  // execute HTTP GET request
+	  window.location.href = url;
+	  // execute HTTP POST request
+	  //base_url = url.substring(0, url.indexOf('?'));
+	  //params = URLToArray(url);
+	  //post_to_url(base_url, params);
 
 	}
 
