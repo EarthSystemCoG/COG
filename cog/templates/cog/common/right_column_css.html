@@ -131,6 +131,14 @@
        	  myTabs.set('activeIndex', itab);
 	   }
 
+       // function to provide an alert when changing nodes
+       function changeNode(name, local_name) {
+           if (name != local_name){
+               alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
+                       "an additional login.")
+           }
+       }
+
        // function to populate the project widget via ajax call
        function loadProjectBrowser(project_short_name) {
 

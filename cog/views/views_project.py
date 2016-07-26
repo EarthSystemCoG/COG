@@ -16,6 +16,7 @@ from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_M
 from cog.views.views_templated import templated_page_display
 from cog.views.utils import getQueryDict
 from cog.models.auth import userHasAdminPermission
+from django.contrib.sites.models import Site
 
 
 # method to add a new project, with optional parent project
@@ -706,7 +707,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             print "tag in render_project_list = ", tag
         except ObjectDoesNotExist:
             # store error associated with non-existing tag
-            tag_error = "Tag does not exist"
+            tag_error = "Tag does not exist."
     
     # list projects to include in widget
     if tag_error is None:
@@ -737,6 +738,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             display = 'none'
 
     # height of individual project widgets
+    site = Site.objects.get_current()  # get local domain to compare to link in project browser
     html += '<div id="'+widget_id+'" style="display:'+display+'; margin-left:4px;">'
     if len(projects) == 0:
         if tag_error is not None:
@@ -749,13 +751,17 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
                 html += '<em class="message">No projects found.</em>'
     else:     
         # loop over projects sorted by name
+        # create actual links to projects
         for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):
-            html += '<a href="' + prj.getAbsoluteUrl()
+            html += '<a href="' + prj.getAbsoluteUrl() + '"'
             # (widget, inner_text, width)
-            html += '" onmouseover="tooltip.show(this,' \
-                    '\'' + prj.long_name + '\', 200);" onmouseout="tooltip.hide();">'
+            # proj name must be in single quotes, use \ to escape
+            html += ' onmouseover="tooltip.show(this, \'' + prj.long_name + '\',200);"'
+            html += ' onmouseout="tooltip.hide();"'
+            html += ' onclick="changeNode(\'' + prj.site.name + '\' , \'' + site.name + '\')"'  # name must be a string
+            html += '>'
             html += prj.short_name + '</a><br/>'
-    html += '</div>'
+        html += '</div>'  # must be outside project loop
 
     # return both the HTML and the 'open' status of the following widget
     return html
