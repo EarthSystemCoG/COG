@@ -90,19 +90,18 @@ explicitly covered in the areas below. These are reclaimed here so that we
 can completely control in one file how things look
 *******************************/
 body{
-    /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
-    /*font: 13px/1.231 arial,helvetica,clean,sans-serif; */ /*fonts-min.css*/
+
     /* px to pt ratio = 1.33, so 13px = 9.77pt */
     font: normal normal normal 13px/1.231 Arial,sans-serif; 
 
-    color:         #333;         /* text color...dark grey*/
-    text-align:    left;         /*default alignment is left-justified */
-    margin:         0;       /*remove all margins in the box model */
+    color:         #333;       /* text color...dark grey*/
+    text-align:    left;       /* default alignment is left-justified */
+    margin:         0;         /* remove all margins in the box model */
     padding:        0;
     margin-right:   auto;
     margin-left:    auto;
     vertical-align: baseline; /* this is the default, be we want to control */
-    width:          100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
+    width:          100%;     /*go the entire size of the browser. custom header is in this and also goes the entire way */
     height:         100%;
 }
 
@@ -116,7 +115,7 @@ BEGIN: Content wrappers
 **********************************/
 
 .container:after{
-   content:normal; /*critical*/
+   content:normal; /* critical */
    height:100%;
 
 }
@@ -124,8 +123,8 @@ BEGIN: Content wrappers
 /* create a sticky footer. This div pushes the footer down the full height of the browser window
 but then enables the footer bar to be at the bottom */
 div.content_wrapper{
-    height:         100%;  /*extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
-    margin-bottom:  -90px; /*this needs to be the same height as the custom footer height + footer height + footer spacer height */
+    height:         100%;  /* extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
+    margin-bottom:  -90px; /*t his needs to be the same height as the custom footer height + footer height + footer spacer height */
 }
 
 /* moves footers down when the body exceeds the window and you have to scroll */
@@ -143,7 +142,7 @@ div.custom_header_bar {
     width:            100%;
     margin-top:       0;
     margin-bottom:    2px;
-    background-color: #E9F5F6; /*light blue*/
+    background-color: #E9F5F6; /* light blue */
 
 }
 
@@ -155,7 +154,7 @@ div.custom_header{
 }
 
 td.custom_header_esgf_cog{
-    width:          180px; /*width of logo*/
+    width:          180px; /*w idth of logo */
     vertical-align: top;
     margin:         0;
     padding:        0;
