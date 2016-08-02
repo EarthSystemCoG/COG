@@ -840,7 +840,7 @@ BEGIN SPECIFIC ACTIONS
 .restrictedlink {
 	padding-left: 12px;
 	padding-top: 2px;
-	background: url(/static/cog/img/icon-lock-small2.png) 0 .2em no-repeat;
+	background: url(/static/cog/img/icon-lock-small.png) 0 .2em no-repeat;
 }
 
 .deletelink {
@@ -1087,7 +1087,7 @@ END NEWS WIDGET
 .box-comment .caption {
     color:         #666;
 	background:    #B9E0E3;
-	border:        1px solid #CCCCCCC;
+	border:        1px solid #CCCCCC;
 	margin-bottom: 3px;
 	font-weight:   bold;
 	font-style:    italic;
