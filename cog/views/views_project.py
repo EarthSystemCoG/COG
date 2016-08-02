@@ -697,7 +697,7 @@ class DisplayStatus:
 # example: project='cog', tab='tags', tagName=None, user=..., 
 # widgetName='MIP', widgetId='MIP_projects', displayStatus='open'
 def render_project_list(project, tab, tag_name, user, widget_name, widget_id, display_status, add_delete_link=False):
-           
+
     # retrieve tag, if requested
     tag = None
     tag_error = None  # keeps track of error in retrieving tag
@@ -758,7 +758,8 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             # proj name must be in single quotes, use \ to escape
             html += ' onmouseover="tooltip.show(this, \'' + prj.long_name + '\',200);"'
             html += ' onmouseout="tooltip.hide();"'
-            html += ' onclick="changeNode(\'' + prj.site.name + '\' , \'' + site.name + '\')"'  # name must be a string
+            html += ' onclick="changeNode(\'' + prj.site.name + '\' , \'' + site.name + '\' )"'
+            # name must be a string
             html += '>'
             html += prj.short_name + '</a><br/>'
         html += '</div>'  # must be outside project loop

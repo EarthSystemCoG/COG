@@ -5,6 +5,9 @@
 {% load cog_utils %}
 
 <link rel="stylesheet" type="text/css" media="screen, projection" href="{{STATIC_URL}}css/yui/tabview.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
 <!--// note do not use scoped for this style because it is loaded further down the template heirarchy //-->
 <style type="text/css">
@@ -127,10 +130,20 @@
 
        // function to provide an alert when changing nodes
        function changeNode(name, local_name) {
-           if (name != local_name){
-               alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
-                       "an additional login.")
+           var ca = document.cookie.split(';');
+
+           if (ca[0] != "node_warning=skip") {
+               if (name != local_name) {
+                   alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
+                           "an additional login.")
+               }
            }
+           //set cookie so warning is not seen again for one year or until cookie is deleted by the user. 
+           var now = new Date();
+           var yr = now.getFullYear();
+           yr = yr + 1;
+           now.setFullYear(yr);
+           document.cookie = "node_warning=skip; expires=" + now.toUTCString() + "; path=/";
        }
 
        // function to populate the project widget via ajax call
