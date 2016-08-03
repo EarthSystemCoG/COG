@@ -164,7 +164,7 @@ td.custom_header_esgf_cog{
 
 td.powered_by{
     width:          60px;
-    font-size:      10px;
+    font-size:      10px; /* 2px smaller than base font */
     font-weight:    bold;
     font-style:     italic;
     vertical-align: top;
@@ -176,7 +176,7 @@ td.powered_by{
 
 td.hosted_by{
     width:          60px;
-    font-size:      10px;
+    font-size:      10px; /* 2px smaller than base font */
     font-weight:    bold;
     font-style:     italic;
     vertical-align: top;
@@ -188,7 +188,7 @@ td.hosted_by{
 
 td.custom_header_location{
     vertical-align: top;
-    font-size:      12px;  /* note this is in px and not pt */
+    font-size:      12px;
     color:          #666;
     line-height:    1.35;
     text-align:     left;
@@ -238,7 +238,7 @@ div.custom_footer {
 
 .custom_footer td{
     vertical-align: middle;
-    font:           normal normal 8pt/1.231 Arial,sans-serif;
+    font:           normal normal 11px/1.231 Arial,sans-serif;
     padding:        0; /* ensure text lines up with left navigation bar */
 }
 
@@ -267,7 +267,7 @@ div.footer_spacer{
 }
 
 div.footer{
-  font-size:    8pt;
+  font-size:    11px;
   margin-left:  auto;
   margin-right: auto;
   height:       40px;
@@ -276,7 +276,7 @@ div.footer{
 
 .footer td{
     vertical-align: middle;
-    font:           normal normal 8pt/1.231 Arial,sans-serif;
+    font:           normal normal 11px/1.231 Arial,sans-serif;
     color:          #666;
     padding:        0;    /*ensure the table lines up with the left navigation bar */
     padding-top:    3px;  /* nice spacing in the div and between the two table rows */
@@ -353,7 +353,7 @@ BEGIN: headers
 *******************************/
 h1 {
 	color:             #666;
-	font-size:         16pt;
+	font-size:         21px;
 	font-weight:       bold;
     line-height:       1;
     margin:            0;   /* we should not have to set these here */
@@ -363,28 +363,28 @@ h1 {
 }
 h2 {
 	color:       #666;
-	font-size:   13.5pt;
+	font-size:   18px;
 	font-weight: bold;
 }
 h3 {
 	color:       #666;
-	font-size:   12pt;
+	font-size:   16px;
 	font-weight: bold;
 }
 h4 {
 	color:       #666;
-	font-size:   12pt;
+	font-size:   16px;
 	font-weight: bold;
 	font-style:  italic;
 }
 h5 {
 	color:       #666;
-	font-size:   10pt;
+	font-size:   14px;
 	font-weight: bold;
 }
 h6 {
 	color:       #666;
-	font-size:   10pt;
+	font-size:   14px;
 	font-weight: bold;
 	font-style:  italic;
 }
@@ -574,7 +574,7 @@ td, th {
     font-weight: bold;
     background:  none repeat scroll 0 0 #B9E0E3;
     padding:     5px;
-    font-size:   inherit;
+    font-size:   12px;
 }
 
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
@@ -678,7 +678,7 @@ BEGIN FORM ELEMENTS
 	margin-right: 2px;
 	margin-top:   5px;
 }
-
+/* project browser buttons */
 input.right_go{
 	background:     white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
     width:          28px;
@@ -691,23 +691,7 @@ input.right_go{
     padding-right:  3px;
 	color:          black;
     border:         1px solid #CCCCCC;
-	font-size:      8.5pt;
-}
-
-
-input.search_help{
-	background:     white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
-    width:          35px;
-	margin-right:   0;
-    margin-left:    2px;
-    height:         22px;
-	padding-top:    2px;
-    padding-bottom: 2px;
-    padding-left:   3px;
-    padding-right:  3px;
-	color:          black;
-    border:         1px solid #CCCCCC;
-	font-size:      8.5pt;
+	font-size:      11px;
 }
 
 /***************
@@ -779,8 +763,7 @@ BEGIN CHANGES TO THE WIKI
 ******************************/
 /* These are the styles in the pulldown menu */
 small {
-	font-size:  8pt;
-	font-style: italic;
+	font-size:  11px;
 }
 
 strong {
@@ -832,7 +815,7 @@ BEGIN SPECIFIC ACTIONS
 }
 
 .arrowrightlink {
-	padding-left: 8px;
+	padding-left: 12px;
 	padding-top:  2px;
 	background:   url(/static/cog/img/icon_arrowrightlink.png) 0 .25em no-repeat;
 }
@@ -867,7 +850,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 /* this is the upper section of the left nav bar */
 .vertical_menu table td {
-	font-size:        8pt; /* once we remove fonts-min from the left template, this should inherit from body  needs to be the same as <li> below*/
+	font-size:        11px; /* one size smaller than base font */
 	text-align:       left;
 	vertical-align:   top;
     padding:          1px 0 0 1px;
@@ -889,7 +872,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	    padding-bottom:   2px;
 	    padding-right:    5px;
 	    padding-left:     5px;
-	    font-size:        9pt;
+	    font-size:        12px;
 	    text-align:       left;
 	    font-weight:      bold;
 	    color:            #666;
@@ -903,7 +886,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	    padding-bottom:   2px;
 	    padding-right:    5px;
 	    padding-left:     5px;
-	    font-size:        9pt;
+	    font-size:        12px;
 	    text-align:       left;
 	    font-weight:      bold;
 	    color:            #666;
@@ -916,7 +899,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 	    padding-bottom:   2px;
 	    padding-right:    5px;
 	    padding-left:     5px;
-	    font-size:        9pt;
+	    font-size:        12px;
 	    text-align:       left;
 	    font-weight:      bold;
 	    color:            white;
@@ -928,7 +911,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 .vertical_menu h3 {
 	margin:           0;
 	padding:          2px 5px 3px 5px;
-	font-size:        9pt;
+	font-size:        12px;
 	text-align:       left;
 	font-weight:      bold;
 	color:            #666;
@@ -947,11 +930,11 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 .vertical_menu li {
     /* line-height tweaked to match project browser elements */
-	line-height: 14pt;
+	line-height: 19px;
 	padding:     0;
 	margin:      0;
 	list-style:  none;
-	font-size:   8pt; /* needs to be the same as the upper section which is a table */
+	font-size:   11px; /* needs to be the same as the upper section which is a table */
 }
 
 .vertical_menu li li {
@@ -1013,7 +996,7 @@ BEGIN NEWS WIDGET
 .news_header {
 	background-color: #FCE79F;
 	color:            #666;
-	font-size:        9pt;
+	font-size:        12px;
 }
 
 .news_box_body {
@@ -1022,7 +1005,7 @@ BEGIN NEWS WIDGET
 }
 
 .news_box table td, .news_box table th {
-	font-size: 8pt;
+	font-size: 11px;
 	padding:   0;
 	margin:    0;
 }
@@ -1037,7 +1020,7 @@ BEGIN NEWS WIDGET
 .news_footer {
 	margin:           0;
 	padding:          2px 5px 3px 5px;
-	font-size:        8pt;
+	font-size:        11px;
 	text-align:       left;
 	font-weight:      bold;
 	background-color: #FCE79F;
@@ -1121,7 +1104,7 @@ BEGIN USER MESSAGES
 	color:         white;
 	text-align:    center;
 	padding:       10px;
-	font-size:     11pt;
+	font-size:     11px;
 	margin-top:    5px;
 	margin-bottom: 10px;
 }
@@ -1152,7 +1135,7 @@ BEGIN USER MESSAGES
 
 /* used on login2, site index errors. Used for p tags */
 .errornote {
-	font-size:   9pt !important;
+	font-size:   12px !important;
     text-align:  center;
 	display:     block;
 	padding:     5px;
@@ -1174,7 +1157,7 @@ BEGIN SEARCH WIDGET
 .search-box {
 	background:    #FFFFFF;
     border:        1px solid #CCCCCC;
-	font-size:     8pt;
+	font-size:     11px;
     margin-bottom: 10px;
     margin-top:    0;
 }
@@ -1182,7 +1165,7 @@ BEGIN SEARCH WIDGET
 .search_header {
 	margin:            0;
 	padding:           2px 5px 3px 5px;
-	font-size:         9pt;
+	font-size:         12px;
 	text-align:        left;
 	font-weight:       bold;
 	background-color:  #FCE79F; /* same as right widgets header */
@@ -1195,13 +1178,13 @@ BEGIN SEARCH WIDGET
 .box-colored {
 	background: #FCE79F; /*light yellow*/
     border:     1px solid #CCCCCC;
-	font-size:  8pt;
+	font-size:  11px;
 }
 
 .box-globus {
 	background: #FCE79F; /*light yellow*/
     border:     1px solid #CCCCCC;
-	font-size:  10pt;
+	font-size:  12px;
 	padding:    4px;
 	height:     80px;
 }
@@ -1234,11 +1217,11 @@ BEGIN ADVANCED SEARCH PAGE
 ******************************/
 
 .facet-category {
-	font-size: 9pt;
+	font-size: 12px;
 }
 
 .facet-option {
-	font-size:  9pt;
+	font-size:  12px;
 	text-align: left;
 }
 
@@ -1268,7 +1251,7 @@ BEGIN PEER-NODES-BOX
 .peer_nodes_box {
 	background:    #FFFFFF;
     border:        1px solid #CCCCCC;
-	font-size:     8pt;
+	font-size:     11px;
     margin-bottom: 10px;
     margin-top:    0;
 }
@@ -1286,7 +1269,7 @@ END PEER-NODES-BOX
 .caption {
 	margin:           0;
 	padding:          2px 5px 3px 5px;
-	font-size:        9pt;
+	font-size:        12px;
 	text-align:       left;
 	font-weight:      bold;
 	background-color: #000;
@@ -1302,7 +1285,7 @@ END PEER-NODES-BOX
 .header_bar {
 	margin:           0;
 	padding:          2px 5px 3px 5px;
-	font-size:        9pt;
+	font-size:        12px;
 	text-align:       left;
 	font-weight:      bold;
 	background-color: #B9E0E3;
@@ -1346,7 +1329,7 @@ ul.messagelist {
 }
 
 ul.messagelist li {
-	font-size:     9pt;
+	font-size:     12px;
 	display:       block;
 	padding:       4px 5px 4px 25px;
 	margin:        0 0 3px 0;
@@ -1356,7 +1339,7 @@ ul.messagelist li {
 }
 
 .warning {
-	font-size:   9pt !important;
+	font-size:   12px !important;
 	display:     block;
 	padding:     4px;
 	margin:      4px;
@@ -1371,7 +1354,7 @@ ul.errorlist {
 }
 
 .errorlist li {
-	font-size:  9pt !important;
+	font-size:  12px !important;
 	display:    block;
 	padding:    4px 5px 4px 25px;
 	margin:     0 0 3px 0;
@@ -1456,27 +1439,12 @@ END SPECIFIC CSS FIXES
 	background:    #EEEEEE;
 	text-align:    left;
 	color:         #666666;
-	font-size:     9pt;
+	font-size:     12px;
 }
 
 /***********************************
 BEGIN non-CUSTOMIZABLE HEADER STYLES
 ************************************/
-
-/* TODO: is this used? */
-#right_sentence {
-	margin-top:  35px;
-	font-weight: bold;
-	font-style:  italic;
-	font-size:   10pt;
-	text-align:  left;
-	color:       #333;
-	float:       right;
-}
-
-#right_logo a:link, #right_logo a:visited {
-    color: #666;
-}
 
 /* TOP NAV */
 .top_nav {
@@ -1486,7 +1454,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     padding:     0;
     background:  #FFFFFF;
     color:       #FFFFFF;
-    font-size:   9pt;
+    font-size:   12px;
     font-weight: bold;
     font-style:  normal;
 }
@@ -1498,7 +1466,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 	width:        100%;
 	background:   #358C92;
 	float:        left;
-    height:       20px;
+    height:       22px;
 }
 
 #top_subnav_left {
@@ -1538,7 +1506,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     padding:     0;
     background:  #FFFFFF;
     color:       #FFFFFF;
-    font-size:   9pt;
+    font-size:   12px;
     font-weight: bold;
     font-style:  normal;
 }
@@ -1584,7 +1552,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 	padding:     0;
 	margin:      0;
 	text-align:  center;
-	font-size:   8.5pt;
+	font-size:   11px;
 }
 
 /* Test styles for tabbed rollup */
