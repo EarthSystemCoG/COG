@@ -1449,7 +1449,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 /* TOP NAV */
 .top_nav {
     width:       100%;
-    height:      20px;
+    height:      22px;
     margin:      0 auto;
     padding:     0;
     background:  #FFFFFF;
@@ -1461,62 +1461,25 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 /*bar that shows up when there is no upper navigation items (e.g. data cart) */
 #top_nav_left {
-	padding-top:  2px;
-	padding-left: 6px;
-	width:        100%;
-	background:   #358C92;
-	float:        left;
-    height:       22px;
-}
-
-#top_subnav_left {
-	padding-top:      2px;
-	padding-left:     6px;
+	padding:          2px 2px 2px 6px;
 	width:            100%;
-	background-color: #B9E0E3;
+	background-color: #358C92; /* dark teal */
 	float:            left;
-}
-
-#top_subnav_left a:link, #top_subnav_left a:visited {
-    color: #666;
+    height:           22px;
 }
 
 #top_nav_right {
-	width:            97%;
-	padding-top:      0;
+	width:            100%;
     text-align:       right;
-	padding-left:     5px;      /* make yellow box line up with rest of the right widgets */
+    padding:          2px 2px 2px 6px;
     background-color: #FAC24A; /*dark yellow*/
 	float:            right;
-    height:           22px;
+    height:           22px;  /* don't use inherit here */
 }
 
 #top_nav_right a {
 	color:          black;
-    padding:        0;
-    padding-top:    4px;
-    padding-bottom: 4px;
-    padding-right:  4px;
-}
 
-#top_subnav {
-    width:       100%;
-    height:      20px;
-    margin:      0 auto;
-    padding:     0;
-    background:  #FFFFFF;
-    color:       #FFFFFF;
-    font-size:   12px;
-    font-weight: bold;
-    font-style:  normal;
-}
-
-#top_subnav_right {
-	width:        97%;
-	padding-top:  2px;
-	padding-left: 6px;
-	text-align:   right;
-	color:        #666;
 }
 
 .top_nav ul {
@@ -1553,6 +1516,38 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 	margin:      0;
 	text-align:  center;
 	font-size:   11px;
+}
+
+#top_subnav_left {
+	padding-top:      2px;
+	padding-left:     6px;
+	width:            100%;
+	background-color: #B9E0E3;
+	float:            left;
+}
+
+#top_subnav_left a:link, #top_subnav_left a:visited {
+    color: #666;
+}
+
+#top_subnav {
+    width:       100%;
+    height:      20px;
+    margin:      0 auto;
+    padding:     0;
+    background:  #FFFFFF;
+    color:       #FFFFFF;
+    font-size:   12px;
+    font-weight: bold;
+    font-style:  normal;
+}
+
+#top_subnav_right {
+	width:        97%;
+	padding-top:  2px;
+	padding-left: 6px;
+	text-align:   right;
+	color:        #666;
 }
 
 /* Test styles for tabbed rollup */
