@@ -27,7 +27,7 @@ setup(
                       'pysqlite==2.8.1',        
                       'django-contrib-comments==1.6.2',   
                       'oauth2client==2.0.1',
-                      'globusonline-transfer-api-client==0.10.16',   
+                      'globusonline-transfer-api-client==0.10.18',   
                       #'pillow==3.1.0', # pre-requisite: must be installed with --use-wheel on MAC-OSX
                       'django-simple-captcha==0.5.1',
                       'html5lib==1.0b8',
