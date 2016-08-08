@@ -13,15 +13,15 @@ urlpatterns = [
     #url(r'^index/$', TemplateView.as_view(template_name="cog/index.html")),
     
     # forbidden extensions
-    url(r'.*\.asp$', HttpResponseNotFound),
-    url(r'.*\.aspx$', HttpResponseNotFound),
-    url(r'.*\.cfm$', HttpResponseNotFound),
-    url(r'.*\.cgi$', HttpResponseNotFound),
-    url(r'.*\.jsp$', HttpResponseNotFound),
-    url(r'.*\.php$', HttpResponseNotFound),
-    url(r'.*\.php3$', HttpResponseNotFound),
-    url(r'.*\.pl$', HttpResponseNotFound),
-    url(r'.*\.shtml$', HttpResponseNotFound),
+    url(r'.*\.asp\/?$', HttpResponseNotFound),
+    url(r'.*\.aspx\/?$', HttpResponseNotFound),
+    url(r'.*\.cfm\/?$', HttpResponseNotFound),
+    url(r'.*\.cgi\/?$', HttpResponseNotFound),
+    url(r'.*\.jsp\/?$', HttpResponseNotFound),
+    url(r'.*\.php\/?$', HttpResponseNotFound),
+    url(r'.*\.php3\/?$', HttpResponseNotFound),
+    url(r'.*\.pl\/?$', HttpResponseNotFound),
+    url(r'.*\.shtml\/?$', HttpResponseNotFound),
     
     # site home
     url(r'^$', cog.views.site_home, name='site_home' ) ,
