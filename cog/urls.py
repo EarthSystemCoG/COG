@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url, include
 import cog.views
 import django_openid_auth.views
 import django.contrib.auth.views
+from django.http.response import HttpResponseNotFound
 import django.views
 from cog.models import settings
 
@@ -10,6 +11,17 @@ urlpatterns = [
 
     # FIXME: top-level index
     #url(r'^index/$', TemplateView.as_view(template_name="cog/index.html")),
+    
+    # forbidden extensions
+    url(r'.*\.asp$', HttpResponseNotFound),
+    url(r'.*\.aspx$', HttpResponseNotFound),
+    url(r'.*\.cfm$', HttpResponseNotFound),
+    url(r'.*\.cgi$', HttpResponseNotFound),
+    url(r'.*\.jsp$', HttpResponseNotFound),
+    url(r'.*\.php$', HttpResponseNotFound),
+    url(r'.*\.php3$', HttpResponseNotFound),
+    url(r'.*\.pl$', HttpResponseNotFound),
+    url(r'.*\.shtml$', HttpResponseNotFound),
     
     # site home
     url(r'^$', cog.views.site_home, name='site_home' ) ,
