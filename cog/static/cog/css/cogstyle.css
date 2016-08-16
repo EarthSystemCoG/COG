@@ -73,7 +73,6 @@ BEGIN PAGE-LEVEL ELEMENTS
 ***************/
 html {
     overflow-y:  scroll;
-    background:  white;
     height:      100%;
 }
 
@@ -103,6 +102,7 @@ body{
     vertical-align: baseline; /* this is the default, be we want to control */
     width:          100%;     /*go the entire size of the browser. custom header is in this and also goes the entire way */
     height:         100%;
+    background-color: white;
 }
 
 
@@ -398,6 +398,7 @@ hr {
     background-color:  #358C92; /* dark teal */
 	margin-bottom:    4px;
 	margin-top:       4px;
+    border:           none;  /* needed because icon library styles hr */
 }
 
 /***************
@@ -1498,7 +1499,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     display:         block;
     margin-right:    3px;
     text-decoration: none;
-    padding:         2px 8px 6px 6px;
+    padding:         4px 8px 6px 6px; /* top right bottom left */
     font-weight:     bold;
     color:           #FFFFFF;
     border:          none;
