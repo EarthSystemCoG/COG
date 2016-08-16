@@ -1462,8 +1462,8 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 /*bar that shows up when there is no upper navigation items (e.g. data cart) */
 #top_nav_left {
-	padding:          2px 2px 2px 6px;
-	width:            100%;
+	padding:          2px 0 0 6px;
+	width:            934px;  /* 940 - 6 = 934 */
 	background-color: #358C92; /* dark teal */
 	float:            left;
     height:           22px;
@@ -1472,15 +1472,10 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 #top_nav_right {
 	width:            100%;
     text-align:       right;
-    padding:          2px 2px 2px 6px;
+    padding:          2px 0 0 0;
     background-color: #FAC24A; /*dark yellow*/
 	float:            right;
     height:           22px;  /* don't use inherit here */
-}
-
-#top_nav_right a {
-	color:          black;
-
 }
 
 .top_nav ul {
@@ -1499,7 +1494,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     display:         block;
     margin-right:    3px;
     text-decoration: none;
-    padding:         4px 8px 6px 6px; /* top right bottom left */
+    padding:         4px 6px 4px 6px; /* top right bottom left */
     font-weight:     bold;
     color:           #FFFFFF;
     border:          none;
@@ -1507,6 +1502,12 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 .top_nav a:hover {
     text-decoration: underline;
+}
+
+#top_nav_right a {
+	color:          black;
+    padding:        4px 4px 4px 0;
+
 }
 
 #top_subnav_right a {
