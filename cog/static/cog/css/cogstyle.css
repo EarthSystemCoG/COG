@@ -1466,7 +1466,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 	width:            934px;  /* 940 - 6 = 934 */
 	background-color: #358C92; /* dark teal */
 	float:            left;
-    height:           22px;
+    height:           20px;
 }
 
 #top_nav_right {
@@ -1475,7 +1475,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     padding:          2px 0 0 0;
     background-color: #FAC24A; /*dark yellow*/
 	float:            right;
-    height:           22px;  /* don't use inherit here */
+    height:           20px;  /* don't use inherit here */
 }
 
 .top_nav ul {
@@ -1494,7 +1494,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
     display:         block;
     margin-right:    3px;
     text-decoration: none;
-    padding:         4px 6px 4px 6px; /* top right bottom left */
+    padding:         2px 6px 4px 6px; /* top right bottom left */
     font-weight:     bold;
     color:           #FFFFFF;
     border:          none;
@@ -1506,7 +1506,7 @@ BEGIN non-CUSTOMIZABLE HEADER STYLES
 
 #top_nav_right a {
 	color:          black;
-    padding:        4px 4px 4px 0;
+    padding:        2px 4px 4px 0;
 
 }
 
