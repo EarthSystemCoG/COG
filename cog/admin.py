@@ -12,7 +12,8 @@ from django.contrib.auth.forms import UserChangeForm, ReadOnlyPasswordHashField
 # Override the password help text. We don't want site admins changing passwords using the admin interface.
 class MyUserChangeForm(UserChangeForm):
     password = ReadOnlyPasswordHashField(label="Password", help_text=(
-            "Password changes using this form will NOT be saved to the ESGF database."),
+            "Password changes via the admin interface have been disabled since they will not be saved to "
+            "the ESGF database."),
     )
 
 
