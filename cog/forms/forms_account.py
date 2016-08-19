@@ -1,18 +1,12 @@
-from django.db import models
 from django.contrib.auth.models import User
 from django.forms import (Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, 
                           ImageField, FileInput, Textarea, ModelChoiceField)
-from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
 from django.contrib.auth.hashers import check_password
-from os.path import exists
-from cog.models.constants import UPLOAD_DIR_PHOTOS
 from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
-import os.path
 from django_openid_auth.models import UserOpenID
-import imghdr
 from captcha.fields import CaptchaField
 from cog.forms.forms_utils import validate_image
 from cog.plugins.esgf.security import esgfDatabaseManager
