@@ -128,6 +128,9 @@
        // function to provide an alert when changing nodes
        function changeNode(name, local_name) {
            var ca = document.cookie.split(';');
+           for (var i=0;i<ca.length;i++){
+                   alert (ca[i])
+               }
            if (!("node_warning=skip" in ca)) {
                alert("not");
                if (name != local_name) {
@@ -143,8 +146,8 @@
                }
            }else{
                alert("in");
-               for (var i=0;i<ca.length;i++){
-                   alert (ca[i])
+               for (var j=0;i<ca.length;j++){
+                   alert (ca[j])
                }
            }
        }
