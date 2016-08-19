@@ -129,7 +129,7 @@
        function changeNode(name, local_name) {
            var ca = document.cookie.split(';');
            // check if cookie exists
-           if ( ca.indexOf( 'node_warning=skip' ) > -1 ) {
+           if ( document.cookie.indexOf( 'node_warning=skip' ) > -1 ) {
            }else{
                alert(ca.indexOf( 'node_warning=skip' ));
                if (name != local_name) {
