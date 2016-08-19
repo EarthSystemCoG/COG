@@ -131,7 +131,7 @@
            for (var i=0;i<ca.length;i++){
                    alert (ca[i])
                }
-           if (!("node_warning=skip" in ca)) {
+           if ( ca.indexOf( 'node_warning=skip' ) > -1 ){
                alert("not");
                if (name != local_name) {
                    alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
