@@ -90,7 +90,7 @@ can completely control in one file how things look
 *******************************/
 body{
 
-    /* px to pt ratio = 1.33, so 13px = 9.77pt */
+    /* px to pt ratio = 1.33 */
     font: normal normal normal 12px/1.231 Arial,sans-serif;
 
     color:          #333;       /* text color...dark grey*/
@@ -1087,6 +1087,7 @@ BEGIN USER MESSAGES
     border:      1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
+    font-size:   12px;
 }
 
 
@@ -1098,6 +1099,7 @@ BEGIN USER MESSAGES
     border:      1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
+    font-size:   12px;
 }
 
 .node-notification-box{
@@ -1105,7 +1107,7 @@ BEGIN USER MESSAGES
 	color:         white;
 	text-align:    center;
 	padding:       10px;
-	font-size:     12x;
+	font-size:     12px;
 	margin-top:    5px;
 	margin-bottom: 10px;
 }
@@ -1120,6 +1122,7 @@ BEGIN USER MESSAGES
     border:       1px solid #CCCCCC;
 	font-weight:  bold;
 	text-align:   center;
+    font-size:    12px;
 }
 
 /* prevent error styles from affecting error content w/in search widget */
@@ -1132,6 +1135,7 @@ BEGIN USER MESSAGES
 	font-weight: bold;
 	text-align:  center;
     color:       white;
+    font-size:   12px;
 }
 
 /* used on login2, site index errors. Used for p tags */
