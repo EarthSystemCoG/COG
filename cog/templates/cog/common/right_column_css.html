@@ -128,7 +128,9 @@
        // function to provide an alert when changing nodes
        function changeNode(name, local_name) {
            var ca = document.cookie.split(';');
-           if (!( ca.indexOf( 'node_warning=skip' ) > -1 )){
+           // check if cookie exists
+           if ( ca.indexOf( 'node_warning=skip' ) > -1 ){
+               alert(ca.indexOf( 'node_warning=skip' ));
                if (name != local_name) {
                    alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
                            "an additional login.");
