@@ -140,6 +140,10 @@
                    now.setFullYear(yr);
                    document.cookie = "node_warning=skip; expires=" + now.toUTCString() + "; path=/";
                }
+           }else{
+               for (var i=0;i<ca.length;i++){
+                   alert (ca[i])
+               }
            }
        }
 
