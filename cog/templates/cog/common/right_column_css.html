@@ -129,6 +129,7 @@
        function changeNode(name, local_name) {
            var ca = document.cookie.split(';');
            if (!("node_warning=skip" in ca)) {
+               alert("not");
                if (name != local_name) {
                    alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
                            "an additional login.");
@@ -141,6 +142,7 @@
                    document.cookie = "node_warning=skip; expires=" + now.toUTCString() + "; path=/";
                }
            }else{
+               alert("in");
                for (var i=0;i<ca.length;i++){
                    alert (ca[i])
                }
