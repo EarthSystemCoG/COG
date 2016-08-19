@@ -129,7 +129,8 @@
        function changeNode(name, local_name) {
            var ca = document.cookie.split(';');
            // check if cookie exists
-           if ( ca.indexOf( 'node_warning=skip' ) > -1 ){
+           if ( ca.indexOf( 'node_warning=skip' ) > -1 ) {
+           }else{
                alert(ca.indexOf( 'node_warning=skip' ));
                if (name != local_name) {
                    alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
