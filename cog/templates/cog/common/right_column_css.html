@@ -128,19 +128,19 @@
        // function to provide an alert when changing nodes
        function changeNode(name, local_name) {
            var ca = document.cookie.split(';');
-
-           if (ca[0] != "node_warning=skip") {
+           if (!("node_warning=skip" in ca)) {
                if (name != local_name) {
                    alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
-                           "an additional login.")
+                           "an additional login.");
+
+                   //set cookie so warning is not seen again for one year or until cookie is deleted by the user.
+                   var now = new Date();
+                   var yr = now.getFullYear();
+                   yr = yr + 1;
+                   now.setFullYear(yr);
+                   document.cookie = "node_warning=skip; expires=" + now.toUTCString() + "; path=/";
                }
            }
-           //set cookie so warning is not seen again for one year or until cookie is deleted by the user.
-           var now = new Date();
-           var yr = now.getFullYear();
-           yr = yr + 1;
-           now.setFullYear(yr);
-           document.cookie = "node_warning=skip; expires=" + now.toUTCString() + "; path=/";
        }
 
        // function to populate the project widget via ajax call
