@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url, include
 from django.contrib import admin
 import django.views.static, django.views.generic
 import cog.views
+from django.http.response import HttpResponseNotFound
 
 from filebrowser.sites import site
 
@@ -10,6 +11,16 @@ admin.autodiscover()
 
 urlpatterns = [
                        
+    # forbidden extensions (case-insensitive)
+    url(r'(?i).*\.asp\/?$', HttpResponseNotFound),
+    url(r'(?i).*\.aspx\/?$', HttpResponseNotFound),
+    url(r'(?i).*\.cfm\/?$', HttpResponseNotFound),
+    url(r'.*\.cgi\/?$', HttpResponseNotFound),
+    url(r'(?i).*\.jsp\/?$', HttpResponseNotFound),
+    url(r'(?i).*\.php\/?$', HttpResponseNotFound),
+    url(r'(?i).*\.php3\/?$', HttpResponseNotFound),
+    url(r'(?i).*\.pl\/?$', HttpResponseNotFound),
+    url(r'(?i).*\.shtml\/?$', HttpResponseNotFound),
     
     url(r'^robots\.txt$', django.views.generic.TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), name='robots.txt'),
                                                       
