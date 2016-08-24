@@ -232,7 +232,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # Use stricter policy for X_FRAME_OPTIONS: default is X_FRAME_OPTIONS='SAMEORIGIN'
-#X_FRAME_OPTIONS = 'DENY'
+X_FRAME_OPTIONS = 'DENY'
 
 # login page URL (default: '/accounts/login')
 LOGIN_URL = '/login/'
