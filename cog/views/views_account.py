@@ -1,4 +1,3 @@
-import datetime
 import urllib
 from urlparse import urlparse
 
@@ -23,6 +22,9 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.util.thumbnails import *
 from cog.views.utils import set_openid_cookie, get_all_shared_user_info
 from django.http.response import HttpResponseForbidden
+
+#FIXME:  note: must import this module last otherwise it conflicts with previous import datetime.datetime
+import datetime
 
 
 def redirectToIdp():

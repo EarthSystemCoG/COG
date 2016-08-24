@@ -11,6 +11,7 @@ from captcha.fields import CaptchaField
 from cog.forms.forms_utils import validate_image
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.models.user_profile import createUsername
+from django.conf import settings
 
 # list of invalid characters in text fields
 # INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
