@@ -121,8 +121,6 @@
             {% else %}
 	            <div class="message-box">
 	                {{ request.GET.message|showMessage|safe }}
-	                <br/>Your OpenID is: {{ request.GET.openid|escape }}
-	                <br/>Your local username is: {{ request.GET.username|escape }} 
 	            </div>
             {% endif %}
 	        <p></p>
