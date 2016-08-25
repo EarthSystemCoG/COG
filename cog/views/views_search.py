@@ -833,6 +833,11 @@ def search_files(request, dataset_id, index_node):
     # optional query filter
     query = request.GET.get('query', None)
     if query is not None and len(query.strip()) > 0:
+        # validate query value
+        for c in INVALID_CHARACTERS:
+            if c in query:
+                # HttpResponseBadRequest Status Code = 400
+                return HttpResponseBadRequest(ERROR_MESSAGE_INVALID_TEXT, content_type="text/plain")
         params.append(('query', query))
         
     # optional shard
