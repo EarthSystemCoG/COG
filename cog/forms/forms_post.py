@@ -118,6 +118,18 @@ class PostForm(ModelForm):
             template = cleaned_data.get("template")
             if template == '':
                 self._errors["template"] = self.error_class(["Invalid template"])
+        
+        # prevent <iframe>, <script> and <form> tags        
+        if type == Post.TYPE_PAGE:
+            body = cleaned_data.get("body")
+            # execute validation on content without white spaces
+            _body = body.replace(" ", "").lower()
+            if "<iframe" in _body:
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <iframe> tag"])
+            if "<script" in _body:
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <script> tag"])
+            if "<form" in _body:
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <form> tag"])
 
         # validate "topic"
         # cannot set both 'topic' and 'newtopic'
