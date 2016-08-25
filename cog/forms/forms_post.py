@@ -1,5 +1,5 @@
 from cog.models import *
-from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
+from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect, ValidationError
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
@@ -52,7 +52,7 @@ class PostForm(ModelForm):
         else:
             self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project) &
                                                              Q(post__type=type)).distinct().order_by('name')
-
+    
     # override form clean() method to execute combined validation on multiple fields
     def clean(self):
 
@@ -60,6 +60,13 @@ class PostForm(ModelForm):
         topic = cleaned_data.get("topic")
         newtopic = cleaned_data.get("newtopic")
         type = cleaned_data.get("type")
+        
+        # prevent XSS on fields 'title', 'label', 'newtopic'
+        for key in ["title", "label", "newtopic"]:
+            try:
+                xss_clean_field(self, key)
+            except ValidationError as ve:
+                self._errors[key] = self.error_class([ve.message])
 
         # validate URL
         # must be null for home page, not null for other pages
@@ -141,6 +148,7 @@ class PostForm(ModelForm):
 
         # create new topic - if not existing already
         elif newtopic != '':
+                        
             try:
                 topic = Topic.objects.get(name__iexact=newtopic)
             except ObjectDoesNotExist:

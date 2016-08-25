@@ -14,6 +14,7 @@ import operator
 from cog.forms.forms_utils import validate_image
 import magic
 from cog.constants import VALID_MIME_TYPES
+from cog.utils import default_clean_field
 
 # list of invalid characters in uploaded documents file names
 INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/\s]"
@@ -55,6 +56,13 @@ class NewsForm(ModelForm):
             if userHasContributorPermission(user, p):
                 qs = qs | Q(pk=p.id)
         return qs
+    
+    def clean_title(self):
+        return xss_clean_field(self, 'title')
+    
+    def clean_text(self):
+        return xss_clean_field(self, 'text')
+
 
     class Meta:
         model = News
@@ -85,32 +93,37 @@ class DocForm(ModelForm):
             At this point the file is still in memory only,
             so if error is thrown there is no need to remove it from disk."""
         cleaned_data = self.cleaned_data
-        file = cleaned_data.get("file")
+        thefile = cleaned_data.get("file")
+        title = cleaned_data.get("title")
+        description = cleaned_data.get("description")
         
-        if not file:
+        if not thefile:
             self._errors["file"] = self.error_class(["Sorry, the file is empty."])
             return cleaned_data
 
-        if re.search(INVALID_CHARS, file.name):
+        if re.search(INVALID_CHARS, thefile.name):
             self._errors['file'] = self.error_class(["Sorry, the filename contains invalid characters. "
                                                      "It can only contain letters, numbers, spaces, and _ - . /"])
+            
+        if re.search(INVALID_CHARS, title):
+            self._errors['title'] = self.error_class(["Sorry, the document title contains invalid characters. "
+                                                      "It can only contain letters, numbers, spaces, and _ - . /"])
+        if re.search(INVALID_CHARS, description):
+            self._errors['description'] = self.error_class(["Sorry, the document description contains invalid characters. "
+                                                            "It can only contain letters, numbers, spaces, and _ - . /"])
 
+            
         project = cleaned_data['project']
-        if file.size > project.maxUploadSize:
+        if thefile.size > project.maxUploadSize:
             self._errors["file"] = self.error_class(["Sorry, the file size exceeds the maximum allowed."])
 
         # validate the file content
         # must write the file to a temporary location to validate it
         # choose to write to $SITE_MEDIA/tmp/file.name
         if len(self._errors)==0:
-           
-            #tmp_file_path = os.path.join("tmp/", file.name)
-            #default_storage.save(tmp_file_path, ContentFile(file.read()))
-            #full_tmp_file_path = os.path.join(settings.MEDIA_ROOT, tmp_file_path)
-            #print 'Validating file: %s' % full_tmp_file_path
-            
-            file_ext = str(os.path.splitext(file.name)[1])
-            mime_type = magic.from_buffer(file.read(1024), mime=True)
+                       
+            file_ext = str(os.path.splitext(thefile.name)[1])
+            mime_type = magic.from_buffer(thefile.read(1024), mime=True)
             print "Validating file extension=%s, mime type=%s" % (file_ext, mime_type)
             if not file_ext:
                 self._errors["file"] = self.error_class(["File name must have an extension"])

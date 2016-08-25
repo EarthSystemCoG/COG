@@ -13,6 +13,8 @@ TIMEOUT = 5
 INVALID_CHARS = "[@#$%^&*\[\]/{}|\"<>\\\]"
 # shorter list specific to URL since the following characters are allowed for URLs: /#&
 URL_INVALID_CHARS = "[@$^*\[\]\'{}|\"<>\\\]"
+# even shorter list of invdali charactes to prevent XSS
+XSS_INVALID_CHARS = "[<>]"
 
 def hasText(str):
     '''Utility function to establish whether a string has any non-empty characters.'''
@@ -44,6 +46,10 @@ def clean_url_field(form, field):
 # method to check a field for the default bad characters
 def default_clean_field(form, field):
     return clean_field(form, field, INVALID_CHARS)
+
+# method to check for the presence of XSS enabling characters
+def xss_clean_field(form, field):
+    return clean_field(form, field, XSS_INVALID_CHARS)
 
 # Function to truncate a string at some word limit
 def smart_truncate(s, width):
