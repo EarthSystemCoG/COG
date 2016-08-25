@@ -32,6 +32,7 @@ setup(
                       'django-simple-captcha==0.5.1',
                       'html5lib==1.0b8',
                       'bleach==1.4.2',
+                      'python-magic==0.4.12',
                       ],
     long_description=read('README.md'),
     classifiers=[
