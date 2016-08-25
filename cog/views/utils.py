@@ -157,6 +157,7 @@ def get_all_shared_user_info(user, includeCurrentSite=True):
             sites = list(getPeerSites())
             if includeCurrentSite:
                 sites = sites + [Site.objects.get_current()]
+            
             for site in sites:
                             
                 url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
@@ -164,6 +165,8 @@ def get_all_shared_user_info(user, includeCurrentSite=True):
                 jobj = getJson(url)
                 if jobj is not None and openid in jobj['users']:
                     userDict[site] = jobj['users'][openid] 
+                else:
+                    print 'Openid=%s not found at site=%s' % (openid, site)
                                                             
     except UserProfile.DoesNotExist:
         pass  # user profile not yet created

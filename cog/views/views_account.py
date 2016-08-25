@@ -331,6 +331,8 @@ def user_detail(request, user_id):
         
     # retrieve map of (project, roles) for this user
     (projTuples, groupTuples) = get_all_shared_user_info(user)
+    print "\nprojTuples="
+    print projTuples
         
     # sort projects, groups alphabetically
     projects = sorted(projTuples, key=lambda x: x[0].short_name)

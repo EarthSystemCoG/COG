@@ -12,7 +12,8 @@
 			<td>Cancel</td>
 		</tr>
 		{% for project, roles in projects %} 
-			{% if not project.private or request.user == user_profile.user or request.user.is_staff == True or request.user|hasAdminPermission:project %}
+			
+			{% if request.user == user_profile.user or request.user.is_staff == True or request.user|hasAdminPermission:project %}
 				<tr>
 					<td nowrap="nowrap">
 						<a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a>
@@ -25,8 +26,19 @@
 							<a href="{% url 'membership_remove' project.short_name|lower %}" class="deletelink">&nbsp;Cancel</a> 
 						{% endif %}
 					</td>
-				</tr>
+				</tr>	
+			{% else %}
+				{% if not project.private %}
+					<tr>
+						<td nowrap="nowrap">
+							<a href="{% url 'project_home' project.short_name|lower %}">{{ project.short_name }}</a>
+						</td>
+						<td nowrap="nowrap">&nbsp;</td>
+						<td nowrap="nowrap">&nbsp;</td>
+					</tr>
+				{% endif %}
 			{% endif %} 
+				
 		{% endfor %}
 	</table>
 </div>
