@@ -37,10 +37,7 @@ urlpatterns = [
     # Administrator application
     #(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-        
-    # Comments
-    url(r'^comments/', include('django_comments.urls')),
-    
+            
     # django-simple-captcha
     url(r'^captcha/', include('captcha.urls')),
     

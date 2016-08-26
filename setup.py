@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name = "cog",
-    version = "3.6.0",
+    version = "3.7.0",
     author = "CoG Development Team",
     author_email = "cog_support@list.woc.noaa.gov",
     description = ("Earth System CoG: web interface for the Earth System Grid Federation"),
@@ -25,7 +25,6 @@ setup(
                       'python-openid==2.2.5',
                       'passlib==1.6.5',
                       'pysqlite==2.8.1',        
-                      'django-contrib-comments==1.6.2',   
                       'oauth2client==2.0.1',
                       'globusonline-transfer-api-client==0.10.18',   
                       #'pillow==3.1.0', # pre-requisite: must be installed with --use-wheel on MAC-OSX
