@@ -108,7 +108,7 @@ class ProjectForm(ModelForm):
         model = Project
         fields = ('short_name', 'long_name', 'author', 'description', 
                   'parents', 'peers', 'logo', 'logo_url', 'active', 'private', 'shared',
-                  'dataSearchEnabled', 'forumNotificationEnabled', 'nodesWidgetEnabled',
+                  'dataSearchEnabled', 'nodesWidgetEnabled',
                   'site', 'maxUploadSize')
 
 class ContactusForm(ModelForm):

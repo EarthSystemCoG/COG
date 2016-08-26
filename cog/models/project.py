@@ -133,11 +133,7 @@ class Project(models.Model):
     
     # flag to enable the search widget
     dataSearchEnabled = models.BooleanField(default=False, blank=False, null=False, help_text='Enable data search?')
-    
-    # flag to enable forum notifications
-    forumNotificationEnabled = models.BooleanField(default=False, blank=False, null=False,
-                                                   help_text='Enable forum notifications to project administrators ?')
-    
+        
     # flag to enable the peer widget
     nodesWidgetEnabled = models.BooleanField(default=False, blank=False, null=False, 
                                              help_text='Enable federated nodes widget ?')
