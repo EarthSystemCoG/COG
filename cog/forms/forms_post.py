@@ -61,13 +61,6 @@ class PostForm(ModelForm):
         newtopic = cleaned_data.get("newtopic")
         type = cleaned_data.get("type")
         
-        # prevent XSS on fields 'title', 'label', 'newtopic'
-        for key in ["title", "label", "newtopic"]:
-            try:
-                xss_clean_field(self, key)
-            except ValidationError as ve:
-                self._errors[key] = self.error_class([ve.message])
-
         # validate URL
         # must be null for home page, not null for other pages
         if type == Post.TYPE_PAGE:
@@ -155,6 +148,14 @@ class PostForm(ModelForm):
                 topic = Topic.objects.create(name=newtopic)
 
             cleaned_data["topic"] = topic
+
+        # prevent XSS on fields 'title', 'label', 'newtopic'
+        for key in ["title", "label", "newtopic"]:
+            if key in cleaned_data:
+                try:
+                    xss_clean_field(self, key)
+                except ValidationError as ve:
+                    self._errors[key] = self.error_class([ve.message])
 
         # always return the full collection of cleaned data.
         return cleaned_data
