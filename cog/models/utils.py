@@ -13,7 +13,6 @@ from django.conf import settings
 from django.utils.timezone import now
 from news import News
 from django.db.models import Q
-from django_comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from folder import Folder, getTopFolder, TOP_SUB_FOLDERS
 from cog.models.constants import DEFAULT_SEARCH_FACETS
@@ -189,18 +188,6 @@ def listPeople(project):
     return sorted(people, key=lambda user: (user.last_name.lower(), user.first_name.lower()))
 
 
-def delete_comments(obj):
-    """
-    Function to delete comments associated with a generic object.
-    """
-    
-    object_type = ContentType.objects.get_for_model(obj)
-    comments = Comment.objects.filter(object_pk=obj.id).filter(content_type=object_type)
-    for comment in comments:
-        print 'Deleting associated comment=%s' % comment.comment
-        comment.delete()
-
-
 def get_or_create_default_search_group(project):
     
     profile = project.searchprofile
@@ -322,10 +309,7 @@ def delete_doc(doc):
     '''
     Utility method to properly delete a Doc object.
     '''
-    
-    # delete associated comments
-    delete_comments(doc)
-    
+        
     # remove from possible associated posts
     posts = Post.objects.filter(docs__id=doc.id)
     for post in posts:

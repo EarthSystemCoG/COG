@@ -22,15 +22,6 @@
     <!--// include action links via cog/post/_post_actions.html  //-->
     {% include 'cog/post/_post_actions.html' %}
 
-
-    <!--// add comments via cog/common/_comments.html //-->
-    <div id="comments" style="text-align:left;">
-    {% with post.url as next_view %}
-        {% with post as object %}
-	   {% include 'cog/common/_comments.html' %}
-	{% endwith %}
-    {% endwith %}
-    </div>
     
     <!--// include attachments via cog/post/_post_attachements.html  //-->
     <div id="attachments">

@@ -69,10 +69,7 @@ def post_delete(request, post_id):
                 
         # send post update signal
         post.send_signal(SIGNAL_OBJECT_DELETED)
-        
-        # delete associated comments
-        delete_comments(post)
-        
+                
         # delete the post
         post.delete()
     
