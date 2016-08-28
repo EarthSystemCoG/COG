@@ -221,8 +221,8 @@ def user_add(request):
             user = form.save(commit=False)
             
             # must reset the password through the special method that encodes it correctly
-            clearTextPassword = form.cleaned_data['password']
-            user.set_password(clearTextPassword)
+            clearTextPwd = form.cleaned_data['password']
+            user.set_password(clearTextPwd)
                         
             # save user to database
             user.save()
@@ -254,7 +254,7 @@ def user_add(request):
             userp.save()
             
             # NOTE: this field is NOT persisted in the CoG database but it is used by insertEsgfUser() below
-            userp.clearTextPassword = clearTextPassword  
+            userp.clearTextPwd = clearTextPwd  
             # insert into ESGF database
             if settings.ESGF_CONFIG:
                 esgfDatabaseManager.insertEsgfUser(userp)

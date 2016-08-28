@@ -138,7 +138,7 @@ class CoGInstall(object):
             # create UserProfile object
             userp = UserProfile(user=user, institution='Institution', city='City', state='State', country='Country',
                                 site=site, last_password_update=datetime.datetime.now())
-            userp.clearTextPassword=password # needed by esgfDatabaseManager, NOT saved as clear text in any database
+            userp.clearTextPwd=password # needed by esgfDatabaseManager, NOT saved as clear text in any database
             userp.save()
             
             # ESGF database setup

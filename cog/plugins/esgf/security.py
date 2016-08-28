@@ -100,9 +100,9 @@ class ESGFDatabaseManager():
             try:
                 
                 # encrypt password with MD5_CRYPT
-                clearTextPassword = userProfile.clearTextPassword
-                if clearTextPassword is not None and len(clearTextPassword)>0:
-                    encPassword = md5_crypt.encrypt(clearTextPassword)
+                clearTextPwd = userProfile.clearTextPwd
+                if clearTextPwd is not None and len(clearTextPwd)>0:
+                    encPassword = md5_crypt.encrypt(clearTextPwd)
                 else:
                     encPassword = None
     
@@ -215,7 +215,7 @@ class ESGFDatabaseManager():
         session.close()
         return esgfUsers
     
-    def updatePassword(self, user, clearTextPassword):
+    def updatePassword(self, user, clearTextPwd):
         '''Updates the user password in the ESGF database.'''
                 
         for openid in user.profile.openids():
@@ -226,7 +226,7 @@ class ESGFDatabaseManager():
                 esgfUser = self.getUserByOpenid(openid)
                 if esgfUser is not None:
                     session = self.Session()
-                    encPasword = md5_crypt.encrypt(clearTextPassword)
+                    encPasword = md5_crypt.encrypt(clearTextPwd)
                     esgfUser.password = encPasword
                     print 'Updated ESGF password for user with openid: %s' % openid
                     session.add(esgfUser)
