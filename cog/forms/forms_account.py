@@ -18,12 +18,12 @@ from django.conf import settings
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
 
-# NOTE: must be same as JavaScript pattern in _password_check.html
-PASSWORD_PATTERN = r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$'
-PASSWORD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one upper case letter, one number, ' \
+# NOTE: must be same as JavaScript pattern in _PWD_check.html
+PWD_PATTERN = r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$'
+PWD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one upper case letter, one number, ' \
                         'and one special symbol. '\
                       + 'All characters are allowed EXCEPT for ( ) " . '
-CONFIRM_PASSWORD_INSTRUCTIONS = 'Must match the password above.'
+CONFIRM_PWD_INSTRUCTIONS = 'Must match the password above.'
 
 
 class UserUrlForm(ModelForm):
@@ -92,11 +92,11 @@ class PasswordChangeForm(Form):
                          # trigger javascript function when input field looses focus
                          widget=PasswordInput(render_value=True, attrs={"onchange": "checkPassword();",
                                                                         "autocomplete": "off"}),
-                         help_text=PASSWORD_INSTRUCTIONS
+                         help_text=PWD_INSTRUCTIONS
                          )  # not required for OpenID users
     confirm_password = CharField(required=True, widget=PasswordInput(render_value=True,
                                                                      attrs={"autocomplete": "off", }),
-                                 help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
+                                 help_text=CONFIRM_PWD_INSTRUCTIONS)
 
     # override __init__ method to store the user object
     # def __init__(self, user, *args, **kwargs):
@@ -151,12 +151,12 @@ class UserForm(ImageForm):
     password = CharField(required=False, 
                          # trigger javascript function when input field looses focus
                          widget=PasswordInput(render_value=True, attrs={"onchange": "checkPassword();", }),
-                         help_text=PASSWORD_INSTRUCTIONS
+                         help_text=PWD_INSTRUCTIONS
                          )  # not required for OpenID users
 
     # additional fields not in User
     confirm_password = CharField(required=False, widget=PasswordInput(render_value=True),
-                                 help_text=CONFIRM_PASSWORD_INSTRUCTIONS)  # not required for OpenID users
+                                 help_text=CONFIRM_PWD_INSTRUCTIONS)  # not required for OpenID users
     institution = CharField(required=True)
     department = CharField(required=False)
     city = CharField(required=True)
@@ -237,7 +237,7 @@ def validate_password(form):
         else:
             if len(password) < 8:
                 form._errors["password"] = form.error_class(["'Password' must contain at least 8 characters."])
-            elif re.match(PASSWORD_PATTERN, password) is None:
+            elif re.match(PWD_PATTERN, password) is None:
                 form._errors["password"] = form.error_class(["'Password' does not match the required criteria."])
                 
         if '"' in password:
