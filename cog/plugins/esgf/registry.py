@@ -2,19 +2,22 @@
 Module containing API and implementation for registry-type objects.
 '''
 
-from xml.etree.ElementTree import fromstring, ParseError
-import re
 import abc
-#import pycurl
-#import certifi
-from cog.utils import file_modification_datetime
-from django.conf import settings
 import os
+import re
+from xml.etree.ElementTree import fromstring, ParseError
+
+from cog.constants import (IDP_WHITELIST_STATIC_FILENAME, IDP_WHITELIST_FILENAME, 
+                           KNOWN_PROVIDERS_FILENAME, PEER_NODES_FILENAME, ENDPOINTS_FILENAME)
+from cog.models import PeerSite
+from cog.utils import file_modification_datetime, check_filepath
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 
-from cog.models import PeerSite
 
+#import pycurl
+#import certifi
 NS = "http://www.esgf.org/whitelist"
 
 class WhiteList(object):
@@ -68,6 +71,9 @@ class LocalEndpointDict(EndpointDict):
                 self.modtime = file_modification_datetime(self.filepath)
                 self._reload(force=True)
                 self.init = True
+                
+                # prevent file path manipulation
+                check_filepath(self.filepath, [ENDPOINTS_FILENAME])
             
         except IOError:
             pass
@@ -122,6 +128,9 @@ class LocalKnownProvidersDict(KnownProvidersDict):
             
             # store filepath and its last access time
             self.filepath = str(settings.KNOWN_PROVIDERS)
+            
+            # prevent file path manipulation
+            check_filepath(self.filepath, [KNOWN_PROVIDERS_FILENAME])
             
             if os.path.exists(self.filepath):
                 
@@ -193,6 +202,9 @@ class LocalWhiteList(WhiteList):
         # loop over whitelist files
         for filepath in self.filepaths:
             
+            # prevent file path manipulation
+            check_filepath(filepath, [IDP_WHITELIST_FILENAME, IDP_WHITELIST_STATIC_FILENAME])
+            
             # record last modification time
             self.modtimes[filepath] = file_modification_datetime(filepath)
 
@@ -255,7 +267,12 @@ class PeerNodesList(object):
     '''
     
     def __init__(self, filepath):
+        
         self.filepath = filepath
+        
+        # prevent file path manipulation
+        check_filepath(self.filepath, [PEER_NODES_FILENAME])
+
         
     def reload(self, delete=False):
         

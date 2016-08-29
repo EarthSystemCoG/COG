@@ -97,3 +97,19 @@ def getJson(url):
         print e
         print 'Error retrieving URL=%s' % url
         return None
+    
+def check_filepath(file_full_path, expected_file_names):
+    '''Method to check that a file full path matches the expected file name.
+       This is useful to avoid possible path manipulation issues.
+       If no problems are found, the original file path is returned. '''
+    
+    (head, tail) = os.path.split(file_full_path)
+    if tail not in expected_file_names:
+        raise Exception("Invalid file path to be read: %s" % file_full_path)
+    
+    # also check for directory recursiveness
+    if '.' in head:
+        raise Exception("Invalid file path to be read: %s" % file_full_path)
+    
+    return file_full_path
+    

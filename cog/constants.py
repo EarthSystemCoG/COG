@@ -25,3 +25,10 @@ VALID_MIME_TYPES = { '.bmp':  ['image/bmp', 'image/x-windows-bmp'],
                      '.xls':  ['application/excel', 'application/vnd.ms-excel', 'application/x-msexcel'],
                      '.xlsx': ['application/excel', 'application/vnd.ms-excel', 'application/x-msexcel','application/zip'],
                      }
+
+# fix the configuration file names to avoid path manipulation warnings
+IDP_WHITELIST_FILENAME = "esgf_idp.xml"
+IDP_WHITELIST_STATIC_FILENAME = "esgf_idp_static.xml"
+KNOWN_PROVIDERS_FILENAME = "esgf_known_providers.xml"
+PEER_NODES_FILENAME = "esgf_cogs.xml"
+ENDPOINTS_FILENAME = "esgf_endpoints.xml"
