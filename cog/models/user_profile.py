@@ -67,9 +67,9 @@ class UserProfile(models.Model):
         if self.last_password_update is None:
             return True
         
-        if settings.PASSWORD_EXPIRATION_DAYS > 0:
+        if settings.PWD_EXPIRATION_DAYS > 0:
             today = datetime.date.today()
-            if (today - self.last_password_update).days > settings.PASSWORD_EXPIRATION_DAYS:
+            if (today - self.last_password_update).days > settings.PWD_EXPIRATION_DAYS:
                 return True
             
         # default

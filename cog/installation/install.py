@@ -18,7 +18,7 @@ from cog.models import PeerSite
 from cog.views.views_project import initProject
 
 from cog.installation.constants import (DEFAULT_PROJECT_SHORT_NAME, ESGF_ROOTADMIN_PASSWORD_FILE, 
-                                        DEFAULT_ROOTADMIN_PASSWORD, ROOTADMIN_USERNAME)
+                                        DEFAULT_ROOTADMIN_PWD, ROOTADMIN_USERNAME)
 from cog.plugins.esgf.security import esgfDatabaseManager
 from django_openid_auth.models import UserOpenID
 from django.core.exceptions import ObjectDoesNotExist
@@ -131,7 +131,7 @@ class CoGInstall(object):
             if settings.ESGF_CONFIG:
                 password = self._getRootAdminPassword()
             else:
-                password = DEFAULT_ROOTADMIN_PASSWORD
+                password = DEFAULT_ROOTADMIN_PWD
             user.set_password(password)
             user.save()
                         
@@ -181,7 +181,7 @@ class CoGInstall(object):
             # file not found
             logging.warn("ESGF administrator password file: %s could not found or could not be read" % ESGF_ROOTADMIN_PASSWORD_FILE) 
             logging.warn("Using standard administrator password, please change it right away.")
-            return DEFAULT_ROOTADMIN_PASSWORD
+            return DEFAULT_ROOTADMIN_PWD
 
             
 if __name__ == '__main__':

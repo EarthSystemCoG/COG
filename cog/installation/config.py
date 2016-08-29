@@ -162,7 +162,7 @@ class CogConfig(object):
         # interval between updates of user's projects, during user session
         self._safeSet('MY_PROJECTS_REFRESH_SECONDS', 3600)
         # optional number of days after which password expire
-        self._safeSet('PASSWORD_EXPIRATION_DAYS','0')
+        self._safeSet('PWD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
         idpPeer = self._safeGet("esgf.idp.peer", default='')
         if hostName != idpPeer:

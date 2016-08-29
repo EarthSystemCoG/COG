@@ -21,7 +21,7 @@ class SiteManager(object):
        DATABASE_PORT=5432
        MY_PROJECTS_REFRESH_SECONDS=3600
        # optional number of days after which password expire
-       PASSWORD_EXPIRATION_DAYS=0
+       PWD_EXPIRATION_DAYS=0
        # optional top-level URL to redirect user registration (no trailing '/')
        IDP_REDIRECT=https://www.earthsystemcog.org
        # whitelist of trusted Identity Providers

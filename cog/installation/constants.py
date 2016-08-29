@@ -13,7 +13,7 @@ ESGF_PASSWORD_FILE = '%s/.esg_pg_pass' % ESG_CONFIG_DIR
 IDP_WHITELIST = "%s/esgf_idp.xml, %s/esgf_idp_static.xml" % (ESG_CONFIG_DIR, ESG_CONFIG_DIR)
 ESGF_ROOTADMIN_PASSWORD_FILE = '%s/.esgf_pass' % ESG_CONFIG_DIR
 ROOTADMIN_USERNAME = "rootAdmin"
-DEFAULT_ROOTADMIN_PASSWORD = "changeit"
+DEFAULT_ROOTADMIN_PWD = "changeit"
 KNOWN_PROVIDERS = "%s/esgf_known_providers.xml" % ESG_CONFIG_DIR
 PEER_NODES = "%s/esgf_cogs.xml" % ESG_CONFIG_DIR
 

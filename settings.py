@@ -29,7 +29,7 @@ DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
 DATABASE_HOST = siteManager.get('DATABASE_HOST', default='localhost')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
 MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600))  # one hour
-PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0))  # 0: no expiration
+PWD_EXPIRATION_DAYS = int(siteManager.get('PWD_EXPIRATION_DAYS', default=0))  # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % siteManager.cog_config_dir)
