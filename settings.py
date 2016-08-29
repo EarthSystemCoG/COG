@@ -230,8 +230,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# Use stricter policy for X_FRAME_OPTIONS: default is X_FRAME_OPTIONS='SAMEORIGIN'
-X_FRAME_OPTIONS = 'DENY'
+# Default is X_FRAME_OPTIONS='SAMEORIGIN'
+# Using X_FRAME_OPTIONS = DENY breaks the CKEditor file uploader.
+#X_FRAME_OPTIONS = 'DENY'
 
 # login page URL (default: '/accounts/login')
 LOGIN_URL = '/login/'
