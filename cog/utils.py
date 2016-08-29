@@ -61,28 +61,6 @@ def smart_truncate(s, width):
         else:
             return s[0:width].rsplit(None, 1)[0] +" ..."
 
-def create_resized_image(newimagepath, imagepath, xconstrain=200, yconstrain=200):
-    """
-    Function to create a resized image from an original image location.
-    """
-    from PIL import Image, ImageOps
-    import urllib
-    import os
-    from django.conf import settings
-
-        # delete previous image
-    if os.path.exists(newimagepath):
-        os.remove(newimagepath)
-
-    # create new image
-    unsized_image = urllib.urlretrieve(str(imagepath)) # Fetch original image
-    unsized_image = Image.open(unsized_image[0]) # Load the fetched image
-    resized_image = ImageOps.fit(unsized_image, (xconstrain, yconstrain), Image.ANTIALIAS) # Create a resized image by fitting the original image into the constrains, and do this using proper antialiasing
-    resized_image = resized_image.convert("RGB") # PIL sometimes throws errors if this isn't done
-    resized_image.save(newimagepath) # Save the resized image as a jpeg into the MEDIA_ROOT/images/resized
-
-    return newimagepath
-
 def getJson(url):
     '''Retrieves and parses a JSON document at some URL.'''
     

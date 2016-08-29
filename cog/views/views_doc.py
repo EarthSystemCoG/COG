@@ -13,7 +13,6 @@ from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES, SYSTEM_DOCS,
 from django.conf import settings
 from django.views.static import serve
 from cog.models.auth import userHasUserPermission, userHasContributorPermission
-from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
 from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
@@ -46,15 +45,6 @@ def doc_upload(request, project_short_name):
             url = instance.file.url
             error = ''
             
-            # create thumbnail
-            # NOTE: already executed automatic when browsing through django-browser
-            #imagepath = os.path.join( getattr(settings, "MEDIA_ROOT"),  instance.file.name )
-            #(path, filename) = os.path.split(imagepath)
-            #(name, ext) = os.path.splitext(filename)
-            #thumbnailpath = os.path.join( path, "%s_thumbnail.jpeg" % name )
-            #print 'Creating thumbnail: %s' % thumbnailpath
-            #create_resized_image(thumbnailpath, imagepath)         
-
         else:
             print 'Form errors:%s' % form.errors
             error = 'The file uploaded is not an image. Valid files include PNG, JPG, and PDF.'
