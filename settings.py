@@ -216,6 +216,7 @@ INSTALLED_APPS = (
     'grappelli',
     'filebrowser',
     'django.contrib.admin.apps.SimpleAdminConfig',
+    'django_comments',
     'django.contrib.staticfiles',
     'captcha',
     'layouts',
