@@ -758,7 +758,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             # proj name must be in single quotes, use \ to escape
             html += ' onmouseover="tooltip.show(this, \'' + prj.long_name + '\',200);"'
             html += ' onmouseout="tooltip.hide();"'
-            html += ' onclick="changeNode(\'' + prj.site.name + '\' , \'' + site.name + '\' )"'
+            #html += ' onclick="changeNode(\'' + prj.site.name + '\' , \'' + site.name + '\' )"'
             # name must be a string
             html += '>'
             html += prj.short_name + '</a><br/>'
