@@ -87,16 +87,16 @@
 	        <div id="project_browser_controls">
 	            <div id="tag_entry" style="padding:0; padding-bottom: 2px; margin:0; width:188px;">
                     <!--class=yui-ac-->
-		            <div id="tagAutoComplete" style="margin:0; padding:0; width:188px; position:static; display:inline;">
+		            <div id="tagAutoComplete" style="margin:0; padding:0; width:189px; position:static; display:inline;">
 
 			             <!--class=yui-ac-input-->
                          <label for="projectBrowserText" style="display:none;">Enter Tag</label>
                          <!--ONCLICK: land on All -->
                          <!-- width includes size of box + margins -->
-                         <!--176px + 4px left margin = 180px, which leaves 4px either side from 188px-->
+                         <!--177px + 4px left margin = 181px, which leaves 4px either side from 189px-->
 		                 <input type="text" onclick="gotoTab(1);" id="projectBrowserText" placeholder="Enter Tag"
-                                style="width:176px; position:static;
-		             font-size:8.5pt; padding:0; padding-left:2px; margin:0; margin-left:4px; margin-top:4px;border:0;" alt="projectBrowserText" />
+                                style="width:177px; position:static;
+		                        font-size:8.5pt; padding:0; padding-left:2px; margin:0; margin-left:4px; margin-top:4px;border:0;" alt="projectBrowserText" />
 
 		                 <div style="width:177px" id="tagContainer"> <!-- make size 1px smaller than input above -->
 		                 </div>
@@ -111,7 +111,7 @@
 	                     {% endif %}
 
                          <!--RESET: Land on This-->
-	                     <input class="right_go" style="width:45px; margin:0; margin-left:0px;"
+	                     <input class="right_go" style="width:45px; margin:0; margin-left:0;"
 	                          type="submit" value="Reset" id="resetProjectBrowserButton"
 	                          onclick="document.getElementById('projectBrowserText').value='';
                                       loadProjectBrowser('{{project.short_name}}'); gotoTab(0); "/>
