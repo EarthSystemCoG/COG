@@ -207,23 +207,23 @@
 		};
 
        // function to provide an alert when changing nodes
-       //function changeNode(name, local_name) {
+       function changeNode(name, local_name) {
            // read full cookies string to see node_warning exists
-        //   if ( document.cookie.indexOf( 'node_warning=skip' ) > -1 ) {
-        //   }else{
-        //       if (name != local_name) {
-        //           alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
-        //                   "an additional login.");
+           if ( document.cookie.indexOf( 'node_warning=skip' ) > -1 ) {
+           }else{
+               if (name != local_name) {
+                   alert("You are leaving the " + local_name + " node for the " + name + " node. \n\nChanging nodes MAY require " +
+                           "an additional login.");
 
                    //set cookie so warning is not seen again for one year or until cookie is deleted by the user.
-         //          var now = new Date();
-        //           var yr = now.getFullYear();
-        //           yr = yr + 1;
-        //           now.setFullYear(yr);
-        //           document.cookie = "node_warning=skip; expires=" + now.toUTCString() + "; path=/";
-        //       }
-        //   }
-       //}
+                   var now = new Date();
+                   var yr = now.getFullYear();
+                   yr = yr + 1;
+                   now.setFullYear(yr);
+                   document.cookie = "node_warning=skip; expires=" + now.toUTCString() + "; path=/";
+               }
+           }
+       }
     //]]>
 </script>
 

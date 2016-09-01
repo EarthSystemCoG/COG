@@ -16,7 +16,7 @@ from cog.views.constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_M
 from cog.views.views_templated import templated_page_display
 from cog.views.utils import getQueryDict
 from cog.models.auth import userHasAdminPermission
-from django.contrib.sites.models import Site
+#from django.contrib.sites.models import Site
 
 
 # method to add a new project, with optional parent project
@@ -738,7 +738,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             display = 'none'
 
     # height of individual project widgets
-    site = Site.objects.get_current()  # get local domain to compare to link in project browser
+
     html += '<div id="'+widget_id+'" style="display:'+display+'; margin-left:4px;">'
     if len(projects) == 0:
         if tag_error is not None:
@@ -752,17 +752,18 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
     else:     
         # loop over projects sorted by name
         # create actual links to projects
+        site = Site.objects.get_current()  # get local domain to compare to link in project browser
         for prj in sorted(projects, key=lambda prj: prj.short_name.lower()):
             html += '<a href="' + prj.getAbsoluteUrl() + '"'
             # (widget, inner_text, width)
             # proj name must be in single quotes, use \ to escape
             html += ' onmouseover="tooltip.show(this, \'' + prj.long_name + '\',200);"'
             html += ' onmouseout="tooltip.hide();"'
-            #html += ' onclick="changeNode(\'' + prj.site.name + '\' , \'' + site.name + '\' )"'
+            html += ' onclick="changeNode(\'' + prj.site.name + '\' , \'' + site.name + '\' );"'
             # name must be a string
             html += '>'
             html += prj.short_name + '</a><br/>'
-        html += '</div>'  # must be outside project loop
+    html += '</div>'  # must be outside the if statement, to close the div
 
     # return both the HTML and the 'open' status of the following widget
     return html
