@@ -125,11 +125,14 @@ class PostForm(ModelForm):
             # execute validation on content without white spaces
             _body = body.replace(" ", "").lower()
             if "<iframe" in _body:
-                self._errors["body"] = self.error_class(["Invalid content: cannot use <iframe> tag"])
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <iframe> tag. Use the source "
+                                                         "button to remove."])
             if "<script" in _body:
-                self._errors["body"] = self.error_class(["Invalid content: cannot use <script> tag"])
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <script> tag. Use the source "
+                                                         "button to remove."])
             if "<form" in _body:
-                self._errors["body"] = self.error_class(["Invalid content: cannot use <form> tag"])
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <form> tag. Use the source "
+                                                         "button to remove."])
 
         # validate "topic"
         # cannot set both 'topic' and 'newtopic'
