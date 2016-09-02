@@ -57,8 +57,8 @@
    <div class="top_nav">
        <div class="span-940">
 	       <div id="top_nav_left">
-		       {% if project %}
-			       <ul>
+               <ul>
+		           {% if project %}
 				       {% for tablist in project|getTopNav:request %}
                            {% for tab in tablist %}
                                {% if forloop.counter == 1 %} <!-- Upper Nav Bar; Render first tablist only -->
@@ -69,10 +69,10 @@
                                 {% endif %}
                            {% endfor %}
 				       {% endfor %}
-			       </ul>
-               {% else %}
-                   <li><a href="http://{{site.domain }}">{{ site.name }} Home</a></li>
-		       {% endif %}
+                   {% else %}
+                       <li><a href="http://{{site.domain }}">{{ site.name }} Home</a></li>
+		           {% endif %}
+               </ul>
 		   </div> <!--// end div id=top_nav_left //-->
 	   </div> <!--//end div.span-26 //-->
 	
