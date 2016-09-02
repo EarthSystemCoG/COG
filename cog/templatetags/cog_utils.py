@@ -712,8 +712,8 @@ def showMessage(message):
         return 'The user password has been updated.'
 
     elif message == 'user_reminder':
-        return 'Your UserName and OpenID have been emailed to the address you provided.' \
-               '<br/>Please check your email box.'
+        return 'Your username and OpenID have been emailed to the address you provided.' \
+               '<br/>Please check your email.'
 
     elif message == 'incomplete_profile':
         return 'Please update your profile to contain at least the mandatory information required by COG ' \
