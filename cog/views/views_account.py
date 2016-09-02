@@ -663,9 +663,10 @@ def user_reminder(request):
             # look up username
             users = User.objects.filter(email__iexact=email)
 
+            # user in this context is an account. There can be more than one account associated with an email
             if len(users) > 0:
 
-                # send email with username(s) to user
+                # send email with username(s) to the requester
                 subject = "Username/OpenID Reminder"
                 message = ""
                 for user in users:
