@@ -36,7 +36,7 @@ def clean_field(form, field, invalid_characters):
     for c in data:
         if re.match(invalid_characters, c):
             print 'Invalid character: %s' % c
-            raise forms.ValidationError("The character '%s' is invalid" % c)
+            raise forms.ValidationError("The character '%s' is invalid." % c)
     return data
 
 # method to clean a URL field
