@@ -70,8 +70,8 @@
 								  {% endwith %}
   	                              {% if request.user.is_authenticated %}
 	                           	      <br/>
-	                           		  <!-- FIXME: NCPP files must be published with service 'HTTPServer' to enable wget -->
-									  {% if record.fields.project.0 != 'NCPP' %}
+	                           		  <!-- do not display data cart links for retracted datasets -->
+									  {% if record.fields.retracted.0 != 'true' %}
 		                           	      <!--  add or remove from Data Cart -->
 		                           		  <span id="datacart-delete-{{record.id}}" style="display:none">
 										      <a href="javascript:deleteFromCart('{{ record.id }}')">
@@ -92,6 +92,7 @@
 											  <script>set_visibility("datacart-delete-{{record.id}}", false);</script>
 		                           			  <script>set_visibility("datacart-add-{{record.id}}", true);</script>
 										  {% endif %}
+										  
 									  {% endif %}
 
 									{% comment %}
