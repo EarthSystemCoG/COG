@@ -16,7 +16,7 @@ from django.conf import settings
 # list of invalid characters in text fields
 # INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
-INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
+INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\@\.]"
 
 # NOTE: must be same as JavaScript pattern in _PWD_check.html
 PWD_PATTERN = r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$'
