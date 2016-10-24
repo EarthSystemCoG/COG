@@ -335,8 +335,8 @@
 		if (element!=null) element.innerHTML = ""+size;
 
 		<!-- remove item from datacart -->
-		set_visibility("item_"+identifier, false);
-		set_visibility("item_"+identifier+"_hr", false);
+		delete_element("item_"+identifier);
+		delete_element("item_"+identifier+"_hr");
 
 		<!-- hide 'delete' link -->
 		set_visibility("datacart-delete-"+identifier, false);
