@@ -113,8 +113,8 @@ class DocForm(ModelForm):
                                                       "It can only contain letters, numbers, spaces, and _ - . /"])
         if re.search(INVALID_CHARS_DESCRIP, description):
             self._errors['description'] = self.error_class(["Sorry, the document description contains invalid "
-                                                            "characters. It can only contain letters, numbers, spaces,"
-                                                            "and _ - . , /"])
+                                                            "characters. It can only contain letters, numbers, spaces, "
+                                                            "and _ - . / ,"])
         project = cleaned_data['project']
         if thefile.size > project.maxUploadSize:
             self._errors["file"] = self.error_class(["Sorry, the file size exceeds the maximum allowed."])
