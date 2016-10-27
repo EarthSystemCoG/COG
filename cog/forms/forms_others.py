@@ -67,7 +67,6 @@ class NewsForm(ModelForm):
     def clean_text(self):
         return xss_clean_field(self, 'text')
 
-
     class Meta:
         model = News
         fields = "__all__" 
@@ -116,8 +115,6 @@ class DocForm(ModelForm):
             self._errors['description'] = self.error_class(["Sorry, the document description contains invalid "
                                                             "characters. It can only contain letters, numbers, spaces,"
                                                             "and _ - . , /"])
-
-            
         project = cleaned_data['project']
         if thefile.size > project.maxUploadSize:
             self._errors["file"] = self.error_class(["Sorry, the file size exceeds the maximum allowed."])
@@ -125,7 +122,7 @@ class DocForm(ModelForm):
         # validate the file content
         # must write the file to a temporary location to validate it
         # choose to write to $SITE_MEDIA/tmp/file.name
-        if len(self._errors)==0:
+        if len(self._errors) == 0:
                        
             file_ext = str(os.path.splitext(thefile.name)[1])
             mime_type = magic.from_buffer(thefile.read(1024), mime=True)
@@ -135,7 +132,8 @@ class DocForm(ModelForm):
             elif file_ext.lower() not in VALID_MIME_TYPES.keys():
                 self._errors["file"] = self.error_class(["File extension %s is not supported." % file_ext])
             elif mime_type not in VALID_MIME_TYPES[file_ext.lower()]:
-                self._errors["file"] = self.error_class(["File extension %s does not match its valid mime type." % file_ext])
+                self._errors["file"] = self.error_class(["File extension %s does not match its valid mime type." %
+                                                         file_ext])
             
         return cleaned_data
 
