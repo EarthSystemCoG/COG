@@ -17,7 +17,11 @@ from cog.constants import VALID_MIME_TYPES
 from cog.utils import default_clean_field
 
 # list of invalid characters in uploaded documents file names
+# ^ at the beginning means the search will match the characters NOT in the set. \s is a space
 INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/\s]"
+
+# need to allow commas in descriptions but not in the title or file name
+INVALID_CHARS_DESCRIP = "[^a-zA-Z0-9_\,\-\.\/\s]"
 
 
 class NewsForm(ModelForm):
@@ -108,9 +112,10 @@ class DocForm(ModelForm):
         if re.search(INVALID_CHARS, title):
             self._errors['title'] = self.error_class(["Sorry, the document title contains invalid characters. "
                                                       "It can only contain letters, numbers, spaces, and _ - . /"])
-        if re.search(INVALID_CHARS, description):
-            self._errors['description'] = self.error_class(["Sorry, the document description contains invalid characters. "
-                                                            "It can only contain letters, numbers, spaces, and _ - . /"])
+        if re.search(INVALID_CHARS_DESCRIP, description):
+            self._errors['description'] = self.error_class(["Sorry, the document description contains invalid "
+                                                            "characters. It can only contain letters, numbers, spaces,"
+                                                            "and _ - . , /"])
 
             
         project = cleaned_data['project']
