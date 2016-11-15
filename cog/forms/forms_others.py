@@ -17,7 +17,11 @@ from cog.constants import VALID_MIME_TYPES
 from cog.utils import default_clean_field
 
 # list of invalid characters in uploaded documents file names
+# ^ at the beginning means the search will match the characters NOT in the set. \s is a space
 INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/\s]"
+
+# need to allow commas in descriptions but not in the title or file name
+INVALID_CHARS_DESCRIP = "[^a-zA-Z0-9_\,\-\.\/\s]"
 
 
 class NewsForm(ModelForm):
@@ -63,7 +67,6 @@ class NewsForm(ModelForm):
     def clean_text(self):
         return xss_clean_field(self, 'text')
 
-
     class Meta:
         model = News
         fields = "__all__" 
@@ -108,11 +111,10 @@ class DocForm(ModelForm):
         if re.search(INVALID_CHARS, title):
             self._errors['title'] = self.error_class(["Sorry, the document title contains invalid characters. "
                                                       "It can only contain letters, numbers, spaces, and _ - . /"])
-        if re.search(INVALID_CHARS, description):
-            self._errors['description'] = self.error_class(["Sorry, the document description contains invalid characters. "
-                                                            "It can only contain letters, numbers, spaces, and _ - . /"])
-
-            
+        if re.search(INVALID_CHARS_DESCRIP, description):
+            self._errors['description'] = self.error_class(["Sorry, the document description contains invalid "
+                                                            "characters. It can only contain letters, numbers, spaces, "
+                                                            "and _ - . / ,"])
         project = cleaned_data['project']
         if thefile.size > project.maxUploadSize:
             self._errors["file"] = self.error_class(["Sorry, the file size exceeds the maximum allowed."])
@@ -120,7 +122,7 @@ class DocForm(ModelForm):
         # validate the file content
         # must write the file to a temporary location to validate it
         # choose to write to $SITE_MEDIA/tmp/file.name
-        if len(self._errors)==0:
+        if len(self._errors) == 0:
                        
             file_ext = str(os.path.splitext(thefile.name)[1])
             mime_type = magic.from_buffer(thefile.read(1024), mime=True)
@@ -130,7 +132,8 @@ class DocForm(ModelForm):
             elif file_ext.lower() not in VALID_MIME_TYPES.keys():
                 self._errors["file"] = self.error_class(["File extension %s is not supported." % file_ext])
             elif mime_type not in VALID_MIME_TYPES[file_ext.lower()]:
-                self._errors["file"] = self.error_class(["File extension %s does not match its valid mime type." % file_ext])
+                self._errors["file"] = self.error_class(["File extension %s does not match its valid mime type." %
+                                                         file_ext])
             
         return cleaned_data
 
