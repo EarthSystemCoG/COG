@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -50,9 +50,9 @@ def doc_upload(request, project_short_name):
             error = 'The file uploaded is not an image. Valid files include PNG, JPG, and PDF.'
             url = "%s%s" % (settings.STATIC_URL, 'cog/img/error.jpeg')
     
-        return render_to_response('cog/doc/doc_upload.html', 
-                                  {'title': 'File Upload', 'url': url, 'error': error},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/doc/doc_upload.html', 
+                      {'title': 'File Upload', 'url': url, 'error': error})
 
 
 @login_required   
@@ -119,9 +119,9 @@ def doc_add(request, project_short_name):
 
 def doc_detail(request, doc_id):
     doc = get_object_or_404(Doc, pk=doc_id)
-    return render_to_response('cog/doc/doc_detail.html', 
-                              {'doc': doc, 'project': doc.project, 'title': doc.title},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/doc/doc_detail.html', 
+                  {'doc': doc, 'project': doc.project, 'title': doc.title})
 
 
 def doc_download(request, path):
@@ -290,16 +290,16 @@ def doc_list(request, project_short_name):
     results = Doc.objects.filter(qset).distinct().order_by(order_by)
     list_title = "Total Number of Matching Documents: %d" % len(results)
    
-    return render_to_response('cog/doc/doc_list.html', 
-                              {"object_list": paginate(results, request, max_counts_per_page=100),
-                               'project': project, 'title': '%s Files' % project.short_name,
-                               "query": query, "order_by": order_by, "filter_by": filter_by, "list_title":
-                                  list_title},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/doc/doc_list.html', 
+                  {"object_list": paginate(results, request, max_counts_per_page=100),
+                   'project': project, 'title': '%s Files' % project.short_name,
+                   "query": query, "order_by": order_by, "filter_by": filter_by, 
+                   "list_title":list_title})
 
 
 def render_doc_form(request, form, project):
     title = 'Upload %s File' % project.short_name
-    return render_to_response('cog/doc/doc_form.html', 
-                             {'form': form, 'project':project, 'title':title}, 
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/doc/doc_form.html', 
+                  {'form': form, 'project':project, 'title':title})

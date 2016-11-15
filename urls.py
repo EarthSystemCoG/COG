@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from django.contrib import admin
 import django.views.static, django.views.generic
 import cog.views

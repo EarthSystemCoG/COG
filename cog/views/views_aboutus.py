@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render_to_response, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -100,11 +100,11 @@ def aboutus_update(request, project_short_name, tab):
 
 
 def render_aboutus_form(request, project, tab, form):
-    return render_to_response('cog/project/aboutus_form.html',
-                              {'form': form, 'tab': tab,
-                               'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
-                               'project': project},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/project/aboutus_form.html',
+                   {'form': form, 'tab': tab,
+                    'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
+                    'project': project})
 
 
 @login_required
@@ -164,11 +164,11 @@ def impacts_update(request, project_short_name, tab):
 
 
 def render_impacts_form(request, project, formset, tab):
-    return render_to_response('cog/project/aboutus_form.html',
-                              {'formset': formset, 'tab': tab,
-                               'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
-                               'project': project},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/project/aboutus_form.html',
+                  {'formset': formset, 'tab': tab,
+                   'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
+                   'project': project})
 
 
 # function to customize the widget used by specific formset fields
@@ -323,8 +323,7 @@ def _imageformset_update(request, project, tab,
 
 def render_formset(template, request, project, tab, formset):
 
-    return render_to_response(template,
-                             {'formset': formset, 'tab':tab,
-                              'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
-                              'project': project },
-                              context_instance=RequestContext(request))
+    return render(request, template,
+                  {'formset': formset, 'tab':tab,
+                   'title': 'Update %s %s' % (project.short_name, TAB_LABELS[tab]),
+                   'project': project })

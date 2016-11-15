@@ -7,7 +7,7 @@ from constants import PERMISSION_DENIED_MESSAGE
 from django.contrib.auth.decorators import login_required
 from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.utils.functional import curry
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
@@ -200,9 +200,9 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
             
 
 def render_governance_object_form(request, project, formset, title, template):
-    return render_to_response(template,
-                              {'title': title, 'project': project, 'formset': formset},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  template,
+                  {'title': title, 'project': project, 'formset': formset})
 
 # view to update a Management Body object members
 @login_required
@@ -305,15 +305,12 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
 
 def render_members_form(request, object, formset, redirect):
         
-    return render_to_response('cog/governance/members_form.html',
-                              {'title': '%s Members Update' % object,
-                               'project': object.project,
-                               'formset': formset, 'redirect': redirect},
-                              context_instance=RequestContext(request))
-
-
-
-
+    return render(request,
+                  'cog/governance/members_form.html',
+                  {'title': '%s Members Update' % object,
+                   'project': object.project,
+                   'formset': formset, 'redirect': redirect})
+    
 
 @login_required
 def processes_update(request, project_short_name):
@@ -356,14 +353,14 @@ def processes_update(request, project_short_name):
             return render_governance_processes_form(request, form, project)
 
 def render_governance_processes_form(request, form, project):
-    return render_to_response('cog/governance/governance_processes_form.html',
-                              {'title': 'Governance Processes Update', 'project': project, 'form': form},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/governance/governance_processes_form.html',
+                  {'title': 'Governance Processes Update', 'project': project, 'form': form} )
     
 def render_governance_overview_form(request, form, project):
-    return render_to_response('cog/governance/governance_overview_form.html',
-                              {'title': 'Governance Overview Update', 'project': project, 'form': form},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/governance/governance_overview_form.html',
+                  {'title': 'Governance Overview Update', 'project': project, 'form': form})
 
 
 # Method to update an organizational role
@@ -416,6 +413,6 @@ def organizational_role_update(request, project_short_name):
 
 
 def render_organizational_role_form(request, project, formset):
-    return render_to_response('cog/governance/organizational_role_form.html',
-                              {'title': 'Organizational Roles Update', 'project': project, 'formset': formset},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/governance/organizational_role_form.html',
+                  {'title': 'Organizational Roles Update', 'project': project, 'formset': formset})

@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.core.urlresolvers import reverse
@@ -43,8 +43,9 @@ def datacart_display(request, site_id, user_id):
                 print site, size
                 dcs[openid][site] = size
         
-    return render_to_response('cog/datacart/datacart.html', {'datacart': datacart, 'datacarts': dcs},
-                              context_instance=RequestContext(request))    
+    return render(request,
+                  'cog/datacart/datacart.html', 
+                  {'datacart': datacart, 'datacarts': dcs})    
     
 
 # view to display a user datacart by openid

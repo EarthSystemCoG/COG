@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django_openid_auth.models import UserOpenID
 from django_openid_auth.views import login_complete
@@ -338,9 +338,8 @@ def user_detail(request, user_id):
     projects = sorted(projTuples, key=lambda x: x[0].short_name)
     groups = sorted(groupTuples, key=lambda x: x[0])
             
-    return render_to_response('cog/account/user_detail.html',
-                              {'user_profile': user_profile, 'projects': projects, 'groups':groups, 'title': 'User Profile'},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/user_detail.html',
+                  {'user_profile': user_profile, 'projects': projects, 'groups':groups, 'title': 'User Profile'})
 
 
 # view to redirect to the user profile on the local or remote node
@@ -423,9 +422,9 @@ def user_delete(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     
     if request.method == 'GET':
-        return render_to_response('cog/account/user_delete.html', 
-                                  {'user': user, 'title': 'Delete User'},
-                                  context_instance=RequestContext(request))
+        return render(request, 
+                      'cog/account/user_delete.html', 
+                      {'user': user, 'title': 'Delete User'} )
     else:
         
         # delete ESGF user and all related objects
@@ -800,30 +799,25 @@ def password_reset(request):
 
 
 def render_user_form(request, form, formset, title=''):
-    return render_to_response('cog/account/user_form.html',
-                              {'form': form, 'formset': formset, 'mytitle': title},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/user_form.html',
+                  {'form': form, 'formset': formset, 'mytitle': title})
 
 
 def render_password_change_form(request, form, username):
-    return render_to_response('cog/account/password_change.html',
-                              {'form': form, 'mytitle': 'Change Password for User: %s' % username},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/password_change.html',
+                  {'form': form, 'mytitle': 'Change Password for User: %s' % username})
 
 
 def render_password_reset_form(request, form, message=""):
-    return render_to_response('cog/account/password_reset.html',
-                              {'form': form, 'mytitle': 'Reset User Password', 'message': message},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/password_reset.html',
+                  {'form': form, 'mytitle': 'Reset User Password', 'message': message})
 
 
 def render_user_reminder_form(request, form, message=""):
-    return render_to_response('cog/account/user_reminder.html',
-                              {'form': form, 'mytitle': 'UserName and OpenID Reminder', 'message': message},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/user_reminder.html',
+                  {'form': form, 'mytitle': 'UserName and OpenID Reminder', 'message': message})
 
 
 def render_site_change_form(request, form):
-    return render_to_response('cog/account/site_change.html',
-                              {'form': form, 'mytitle' : 'Change User Home Node' },
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/site_change.html',
+                              {'form': form, 'mytitle' : 'Change User Home Node' })

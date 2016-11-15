@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 
 from cog.forms import *
@@ -57,10 +57,10 @@ def project_add(request):
         
         form = ProjectForm(instance=project)
 
-        return render_to_response('cog/project/project_form.html',
-                                  {'form': form, 'title': 'Register New Project', 'project': parent,
-                                   'action': 'add', 'tabs': tabs, 'folders': folders, },
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/project/project_form.html',
+                      {'form': form, 'title': 'Register New Project', 'project': parent,
+                       'action': 'add', 'tabs': tabs, 'folders': folders, })
         
     else:
         
@@ -89,9 +89,9 @@ def project_add(request):
             messages = ['Thank you for registering project: %s' % project.short_name,
                         'Your request will be reviewed by the node administrators as soon as possible,',
                         'and you will be notified of the outcome by email.']
-            return render_to_response('cog/common/message.html',
-                                      {'mytitle': 'New Project Confirmation', 'messages': messages},
-                                      context_instance=RequestContext(request))
+            return render(request,
+                          'cog/common/message.html',
+                          {'mytitle': 'New Project Confirmation', 'messages': messages})
                     
         # invalid data
         else:
@@ -107,10 +107,9 @@ def project_add(request):
             # rebuild list of unsaved project folders
             folders = _getUnsavedProjectSubFolders(project, request)
 
-            return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Register New Project', 'action': 'add', 'tabs': tabs,
-                                       'folders': folders},
-                                      context_instance=RequestContext(request))
+            return render(request,
+                          'cog/project/project_form.html', 
+                          {'form': form, 'title': 'Register New Project', 'action': 'add', 'tabs': tabs, 'folders': folders})
             
 # method to reorganize the project index menu
 @login_required
@@ -136,9 +135,10 @@ def project_index(request, project_short_name):
     # GET
     if request.method == 'GET':
         
-        return render_to_response('cog/project/index_form.html', 
-                                  {'index': index, 'title': 'Update Site Index', 'project': project, 'errors': errors},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/project/index_form.html', 
+                      {'index': index, 'title': 'Update Site Index', 'project': project, 'errors': errors})
+        
     # POST
     else:
         
@@ -200,10 +200,9 @@ def project_index(request, project_short_name):
 
         else:
             # return to form to fix validation errors
-            return render_to_response('cog/project/index_form.html', 
-                                      {'index': index, 'title': 'Update Site Index', 'project': project,
-                                       'errors': errors},
-                                      context_instance=RequestContext(request))
+            return render(request,
+                          'cog/project/index_form.html', 
+                          {'index': index, 'title': 'Update Site Index', 'project': project, 'errors': errors})
 
 
 # method to update an existing project
@@ -232,10 +231,10 @@ def project_update(request, project_short_name):
         
         # create form object from model
         form = ProjectForm(instance=project)
-        return render_to_response('cog/project/project_form.html', 
-                                  {'form': form, 'title': 'Update Project', 'project': project, 'action': 'update',
-                                   'tabs': tabs, 'folders': folders, 'NAVMAP': NAVMAP, 'INVNAVMAP': INVNAVMAP},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/project/project_form.html', 
+                      {'form': form, 'title': 'Update Project', 'project': project, 'action': 'update',
+                       'tabs': tabs, 'folders': folders, 'NAVMAP': NAVMAP, 'INVNAVMAP': INVNAVMAP})
     
     else:
         
@@ -282,11 +281,11 @@ def project_update(request, project_short_name):
                 
             folders = getTopSubFolders(project)
             
-            return render_to_response('cog/project/project_form.html', 
-                                      {'form': form, 'title': 'Update Project', 'project': project, 'action': 'update',
-                                       'tabs': tabs, "folders": folders,
-                                       'NAVMAP': NAVMAP, 'INVNAVMAP': INVNAVMAP},
-                                      context_instance=RequestContext(request))
+            return render(request,
+                          'cog/project/project_form.html', 
+                          {'form': form, 'title': 'Update Project', 'project': project, 'action': 'update',
+                           'tabs': tabs, "folders": folders,
+                           'NAVMAP': NAVMAP, 'INVNAVMAP': INVNAVMAP})
             
 # method to update an existing project
 
@@ -305,9 +304,10 @@ def project_delete(request, project_short_name):
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     if request.method == 'GET':
-        return render_to_response('cog/project/project_delete.html', 
-                                  {'project': project, 'title': 'Delete Project'},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/project/project_delete.html', 
+                      {'project': project, 'title': 'Delete Project'})
+        
     else:
         
         # delete all project objects
@@ -376,9 +376,9 @@ def contactus_update(request, project_short_name):
 
 
 def render_contactus_form(request, project, form):
-    return render_to_response('cog/project/contactus_form.html', 
-                              {'form': form, 'title': 'Update Project Contact Us', 'project': project},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/project/contactus_form.html', 
+                  {'form': form, 'title': 'Update Project Contact Us', 'project': project})
     
 
 # function to notify the node administrators that a new project has been requested
@@ -824,11 +824,11 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
 
 def render_tags_form(request, project, form):
     
-    return render_to_response('cog/project/project_tags_form.html', 
-                              {'form': form,
-                               'title': 'Update Tags for Project: %s' % project.short_name,
-                               'project': project},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/project/project_tags_form.html', 
+                  {'form': form,
+                   'title': 'Update Tags for Project: %s' % project.short_name,
+                   'project': project})
 
 
 @login_required
@@ -912,9 +912,9 @@ def _project_page_update(request, project_short_name,
         form = formClass(instance=project)
 
         # render form    
-        return render_to_response(form_template,
-                                  {'title': form_template_title, 'project': project, 'form': form},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      form_template,
+                      {'title': form_template_title, 'project': project, 'form': form})
     
     # POST request
     else:
@@ -934,15 +934,15 @@ def _project_page_update(request, project_short_name,
         # return to form
         else:
             print 'Form is invalid %s' % form.errors
-            return render_to_response(form_template,
-                                      {'title': form_template_title, 'project': project, 'form': form},
-                                      context_instance=RequestContext(request))
+            return render(request,
+                          form_template,
+                          {'title': form_template_title, 'project': project, 'form': form})
 
         
 def render_development_form(request, project, form):
-    return render_to_response('cog/project/development_form.html',
-                              {'title': 'Development Overview Update', 'project': project, 'form': form},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/project/development_form.html',
+                  {'title': 'Development Overview Update', 'project': project, 'form': form})
 
 
 def _getUnsavedProjectSubFolders(project, request):

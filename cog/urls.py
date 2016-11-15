@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 import cog.views
 import django_openid_auth.views
 import django.contrib.auth.views

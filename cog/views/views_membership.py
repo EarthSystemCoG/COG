@@ -1,7 +1,7 @@
 from cog.models import *
 from cog.services.membership import *
 from django.contrib.auth.models import User, Group, Permission
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -33,8 +33,8 @@ def membership_request(request, project_short_name):
     # display submission form
     if request.method == 'GET':
         
-        return render_to_response(template, {'project': project, 'title': title},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      template, {'project': project, 'title': title})
         
     # process submission form
     else:
@@ -52,9 +52,9 @@ def membership_request(request, project_short_name):
         if status == RESULT_SUCCESS:
             notifyAdminsOfMembershipRequest(project, user, request)
                 
-        return render_to_response(template, 
-                                  {'project': project, 'group': group, 'user': user, 'status': status, 'title': title},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      template, 
+                      {'project': project, 'group': group, 'user': user, 'status': status, 'title': title})
     
 
 # View to list the project memberships for all system users
@@ -146,13 +146,14 @@ def render_membership_page(request, project, users, title, view_name):
     # load project groups
     groups = project.getGroups()
         
-    return render_to_response('cog/membership/membership_list.html', 
-                              {'project': project, 
-                               'users': paginate(users, request, max_counts_per_page=50),
-                               'groups': groups,
-                               'view_name': view_name,
-                               'title': title, 'list_title': '%s Membership' % project.short_name},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/membership/membership_list.html', 
+                  {'project': project, 
+                   'users': paginate(users, request, max_counts_per_page=50),
+                   'groups': groups,
+                   'view_name': view_name,
+                   'title': title, 
+                   'list_title': '%s Membership' % project.short_name})
 
 
 # view to cancel membership in a project...initiated by the user from their profile page
@@ -175,8 +176,9 @@ def membership_remove(request, project_short_name):
     if request.method == 'GET':
         
         title = 'Cancel %s Membership Request' % project.short_name
-        return render_to_response(template, {'project': project, 'title': title},
-                                  context_instance=RequestContext(request))
+        return render(request, 
+                      template, 
+                      {'project': project, 'title': title})
         
     # process submission form
     else:
@@ -197,8 +199,7 @@ def membership_remove(request, project_short_name):
         
         # redirect to confirmation page
         #title = 'Cancel %s Membership Confirmation' % project.short_name
-        #return render_to_response(template, {'project':project,'title': title },
-        # context_instance=RequestContext(request))
+        #return rendere(request, template, {'project':project,'title': title })
         # redirect to user profile (on proper node)
         return HttpResponseRedirect(reverse('user_profile_redirect', kwargs={'user_id': request.user.id}))
     

@@ -10,7 +10,7 @@ from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest, HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from sqlalchemy.orm.exc import NoResultFound
@@ -71,10 +71,9 @@ def ac_subscribe(request, group_name):
             except TemplateDoesNotExist:
                 pass
         
-        return render_to_response(template, 
-                                  {'title': title, 'group_name': group_name, 'status': status,
-                                   'licenseTxt': licenseTxt, 'licenseHtml': licenseHtml},
-                                  context_instance=RequestContext(request))
+        return render(request, template, 
+                      {'title': title, 'group_name': group_name, 'status': status,
+                       'licenseTxt': licenseTxt, 'licenseHtml': licenseHtml})
         
     # process submission form
     else:
@@ -120,9 +119,8 @@ def ac_process(request, group_name, user_id):
         
         form = PermissionForm(initial=initial)
         
-        return render_to_response(template, 
-                                  {'group_name': group_name, 'title': title, 'user': user, 'form': form},
-                                  context_instance=RequestContext(request))
+        return render(request, template, 
+                      {'group_name': group_name, 'title': title, 'user': user, 'form': form})
     
     # process admin form
     else:
@@ -153,9 +151,8 @@ def ac_process(request, group_name, user_id):
             
         else:
             print "Form is invalid: %s" % form.errors
-            return render_to_response(template, 
-                                      {'group_name': group_name, 'title': title, 'user': user, 'form': form},
-                                      context_instance=RequestContext(request))
+            return render(request, template, 
+                          {'group_name': group_name, 'title': title, 'user': user, 'form': form})
 
 
 def ac_list(request):
@@ -189,9 +186,8 @@ def ac_list(request):
     if 'wheel' in _groups:
         del _groups['wheel']
     
-    return render_to_response('cog/access_control/list.html', 
-                              {'groups': _groups, 'title': 'ESGF Data Access Control Groups'},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/access_control/list.html', 
+                  {'groups': _groups, 'title': 'ESGF Data Access Control Groups'} )
     
 
 def notifyAdmins(group_name, user_id, incomingRequest):

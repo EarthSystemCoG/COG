@@ -20,7 +20,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.http.response import HttpResponseServerError
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.template.exceptions import TemplateDoesNotExist
 from django.views.decorators.http import require_http_methods
@@ -83,9 +83,9 @@ def search(request, project_short_name):
     else:
         messages = ['Searching is not enabled for this project.',
                     'Please contact the project administrators for further assistance.']
-        return render_to_response('cog/common/message.html', {'project': project, 'messages': messages,
-                                                              'title2': 'Data Search'},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/common/message.html', 
+                      {'project': project, 'messages': messages, 'title2': 'Data Search'})
 
 def _addConfigConstraints(searchInput, searchConfig):
     '''Returns a COPY of the search input object with added project fixed constraints.'''
@@ -268,7 +268,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
         del data[TEMPLATE] # remove temp,ate from session
 
     try:
-        return render_to_response(template, data, context_instance=RequestContext(request))   
+        return render(request, template, data)   
      
     except TemplateDoesNotExist:
         
@@ -409,10 +409,10 @@ def metadata_display(request, project_short_name):
         jsondoc = json.loads(response)
         parentMetadata = _processDoc(jsondoc["response"]["docs"][0])
     
-    return render_to_response('cog/search/metadata_display.html', 
-                              {'title': metadata.title, 'project': project, 'metadata': metadata,
-                               'parentMetadata': parentMetadata, 'back': back},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/metadata_display.html', 
+                  {'title': metadata.title, 'project': project, 'metadata': metadata,
+                   'parentMetadata': parentMetadata, 'back': back})
 
 
 class MetaDoc:
@@ -865,10 +865,10 @@ def search_reload(request):
         return HttpResponseRedirect(request.session[LAST_SEARCH_URL])  # just like after the last POST
         
     else:
-        return render_to_response('cog/common/message.html', 
-                                  {'mytitle': 'An Error Occurred',
-                                   'messages': ['Your last search page could not be found.']},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/common/message.html', 
+                      {'mytitle': 'An Error Occurred',
+                       'messages': ['Your last search page could not be found.']})
 
 def _get_search_groups(project):
     '''
@@ -902,12 +902,12 @@ def search_profile_order(request, project_short_name):
     # GET
     if request.method == 'GET':
         
-        return render_to_response('cog/search/search_order_form.html', 
-                                  {'project': project, 
-                                   'groups': groups,
-                                   'title': 'Order Search Facets and Groups', 
-                                   'errors':{} }, 
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/search/search_order_form.html',
+                      {'project': project, 
+                       'groups': groups,
+                       'title': 'Order Search Facets and Groups',
+                       'errors':{} })
 
     # POST
     else:
@@ -956,28 +956,28 @@ def search_profile_order(request, project_short_name):
 
         else:
             # return to form to fix validation errors
-            return render_to_response('cog/search/search_order_form.html', 
-                                      {'project': project, 
-                                       'groups': groups,
-                                       'title': 'Order Search Facets and Groups', 
-                                       'errors':errors }, 
-                                       context_instance=RequestContext(request))
+            return render(request,
+                          'cog/search/search_order_form.html', 
+                          {'project': project, 
+                           'groups': groups,
+                           'title': 'Order Search Facets and Groups', 
+                           'errors':errors })
             
 def render_search_profile_form(request, project, form, search_groups):
-    return render_to_response('cog/search/search_profile_form.html', 
-                              {'project': project, 
-                               'form': form, 
-                               'search_groups':search_groups,
-                               'title': 'Project Search Configuration'},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/search_profile_form.html', 
+                  {'project': project, 
+                   'form': form, 
+                   'search_groups':search_groups,
+                   'title': 'Project Search Configuration'})
     
 
 def render_search_facet_form(request, project, form, facets):
-    return render_to_response('cog/search/search_facet_form.html', 
-                              {'project': project, 'form': form, 'title': 'Search Facet Configuration',
-                               'facets': facets}, context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/search_facet_form.html', 
+                  {'project': project, 'form': form, 'title': 'Search Facet Configuration', 'facets': facets})
 
 def render_search_group_form(request, project, form):
-    return render_to_response('cog/search/search_group_form.html', 
-                              {'project': project, 'form': form, 'title': 'Search Facet Group'}, 
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/search_group_form.html', 
+                  {'project': project, 'form': form, 'title': 'Search Facet Group'})

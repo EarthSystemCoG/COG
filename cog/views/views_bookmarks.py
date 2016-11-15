@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from cog.models import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
@@ -58,16 +58,15 @@ def bookmark_list(request, project_short_name):
 
     # change render template to 'cog/common/rollup_tabbed.html' to turn on tabbed rollups.
 
-    return render_to_response('cog/common/rollup_accordion.html',
-                              {'project': project,
-                               'title': '%s %s' % (project.short_name, template_title),
-                               # 'title': template_title,
-                               'template_page': template_page,
-                               'template_title': template_title,
-                               'template_form_name': template_form_name,
-                               'children': children,
-                               'peers': peers},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/common/rollup_accordion.html',
+                   {'project': project,
+                    'title': '%s %s' % (project.short_name, template_title),
+                    'template_page': template_page,
+                    'template_title': template_title,
+                    'template_form_name': template_form_name,
+                    'children': children,
+                    'peers': peers})
 
     
 # View to add a bookmark via a standard web form
@@ -341,15 +340,15 @@ def delete_folder(folder):
 
 
 def render_folder_form(request, project, form):
-    return render_to_response('cog/bookmarks/folder_form.html',
-                              {'project': project, 'form': form, 'title': 'Resource Folder Form'},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/bookmarks/folder_form.html',
+                   {'project': project, 'form': form, 'title': 'Resource Folder Form'})
 
 
 def render_bookmark_form(request, project, form):
-    return render_to_response('cog/bookmarks/bookmark_form.html', 
-                              {'project': project, 'form': form, 'title': 'Resource Form'},
-                              context_instance=RequestContext(request))     
+    return render(request,
+                  'cog/bookmarks/bookmark_form.html', 
+                  {'project': project, 'form': form, 'title': 'Resource Form'})     
     
 
 @login_required

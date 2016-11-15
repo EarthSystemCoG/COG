@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 import urllib
 from cog.utils import getJson
@@ -186,9 +186,9 @@ def transfer(request):
 		download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 
 		# display the same page as resulting from data cart invocation
-		return render_to_response('cog/globus/transfer.html', 
-	    						  { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' },
-	    						  context_instance=RequestContext(request))	
+		return render(request,
+                      'cog/globus/transfer.html', 
+	    			  { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' })	
 		
 	else:
 						
@@ -270,9 +270,9 @@ def submit(request):
 	for source_endpoint, source_files in download_map.items():
 		status, message = activateEndpoint(api_client, source_endpoint, openid, password)
 		if not status:
-			return render_to_response('cog/globus/password.html',
-				{ 'openid': openid, 'message': message },
-				context_instance=RequestContext(request))
+			return render(request,
+                          'cog/globus/password.html',
+                          { 'openid': openid, 'message': message })
 
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = []  # list of submitted task ids
@@ -283,9 +283,9 @@ def submit(request):
 		task_ids.append(task_id)
 	
 	# display confirmation page
-	return render_to_response('cog/globus/confirmation.html',
-						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
-						        context_instance=RequestContext(request))	
+	return render(request,
+                  'cog/globus/confirmation.html',
+				  { 'task_ids':task_ids, 'title':'Globus Download Confirmation' })	
 
 
 @requires_globus

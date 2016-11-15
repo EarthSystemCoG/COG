@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.db.models import Q
 from django.template import RequestContext
 from django.contrib.auth.models import User
@@ -46,11 +46,11 @@ def getKnownIdentityProviders():
 def getProjectNotActiveRedirect(request, project):
         messages = ['Access to all pages of project %s is currently forbidden.' % project.short_name,
                     'Please contact <a href="/projects/cog/contactus/">support</a> with any questions.']
-        return render_to_response('cog/common/message.html', 
-                                  {'mytitle': 'Project Access Not Enabled',
-                                   'project': project,
-                                   'messages': messages},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/common/message.html', 
+                      {'mytitle': 'Project Access Not Enabled',
+                       'project': project,
+                       'messages': messages})
 
 
 # function to return an error message if a project is not public
@@ -58,11 +58,11 @@ def getProjectNotVisibleRedirect(request, project):
 
         messages = ['Access to all pages of project %s is restricted to members only.' % project.short_name,
                     'Please contact <a href="/projects/cog/contactus/">support</a> with any questions.']
-        return render_to_response('cog/common/message.html', 
-                                  {'mytitle': 'Project Access Restricted',
-                                   'project': project,
-                                   'messages': messages},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/common/message.html', 
+                       {'mytitle': 'Project Access Restricted',
+                        'project': project,
+                        'messages': messages})
 
 
 def set_openid_cookie(response, openid):

@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -15,22 +15,22 @@ def news_list(request, project_short_name):
     
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
        
-    return render_to_response('cog/news/news_list.html', 
-                              {'project': project, 
-                               'title': '%s News' % project.short_name,
-                               'project_news': paginate(project_news(project), request, max_counts_per_page=10)},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/news/news_list.html', 
+                  {'project': project, 
+                   'title': '%s News' % project.short_name,
+                   'project_news': paginate(project_news(project), request, max_counts_per_page=10)})
  
 
 def news_detail(request, news_id):
     
     news = get_object_or_404(News, pk=news_id)
     
-    return render_to_response('cog/news/news_detail.html', 
-                              {'project': news.project, 
-                               'news': news,
-                               'title': news.title},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/news/news_detail.html', 
+                  {'project': news.project, 
+                   'news': news,
+                   'title': news.title})
 
 
 @login_required
@@ -147,11 +147,11 @@ def news_delete(request, news_id):
     
     # show confirmation form
     if request.method == 'GET':
-        return render_to_response('cog/news/news_delete.html', 
-                                  {'news': news,
-                                   'project': project,
-                                   'title': 'Delete News'},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/news/news_delete.html', 
+                      {'news': news,
+                       'project': project,
+                       'title': 'Delete News'})
         
     # execute, and redirect to project's home page
     else:
@@ -175,9 +175,8 @@ def get_other_projects(qdict, method):
 
 def render_news_form(request, qdict, form, project):
  
-    return render_to_response('cog/news/news_form.html', 
-                              {'form': form, 'title': 
-                               'Publish %s News' % project.short_name,
-                               'project': project,
-                               'other_projects' : get_other_projects(qdict, request.method) }, 
-                              context_instance=RequestContext(request))
+    return render('cog/news/news_form.html', 
+                  {'form': form, 'title': 
+                   'Publish %s News' % project.short_name,
+                   'project': project,
+                   'other_projects' : get_other_projects(qdict, request.method) })
