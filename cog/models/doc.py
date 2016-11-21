@@ -16,7 +16,9 @@ class OverridingFileStorage(FileSystemStorage):
     """Subclass of FileSystemStorage that overrides existing files (in the same folder)."""
 
     # This method is actually defined in Storage
-    def save(self, name, content):
+    # note: max_length=None required as of Django 1.10:
+    # see https://docs.djangoproject.com/en/1.10/releases/1.8/#support-for-the-max-length-argument-on-custom-storage-classes
+    def save(self, name, content, max_length=None): 
         # must delete current file first  
         if self.exists(name):
             print 'Deleting existing file=%s' % name
