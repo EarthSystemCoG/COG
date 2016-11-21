@@ -175,7 +175,8 @@ def get_other_projects(qdict, method):
 
 def render_news_form(request, qdict, form, project):
  
-    return render('cog/news/news_form.html', 
+    return render(request,
+                  'cog/news/news_form.html', 
                   {'form': form, 'title': 
                    'Publish %s News' % project.short_name,
                    'project': project,
