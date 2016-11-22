@@ -165,7 +165,7 @@ class CogConfig(object):
         self._safeSet('PWD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
         idpPeer = self._safeGet("esgf.idp.peer", default=None)
-        if hostName != idpPeer:
+        if hostName != idpPeer and idpPeer is not None:
             self._safeSet('IDP_REDIRECT', 'https://%s' % idpPeer) # redirect to specified "esgf.idp.peer"
         else:
             self._safeSet('IDP_REDIRECT','') # no redirect by default
