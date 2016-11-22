@@ -204,36 +204,18 @@ def render_governance_object_form(request, project, formset, title, template):
                   template,
                   {'title': title, 'project': project, 'formset': formset})
 
-# view to update a Management Body object members
-@login_required
-def management_body_members(request, project_short_name, object_id):
-    
-    # retrieve object
-    managementBody = get_object_or_404(ManagementBody, pk=object_id)
-    
-    # create form class with current project
-    managementBodyMemberForm = staticmethod(curry(ManagementBodyMemberForm, project=managementBody.project))
-    
-    # delegate to generic view with specific object types
-    tab = TABS["BODIES"]
-    redirect = reverse('governance_display', args=[managementBody.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm,
-                          redirect)
-
-
 # view to update a Communication Means object members  
 @login_required
 def communication_means_members(request, object_id):
     
     commnicationMeans = get_object_or_404(CommunicationMeans, pk=object_id)
     # create form class with current project
-    communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
+    #communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
     
     # delegate to generic view with specific object types
     tab = TABS["COMMUNICATION"]
     redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember,
-                          communicationMeansMemberForm, redirect)
+    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, CommunicationMeansMemberForm, redirect)
 
 
 # view to update an Organizational Role object members  
@@ -243,15 +225,26 @@ def organizational_role_members(request, object_id):
     organizationalRole = get_object_or_404(OrganizationalRole, pk=object_id)
 
     # create form class with current project
-    organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
+    #organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
     
     # delegate to generic view with specific object types
     tab = TABS["ROLES"]
     redirect = reverse('governance_display', args=[organizationalRole.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember,
-                          organizationalRoleMemberForm, redirect)
+    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, OrganizationalRoleMemberForm, redirect)
 
 
+# view to update a Management Body object members
+@login_required
+def management_body_members(request, project_short_name, object_id):
+    
+    # retrieve object
+    managementBody = get_object_or_404(ManagementBody, pk=object_id)
+        
+    # delegate to generic view with specific object types
+    tab = TABS["BODIES"]
+    redirect = reverse('governance_display', args=[managementBody.project.short_name.lower(), tab])
+    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, ManagementBodyMemberForm, redirect)
+    
 # 
 # Generic view to update members for:
 # -) objectType=CommunicationMeans, objectMemberType=CommunicationMeansMember
@@ -261,7 +254,7 @@ def organizational_role_members(request, object_id):
 # obj.project
 # obj.__unicode__
 #
-def members_update(request, tab, objectId, objectType, objectMemberType, objectForm, redirect):
+def members_update(request, tab, objectId, objectType, objectMemberType, objectMemberForm, redirect):
     
     # retrieve governance object
     obj = get_object_or_404(objectType, pk=objectId)
@@ -271,15 +264,16 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # formset factory
-    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, extra=3, fields="__all__")
-    # set the formset form to custom class that includes the current project
-    ObjectFormSet.form = objectForm
+    users_queryset = projectUsersQuerySet(obj.project)
+    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, form=objectMemberForm, extra=3, fields="__all__")
 
     # GET request
     if request.method == 'GET':
         
         # retrieve current members
         formset = ObjectFormSet(instance=obj)
+        for form in formset.forms:
+            form.fields['user'].queryset = users_queryset
         
         # render view
         return render_members_form(request, obj, formset, redirect)

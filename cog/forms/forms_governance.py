@@ -109,12 +109,7 @@ class CommunicationMeansMemberForm(ModelForm):
 
     # override __init__ method to filter users by project
     def __init__(self, *args, **kwargs):
-
-        project = kwargs.pop('project')
         super(CommunicationMeansMemberForm, self).__init__(*args, **kwargs)
-
-        # filter communications members by project
-        self.fields['user'].queryset = projectUsersQuerySet(project)
 
 
 
@@ -124,14 +119,8 @@ class ManagementBodyMemberForm(ModelForm):
         model = ManagementBodyMember
         fields = "__all__" 
 
-    # override __init__ method to filter users by project
     def __init__(self, *args, **kwargs):
-
-        project = kwargs.pop('project')
         super(ManagementBodyMemberForm, self).__init__(*args, **kwargs)
-
-        # filter mgt body members by project
-        self.fields['user'].queryset = projectUsersQuerySet(project)
 
 
 class OrganizationalRoleMemberForm(ModelForm):
@@ -140,14 +129,8 @@ class OrganizationalRoleMemberForm(ModelForm):
         model = OrganizationalRoleMember
         fields = "__all__" 
 
-    # override __init__ method to filter users by project
     def __init__(self, *args, **kwargs):
-
-        project = kwargs.pop('project')
         super(OrganizationalRoleMemberForm, self).__init__(*args, **kwargs)
-
-        # filter roles by project
-        self.fields['user'].queryset = projectUsersQuerySet(project)
 
 
 # function to build a queryset that selects users of the given project
