@@ -21,4 +21,5 @@ for post in Post.objects.all():
     if BAD_LINK in post.body:
         print "Found bad link at URL: %s" % post.url
         post.body = post.body.replace(BAD_LINK, GOOD_LINK)
-        #post.save()
+        post.save()
+        
