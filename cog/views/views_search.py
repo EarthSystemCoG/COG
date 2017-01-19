@@ -138,10 +138,13 @@ def _buildSearchInputFromHttpRequest(request, searchConfig):
         searchInput.limit = int(queryDict['limit'])
         
     # max_version, min_version
+    # NOTE: implies search on All Versions ( searchInput.latest = False )
     if queryDict.get('max_version', ''):
         searchInput.max_version = queryDict['max_version'].strip()
+        searchInput.latest = False
     if queryDict.get('min_version', ''):
         searchInput.min_version = queryDict['min_version'].strip()
+        searchInput.latest = False
 
 
     return searchInput
