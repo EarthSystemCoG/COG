@@ -71,9 +71,18 @@
 		<!--  all other services -->
 		{% else %}
 			&nbsp; [ <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> ]
-	
 	    {% endif %}
 	
+	{% endfor %}
+	
+	<!-- Quality Control Flags -->
+	{% for qcflag, qcdict in record|qcflags %}
+		&nbsp;
+		<span class="input-color">[
+		{% for key, value in qcdict.items %}
+			<div class="color-box" style="background-color: {{ value }};"></div>
+		{% endfor %}
+		]</span> 
 	{% endfor %}
 	
 	<!-- display ES-DOC viewer link (CMIP5 datasets only for now) -->

@@ -3,6 +3,7 @@ from cog.models.search import searchMappings
 from cog.site_manager import siteManager
 from string import replace
 import json
+from collections import OrderedDict
 if siteManager.isGlobusEnabled():    
     from cog.views.views_globus import GLOBUS_ENDPOINTS
 
@@ -152,6 +153,40 @@ def recordUrls(record):
 											  'GridFTP') )
             
     return sorted(urls, key = lambda url: url_order(url[1]))
+
+@register.filter
+def qcflags(record):
+    '''
+    Parses the record QC flags metadata into a dictionary indexed by the QC flag type.
+    Input:
+     "quality_control_flags": [
+          "obs4mips_indicators:1:yellow",
+          "obs4mips_indicators:2:red"
+        ],
+    Output:
+        {'obs4mips_indicators': OrderedDict([(1, 'yellow'), (2, 'red')])}
+    '''
+    
+    qcflags = {}
+    if record.fields.get('quality_control_flags', None):
+        for qcflag in record.fields['quality_control_flags']:
+            # break up the list item into different parts
+            # qcflag="obs4mips_indicators:1:yellow"
+            (qcflag_name, qcflag_order, qcflag_value) = qcflag.split(':')
+            try:
+                qcflags[qcflag_name]
+            except KeyError:
+                qcflags[qcflag_name] = {}
+            qcflags[qcflag_name][int(qcflag_order)] = qcflag_value
+    # for each qcflag, sort dictionary of values by their key (i.e. by the QC flag value order)
+    for key in qcflags:
+        qcflags[key] = OrderedDict(sorted(qcflags[key].items(), key=lambda t: t[0]))
+        for k, v in qcflags[key].items():
+            print k, v
+            
+    # note: to enable easy access in html template, return the sorted set of (key, value) pairs
+    # where the value is itself an ordered dictionary
+    return sorted( qcflags.items() )
 
 @register.filter
 def sortResults(results, fieldName):
