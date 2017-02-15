@@ -4,6 +4,7 @@ from cog.site_manager import siteManager
 from string import replace
 import json
 from collections import OrderedDict
+from django.conf import settings
 if siteManager.isGlobusEnabled():    
     from cog.views.views_globus import GLOBUS_ENDPOINTS
 
@@ -181,12 +182,20 @@ def qcflags(record):
     # for each qcflag, sort dictionary of values by their key (i.e. by the QC flag value order)
     for key in qcflags:
         qcflags[key] = OrderedDict(sorted(qcflags[key].items(), key=lambda t: t[0]))
-        for k, v in qcflags[key].items():
-            print k, v
             
     # note: to enable easy access in html template, return the sorted set of (key, value) pairs
     # where the value is itself an ordered dictionary
     return sorted( qcflags.items() )
+
+@register.filter
+def qcflag_url(qcflag_name):
+    """
+    Returns the reference URL for a given quality control flag
+    :param key:
+    :return:
+    """
+    qcflag_urls = getattr(settings,'QCFLAGS_URLS', {})
+    return qcflag_urls.get(qcflag_name, '') # return empty link by default
 
 @register.filter
 def sortResults(results, fieldName):

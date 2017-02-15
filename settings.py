@@ -312,3 +312,7 @@ CAPTCHA_BACKGROUND_COLOR = '#FAC24A' # matches CoG dark yellow
 #CAPTCHA_FOREGROUND_COLOR = "#666666" # matches CoG dark gray
 CAPTCHA_IMAGE_SIZE = (100, 40)
 #CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+
+#==== Quality Control Flags references ==================================
+
+QCFLAGS_URLS = { 'obs4mips_indicators': 'https://www.earthsystemcog.org/projects/obs4mips/' }
