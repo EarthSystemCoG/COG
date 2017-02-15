@@ -54,7 +54,7 @@ def establishFlow(request):
 	return oauth_client.OAuth2WebServerFlow(
 		client_id = client_id,
 		authorization_header = auth_header,
-		scope = 'urn:globus:auth:scope:transfer.api.globus.org:all',
+		scope = ['openid', 'profile', 'urn:globus:auth:scope:transfer.api.globus.org:all'],
 		redirect_uri = request.build_absolute_uri(reverse("globus_token")).replace('http:','https:'),
 		auth_uri = GLOBUS_AUTH_URL + '/v2/oauth2/authorize',
 		token_uri = GLOBUS_AUTH_URL + '/v2/oauth2/token')
@@ -234,7 +234,12 @@ def token(request):
 
 	globus_credentials = establishFlow(request).step2_exchange(globus_auth_code)
 	id_token = globus_credentials.id_token
-	access_token = globus_credentials.access_token
+	access_token = None
+	other_tokens = globus_credentials.token_response['other_tokens']
+	for token in other_tokens:
+		if token['scope'] == 'urn:globus:auth:scope:transfer.api.globus.org:all':
+			access_token = token['access_token']
+			break
 	#print 'id_token: %s, access_token: %s' % (id_token, access_token)
 
 	# store token into session
