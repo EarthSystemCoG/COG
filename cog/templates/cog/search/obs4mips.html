@@ -18,6 +18,7 @@
 				 <th><strong>Dataset Name</strong></th>
 				 <th><strong>Variables</strong></th>
 				 <th><strong>Tech Note</strong></th>
+				 <th><strong>Maturity Indicators</strong></th>
 			 </tr>
 
              <tbody>
@@ -36,6 +37,18 @@
           						     <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a>
           					     {% endif %}
           				     {% endfor %}
+          			     </td>
+          			     <td>
+          			     	<!-- Quality Control Flags -->
+							{% for qcflag, qcdict in record|qcflags %}
+								<a href='{{ qcflag|qcflag_url }}'>
+									<span class="input-color">[
+									{% for key, value in qcdict.items %}
+										<div class="color-box" style="background-color: {{ value }};"></div>
+									{% endfor %}
+									]</span> 
+								</a>
+							{% endfor %}
           			     </td>
      			     </tr>
                  {% endfor %}
