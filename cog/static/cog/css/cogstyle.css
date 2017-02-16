@@ -838,7 +838,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 /* the box around the entire menu */
 .vertical_menu {
-    border:        10px solid #cccccc;
+    border:        1px solid #cccccc;
 	border-top:    0;
 	margin-bottom: 10px;
 	margin-top:    0;
