@@ -321,10 +321,12 @@ def datacart_pid(request, site_id, user_id):
         raise Exception("User not authorized to modify datacart")
 
     pid_messaging_service_credentials = []
+    priority = 1
     for cred in settings.PID_CREDENTIALS:
-        parts = cred.split(',')
+        parts = cred.split('|')
         if len(parts) == 3:
-            pid_messaging_service_credentials.append({'url': parts[0], 'user': parts[1], 'password': parts[2]})
+            pid_messaging_service_credentials.append({'url': parts[0].strip(), 'user': parts[1].strip(), 'password': parts[2].strip(), 'priority': priority})
+            priority += 1
 
     # get list of dataset_pids and dataset_ids
     try:
