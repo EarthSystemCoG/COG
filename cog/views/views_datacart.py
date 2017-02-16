@@ -12,7 +12,12 @@ from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 from django.core.exceptions import ObjectDoesNotExist
 from django_openid_auth.models import UserOpenID
 from cog.views.utils import getQueryDict
+from cog.site_manager import siteManager
 
+try:
+    import esgfpid
+except ImportError:
+    pass
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
@@ -300,3 +305,53 @@ def datacart_empty(request, site_id, user_id):
     DataCartItem.objects.filter(cart=datacart).delete()
     
     return HttpResponseRedirect(reverse('datacart_display', args=[site_id, user_id]))
+
+
+# view to generate a collection PID for the selected items in the data cart
+@login_required
+@require_POST
+@csrf_exempt
+def datacart_pid(request, site_id, user_id):
+
+    # check User object
+    user = get_object_or_404(User, pk=user_id)
+
+    # security check
+    if not request.user.id != user_id:
+        raise Exception("User not authorized to modify datacart")
+
+    pid_messaging_service_credentials = []
+    for cred in settings.PID_CREDENTIALS:
+        parts = cred.split(',')
+        if len(parts) == 3:
+            pid_messaging_service_credentials.append({'url': parts[0], 'user': parts[1], 'password': parts[2]})
+
+    # get list of dataset_pids and dataset_ids
+    try:
+        datacart = DataCart.objects.get(user=user)
+    except DataCart.DoesNotExist:
+        datacart = None
+
+    queryDict = getQueryDict(request)
+    ids = queryDict.getlist('id')
+
+    dataset_ids = {}
+    if datacart:
+        for item in datacart.items.all():
+            # filter selected datasets only
+            if item.identifier in ids:
+                dataset_ids[item.identifier.split('|')[0]] = item.getValue('pid')
+
+    # call PID library to generate collection PID
+    connector = esgfpid.Connector(handle_prefix=settings.PID_PREFIX,
+                                  messaging_service_exchange_name=settings.PID_MESSAGING_SERVICE_EXCHANGE,
+                                  messaging_service_credentials=pid_messaging_service_credentials,
+                                  )
+
+    connector.start_messaging_thread()
+    pid = connector.create_data_cart_pid(dataset_ids)
+    connector.finish_messaging_thread()
+
+    print 'Generated data cart PID for %d datasets: %s' % (len(ids), pid)
+
+    return HttpResponse(json.dumps(pid), content_type="application/json")

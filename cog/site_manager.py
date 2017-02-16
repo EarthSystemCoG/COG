@@ -2,7 +2,7 @@ import os
 import ConfigParser
 import logging
 
-from cog.constants import (SECTION_ESGF, SECTION_GLOBUS)
+from cog.constants import (SECTION_ESGF, SECTION_GLOBUS, SECTION_PID)
 
 class SiteManager(object):
     '''
@@ -53,7 +53,16 @@ class SiteManager(object):
         
         return self.hasConfig(SECTION_GLOBUS)
 
-    
-    
+    def isPidEnabled(self):
+        '''Utility function to check whether this site has been configured for data cart PIDs.'''
+
+        try:
+            __import__('esgfpid')
+            module_found = True
+        except ImportError:
+            module_found = False
+
+        return self.hasConfig(SECTION_PID) and module_found
+
+
 siteManager = SiteManager()
-            

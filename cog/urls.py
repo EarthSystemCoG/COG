@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^search_files/(?P<dataset_id>.+)/(?P<index_node>.+)/$', cog.views.search_files, name='search_files'),
     url(r'^metadata_display/(?P<project_short_name>.+)/$', cog.views.metadata_display, name='metadata_display' ),
     url(r'^search_reload/$', cog.views.search_reload, name='search_reload' ),
+    url(r'^citation_display/$', cog.views.citation_display, name='citation_display'),
 
     # authentication options
     # a) django (username/password) login
@@ -80,6 +81,7 @@ urlpatterns = [
     url(r'^datacart/add_all/(?P<site_id>\d+)/(?P<user_id>\d+)/$', cog.views.datacart_add_all, name='datacart_add_all'),
     url(r'^datacart/delete_all/(?P<site_id>\d+)/(?P<user_id>\d+)/$', cog.views.datacart_delete_all, name='datacart_delete_all'),
     url(r'^datacart/byopenid/$', cog.views.datacart_byopenid, name='datacart_byopenid'),
+    url(r'^datacart/datacart-pid/(?P<site_id>\d+)/(?P<user_id>\d+)/$', cog.views.datacart_pid, name='datacart_pid'),
 
     # projects
     url(r'^project/add/$', cog.views.project_add, name='project_add' ),

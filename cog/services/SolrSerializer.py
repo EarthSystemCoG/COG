@@ -140,7 +140,12 @@ def _encode_field_value(record, name, value):
                     record.addField(name, (url, mimeType, serviceName))
             elif name=='xlink':
                 # NOTE: 'xlink' metadata is renamed to 'url' metadata
-                record.addField('url', (parts[0], 'application/pdf', 'Tech Note'))
+                if parts[2] == 'pid':
+                    record.addField('url', (parts[0], 'application/pid', 'PID'))
+                elif parts[2] == 'citation':
+                    record.addField('url', (parts[0], 'application/citation', 'Citation'))
+                else:
+                    record.addField('url', (parts[0], 'application/pdf', 'Tech Note'))
             else:
                 # default triple encoding
                 record.addField(name, parts) # store full URL triple in list of values
