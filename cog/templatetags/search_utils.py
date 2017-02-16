@@ -5,8 +5,6 @@ from string import replace
 import json
 from collections import OrderedDict
 from django.conf import settings
-if siteManager.isGlobusEnabled():    
-    from cog.views.views_globus import GLOBUS_ENDPOINTS
 
 register = template.Library()
 
@@ -123,36 +121,19 @@ def recordUrls(record):
                   "application/wget", 
                   "WGET Script") )
     
-    # add GridFTP endpoint
+    # add Globus endpoints
     if siteManager.isGlobusEnabled():  # only if this node has been registered with Globus
         if 'access' in record.fields and 'index_node' in record.fields and 'data_node' in record.fields:
             index_node = record.fields['index_node'][0]
             data_node = record.fields['data_node'][0]
             
-            # try adding "Globus" access first
-            globusAccess = False
             for value in record.fields['access']:
             	if value.lower() == 'globus':
                 	gurl = '/globus/download?dataset=%s@%s' %(record.id, index_node)
                 	if record.fields.get('shard', None):
                 		gurl += "&shard="+record.fields.get('shard')[0]
                 	urls.append( (gurl, 'application/gridftp', 'GridFTP') )
-                	globusAccess = True
-                	
-            # if not found, try to add GridFTP access
-            if not globusAccess:
-	            for value in record.fields['access']:
-					if value.lower() == 'gridftp':
-						# data_node must appear in list of valid Globus endpoints (example: "esg-datanode.jpl.nasa.gov:2811")
-						for gridftp_url in GLOBUS_ENDPOINTS.endpointDict().keys():
-							gurl = '/globus/download?dataset=%s@%s' %(record.id, index_node)
-							if record.fields.get('shard', None):
-								gurl += "&shard="+record.fields.get('shard')[0]
-							if data_node in gridftp_url:
-								urls.append( (gurl,
-											  'application/gridftp', # must match: var GRIDFTP = 'application/gridftp'
-											  'GridFTP') )
-            
+                	            
     return sorted(urls, key = lambda url: url_order(url[1]))
 
 @register.filter

@@ -12,7 +12,6 @@ from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
-from cog.plugins.esgf.registry import LocalEndpointDict
 import os
 import re
 from cog.views.utils import getQueryDict
@@ -43,9 +42,6 @@ if siteManager.isGlobusEnabled():
 
 	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
 	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
-	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
-
-	GLOBUS_ENDPOINTS= LocalEndpointDict(endpoints_filepath)
 
 
 def establishFlow(request):
@@ -141,30 +137,8 @@ def download(request):
 						if not gendpoint_name in download_map:
 							download_map[gendpoint_name] = [] # insert empty list of paths
 						download_map[gendpoint_name].append(path)
-				elif 'gridftp' in access:
-					# example or urlparse output:
-					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
-					o = urlparse(access['gridftp'])
-					hostname = str(o.netloc)
-					epDict = GLOBUS_ENDPOINTS.endpointDict()
-					# {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
-					#  'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
-					if (hostname in epDict):
-						gendpoint_name = epDict[hostname].name
-						gendpoint_path_out = epDict[hostname].path_out
-						gendpoint_path_in = epDict[hostname].path_in
-						if not gendpoint_name in download_map:
-							download_map[gendpoint_name] = [] # insert empty list of paths
-						gfilepath = str(o.path).replace('//','/')
-						if gendpoint_path_out is not None:
-							gfilepath = gfilepath.replace(gendpoint_path_out, '')
-						if gendpoint_path_in is not None:
-							gfilepath = gendpoint_path_in + gfilepath
-						download_map[gendpoint_name].append(gfilepath)
-					else:
-						print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
 				else:
-					print 'The file is not accessible through Globus/GridFTP'
+					print 'The file is not accessible through Globus'
 		else:
 			return HttpResponseServerError("Error querying for files URL")
 						
