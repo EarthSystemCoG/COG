@@ -80,8 +80,8 @@
 
 		        <table>
 			      <tr>
-			       
-			      <td style="width:20%; text-aling:left; vertical-align:middle;">
+			      <td style="width:35%; text-aling:left; vertical-align:middle;">To search All Versions with given date constraints:</td>
+			      <td style="width:25%; text-aling:left; vertical-align:middle;">
 		               <input type="text" id="min_version_query" alt="min_version_query" name="min_version" size="10" value="{{search_input.min_version}}"/>
 		           </td>
 			       <td style="width:20%; text-aligh:right; vertical-align:middle; white-space: nowrap;"><label for="max_version_query">&le; dataset version (as 'YYYYMMDD' date) &le; </label></td>
@@ -89,7 +89,18 @@
 			       <td style="width:20%; text-aling:left; vertical-align:middle;">
 		               <input type="text" id="max_version_query" alt="max_version_query" name="max_version" size="10" value="{{search_input.max_version}}"/>
 		           </td>
-		           <td style="width:40%; text-aling:left; vertical-align:middle;">&nbsp;(will search All Versions for date constraints)</td>
+
+		          </tr>
+		          <tr>
+		          	<td style="width:100%; text-aling:left; vertical-align:middle;" colspan="4">
+		          		To search for a dataset with a known <b>id</b>, <b>master_id</b> or <b>instance_id</b>, use the 'Enter Text' widget above as in the following examples (use of '*' is allowed):
+		          		<ul>
+		          			<li> id:obs4mips.NASA-JPL.GNSS_RO.zg.monClim.v20160601|esgf-data.jpl.nasa.gov
+		          			<li> id:obs4mips.NASA-JPL.*
+		          			<li> master_id:obs4mips.NASA-JPL.GNSS_RO.zg.monClim
+		          			<li> instance_id:obs4mips.NASA-JPL.GNSS_RO.zg.monClim.v20160601
+		          		</ul>
+		          	</td>
 		          </tr>
 		        </table>
 
