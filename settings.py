@@ -13,7 +13,7 @@ Each parameter has a default value.
 '''
 
 from cog.site_manager import siteManager
-from cog.constants import SECTION_ESGF
+from cog.constants import SECTION_ESGF, SECTION_PID
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
@@ -61,6 +61,13 @@ if ESGF_CONFIG:
     ESGF_DBURL = siteManager.get('ESGF_DBURL', section=SECTION_ESGF)
     ESGF_VERSION = siteManager.get('ESGF_VERSION', section=SECTION_ESGF)
 # FIXME
+
+# PID specific settings
+PID_CONFIG = siteManager.isPidEnabled()
+if PID_CONFIG:
+    PID_PREFIX = siteManager.get('PID_PREFIX', section=SECTION_PID, default='21.14100')
+    PID_MESSAGING_SERVICE_EXCHANGE = siteManager.get('PID_EXCHANGE', section=SECTION_PID, default='esgffed-exchange')
+    PID_CREDENTIALS = siteManager.get('PID_CREDENTIALS', section=SECTION_PID, default=None).split('\n')
 
 #====================== standard django settings.py ======================
 

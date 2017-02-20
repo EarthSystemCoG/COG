@@ -15,8 +15,8 @@
 	</div>
 	<!-- Record metadata -->
 	[ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
-	
-	
+
+
 <!--  Non-retracted dataset -->
 {% else %}
 
@@ -29,52 +29,70 @@
 		{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
 		{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
 	</div>
-	
+
 	<!-- Record metadata -->
 	[ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
-	
+
 	<!-- Dataset files -->
 	&nbsp; [ <strong><a href="" onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
 	                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
 	                        		              '0', '{{ project.short_name.lower }}');
 	                         return false">Show Files</a></strong> ]
-	
+
 		  <!-- hidden button used to trigger the same event as the href element above -->
 		  <input type="button" id="href_{{record.id}}" style="display:none"
 			     onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
 			              javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
 			            		               '0', '{{ project.short_name.lower }}');
 		  	              return false" />
-	
+
 	<!-- Display URL links -->
 	{% for url in record|recordUrls %}
-	
+
 		<!-- add this service to the catalog -->
 		<script language="javascript">services.add( new Service('{{record.id}}','{{url.0}}', '{{url.1}}','{{url.2}}','{{record.fields.index_node.0}}') );</script>
-	
+
 		<!-- THREDDS -->
 		{% if url.1 == 'application/html+thredds' %}
 		    &nbsp; [ <a href="{{url.0}}" target="_blank"><strong>THREDDS Catalog</strong></a> ]
-	
+
 		<!-- LAS -->
 		{% elif url.1 == 'application/las' %}
 		    &nbsp; [ <a href="{{url.0}}" target="_blank"><strong>LAS Visualization</strong></a> ]
-	
+
 		<!-- WGET -->
 		{% elif url.1 == 'application/wget' %}
 			&nbsp; [ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.fields.shard.0 }}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
-			
+
 		<!-- Globus -->
 		{% elif url.1 == 'application/gridftp' %}
 			&nbsp; [ <a href="javascript:goDataset('{{ url.0 }}')"><strong>Globus Download</strong></a> ]
-	
+
+		<!--  Citation -->
+		{% elif url.1 == 'application/citation' %}
+			&nbsp; [ <strong><a href=""
+								onclick="javascript:openclose('citation_{{ record.id }}', this, 'Show Citation', 'Hide Citation');
+                                         javascript:showCitation('{{ record.id }}', '{{ url.0 }}');
+                                         return false">Show Citation</a></strong> ]
+
+            <!-- hidden button used to trigger the same event as the href element above -->
+            <input type="button" id="href_{{record.id}}" style="display:none"
+				   onclick="javascript:openclose('citation_{{ record.id }}', this, 'Show Citation', 'Hide Citation');
+                            javascript:showCitation('{{ record.id }}', '{{ url.0 }}');
+                            return false" />
+
+       <!-- PID -->
+       {% elif url.1 == 'application/pid' %}
+               &nbsp; [ <a href="{{url.0}}" target="_blank"><strong>PID</strong></a> ]
+
 		<!--  all other services -->
 		{% else %}
 			&nbsp; [ <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> ]
+
 	    {% endif %}
-	
+
 	{% endfor %}
-	
+
 	<!-- Quality Control Flags -->
 	{% for qcflag, qcdict in record|qcflags %}
 		&nbsp;
@@ -91,14 +109,14 @@
 	{% if project.searchprofile.modelMetadataFlag %}
 		{% if record.fields.project.0|lower == 'cmip5' %}
 			&nbsp; [ <a href="http://view.es-doc.org/?renderMethod=datasetid&project={{record.fields.project.0}}&id={{record.fields.instance_id.0}}" target="_blank">
-					 	<strong>Model Metadata</strong> 
+						<strong>Model Metadata</strong>
 					</a> ]
 		{% endif %}
 	{% endif %}
-	
+
 <!-- Non-retracted dataset -->
 {% endif %}
-	
+
 <!-- Record metadata box -->
 <div class="padded-box" id="dataset_{{ record.id }}" style="display:none; width:500px;">
 
@@ -122,3 +140,6 @@
 
 <!-- files place-holder -->
 <div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>
+
+<!-- citation place-holder -->
+<div class="padded-box" id="citation_{{ record.id }}" style="display:none"></div>

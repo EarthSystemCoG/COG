@@ -6,6 +6,7 @@ SECTION_DEFAULT = 'DEFAULT'
 SECTION_ESGF = 'ESGF'
 SECTION_EMAIL = 'EMAIL'
 SECTION_GLOBUS = 'GLOBUS'
+SECTION_PID = 'PID'
 
 # note: use lower case
 VALID_MIME_TYPES = { '.bmp':  ['image/bmp', 'image/x-windows-bmp'],

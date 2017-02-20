@@ -179,7 +179,12 @@
 				keys2 = keys2.sort();
 				for (var j=0; j<keys.length; j++) {
 					key = keys[j];
-					html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
+					// add link to pid landing page if tracking_id is a pid
+                    if ( key == 'tracking_id' && String(doc[key]).startsWith('hdl:') ) {
+                        html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: <a href='http://hdl.handle.net/"+doc[key]+"' target=_blank>"+doc[key]+"</a>";
+                    } else {
+                        html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
+                    }
 				}
 				for (var j=0; j<keys2.length; j++) {
 					key = keys2[j];

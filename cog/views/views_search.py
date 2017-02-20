@@ -18,7 +18,7 @@ from cog.views.utils import getQueryDict
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.http.response import HttpResponseServerError
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
@@ -984,3 +984,28 @@ def render_search_group_form(request, project, form):
     return render(request,
                   'cog/search/search_group_form.html', 
                   {'project': project, 'form': form, 'title': 'Search Facet Group'})
+
+def citation_display(request):
+
+    # get citation info in json format
+    url = request.GET.get('url', '')
+
+    try:
+        fh = urllib2.urlopen(url)
+        response = fh.read()
+        headers = fh.info().dict
+    except HTTPError, e:
+        print('HTTPError %s for %s' % (str(e.code), url))
+        return HttpResponseNotFound()
+
+    if int(headers['x-cera-rc']) > 0:
+        print 'Citation not found: %s' % url
+        return HttpResponseNotFound()
+
+    try:
+        json.loads(response)
+    except ValueError, e:
+        print 'Citation not valid json: %s' % url
+        return HttpResponseNotFound()
+
+    return HttpResponse(response, content_type="application/json")
