@@ -4,8 +4,10 @@
 
 {% autoescape off %}
 
-
-
+  	<!-- Data search widget -->
+  	{% if post.is_home %}
+  		{% include 'cog/project/_project_data_search.html' %}
+  	{% endif %}
 
     <div id="cog_post_body">
         {{ post.body }}
