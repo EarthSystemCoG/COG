@@ -224,24 +224,38 @@
 					var imageUrl = null;
 
 					// loop over file access URLs, inspect service type, create hyperlinks
+					html += "Singe File Access:<br/>";
 					for (var j=0; j<doc.url.length; j++) {
+						
 						var urlArray = doc.url[j].split('|');
+						var urlLink = urlArray[0];
+						var urlType = urlArray[1];
+						var urlTitle = urlArray[2];
+						
+						if (urlTitle.toLowerCase()=="httpserver") {
+							urlTitle = "HTTP Download";
+						} else if (urlTitle.toLowerCase()=="globus") {
+							urlTitle = "Globus Download";
+						} else if (urlTitle.toLowerCase()=="opendap") {
+							urlTitle = "OpenDAP Download";
+							urlLink = urlLink.replace('.html','.dods');
+						}
 
 						// special case: 'Thumbnail' service
-						if (urlArray[2].toLowerCase() == 'thumbnail') {
-							thumbnailUrl = urlArray[0]; // store thumbnail URL for later replacement
+						if (urlTitle.toLowerCase() == 'thumbnail') {
+							thumbnailUrl = urlLink; // store thumbnail URL for later replacement
 
 						} else {
 
 							// images: create hyperlink with graphic
-							if (urlArray[1].indexOf("image")>=0) {
-								html += "<a href='"+urlArray[0]+"'><img src='IMAGE_URL' width='50px'/></a>&nbsp;"; // 'IMAGE_URL'
-								imageUrl = urlArray[0]; // always store reference to image URL
+							if (urlType.indexOf("image")>=0) {
+								html += "<a href='"+urlLink+"'><img src='IMAGE_URL' width='50px'/></a><br/>"; // 'IMAGE_URL'
+								imageUrl = urlLink; // always store reference to image URL
 
 							// non-images: create hyperlink with text
 							} else {
-								if (urlArray[2].toLowerCase() != 'gridftp') {
-									html += "<a href='"+urlArray[0]+"'>"+urlArray[2]+"</a><br/>";
+								if (urlTitle.toLowerCase() != 'gridftp') {
+									html += "<a href='"+urlLink+"'>"+urlTitle+"</a><br/>";
 								}
 							}
 						}

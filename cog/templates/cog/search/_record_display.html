@@ -13,6 +13,9 @@
 		{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }}{% endif %}
 		{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
 	</div>
+	
+	Full Dataset Services: &nbsp; 
+	
 	<!-- Record metadata -->
 	[ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
 
@@ -30,18 +33,20 @@
 		{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
 	</div>
 
+	Full Dataset Services: &nbsp;  
+	
 	<!-- Record metadata -->
 	[ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
 
 	<!-- Dataset files -->
-	&nbsp; [ <strong><a href="" onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
+	&nbsp; [ <strong><a href="" onclick="javascript:openclose('files_{{ record.id }}', this, 'List Files', 'Hide Files');
 	                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
 	                        		              '0', '{{ project.short_name.lower }}');
-	                         return false">Show Files</a></strong> ]
+	                         return false">List Files</a></strong> ]
 
 		  <!-- hidden button used to trigger the same event as the href element above -->
 		  <input type="button" id="href_{{record.id}}" style="display:none"
-			     onclick="javascript:openclose('files_{{ record.id }}', this, 'Show Files', 'Hide Files');
+			     onclick="javascript:openclose('files_{{ record.id }}', this, 'List Files', 'Hide Files');
 			              javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
 			            		               '0', '{{ project.short_name.lower }}');
 		  	              return false" />
