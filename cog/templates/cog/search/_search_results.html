@@ -69,7 +69,7 @@
 								      {% include 'cog/search/_record_display.html' %}
 								  {% endwith %}
   	                              {% if request.user.is_authenticated %}
-	                           	      <br/>
+	           
 	                           		  <!-- do not display data cart links for retracted datasets -->
 									  {% if record.fields.retracted.0 != 'true' %}
 		                           	      <!--  add or remove from Data Cart -->
