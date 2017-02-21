@@ -86,11 +86,11 @@
 	  
 	  // execute synchronous request for one wget script
 	  // execute HTTP GET request
-	  window.location.href = url;
+	  //window.location.href = url;
 	  // execute HTTP POST request
-	  //base_url = url.substring(0, url.indexOf('?'));
-	  //params = URLToArray(url);
-	  //post_to_url(base_url, params);
+	  base_url = url.substring(0, url.indexOf('?'));
+	  params = URLToArray(url);
+	  post_to_url(base_url, params);
 
 	}
 
