@@ -79,17 +79,34 @@
     		     id="more_search_options_panel">
 
 		        <table>
+		         <tr>
+			      <td style="width:30%; text-aling:left; vertical-align:middle;" >To sub-select Filenames by variable:</td>
+			       <td style="width:25%; text-aligh:right; vertical-align:middle; white-space: nowrap;">
+			       		<input type="text" name="query-filter" alt="query-filter" id="query-filter"
+			             	   placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter2(); return false; }" />			       
+			       </td>
+			       <td style="width:45%; text-aling:left; vertical-align:middle;" colspan="2">
+	  	                  &nbsp;<input type="button" value="Apply" 
+	  	                               onclick="javascript:applyQueryFilter2(); return false;"/>
+	  		              &nbsp;<input type="button" value="Reset" 
+	  		                           onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter2(); return false;"/>
+		           	  	  &nbsp; (works with 'Show Files', WGET and Globus)
+		           </td>
+		          </tr>
 			      <tr>
-			      <td style="width:35%; text-aling:left; vertical-align:middle;">To search All Versions with given date constraints:</td>
+			      <td style="width:30%; text-aling:left; vertical-align:middle;">To search All Versions with date constraints:</td>
 			      <td style="width:25%; text-aling:left; vertical-align:middle;">
-		               <input type="text" id="min_version_query" alt="min_version_query" name="min_version" size="10" value="{{search_input.min_version}}"/>
+		               <input type="text" id="min_version_query" alt="min_version_query" 
+		                      placeholder="YYYYMMDD"
+		                      name="min_version" size="10" value="{{search_input.min_version}}"/>
 		           </td>
 			       <td style="width:20%; text-aligh:right; vertical-align:middle; white-space: nowrap;"><label for="max_version_query">&le; dataset version (as 'YYYYMMDD' date) &le; </label></td>
 			       
-			       <td style="width:20%; text-aling:left; vertical-align:middle;">
-		               <input type="text" id="max_version_query" alt="max_version_query" name="max_version" size="10" value="{{search_input.max_version}}"/>
+			       <td style="width:25%; text-aling:left; vertical-align:middle;">
+		               <input type="text" id="max_version_query" alt="max_version_query" 
+		                      placeholder="YYYYMMDD"
+		                      name="max_version" size="10" value="{{search_input.max_version}}"/>
 		           </td>
-
 		          </tr>
 		          <tr>
 		          	<td style="width:100%; text-aling:left; vertical-align:middle;" colspan="4">
