@@ -322,4 +322,4 @@ CAPTCHA_IMAGE_SIZE = (100, 40)
 
 #==== Quality Control Flags references ==================================
 
-QCFLAGS_URLS = { 'obs4mips_indicators': 'https://www.earthsystemcog.org/projects/obs4mips/' }
+QCFLAGS_URLS = { 'obs4mips_indicators': 'https://www.earthsystemcog.org/projects/obs4mips/data-indicators' }
