@@ -325,11 +325,12 @@ def datacart_pid(request, site_id, user_id):
     for cred in settings.PID_CREDENTIALS:
         parts = cred.split('|')
 
-        ssl_enabled = False
-        if parts[5].strip().upper() == 'TRUE':
-            ssl_enabled = True
-
         if len(parts) == 6:
+
+            ssl_enabled = False
+            if parts[5].strip().upper() == 'TRUE':
+                ssl_enabled = True
+
             pid_messaging_service_credentials.append({'url': parts[0].strip(),
                                                       'port': parts[1].strip(),
                                                       'vhost': parts[2].strip(),
