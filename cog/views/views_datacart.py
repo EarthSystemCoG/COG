@@ -324,8 +324,20 @@ def datacart_pid(request, site_id, user_id):
     priority = 1
     for cred in settings.PID_CREDENTIALS:
         parts = cred.split('|')
-        if len(parts) == 3:
-            pid_messaging_service_credentials.append({'url': parts[0].strip(), 'user': parts[1].strip(), 'password': parts[2].strip(), 'priority': priority})
+
+        if len(parts) == 6:
+
+            ssl_enabled = False
+            if parts[5].strip().upper() == 'TRUE':
+                ssl_enabled = True
+
+            pid_messaging_service_credentials.append({'url': parts[0].strip(),
+                                                      'port': parts[1].strip(),
+                                                      'vhost': parts[2].strip(),
+                                                      'user': parts[3].strip(),
+                                                      'password': parts[4].strip(),
+                                                      'ssl_enabled': ssl_enabled,
+                                                      'priority': priority})
             priority += 1
 
     # get list of dataset_pids and dataset_ids
