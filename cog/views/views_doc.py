@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
@@ -13,7 +13,6 @@ from cog.models.constants import DOCUMENT_TYPE_ALL, DOCUMENT_TYPES, SYSTEM_DOCS,
 from django.conf import settings
 from django.views.static import serve
 from cog.models.auth import userHasUserPermission, userHasContributorPermission
-from cog.utils import create_resized_image
 from cog.models.doc import get_upload_path
 from cog.models.utils import delete_doc
 from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
@@ -46,23 +45,14 @@ def doc_upload(request, project_short_name):
             url = instance.file.url
             error = ''
             
-            # create thumbnail
-            # NOTE: already executed automatic when browsing through django-browser
-            #imagepath = os.path.join( getattr(settings, "MEDIA_ROOT"),  instance.file.name )
-            #(path, filename) = os.path.split(imagepath)
-            #(name, ext) = os.path.splitext(filename)
-            #thumbnailpath = os.path.join( path, "%s_thumbnail.jpeg" % name )
-            #print 'Creating thumbnail: %s' % thumbnailpath
-            #create_resized_image(thumbnailpath, imagepath)         
-
         else:
             print 'Form errors:%s' % form.errors
             error = 'The file uploaded is not an image. Valid files include PNG, JPG, and PDF.'
             url = "%s%s" % (settings.STATIC_URL, 'cog/img/error.jpeg')
     
-        return render_to_response('cog/doc/doc_upload.html', 
-                                  {'title': 'File Upload', 'url': url, 'error': error},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/doc/doc_upload.html', 
+                      {'title': 'File Upload', 'url': url, 'error': error})
 
 
 @login_required   
@@ -129,9 +119,9 @@ def doc_add(request, project_short_name):
 
 def doc_detail(request, doc_id):
     doc = get_object_or_404(Doc, pk=doc_id)
-    return render_to_response('cog/doc/doc_detail.html', 
-                              {'doc': doc, 'project': doc.project, 'title': doc.title},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/doc/doc_detail.html', 
+                  {'doc': doc, 'project': doc.project, 'title': doc.title})
 
 
 def doc_download(request, path):
@@ -300,16 +290,16 @@ def doc_list(request, project_short_name):
     results = Doc.objects.filter(qset).distinct().order_by(order_by)
     list_title = "Total Number of Matching Documents: %d" % len(results)
    
-    return render_to_response('cog/doc/doc_list.html', 
-                              {"object_list": paginate(results, request, max_counts_per_page=100),
-                               'project': project, 'title': '%s Files' % project.short_name,
-                               "query": query, "order_by": order_by, "filter_by": filter_by, "list_title":
-                                  list_title},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/doc/doc_list.html', 
+                  {"object_list": paginate(results, request, max_counts_per_page=100),
+                   'project': project, 'title': '%s Files' % project.short_name,
+                   "query": query, "order_by": order_by, "filter_by": filter_by, 
+                   "list_title":list_title})
 
 
 def render_doc_form(request, form, project):
     title = 'Upload %s File' % project.short_name
-    return render_to_response('cog/doc/doc_form.html', 
-                             {'form': form, 'project':project, 'title':title}, 
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/doc/doc_form.html', 
+                  {'form': form, 'project':project, 'title':title})

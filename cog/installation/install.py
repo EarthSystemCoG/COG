@@ -18,7 +18,7 @@ from cog.models import PeerSite
 from cog.views.views_project import initProject
 
 from cog.installation.constants import (DEFAULT_PROJECT_SHORT_NAME, ESGF_ROOTADMIN_PASSWORD_FILE, 
-                                        DEFAULT_ROOTADMIN_PASSWORD, ROOTADMIN_USERNAME)
+                                        DEFAULT_ROOTADMIN_PWD, ROOTADMIN_USERNAME)
 from cog.plugins.esgf.security import esgfDatabaseManager
 from django_openid_auth.models import UserOpenID
 from django.core.exceptions import ObjectDoesNotExist
@@ -64,10 +64,8 @@ class CoGInstall(object):
         
         # django management commands
         #management.call_command("syncdb", interactive=False)
-        # FIXME: django-contrib-comments 1.6.1 is missing one migration
-        management.call_command("makemigrations","django_comments") 
-        management.call_command("migrate","--fake-initial")
-        management.call_command("migrate")
+        #management.call_command("migrate","--fake-initial")
+        management.call_command("migrate", interactive=False)
         management.call_command("collectstatic", interactive=False, verbosity=0)
         
         # custom management commands
@@ -80,8 +78,9 @@ class CoGInstall(object):
         dbname = self.siteManager.get('DATABASE_NAME')
         dbuser = self.siteManager.get('DATABASE_USER')
         dbpassword = self.siteManager.get('DATABASE_PASSWORD')
+        dbhost = self.siteManager.get('DATABASE_HOST')
         dbport = self.siteManager.get('DATABASE_PORT')
-        dburl = 'postgresql://%s:%s@localhost:%s/postgres' % (dbuser, dbpassword, dbport)
+        dburl = 'postgresql://%s:%s@%s:%s/postgres' % (dbuser, dbpassword, dbhost, dbport)
     
         # connect to the 'postgres' database
         engine = sqlalchemy.create_engine(dburl)
@@ -132,14 +131,14 @@ class CoGInstall(object):
             if settings.ESGF_CONFIG:
                 password = self._getRootAdminPassword()
             else:
-                password = DEFAULT_ROOTADMIN_PASSWORD
+                password = DEFAULT_ROOTADMIN_PWD
             user.set_password(password)
             user.save()
                         
             # create UserProfile object
             userp = UserProfile(user=user, institution='Institution', city='City', state='State', country='Country',
                                 site=site, last_password_update=datetime.datetime.now())
-            userp.clearTextPassword=password # needed by esgfDatabaseManager, NOT saved as clear text in any database
+            userp.clearTextPwd=password # needed by esgfDatabaseManager, NOT saved as clear text in any database
             userp.save()
             
             # ESGF database setup
@@ -182,7 +181,7 @@ class CoGInstall(object):
             # file not found
             logging.warn("ESGF administrator password file: %s could not found or could not be read" % ESGF_ROOTADMIN_PASSWORD_FILE) 
             logging.warn("Using standard administrator password, please change it right away.")
-            return DEFAULT_ROOTADMIN_PASSWORD
+            return DEFAULT_ROOTADMIN_PWD
 
             
 if __name__ == '__main__':

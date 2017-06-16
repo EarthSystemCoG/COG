@@ -2,7 +2,7 @@
 Views for exchanging information with other nodes.
 '''
 from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 import json
 from cog.models import Project, getProjectsAndRolesForUsers, DataCart
 from django.contrib.sites.models import Site
@@ -167,9 +167,9 @@ def sync_projects(request):
         
     sites, totalNumberOfProjects, totalNumberOfUsers = projectManager.sync()
     
-    return render_to_response('cog/admin/sync_projects.html', 
-                              {'sites':sorted(sites.iteritems(), key=lambda (siteid, sitedict): sitedict['name']), 
-                               'totalNumberOfProjects':totalNumberOfProjects, 'totalNumberOfUsers':totalNumberOfUsers },
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/admin/sync_projects.html', 
+                  {'sites':sorted(sites.iteritems(), key=lambda (siteid, sitedict): sitedict['name']), 
+                   'totalNumberOfProjects':totalNumberOfProjects, 'totalNumberOfUsers':totalNumberOfUsers })
         
     

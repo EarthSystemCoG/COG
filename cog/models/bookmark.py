@@ -1,6 +1,5 @@
 from django.db import models
 from constants import APPLICATION_LABEL
-from folder import Folder
 from cog.models import Post
 
 
@@ -15,7 +14,7 @@ class Bookmark(models.Model):
     notes = models.ForeignKey(Post, blank=True, null=True, on_delete=models.SET_NULL)
     
     def __unicode__(self):
-        return "%s [%s]" % (self.name , self.url)
+        return "%s [%s]" % (self.name, self.url)
 
     class Meta:
         app_label = APPLICATION_LABEL

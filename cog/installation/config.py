@@ -10,6 +10,8 @@ esgf.host=esg-datanode.jpl.nasa.gov:
     - DEFAULT_SEARCH_URL = http://esg-datanode.jpl.nasa.gov/esg-search/search/
 db.user=...
     - DATABASE_USER=...
+db.host=localhost
+    - DATABASE_HOST=localhost
 db.port=5432
     - DATABASE_PORT=5432
 mail.admin.address=esg-node@jpl.nasa.gov
@@ -150,6 +152,7 @@ class CogConfig(object):
         self._safeSet('DATABASE_NAME', 'cogdb')
         self._safeSet('DATABASE_USER', self._safeGet("db.user") )
         self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
+        self._safeSet('DATABASE_HOST', self._safeGet("db.host", default='localhost'))
         self._safeSet('DATABASE_PORT', self._safeGet("db.port", default='5432'))
         self._safeSet('MEDIA_ROOT','%s/site_media' % COG_CONFIG_DIR)
         # default project to where '/' requests are redirected
@@ -159,10 +162,10 @@ class CogConfig(object):
         # interval between updates of user's projects, during user session
         self._safeSet('MY_PROJECTS_REFRESH_SECONDS', 3600)
         # optional number of days after which password expire
-        self._safeSet('PASSWORD_EXPIRATION_DAYS','0')
+        self._safeSet('PWD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
-        idpPeer = self._safeGet("esgf.idp.peer", default='')
-        if hostName != idpPeer:
+        idpPeer = self._safeGet("esgf.idp.peer", default=None)
+        if hostName != idpPeer and idpPeer is not None:
             self._safeSet('IDP_REDIRECT', 'https://%s' % idpPeer) # redirect to specified "esgf.idp.peer"
         else:
             self._safeSet('IDP_REDIRECT','') # no redirect by default
@@ -190,7 +193,7 @@ class CogConfig(object):
         if self.esgf:
             self._safeSet('ESGF_HOSTNAME', hostName, section=SECTION_ESGF)
             self._safeSet('ESGF_DBURL', 
-                          "postgresql://%s:%s@localhost/esgcet" % (self._safeGet("db.user"), self._safeGet("db.password")),
+                          "postgresql://%s:%s@%s/esgcet" % (self._safeGet("db.user"), self._safeGet("db.password"), self._safeGet("db.host")),
                           section=SECTION_ESGF)
             
         #[EMAIL]

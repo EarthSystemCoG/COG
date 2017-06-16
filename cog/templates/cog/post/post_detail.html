@@ -30,11 +30,6 @@
    {% include 'cog/post/_post_attachements.html' %}
 {% endwith %}
 
-<!-- Comments -->
-{% url 'post_detail' post.id as next_view %}
-{% with post as object %}
-    {% include 'cog/common/_comments.html' %}
-{% endwith %}
 
 <!-- Hierarchy -->
 {% with post as post %}

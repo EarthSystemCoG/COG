@@ -1,0 +1,92 @@
+<!-- Javascript controls for data cart PID functionality -->
+<script type="text/javascript">
+//<![CDATA[
+
+    // function called if Ajax request failed
+    var handleDataCartPidFailure = function(o) {
+        hideWaitPanel();
+        html = "<div style='text-align:center;'>Collection PID generation failed."
+	           + "<br/>Please try again later or contact <a href='mailto:esgf@dkrz.de?subject=Collection PID generation failure'>esgf@dkrz.de</a> if the problem persists.</div></div>";
+
+        // display pid panel with new content
+        dataCartPidPanel = document.getElementById("datacart-pid");
+        dataCartPidPanel.innerHTML = html;
+        dataCartPidPanel.style.display = 'block';
+    }
+
+	// function called if Ajax request to PID service succeeded
+	var handleDataCartPidSuccess = function(o) {
+
+		// parse JSON response into object
+		var html = "";
+        hideWaitPanel();
+		var jsonResponse = eval('(' + o.responseText + ')');
+
+		// description
+        html += "<div style='text-align:center;'>Collection PID for the selected datasets: "
+             + "<span style='display:inline-block; vertical-align: -3px;'>"
+             + "<a href='https://esgf-data.dkrz.de/projects/esgf-dkrz/tou' target='_blank'>"
+             + "</a>"
+             + "</span>"
+             + "<br/><a href='https://hdl.handle.net/"+jsonResponse+"' target='_blank'>"+jsonResponse+"</a>"
+             + "<br/><br/>You can use this <a href='https://esgf-data.dkrz.de/projects/esgf-dkrz/pid' target='_blank'>Persistent Identifier</a> to refer back to your individual Data Cart. Note that this is no guarantee that the data in the Data Cart will remain available or stable, but only that there will always be a reference back to them. For more information, see <a href='https://esgf-data.dkrz.de/projects/esgf-dkrz/datacart_pid' target='_blank'>here</a>."
+             + "</div>";
+
+		html += "</div>";
+
+		// display PID panel with new content
+		dataCartPidPanel = document.getElementById("datacart-pid");
+		dataCartPidPanel.innerHTML = html;
+		dataCartPidPanel.style.display = 'block';
+	}
+
+	// function to generate a collection PID for all selected datasets
+	function dataCartPid(id, hlink, showText, hideText) {
+	  // clear message from other services
+      clearAllMessages();
+
+	  {% if request.user.is_authenticated %}
+
+		  // open the data cart PID panel
+		  if (document.getElementById(id).style.display=='none') {
+
+			//  data cart PID url
+			var url = "{% url 'datacart_pid' site.id request.user.id %}";
+
+			// loop over selected data cart items
+			var postdata = "";
+			var objs = getSelectedDataCartItems();
+            if (objs.length<=0) {
+                showMessage("Warning", "Please select one or more datasets in the Data Cart.");
+			} else if (objs.length>500) {
+                showMessage("Warning", "Please select at most 500 datasets to generate a Collection PID.");
+			} else {
+                for (var i in objs) {
+				    postdata += "&id="+objs[i].name;
+			    }
+				// open data cart PID panel
+				this.document.getElementById(id).innerHTML = "";
+				openclose(id, hlink, showText, hideText);
+
+				// execute asynchronous POST request
+				var transaction = YAHOO.util.Connect.asyncRequest('POST', url, dataCartPidCallback, postdata);
+		                showWaitPanel();
+			}
+		  } else {
+
+			  // close the data cart PID panel
+			  openclose(id, hlink, showText, hideText);
+		  }
+      {% endif %}
+	}
+
+	var dataCartPidCallback = {
+        success:handleDataCartPidSuccess,
+		failure: handleDataCartPidFailure,
+		cache:false,
+		timeout:15000,
+		argument: []
+	};
+
+  //]]>
+</script>

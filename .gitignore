@@ -5,6 +5,7 @@
 
 # Compiled files
 *.pyc
+*.eggs
 
 # CKEditor
 cog/static/cog/ckeditor

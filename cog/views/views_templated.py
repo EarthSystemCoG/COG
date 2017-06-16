@@ -2,7 +2,7 @@
 Module containing functionality for rendering templated pages.
 """
 
-from django.shortcuts import get_object_or_404, render_to_response, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from cog.models import Project, getLeadOrganizationalRoles, getMemberOrganizationalRoles
 from cog.models.navbar import TABS
@@ -108,14 +108,13 @@ def render_templated_page(request, project, tab, template_page, template_title, 
 
     # to change to tabbed rollup, load 'cog/common/rollup_tabbed.html'
 
-    return render_to_response('cog/common/rollup_accordion.html',
-                              {'project': project,
-                               'title': '%s %s' % (project.short_name, template_title),
-                               # 'title': template_title,
-                               'tab': tab,
-                               'template_page': template_page,
-                               'template_title': template_title,
-                               'template_form_pages': template_form_pages,
-                               'children': children,
-                               'peers': peers},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/common/rollup_accordion.html',
+                  {'project': project,
+                   'title': '%s %s' % (project.short_name, template_title),
+                   'tab': tab,
+                   'template_page': template_page,
+                   'template_title': template_title,
+                   'template_form_pages': template_form_pages,
+                   'children': children,
+                   'peers': peers})

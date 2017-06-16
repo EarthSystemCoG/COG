@@ -18,7 +18,7 @@ import os, re
 from types import MethodType
 
 # DJANGO IMPORTS
-from django.shortcuts import render_to_response, HttpResponse
+from django.shortcuts import render, HttpResponse
 from django.template import RequestContext as Context
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.admin.views.decorators import staff_member_required
@@ -36,7 +36,7 @@ from django.core.files.storage import DefaultStorage, default_storage, FileSyste
 from django.core.exceptions import ImproperlyConfigured
 
 # FILEBROWSER IMPORTS
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 from filebrowser.functions import get_breadcrumbs, get_filterdate, get_settings_var, handle_file_upload, convert_filename
 from filebrowser.templatetags.fb_tags import query_helper
 from filebrowser.base import FileListing, FileObject
@@ -133,7 +133,7 @@ class FileBrowserSite(object):
         return login_required(never_cache(view))
 
     def get_urls(self):
-        from django.conf.urls import patterns, url, include  
+        from django.conf.urls import url, include  
 
         urlpatterns = [
     
@@ -277,17 +277,18 @@ class FileBrowserSite(object):
         except (EmptyPage, InvalidPage):
             page = p.page(p.num_pages)
         
-        return render_to_response('filebrowser/index.html', {
-            'p': p,
-            'page': page,
-            'filelisting': filelisting,
-            'query': query,
-            'title': _(u'FileBrowser'),
-            'settings_var': get_settings_var(directory=self.directory),
-            'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
-            'breadcrumbs_title': "",
-            'filebrowser_site': self
-        }, context_instance=Context(request, current_app=self.name))
+        return render(request, 
+                      'filebrowser/index.html', 
+                      {'p': p,
+                       'page': page,
+                       'filelisting': filelisting,
+                       'query': query,
+                       'title': _(u'FileBrowser'),
+                       'settings_var': get_settings_var(directory=self.directory),
+                       'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
+                       'breadcrumbs_title': "",
+                       'filebrowser_site': self }) 
+        #context_instance=Context(request, current_app=self.name))
     
     # mkdir signals
     filebrowser_pre_createdir = Signal(providing_args=["path", "name"])
@@ -323,15 +324,15 @@ class FileBrowserSite(object):
         else:
             form = CreateDirForm(path, filebrowser_site=self)
         
-        return render_to_response('filebrowser/createdir.html', {
-            'form': form,
-            'query': query,
-            'title': _(u'New Folder'),
-            'settings_var': get_settings_var(directory=self.directory),
-            'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
-            'breadcrumbs_title': _(u'New Folder'),
-            'filebrowser_site': self
-        }, context_instance=Context(request, current_app=self.name))
+        return render(request,
+                      'filebrowser/createdir.html', 
+                      {'form': form,
+                       'query': query,
+                       'title': _(u'New Folder'),
+                       'settings_var': get_settings_var(directory=self.directory),
+                       'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
+                       'breadcrumbs_title': _(u'New Folder'),
+                       'filebrowser_site': self } ) #context_instance=Context(request, current_app=self.name))
     
 
     @filebrowser_check()
@@ -342,14 +343,14 @@ class FileBrowserSite(object):
         query = request.GET
         path = u'%s' % os.path.join(self.directory, query.get('dir', ''))
         
-        return render_to_response('filebrowser/upload.html', {
-            'query': query,
-            'title': _(u'Select files to upload'),
-            'settings_var': get_settings_var(directory=self.directory),
-            'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
-            'breadcrumbs_title': _(u'Upload'),
-            'filebrowser_site': self
-        }, context_instance=Context(request, current_app=self.name))
+        return render(request,
+                      'filebrowser/upload.html', 
+                      { 'query': query,
+                       'title': _(u'Select files to upload'),
+                       'settings_var': get_settings_var(directory=self.directory),
+                       'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
+                       'breadcrumbs_title': _(u'Upload'),
+                       'filebrowser_site': self }) #context_instance=Context(request, current_app=self.name))
 
     @filebrowser_check()
     def delete_confirm(self, request):
@@ -374,7 +375,7 @@ class FileBrowserSite(object):
             filelisting = None
             additional_files = None
         
-        return render_to_response('filebrowser/delete_confirm.html', {
+        return render(request, 'filebrowser/delete_confirm.html', {
             'fileobject': fileobject,
             'filelisting': filelisting,
             'additional_files': additional_files,
@@ -384,7 +385,7 @@ class FileBrowserSite(object):
             'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
             'breadcrumbs_title': _(u'Confirm delete'),
             'filebrowser_site': self
-        }, context_instance=Context(request, current_app=self.name))
+        }) #, context_instance=Context(request, current_app=self.name))
 
     # delete signals
     filebrowser_pre_delete = Signal(providing_args=["path", "name"])
@@ -471,7 +472,7 @@ class FileBrowserSite(object):
         else:
             form = ChangeForm(initial={"name": fileobject.filename}, path=path, fileobject=fileobject, filebrowser_site=self)
         
-        return render_to_response('filebrowser/detail.html', {
+        return render(request, 'filebrowser/detail.html', {
             'form': form,
             'fileobject': fileobject,
             'query': query,
@@ -480,7 +481,7 @@ class FileBrowserSite(object):
             'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
             'breadcrumbs_title': u'%s' % fileobject.filename,
             'filebrowser_site': self
-        }, context_instance=Context(request, current_app=self.name))
+        }) # context_instance=Context(request, current_app=self.name))
 
     def version(self, request):
         """
@@ -490,12 +491,12 @@ class FileBrowserSite(object):
         path = u'%s' % os.path.join(self.directory, query.get('dir', ''))
         fileobject = FileObject(os.path.join(path, query.get('filename', '')), site=self)
         
-        return render_to_response('filebrowser/version.html', {
+        return render(request, 'filebrowser/version.html', {
             'fileobject': fileobject,
             'query': query,
             'settings_var': get_settings_var(directory=self.directory),
             'filebrowser_site': self
-        }, context_instance=Context(request, current_app=self.name))
+        }) # context_instance=Context(request, current_app=self.name))
 
     # upload signals
     filebrowser_pre_upload = Signal(providing_args=["path", "file"])

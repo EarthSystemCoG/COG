@@ -1,0 +1,48 @@
+<!--// START: /cog/templates/cog/post/_post_form_hyperlink.html //-->
+
+{% load cog_utils %}
+
+<table>
+    <tr>
+        <td class="col1" style="vertical-align: middle;"><strong>*Title</strong></td>
+        <td style="vertical-align: middle;">{{ form.title }}</td>
+        <td style="vertical-align: middle;">{{ form.title.errors }}</td>
+    </tr>
+</table>
+<table>
+   <tr>
+        <td class="col1" style="vertical-align: middle;">Label</td>
+        <td style="width:200px;">{{ form.label }}</td>
+		<td style="vertical-align:middle;">&nbsp; <em class="message">Optional shorter label for left menu, max 28 characters,
+			defaults to page title</em> {{ form.label.errors }}</td>
+	    </tr>
+</table>
+<table class="odd-color">
+   <tr>
+        <td class="col1" style="vertical-align: middle;"><strong>*URL</strong></td>
+        <td style="vertical-align: middle;">{{ form.url }}</td>
+
+       {% if form.url.errors|length == 0 %}
+	       <td style="vertical-align:middle;width:250px;">
+              <em class="message" style="text-align: center;">Enter full URL starting with http(s)://...</em>
+           </td>
+       {%  else %}
+           <td style="width:250px;vertical-align:middle;">
+              {{ form.url.errors }}
+           </td>
+       {% endif %}
+   </tr>
+</table>
+
+<table>
+    <tr>
+          <td class="col1" style="vertical-align: middle;">Topic</td>
+          <td style="width:80px; vertical-align:middle;" nowrap="nowrap">{{ form.topic }}</td>
+          <td style="width:80px; vertical-align:middle;"><strong>or New Topic</strong></td>
+	  <td style="width:140px;vertical-align:middle;">{{ form.newtopic }}</td>
+	  <td>{{form.newtopic.errors }} {{ form.topic.errors }}</td>
+   </tr>
+ </table>
+
+
+<!--// END: /cog/templates/cog/post/_post_form_hyperlink.html //-->

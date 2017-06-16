@@ -22,6 +22,14 @@ else:
     except ImportError:
         import Image
 
+def validate_path(path):
+    '''Method to protect against file path manipulation.'''
+    
+    (head, tail) = os.path.split(path)
+    if '.' in head:
+        raise Exception("File Browser was about to open an invalid file path: %s" % head)
+    
+    return path
 
 def path_strip(path, root):
     if not path or not root:
@@ -293,7 +301,7 @@ def version_generator(value, version_prefix, force=None, site=None):
         site = default_site
     tmpfile = File(NamedTemporaryFile())
     try:
-        f = site.storage.open(value)
+        f = site.storage.open(validate_path(value))
         im = Image.open(f)
         version_path = get_version_path(value, version_prefix, site=site)
         version_dir, version_basename = os.path.split(version_path)
@@ -306,13 +314,13 @@ def version_generator(value, version_prefix, force=None, site=None):
                 if callable(m):
                     version = m(version)
         try:
-            version.save(tmpfile, format=Image.EXTENSION[ext.lower()], quality=VERSION_QUALITY, optimize=(os.path.splitext(version_path)[1] != '.gif'))
+            version.save(validate_path(tmpfile), format=Image.EXTENSION[ext.lower()], quality=VERSION_QUALITY, optimize=(os.path.splitext(version_path)[1] != '.gif'))
         except IOError:
-            version.save(tmpfile, format=Image.EXTENSION[ext.lower()], quality=VERSION_QUALITY)
+            version.save(validate_path(tmpfile), format=Image.EXTENSION[ext.lower()], quality=VERSION_QUALITY)
         # Remove the old version, if there's any
         if version_path != site.storage.get_available_name(version_path):
             site.storage.delete(version_path)
-        site.storage.save(version_path, tmpfile)
+        site.storage.save(validate_path(version_path), tmpfile)
         return version_path
     except:
         return None

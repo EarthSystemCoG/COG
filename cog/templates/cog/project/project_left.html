@@ -32,7 +32,7 @@
 	    {% endfor %}
 	    
 	    {% if user|hasAdminPermission:project %}
-		    <hr style="margin:0;"/>
+		    <hr style="margin:0; background-color:#CCCCCC;"/>
 		    <ul>
 		    	<li><a href="{% url 'project_index' project.short_name.lower %}" class="changelink">&nbsp;Edit Site Index</a></li>
 		    </ul>
@@ -58,6 +58,7 @@
             </div>
             <ul>
                 <li><a href="{% url 'post_add' project.short_name.lower %}?type=page" class="addlink">&nbsp;Add Page</a></li>
+                <li><a href="{% url 'post_add' project.short_name.lower %}?type=hyperlink" class="addlink">&nbsp;Add Link</a></li>
        	        <li><a href="{% url 'news_add' project.short_name.lower %}" class="addlink">&nbsp;Publish News</a></li>
                 <li><a href="{% url 'doc_add' project.short_name.lower %}" class="addlink">&nbsp;Add File</a></li>
                 <li><a href="{% url 'bookmark_add' project.short_name.lower %}" class="addlink">&nbsp;Add Resource</a></li>

@@ -2,53 +2,11 @@ import os
 import ConfigParser
 import logging
 
-from cog.constants import (SECTION_ESGF, SECTION_GLOBUS)
+from cog.constants import (SECTION_ESGF, SECTION_GLOBUS, SECTION_PID)
 
 class SiteManager(object):
-    '''Class used to load site-specific settings at COG startup.
-
-       Example configuration file:
-
-       [default]
-       SITE_NAME=My Site
-       SITE_DOMAIN=localhost:8000
-       TIME_ZONE=America/Denver
-       COG_MAILING_LIST=cog_info@list.woc.noaa.gov
-       SECRET_KEY=yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#
-       DATABASE_NAME=cogdb
-       DATABASE_USER=database_user
-       DATABASE_PORT=database_port
-       DATABASE_PORT=5432
-       MY_PROJECTS_REFRESH_SECONDS=3600
-       # optional number of days after which password expire
-       PASSWORD_EXPIRATION_DAYS=0
-       # optional top-level URL to redirect user registration (no trailing '/')
-       IDP_REDIRECT=https://www.earthsystemcog.org
-       # whitelist of trusted Identity Providers
-       IDP_WHITELIST=/esg/config/esgf_idp.xml, /esg/config/esgf_idp_static.xml
-       # dev/prod server switch
-       PRODUCTION_SERVER = True
-       USE_CAPTCHA = True
-
-       [ESGF]
-       ESGF_HOSTNAME=esg-datanode.jpl.nasa.gov
-       ESGF_DBURL=postgresql://<db_username>:<db_password>@localhost/esgcet
-       ESGF_VERSION=v2.0-RC4.3-devel
-       
-       [EMAIL]
-       EMAIL_SERVER=smtp.gmail.com
-       # leave port blank if default
-       EMAIL_PORT=
-       EMAIL_SENDER=Earth System COG
-       EMAIL_USERNAME=........
-       EMAIL_PASSWORD=........
-       EMAIL_SECURITY=STARTTLS
-       
-       [GLOBUS]
-       PORTAL_GO_USERNAME = ..........
-       PORTAL_GO_PASSWORD = ..........
-       ENDPOINTS = /esg/config/esgf_endpoints.xml
-
+    '''
+    Class used to load site-specific settings at COG startup.
     '''
     
     # location of site specific settigs configuration file
@@ -84,7 +42,12 @@ class SiteManager(object):
         '''Returns True if the configuration file contains the named section.'''
 
         return self.config.has_section(section)
-    
+
+    def hasOption(self, section, option):
+        '''Returns True if the configuration file contains the named section and the named option.'''
+
+        return self.config.has_option(section, option)
+
     def isEsgfEnabled(self):
         '''Utility function to check whether this site is backed-up by an ESGF node.'''
         
@@ -95,7 +58,16 @@ class SiteManager(object):
         
         return self.hasConfig(SECTION_GLOBUS)
 
-    
-    
+    def isPidEnabled(self):
+        '''Utility function to check whether this site has been configured for data cart PIDs.'''
+
+        try:
+            __import__('esgfpid')
+            module_found = True
+        except ImportError:
+            module_found = False
+
+        return self.hasOption(SECTION_PID, 'PID_CREDENTIALS') and module_found
+
+
 siteManager = SiteManager()
-            

@@ -10,10 +10,14 @@ import django.dispatch
 class Post(models.Model):
         
         # possible Post types
-        TYPE_BLOG  = 'blog'
-        TYPE_PAGE  = 'page'
+        TYPE_BLOG  = 'blog'  # obsolete
+        TYPE_PAGE  = 'page'  # internal wiki page
         TYPE_NOTES = 'notes'
-        POST_TYPES = ( (TYPE_BLOG, TYPE_BLOG.capitalize()), (TYPE_PAGE, TYPE_PAGE.capitalize()), (TYPE_NOTES, TYPE_NOTES.capitalize()) )
+        TYPE_HYPERLINK = 'hyperlink'   # an external URL
+        POST_TYPES = ( (TYPE_BLOG, TYPE_BLOG.capitalize()), 
+                       (TYPE_PAGE, TYPE_PAGE.capitalize()), 
+                       (TYPE_HYPERLINK, TYPE_HYPERLINK.capitalize()), 
+                       (TYPE_NOTES, TYPE_NOTES.capitalize()) )
       
         author = models.ForeignKey(User, related_name='posts', verbose_name='Author', blank=False, null=True, on_delete=models.SET_NULL)
         title = models.CharField(max_length=200, verbose_name='Title', blank=False)

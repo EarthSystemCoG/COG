@@ -71,12 +71,16 @@ def update_user_projects(user):
                     
         # remove old memberships for remote projects
         for group in user.groups.all():
-            project = getProjectForGroup(group)
-            # do not change local projects
-            if not project.isLocal():
-                if not group in remoteGroups:
-                    print 'Removing group: %s from user: %s' % (group, user)
-                    user.groups.remove( group )
+            try:
+                project = getProjectForGroup(group)
+                # do not change local projects
+                if not project.isLocal():
+                    if not group in remoteGroups:
+                        print 'Removing group: %s from user: %s' % (group, user)
+                        user.groups.remove( group )
+            except ObjectDoesNotExist:
+                print 'WARNING: cannot retrieve project for group=%s, removing obsolete group' % group
+                user.groups.remove( group )
             
         # persist changes to local database
         user.save()

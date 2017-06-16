@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from cog.models import *
 from django.contrib.auth.models import User
 from django.template import RequestContext
@@ -46,16 +46,16 @@ def external_urls_display(request, project_short_name, suburl):
     peers = _subSelectProjects(project.peers.all(), externalUrlConf, request.user)
 
     # to change to tabbed rollups, load 'cog/common/rollup_tabbed.html'
-    return render_to_response('cog/common/rollup_accordion.html',
-                              {'project': project, 
-                               'title': '%s %s' % (project.short_name, template_title),
-                               # 'title': template_title,
-                               'template_page': 'cog/project/_external_urls_list.html', 
-                               'template_title': template_title, 
-                               'template_form_pages': template_form_pages,
-                               'children': children, 'peers': peers,
-                               'external_url_type': external_url_type},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/common/rollup_accordion.html',
+                   {'project': project, 
+                    'title': '%s %s' % (project.short_name, template_title),
+                    # 'title': template_title,
+                    'template_page': 'cog/project/_external_urls_list.html', 
+                    'template_title': template_title, 
+                    'template_form_pages': template_form_pages,
+                    'children': children, 'peers': peers,
+                    'external_url_type': external_url_type})
 
 
 # method to sub-select related projects to display in external URL rollup
@@ -161,7 +161,7 @@ def custom_field_callback(field):
 
 
 def render_external_urls_form(request, project, formset, externalUrlConf, redirect):
-     return render_to_response('cog/project/external_urls_form.html',
-                              {'project':project, 'formset':formset, 'title' : '%s Update' % externalUrlConf.label, 
-                               'type' : externalUrlConf.type, 'redirect': redirect },
-                                context_instance=RequestContext(request))
+    return render(request,
+                  'cog/project/external_urls_form.html',
+                  {'project':project, 'formset':formset, 'title' : '%s Update' % externalUrlConf.label, 
+                   'type' : externalUrlConf.type, 'redirect': redirect })

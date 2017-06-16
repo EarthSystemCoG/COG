@@ -712,8 +712,8 @@ def showMessage(message):
         return 'The user password has been updated.'
 
     elif message == 'user_reminder':
-        return 'Your UserName and OpenID have been emailed to the address you provided.' \
-               '<br/>Please check your email box.'
+        return 'Your username and OpenID have been emailed to the address you provided.' \
+               '<br/>Please check your email.'
 
     elif message == 'incomplete_profile':
         return 'Please update your profile to contain at least the mandatory information required by COG ' \
@@ -859,3 +859,12 @@ def getHttpParamValue(request, name):
 def bleachtags(htmlstring):
     
     return str( bleach.clean(htmlstring) ) # unicode --> string)
+
+@register.filter
+def getDisplayStatus(flag1, flag2):
+    '''Return the display status of an HTML panel by evaluating the logical OR of two variables.'''
+    
+    if flag1 or flag2:
+        return 'block'
+    else:
+        return 'none'

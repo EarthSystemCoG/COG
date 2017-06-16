@@ -36,7 +36,7 @@
 	        <div class="span-max last" style="margin-bottom:10px;" >
 	        
 	        	<!-- update links -->
-	            {% if request.user.id == user_profile.user.id or request.user.is_staff %}
+                {% if request.user.id == user_profile.user.id or request.user.is_staff %}
 	                <div style="text-align:center;">
 	                    <a href="{% url 'user_update' user_profile.user.id %}">Update profile |</a>
 	                    <!-- Change password -->

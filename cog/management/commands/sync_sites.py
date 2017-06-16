@@ -22,15 +22,15 @@ class Command(BaseCommand):
     
     help = 'Updates the list of CoG peers in the local database'
     
-    # add option to delete sites if not found in XML
-    option_list = BaseCommand.option_list + (
-    make_option('--delete',
-        action='store_true',
-        dest='delete',
-        default=False,
-        help='Delete stale sites that are found in database but not in the XML file'),
-    )
 
+    def add_arguments(self, parser):
+        
+        # Named (optional) arguments
+        parser.add_argument('--delete',
+                            action='store_true',
+                            dest='delete',
+                            default=False,
+                            help='Delete stale sites that are found in database but not in the XML file')
     
     def handle(self, *args, **options):
         

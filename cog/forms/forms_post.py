@@ -1,5 +1,5 @@
 from cog.models import *
-from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect
+from django.forms import ModelForm, ModelMultipleChoiceField, NullBooleanSelect, ValidationError
 from django.db import models
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django import forms
@@ -43,10 +43,16 @@ class PostForm(ModelForm):
 
         #self.fields['parent'].queryset[0]=Q(is_home="true")
         self.fields['parent'].empty_label = "Top Level Page (no parent)"
-        # limit topic selection to current project and post type
-        self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project) &
+        # limit topic selection to current project and post type(s)
+        if type == Post.TYPE_PAGE or type == Post.TYPE_HYPERLINK:
+            self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project))\
+                                                         .filter(Q(post__type=Post.TYPE_PAGE) |
+                                                                 Q(post__type=Post.TYPE_HYPERLINK))\
+                                                         .distinct().order_by('name')
+        else:
+            self.fields['topic'].queryset = Topic.objects.filter(Q(post__project=project) &
                                                              Q(post__type=type)).distinct().order_by('name')
-
+    
     # override form clean() method to execute combined validation on multiple fields
     def clean(self):
 
@@ -54,7 +60,7 @@ class PostForm(ModelForm):
         topic = cleaned_data.get("topic")
         newtopic = cleaned_data.get("newtopic")
         type = cleaned_data.get("type")
-
+        
         # validate URL
         # must be null for home page, not null for other pages
         if type == Post.TYPE_PAGE:
@@ -100,12 +106,33 @@ class PostForm(ModelForm):
                     else:
                         self._check_url_is_unique(full_url+"/")
 
+        # validate full URLs
+        if type == Post.TYPE_HYPERLINK:
+            url = cleaned_data.get("url").lower()
+            if not url.startswith('http://') and not url.startswith('https://'):
+                self._errors["url"] = self.error_class(["Invalid URL: must start with http(s)://..."])
+            
         # validate "template"
         # must be not null for every page
         if type == Post.TYPE_PAGE:
             template = cleaned_data.get("template")
             if template == '':
                 self._errors["template"] = self.error_class(["Invalid template"])
+        
+        # prevent <iframe>, <script> and <form> tags        
+        if type == Post.TYPE_PAGE:
+            body = cleaned_data.get("body")
+            # execute validation on content without white spaces
+            _body = body.replace(" ", "").lower()
+            if "<iframe" in _body:
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <iframe> tag. Use the source "
+                                                         "button to remove."])
+            if "<script" in _body:
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <script> tag. Use the source "
+                                                         "button to remove."])
+            if "<form" in _body:
+                self._errors["body"] = self.error_class(["Invalid content: cannot use <form> tag. Use the source "
+                                                         "button to remove."])
 
         # validate "topic"
         # cannot set both 'topic' and 'newtopic'
@@ -117,12 +144,21 @@ class PostForm(ModelForm):
 
         # create new topic - if not existing already
         elif newtopic != '':
+                        
             try:
                 topic = Topic.objects.get(name__iexact=newtopic)
             except ObjectDoesNotExist:
                 topic = Topic.objects.create(name=newtopic)
 
             cleaned_data["topic"] = topic
+
+        # prevent XSS on fields 'title', 'label', 'newtopic'
+        for key in ["title", "label", "newtopic"]:
+            if key in cleaned_data:
+                try:
+                    xss_clean_field(self, key)
+                except ValidationError as ve:
+                    self._errors[key] = self.error_class([ve.message])
 
         # always return the full collection of cleaned data.
         return cleaned_data

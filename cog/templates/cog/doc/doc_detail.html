@@ -47,10 +47,4 @@
         <div id="myDialog" class="yui-skin-sam"></div>
     {% endif %}
 
-    <!-- Comments -->
-    {% with doc as object %}
-        {% url 'doc_detail' object.id as next_view %}
-        {% include 'cog/common/_comments.html' %}
-    {% endwith %}        
-
 {% endblock %}

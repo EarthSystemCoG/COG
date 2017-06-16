@@ -2,19 +2,22 @@
 Module containing API and implementation for registry-type objects.
 '''
 
-from xml.etree.ElementTree import fromstring, ParseError
-import re
 import abc
-#import pycurl
-#import certifi
-from cog.utils import file_modification_datetime
-from django.conf import settings
 import os
+import re
+from xml.etree.ElementTree import fromstring, ParseError
+
+from cog.constants import (IDP_WHITELIST_STATIC_FILENAME, IDP_WHITELIST_FILENAME, 
+                           KNOWN_PROVIDERS_FILENAME, PEER_NODES_FILENAME)
+from cog.models import PeerSite
+from cog.utils import file_modification_datetime, check_filepath
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 
-from cog.models import PeerSite
 
+#import pycurl
+#import certifi
 NS = "http://www.esgf.org/whitelist"
 
 class WhiteList(object):
@@ -35,79 +38,6 @@ class KnownProvidersDict(object):
         '''Returns a dictionary of (IdP name, IdP URL) pairs.''' 
         pass
     
-class Endpoint(object):
-    '''Utility class that stores the fields for processing a Globus endpoint.'''
-    
-    def __init__(self, name, path_out=None, path_in=None):
-        self.name = name
-        self.path_out = path_out
-        self.path_in = path_in
-    
-    
-class EndpointDict(object):
-
-    __metaclass__ = abc.ABCMeta
-    
-    @abc.abstractmethod
-    def endpointDict(self):
-        '''Returns a dictionary of (GridFTP hostname:port, Globus Endpoint object) pairs.''' 
-        pass
-    
-class LocalEndpointDict(EndpointDict):
-    '''Implementation of EndpointDict based on a local XML configuration file.'''
-    
-    def __init__(self, filepath):
-        
-        self.filepath = None
-        self.endpoints = {}
-        self.init = False
-        
-        try:
-            if os.path.exists(filepath):
-                self.filepath = filepath
-                self.modtime = file_modification_datetime(self.filepath)
-                self._reload(force=True)
-                self.init = True
-            
-        except IOError:
-            pass
-        
-    def _reload(self, force=False):
-        '''Internal method to reload the dictionary of endpoints if the file has changed since it was last read'''
-
-        if self.filepath: # only if endpoints file exists
-            
-            modtime = file_modification_datetime(self.filepath)
-    
-            if force or modtime > self.modtime:
-    
-                print 'Loading endpoints from: %s, last modified: %s' % (self.filepath, modtime)
-                self.modtime = modtime
-                endpoints = {}
-    
-                # read XML file
-                with open (self.filepath, "r") as myfile:
-                    xml=myfile.read().replace('\n', '')
-                    
-                # <endpoints xmlns="http://www.esgf.org/whitelist">
-                root = fromstring(xml)
-                # <endpoint name="esg#jpl" gridftp="esg-datanode.jpl.nasa.gov:2811" />
-                for endpoint in root.findall("{%s}endpoint" % NS):
-                    gridftp = endpoint.attrib['gridftp']
-                    name = endpoint.attrib['name']                   # mandatory attribute
-                    path_out = endpoint.attrib.get('path_out', None) # optional attribute
-                    path_in = endpoint.attrib.get('path_in', None)   # optional attribute
-                    endpoints[ gridftp ] = Endpoint(name, path_out=path_out, path_in=path_in)
-                    print 'Using Globus endpoint %s : %s (%s --> %s)'  % (gridftp, name, path_out, path_in)
-    
-                # switch the dictionary of endpoints after reading
-                self.endpoints = endpoints
-    
-    def endpointDict(self):
-        
-        self._reload() # reload dictionary from file ?
-        return self.endpoints
-
     
 class LocalKnownProvidersDict(KnownProvidersDict):
     '''Implementation of KnownProvidersDict based on a local XML configuration file.'''
@@ -122,6 +52,9 @@ class LocalKnownProvidersDict(KnownProvidersDict):
             
             # store filepath and its last access time
             self.filepath = str(settings.KNOWN_PROVIDERS)
+            
+            # prevent file path manipulation
+            check_filepath(self.filepath, [KNOWN_PROVIDERS_FILENAME])
             
             if os.path.exists(self.filepath):
                 
@@ -193,6 +126,9 @@ class LocalWhiteList(WhiteList):
         # loop over whitelist files
         for filepath in self.filepaths:
             
+            # prevent file path manipulation
+            check_filepath(filepath, [IDP_WHITELIST_FILENAME, IDP_WHITELIST_STATIC_FILENAME])
+            
             # record last modification time
             self.modtimes[filepath] = file_modification_datetime(filepath)
 
@@ -255,7 +191,12 @@ class PeerNodesList(object):
     '''
     
     def __init__(self, filepath):
+        
         self.filepath = filepath
+        
+        # prevent file path manipulation
+        check_filepath(self.filepath, [PEER_NODES_FILENAME])
+
         
     def reload(self, delete=False):
         

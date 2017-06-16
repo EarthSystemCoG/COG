@@ -1,7 +1,6 @@
 <!--START:/cog/templates/cog/search/_search_text.html-->
-<!-- Title -->
-<!--<h1 class="title">{{ project.short_name }} Data Search </h1> -->
 
+{% load cog_utils %}
 
 {% if project.searchprofile.description %}
     <div>
@@ -11,8 +10,8 @@
 {% endif %}
 
 <!-- Search Text Box-->
-<table>
-    <tr>
+<table>    
+  <tr>
     <td>
       <div style="background-color:#EEEEEE;border:1px solid #666; padding-right:5px;height:41px;">
         <table>
@@ -32,9 +31,9 @@
         <table>
         <tr>
 	       <td style="width:50%;text-align:center;vertical-align:middle;">
-           <span style="display:inline-block; vertical-align: -3px;">
+           <span style="display:inline-block;">
                <a href="https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help" target="_blank">
-                   <img alt="question mark icon" style="float:right;width:14px;" src="/static/cog/img/question_teal_16x16.png">
+                   <i style="font-size:17px; color:#666; vertical-align: middle;" class="fa fa-question-circle"></i>
                </a>
            </span>
            &nbsp;
@@ -42,8 +41,6 @@
 		   &nbsp; <input type="button" value="Reset" onclick="window.location='{{ request.get_full_path }}'"/>
            <!--&nbsp; <input type="button" value="Help" onclick="window.open('https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help', '_blank') " />-->
 	      {% comment %} &nbsp; <input type="button" value="Reset" onclick="window.location='{% url 'search' project.short_name %}'"/> {% endcomment %}
-
-
 
 	      Display
 	      <select name="limit" id="limit">
@@ -53,12 +50,81 @@
 	         <option value="100" {% if search_input.limit == 100 %} selected="selected" {% endif %}>100</option>
 	      </select>
           <label for="limit">results per page</label>
+
+		  <!-- More Search Options control -->
+		  &nbsp;&nbsp;&nbsp;
+		  [ <strong><a href="" onclick="javascript:document.getElementById( 'max_version_query' ).value=''; 
+			                            javascript:document.getElementById( 'min_version_query' ).value=''; 
+		                                javascript:openclose('more_search_options_panel', this, 'More Search Options', 'Less Search Options'); 
+		                                return false;">
+		  {% if search_input.max_version or search_input.min_version %}
+		    Less Search Options 	
+		  {% else %}
+		  	More Search Options
+		  {% endif %}
+		  </a></strong> ]
+		  
 	     </td>
         </tr>
         </table>
       </div>
     </td>
     </tr>
+    
+    
+    <!-- More Search Options panel -->
+    <tr>
+    	<td colspan="2" style="background-color:#FFFFFF">
+    		<div style="background-color:#EEEEEE; border:1px solid #666; padding-right:5px; display: {{ search_input.max_version|getDisplayStatus:search_input.min_version }}" 
+    		     id="more_search_options_panel">
+
+		        <table>
+		         <tr>
+			      <td style="width:30%; text-aling:left; vertical-align:middle;" >To filter Filenames by variable:</td>
+			       <td style="width:25%; text-aligh:right; vertical-align:middle; white-space: nowrap;">
+			       		<input type="text" name="query-filter" alt="query-filter" id="query-filter"
+			             	   placeholder="Enter Text" onkeydown="if (event.keyCode == 13) { applyQueryFilter2(); return false; }" />			       
+			       </td>
+			       <td style="width:45%; text-aling:left; vertical-align:middle;" colspan="2">
+	  	                  &nbsp;<input type="button" value="Apply" 
+	  	                               onclick="javascript:applyQueryFilter2(); return false;"/>
+	  		              &nbsp;<input type="button" value="Reset" 
+	  		                           onclick="document.getElementById('query-filter').value=''; javascript:applyQueryFilter2(); return false;"/>
+		           	  	  &nbsp; (works with 'List Files', WGET and Globus)
+		           </td>
+		          </tr>
+			      <tr>
+			      <td style="width:30%; text-aling:left; vertical-align:middle;">To search All Versions with date constraints:</td>
+			      <td style="width:25%; text-aling:left; vertical-align:middle;">
+		               <input type="text" id="min_version_query" alt="min_version_query" 
+		                      placeholder="YYYYMMDD"
+		                      name="min_version" size="10" value="{{search_input.min_version}}"/>
+		           </td>
+			       <td style="width:20%; text-aligh:right; vertical-align:middle; white-space: nowrap;"><label for="max_version_query">&le; dataset version (as 'YYYYMMDD' date) &le; </label></td>
+			       
+			       <td style="width:25%; text-aling:left; vertical-align:middle;">
+		               <input type="text" id="max_version_query" alt="max_version_query" 
+		                      placeholder="YYYYMMDD"
+		                      name="max_version" size="10" value="{{search_input.max_version}}"/>
+		           </td>
+		          </tr>
+		          <tr>
+		          	<td style="width:100%; text-aling:left; vertical-align:middle;" colspan="4">
+		          		To search for a dataset with a known <b>id</b>, <b>master_id</b> or <b>instance_id</b>, use the 'Enter Text' widget above as in the following examples (use of '*' is allowed):
+		          		<ul>
+		          			<li> id:obs4mips.NASA-JPL.GNSS_RO.zg.monClim.v20160601|esgf-data.jpl.nasa.gov
+		          			<li> id:obs4mips.NASA-JPL.*
+		          			<li> master_id:obs4mips.NASA-JPL.GNSS_RO.zg.monClim
+		          			<li> instance_id:obs4mips.NASA-JPL.GNSS_RO.zg.monClim.v20160601
+		          		</ul>
+		          	</td>
+		          </tr>
+		        </table>
+
+			</div>
+    	</td>
+    </tr>
+    
 </table>
 
 <!-- optional checkbox flags -->

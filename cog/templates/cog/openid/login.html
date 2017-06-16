@@ -17,8 +17,8 @@
 		
 		/* buttons */
 		.yui-ac .yui-button {vertical-align:middle;}
-		.yui-ac .yui-button button {background: url({{ STATIC_URL}}/js/yui/examples/autocomplete/assets/img/ac-arrow-rt.png) center center no-repeat }
-		.yui-ac .open .yui-button button {background: url({{ STATIC_URL}}/js/yui/examples/autocomplete/assets/img/ac-arrow-dn.png) center center no-repeat}
+		.yui-ac .yui-button button {background: url({{ STATIC_URL}}cog/img/ac-arrow-rt.png) center center no-repeat }
+		.yui-ac .open .yui-button button {background: url({{ STATIC_URL}}cog/img/ac-arrow-dn.png) center center no-repeat}
 	
 	</style>
 
@@ -121,8 +121,6 @@
             {% else %}
 	            <div class="message-box">
 	                {{ request.GET.message|showMessage|safe }}
-	                <br/>Your OpenID is: {{ request.GET.openid|escape }}
-	                <br/>Your local username is: {{ request.GET.username|escape }} 
 	            </div>
             {% endif %}
 	        <p></p>
