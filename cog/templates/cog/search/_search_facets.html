@@ -40,7 +40,8 @@
 				                    <!-- only show the +/- button if there are options available -->
 				                    {% if facet.getValues %}
 					                    <div class="bd">
-				              		        <div class="fixed">
+				              		      <div class="fixed">
+				              		        <div class="facet-panel">
 				              	            	{% for value_counts in facet.getSortedValues %}
 					              			        {% if value_counts.1 > 0 and value_counts.0.lower != 'none' %}
 		              			    			        <li class="facet-option">
@@ -54,6 +55,7 @@
 					              			        {% endif %}
 					              		        {% endfor %}
 						      		        </div>
+						      		      </div>
 								        </div>
 					                    <div class="actions">
 							                <a href="#" class="accordionToggleItem">&nbsp;</a>

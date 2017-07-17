@@ -13,7 +13,7 @@ Each parameter has a default value.
 '''
 
 from cog.site_manager import siteManager
-from cog.constants import SECTION_ESGF
+from cog.constants import SECTION_ESGF, SECTION_PID
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
@@ -26,9 +26,10 @@ DATABASE_PATH = siteManager.get('DATABASE_PATH', default="%s/django.data" % site
 DATABASE_NAME = siteManager.get('DATABASE_NAME', default='cogdb')
 DATABASE_USER = siteManager.get('DATABASE_USER')
 DATABASE_PASSWORD = siteManager.get('DATABASE_PASSWORD')
+DATABASE_HOST = siteManager.get('DATABASE_HOST', default='localhost')
 DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
 MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600))  # one hour
-PASSWORD_EXPIRATION_DAYS = int(siteManager.get('PASSWORD_EXPIRATION_DAYS', default=0))  # 0: no expiration
+PWD_EXPIRATION_DAYS = int(siteManager.get('PWD_EXPIRATION_DAYS', default=0))  # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % siteManager.cog_config_dir)
@@ -61,6 +62,13 @@ if ESGF_CONFIG:
     ESGF_VERSION = siteManager.get('ESGF_VERSION', section=SECTION_ESGF)
 # FIXME
 
+# PID specific settings
+PID_CONFIG = siteManager.isPidEnabled()
+if PID_CONFIG:
+    PID_PREFIX = siteManager.get('PID_PREFIX', section=SECTION_PID, default='21.14100')
+    PID_MESSAGING_SERVICE_EXCHANGE = siteManager.get('PID_EXCHANGE', section=SECTION_PID, default='esgffed-exchange')
+    PID_CREDENTIALS = siteManager.get('PID_CREDENTIALS', section=SECTION_PID, default=None).split('\n')
+
 #====================== standard django settings.py ======================
 
 
@@ -89,8 +97,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': DATABASE_NAME,
         'USER': DATABASE_USER,                      # Not used with sqlite3.
-        'PASSWORD': DATABASE_PASSWORD,                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PASSWORD': DATABASE_PASSWORD,              # Not used with sqlite3.
+        'HOST': DATABASE_HOST,                      # Defaults to 'localhost'
         'PORT': DATABASE_PORT,                      # Set to empty string for default. Not used with sqlite3.
     }
 
@@ -230,7 +238,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# Use stricter policy for X_FRAME_OPTIONS: default is X_FRAME_OPTIONS='SAMEORIGIN'
+# Default is X_FRAME_OPTIONS='SAMEORIGIN'
+# Using X_FRAME_OPTIONS = DENY breaks the CKEditor file uploader.
 #X_FRAME_OPTIONS = 'DENY'
 
 # login page URL (default: '/accounts/login')
@@ -251,6 +260,7 @@ AUTH_PROFILE_MODULE = "cog.UserProfile"
 if PRODUCTION_SERVER:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
     #SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # CSS styles
@@ -267,11 +277,6 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # default size limit of files uploaded by users
 MAX_UPLOAD_SIZE = 52428800
-
-#=== django-comments-contrib settings ======================================
-
-# The maximum length of the comment field, in characters. Comments longer than this will be rejected. Defaults to 3000.
-COMMENT_MAX_LENGTH = 10000
 
 #=== django filebrowser settings =========================
 
@@ -314,3 +319,7 @@ CAPTCHA_BACKGROUND_COLOR = '#FAC24A' # matches CoG dark yellow
 #CAPTCHA_FOREGROUND_COLOR = "#666666" # matches CoG dark gray
 CAPTCHA_IMAGE_SIZE = (100, 40)
 #CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+
+#==== Quality Control Flags references ==================================
+
+QCFLAGS_URLS = { 'obs4mips_indicators': 'https://www.earthsystemcog.org/projects/obs4mips/data-indicators' }

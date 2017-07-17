@@ -42,7 +42,7 @@ class UserProfile(models.Model):
     researchKeywords = models.CharField(max_length=RESEARCH_KEYWORDS_MAX_CHARS, blank=True, null=True, default='')
 
     # clear text password - this field is NOT persisted to the database, but it is needed to execute MD5 encoding on the user-supplied password
-    clearTextPassword = ''
+    clearTextPwd = None
 
     # user (login) type: 1=COG, 2=ESGF
     type = models.IntegerField(null=False, blank=False, default=1)
@@ -67,9 +67,9 @@ class UserProfile(models.Model):
         if self.last_password_update is None:
             return True
         
-        if settings.PASSWORD_EXPIRATION_DAYS > 0:
+        if settings.PWD_EXPIRATION_DAYS > 0:
             today = datetime.date.today()
-            if (today - self.last_password_update).days > settings.PASSWORD_EXPIRATION_DAYS:
+            if (today - self.last_password_update).days > settings.PWD_EXPIRATION_DAYS:
                 return True
             
         # default

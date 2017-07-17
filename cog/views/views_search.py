@@ -18,9 +18,9 @@ from cog.views.utils import getQueryDict
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.http.response import HttpResponseServerError
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.template.exceptions import TemplateDoesNotExist
 from django.views.decorators.http import require_http_methods
@@ -40,7 +40,7 @@ SEARCH_PATH   = "search_path"
 SEARCH_URL    = 'search_url'         # stores ESGF search URL
 LAST_SEARCH_URL = "last_search_url"  # stores CoG last search URL (including project)
 # constraints excluded from bread crumbs display
-SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type"]
+SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type","max_version", "min_version"]
 TEMPLATE='template'
               
       
@@ -83,9 +83,9 @@ def search(request, project_short_name):
     else:
         messages = ['Searching is not enabled for this project.',
                     'Please contact the project administrators for further assistance.']
-        return render_to_response('cog/common/message.html', {'project': project, 'messages': messages,
-                                                              'title2': 'Data Search'},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/common/message.html', 
+                      {'project': project, 'messages': messages, 'title2': 'Data Search'})
 
 def _addConfigConstraints(searchInput, searchConfig):
     '''Returns a COPY of the search input object with added project fixed constraints.'''
@@ -136,6 +136,16 @@ def _buildSearchInputFromHttpRequest(request, searchConfig):
         searchInput.offset = int(queryDict['offset'])
     if queryDict.get('limit', 0):
         searchInput.limit = int(queryDict['limit'])
+        
+    # max_version, min_version
+    # NOTE: implies search on All Versions ( searchInput.latest = False )
+    if queryDict.get('max_version', ''):
+        searchInput.max_version = queryDict['max_version'].strip()
+        searchInput.latest = False
+    if queryDict.get('min_version', ''):
+        searchInput.min_version = queryDict['min_version'].strip()
+        searchInput.latest = False
+
 
     return searchInput
 
@@ -261,7 +271,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
         del data[TEMPLATE] # remove temp,ate from session
 
     try:
-        return render_to_response(template, data, context_instance=RequestContext(request))   
+        return render(request, template, data)   
      
     except TemplateDoesNotExist:
         
@@ -287,8 +297,9 @@ def search_post(request, searchInput, searchConfig, extra={}):
     searchService = searchConfig.searchService
     queryDict = getQueryDict(request)
     
-    # valid user input
-    if (searchInput.isValid()):
+    # validate user input
+    (valid, error_message) = searchInput.isValid()
+    if valid:
                 
         # add project fixed constraints
         print 'Search POST: adding fixed project constraints'
@@ -327,7 +338,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
         # override search input from request
         data[SEARCH_INPUT] = searchInput
         # add error
-        data[ERROR_MESSAGE] = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS
+        data[ERROR_MESSAGE] = error_message
              
     # store data in session 
     request.session[SEARCH_DATA] = data
@@ -401,10 +412,10 @@ def metadata_display(request, project_short_name):
         jsondoc = json.loads(response)
         parentMetadata = _processDoc(jsondoc["response"]["docs"][0])
     
-    return render_to_response('cog/search/metadata_display.html', 
-                              {'title': metadata.title, 'project': project, 'metadata': metadata,
-                               'parentMetadata': parentMetadata, 'back': back},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/metadata_display.html', 
+                  {'title': metadata.title, 'project': project, 'metadata': metadata,
+                   'parentMetadata': parentMetadata, 'back': back})
 
 
 class MetaDoc:
@@ -825,6 +836,11 @@ def search_files(request, dataset_id, index_node):
     # optional query filter
     query = request.GET.get('query', None)
     if query is not None and len(query.strip()) > 0:
+        # validate query value
+        for c in INVALID_CHARACTERS:
+            if c in query:
+                # HttpResponseBadRequest Status Code = 400
+                return HttpResponseBadRequest(ERROR_MESSAGE_INVALID_TEXT, content_type="text/plain")
         params.append(('query', query))
         
     # optional shard
@@ -852,10 +868,10 @@ def search_reload(request):
         return HttpResponseRedirect(request.session[LAST_SEARCH_URL])  # just like after the last POST
         
     else:
-        return render_to_response('cog/common/message.html', 
-                                  {'mytitle': 'An Error Occurred',
-                                   'messages': ['Your last search page could not be found.']},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/common/message.html', 
+                      {'mytitle': 'An Error Occurred',
+                       'messages': ['Your last search page could not be found.']})
 
 def _get_search_groups(project):
     '''
@@ -889,12 +905,12 @@ def search_profile_order(request, project_short_name):
     # GET
     if request.method == 'GET':
         
-        return render_to_response('cog/search/search_order_form.html', 
-                                  {'project': project, 
-                                   'groups': groups,
-                                   'title': 'Order Search Facets and Groups', 
-                                   'errors':{} }, 
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/search/search_order_form.html',
+                      {'project': project, 
+                       'groups': groups,
+                       'title': 'Order Search Facets and Groups',
+                       'errors':{} })
 
     # POST
     else:
@@ -943,28 +959,53 @@ def search_profile_order(request, project_short_name):
 
         else:
             # return to form to fix validation errors
-            return render_to_response('cog/search/search_order_form.html', 
-                                      {'project': project, 
-                                       'groups': groups,
-                                       'title': 'Order Search Facets and Groups', 
-                                       'errors':errors }, 
-                                       context_instance=RequestContext(request))
+            return render(request,
+                          'cog/search/search_order_form.html', 
+                          {'project': project, 
+                           'groups': groups,
+                           'title': 'Order Search Facets and Groups', 
+                           'errors':errors })
             
 def render_search_profile_form(request, project, form, search_groups):
-    return render_to_response('cog/search/search_profile_form.html', 
-                              {'project': project, 
-                               'form': form, 
-                               'search_groups':search_groups,
-                               'title': 'Project Search Configuration'},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/search_profile_form.html', 
+                  {'project': project, 
+                   'form': form, 
+                   'search_groups':search_groups,
+                   'title': 'Project Search Configuration'})
     
 
 def render_search_facet_form(request, project, form, facets):
-    return render_to_response('cog/search/search_facet_form.html', 
-                              {'project': project, 'form': form, 'title': 'Search Facet Configuration',
-                               'facets': facets}, context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/search_facet_form.html', 
+                  {'project': project, 'form': form, 'title': 'Search Facet Configuration', 'facets': facets})
 
 def render_search_group_form(request, project, form):
-    return render_to_response('cog/search/search_group_form.html', 
-                              {'project': project, 'form': form, 'title': 'Search Facet Group'}, 
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/search/search_group_form.html', 
+                  {'project': project, 'form': form, 'title': 'Search Facet Group'})
+
+def citation_display(request):
+
+    # get citation info in json format
+    url = request.GET.get('url', '')
+
+    try:
+        fh = urllib2.urlopen(url)
+        response = fh.read()
+        headers = fh.info().dict
+    except HTTPError, e:
+        print('HTTPError %s for %s' % (str(e.code), url))
+        return HttpResponseNotFound()
+
+    if int(headers['x-cera-rc']) > 0:
+        print 'Citation not found: %s' % url
+        return HttpResponseNotFound()
+
+    try:
+        json.loads(response)
+    except ValueError, e:
+        print 'Citation not valid json: %s' % url
+        return HttpResponseNotFound()
+
+    return HttpResponse(response, content_type="application/json")

@@ -79,5 +79,29 @@
   			searchForm.offset.value = offset;
   			searchForm.submit();
   		}
+  		
+  	    // function to apply the query filter to the currently showing file listings
+  	    function applyQueryFilter2() {
+  	    	
+  	      {% with search_output.results as results %}
+  	    	{% if results|length > 0 %}
+
+	  	    	{% for record in results %}
+	  	    		var filesDiv = document.getElementById("files_{{ record.id }}");
+	  	    		if (filesDiv!=null && filesDiv.style.display == 'block') { // files panel is showing
+	  	    			// retrieve hidden button element
+	  	    			var hrefElement = document.getElementById("href_{{record.id}}");
+	  					// simulate 'hide' click
+	  	    			hrefElement.click();
+	  					// simulate 'show' click
+	  	    			hrefElement.click();
+	
+	  	    		}
+  	    	{% endfor %}
+  	    	
+  	    	{% endif %}
+  	      {% endwith %}
+
+  	    }
  //]]>
  </script>

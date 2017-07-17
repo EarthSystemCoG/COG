@@ -1,0 +1,100 @@
+<!-- Javascript controls for Citation functionality -->
+<script type="text/javascript">
+
+    // function to obtain the HTML id for the citation
+    function getCitationDiv(dataset_id) {
+            id = "citation_"+dataset_id;
+            return document.getElementById(id);
+    }
+
+     // function to show the citation information for one dataset
+     // parse citation url and extract information
+    function showCitation(dataset_id, citation_url) {
+        fdiv = getCitationDiv(dataset_id);
+
+        if (fdiv.style.display=='block') {
+                var url = "/citation_display/?url="+citation_url;
+                citationCallback.argument[0] = dataset_id;
+                citationCallback.argument[1] = citation_url;
+
+                // execute asynchronous GET request
+                var transaction = YAHOO.util.Connect.asyncRequest('GET', url, citationCallback, null);
+
+                // show waiting panel
+                showWaitPanel();
+            }
+    }
+
+    // function called if Ajax request failed
+    var handleCitationFailure = function(o) {
+            hideWaitPanel();
+
+            dataset_id = o.argument[0];
+
+            var html = "<strong>Data Citation</strong>";
+            html += "<div style='text-align:left'>No citation information available for this data. Please contact <a href=mailto:esgf@dkrz.de?subject=Citation%20not%20found:%20"+dataset_id+">esgf@dkrz.de</a> for further information.</div>";
+            fdiv.innerHTML = html;
+    }
+
+    // function called if Ajax request succeeded to create the citation display widget
+    var handleCitationSuccess = function(o) {
+            // hide waiting panel
+            hideWaitPanel();
+
+            dataset_id = o.argument[0];
+            citation_url = o.argument[1];
+
+            // parse JSON response into object
+            var jsonResponse = eval('(' + o.responseText + ')');
+            var fdiv = getCitationDiv(dataset_id);
+            // extract information to display
+            var identifier = jsonResponse.identifier.id;
+            var id_type = jsonResponse.identifier.identifierType;
+            var title = jsonResponse.titles[0];
+            var publisher = jsonResponse.publisher;
+            var publication_year = jsonResponse.publicationYear;
+
+            // point to DOI landing page if it is a DOI
+            if(id_type=="DOI") {
+                    identifier = "http://doi.org/"+identifier;
+            }
+
+            // show only the first three creators
+            var num_creators = 3;
+            if(jsonResponse.creators.length<3) {
+                    num_creators = jsonResponse.creators.length;
+            }
+            var creators = "";
+            for(var i = 0; i < num_creators; i++) {
+                    creators += jsonResponse.creators[i].creatorName;
+                    if(i != num_creators-1) {
+                            creators += '; ';
+                    }
+            }
+            if(jsonResponse.creators.length>3) {
+                    creators += ' et al.';
+            }
+
+            // link to HTML citation landing page
+            var html_citation_url = citation_url.replace(".json", "");
+
+            // display all information
+            var html = "<strong>Data Citation</strong> (<a href="+html_citation_url+" target=_blank>Landing Page</a>)";
+            html  += "<div style='text-align:left'><b>Identifier "+id_type+":</b> <a target='_blank' href='"+identifier+"'>"+identifier+"</a></div>";
+            html += "<div style='text-align:left'><b>Creators:</b> "+creators+"</div>";
+            html += "<div style='text-align:left'><b>Title:</b> "+title+"</div>";
+            html += "<div style='text-align:left'><b>Publisher:</b> "+publisher+"</div>";
+            html += "<div style='text-align:left'><b>Publication Year:</b> "+publication_year+"</div>";
+
+            fdiv.innerHTML = html;
+    }
+
+    var citationCallback = {
+        success:handleCitationSuccess,
+        failure: handleCitationFailure,
+        cache:false,
+        timeout: 20000,
+        argument: []
+    };
+
+</script>

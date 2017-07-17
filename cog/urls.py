@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 import cog.views
 import django_openid_auth.views
 import django.contrib.auth.views
@@ -10,7 +10,7 @@ urlpatterns = [
 
     # FIXME: top-level index
     #url(r'^index/$', TemplateView.as_view(template_name="cog/index.html")),
-    
+        
     # site home
     url(r'^$', cog.views.site_home, name='site_home' ) ,
     
@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^search_files/(?P<dataset_id>.+)/(?P<index_node>.+)/$', cog.views.search_files, name='search_files'),
     url(r'^metadata_display/(?P<project_short_name>.+)/$', cog.views.metadata_display, name='metadata_display' ),
     url(r'^search_reload/$', cog.views.search_reload, name='search_reload' ),
+    url(r'^citation_display/$', cog.views.citation_display, name='citation_display'),
 
     # authentication options
     # a) django (username/password) login
@@ -80,6 +81,7 @@ urlpatterns = [
     url(r'^datacart/add_all/(?P<site_id>\d+)/(?P<user_id>\d+)/$', cog.views.datacart_add_all, name='datacart_add_all'),
     url(r'^datacart/delete_all/(?P<site_id>\d+)/(?P<user_id>\d+)/$', cog.views.datacart_delete_all, name='datacart_delete_all'),
     url(r'^datacart/byopenid/$', cog.views.datacart_byopenid, name='datacart_byopenid'),
+    url(r'^datacart/datacart-pid/(?P<site_id>\d+)/(?P<user_id>\d+)/$', cog.views.datacart_pid, name='datacart_pid'),
 
     # projects
     url(r'^project/add/$', cog.views.project_add, name='project_add' ),
@@ -168,10 +170,7 @@ urlpatterns = [
     url(r'^share/groups/$', cog.views.share_groups, name='share_groups'),
     url(r'^share/user/$', cog.views.share_user, name='share_user'),
     url(r'^share/sync/projects/$', cog.views.sync_projects, name='sync_projects'),
-    
-    # comments
-    url(r'^comments/delete_comment/(?P<id>.*)/$', cog.views.views_common.deleteComment, name='delete_comment'),
-    
+        
     # Globus integration
     url(r'^globus/download/$', cog.views.views_globus.download, name='globus_download'),
     url(r'^globus/transfer/$', cog.views.views_globus.transfer, name='globus_transfer'),

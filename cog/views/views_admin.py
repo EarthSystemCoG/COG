@@ -3,7 +3,7 @@ from cog.models import *
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 import ast
 from django.contrib.sites.models import Site  
@@ -21,9 +21,8 @@ def site_home(request):
     #return HttpResponseRedirect()
             
     # redirect to independent splash page
-    #return render_to_response('cog/index.html', 
-    #                          {'title':'Welcome to COG' }, 
-    #                          context_instance=RequestContext(request))
+    #return render(request, 'cog/index.html', 
+    #              {'title':'Welcome to COG' })
 
 
 # admin page for managing projects
@@ -50,10 +49,10 @@ def admin_projects(request):
             project_list = project_list.filter(site=Site.objects.get_current()).order_by('short_name')
 
     # retrieve top-level projects, ordered alphabetically by short name. Only list those on the current site.
-    return render_to_response('cog/admin/admin_projects.html',
-                              {'project_list': paginate(project_list, request),
-                               'title': '%s Projects Administration' % site.name,
-                               }, context_instance=RequestContext(request))
+    return render(request,
+                  'cog/admin/admin_projects.html',
+                  {'project_list': paginate(project_list, request),
+                   'title': '%s Projects Administration' % site.name})
 
 
 # admin page for listing all system users
@@ -71,9 +70,9 @@ def admin_users(request):
         users = User.objects.all().order_by(sortby)  
 
     title = 'List System/Node Users'
-    return render_to_response('cog/admin/admin_users.html',
-                              {'users': paginate(users, request, max_counts_per_page=50), 'title': title},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/admin/admin_users.html',
+                  {'users': paginate(users, request, max_counts_per_page=50), 'title': title})
 
     
 # admin page for managing peers
@@ -85,8 +84,9 @@ def admin_peers(request):
     if request.method == 'GET':
         
         formset = PeerSiteFormSet(queryset=PeerSite.objects.exclude(site=Site.objects.get_current()))
-        return render_to_response('cog/admin/admin_peers.html', {'formset': formset},
-                                  context_instance=RequestContext(request))
+        return render(request,
+                      'cog/admin/admin_peers.html', 
+                      {'formset': formset})
         
     else:
         
@@ -98,5 +98,5 @@ def admin_peers(request):
         
         else:
             print formset.errors
-            return render_to_response('cog/admin/admin_peers.html', {'formset': formset},
-                                      context_instance=RequestContext(request))
+            return render(request,
+                          'cog/admin/admin_peers.html', {'formset': formset})

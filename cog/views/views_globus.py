@@ -2,7 +2,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 import urllib
 from cog.utils import getJson
@@ -12,10 +12,9 @@ from cog.site_manager import siteManager
 import datetime
 from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
-from cog.plugins.esgf.registry import LocalEndpointDict
 import os
-from cog.views.utils import getQueryDict
 import re
+from cog.views.utils import getQueryDict
 
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
@@ -28,6 +27,7 @@ GLOBUS_ACCESS_TOKEN = 'globus_access_token'
 GLOBUS_USERNAME = 'globus_username'
 TARGET_ENDPOINT = 'target_endpoint'
 TARGET_FOLDER = 'target_folder'
+ESGF_PASSWORD = 'password'
 
 # external URLs
 GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/app/browse-endpoint'
@@ -37,13 +37,11 @@ if siteManager.isGlobusEnabled():
 
 	from base64 import urlsafe_b64encode
 	from oauth2client import client as oauth_client
-	from cog.plugins.globus.transfer import submitTransfer, generateGlobusDownloadScript
+	from cog.plugins.globus.transfer import activateEndpoint, submitTransfer, generateGlobusDownloadScript
+	from globusonline.transfer.api_client import TransferAPIClient
 
 	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
 	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
-	endpoints_filepath = siteManager.get('ENDPOINTS', section=SECTION_GLOBUS)
-
-	GLOBUS_ENDPOINTS= LocalEndpointDict(endpoints_filepath)
 
 
 def establishFlow(request):
@@ -52,7 +50,7 @@ def establishFlow(request):
 	return oauth_client.OAuth2WebServerFlow(
 		client_id = client_id,
 		authorization_header = auth_header,
-		scope = 'urn:globus:auth:scope:transfer.api.globus.org:all',
+		scope = ['openid', 'profile', 'urn:globus:auth:scope:transfer.api.globus.org:all'],
 		redirect_uri = request.build_absolute_uri(reverse("globus_token")).replace('http:','https:'),
 		auth_uri = GLOBUS_AUTH_URL + '/v2/oauth2/authorize',
 		token_uri = GLOBUS_AUTH_URL + '/v2/oauth2/token')
@@ -139,30 +137,8 @@ def download(request):
 						if not gendpoint_name in download_map:
 							download_map[gendpoint_name] = [] # insert empty list of paths
 						download_map[gendpoint_name].append(path)
-				elif 'gridftp' in access:
-					# example or urlparse output:
-					# ParseResult(scheme=u'gsiftp', netloc=u'esg-datanode.jpl.nasa.gov:2811', path=u'//esg_dataroot/obs4MIPs/observations/atmos/husNobs/mon/grid/NASA-JPL/AIRS/v20110608/husNobs_AIRS_L3_RetStd-v5_200209-201105.nc', params='', query='', fragment='')
-					o = urlparse(access['gridftp'])
-					hostname = str(o.netloc)
-					epDict = GLOBUS_ENDPOINTS.endpointDict()
-					# {'esg-datanode.jpl.nasa.gov:2811':'esg#jpl',
-					#  'esg-vm.jpl.nasa.gov:2811':'esg#jpl'}
-					if (hostname in epDict):
-						gendpoint_name = epDict[hostname].name
-						gendpoint_path_out = epDict[hostname].path_out
-						gendpoint_path_in = epDict[hostname].path_in
-						if not gendpoint_name in download_map:
-							download_map[gendpoint_name] = [] # insert empty list of paths
-						gfilepath = str(o.path).replace('//','/')
-						if gendpoint_path_out is not None:
-							gfilepath = gfilepath.replace(gendpoint_path_out, '')
-						if gendpoint_path_in is not None:
-							gfilepath = gendpoint_path_in + gfilepath
-						download_map[gendpoint_name].append(gfilepath)
-					else:
-						print 'WARNING: hostname %s is not mapped to any Globus Endpoint, URL %s cannot be downloaded' % (hostname, url)
 				else:
-					print 'The file is not accessible through Globus/GridFTP'
+					print 'The file is not accessible through Globus'
 		else:
 			return HttpResponseServerError("Error querying for files URL")
 						
@@ -184,9 +160,9 @@ def transfer(request):
 		download_map = request.session[GLOBUS_DOWNLOAD_MAP]
 
 		# display the same page as resulting from data cart invocation
-		return render_to_response('cog/globus/transfer.html', 
-	    						  { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' },
-	    						  context_instance=RequestContext(request))	
+		return render(request,
+                      'cog/globus/transfer.html', 
+	    			  { GLOBUS_DOWNLOAD_MAP: download_map, 'title':'Globus Download' })	
 		
 	else:
 						
@@ -228,11 +204,16 @@ def token(request):
 
 	# use 'code' to obtain an 'access_token'
 	globus_auth_code = request.GET['code']
-	print 'Globus OAuth code: %s' % globus_auth_code
+	#print 'Globus OAuth code: %s' % globus_auth_code
 
 	globus_credentials = establishFlow(request).step2_exchange(globus_auth_code)
 	id_token = globus_credentials.id_token
-	access_token = globus_credentials.access_token
+	access_token = None
+	other_tokens = globus_credentials.token_response['other_tokens']
+	for token in other_tokens:
+		if token['scope'] == 'urn:globus:auth:scope:transfer.api.globus.org:all':
+			access_token = token['access_token']
+			break
 	#print 'id_token: %s, access_token: %s' % (id_token, access_token)
 
 	# store token into session
@@ -241,12 +222,16 @@ def token(request):
 
 	return HttpResponseRedirect( reverse('globus_submit') )
 
+
 @requires_globus
 @login_required
 def submit(request):
 	'''View to submit a Globus transfer request.
 	   The access token and files to download are retrieved from the session. '''
-	
+
+	openid = request.user.profile.openid()
+	# get a password if authoactivation failed and a user was asked for a password
+	password = request.POST.get(ESGF_PASSWORD)
 	# retrieve all data transfer request parameters from session
 	username = request.session[GLOBUS_USERNAME]
 	access_token = request.session[GLOBUS_ACCESS_TOKEN]
@@ -257,19 +242,30 @@ def submit(request):
 	print 'Downloading files=%s' % download_map.items()
 	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
+	api_client = TransferAPIClient(username, goauth=access_token)
+	# loop over source endpoints and autoactivate them
+	# if the autoactivation fails, redirect to a form asking for a password
+	activateEndpoint(api_client, target_endpoint)
+	for source_endpoint, source_files in download_map.items():
+		status, message = activateEndpoint(api_client, source_endpoint, openid, password)
+		if not status:
+			return render(request,
+                          'cog/globus/password.html',
+                          { 'openid': openid, 'message': message })
+
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = []  # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
-		
+			
 		# submit transfer request
-		openid = request.user.profile.openid()
-		task_id = submitTransfer(openid, username, access_token, source_endpoint, source_files, target_endpoint, target_folder)
+		task_id = submitTransfer(api_client, source_endpoint, source_files, target_endpoint, target_folder)
 		task_ids.append(task_id)
 	
 	# display confirmation page
-	return render_to_response('cog/globus/confirmation.html',
-						     { 'task_ids':task_ids, 'title':'Globus Download Confirmation' },
-						        context_instance=RequestContext(request))	
+	return render(request,
+                  'cog/globus/confirmation.html',
+				  { 'task_ids':task_ids, 'title':'Globus Download Confirmation' })	
+
 
 @requires_globus
 @login_required

@@ -43,9 +43,6 @@ from communication_means_member import CommunicationMeansMember
 from organizational_role import OrganizationalRole, getLeadOrganizationalRoles, getMemberOrganizationalRoles, getOrganizationalRoles
 from organizational_role_member import OrganizationalRoleMember
 
-# Forum
-from forum import Forum, ForumThread, ForumTopic
-
 # Search
 from search import *
 

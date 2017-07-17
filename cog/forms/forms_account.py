@@ -1,38 +1,35 @@
-from django.db import models
 from django.contrib.auth.models import User
 from django.forms import (Form, ModelForm, CharField, PasswordInput, TextInput, BooleanField, 
                           ImageField, FileInput, Textarea, ModelChoiceField)
-from cog.models import *
 from django.core.exceptions import ObjectDoesNotExist
 import re
 from django.contrib.auth.hashers import check_password
-from os.path import exists
-from cog.models.constants import UPLOAD_DIR_PHOTOS
 from cog.forms.forms_image import ImageForm
 from cog.models.constants import RESEARCH_KEYWORDS_MAX_CHARS, RESEARCH_INTERESTS_MAX_CHARS
-import os.path
 from django_openid_auth.models import UserOpenID
-import imghdr
 from captcha.fields import CaptchaField
 from cog.forms.forms_utils import validate_image
 from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.models.user_profile import createUsername
+from django.conf import settings
 
 # list of invalid characters in text fields
-#INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
+# INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
-INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\+\@\.]"
+INVALID_USERNAME_CHARS = "[^a-zA-Z0-9_\-\@\.]"
 
-# NOTE: must be same as JavaScript pattern in _password_check.html
-PASSWORD_PATTERN = r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$'
-PASSWORD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one upper case letter, one number, and one special symbol. '\
-                      + 'All characters are allowed EXCEPT for double quote (").'
-CONFIRM_PASSWORD_INSTRUCTIONS = 'Must match the password above.'
+# NOTE: must be same as JavaScript pattern in _PWD_check.html
+PWD_PATTERN = r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$'
+PWD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one upper case letter, one number, ' \
+                        'and one special symbol. '\
+                      + 'All characters are allowed EXCEPT for ( ) " . '
+CONFIRM_PWD_INSTRUCTIONS = 'Must match the password above.'
+
 
 class UserUrlForm(ModelForm):
 
-    url = CharField(required=True, widget=TextInput(attrs={'size':'35'}))
-    name = CharField(required=True, widget=TextInput(attrs={'size':'15'}))
+    url = CharField(required=True, widget=TextInput(attrs={'size': '35'}))
+    name = CharField(required=True, widget=TextInput(attrs={'size': '15'}))
 
     # validate data against bad characters
     def clean(self):
@@ -45,18 +42,20 @@ class UserUrlForm(ModelForm):
 
         return self.cleaned_data
 
+
 class UserOpenidForm(ModelForm):
 
-    claimed_id =  CharField(required=True, widget=TextInput(attrs={'size':'90'}))
+    claimed_id = CharField(required=True, widget=TextInput(attrs={'size': '90'}))
 
     class Meta:
         model = UserOpenID
         fields = ('claimed_id',)
 
+
 class PasswordResetForm(Form):
 
-    openid = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
-    email = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    openid = CharField(required=True, widget=TextInput(attrs={'size': '50'}))
+    email = CharField(required=True, widget=TextInput(attrs={'size': '50'}))
 
     # validate data against bad characters
     def clean(self):
@@ -69,9 +68,10 @@ class PasswordResetForm(Form):
 
         return self.cleaned_data
 
+
 class UsernameReminderForm(Form):
 
-    email = CharField(required=True, widget=TextInput(attrs={'size':'50'}))
+    email = CharField(required=True, widget=TextInput(attrs={'size': '50'}))
 
     # validate data against bad characters
     def clean(self):
@@ -84,27 +84,28 @@ class UsernameReminderForm(Form):
 
 class PasswordChangeForm(Form):
 
-    username = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the target user
-    requestor = CharField(required=True, widget=TextInput(attrs={'size':'50'}))  # the user requesting the change (
+    username = CharField(required=True, widget=TextInput(attrs={'size': '50'}))  # the target user
+    requestor = CharField(required=True, widget=TextInput(attrs={'size': '50'}))  # the user requesting the change (
     # same as target user, or a node administrator)
-    old_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }))
+    old_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs={"autocomplete": "off", }))
     password = CharField(required=True, 
-                     # trigger javascript function when input field looses focus
-                     widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", "autocomplete" : "off" }),
-                     help_text = PASSWORD_INSTRUCTIONS
-                     ) # not required for OpenID users
-    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True, attrs = { "autocomplete" : "off", }), 
-                                 help_text=CONFIRM_PASSWORD_INSTRUCTIONS)
+                         # trigger javascript function when input field looses focus
+                         widget=PasswordInput(render_value=True, attrs={"onchange": "checkPassword();",
+                                                                        "autocomplete": "off"}),
+                         help_text=PWD_INSTRUCTIONS
+                         )  # not required for OpenID users
+    confirm_password = CharField(required=True, widget=PasswordInput(render_value=True,
+                                                                     attrs={"autocomplete": "off", }),
+                                 help_text=CONFIRM_PWD_INSTRUCTIONS)
 
     # override __init__ method to store the user object
-    #def __init__(self, user, *args,**kwargs):
+    # def __init__(self, user, *args, **kwargs):
 
-    #    super(PasswordChangeForm, self ).__init__(*args,**kwargs) # populates the post
-    #    self.user = user
+    # super(PasswordChangeForm, self ).__init__(*args,**kwargs) # populates the post
+    # self.user = user
 
     def clean(self):
-        
-        
+
         try:
             
             # load user by username
@@ -129,7 +130,7 @@ class PasswordChangeForm(Form):
                     self._errors["old_password"] = self.error_class(["Wrong administrator password."])
                 
             else:
-                raise Exception("Unauthoriuzed attempt to change the user password")
+                raise Exception("Unauthorized attempt to change the user password")
     
             # validate 'password', 'confirm_password' fields
             validate_password(self)
@@ -138,6 +139,7 @@ class PasswordChangeForm(Form):
             self._errors["username"] = self.error_class(["Username not found."])
 
         return self.cleaned_data
+
 
 class UserForm(ImageForm):
 
@@ -148,13 +150,13 @@ class UserForm(ImageForm):
     email = CharField(required=True)
     password = CharField(required=False, 
                          # trigger javascript function when input field looses focus
-                         # could have also used: YAHOO.util.Event.addListener(id_myField, "click", myClickEventHandler, myOptionalData);
-                         widget=PasswordInput(render_value=True, attrs = { "onchange" : "checkPassword();", }),
-                         help_text = PASSWORD_INSTRUCTIONS
-                         ) # not required for OpenID users
+                         widget=PasswordInput(render_value=True, attrs={"onchange": "checkPassword();", }),
+                         help_text=PWD_INSTRUCTIONS
+                         )  # not required for OpenID users
 
     # additional fields not in User
-    confirm_password = CharField(required=False, widget=PasswordInput(render_value=True), help_text=CONFIRM_PASSWORD_INSTRUCTIONS) # not required for OpenID users
+    confirm_password = CharField(required=False, widget=PasswordInput(render_value=True),
+                                 help_text=CONFIRM_PWD_INSTRUCTIONS)  # not required for OpenID users
     institution = CharField(required=True)
     department = CharField(required=False)
     city = CharField(required=True)
@@ -162,7 +164,8 @@ class UserForm(ImageForm):
     country = CharField(required=True)
     subscribed = BooleanField(required=False)
     private = BooleanField(required=False)
-    researchInterests = CharField(required=False, widget=Textarea(attrs={'rows': 6}), max_length=RESEARCH_INTERESTS_MAX_CHARS)
+    researchInterests = CharField(required=False, widget=Textarea(attrs={'rows': 6}),
+                                  max_length=RESEARCH_INTERESTS_MAX_CHARS)
     researchKeywords = CharField(required=False, max_length=RESEARCH_KEYWORDS_MAX_CHARS)
 
     # do NOT use default widget 'ClearableFileInput' as it doesn't work well with forms.ImageField
@@ -179,8 +182,8 @@ class UserForm(ImageForm):
         model = User
         # define fields to be used, so to exclude last_login and date_joined, and login type
         fields = ('first_name', 'last_name', 'username', 'password', 'email',
-                  'institution','city','state','country','department',
-                  'subscribed','private',
+                  'institution', 'city', 'state', 'country', 'department',
+                  'subscribed', 'private',
                   'image', 'delete_image', 'researchInterests', 'researchKeywords', 'next')
 
     # override form clean() method to execute custom validation on fields,
@@ -210,15 +213,16 @@ class UserForm(ImageForm):
         validate_image(self, 'image')
 
         # validate all other fields against injection attacks
-        for field in ['first_name','last_name', 'username', 'email', 'institution', 'department', 'city', 'state', 'country',
-                      'researchInterests', 'researchKeywords']:
+        for field in ['first_name', 'last_name', 'username', 'email', 'institution', 'department', 'city',
+                      'state', 'country', 'researchInterests', 'researchKeywords']:
             try:
                 validate_field(self, field, cleaned_data[field])
                 validate_ascii(self, field, cleaned_data[field])
-            except KeyError: # field not set (validation occurs later)
+            except KeyError:  # field not set (validation occurs later)
                 pass
 
         return cleaned_data
+
 
 # method to validate the fields 'password" and 'confirm_password'
 def validate_password(form):
@@ -233,7 +237,7 @@ def validate_password(form):
         else:
             if len(password) < 8:
                 form._errors["password"] = form.error_class(["'Password' must contain at least 8 characters."])
-            elif re.match(PASSWORD_PATTERN, password) is None:
+            elif re.match(PWD_PATTERN, password) is None:
                 form._errors["password"] = form.error_class(["'Password' does not match the required criteria."])
                 
         if '"' in password:
@@ -243,11 +247,13 @@ def validate_password(form):
             form._errors["confirm_password"] = form.error_class(["'Confirm Password' is a required field."])
         else:
             if len(confirm_password) < 6:
-                form._errors["confirm_password"] = form.error_class(["'Confirm Password' must contain at least 6 characters."])
+                form._errors["confirm_password"] = form.error_class(["'Confirm Password' "
+                                                                     "must contain at least 6 characters."])
 
         if password is not None and confirm_password is not None:
             if password != confirm_password:
                 form._errors["confirm_password"] = form.error_class(["'Password' and 'Confirm Password' must match."])
+
 
 # method to validate the field 'username'
 def validate_username(form, user_id):
@@ -260,14 +266,15 @@ def validate_username(form, user_id):
         if username:
             if len(username) < 5:
                 form._errors["username"] = form.error_class(["'Username' must contain at least 5 characters."])
-            elif len(username) >30:
+            elif len(username) > 30:
                 form._errors["username"] = form.error_class(["'Username' must not exceed 30 characters."])
             elif re.search(INVALID_USERNAME_CHARS, username):
-                form._errors["username"] = form.error_class(["'Username' can only contain letters, digits and @/./+/-/_"])
+                form._errors["username"] = form.error_class(["'Username' can only contain letters, "
+                                                             "digits and @/./+/-/_"])
                 
             if settings.ESGF_CONFIG:
                 # check that the corresponding OpenID is available in the local CoG database
-                if user_id is None: # do not check when instance is updated
+                if user_id is None:  # do not check when instance is updated
                     openid = esgfDatabaseManager.buildOpenid(username)
                     
                     if esgfDatabaseManager.checkOpenid(openid):
@@ -280,17 +287,19 @@ def validate_username(form, user_id):
                         # once the openid is validated, choose the closest possible username
                         _username = createUsername(username)
                         print 'Created username=%s from=%s' % (_username, username)
-                        cleaned_data['username'] = _username # override form data
+                        cleaned_data['username'] = _username  # override form data
             else:
                 # django will automatically check that the username is unique in the CoG database
                 pass
+
 
 # method to validate a generic field against bad characters
 def validate_field(form, field_name, field_value):
     if field_value:
         if re.search(INVALID_CHARS, field_value):
             form._errors[field_name] = form.error_class(["'%s' contains invalid characters." % field_name])
-            
+
+
 # method to check that a field does NOT have non-ascii characters
 def validate_ascii(form, field_name, field_value):
     if field_value:

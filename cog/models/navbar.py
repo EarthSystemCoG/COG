@@ -40,7 +40,6 @@ TABS = {"ABOUTUS": "aboutus", "MISSION": "mission",
                                     "PROCESSES": "processes",
                                     "POLICIES": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["POLICY"]).suburl,
                                     "METRICS": externalUrlManager.getConf(type=EXTERNAL_URL_TYPES["METRIC"]).suburl,
-        "FORUM": "forum",
         "CONTACTUS": "contactus"}
 
 # list of pre-defined project pages
@@ -88,7 +87,6 @@ PROJECT_PAGES = (
                                                  ("Policies", "%s/" % TABS["POLICIES"]), ],
     # Note: the tab names do not necessarily match the resource names
     [('Resources', "%s/" % TABS["RESOURCES"]), ],
-    [("Forum", "%s/" % TABS["FORUM"])],
     [("Contact Us", "%s/" % TABS["CONTACTUS"])],
 )
 

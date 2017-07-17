@@ -2,7 +2,7 @@ import sys
 import argparse
 import os
 
-from random import randint
+from random import SystemRandom
 from uuid import uuid4
 
 def activateEndpoints(gendpointDict, uendpoint, username, sshkey):
@@ -54,7 +54,8 @@ def arguments(argv):
 
 def getFiles(gendpointDict, uendpoint, username, upath, sshkey):
 
-    transferFile = '/tmp/transferList' + str(randint(1,9999)) + '.txt'
+    cryptogen = SystemRandom()
+    transferFile = '/tmp/transferList' + str(cryptogen.randint(1,9999)) + '.txt'
     file = open(transferFile, 'w')
 
     label = str(uuid4())

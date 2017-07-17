@@ -1,4 +1,3 @@
-import datetime
 import urllib
 from urlparse import urlparse
 
@@ -11,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django_openid_auth.models import UserOpenID
 from django_openid_auth.views import login_complete
@@ -23,6 +22,9 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.util.thumbnails import *
 from cog.views.utils import set_openid_cookie, get_all_shared_user_info
 from django.http.response import HttpResponseForbidden
+
+#FIXME:  note: must import this module last otherwise it conflicts with previous import datetime.datetime
+import datetime
 
 
 def redirectToIdp():
@@ -101,28 +103,35 @@ def _custom_login(request, response):
     return response
 
 
-def notifyAdminsOfUserRegistration(user):
+def notifyAdminsOfUserRegistration(user,request):
 
-    subject = 'New User Registration'
-    message = 'User %s has created a new account' % user.get_full_name()
+    subject = "New User Registration"
+
+    profile_url = reverse('user_profile_redirect', kwargs={'user_id': user.id})  # go to the right node
+    profile_url = request.build_absolute_uri(profile_url)
+
+    message = "User %s has created a new account." % user.get_full_name()
+    message += "\nView home node profile at: %s" % profile_url
+
+    # openid
+    message += "\n\nOpenID is: %s" % user.profile.openid()
 
     # user attributes
-    message += "\nFirst Name: %s" % user.first_name
+    message += "\n\nFirst Name: %s" % user.first_name
     message += "\nLast Name: %s" % user.last_name
     message += "\nUser Name: %s" % user.username
     message += "\nEmail: %s" % user.email
-    
-    # openid
-    message += "\nOpenID is: %s" % user.profile.openid()
 
     # user profile attributes
     profile = UserProfile.objects.get(user=user)
-    message += "\nInstitution: %s" % profile.institution
+    message += "\n\nInstitution: %s" % profile.institution
     message += "\nDepartment: %s" % profile.department
     message += "\nCity: %s" % profile.city
     message += "\nState: %s" % profile.state
     message += "\nCountry: %s" % profile.country
     message += "\nSubscribe to COG email list? %s" % profile.subscribed
+    message += "\nResearch Interests: %s" % profile.researchInterests
+    message += "\nResearch Keywords: %s" % profile.researchKeywords
 
     for admin in getSiteAdministrators():
         notify(admin, subject, message)
@@ -212,8 +221,8 @@ def user_add(request):
             user = form.save(commit=False)
             
             # must reset the password through the special method that encodes it correctly
-            clearTextPassword = form.cleaned_data['password']
-            user.set_password(clearTextPassword)
+            clearTextPwd = form.cleaned_data['password']
+            user.set_password(clearTextPwd)
                         
             # save user to database
             user.save()
@@ -245,7 +254,7 @@ def user_add(request):
             userp.save()
             
             # NOTE: this field is NOT persisted in the CoG database but it is used by insertEsgfUser() below
-            userp.clearTextPassword = clearTextPassword  
+            userp.clearTextPwd = clearTextPwd  
             # insert into ESGF database
             if settings.ESGF_CONFIG:
                 esgfDatabaseManager.insertEsgfUser(userp)
@@ -269,7 +278,7 @@ def user_add(request):
 
             # notify user, node administrators of new registration
             notifyUserOfRegistration(user)
-            notifyAdminsOfUserRegistration(user)
+            notifyAdminsOfUserRegistration(user,request)
 
             # subscribe to mailing list ?
             if userp.subscribed:
@@ -322,14 +331,15 @@ def user_detail(request, user_id):
         
     # retrieve map of (project, roles) for this user
     (projTuples, groupTuples) = get_all_shared_user_info(user)
+    print "\nprojTuples="
+    print projTuples
         
     # sort projects, groups alphabetically
     projects = sorted(projTuples, key=lambda x: x[0].short_name)
     groups = sorted(groupTuples, key=lambda x: x[0])
             
-    return render_to_response('cog/account/user_detail.html',
-                              {'user_profile': user_profile, 'projects': projects, 'groups':groups, 'title': 'User Profile'},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/user_detail.html',
+                  {'user_profile': user_profile, 'projects': projects, 'groups':groups, 'title': 'User Profile'})
 
 
 # view to redirect to the user profile on the local or remote node
@@ -412,9 +422,9 @@ def user_delete(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     
     if request.method == 'GET':
-        return render_to_response('cog/account/user_delete.html', 
-                                  {'user': user, 'title': 'Delete User'},
-                                  context_instance=RequestContext(request))
+        return render(request, 
+                      'cog/account/user_delete.html', 
+                      {'user': user, 'title': 'Delete User'} )
     else:
         
         # delete ESGF user and all related objects
@@ -467,10 +477,17 @@ def user_update(request, user_id):
     else:
         # form with bounded data
         form = UserForm(request.POST, request.FILES, instance=user)
+        
         # formset with bounded data
         formset = UserUrlFormsetFactory(request.POST, queryset=UserUrl.objects.filter(profile=profile), prefix='url')
 
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
+            
+            # delete UserUrls if found
+            urls = UserUrl.objects.filter(profile=profile)
+            for url in urls:
+                print 'Deleting user URL: %s' % url.url
+                url.delete()
 
             # update user
             user = form.save()
@@ -520,13 +537,13 @@ def user_update(request, user_id):
             user_profile.save()
 
             # must assign URL to this user
-            urls = formset.save(commit=False)
-            for url in urls:
-                url.profile = profile
-                url.save()
+            #urls = formset.save(commit=False)
+            #for url in urls:
+            #    url.profile = profile
+            #    url.save()
 
-            for obj in formset.deleted_objects:
-                obj.delete()
+            #for obj in formset.deleted_objects:
+            #    obj.delete()
 
             # generate thumbnail - after picture has been saved
             if _generateThumbnail:
@@ -645,9 +662,10 @@ def user_reminder(request):
             # look up username
             users = User.objects.filter(email__iexact=email)
 
+            # user in this context is an account. There can be more than one account associated with an email
             if len(users) > 0:
 
-                # send email with username(s) to user
+                # send email with username(s) to the requester
                 subject = "Username/OpenID Reminder"
                 message = ""
                 for user in users:
@@ -781,30 +799,25 @@ def password_reset(request):
 
 
 def render_user_form(request, form, formset, title=''):
-    return render_to_response('cog/account/user_form.html',
-                              {'form': form, 'formset': formset, 'mytitle': title},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/user_form.html',
+                  {'form': form, 'formset': formset, 'mytitle': title})
 
 
 def render_password_change_form(request, form, username):
-    return render_to_response('cog/account/password_change.html',
-                              {'form': form, 'mytitle': 'Change Password for User: %s' % username},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/password_change.html',
+                  {'form': form, 'mytitle': 'Change Password for User: %s' % username})
 
 
 def render_password_reset_form(request, form, message=""):
-    return render_to_response('cog/account/password_reset.html',
-                              {'form': form, 'mytitle': 'Reset User Password', 'message': message},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/password_reset.html',
+                  {'form': form, 'mytitle': 'Reset User Password', 'message': message})
 
 
 def render_user_reminder_form(request, form, message=""):
-    return render_to_response('cog/account/user_reminder.html',
-                              {'form': form, 'mytitle': 'UserName and OpenID Reminder', 'message': message},
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/user_reminder.html',
+                  {'form': form, 'mytitle': 'UserName and OpenID Reminder', 'message': message})
 
 
 def render_site_change_form(request, form):
-    return render_to_response('cog/account/site_change.html',
-                              {'form': form, 'mytitle' : 'Change User Home Node' },
-                              context_instance=RequestContext(request))
+    return render(request, 'cog/account/site_change.html',
+                              {'form': form, 'mytitle' : 'Change User Home Node' })

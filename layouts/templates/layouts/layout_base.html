@@ -19,6 +19,13 @@ These are then used in the CSS to fix specific issues-->
         <!--// <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/screen.css"/> //-->
         <!--// <link type="text/css" rel="stylesheet"  media="print" href="{{STATIC_URL}}css/blueprint/print.css"/> //-->
 
+		<!-- // frame busting JS // 
+		<script language="javascript">
+			/* break us out of any containing iframes */
+			/* IMPORTANT: THIS BREAKS FILE UPLOADER, DON'T DO IT */
+			//if (top != self) { top.location.replace(self.location.href); }
+		</script> -->
+		
         <!--// CSS for grid layout //-->
         <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/reset.css"/>
         <link type="text/css" rel="stylesheet"  media="screen, projection" href="{{STATIC_URL}}css/blueprint/src/grid.css"/>
@@ -27,12 +34,17 @@ These are then used in the CSS to fix specific issues-->
          <!--// Load head section from template. Contains CSS //-->
          {% block head %}{% endblock %}
 
+         <!-- icon library used for question mark icon -->
+         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+
+
          <!--// loading CoG-specific styles. Needs to be last //-->
          <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}cog/css/cogstyle.css" />
 
          <!--// hooks for page-specific head content. Both style statements and javascript need to be loaded in the header only. //-->
          {% block extrahead %}{% endblock %}
          {% block extrastyle %}{% endblock %}
+         
     </head>
     
     <body>

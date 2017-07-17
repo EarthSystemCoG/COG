@@ -6,12 +6,12 @@
 
 {% block extrahead %}
 
-	<!--<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css"/>-->
-    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
-	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
-	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
-	<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js"></script>
+	<!--<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}js/yui-2.9.0/build/fonts/fonts-min.css"/>-->
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}js/yui-2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
+	<script type="text/javascript" src="{{ STATIC_URL }}js/yui-2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/yui-2.9.0/build/animation/animation-min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/yui-2.9.0/build/datasource/datasource-min.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}js/yui-2.9.0/build/autocomplete/autocomplete-min.js"></script>
 
     <!-- note: must style the autocomplete containers otherwise it expands to fit the whole window-->
     <style type="text/css">
@@ -124,7 +124,7 @@
 	                	    {% else %}
 	                   		    <td>
                                    {{ form.username }}
-	                        	   <em class="message">[ 5 to 30 characters, letters, digits and @/./+/-/_ only. 
+	                        	   <em class="message">[ 5 to 30 characters, letters, digits and @/./-/_ only. 
 	                        	                         Please note that the username is used to build a unique OpenID that you will use to login. 
 	                        	                         If your chosen username is not available, you will be automatically assigned a similar one. ]
 	                        	   <br>{{ form.username.errors }}

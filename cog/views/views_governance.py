@@ -7,7 +7,7 @@ from constants import PERMISSION_DENIED_MESSAGE
 from django.contrib.auth.decorators import login_required
 from django.forms.models import BaseInlineFormSet, inlineformset_factory
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.utils.functional import curry
 from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
@@ -200,26 +200,9 @@ def governance_object_update(request, project_short_name, tab, objectType, objec
             
 
 def render_governance_object_form(request, project, formset, title, template):
-    return render_to_response(template,
-                              {'title': title, 'project': project, 'formset': formset},
-                              context_instance=RequestContext(request))
-
-# view to update a Management Body object members
-@login_required
-def management_body_members(request, project_short_name, object_id):
-    
-    # retrieve object
-    managementBody = get_object_or_404(ManagementBody, pk=object_id)
-    
-    # create form class with current project
-    managementBodyMemberForm = staticmethod(curry(ManagementBodyMemberForm, project=managementBody.project))
-    
-    # delegate to generic view with specific object types
-    tab = TABS["BODIES"]
-    redirect = reverse('governance_display', args=[managementBody.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, managementBodyMemberForm,
-                          redirect)
-
+    return render(request,
+                  template,
+                  {'title': title, 'project': project, 'formset': formset})
 
 # view to update a Communication Means object members  
 @login_required
@@ -227,13 +210,12 @@ def communication_means_members(request, object_id):
     
     commnicationMeans = get_object_or_404(CommunicationMeans, pk=object_id)
     # create form class with current project
-    communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
+    #communicationMeansMemberForm = staticmethod(curry(CommunicationMeansMemberForm, project=commnicationMeans.project))
     
     # delegate to generic view with specific object types
     tab = TABS["COMMUNICATION"]
     redirect = reverse('governance_display', args=[commnicationMeans.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember,
-                          communicationMeansMemberForm, redirect)
+    return members_update(request, tab, object_id, CommunicationMeans, CommunicationMeansMember, CommunicationMeansMemberForm, redirect)
 
 
 # view to update an Organizational Role object members  
@@ -243,15 +225,26 @@ def organizational_role_members(request, object_id):
     organizationalRole = get_object_or_404(OrganizationalRole, pk=object_id)
 
     # create form class with current project
-    organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
+    #organizationalRoleMemberForm = staticmethod(curry(OrganizationalRoleMemberForm, project=organizationalRole.project))
     
     # delegate to generic view with specific object types
     tab = TABS["ROLES"]
     redirect = reverse('governance_display', args=[organizationalRole.project.short_name.lower(), tab])
-    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember,
-                          organizationalRoleMemberForm, redirect)
+    return members_update(request, tab, object_id, OrganizationalRole, OrganizationalRoleMember, OrganizationalRoleMemberForm, redirect)
 
 
+# view to update a Management Body object members
+@login_required
+def management_body_members(request, project_short_name, object_id):
+    
+    # retrieve object
+    managementBody = get_object_or_404(ManagementBody, pk=object_id)
+        
+    # delegate to generic view with specific object types
+    tab = TABS["BODIES"]
+    redirect = reverse('governance_display', args=[managementBody.project.short_name.lower(), tab])
+    return members_update(request, tab, object_id, ManagementBody, ManagementBodyMember, ManagementBodyMemberForm, redirect)
+    
 # 
 # Generic view to update members for:
 # -) objectType=CommunicationMeans, objectMemberType=CommunicationMeansMember
@@ -261,7 +254,7 @@ def organizational_role_members(request, object_id):
 # obj.project
 # obj.__unicode__
 #
-def members_update(request, tab, objectId, objectType, objectMemberType, objectForm, redirect):
+def members_update(request, tab, objectId, objectType, objectMemberType, objectMemberForm, redirect):
     
     # retrieve governance object
     obj = get_object_or_404(objectType, pk=objectId)
@@ -271,15 +264,16 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
         return HttpResponseForbidden(PERMISSION_DENIED_MESSAGE)
     
     # formset factory
-    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, extra=3, fields="__all__")
-    # set the formset form to custom class that includes the current project
-    ObjectFormSet.form = objectForm
+    users_queryset = projectUsersQuerySet(obj.project)
+    ObjectFormSet = inlineformset_factory(objectType, objectMemberType, form=objectMemberForm, extra=3, fields="__all__")
 
     # GET request
     if request.method == 'GET':
         
         # retrieve current members
         formset = ObjectFormSet(instance=obj)
+        for form in formset.forms:
+            form.fields['user'].queryset = users_queryset
         
         # render view
         return render_members_form(request, obj, formset, redirect)
@@ -305,15 +299,12 @@ def members_update(request, tab, objectId, objectType, objectMemberType, objectF
 
 def render_members_form(request, object, formset, redirect):
         
-    return render_to_response('cog/governance/members_form.html',
-                              {'title': '%s Members Update' % object,
-                               'project': object.project,
-                               'formset': formset, 'redirect': redirect},
-                              context_instance=RequestContext(request))
-
-
-
-
+    return render(request,
+                  'cog/governance/members_form.html',
+                  {'title': '%s Members Update' % object,
+                   'project': object.project,
+                   'formset': formset, 'redirect': redirect})
+    
 
 @login_required
 def processes_update(request, project_short_name):
@@ -356,14 +347,14 @@ def processes_update(request, project_short_name):
             return render_governance_processes_form(request, form, project)
 
 def render_governance_processes_form(request, form, project):
-    return render_to_response('cog/governance/governance_processes_form.html',
-                              {'title': 'Governance Processes Update', 'project': project, 'form': form},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/governance/governance_processes_form.html',
+                  {'title': 'Governance Processes Update', 'project': project, 'form': form} )
     
 def render_governance_overview_form(request, form, project):
-    return render_to_response('cog/governance/governance_overview_form.html',
-                              {'title': 'Governance Overview Update', 'project': project, 'form': form},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/governance/governance_overview_form.html',
+                  {'title': 'Governance Overview Update', 'project': project, 'form': form})
 
 
 # Method to update an organizational role
@@ -416,6 +407,6 @@ def organizational_role_update(request, project_short_name):
 
 
 def render_organizational_role_form(request, project, formset):
-    return render_to_response('cog/governance/organizational_role_form.html',
-                              {'title': 'Organizational Roles Update', 'project': project, 'formset': formset},
-                              context_instance=RequestContext(request))
+    return render(request,
+                  'cog/governance/organizational_role_form.html',
+                  {'title': 'Organizational Roles Update', 'project': project, 'formset': formset})

@@ -1,0 +1,32 @@
+<!-- Data Search widget -->
+{% load cog_utils %}
+
+{% if project.dataSearchEnabled %}
+ <div class="search-box">
+      <div class="right_widget_header">
+             <span style="vertical-align: middle;">
+                 Search &amp; Download Data
+             </span>
+             <span style="display:inline-block; vertical-align: 0">
+                 <a href="https://www.earthsystemcog.org/projects/cog/doc/data_services/search_help" target="_blank">
+                 <i style="font-size:17px; color:#666; vertical-align: middle;" class="fa fa-question-circle"></i>
+                 </a>
+             </span>
+         </div> <!--// end div.right_widget_header //-->
+
+      <div id="search_entry" style="padding:4px; padding-right:0; margin:0; text-align:center;">
+       <form action="{% url 'search' project.short_name.lower %}" method="post" id="search-form">
+            {% csrf_token %}
+            <!-- <input type="hidden" name="offset" value="0" /> -->
+            <!-- <input type="hidden" name="limit" value="10" /> -->
+            <input type="hidden" name="type" value="Dataset" />
+            <label for="query" style="display:none;">Simple Text Search:</label>
+	        <input type="text" name="query" size="24" value="" style="width:400px; height:22px;
+               font-size:10.0pt; padding:0; margin:0; padding-left:2px;" placeholder="Simple Text Search"/>
+            <input class="right_go" type="submit" value="Go"/>
+            &nbsp;
+            <a class="listlink" href="{% url 'search' project.short_name.lower %}">&nbsp; More search options</a>
+       </form>
+      </div> <!--// end div id=search_entry //-->
+ </div> <!--//end div.search-box //-->
+{% endif %}

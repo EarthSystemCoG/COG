@@ -11,6 +11,10 @@
 	{% include 'cog/datacart/_wget_js.html' %}
 	{% include 'cog/datacart/_las_js.html' %}
 	{% include 'cog/datacart/_go_js.html' %}
+	{% include 'cog/datacart/_citation_js.html' %}
+	{% if 'PID_CONFIG'|settings_value %}
+		{% include 'cog/datacart/_pid_js.html' %}
+	{% endif %}
 
 	<!-- custom spacing of datacart table -->
 	<style scoped type="text/css">
@@ -29,7 +33,15 @@
 {% block main %}
 
     <!--pull down menu of other data carts-->
-    <h1>My DataCart</h1>
+    <h1>My Data Cart</h1>
+    <p>
+        <strong>About Data Carts:</strong> You have a Data Cart on every ESGF node you have logged into. This is your
+        Data Cart on the <a href="http://{{ site.domain }}">{{ site.domain }} </a> node.
+        {% if datacars.items|length > 0  %}
+            Use the pull down menu below to navigate between Data Carts.
+        {%  endif %}
+        The items in this cart will persist until removed.
+    </p>
 	<div style="text-align:center; font-weight:bold">
 		
 		<!-- local data cart -->
@@ -50,6 +62,7 @@
 					{% endfor %}
 				{% endfor %}				
 			</select>
+
 		{% endif %}
 		
 		<!-- link back to search -->
@@ -97,13 +110,18 @@
 	      			     &nbsp;
 	      			     [ <strong><a href="" onclick="javascript:goDatasets(); return false">Globus
 						 Download</a></strong> ]
-				     </td>
+						{% if 'PID_CONFIG'|settings_value %}
+							&nbsp;
+						    [ <strong><a href="" onclick="javascript:dataCartPid('datacart-pid', this, 'Collection PID',
+							'Hide Collection PID'); return false">Collection PID</a></strong> ]
+						{% endif %}
+					 </td>
 			    </tr>
 			    <!--this row must be set explicitly to white since the td, which is white does not fill up the entire
 			     row, which is gray -->
 			    <tr style="background-color: white;">
 			         <td style="width:72%;vertical-align:middle;">
-			              When 'Show Files' is clicked, or when using WGET or Globus,
+			              When 'List Files' is clicked, or when using WGET or Globus,
 				          you may use an optional string to
 				          sub-select the filenames:
 			         </td>
@@ -126,6 +144,10 @@
 			        <td colspan="4" >
 			            <!-- wget scripts place-holder  -->
 			            <div style="width:500px;display:none;margin-left:auto;margin-right:auto;" class="padded-box" id="wget-scripts"></div>
+						<!-- datacart pid place-holder  -->
+						{% if 'PID_CONFIG'|settings_value %}
+							<div style="width:500px;display:none;margin-left:auto;margin-right:auto;" class="padded-box" id="datacart-pid"></div>
+						{% endif %}
 			        </td>
 			    </tr>
 			    <tr id="item_{{ item.identifier }}_hr">

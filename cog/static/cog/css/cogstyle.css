@@ -28,9 +28,9 @@
 * dark yellow  = #FAC24A bar with technical support
 * light yellow = #FCE79F headers
 * lightest yellow = #FCF2CE table dividers, some message boxes
-* dark gray    = #666666
-* middle gray  = #666
-* light gray   = #333
+* dark gray    = #666
+* light gray   = #CCCCCC
+
 
 ******************************/
 
@@ -73,8 +73,7 @@ BEGIN PAGE-LEVEL ELEMENTS
 ***************/
 html {
     overflow-y:  scroll;
-    background: white;
-    height:     100%;
+    height:      100%;
 }
 
 /***************
@@ -90,20 +89,20 @@ explicitly covered in the areas below. These are reclaimed here so that we
 can completely control in one file how things look
 *******************************/
 body{
-    /*font: font-style font-variant font-weight font-size/line-height|caption|icon|menu|message-box|small-caption|status-bar|initial|inherit;*/
-    /*font: 13px/1.231 arial,helvetica,clean,sans-serif; */ /*fonts-min.css*/
-    /* px to pt ratio = 1.33, so 13px = 9.77pt */
-    font: normal normal normal 13px/1.231 Arial,sans-serif; 
 
-    color:         #333;         /* text color...dark grey*/
-    text-align:    left;         /*default alignment is left-justified */
-    margin:         0;       /*remove all margins in the box model */
+    /* px to pt ratio = 1.33 */
+    font: normal normal normal 12px/1.231 Arial,sans-serif;
+
+    color:          #333;       /* text color...dark grey*/
+    text-align:     left;       /* default alignment is left-justified */
+    margin:         0;         /* remove all margins in the box model */
     padding:        0;
     margin-right:   auto;
     margin-left:    auto;
     vertical-align: baseline; /* this is the default, be we want to control */
-    width:          100%;          /*go the entire size of the browser. custom header is in this and also goes the entire way */
+    width:          100%;     /*go the entire size of the browser. custom header is in this and also goes the entire way */
     height:         100%;
+    background-color: white;
 }
 
 
@@ -116,16 +115,16 @@ BEGIN: Content wrappers
 **********************************/
 
 .container:after{
-   content:normal; /*critical*/
-   height:100%;
+   content: normal; /* critical */
+   height:  100%;
 
 }
 
 /* create a sticky footer. This div pushes the footer down the full height of the browser window
 but then enables the footer bar to be at the bottom */
 div.content_wrapper{
-    height:         100%;  /*extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
-    margin-bottom:  -90px; /*this needs to be the same height as the custom footer height + footer height + footer spacer height */
+    height:         100%;  /* extend the full height of the browser. If browser is small, won't go smaller than div.main_conent */
+    margin-bottom:  -90px; /*t his needs to be the same height as the custom footer height + footer height + footer spacer height */
 }
 
 /* moves footers down when the body exceeds the window and you have to scroll */
@@ -143,7 +142,7 @@ div.custom_header_bar {
     width:            100%;
     margin-top:       0;
     margin-bottom:    2px;
-    background-color: #E9F5F6; /*light blue*/
+    background-color: #E9F5F6; /* light blue */
 
 }
 
@@ -155,7 +154,7 @@ div.custom_header{
 }
 
 td.custom_header_esgf_cog{
-    width:          180px; /*width of logo*/
+    width:          180px; /*width of logo */
     vertical-align: top;
     margin:         0;
     padding:        0;
@@ -165,7 +164,7 @@ td.custom_header_esgf_cog{
 
 td.powered_by{
     width:          60px;
-    font-size:      10px;
+    font-size:      10px; /* 2px smaller than base font */
     font-weight:    bold;
     font-style:     italic;
     vertical-align: top;
@@ -177,7 +176,7 @@ td.powered_by{
 
 td.hosted_by{
     width:          60px;
-    font-size:      10px;
+    font-size:      10px; /* 2px smaller than base font */
     font-weight:    bold;
     font-style:     italic;
     vertical-align: top;
@@ -189,7 +188,7 @@ td.hosted_by{
 
 td.custom_header_location{
     vertical-align: top;
-    font-size:      12px;  /* note this is in px and not pt */
+    font-size:      12px;
     color:          #666;
     line-height:    1.35;
     text-align:     left;
@@ -239,8 +238,8 @@ div.custom_footer {
 
 .custom_footer td{
     vertical-align: middle;
-    font:           normal normal 8pt/1.231 Arial,sans-serif;
-    padding:       0; /* ensure text lines up with left navigation bar */
+    font:           normal normal 11px/1.231 Arial,sans-serif;
+    padding:        0; /* ensure text lines up with left navigation bar */
 }
 
 .custom_footer td a:link, .custom_footer td a:hover, .custom_footer td a:visited{
@@ -268,7 +267,7 @@ div.footer_spacer{
 }
 
 div.footer{
-  font-size:    8pt;
+  font-size:    11px;
   margin-left:  auto;
   margin-right: auto;
   height:       40px;
@@ -277,9 +276,9 @@ div.footer{
 
 .footer td{
     vertical-align: middle;
-    font:           normal normal 8pt/1.231 Arial,sans-serif;
+    font:           normal normal 11px/1.231 Arial,sans-serif;
     color:          #666;
-    padding:        0;  /*ensure the table lines up with the left navigation bar */
+    padding:        0;    /*ensure the table lines up with the left navigation bar */
     padding-top:    3px;  /* nice spacing in the div and between the two table rows */
 }
 
@@ -305,15 +304,15 @@ IE10+ no longer accepts conditionals
 
 /* adjust bullets which are outside by default in IE */
 .ie6 ul, .ie7 ul, .ie8 ul, .ie9 ul{
-     margin:             0;
-     padding:            0;
+     margin:              0;
+     padding:             0;
      list-style-position: inside;
 }
 
 /*force IE to behave the same as other browsers */
 .ie9 hr {
-    background:   #358C92;
-	border:       none;
+    background:    #358C92;
+	border:        none;
 	height:        1px;
 	margin-bottom: 4px;
 	margin-top:    4px;
@@ -353,41 +352,41 @@ td.checkbox_label {
 BEGIN: headers
 *******************************/
 h1 {
-	color:         #666;
-	font-size:     16pt;
-	font-weight:   bold;
-        line-height:   1;
-        margin:       0;   /* we should not have to set these here */
-        padding:      0;  /* we should not have to set these here */
-        margin-bottom: 10px;
-        text-align:    left;
+	color:             #666;
+	font-size:         21px;
+	font-weight:       bold;
+    line-height:       1;
+    margin:            0;   /* we should not have to set these here */
+    padding:           0;  /* we should not have to set these here */
+    margin-bottom:     10px;
+    text-align:        left;
 }
 h2 {
-	color: #666;
-	font-size: 13.5pt;
+	color:       #666;
+	font-size:   18px;
 	font-weight: bold;
 }
 h3 {
-	color: #666;
-	font-size: 12pt;
+	color:       #666;
+	font-size:   16px;
 	font-weight: bold;
 }
 h4 {
-	color: #666;
-	font-size: 12pt;
+	color:       #666;
+	font-size:   16px;
 	font-weight: bold;
-	font-style: italic;
+	font-style:  italic;
 }
 h5 {
-	color: #666;
-	font-size: 10pt;
+	color:       #666;
+	font-size:   14px;
 	font-weight: bold;
 }
 h6 {
-	color: #666;
-	font-size: 10pt;
+	color:       #666;
+	font-size:   14px;
 	font-weight: bold;
-	font-style: italic;
+	font-style:  italic;
 }
 
 
@@ -396,13 +395,11 @@ h6 {
 * SCOPE: the page body content
 ***************/
 hr {
-	/*background-color: #CCC; light-gray*/
-        background-color:  #358C92; /* dark teal */
-	margin-bottom: 4px;
-	margin-top: 4px;
+    background-color:  #358C92; /* dark teal */
+	margin-bottom:    4px;
+	margin-top:       4px;
+    border:           none;  /* needed because icon library styles hr */
 }
-
-
 
 /***************
 * NAME: links
@@ -411,16 +408,14 @@ hr {
 ***************/
 a:link, a:visited {
     /* keep the same style for links regardless of whether they've been visited */
-    color: #358C92;    /* dark teal */
+    color:           #358C92;    /* dark teal */
     text-decoration: none;
 }
 a:hover {
-        /* only change the style of a link while a user is hovering over it */
-	color: #358C92; /*dark teal */
+    /* only change the style of a link while a user is hovering over it */
+	color:           #358C92; /*dark teal */
 	text-decoration: none;
 }
-
-
 
 /******************************
 END PAGE-LEVEL ELEMENTS
@@ -444,7 +439,7 @@ em.bold {font-weight: 700; font-style:normal;} /* misc style only */
 }
 
 .gray {
-    background:     #eee;
+    background: #eee;
 
 }
 
@@ -458,8 +453,6 @@ em.bold {font-weight: 700; font-style:normal;} /* misc style only */
 }
 
 
-
-
 /******************************
 BEGIN TABLE ELEMENTS
 ******************************/
@@ -471,7 +464,7 @@ BEGIN TABLE ELEMENTS
 table {
         /* prevent nested cells' borders or spacing from accumulating */
 	border-collapse: collapse;
-	border-color:    #ccc;
+	border-color:    #CCCCCC;
 	margin-bottom:   0;
 	margin-left:     0;
 }
@@ -486,8 +479,7 @@ tbody tr:nth-child(2n), table tbody tr.even{
 /* background color for cells in even rows */
 /* (no need to explicitly specify background of the other rows; they inherit from body) */
 tbody tr:nth-child(even) td, table tbody tr.even td {
-	/* background:       #B9E0E3;/*light-teal */
-    background-color: #eee /*light-gray */
+    background-color: #eee /* light-gray */
 }
 
 /* additional styles were added to support tables swap the order of alternating row colors; */
@@ -498,7 +490,6 @@ tbody tr:nth-child(even) td, table tbody tr.even td {
 /* style for cells in an even row */
 /* style for cells in an even row in an "even-first" colored table */
 table.even-color tbody tr:nth-child(even) td, tbody tr.even td {
-	/* background: #B9E0E3; /*light-teal */
     background-color: #eee /*light-gray */
 }
 
@@ -511,7 +502,6 @@ table.even-color tbody tr:nth-child(odd) td, tbody tr.odd td {
 /* style for cells in an odd row */
 /* style for cells in an odd row in an "odd-first" colored table */
 table.odd-color tbody tr:nth-child(odd) td, tbody tr.odd td {
-	/*background: #B9E0E3;/*light-teal */
     background-color: #eee /*light-gray */
 }
 
@@ -524,7 +514,6 @@ table.odd-color tbody tr:nth-child(even) td, tbody tr.even td {
 /* style for all cells in a non-colored (ie: no alternating color) table */
 table.no-color td{
 	background-color: #FFFFFF !important;
-
 }
 
 /* for use in the custom header for JPL */
@@ -552,7 +541,7 @@ caption {
 	text-align:    left;
 	font-weight:   bold;
 	background:    #B9E0E3;
-	border-bottom: 1px solid #666666;
+    border-bottom: 1px solid #CCCCCC;
 	color:         #666;
 }
 
@@ -564,7 +553,7 @@ caption {
 	text-align:    left;
 	font-weight:   bold;
 	background:    #C3D9FF;
-	border-bottom: 1px solid #666666;
+	border-bottom: 1px solid #CCCCCC;
 	color:         #666;
 }
 
@@ -584,9 +573,9 @@ td, th {
 /* table headers in the wiki */
 #cog_post_body th {
     font-weight: bold;
-    background:  none repeat scroll 0 0 #C3D9FF;
+    background:  none repeat scroll 0 0 #B9E0E3;
     padding:     5px;
-    font-size:   inherit;
+    font-size:   12px;
 }
 
 /* the next classes are applied to adjust the spacing of tables in specific circumstances */
@@ -605,13 +594,13 @@ td, th {
 
 
 td.head {
-	text-align: left;
+	text-align:  left;
 	font-weight: bold;
 }
 
 td.tophead {
-	text-align: left;
-	font-weight: bold;
+	text-align:     left;
+	font-weight:    bold;
 	vertical-align: top;
 }
 
@@ -619,11 +608,11 @@ td.caption_mimic{
     background-color: #B9E0E3;
     text-align:       left;
     color:            #666;
-    border-bottom:    1px solid #666;
+    border-bottom:    1px solid #CCCCCC;
 }
 
 td.righttop {
-	text-align: right;
+	text-align:     right;
 	vertical-align: top;
 }
 
@@ -643,10 +632,9 @@ td.righttop {
 
 /* used on templated content, both views and forms */
 td.leftcolumn {
-        width: 160px;
-		text-align: right;
+        width:          160px;
+		text-align:     right;
 		vertical-align: top;
-
 }
 
 
@@ -655,17 +643,18 @@ td.leftcolumn {
 * format code snippets
 *****************************/
 td.numbers{
-padding-right:10px;
-color:#A0A0A0;
-text-align:right;
-padding-top:0;}
-
+padding-right: 10px;
+color:         #A0A0A0;
+text-align:    right;
+padding-top:   0;
+}
 
 td.code{
-padding-top:0;
-background-color:#EFEFFF;
-border:1px solid #C0C0D0;
-padding-right:50px;}
+padding-top:      0;
+background-color: #EFEFFF;
+border:           1px solid  #C0C0D0;
+padding-right:    50px;
+}
 /******************************
 END TABLE ELEMENTS
 ******************************/
@@ -685,12 +674,12 @@ BEGIN FORM ELEMENTS
 	background:   white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
 	padding:      3px 5px;
 	color:        black;
-	border:       1px solid #666;
+    border:       1px solid #CCCCCC;
 	margin-bottom:5px;
 	margin-right: 2px;
 	margin-top:   5px;
 }
-
+/* project browser buttons */
 input.right_go{
 	background:     white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
     width:          28px;
@@ -702,24 +691,8 @@ input.right_go{
     padding-left:   3px;
     padding-right:  3px;
 	color:          black;
-	border:         1px solid #666666;
-	font-size:      8.5pt;
-}
-
-
-input.search_help{
-	background:     white url(/static/cog/img/nav-bg.gif) bottom repeat-x;
-    width:          35px;
-	margin-right:   0;
-    margin-left:    2px;
-    height:         22px;
-	padding-top:    2px;
-    padding-bottom: 2px;
-    padding-left:   3px;
-    padding-right:  3px;
-	color:          black;
-	border:         1px solid #666666;
-	font-size:      8.5pt;
+    border:         1px solid #CCCCCC;
+	font-size:      11px;
 }
 
 /***************
@@ -727,9 +700,8 @@ input.search_help{
 * SCOPE: the current form
 ***************/
 
-
 input[type=text] {
-	border:       1px solid #666666;
+    border:       1px solid #CCCCCC;
 	background:   #FFFFFF;
 	color:        #5D781D;
 	width:        99%; /* same width as all other types of inputs */
@@ -738,13 +710,13 @@ input[type=text] {
 }
 
 input[type=checkbox]{
-        vertical-align:baseline; /* default but want to make sure so we can do ie fixex */
-	margin-left:  0; /* so they line up nicely in tables */
+    vertical-align:   baseline; /* default but want to make sure so we can do ie fixex */
+	margin-left:      0;        /* so they line up nicely in tables */
 }
 
 
 input[type=password] {
-	border:       1px solid #666666;
+    border:       1px solid #CCCCCC;
 	background:   #FFFFFF;
 	color:        #5D781D;
     width:        99%; /* same width as all other types of inputs */
@@ -753,7 +725,7 @@ input[type=password] {
 }
 
 input[type=url] {
-    border:       1px solid #666666;
+    border:       1px solid #CCCCCC;
 	background:   #FFFFFF;
 	color:        #5D781D;
     width:        99%; /* same width as all other types of inputs */
@@ -767,9 +739,8 @@ input[type=url] {
 }
 
 textarea {
-        /* display scrollbars as needed */
-	overflow:     auto;
-	border:       1px solid #666666;
+	overflow:     auto; /* display scrollbars as needed */
+    border:       1px solid #CCCCCC;
 	width:        99%; /* not 100% because it provides a nice margin inside a table */
     padding-left: 2px; /* space before text starts */
 }
@@ -793,8 +764,7 @@ BEGIN CHANGES TO THE WIKI
 ******************************/
 /* These are the styles in the pulldown menu */
 small {
-	font-size: 8pt;
-	font-style: italic;
+	font-size:  11px;
 }
 
 strong {
@@ -815,40 +785,40 @@ BEGIN SPECIFIC ACTIONS
 
 .addlink {
 	padding-left: 12px;
-	background: url(/static/cog/img/icon_addlink.gif) 0 .2em no-repeat;
+	background:   url(/static/cog/img/icon_addlink.gif) 0 .2em no-repeat;
 }
 
 .listlink {
 	padding-left: 12px;
-	background: url(/static/cog/img/icon_listlink.gif) 0 .0em no-repeat;
+	background:    url(/static/cog/img/icon_listlink.gif) 0 .0em no-repeat;
 }
 
 .changelink {
 	padding-left: 12px;
-	background: url(/static/cog/img/icon_changelink.gif) 0 .2em no-repeat;
+	background:    url(/static/cog/img/icon_changelink.gif) 0 .2em no-repeat;
 }
 
 .privatelink {
 	padding-left: 12px;
-	padding-top: 2px;
-	background: url(/static/cog/img/icon-lock-small.png) 0 .2em no-repeat;
+	padding-top:   2px;
+	background:    url(/static/cog/img/icon-lock-small.png) 0 .2em no-repeat;
 }
 
 .restrictedlink {
 	padding-left: 12px;
-	padding-top: 2px;
-	background: url(/static/cog/img/icon-lock-small2.png) 0 .2em no-repeat;
+	padding-top:   2px;
+	background:    url(/static/cog/img/icon-lock-small.png) 0 .2em no-repeat;
 }
 
 .deletelink {
 	padding-left: 12px;
-	background: url(/static/cog/img/icon_deletelink.gif) 0 .25em no-repeat;
+	background:    url(/static/cog/img/icon_deletelink.gif) 0 .25em no-repeat;
 }
 
 .arrowrightlink {
-	padding-left: 8px;
-	padding-top: 2px;
-	background: url(/static/cog/img/icon_arrowrightlink.png) 0 .25em no-repeat;
+	padding-left: 12px;
+	padding-top:  2px;
+	background:   url(/static/cog/img/icon_arrowrightlink.png) 0 .25em no-repeat;
 }
 
 /******************************
@@ -866,12 +836,13 @@ BEGIN COLUMN ELEMENTS & ROLLUPS
 BEGIN VERTICAL MENU (LEFT NAVBAR)
 ******************************/
 
+/* the box around the entire menu */
 .vertical_menu {
-	border: 1px solid #358C92;
-	border-top: 0;
+    border:        1px solid #cccccc;
+	border-top:    0;
 	margin-bottom: 10px;
-	margin-top: 0;
-	background: white;
+	margin-top:    0;
+	background:    white;
 }
 
 .vertical_menu table {
@@ -880,8 +851,7 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 /* this is the upper section of the left nav bar */
 .vertical_menu table td {
-	/*font-size: 8pt;*/
-	font-size:        8pt; /* once we remove fonts-min from the left template, this should inherit from body  needs to be the same as <li> below*/
+	font-size:        11px; /* one size smaller than base font */
 	text-align:       left;
 	vertical-align:   top;
     padding:          1px 0 0 1px;
@@ -898,60 +868,54 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 /* These two items need to be the same except for the color */
 
 .right_widget_header {
-        margin:        0;
-	    padding-top:   2px;
-	    padding-bottom:2px;
-	    padding-right: 5px;
-	    padding-left:  5px;
-	    font-size:     9pt;
-	    text-align:    left;
-	    font-weight:   bold;
-	    color:         #666;
-	    background-color: #FCE79F; /* dark yellow */
-
-}
-
-.left_widget_header {
-            margin:          0;
+        margin:           0;
 	    padding-top:      2px;
 	    padding-bottom:   2px;
 	    padding-right:    5px;
 	    padding-left:     5px;
-	    font-size:        9pt;
+	    font-size:        12px;
+	    text-align:       left;
+	    font-weight:      bold;
+	    color:            #666;
+	    background-color: #FCE79F; /* dark yellow */
+}
+
+/* left nav bar section headers (light teal) */
+.left_widget_header {
+        margin:           0;
+	    padding-top:      2px;
+	    padding-bottom:   2px;
+	    padding-right:    5px;
+	    padding-left:     5px;
+	    font-size:        12px;
 	    text-align:       left;
 	    font-weight:      bold;
 	    color:            #666;
 	    background-color: #B9E0E3; /*light teal*/
-	    border-top:       1px solid #358C92;
-	    border-bottom:    1px solid #358C92;
-
 }
-/*first section of the left nav bar is in dark teal */
+/* left nav bar project header (dark teal) */
 .left_upper_widget_header {
-            margin:          0;
-            padding-top:      2px;
+        margin:           0;
+        padding-top:      2px;
 	    padding-bottom:   2px;
 	    padding-right:    5px;
 	    padding-left:     5px;
-	    font-size:        9pt;
+	    font-size:        12px;
 	    text-align:       left;
 	    font-weight:      bold;
 	    color:            white;
 	    background-color: #358C92; /*dark teal*/
-	    border-top:       1px solid #358C92;
-	    border-bottom:    1px solid #358C92;
-
 }
 
-
+/* TODO is this even used anymore?? */
 /* prevent body heading styles from affecting vertical_menu content */
 .vertical_menu h3 {
-	margin:     0;
-	padding:     2px 5px 3px 5px;
-	font-size:   9pt;
-	text-align:  left;
-	font-weight: bold;
-	color:       #666;
+	margin:           0;
+	padding:          2px 5px 3px 5px;
+	font-size:        12px;
+	text-align:       left;
+	font-weight:      bold;
+	color:            #666;
 	background-color: #B9E0E3;
 	border-top:       1px solid #358C92;
 	border-bottom:    1px solid #358C92;
@@ -959,28 +923,24 @@ BEGIN VERTICAL MENU (LEFT NAVBAR)
 
 /*lower section of the left nav bar */
 .vertical_menu ul {
-	margin:        0;
+	margin:         0;
 	padding-left:   4px;
-	padding-bottom:0;
+	padding-bottom: 0;
 	list-style:     none;
 }
 
-
-
-
-
 .vertical_menu li {
-        /* line-height tweaked to match project browser elements */
-	line-height: 14pt;
-	padding:    0;
-	margin:     0;
+    /* line-height tweaked to match project browser elements */
+	line-height: 19px;
+	padding:     0;
+	margin:      0;
 	list-style:  none;
-	font-size:   8pt; /* needs to be the same as the upper section which is a table */
+	font-size:   11px; /* needs to be the same as the upper section which is a table */
 }
 
 .vertical_menu li li {
 	line-height:0;
-	padding: 5px;
+	padding:    5px;
 }
 
 .vertical_menu li:first-child {
@@ -1003,9 +963,9 @@ END VERTICAL MENU (LEFT NAVBAR)
 /******************************/
 
 #id_tags{
-   min-width:200px;              /*when there are no tags the box has no size*/
-   border: 1px solid #666;
-   margin-left: 0;              /* chrome actually adds a margin to all select boxes. Remove this. */
+   min-width:   200px; /*when there are no tags the box has no size*/
+   border:      1px solid #CCCCCC;
+   margin-left: 0; /* chrome actually adds a margin to all select boxes. Remove this. */
 }
 
 
@@ -1014,13 +974,10 @@ END VERTICAL MENU (LEFT NAVBAR)
 /******************************/
 /* used on the update project page */
 .selectprojects{
-    min-width:300px;              /*when there are no tags the box has no size*/
-    border: 1px solid black;
+    min-width:     300px;              /*when there are no tags the box has no size*/
+    border:        1px solid #CCCCCC;
     margin-bottom: 5px; /* some extra space before the help text */
-    /*required:False;  TODO: this css does not make sense*/
-
 }
-
 /******************************/
 /* BEGIN TAG SELECTION BOX */
 /******************************/
@@ -1031,16 +988,16 @@ BEGIN NEWS WIDGET
 ******************************/
 
 .news_box {
-	border: 1px solid #666666;
-	margin-bottom:    10px;
-    margin-top:       0;
-	background:       #FFFFFF;
+    border:         1px solid #CCCCCC;
+	margin-bottom:  10px;
+    margin-top:     0;
+	background:     #FFFFFF;
 }
 
 .news_header {
 	background-color: #FCE79F;
 	color:            #666;
-	font-size:        9pt;
+	font-size:        12px;
 }
 
 .news_box_body {
@@ -1049,7 +1006,7 @@ BEGIN NEWS WIDGET
 }
 
 .news_box table td, .news_box table th {
-	font-size: 8pt;
+	font-size: 11px;
 	padding:   0;
 	margin:    0;
 }
@@ -1062,16 +1019,16 @@ BEGIN NEWS WIDGET
 	background: #FCF2CE; /* lightest yellow */
 }
 .news_footer {
-	margin:0;
-	padding: 2px 5px 3px 5px;
-	font-size: 8pt;
-	text-align: left;
-	font-weight: bold;
+	margin:           0;
+	padding:          2px 5px 3px 5px;
+	font-size:        11px;
+	text-align:       left;
+	font-weight:      bold;
 	background-color: #FCE79F;
-	color: #666666;
-	border: 0 solid #666666;
-	border-top: 1px solid #666666;
-	display: block;
+	color:            #666666;
+    border:           0;
+    border-top:       1px solid #CCCCCC;
+	display:          block;
 }
 
 /******************************
@@ -1083,14 +1040,14 @@ END NEWS WIDGET
 .box-comment {
 	padding:    5px;
 	margin:     2px;
-	border:     0 solid #417690;
-	background: #FFFFFF;
+	border:     0;
+    background: #FFFFFF;
 }
 
 .box-comment .caption {
     color:         #666;
 	background:    #B9E0E3;
-	border:        1px solid #666;
+	border:        1px solid #CCCCCC;
 	margin-bottom: 3px;
 	font-weight:   bold;
 	font-style:    italic;
@@ -1099,14 +1056,14 @@ END NEWS WIDGET
 .box-comment2 {
 	padding:    0;
 	margin:     0;
-	border:     0 solid #417690;
+	border:     0;
 	background: #FFFFFF;
 }
 
 .box-comment2 .caption {
 	color:         #666;
 	background:    #B9E0E3;
-	border-bottom: 1px solid #666;
+    border-bottom: 1px solid #CCCCCC;
 	margin-bottom: 3px;
 	font-weight:   bold;
 	font-style:    italic;
@@ -1114,7 +1071,7 @@ END NEWS WIDGET
 
 .box-comment2 .body {
 	padding: 2px;
-	margin: 2px;
+	margin:  2px;
 }
 
 /****** END COMMENTS ****/
@@ -1127,9 +1084,10 @@ BEGIN USER MESSAGES
 .instruction-box {
     background:  #B9E0E3; /* light-teal */
 	padding:     5px;
-	border:      1px solid #666;
+    border:      1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
+    font-size:   12px;
 }
 
 
@@ -1138,56 +1096,56 @@ BEGIN USER MESSAGES
     background:  #fce79f; /* light yellow*/
 	padding:     5px;
 	margin:      5px 0 5px 0;
-	border:      1px solid #666;
+    border:      1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
+    font-size:   12px;
 }
 
 .node-notification-box{
-	background:   #666;
-	color:        white;
-	text-align:   center;
-	padding:      10px;
-	font-size:    11pt;
-	margin-top:   5px;
-	margin-bottom:10px;
+	background:    #666;
+	color:         white;
+	text-align:    center;
+	padding:       10px;
+	font-size:     12px;
+	margin-top:    5px;
+	margin-bottom: 10px;
 }
 
 /*update openID box. This should be removed when no longer needed */
 .changeID-box {
-
-    /*background:  #FCF2CE; /* lightest yellow */
-    background:  #fce79f; /* light yellow */
-	padding:     10px;
-	margin-left: auto;
-    margin-right:auto;
-    width:       80%;
-	border:      1px solid #666;
-	font-weight: bold;
-	text-align:  center;
+    background:   #fce79f; /* light yellow */
+	padding:      10px;
+	margin-left:  auto;
+    margin-right: auto;
+    width:        80%;
+    border:       1px solid #CCCCCC;
+	font-weight:  bold;
+	text-align:   center;
+    font-size:    12px;
 }
 
 /* prevent error styles from affecting error content w/in search widget */
 /*bad openid, bad IDP, failed login etc*/
 .error-box {
-    /*background:  #FAC24A; /* dark yellow*/
     background:  red;
 	padding:     5px;
 	margin:      5px;
-    border:      1px solid #666;
+    border:      1px solid #CCCCCC;
 	font-weight: bold;
 	text-align:  center;
     color:       white;
+    font-size:   12px;
 }
 
 /* used on login2, site index errors. Used for p tags */
 .errornote {
-	font-size:   9pt !important;
+	font-size:   12px !important;
     text-align:  center;
 	display:     block;
 	padding:     5px;
 	margin:      4px;
-	border:      1px solid #666;
+    border:      1px solid #CCCCCC;
 	color:       white;
 	font-weight: bold;
 	background:  red;
@@ -1203,40 +1161,37 @@ BEGIN SEARCH WIDGET
 /* defines the box around the search widget */
 .search-box {
 	background:    #FFFFFF;
-	border:        1px solid #666;
-	font-size:     8pt;
-    margin-bottom: 10px;
-    margin-top:    0;
+    border:        1px solid #CCCCCC;
+	font-size:     11px;
+    margin-bottom: 20px;
+    margin-top:    20px;
 }
 
 .search_header {
-	margin:0;
-	padding: 2px 5px 3px 5px;
-	font-size: 9pt;
-	text-align: left;
-	font-weight: bold;
-	/* COG STYLE: RIGHT WIDGETS HEADER BACKGROUND COLOR */
-	background-color: #FCE79F;
-	/* COG STYLE: RIGHT WIDGETS HEADER BORDER COLOR */
-	border-bottom: 1px solid #666666;
-	/* background: #7CA0C7 url(/static/cog/img/default-bg.gif) top left repeat-x; */
-	color: #666;
-	display: block;
+	margin:            0;
+	padding:           2px 5px 3px 5px;
+	font-size:         12px;
+	text-align:        left;
+	font-weight:       bold;
+	background-color:  #FCE79F; /* same as right widgets header */
+    border-bottom:     1px solid #CCCCCC;
+	color:             #666;
+	display:           block;
 }
 
 /* Data Text Search */
 .box-colored {
 	background: #FCE79F; /*light yellow*/
-	border:     1px solid #666;
-	font-size:  8pt;
+    border:     1px solid #CCCCCC;
+	font-size:  11px;
 }
 
 .box-globus {
 	background: #FCE79F; /*light yellow*/
-	border:     1px solid #666;
-	font-size:  10pt;
-	padding: 4px;
-	height: 80px;
+    border:     1px solid #CCCCCC;
+	font-size:  12px;
+	padding:    4px;
+	height:     80px;
 }
 
 /*access control license.*/
@@ -1244,7 +1199,7 @@ BEGIN SEARCH WIDGET
     background:  #fce79f; /* light yellow*/
 	padding:     10px;
 	margin:      10px;
-	border:      1px solid #666;
+    border:      1px solid #CCCCCC;
 	width:       720px;
 	text-align:  left;
 }
@@ -1254,7 +1209,7 @@ BEGIN SEARCH WIDGET
 	background: #FFFFFF;
 	padding:    5px;
 	margin-top: 5px;
-	border:     1px solid #417690;
+	border:     1px solid #CCCCCC;
 	text-align: left;
 }
 
@@ -1267,27 +1222,27 @@ BEGIN ADVANCED SEARCH PAGE
 ******************************/
 
 .facet-category {
-	font-size: 9pt;
+	font-size: 12px;
 }
 
 .facet-option {
-	font-size: 9pt;
-	text-align:left;
+	font-size:  12px;
+	text-align: left;
 }
 
 .fieldset_box {
-	border: 1px solid #358C92;
-	padding: 5px;
-	text-align:left;
-	margin-top:-10px;
+    border:        1px solid #CCCCCC;
+	padding:       5px;
+	text-align:    left;
+	margin-top:    -10px;
 	margin-bottom: 16px;
 }
 
 .fieldset_legend {
-	color: #000000;
-	text-align: left;
+	color:       #000000;
+	text-align:  left;
 	font-weight: bold;
-	padding: 2px;
+	padding:     2px;
 }
 
 /******************************
@@ -1298,20 +1253,18 @@ END ADVANCED SEARCH PAGE
 BEGIN PEER-NODES-BOX
 ******************************/
 
-.peer-nodes-box {
+.peer_nodes_box {
 	background:    #FFFFFF;
-	border:        1px solid #666;
-	font-size:     8pt;
+    border:        1px solid #CCCCCC;
+	font-size:     11px;
     margin-bottom: 10px;
     margin-top:    0;
 }
 
-.peer-nodes-box-body {
-	
-	padding: 4px;
-	max-height: 80px;
-	overflow-y: auto;
-	
+.peer_nodes_box_body {
+	padding:       4px;
+	max-height:    112px; /* same as news box but subtract out the 4px top/bottom padding */
+	overflow-y:    auto; /* turns on scroll bar */
 }
 
 /******************************
@@ -1319,14 +1272,14 @@ END PEER-NODES-BOX
 ******************************/
 
 .caption {
-	margin:0;
-	padding: 2px 5px 3px 5px;
-	font-size: 9pt;
-	text-align: left;
-	font-weight: bold;
+	margin:           0;
+	padding:          2px 5px 3px 5px;
+	font-size:        12px;
+	text-align:       left;
+	font-weight:      bold;
 	background-color: #000;
-	color: #666;
-	display: block;
+	color:            #666;
+	display:          block;
 }
 
 /***************
@@ -1335,15 +1288,14 @@ END PEER-NODES-BOX
 * DESCRIPTION: header_bar does not specify the actual page header, but rather the headings w/in boxes
 ***************/
 .header_bar {
-	margin:0;
-	padding: 2px 5px 3px 5px;
-	font-size: 9pt;
-	text-align: left;
-	font-weight: bold;
+	margin:           0;
+	padding:          2px 5px 3px 5px;
+	font-size:        12px;
+	text-align:       left;
+	font-weight:      bold;
 	background-color: #B9E0E3;
-	color: #666;
-	display: block;
-	border: 1px solid #666666;
+	color:            #666;
+	display:          block;
 }
 
 /******************************
@@ -1378,55 +1330,51 @@ BEGIN MESSAGES & ERRORS
 
 ul.messagelist {
 	padding: 0 0 5px;
-	margin:0;
+	margin:  0;
 }
 
 ul.messagelist li {
-	font-size: 9pt;
-	display: block;
-	padding: 4px 5px 4px 25px;
-	margin: 0 0 3px 0;
-	border-bottom: 1px solid #ddd;
-	color: #666;
-	background: #ffc url(/static/cog/img/icon_success.gif) 5px .3em no-repeat;
+	font-size:     12px;
+	display:       block;
+	padding:       4px 5px 4px 25px;
+	margin:        0 0 3px 0;
+    border-bottom: 1px solid #CCCCCC;
+	color:         #666;
+	background:    #ffc url(/static/cog/img/icon_success.gif) 5px .3em no-repeat;
 }
 
-
-
 .warning {
-	font-size: 9pt !important;
-	display: block;
-	padding: 4px;
-	margin: 4px;
-	text-align: center;
-	color: red;
+	font-size:   12px !important;
+	display:     block;
+	padding:     4px;
+	margin:      4px;
+	text-align:  center;
+	color:       red;
 	font-weight: bold;
 }
 
 ul.errorlist {
-	margin: 0 !important;
+	margin:  0 !important;
 	padding: 0 !important;
 }
 
 .errorlist li {
-	font-size: 9pt !important;
-	display: block;
-	padding: 4px 5px 4px 25px;
-	margin: 0 0 3px 0;
-	border: 1px solid red;
-	color: white;
+	font-size:  12px !important;
+	display:    block;
+	padding:    4px 5px 4px 25px;
+	margin:     0 0 3px 0;
+	border:     1px solid red;
+	color:      white;
 	background: red url(/static/cog/img/icon_alert.gif) 5px .3em no-repeat;
 }
 
 /* ensure the styles apply to errors even when they are w/in tables */
 td ul.errorlist {
-        /* note the !important keyword to override the styles from the table section */
 	margin:  0 !important;
 	padding: 0 !important;
 }
 
 td ul.errorlist li {
-        /* note the !important keyword to override the styles from the table section */
 	margin: 0 !important;
 }
 
@@ -1455,7 +1403,7 @@ BEGIN SPECIFIC CSS FIXES FOR THIRD-PARTY ELEMENTS AND SOME IE
 /* the following styles (x.last) prevents right overflows */
 div.last {
   margin-right: -100px;
-  position: relative;
+  position:     relative;
 }
 
 /* fine tune some of the spacing in IE */
@@ -1472,13 +1420,9 @@ div.last ol {
 
 /* limit the maximum width the user profile image */
 .myimage {
-  display:block; /* does this fix IE issue? */
-  /*width: 100%; */
-  max-width: 200px;
-  /* max-height: 200px; */
- /* width: expression(this.width > 200 ? "200"+"px" : true);*/
-  /* height: expression(this.height > 200 ? "200"+"px" : true); */
-  border: 1px solid #666666;
+    display:   block;
+    max-width: 200px;
+    border:    1px solid #CCCCCC;
 }
 
 /* YUI treeview introduces a bug when user is logged the background of the tree is teal, */
@@ -1490,163 +1434,141 @@ END SPECIFIC CSS FIXES
 ******************************/
 
 .mybox {
-	border: 1px solid #666666;
+    border:        1px solid #CCCCCC;
 	margin-bottom: 5px;
-	background: #FFFFFF;}
+	background:    #FFFFFF;}
 
 .header-gray {
-	border-bottom: 1px solid #666666;
-	margin-bottom:0;
-	background: #EEEEEE;
-	text-align: left;
-	color: #666666;
-	font-size: 9pt;
+    border-bottom: 1px solid #CCCCCC;
+	margin-bottom: 0;
+	background:    #EEEEEE;
+	text-align:    left;
+	color:         #666666;
+	font-size:     12px;
 }
 
 /***********************************
 BEGIN non-CUSTOMIZABLE HEADER STYLES
 ************************************/
 
-/* TODO: is this used? */
-#right_sentence {
-	margin-top:35px;
-	font-weight: bold;
-	font-style: italic;
-	font-size: 10pt;
-	text-align: left;
-	color: #333;
-	float:right;
-}
-
-#right_logo a:link, #right_logo a:visited {
-    color: #666;
-}
-
 /* TOP NAV */
 .top_nav {
     width:       100%;
-    height:      20px;
+    height:      22px;
     margin:      0 auto;
     padding:     0;
     background:  #FFFFFF;
     color:       #FFFFFF;
-    font-size:   9pt;
+    font-size:   12px;
     font-weight: bold;
     font-style:  normal;
 }
 
 /*bar that shows up when there is no upper navigation items (e.g. data cart) */
 #top_nav_left {
-	padding-top:  2px;
-	padding-left: 6px;
-	width:        100%;
-	background:   #358C92;
-	float:        left;
-    height:       20px;
-}
-
-#top_subnav_left {
-	padding-top:     2px;
-	padding-left:    6px;
-	width:           100%;
-	background-color:#B9E0E3;
-	float:           left;
-}
-
-#top_subnav_left a:link, #top_subnav_left a:visited {
-    color: #666;
+	padding:          2px 0 0 6px;
+	width:            934px;  /* 940 - 6 = 934 */
+	background-color: #358C92; /* dark teal */
+	float:            left;
+    height:           20px;
 }
 
 #top_nav_right {
-	width:            97%;
-	padding-top:      0;
+	width:            100%;
     text-align:       right;
-	padding-left:     5px;      /* make yellow box line up with rest of the right widgets */
+    padding:          2px 0 0 0;
     background-color: #FAC24A; /*dark yellow*/
 	float:            right;
-    height:           22px;
-}
-
-#top_nav_right a {
-	color:         black;
-    padding:       0;
-    padding-top:   4px;
-    padding-bottom:4px;
-    padding-right: 4px;
-}
-
-#top_subnav {
-    width: 100%;
-    height: 20px;
-    margin: 0 auto;
-    padding:0;
-    background: #FFFFFF;
-    color: #FFFFFF;
-    font-size: 9pt;
-    font-weight: bold;
-    font-style: normal;
-}
-
-#top_subnav_right {
-	width: 97%;
-	padding-top: 2px;
-	padding-left: 6px;
-	text-align: right;
-	/* background: #FCE79F; */
-	color: #666;
+    height:           20px;  /* don't use inherit here */
 }
 
 .top_nav ul {
-    margin:0;
-    padding: 0 0 0 0;
-    list-style: none;
+    margin:      0;
+    padding:     0;
+    list-style:  none;
     line-height: normal;
 }
 
 .top_nav li {
-    float: left;
+    float:  left;
     height: 20px;
 }
 
 .top_nav a {
-    display: block;
-    margin-right: 3px;
-    /* COG STYLE: TOP NAV BAR TEXT */
+    display:         block;
+    margin-right:    3px;
     text-decoration: none;
-    /* padding: top-right-bottom-left */
-    padding: 2px 8px 6px 6px;
-    font-weight: bold;
-    color: #FFFFFF;
-    border: none;
+    padding:         2px 6px 4px 6px; /* top right bottom left */
+    font-weight:     bold;
+    color:           #FFFFFF;
+    border:          none;
 }
 
 .top_nav a:hover {
     text-decoration: underline;
 }
 
+#top_nav_right a {
+	color:          black;
+    padding:        2px 4px 4px 0;
+
+}
+
 #top_subnav_right a {
-	display: inline;
-	color: #358C92;
+	display:     inline;
+	color:       #358C92;
 	font-weight: normal;
-	padding:0;
-	margin:0;
-	text-align: center;
-	font-size: 8.5pt;
+	padding:     0;
+	margin:      0;
+	text-align:  center;
+	font-size:   11px;
+}
+
+#top_subnav_left {
+	padding-top:      2px;
+	padding-left:     6px;
+	width:            100%;
+	background-color: #B9E0E3;
+	float:            left;
+}
+
+#top_subnav_left a:link, #top_subnav_left a:visited {
+    color: #666;
+}
+
+#top_subnav {
+    width:       100%;
+    height:      20px;
+    margin:      0 auto;
+    padding:     0;
+    background:  #FFFFFF;
+    color:       #FFFFFF;
+    font-size:   12px;
+    font-weight: bold;
+    font-style:  normal;
+}
+
+#top_subnav_right {
+	width:        97%;
+	padding-top:  2px;
+	padding-left: 6px;
+	text-align:   right;
+	color:        #666;
 }
 
 /* Test styles for tabbed rollup */
 /* This are currently not used but we may turn on the tabbed rollup again, so keep for now */
 
 .rollover {
-    display:       inline;
-    border:        solid;
-    border-color:  #cdcdcd;
-    padding-top:   5px;
-    padding-left:  10px;
-    padding-right: 10px;
-    padding-bottom:10px;
-    color:         #666;
-    font-size:     15px;}
+    display:        inline;
+    border:         solid;
+    border-color:   #cdcdcd;
+    padding-top:    5px;
+    padding-left:   10px;
+    padding-right:  10px;
+    padding-bottom: 10px;
+    color:          #666;
+    font-size:      15px;}
 
 .tab_1_selected {
     border-width:  1px 1px 0 1px;
@@ -1671,4 +1593,24 @@ a.nolink{
 
 a.islink{
     color: #358c92;;
+}
+
+/* CSS styles for Quality Control Flags */
+
+.input-color {
+    position: relative;
+}
+
+.input-color .color-box {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: #ccc;
+    border: 1px;
+    border-style: solid;
+    border-color: #666;
+    position: relative;
+    left: 1px;
+    top: 2px;
+    right: 1px;
 }

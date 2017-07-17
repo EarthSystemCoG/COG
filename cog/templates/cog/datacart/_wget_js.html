@@ -1,6 +1,62 @@
 <!-- Javascript controls for wget functionality -->
 <script type="text/javascript">
   //<![CDATA[
+             
+             
+    // function to POST data to a URL
+	function post_to_url(path, params) {
+	
+	    var form = document.createElement("form");
+	    form.setAttribute("method", 'post');
+	    form.setAttribute("action", path);
+	
+	 	// method will happend many "hidden" elements to the form
+	 	// with the name "name", different "value"
+	    var addField = function( key, value ){
+	        var hiddenField = document.createElement("input");
+	        hiddenField.setAttribute("type", "hidden");
+	        hiddenField.setAttribute("name", key);
+	        hiddenField.setAttribute("value", value );
+	
+	        form.appendChild(hiddenField);
+	    }; 
+	
+	    for(var key in params) {
+	        if(params.hasOwnProperty(key)) {
+	            if( params[key] instanceof Array ){
+	                for(var i = 0; i < params[key].length; i++){
+	                    addField( key, params[key][i] )
+	                }
+	            }
+	            else{
+	                addField( key, params[key] ); 
+	            }
+	        }
+	    }
+	
+	    document.body.appendChild(form);
+ 	    form.submit();
+	}
+    
+    // function that converts the HTTP GET request parameters into a POST dictionary of (key, values[]) pairs
+    // example: { 'dataset_id' : ["abc", "cde", "123"], "distrib":["false"] }
+    function URLToArray(url) {
+    	
+        var params = {};
+        var pairs = url.substring(url.indexOf('?') + 1).split('&');
+        for (var i = 0; i < pairs.length; i++) {
+            if(!pairs[i])
+                continue;
+            var pair = pairs[i].split('=');
+            if (params[pair[0]]==null) {
+            	params[pair[0]] = new Array();
+            }
+            // NOTE: POST parameters must NOT be encoded
+            params[decodeURI(pair[0])].push(decodeURI(pair[1]));
+         }
+         return params;
+    
+    }
 
 	// function to execute a request to a single index node
 	// for a wget script spanning one or more datasets
@@ -14,10 +70,10 @@
 	
 	  // add optional 'local' shard
 	  if (shard.length>0) {
-		  url += "?shards=" + encodeURI(shard+"/solr");  // "?shards=localhost:8982/solr"
-	  } else {
+	  	  url += "?shards=" + encodeURI(shard+"/solr");  // "?shards=localhost:8982/solr"
 	  // or target shared "slave" shard only
-		  url += "?distrib=false";
+	  } else {
+      	  url += "?distrib=false";
 	  }
 	  
 	  // add optional query filter
@@ -27,9 +83,14 @@
 	  for (i=0; i<ids.length; i++) {
 		url += "&dataset_id="+encodeURIComponent(ids[i]);
 	  }
-
+	  
 	  // execute synchronous request for one wget script
-	  window.location.href = url;
+	  // execute HTTP GET request
+	  //window.location.href = url;
+	  // execute HTTP POST request
+	  base_url = url.substring(0, url.indexOf('?'));
+	  params = URLToArray(url);
+	  post_to_url(base_url, params);
 
 	}
 

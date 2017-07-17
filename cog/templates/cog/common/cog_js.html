@@ -48,6 +48,15 @@
 	       }
 	   }
 	}
+	
+	// function to delete an HTML element by id
+	function delete_element(id) {
+		   var e = this.document.getElementById(id);
+		   if (e!=null) {
+		       e.parentNode.removeChild(e);
+		   }
+		}
+
     
 //-->
 </script>

@@ -1,8 +1,12 @@
 from django.db import models
 import ConfigParser
+from datetime import datetime
 import os
 
 INVALID_CHARACTERS = ['>','<','&','$','!','\\','\/','\'','\"','(',')','[',']','{','}']
+
+ERROR_MESSAGE_INVALID_TEXT = "Error: search query text cannot contain any of the characters: %s" % INVALID_CHARACTERS
+ERROR_MESSAGE_INVALID_DATE = 'Max/Min Version dates must be of the format: YYYYMMDD'
 
 # maximum number of results per page
 LIMIT = 10
@@ -46,6 +50,8 @@ class SearchInput:
         self.replica = False
         self.latest = True
         self.local = False
+        self.max_version = ''
+        self.min_version = ''
         
     def addConstraint(self, name, value):
         try:
@@ -64,17 +70,37 @@ class SearchInput:
         return self.constraints.get(name, None)
         
     def isValid(self):
+        
+        # validate query text
         for c in INVALID_CHARACTERS:
             if c in self.query:
-                return False
-        return True
+                return (False, ERROR_MESSAGE_INVALID_TEXT)
+        
+        # validate max/min version dates
+        if self.max_version:
+            try:
+                datetime.strptime( self.max_version, "%Y%M%d" )
+            except ValueError:
+                return (False, ERROR_MESSAGE_INVALID_DATE)
+        if self.min_version:
+            try:
+                datetime.strptime( self.min_version, "%Y%M%d" )
+            except ValueError:
+                return (False, ERROR_MESSAGE_INVALID_DATE)
+
+            
+        return (True, '')
+    
+    def isMaxVersionDateValid(self):
+        return False
     
     def isEmpty(self):
         return self.query == '' and len(self.constraints)==0
         
     def printme(self):
         print "Search Input"
-        print "\t Query=%s Type=%s Offset=%d Limit=%d" % (self.query, self.type, self.offset, self.limit)
+        print "\t Query=%s Type=%s Offset=%d Limit=%d Max Version=%s Min Version=%s" % (self.query, self.type, self.offset, self.limit, 
+                                                                                        self.max_version, self.min_version)
         for key, values in self.constraints.items():
             print "\t Constraint key=%s value(s)=%s" % (key, values)
         

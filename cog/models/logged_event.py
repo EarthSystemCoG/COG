@@ -2,7 +2,6 @@ from django.db import models
 from constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from django_comments.signals import comment_was_posted
 from django.core.signals import request_finished
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
@@ -44,21 +43,6 @@ def log_instance_event(sender, **kwargs):
         event.save()
 
 
-# Handler for comment creation
-def log_comment_event(sender, **kwargs):
-
-    comment = kwargs['comment']
-    instance = comment.content_object
-    project = instance.getProject()
-    user = comment.user
-    classname = instance.__class__.__name__
-    title = 'New comment on %s' % get_display_name(instance, classname)
-    if user is not None:
-        event = LoggedEvent.objects.create(user=user, project=project, title=title, description=instance.title,
-                                           sender='%s' % sender,
-                                           url=reverse('%s_detail' % classname.lower(),
-                                                       kwargs={'%s_id' % classname.lower(): instance.id}))
-        event.save()
 
 
 def get_display_name(instance, classname):
@@ -76,8 +60,6 @@ def get_display_name(instance, classname):
 # post_save.connect(log_instance_event, sender=Post, dispatch_uid="log_post_event")
 post_save.connect(log_instance_event, sender=Doc, dispatch_uid="log_doc_event")
 post_save.connect(log_instance_event, sender=News, dispatch_uid="log_news_event")
-comment_was_posted.connect(log_comment_event, dispatch_uid="log_comment_event")
-
 
 # callback receiver function for Post update events
 @receiver(post_signal)

@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 
                 # test user existence by accessing the profile page
                 userProfileUrl = user.profile.getAbsoluteUrl()
-                print "\nChecking user: %s url: %s" % (user, userProfileUrl)
+                print "\nChecking user at URL: %s" % userProfileUrl.decode("utf-8")
                 
                 try:
                     response = urllib.urlopen( userProfileUrl )
@@ -36,6 +36,9 @@ class Command(BaseCommand):
                     else:
                         print '\tUser found.'
                          
-                # remote node is not up   
-                except IOError: # [Errno socket error] [Errno 61] Connection refused
-                    print 'URL %s cannot be reached, skipping... ' % userProfileUrl
+                # error checking this user
+                except Exception as exception:
+                    print 'Error checking URL: %s skipping... ' % userProfileUrl
+                    print exception
+                    pass
+                    
