@@ -65,7 +65,7 @@ if ESGF_CONFIG:
 # PID specific settings
 PID_CONFIG = siteManager.isPidEnabled()
 if PID_CONFIG:
-    PID_PREFIX = siteManager.get('PID_PREFIX', section=SECTION_PID, default='21.14100')
+    PID_PREFIX = siteManager.get('PID_PREFIX', section=SECTION_PID, default='21.14101')
     PID_MESSAGING_SERVICE_EXCHANGE = siteManager.get('PID_EXCHANGE', section=SECTION_PID, default='esgffed-exchange')
     PID_CREDENTIALS = siteManager.get('PID_CREDENTIALS', section=SECTION_PID, default=None).split('\n')
 
