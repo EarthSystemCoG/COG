@@ -1,0 +1,16 @@
+<!-- Javascript controls for wps functionality -->
+<script type="text/javascript">
+  function wps(dataset_id, index_node, shard, endpoint) {
+    var url = endpoint;
+
+    url += '?dataset_id=' + dataset_id;
+
+    url += '&index_node=' + index_node;
+
+    url += '&shard=' + shard;
+
+    url += '&query=' + getQueryFilter();
+
+    window.location.replace(url);
+  }
+</script>

@@ -52,6 +52,7 @@ print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
 PRODUCTION_SERVER = str2bool(siteManager.get('PRODUCTION_SERVER', default='False'))
 print 'Production server flag=%s' % PRODUCTION_SERVER
 
+WPS_ENDPOINT = siteManager.get('WPS_ENDPOINT', default=None);
 
 # FIXME
 # ESGF specific settings
