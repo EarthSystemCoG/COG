@@ -15,6 +15,9 @@
 	{% if 'PID_CONFIG'|settings_value %}
 		{% include 'cog/datacart/_pid_js.html' %}
 	{% endif %}
+        {% if 'WPS_ENDPOINT'|settings_value %}
+          {% include 'cog/datacart/_wps_js.html' %}
+        {% endif %}
 
 	<!-- custom spacing of datacart table -->
 	<style scoped type="text/css">
