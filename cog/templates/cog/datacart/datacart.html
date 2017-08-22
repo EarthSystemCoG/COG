@@ -118,6 +118,10 @@
 						    [ <strong><a href="" onclick="javascript:dataCartPid('datacart-pid', this, 'Collection PID',
 							'Hide Collection PID'); return false">Collection PID</a></strong> ]
 						{% endif %}
+                                                {% if 'WPS_ENDPOINT'|settings_value %}
+                                                        &nbsp;
+                                                        [ <strong><a href="" onclick="javascript:wpsDatasets('{{'WPS_ENDPOINT'|settings_value}}'); return false">Compute</a></strong> ]
+                                                {% endif %}
 					 </td>
 			    </tr>
 			    <!--this row must be set explicitly to white since the td, which is white does not fill up the entire

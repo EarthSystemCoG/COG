@@ -13,4 +13,18 @@
 
     window.location.replace(url);
   }
+
+  function wpsDatasets(endpoint) {
+    var selectedItems = getSelectedItemsByServiceType(THREDDS);
+
+    if (selectedItems.length <= 0) {
+      showMessage("Warning", "Please select one or more datasets in the Data Cart that are THREDDS enabled.");
+    } else {
+      var datasets = selectedItems.map(function(x) {
+        return x.id;
+      });
+
+      wps(datasets.join(','), selectedItems[0].index_node, '', endpoint);
+    }
+  }
 </script>
