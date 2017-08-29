@@ -146,10 +146,7 @@
 			{% endif %}
 			
                         {% if 'WPS_ENDPOINT'|settings_value %}
-                          &nbsp; [ <strong><a href="javascript:wps('{{record.id}}',
-                              '{{record.fields.index_node.0}}',
-                              '{{record.fields.shard.0}}',
-                              '{{'WPS_ENDPOINT'|settings_value}}')">Compute</a></strong> ]
+                          &nbsp; [ <strong><a href="javascript:wps('{{record.id}}', '{{'WPS_ENDPOINT'|settings_value}}', {{record.fields|wps_arguments}})">Compute</a></strong> ]
                         {% endif %}
 	    </td>
 	  </tr>

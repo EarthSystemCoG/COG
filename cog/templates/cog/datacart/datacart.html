@@ -118,7 +118,7 @@
 						    [ <strong><a href="" onclick="javascript:dataCartPid('datacart-pid', this, 'Collection PID',
 							'Hide Collection PID'); return false">Collection PID</a></strong> ]
 						{% endif %}
-                                                {% if 'WPS_ENDPOINT'|settings_value %}
+                                                {% if 'WPS_ENDPOINT'|settings_value and 'WPS_DATASET'|settings_value %}
                                                         &nbsp;
                                                         [ <strong><a href="" onclick="javascript:wpsDatasets('{{'WPS_ENDPOINT'|settings_value}}'); return false">Compute</a></strong> ]
                                                 {% endif %}
