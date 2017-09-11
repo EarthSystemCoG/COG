@@ -41,6 +41,7 @@
 			<!-- Record metadata -->
 			[ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
 		
+
 			<!-- Dataset files -->
 			&nbsp; [ <strong><a href="" onclick="javascript:openclose('files_{{ record.id }}', this, 'List Files', 'Hide Files');
 			                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
@@ -121,6 +122,10 @@
 			    {% endif %}
 		
 			{% endfor %}
+
+
+
+
 		
 			<!-- Quality Control Flags -->
 			{% for qcflag, qcdict in record|qcflags %}
@@ -144,12 +149,17 @@
 							</a> ]
 				{% endif %}
 			{% endif %}
+
+&nbsp;
+[ <b><a href="https://feedback.llnl.gov/cgi-bin/cdat_to_idx_create.cgi?dataset={{record.id}}">VISUS IDX</a></b> ]
+&nbsp;
 			
 	    </td>
 	  </tr>
 	</table>
 
 <!-- Non-retracted dataset -->
+
 {% endif %}
 
 <!-- Record metadata box -->
@@ -172,6 +182,8 @@
         {% endif %}
     {% endfor %}
 </div>
+
+
 
 <!-- files place-holder -->
 <div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>
