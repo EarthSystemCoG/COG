@@ -150,9 +150,9 @@
 				{% endif %}
 			{% endif %}
 
-&nbsp;
-[ <b><a href="https://feedback.llnl.gov/cgi-bin/cdat_to_idx_create.cgi?dataset={{record.id}}" target="_blank">VISUS IDX</a></b> ]
-&nbsp;
+            {% if 'VISUS_SITE'|settings_value %}
+&nbsp;[ <b><a href="https://{{'VISUS_SITE'|settings_value}}/cgi-bin/cdat_to_idx_create.cgi?dataset={{record.id}}" target="_blank">VISUS IDX</a></b> ]&nbsp;
+			{% endif %}
 			
 	    </td>
 	  </tr>
