@@ -64,7 +64,7 @@ def getFacetOptionLabel(facet_key, facet_value):
     """Return the label to be displayed for a given (facet key, facet value) combination, 
        or the facet_value itself if a mapping is not found."""
     label = searchMappings.getFacetOptionLabel(facet_key, facet_value)
-    return label.replace("_"," ")
+    return label.replace("_"," ")        
 
 @register.filter 
 def displayMetadataKey(key):
@@ -79,8 +79,9 @@ def displayMetadataKey(key):
 @register.filter    
 def formatMetadataKey(key):
     '''Utility method to format a metadata key before display.'''
-    key = key.capitalize()
-    return replace(key,'_',' ').title()
+    #key = key.capitalize()
+    #return replace(key,'_',' ').title()
+    return key
 
 @register.filter 
 def toJson(record):

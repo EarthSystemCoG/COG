@@ -119,7 +119,8 @@
 
 	// formats a metadata key for display
 	function formatString(key) {
-		return key.replace(/_/g," ").replace(/,/g,", ")
+		//return key.replace(/_/g," ").replace(/,/g,", ")
+		return key.replace(/,/g,", ")
 	}
 
 	// function called if Ajax request succeded to create the files display widget
@@ -181,21 +182,15 @@
 					key = keys[j];
 					// add link to pid landing page if tracking_id is a pid
                     if ( key == 'tracking_id' && String(doc[key]).startsWith('hdl:') ) {
-                        html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: <a href='http://hdl.handle.net/"+doc[key]+"' target=_blank>"+doc[key]+"</a>";
-                    } else if ( key == 'cf_standard_name' ) {
-                    	html += "<br/><span>CF Standard Name</span>: "+doc[key];
+                        html += "<br/><span>"+formatString(key) +"</span>: <a href='http://hdl.handle.net/"+doc[key]+"' target=_blank>"+doc[key]+"</a>";
                     } else {
-                        html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
+                        html += "<br/><span>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
                     }
 				}
 				for (var j=0; j<keys2.length; j++) {
 					key = keys2[j];
 					if (j>0) html2 += "<br/>";
-				    if ( key == 'cf_standard_name' ) {
-                		html += "<br/><span>CF Standard Name</span>: "+doc[key];
-				    } else {
-						html2 += "<span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
-				    }
+					html2 += "<span>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
 				}
 
 				<!-- special case: image metadata display-->

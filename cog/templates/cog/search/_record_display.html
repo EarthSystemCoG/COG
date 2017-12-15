@@ -122,10 +122,6 @@
 			    {% endif %}
 		
 			{% endfor %}
-
-
-
-
 		
 			<!-- Quality Control Flags -->
 			{% for qcflag, qcdict in record|qcflags %}
@@ -167,15 +163,15 @@
 
 	<strong>Dataset Metadata</strong>
 
-	<br/><span style="text-decoration:underline">ID</span> = {{ record.id }}
+	<br/><span style="text-decoration:underline">id</span> = {{ record.id }}
 	{% if record.fields.version.0 %}
-	<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
+	<br/><span style="text-decoration:underline">version</span> = {{ record.fields.version.0 }}
 	{% endif %}
 
 	<!-- display more record information -->
     {% for keyvalues in record.fields|sortdict %}
         {% if keyvalues.0|displayMetadataKey %}
-        	{% if keyvalues.0|lower == 'access' %}
+        	{% if keyvalues.0|endsWith:'s' %}
         		<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> =
         	{% else %}
             	<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}{{ keyvalues.1|length|pluralize }}</span> =

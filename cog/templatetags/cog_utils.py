@@ -868,3 +868,13 @@ def getDisplayStatus(flag1, flag2):
         return 'block'
     else:
         return 'none'
+    
+@register.filter
+def startsWith(text, starts):
+    if isinstance(text, basestring):
+        return text.starts_with(starts)
+    return False
+
+@register.filter
+def endsWith(text, suffix):
+    return text.endswith(suffix)
