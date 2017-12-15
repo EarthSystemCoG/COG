@@ -182,6 +182,8 @@
 					// add link to pid landing page if tracking_id is a pid
                     if ( key == 'tracking_id' && String(doc[key]).startsWith('hdl:') ) {
                         html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: <a href='http://hdl.handle.net/"+doc[key]+"' target=_blank>"+doc[key]+"</a>";
+                    } else if ( key == 'cf_standard_name' ) {
+                    	html += "<br/><span>CF Standard Name</span>: "+doc[key];
                     } else {
                         html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
                     }
@@ -189,7 +191,11 @@
 				for (var j=0; j<keys2.length; j++) {
 					key = keys2[j];
 					if (j>0) html2 += "<br/>";
-					html2 += "<span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
+				    if ( key == 'cf_standard_name' ) {
+                		html += "<br/><span>CF Standard Name</span>: "+doc[key];
+				    } else {
+						html2 += "<span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
+				    }
 				}
 
 				<!-- special case: image metadata display-->
