@@ -175,7 +175,11 @@
 	<!-- display more record information -->
     {% for keyvalues in record.fields|sortdict %}
         {% if keyvalues.0|displayMetadataKey %}
-            <br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}{{ keyvalues.1|length|pluralize }}</span> =
+        	{% if keyvalues.0|lower == 'access' %}
+        		<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> =
+        	{% else %}
+            	<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}{{ keyvalues.1|length|pluralize }}</span> =
+            {% endif %}
             {% for value in keyvalues.1 %}
             	{{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %}
             {% endfor %}
