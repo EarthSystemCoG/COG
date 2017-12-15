@@ -295,11 +295,11 @@
 			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+shard+"','"+numFound+"','"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show All Files</a></style>";
 
-		// link to show less files
+		// link to show fewer files
 		} else if (docs.length > DEFAULT_LIMIT) {
 			var url = "javascript:window.scrollTo(0,0); " // must resize the scrollbar
 				    + "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+shard+"','"+DEFAULT_LIMIT+"','"+project+"')";
-			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
+			html += "<div style='text-align:center'><a href=\""+url+"\">Show Fewer Files</a></style>";
 
 		}
 
