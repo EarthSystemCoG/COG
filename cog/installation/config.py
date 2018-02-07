@@ -122,7 +122,8 @@ class CogConfig(object):
     def _safeSet(self, key, value, section=SECTION_DEFAULT, override=False):
         '''Method to set a configuration option, without overriding an existing value
             (unless explicitly requested).'''
-
+        logger.info("SECTION_DEFAULT: %s", SECTION_DEFAULT)
+        logger.info("self.cogConfig: %s", self.cogConfig)
         if not self.cogConfig.has_section(section):
             if section != SECTION_DEFAULT:
                 self.cogConfig.add_section(section) # "The DEFAULT section is not acknowledged."
