@@ -3,7 +3,7 @@ Module containing shared constants for CoG installation.
 '''
 import os
 
-SECTION_DEFAULT = 'DEFAULT'
+SECTION_DEFAULT = 'installer.properties'
 SECTION_ESGF = 'ESGF'
 SECTION_EMAIL = 'EMAIL'
 
