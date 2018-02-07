@@ -91,17 +91,17 @@ class CogConfig(object):
 
         # $esg_config_dir/esgf.properties
         try:
+            # with open(ESGF_PROPERTIES_FILE, 'r') as f
             with open(ESGF_PROPERTIES_FILE, 'r') as f:
                 first_line = f.readline()
                 if "[installer.properties]" in first_line:
                     logging.info("Existing section header found.")
-                    f.seek(0,0)
-                    config_string = f.read()
+                    self.esgfConfig.read(f)
                 else:
                     # transform Java properties file into python configuration file: must prepend a section
                     config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
-            config_file = StringIO.StringIO(config_string)
-            self.esgfConfig.readfp(config_file)
+                    config_file = StringIO.StringIO(config_string)
+                    self.esgfConfig.readfp(config_file)
             logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
         except IOError:
             # file not found
