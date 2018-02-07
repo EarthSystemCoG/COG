@@ -98,7 +98,7 @@ class CogConfig(object):
                     f.seek(0,0)
                     config_string = f.read()
                     global SECTION_DEFAULT
-                    SECTION_DEFAULT = "[installer.properties]"
+                    SECTION_DEFAULT = "installer.properties"
                 else:
                     # transform Java properties file into python configuration file: must prepend a section
                     config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
