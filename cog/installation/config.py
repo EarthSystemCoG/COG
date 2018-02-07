@@ -124,6 +124,7 @@ class CogConfig(object):
             (unless explicitly requested).'''
         logging.info("SECTION_DEFAULT: %s", SECTION_DEFAULT)
         logging.info("self.cogConfig: %s", self.cogConfig)
+        logging.info("self.cogConfig.sections(): %s", self.cogConfig.sections())
         if not self.cogConfig.has_section(section):
             if section != SECTION_DEFAULT:
                 self.cogConfig.add_section(section) # "The DEFAULT section is not acknowledged."
