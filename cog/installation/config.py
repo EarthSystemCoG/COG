@@ -127,8 +127,10 @@ class CogConfig(object):
         '''Method to set a configuration option, without overriding an existing value
             (unless explicitly requested).'''
         logging.info("COG_SECTION_DEFAULT: %s", COG_SECTION_DEFAULT)
-        logging.info("self.cogConfig: %s", self.cogConfig)
-        logging.info("self.cogConfig.sections(): %s", self.cogConfig.sections())
+        # logging.info("self.cogConfig: %s", self.cogConfig)
+        # logging.info("self.cogConfig.sections(): %s", self.cogConfig.sections())
+        logging.debug("key: %s", key)
+        logging.debug("value: %s", value)
         if not self.cogConfig.has_section(section):
             logging.debug("Section %s not found", section)
             if section != COG_SECTION_DEFAULT:
