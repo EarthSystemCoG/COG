@@ -164,7 +164,8 @@ class CogConfig(object):
         self._safeSet('DATABASE_PATH','%s/django.data' % COG_CONFIG_DIR)
         # if DJANGO_DATABASE=postgres
         self._safeSet('DATABASE_NAME', 'cogdb')
-        self._safeSet('DATABASE_USER', self._safeGet("db.user") )
+        logging.debug("db.user: %s", self._safeGet("db.user"))
+        self._safeSet('DATABASE_USER', self._safeGet("db.user"))
         self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
         self._safeSet('DATABASE_HOST', self._safeGet("db.host", default='localhost'))
         self._safeSet('DATABASE_PORT', self._safeGet("db.port", default='5432'))
