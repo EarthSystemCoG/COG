@@ -31,7 +31,7 @@ import os
 import time
 from django.utils.crypto import get_random_string
 
-from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
+from constants import (SECTION_DEFAULT, COG_SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE,
                        IDP_WHITELIST, KNOWN_PROVIDERS, PEER_NODES,
                        DEFAULT_PROJECT_SHORT_NAME)
@@ -72,6 +72,7 @@ class CogConfig(object):
         # read existing configuration file
         try:
             filenames = self.cogConfig.read( CONFIGFILEPATH )
+            logging.info("filenames: %s", filenames )
             if len(filenames)>0:
                 logging.info("Using existing configuration file: %s" % CONFIGFILEPATH )
             else:
@@ -122,14 +123,16 @@ class CogConfig(object):
             logging.warn("ESGF database password file: %s could not found or could not be read" % ESGF_PASSWORD_FILE)
 
 
-    def _safeSet(self, key, value, section=SECTION_DEFAULT, override=False):
+    def _safeSet(self, key, value, section=COG_SECTION_DEFAULT, override=False):
         '''Method to set a configuration option, without overriding an existing value
             (unless explicitly requested).'''
-        logging.info("SECTION_DEFAULT: %s", SECTION_DEFAULT)
+        logging.info("COG_SECTION_DEFAULT: %s", COG_SECTION_DEFAULT)
         logging.info("self.cogConfig: %s", self.cogConfig)
         logging.info("self.cogConfig.sections(): %s", self.cogConfig.sections())
         if not self.cogConfig.has_section(section):
-            if section != SECTION_DEFAULT:
+            logging.debug("Section %s not found", section)
+            if section != COG_SECTION_DEFAULT:
+                logging.debug("attempting to add section %s", section)
                 self.cogConfig.add_section(section) # "The DEFAULT section is not acknowledged."
 
         if override or not self.cogConfig.has_option(section, key):
