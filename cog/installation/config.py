@@ -97,6 +97,8 @@ class CogConfig(object):
                 logging.info("Existing section header found.")
                 prop_file.close()
                 self.esgfConfig.read(ESGF_PROPERTIES_FILE)
+                logging.info("self.esgfConfig after read: %s", self.esgfConfig)
+                logging.info("self.esgfConfig sections after read: %s", self.esgfConfig.sections())
             else:
                 with open(ESGF_PROPERTIES_FILE, 'r') as f:
                     # transform Java properties file into python configuration file: must prepend a section
