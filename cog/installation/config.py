@@ -39,6 +39,7 @@ from constants import (SECTION_DEFAULT, COG_SECTION_DEFAULT, SECTION_ESGF, SECTI
 
 # location of site specific settings configuration file
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
+logging.info("COG_CONFIG_DIR: %s", COG_CONFIG_DIR)
 CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
 
 class CogConfig(object):
@@ -166,7 +167,7 @@ class CogConfig(object):
         self._safeSet('DATABASE_PATH','%s/django.data' % COG_CONFIG_DIR)
         # if DJANGO_DATABASE=postgres
         self._safeSet('DATABASE_NAME', 'cogdb')
-        logging.debug("db.user: %s", self._safeGet("db.user"))
+        logging.info("db.user: %s", self._safeGet("db.user"))
         self._safeSet('DATABASE_USER', self._safeGet("db.user"))
         self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
         self._safeSet('DATABASE_HOST', self._safeGet("db.host", default='localhost'))
