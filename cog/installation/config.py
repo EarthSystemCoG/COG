@@ -129,8 +129,8 @@ class CogConfig(object):
         logging.info("COG_SECTION_DEFAULT: %s", COG_SECTION_DEFAULT)
         # logging.info("self.cogConfig: %s", self.cogConfig)
         # logging.info("self.cogConfig.sections(): %s", self.cogConfig.sections())
-        logging.debug("key: %s", key)
-        logging.debug("value: %s", value)
+        logging.info("key: %s", key)
+        logging.info("value: %s", value)
         if not self.cogConfig.has_section(section):
             logging.debug("Section %s not found", section)
             if section != COG_SECTION_DEFAULT:
