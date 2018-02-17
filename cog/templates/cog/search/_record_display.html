@@ -66,6 +66,10 @@
 				    <div style="display: inline-block;">
 				    [ <a href="{{url.0}}" target="_blank"><strong>THREDDS Catalog</strong></a> ]
 				    </div>
+                            
+                                    {% if 'WPS_ENDPOINT'|settings_value %}
+                                      &nbsp; [ <strong><a href="javascript:wps('{{record.id}}', '{{'WPS_ENDPOINT'|settings_value}}', {{record.fields|wps_arguments}})">Compute</a></strong> ]
+                                    {% endif %}
 		
 				<!-- LAS -->
 				{% elif url.1 == 'application/las' %}
@@ -144,10 +148,6 @@
 							</a> ]
 				{% endif %}
 			{% endif %}
-			
-                        {% if 'WPS_ENDPOINT'|settings_value %}
-                          &nbsp; [ <strong><a href="javascript:wps('{{record.id}}', '{{'WPS_ENDPOINT'|settings_value}}', {{record.fields|wps_arguments}})">Compute</a></strong> ]
-                        {% endif %}
 	    </td>
 	  </tr>
 	</table>
