@@ -54,8 +54,8 @@ print 'Production server flag=%s' % PRODUCTION_SERVER
 
 WPS_ENDPOINT = siteManager.get('WPS_ENDPOINT', default=None);
 # Fields that will be added to the query string
-WPS_FIELDS = siteManager.get('WPS_FIELDS', default=['index_node']);
-WPS_DATACART = siteManager.get('WPS_DATACART', default=False)
+WPS_FIELDS = siteManager.get('WPS_FIELDS', default='index_node').split(',');
+WPS_DATACART = str2bool(siteManager.get('WPS_DATACART', default='False'))
 print 'WPS endpoint: %s, datacart enabled: %s, fields: %s' % (WPS_ENDPOINT, WPS_DATACART, ','.join(WPS_FIELDS))
 
 # FIXME
