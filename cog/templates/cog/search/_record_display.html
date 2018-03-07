@@ -127,14 +127,18 @@
 			{% for qcflag, qcdict in record|qcflags %}
 				&nbsp;
 				<div style="display: inline-block;">
-				<a href='{{ qcflag|qcflag_url }}' target='_blank'>
-					<span class="input-color">[
-					{% for key, value in qcdict.items %}
-						<div class="color-box" style="background-color: {{ value }};"></div>
-					{% endfor %}
-					]</span> 
-				</a>
-				[ <strong><a href="" onclick="javascript:openclose('climate_indicators_table_box', this, 'Show Table', 'Hide Table'); return false;">Show Table</a></strong> ]
+				[
+					<a href='{{ qcflag|qcflag_url }}' target='_blank'>
+						<span class="input-color">
+						{% for key, value in qcdict.items %}
+							<div class="color-box" style="background-color: {{ value }};"></div>
+						{% endfor %}	
+						</span>
+					</a>
+					{% if qcflag == "obs4mips_indicators" %}
+						&nbsp;<strong><a href="" onclick="javascript:openclose('climate_indicators_table_box_{{ record.id }}', this, 'Show Table', 'Hide Table'); return false;">Show Table</a></strong>
+					{% endif %}
+				]
 				</div>
 			{% endfor %}
 			
@@ -185,7 +189,7 @@
 </div>
 
 <!-- Climate Indicators table -->
-<div class="padded-box" id="climate_indicators_table_box" style="display:none; text-align:center;">
+<div class="padded-box" id="climate_indicators_table_box_{{ record.id }}" style="display:none; text-align:center;">
 	<img src="{{ STATIC_URL }}cog/img/climate_indicators_table.png" style="text-align:center;" />
 </div>
 
