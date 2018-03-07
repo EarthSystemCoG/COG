@@ -134,6 +134,7 @@
 					{% endfor %}
 					]</span> 
 				</a>
+				[ <strong><a href="" onclick="javascript:openclose('climate_indicators_table_box', this, 'Show Table', 'Hide Table'); return false;">Show Table</a></strong> ]
 				</div>
 			{% endfor %}
 			
@@ -183,7 +184,10 @@
     {% endfor %}
 </div>
 
-
+<!-- Climate Indicators table -->
+<div class="padded-box" id="climate_indicators_table_box" style="display:none; text-align:center;">
+	<img src="{{ STATIC_URL }}cog/img/climate_indicators_table.png" style="text-align:center;" />
+</div>
 
 <!-- files place-holder -->
 <div class="padded-box" id="files_{{ record.id }}" style="display:none"></div>
