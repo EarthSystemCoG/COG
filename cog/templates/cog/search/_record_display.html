@@ -127,7 +127,7 @@
 			{% for qcflag, qcdict in record|qcflags %}
 				&nbsp;
 				<div style="display: inline-block;">
-				<a href='{{ qcflag|qcflag_url }}'>
+				<a href='{{ qcflag|qcflag_url }}' target='_blank'>
 					<span class="input-color">[
 					{% for key, value in qcdict.items %}
 						<div class="color-box" style="background-color: {{ value }};"></div>
