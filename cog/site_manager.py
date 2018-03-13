@@ -1,4 +1,5 @@
 import os
+import time
 import ConfigParser
 import logging
 
@@ -15,18 +16,20 @@ class SiteManager(object):
 
     def __init__(self):
         '''Initialization method reads the configuration file.'''
+        
+        # wait for configuration file to be available
+        while not os.path.exists( SiteManager.CONFIGFILEPATH ):
+            logging.info("Waiting to read configuration file: %s" % SiteManager.CONFIGFILEPATH )
+            time.sleep(1)
 
         self.config = ConfigParser.ConfigParser(allow_no_value=True)
-        # location of site specific settigs configuration file
+        # location of site specific settings configuration file
         self.cog_config_dir = SiteManager.COG_CONFIG_DIR
         try:
             config = self.config.read( SiteManager.CONFIGFILEPATH )
             logging.info("Site manager: using CoG settings from file(s): %s" % config)
-            if not config:
-                # if the configFilePath cannot be read (ie: doesn't exist), raise an error
-                raise ValueError
-
             print 'Initialized CoG settings from file: %s' % SiteManager.CONFIGFILEPATH
+            
         except Exception as e:
             print "Error reading site settings configuration file: %s" % SiteManager.CONFIGFILEPATH
 
