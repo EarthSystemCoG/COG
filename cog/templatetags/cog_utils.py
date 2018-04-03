@@ -25,6 +25,15 @@ from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
 
 register = template.Library()
 
+@register.filter
+def wps_arguments(the_dict):
+    args = {}
+
+    for f in settings.WPS_FIELDS:
+        if f in the_dict:
+	    args[f] = the_dict[f]
+
+    return args
 
 @register.filter
 def knownIdentityProviders(request):

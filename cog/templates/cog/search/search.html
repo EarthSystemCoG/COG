@@ -1,7 +1,9 @@
 {% extends "cog/common/layout_center.html" %}
 
-{% block extrahead %}
+{% load cog_utils %}
 
+{% block extrahead %}
+	
 	<!--// Javascript must be loaded in the header //-->
 	{% include 'cog/datacart/_datacart_js.html' %}
 	{% include 'cog/search/_search_js.html' %}
@@ -12,6 +14,9 @@
 	{% include 'cog/datacart/_las_js.html' %}
 	{% include 'cog/datacart/_go_js.html' %}
         {% include 'cog/datacart/_citation_js.html' %}
+	{% if 'WPS_ENDPOINT'|settings_value %}
+		{% include 'cog/datacart/_wps_js.html' %}
+	{% endif %}
 
 {% endblock %}
 
