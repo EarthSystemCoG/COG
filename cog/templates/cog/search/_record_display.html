@@ -146,14 +146,13 @@
 				</div>
 			{% endfor %}
 			
-			<!-- display ES-DOC viewer link (CMIP5 datasets only for now) -->
-			{% if project.searchprofile.modelMetadataFlag %}
-				{% if record.fields.project.0|lower == 'cmip5' %}
-					&nbsp; [ <a href="http://view.es-doc.org/?renderMethod=datasetid&project={{record.fields.project.0}}&id={{record.fields.instance_id.0}}" target="_blank">
-								<strong>Model Metadata</strong>
-							</a> ]
-				{% endif %}
+			<!-- ES-DOC 'Further Info' URL -->
+			{% if record.fields.further_info_url %}
+				<div style="display: inline-block;">
+					[ <a href="{{record.fields.further_info_url.0}}"><strong>Further Info</strong></a> ]
+				</div>
 			{% endif %}
+			
 
             {% if 'VISUS_SITE'|settings_value %}
 &nbsp;[ <b><a href="https://{{'VISUS_SITE'|settings_value}}/cgi-bin/cdat_to_idx_create.cgi?dataset={{record.id}}" target="_blank">VISUS IDX</a></b> ]&nbsp;
@@ -180,14 +179,14 @@
 	<!-- display more record information -->
     {% for keyvalues in record.fields|sortdict %}
         {% if keyvalues.0|displayMetadataKey %}
-        	{% if keyvalues.0|endsWith:'s' %}
-        		<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> =
-        	{% else %}
-            	<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}{{ keyvalues.1|length|pluralize }}</span> =
-            {% endif %}
-            {% for value in keyvalues.1 %}
-            	{{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %}
-            {% endfor %}
+	        	{% if keyvalues.0|endsWith:'s' %}
+	        		<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> =
+	        	{% else %}
+	            	<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}{{ keyvalues.1|length|pluralize }}</span> =
+	        {% endif %}
+	        {% for value in keyvalues.1 %}
+	            	{{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %}
+	        {% endfor %}
         {% endif %}
     {% endfor %}
 </div>

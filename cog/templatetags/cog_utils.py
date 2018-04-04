@@ -800,7 +800,11 @@ def get_target_url_with_next_url(request, target_url_name):
 
 @register.filter
 def get_first_openid(user):
-    return user.profile.openid()
+    try:
+        return user.profile.openid()
+    # user profile does not exist because site was deleted
+    except ObjectDoesNotExist:
+        return ""
 
 @register.filter
 def get_openid(request):

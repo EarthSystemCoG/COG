@@ -1,6 +1,9 @@
 <!-- Javascript controls for datacart functionality --> 
 <script type="text/javascript">
   //<![CDATA[
+	  
+    var file_metadata_keys = ["cf_standard_name", "checksum_type", "dataset_id", "id", "instance_id", "master_id", "timestamp", 
+    	                          "variable", "variable_id", "variable_long_name", "variable_units", "version"];
 
 	// function to select/deselect all items in cart
 	function toggleAllDataCartItems() {
@@ -166,11 +169,13 @@
 				var keys = []
 				var keys2 = []
 				for (var field in doc) {
-					// display only some file metadata
+					// display some file metadata at top level
 					if (field == 'checksum' || field == 'size' || field == 'tracking_id') {
 						keys[keys.length] = field;
+					// display some other file metadata in pop-up window
 					} else {
-						if (field != 'score' && field != '_version_') {
+						//if (field != 'score' && field != '_version_') {
+					    if ( file_metadata_keys.indexOf(field.toLowerCase()) > -1) {
 							keys2[keys2.length] = field;
 						}
 					}
