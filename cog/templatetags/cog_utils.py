@@ -25,6 +25,15 @@ from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
 
 register = template.Library()
 
+@register.filter
+def wps_arguments(the_dict):
+    args = {}
+
+    for f in settings.WPS_FIELDS:
+        if f in the_dict:
+	    args[f] = the_dict[f]
+
+    return args
 
 @register.filter
 def knownIdentityProviders(request):
@@ -791,7 +800,11 @@ def get_target_url_with_next_url(request, target_url_name):
 
 @register.filter
 def get_first_openid(user):
-    return user.profile.openid()
+    try:
+        return user.profile.openid()
+    # user profile does not exist because site was deleted
+    except ObjectDoesNotExist:
+        return ""
 
 @register.filter
 def get_openid(request):
@@ -868,3 +881,13 @@ def getDisplayStatus(flag1, flag2):
         return 'block'
     else:
         return 'none'
+    
+@register.filter
+def startsWith(text, starts):
+    if isinstance(text, basestring):
+        return text.starts_with(starts)
+    return False
+
+@register.filter
+def endsWith(text, suffix):
+    return text.endswith(suffix)

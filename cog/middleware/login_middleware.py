@@ -80,6 +80,8 @@ class LoginMiddleware(object):
     
                 if request.method=='POST' and not request.user.is_authenticated():
                     if response.status_code == 500:
+                        print 'Authentication Error'
+                        print response
                         if 'OpenID discovery error' in response.content:
                             return HttpResponseRedirect(reverse('openid-login')+"?message=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
     

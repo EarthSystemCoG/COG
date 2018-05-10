@@ -1,0 +1,34 @@
+<!-- Javascript controls for wps functionality -->
+<script type="text/javascript">
+  function wps(dataset_id, endpoint, fields) {
+    var url = endpoint;
+
+    url += '?dataset_id=' + dataset_id;
+
+    for (var f in fields) {
+      url += '&' + f + '=' + fields[f];
+    }
+
+    url += '&query=' + getQueryFilter();
+
+    window.location.replace(url);
+  }
+
+  function wpsDatasets(endpoint) {
+    var selectedItems = getSelectedItemsByServiceType(THREDDS);
+
+    if (selectedItems.length <= 0) {
+      showMessage("Warning", "Please select one or more datasets in the Data Cart that are THREDDS enabled.");
+    } else {
+      var datasets = selectedItems.map(function(x) {
+        return x.id;
+      });
+
+      var fields = {
+        index_node: selectedItems[0].index_node
+      };
+
+      wps(datasets.join(','), endpoint, fields);
+    }
+  }
+</script>

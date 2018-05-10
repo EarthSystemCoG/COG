@@ -41,6 +41,7 @@
 			<!-- Record metadata -->
 			[ <strong><a href="" onclick="javascript:openclose('dataset_{{ record.id }}', this, 'Show Metadata', 'Hide Metadata'); return false;">Show Metadata</a></strong> ]
 		
+
 			<!-- Dataset files -->
 			&nbsp; [ <strong><a href="" onclick="javascript:openclose('files_{{ record.id }}', this, 'List Files', 'Hide Files');
 			                         javascript:showFiles('{{record.id}}','{{record.fields.index_node.0}}', '{{record.fields.shard.0}}',
@@ -66,6 +67,10 @@
 				    <div style="display: inline-block;">
 				    [ <a href="{{url.0}}" target="_blank"><strong>THREDDS Catalog</strong></a> ]
 				    </div>
+                            
+                                    {% if 'WPS_ENDPOINT'|settings_value %}
+                                      &nbsp; [ <strong><a href="javascript:wps('{{record.id}}', '{{'WPS_ENDPOINT'|settings_value}}', {{record.fields|wps_arguments}})">Compute</a></strong> ]
+                                    {% endif %}
 		
 				<!-- LAS -->
 				{% elif url.1 == 'application/las' %}
@@ -126,23 +131,31 @@
 			{% for qcflag, qcdict in record|qcflags %}
 				&nbsp;
 				<div style="display: inline-block;">
-				<a href='{{ qcflag|qcflag_url }}'>
-					<span class="input-color">[
-					{% for key, value in qcdict.items %}
-						<div class="color-box" style="background-color: {{ value }};"></div>
-					{% endfor %}
-					]</span> 
-				</a>
+				[
+					<a href='{{ qcflag|qcflag_url }}' target='_blank'>
+						<span class="input-color">
+						{% for key, value in qcdict.items %}
+							<div class="color-box" style="background-color: {{ value }};"></div>
+						{% endfor %}	
+						</span>
+					</a>
+					{% if qcflag == "obs4mips_indicators" %}
+						&nbsp;<strong><a href="" onclick="javascript:openclose('climate_indicators_table_box_{{ record.id }}', this, 'Show Table', 'Hide Table'); return false;">Show Table</a></strong>
+					{% endif %}
+				]
 				</div>
 			{% endfor %}
 			
-			<!-- display ES-DOC viewer link (CMIP5 datasets only for now) -->
-			{% if project.searchprofile.modelMetadataFlag %}
-				{% if record.fields.project.0|lower == 'cmip5' %}
-					&nbsp; [ <a href="http://view.es-doc.org/?renderMethod=datasetid&project={{record.fields.project.0}}&id={{record.fields.instance_id.0}}" target="_blank">
-								<strong>Model Metadata</strong>
-							</a> ]
-				{% endif %}
+			<!-- ES-DOC 'Further Info' URL -->
+			{% if record.fields.further_info_url %}
+				<div style="display: inline-block;">
+					[ <a href="{{record.fields.further_info_url.0}}"><strong>Further Info</strong></a> ]
+				</div>
+			{% endif %}
+			
+
+            {% if 'VISUS_SITE'|settings_value %}
+&nbsp;[ <b><a href="https://{{'VISUS_SITE'|settings_value}}/cgi-bin/cdat_to_idx_create.cgi?dataset={{record.id}}" target="_blank">VISUS IDX</a></b> ]&nbsp;
 			{% endif %}
 			
 	    </td>
@@ -150,6 +163,7 @@
 	</table>
 
 <!-- Non-retracted dataset -->
+
 {% endif %}
 
 <!-- Record metadata box -->
@@ -157,20 +171,29 @@
 
 	<strong>Dataset Metadata</strong>
 
-	<br/><span style="text-decoration:underline">ID</span> = {{ record.id }}
+	<br/><span style="text-decoration:underline">id</span> = {{ record.id }}
 	{% if record.fields.version.0 %}
-	<br/><span style="text-decoration:underline">Version</span> = {{ record.fields.version.0 }}
+	<br/><span style="text-decoration:underline">version</span> = {{ record.fields.version.0 }}
 	{% endif %}
 
 	<!-- display more record information -->
     {% for keyvalues in record.fields|sortdict %}
         {% if keyvalues.0|displayMetadataKey %}
-            <br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}{{ keyvalues.1|length|pluralize }}</span> =
-            {% for value in keyvalues.1 %}
-            	{{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %}
-            {% endfor %}
+	        	{% if keyvalues.0|endsWith:'s' %}
+	        		<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}</span> =
+	        	{% else %}
+	            	<br/><span style="text-decoration:none">{{ keyvalues.0|formatMetadataKey }}{{ keyvalues.1|length|pluralize }}</span> =
+	        {% endif %}
+	        {% for value in keyvalues.1 %}
+	            	{{ value }}{% if forloop.counter != keyvalues.1|length %}, {% endif %}
+	        {% endfor %}
         {% endif %}
     {% endfor %}
+</div>
+
+<!-- Climate Indicators table -->
+<div class="padded-box" id="climate_indicators_table_box_{{ record.id }}" style="display:none; text-align:center;">
+	<img src="{{ STATIC_URL }}cog/img/climate_indicators_table.png" style="text-align:center;" />
 </div>
 
 <!-- files place-holder -->
