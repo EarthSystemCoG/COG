@@ -36,6 +36,11 @@ from constants import (SECTION_DEFAULT, COG_SECTION_DEFAULT, SECTION_ESGF, SECTI
                        IDP_WHITELIST, KNOWN_PROVIDERS, PEER_NODES,
                        DEFAULT_PROJECT_SHORT_NAME)
 
+logging.info("PEER_NODES: %s", PEER_NODES)
+logging.info("IDP_WHITELIST: %s", IDP_WHITELIST)
+logging.info("KNOWN_PROVIDERS: %s", KNOWN_PROVIDERS)
+
+
 
 # location of site specific settings configuration file
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
@@ -88,29 +93,28 @@ class CogConfig(object):
     def _readEsgfConfig(self):
         '''Method that reads local parameters from ESGF configuration file esgf.properties.'''
 
-        # read ESGF configuration file, if available
+        # read ESGF configuration file ($esg_config_dir/esgf.properties), if available
         self.esgfConfig = ConfigParser.ConfigParser()
-
-        # $esg_config_dir/esgf.properties
         try:
-            prop_file = open(ESGF_PROPERTIES_FILE, 'r')
-            first_line = prop_file.readline()
-            if "[installer.properties]" in first_line:
+            self.esgfConfig.read(ESGF_PROPERTIES_FILE)
+        except IOError:
+            # file not found
+            logging.warn("ESGF properties file: %s not found" % ESGF_PROPERTIES_FILE)
+        else:
+            #Functionality for ESGF 3.0 where esgf.properties already has a section header called installer.properties
+            if SECTION_DEFAULT in self.esgfConfig.sections():
                 logging.info("Existing section header found.")
-                prop_file.close()
-                self.esgfConfig.read(ESGF_PROPERTIES_FILE)
                 logging.info("self.esgfConfig after read: %s", self.esgfConfig)
                 logging.info("self.esgfConfig sections after read: %s", self.esgfConfig.sections())
+                logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
             else:
                 with open(ESGF_PROPERTIES_FILE, 'r') as f:
                     # transform Java properties file into python configuration file: must prepend a section
                     config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
                     config_file = StringIO.StringIO(config_string)
                     self.esgfConfig.readfp(config_file)
-            logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
-        except IOError:
-            # file not found
-            logging.warn("ESGF properties file: %s not found" % ESGF_PROPERTIES_FILE)
+                logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
+
 
         # $esg_config_dir/.esg_pg_pass
         try:
@@ -154,6 +158,7 @@ class CogConfig(object):
 
         # [DEFAULT]
         hostName = self._safeGet("esgf.host", default='localhost')
+        logging.info("hostName: %s", hostName)
         self._safeSet('SITE_NAME', hostName.upper())
         self._safeSet('SITE_DOMAIN', hostName)
         self._safeSet('TIME_ZONE', 'America/Denver')
