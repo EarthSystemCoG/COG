@@ -1,5 +1,6 @@
 import os
 from setuptools import setup, find_packages
+from cog.installation.setup import CogSetupCommand
 
 # Utility function to read the README file.
 def read(fname):
@@ -7,7 +8,7 @@ def read(fname):
 
 setup(
     name = "cog",
-    version = "3.9.1",
+    version = "3.11",
     author = "CoG Development Team",
     author_email = "cog_support@list.woc.noaa.gov",
     description = ("Earth System CoG: web interface for the Earth System Grid Federation"),
@@ -24,9 +25,8 @@ setup(
         'Environment :: Web Environment',
         "Framework :: Django",
     ],
-    #cmdclass={ 'install': CustomInstallCommand },
-    entry_points = {
-     "distutils.commands": [ "setup_cog = cog.installation.setup:CogSetupCommand"]
-    },
-    #dependency_links = ["http://effbot.org/downloads/"],
+    cmdclass={ 'setup_cog': CogSetupCommand },
+    #entry_points = {
+    # "distutils.commands": [ "setup_cog = cog.installation.setup:CogSetupCommand"]
+    #},
 )
