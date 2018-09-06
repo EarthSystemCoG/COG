@@ -39,7 +39,6 @@ from constants import (SECTION_DEFAULT, COG_SECTION_DEFAULT, SECTION_ESGF, SECTI
 
 # location of site specific settings configuration file
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
-logging.info("COG_CONFIG_DIR: %s", COG_CONFIG_DIR)
 CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
 
 class CogConfig(object):
@@ -88,29 +87,26 @@ class CogConfig(object):
     def _readEsgfConfig(self):
         '''Method that reads local parameters from ESGF configuration file esgf.properties.'''
 
-        # read ESGF configuration file, if available
+        # read ESGF configuration file ($esg_config_dir/esgf.properties), if available
         self.esgfConfig = ConfigParser.ConfigParser()
-
-        # $esg_config_dir/esgf.properties
         try:
-            prop_file = open(ESGF_PROPERTIES_FILE, 'r')
-            first_line = prop_file.readline()
-            if "[installer.properties]" in first_line:
+            self.esgfConfig.read(ESGF_PROPERTIES_FILE)
+        except IOError:
+            # file not found
+            logging.warn("ESGF properties file: %s not found" % ESGF_PROPERTIES_FILE)
+        else:
+            #Functionality for ESGF 3.0 where esgf.properties already has a section header called installer.properties
+            if SECTION_DEFAULT in self.esgfConfig.sections():
                 logging.info("Existing section header found.")
-                prop_file.close()
-                self.esgfConfig.read(ESGF_PROPERTIES_FILE)
-                logging.info("self.esgfConfig after read: %s", self.esgfConfig)
-                logging.info("self.esgfConfig sections after read: %s", self.esgfConfig.sections())
+                logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
             else:
                 with open(ESGF_PROPERTIES_FILE, 'r') as f:
                     # transform Java properties file into python configuration file: must prepend a section
                     config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
                     config_file = StringIO.StringIO(config_string)
                     self.esgfConfig.readfp(config_file)
-            logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
-        except IOError:
-            # file not found
-            logging.warn("ESGF properties file: %s not found" % ESGF_PROPERTIES_FILE)
+                logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
+
 
         # $esg_config_dir/.esg_pg_pass
         try:
@@ -127,11 +123,6 @@ class CogConfig(object):
     def _safeSet(self, key, value, section=COG_SECTION_DEFAULT, override=False):
         '''Method to set a configuration option, without overriding an existing value
             (unless explicitly requested).'''
-        logging.info("COG_SECTION_DEFAULT: %s", COG_SECTION_DEFAULT)
-        # logging.info("self.cogConfig: %s", self.cogConfig)
-        # logging.info("self.cogConfig.sections(): %s", self.cogConfig.sections())
-        logging.info("key: %s", key)
-        logging.info("value: %s", value)
         if not self.cogConfig.has_section(section):
             logging.debug("Section %s not found", section)
             if section != COG_SECTION_DEFAULT:
@@ -167,7 +158,6 @@ class CogConfig(object):
         self._safeSet('DATABASE_PATH','%s/django.data' % COG_CONFIG_DIR)
         # if DJANGO_DATABASE=postgres
         self._safeSet('DATABASE_NAME', 'cogdb')
-        logging.info("db.user: %s", self._safeGet("db.user"))
         self._safeSet('DATABASE_USER', self._safeGet("db.user"))
         self._safeSet('DATABASE_PASSWORD', self._safeGet("db.password"))
         self._safeSet('DATABASE_HOST', self._safeGet("db.host", default='localhost'))

@@ -31,6 +31,7 @@ DATABASE_PORT = siteManager.get('DATABASE_PORT', default=5432)
 MY_PROJECTS_REFRESH_SECONDS = int(siteManager.get('MY_PROJECTS_REFRESH_SECONDS', default=3600))  # one hour
 PWD_EXPIRATION_DAYS = int(siteManager.get('PWD_EXPIRATION_DAYS', default=0))  # 0: no expiration
 IDP_REDIRECT = siteManager.get('IDP_REDIRECT', default=None)
+VISUS_SITE = siteManager.get('VISUS_SITE', default=None)
 HOME_PROJECT = siteManager.get('HOME_PROJECT', default='cog')
 MEDIA_ROOT = siteManager.get('MEDIA_ROOT', default="%s/site_media" % siteManager.cog_config_dir)
 DEFAULT_SEARCH_URL = siteManager.get('DEFAULT_SEARCH_URL', default='http://hydra.fsl.noaa.gov/esg-search/search/')
@@ -52,6 +53,11 @@ print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
 PRODUCTION_SERVER = str2bool(siteManager.get('PRODUCTION_SERVER', default='False'))
 print 'Production server flag=%s' % PRODUCTION_SERVER
 
+WPS_ENDPOINT = siteManager.get('WPS_ENDPOINT', default=None);
+# Fields that will be added to the query string
+WPS_FIELDS = siteManager.get('WPS_FIELDS', default='index_node').split(',');
+WPS_DATACART = str2bool(siteManager.get('WPS_DATACART', default='False'))
+print 'WPS endpoint: %s, datacart enabled: %s, fields: %s' % (WPS_ENDPOINT, WPS_DATACART, ','.join(WPS_FIELDS))
 
 # FIXME
 # ESGF specific settings
@@ -65,7 +71,7 @@ if ESGF_CONFIG:
 # PID specific settings
 PID_CONFIG = siteManager.isPidEnabled()
 if PID_CONFIG:
-    PID_PREFIX = siteManager.get('PID_PREFIX', section=SECTION_PID, default='21.14100')
+    PID_PREFIX = siteManager.get('PID_PREFIX', section=SECTION_PID, default='21.14101')
     PID_MESSAGING_SERVICE_EXCHANGE = siteManager.get('PID_EXCHANGE', section=SECTION_PID, default='esgffed-exchange')
     PID_CREDENTIALS = siteManager.get('PID_CREDENTIALS', section=SECTION_PID, default=None).split('\n')
 
