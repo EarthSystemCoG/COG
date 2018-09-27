@@ -143,7 +143,7 @@ def ac_process(request, group_name, user_id):
                         
             # notify user
             permissions = registrationService.list(user.profile.openid(), group_name)
-            notifyUser(group_name, request.user, permissions)
+            notifyUser(group_name, user, permissions)
 
             # (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('ac_process', kwargs={'user_id': user.id, 'group_name': group_name})
