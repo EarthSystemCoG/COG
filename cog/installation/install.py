@@ -156,6 +156,7 @@ class CoGInstall(object):
                 logging.info("Inserting CoG administrator: %s in ESGF database" % user.username)
                 esgfDatabaseManager.insertEsgfUser(user.profile)
                 esgfRegistrationServiceImpl.subscribe(openid, ROOTADMIN_GROUP, ROOTADMIN_ROLE)
+                esgfRegistrationServiceImpl.process(openid, ROOTADMIN_GROUP, ROOTADMIN_ROLE, True)
             
         # must create and enable 'esgf.idp.peer" as federated CoG peer
         if settings.IDP_REDIRECT is not None and settings.IDP_REDIRECT.strip()  != '':
