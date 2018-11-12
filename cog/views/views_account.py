@@ -9,7 +9,7 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django_openid_auth.models import UserOpenID
@@ -34,6 +34,15 @@ def redirectToIdp():
         return False
 
 
+from cog.backends.esgf import discover
+def auth_discover(request, **kwargs):
+    openid = request.GET.get('openid_identifier', None)
+    protocol = 'OAuth2'#discover(openid)
+    if protocol == 'OAuth2':
+        return JsonResponse({'auth': 'OAuth2'})
+    return JsonResponse({'auth': 'OpenID'})
+
+
 def custom_login(request, **kwargs):
     """
     Overrides standard login view that checks whether the authenticated user has any missing information.
@@ -41,7 +50,6 @@ def custom_login(request, **kwargs):
     :param kwargs:
     :return:
     """
-    
     # authenticate user via standard login
     response = login(request, **kwargs)
 
@@ -328,7 +336,11 @@ def user_detail(request, user_id):
         user_profile = UserProfile(user=user)
         user_profile.save()
         print "Created empty profile for user=%s" % user
-        
+    if request.user.is_authenticated():
+        if request.user.social_auth.filter(provider='esgf'):
+            social = request.user.social_auth.get(provider='esgf')
+            setattr(user_profile, 'openids', [social.uid])
+            setattr(user_profile, 'localOpenid', False)
     # retrieve map of (project, roles) for this user
     (projTuples, groupTuples) = get_all_shared_user_info(user)
     print "\nprojTuples="

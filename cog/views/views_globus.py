@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import render
 from django.template import RequestContext
+from social_django.utils import load_strategy
 import urllib
 from cog.utils import getJson
 from urlparse import urlparse
@@ -230,8 +231,19 @@ def submit(request):
 	   The access token and files to download are retrieved from the session. '''
 
 	openid = request.user.profile.openid()
+	cert = None
+	key = None
+	if not openid:
+	    social = request.user.social_auth.get(provider='esgf')
+	    access_token = social.extra_data['access_token']
+	    strategy = load_strategy()
+	    backend = social.get_backend_instance(strategy)
+	    key, cert, cn = backend.get_certificate(access_token)
+	    openid = social.uid
+	    print 'SUBMIT social.uid', social.uid
 	# get a password if authoactivation failed and a user was asked for a password
 	password = request.POST.get(ESGF_PASSWORD)
+	print 'SUBMIT password', password
 	# retrieve all data transfer request parameters from session
 	username = request.session[GLOBUS_USERNAME]
 	access_token = request.session[GLOBUS_ACCESS_TOKEN]
@@ -247,7 +259,7 @@ def submit(request):
 	# if the autoactivation fails, redirect to a form asking for a password
 	activateEndpoint(api_client, target_endpoint)
 	for source_endpoint, source_files in download_map.items():
-		status, message = activateEndpoint(api_client, source_endpoint, openid, password)
+		status, message = activateEndpoint(api_client, source_endpoint, openid, password, cert, key)
 		if not status:
 			return render(request,
                           'cog/globus/password.html',

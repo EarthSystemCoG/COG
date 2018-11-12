@@ -53,7 +53,10 @@ urlpatterns = [
     url(r'^openid/complete/$', cog.views.custom_login_complete, name='openid-complete'),
     url(r'^openid/logo.gif$', django_openid_auth.views.logo, name='openid-logo'),
 
-    
+    # add OAuth2 urls
+    url(r'', include('social_django.urls', namespace='social')),
+    url(r'^esgf-auth/discover/$', cog.views.auth_discover, name='auth-discover'),
+
     # force redirection to login page after logout
     #url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     # use next=... to redirect to previous page after logout
