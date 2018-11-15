@@ -37,7 +37,7 @@ def redirectToIdp():
 from cog.backends.esgf import discover
 def auth_discover(request, **kwargs):
     openid = request.GET.get('openid_identifier', None)
-    protocol = 'OAuth2'#discover(openid)
+    protocol = discover(openid)
     if protocol == 'OAuth2':
         return JsonResponse({'auth': 'OAuth2'})
     return JsonResponse({'auth': 'OpenID'})
