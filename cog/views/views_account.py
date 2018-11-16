@@ -1,7 +1,7 @@
 import urllib
 from urlparse import urlparse
 
-from django.contrib.auth import logout
+from django.contrib.auth import logout, REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import is_password_usable
 from django.contrib.auth.views import login
@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django_openid_auth.models import UserOpenID
 from django_openid_auth.views import login_complete
@@ -109,6 +109,24 @@ def _custom_login(request, response):
                                         "?message=incomplete_profile")
         
     return response
+
+
+def oauth2_login_view(request, form_class=OAuth2LoginForm):
+    
+    if request.POST:
+        
+        form = form_class(request.POST)
+        if form.is_valid():
+            openid_identifier = form.cleaned_data['openid_identifier']
+            redirect_to = form.cleaned_data['next']
+            
+            # store social-auth fields in session
+            request.session['openid_identifier'] = openid_identifier
+            request.session[REDIRECT_FIELD_NAME] = redirect_to
+            
+            return redirect('social:begin', 'esgf')
+    
+    return redirect('login')
 
 
 def notifyAdminsOfUserRegistration(user,request):

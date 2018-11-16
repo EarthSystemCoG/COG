@@ -58,7 +58,7 @@
                     var response = JSON.parse(this.responseText);
                     var form = document.getElementById('login_form');
                     if (response.auth == 'OAuth2')
-                        form.action = "{% url 'social:begin' 'esgf' %}";
+                        form.action = "{% url 'oauth2-login' %}";
                     else
                         form.action = "{% url 'openid-login' %}";
                     form.submit();

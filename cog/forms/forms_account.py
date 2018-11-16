@@ -52,6 +52,12 @@ class UserOpenidForm(ModelForm):
         fields = ('claimed_id',)
 
 
+class OAuth2LoginForm(Form):
+    
+    openid_identifier = CharField()
+    next = CharField(required=False)
+
+
 class PasswordResetForm(Form):
 
     openid = CharField(required=True, widget=TextInput(attrs={'size': '50'}))
