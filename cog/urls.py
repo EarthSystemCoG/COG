@@ -56,7 +56,7 @@ urlpatterns = [
 
     # add OAuth2 urls
     url(r'', include('social_django.urls', namespace='social')),
-    url(r'^esgf-auth/discover/$', cog.views.auth_discover, name='auth-discover'),
+    url(r'^auth/discover/$', cog.views.auth_discover, name='auth-discover'),
 
     # force redirection to login page after logout
     #url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),

@@ -262,13 +262,14 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['openid_identifier',]
-SOCIAL_AUTH_ESGF_KEY = 'XceQW2eGHpXqTQQsVUtc1UVNiLgoJNdFTZx6cM73'
-SOCIAL_AUTH_ESGF_SECRET = 'qqXpMFz6BuVjiA0QlxovdGUOBycGQhnIPvfyEEuVX81n1k8eNZrGQJC6F4xDzi27DGBqtq6nYp4cCFWG5fJzz3d6derWawGlOfHBKCFg9ZNq75LUyeSWhw0oNkESeztT'
 SOCIAL_AUTH_SANITIZE_REDIRECTS = False
 SOCIAL_AUTH_ESGF_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline',
 }
-
+ESGF_OAUTH2_SECRET_FILE = os.environ.get(
+    'ESGF_OAUTH2_SECRET_FILE',
+    '/esg/config/.esgf_oauth2.json'
+)
 
 # Default is X_FRAME_OPTIONS='SAMEORIGIN'
 # Using X_FRAME_OPTIONS = DENY breaks the CKEditor file uploader.

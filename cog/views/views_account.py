@@ -1,5 +1,7 @@
 import urllib
 from urlparse import urlparse
+import json
+import traceback
 
 from django.contrib.auth import logout, REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -35,10 +37,33 @@ def redirectToIdp():
 
 
 from cog.backends.esgf import discover
+
+
+def get_oauth2_cred(openid_identifier):
+    """
+    Get a key and secret pair from /esg/config/.esgf_oauth2.json
+    """
+    parsed_openid = urlparse(openid_identifier)
+    with open(settings.ESGF_OAUTH2_SECRET_FILE, 'r') as f:
+        try:
+            creds = json.loads(f.read())
+            cred = creds.get(parsed_openid.netloc)
+            if cred and cred.get('key') and cred.get('secret'):
+                return cred
+        except Exception:
+            traceback.print_exc()
+    print('Could not find an OAuth2 client key and secret for {} in {}'
+          .format(parsed_openid.netloc, settings.ESGF_OAUTH2_SECRET_FILE))
+    return None
+
+
 def auth_discover(request, **kwargs):
     openid = request.GET.get('openid_identifier', None)
     protocol = discover(openid)
-    if protocol == 'OAuth2':
+    credential = get_oauth2_cred(openid)
+    if protocol == 'OAuth2' and credential:
+        settings.SOCIAL_AUTH_ESGF_KEY = credential['key']
+        settings.SOCIAL_AUTH_ESGF_SECRET = credential['secret']
         return JsonResponse({'auth': 'OAuth2'})
     return JsonResponse({'auth': 'OpenID'})
 
