@@ -136,10 +136,11 @@ def _custom_login(request, response):
     return response
 
 
-def oauth2_login_view(request, form_class=OAuth2LoginForm):
+def oauth2_login(request, form_class=OAuth2LoginForm):
     
     if request.POST:
         
+        # parse the login form
         form = form_class(request.POST)
         if form.is_valid():
             openid_identifier = form.cleaned_data['openid_identifier']
@@ -151,6 +152,7 @@ def oauth2_login_view(request, form_class=OAuth2LoginForm):
             
             return redirect('social:begin', 'esgf')
     
+    # fallback to login view
     return redirect('login')
 
 

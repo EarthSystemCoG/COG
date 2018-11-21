@@ -47,7 +47,7 @@ urlpatterns = [
     # c) openid-only login
     url(r'^login/$', cog.views.custom_login, {'template_name': 'cog/openid/login.html'}, name='login'),
     url(r'^openid/login/$', django_openid_auth.views.login_begin, {'template_name': 'cog/openid/login.html'}, name='openid-login'),
-    url(r'^oauth2/login/$', cog.views.oauth2_login_view, name='oauth2-login'),
+    url(r'^oauth2/login/$', cog.views.oauth2_login, name='oauth2-login'),
     
     # b) or c)
     #url(r'^openid/complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
