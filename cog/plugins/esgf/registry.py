@@ -52,11 +52,11 @@ class LocalKnownProvidersDict(KnownProvidersDict):
             
             # store filepath and its last access time
             self.filepath = str(settings.KNOWN_PROVIDERS)
-            
-            # prevent file path manipulation
-            check_filepath(self.filepath, [KNOWN_PROVIDERS_FILENAME])
-            
+                        
             if os.path.exists(self.filepath):
+                
+                # prevent file path manipulation
+                check_filepath(self.filepath, [KNOWN_PROVIDERS_FILENAME])
                 
                 self.init = True # file of known providers is found
                 self.modtime = file_modification_datetime(self.filepath)

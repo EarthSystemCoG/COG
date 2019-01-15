@@ -1,6 +1,9 @@
 <!-- Javascript controls for datacart functionality --> 
 <script type="text/javascript">
   //<![CDATA[
+	  
+    var file_metadata_keys = ["cf_standard_name", "checksum_type", "dataset_id", "id", "instance_id", "master_id", "timestamp", 
+    	                          "variable", "variable_id", "variable_long_name", "variable_units", "version"];
 
 	// function to select/deselect all items in cart
 	function toggleAllDataCartItems() {
@@ -119,7 +122,8 @@
 
 	// formats a metadata key for display
 	function formatString(key) {
-		return key.replace(/_/g," ").replace(/,/g,", ")
+		//return key.replace(/_/g," ").replace(/,/g,", ")
+		return key.replace(/,/g,", ")
 	}
 
 	// function called if Ajax request succeded to create the files display widget
@@ -165,11 +169,13 @@
 				var keys = []
 				var keys2 = []
 				for (var field in doc) {
-					// display only some file metadata
+					// display some file metadata at top level
 					if (field == 'checksum' || field == 'size' || field == 'tracking_id') {
 						keys[keys.length] = field;
+					// display some other file metadata in pop-up window
 					} else {
-						if (field != 'score' && field != '_version_') {
+						//if (field != 'score' && field != '_version_') {
+					    if ( file_metadata_keys.indexOf(field.toLowerCase()) > -1) {
 							keys2[keys2.length] = field;
 						}
 					}
@@ -181,15 +187,15 @@
 					key = keys[j];
 					// add link to pid landing page if tracking_id is a pid
                     if ( key == 'tracking_id' && String(doc[key]).startsWith('hdl:') ) {
-                        html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: <a href='http://hdl.handle.net/"+doc[key]+"' target=_blank>"+doc[key]+"</a>";
+                        html += "<br/><span>"+formatString(key) +"</span>: <a href='http://hdl.handle.net/"+doc[key]+"' target=_blank>"+doc[key]+"</a>";
                     } else {
-                        html += "<br/><span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
+                        html += "<br/><span>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
                     }
 				}
 				for (var j=0; j<keys2.length; j++) {
 					key = keys2[j];
 					if (j>0) html2 += "<br/>";
-					html2 += "<span style='text-transform:capitalize;'>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
+					html2 += "<span>"+formatString(key) +"</span>: "+formatString(""+doc[key]);
 				}
 
 				<!-- special case: image metadata display-->
@@ -294,11 +300,11 @@
 			var url = "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+shard+"','"+numFound+"','"+project+"')";
 			html += "<div style='text-align:center'><a href=\""+url+"\">Show All Files</a></style>";
 
-		// link to show less files
+		// link to show fewer files
 		} else if (docs.length > DEFAULT_LIMIT) {
 			var url = "javascript:window.scrollTo(0,0); " // must resize the scrollbar
 				    + "javascript:showFiles('"+dataset_id+"','"+index_node+"','"+shard+"','"+DEFAULT_LIMIT+"','"+project+"')";
-			html += "<div style='text-align:center'><a href=\""+url+"\">Show Less Files</a></style>";
+			html += "<div style='text-align:center'><a href=\""+url+"\">Show Fewer Files</a></style>";
 
 		}
 

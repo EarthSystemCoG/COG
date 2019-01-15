@@ -144,8 +144,12 @@ def _encode_field_value(record, name, value):
                     record.addField('url', (parts[0], 'application/pid', 'PID'))
                 elif parts[2] == 'citation':
                     record.addField('url', (parts[0], 'application/citation', 'Citation'))
-                else:
+                elif parts[2] == 'technote':
                     record.addField('url', (parts[0], 'application/pdf', 'Tech Note'))
+                elif parts[2] == 'supdata':
+                    record.addField('url', (parts[0], 'application/zip', 'Supplementary Data'))
+                else:
+                    record.addField('url', (parts[0], 'application/octet-stream', parts[2])) # default
             else:
                 # default triple encoding
                 record.addField(name, parts) # store full URL triple in list of values

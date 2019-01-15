@@ -36,9 +36,9 @@ class Test(unittest.TestCase):
         self.assertEqual(ssl_cert_dir, '/etc/grid-security/certificates', 'Must set environment SSL_CERT_DIR to /etc/grid-security/certificates')
         
     def testPythonVersion(self):
-        '''Tests that the python installed version is 2.7.9.'''
+        '''Tests that the python installed version is 2.7.13.'''
         
-        self.assertTrue('2.7.9' in sys.version, 'Must use Python version 2.7.9')
+        self.assertTrue('2.7.13' in sys.version, 'Must use Python version 2.7.13')
         
         
     def testNoPyCurl(self):
