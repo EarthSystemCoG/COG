@@ -2,9 +2,9 @@
 django==1.10.4
 django-grappelli==2.8.1
 #django-openid-auth==0.7', # must be installed independently from fork
-sqlalchemy==1.0.11
+sqlalchemy
 south==1.0.2
-psycopg2==2.5.2
+psycopg2
 python-openid==2.2.5
 passlib==1.6.5
 pysqlite==2.8.1
@@ -16,4 +16,4 @@ django-simple-captcha==0.5.1
 html5lib==1.0b8
 bleach==1.4.2
 python-magic==0.4.12
-esgfpid==0.7.10
+esgfpid

@@ -18,7 +18,10 @@ from cog.models import PeerSite
 from cog.views.views_project import initProject
 
 from cog.installation.constants import (DEFAULT_PROJECT_SHORT_NAME, ESGF_ROOTADMIN_PASSWORD_FILE, 
-                                        DEFAULT_ROOTADMIN_PWD, ROOTADMIN_USERNAME)
+                                        DEFAULT_ROOTADMIN_PWD, ROOTADMIN_USERNAME, ROOTADMIN_GROUP,
+                                        ROOTADMIN_ROLE)
+
+from cog.services.registration.registration_impl import esgfRegistrationServiceImpl
 from cog.plugins.esgf.security import esgfDatabaseManager
 from django_openid_auth.models import UserOpenID
 from django.core.exceptions import ObjectDoesNotExist
@@ -152,7 +155,8 @@ class CoGInstall(object):
                 # insert rootAdmin user in ESGF database
                 logging.info("Inserting CoG administrator: %s in ESGF database" % user.username)
                 esgfDatabaseManager.insertEsgfUser(user.profile)
-
+                esgfRegistrationServiceImpl.subscribe(openid, ROOTADMIN_GROUP, ROOTADMIN_ROLE)
+                esgfRegistrationServiceImpl.process(openid, ROOTADMIN_GROUP, ROOTADMIN_ROLE, True)
             
         # must create and enable 'esgf.idp.peer" as federated CoG peer
         if settings.IDP_REDIRECT is not None and settings.IDP_REDIRECT.strip()  != '':
