@@ -117,6 +117,13 @@
 		               </div>
 		
 				<!--  all other services -->
+				{% elif url.2 in ['Tech Note', 'summary'] %}
+				{% else %}
+					&nbsp; 
+					<div style="display: inline-block;">
+					[ <a href="{{url.0}}"><strong>Tech Note</strong></a> ]
+					</div>
+
 				{% else %}
 					&nbsp; 
 					<div style="display: inline-block;">
