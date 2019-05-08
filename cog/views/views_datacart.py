@@ -1,12 +1,14 @@
+import logging
+import json
+import re
+
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.core.urlresolvers import reverse
 from cog.models import *
 from django.contrib.auth.decorators import login_required
-import re
 from django.views.decorators.csrf import csrf_exempt
-import json
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from cog.views.views_search import SEARCH_DATA, SEARCH_OUTPUT
 from django.core.exceptions import ObjectDoesNotExist
@@ -21,14 +23,16 @@ except ImportError:
 
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
 
+log = logging.getLogger(__name__)
 
 # view to display the data cart for a given node, user
 @require_GET
 @login_required
 def datacart_display(request, site_id, user_id):
-        
+
     # load User object
     user = get_object_or_404(User, pk=user_id)
+    log.info("Datacart display for %s", str(user))
     # security checl
     if user != request.user:
         return HttpResponseForbidden("Un-authorized attempt to access another user datacart!")
