@@ -36,21 +36,10 @@ def datacart_display(request, site_id, user_id):
         datacart = DataCart.objects.get(user=user)
     except DataCart.DoesNotExist:
         datacart = None
-        
-    # inspect remote data carts
-    dcs = {}
-    # combine from possible multiple user openids
-    for openid in user.profile.openids():
-        _dcs = getDataCartsForUser(openid)
-        if len(_dcs) > 0:
-            dcs[openid] = {}
-            for site, size in _dcs.items():
-                print site, size
-                dcs[openid][site] = size
-        
+
     return render(request,
                   'cog/datacart/datacart.html', 
-                  {'datacart': datacart, 'datacarts': dcs})    
+                  {'datacart': datacart})    
     
 
 # view to display a user datacart by openid
