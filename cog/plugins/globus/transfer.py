@@ -53,10 +53,16 @@ def activateEndpoint(transfer_client, endpoint, openid=None, password=None):
     #reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
 
     # Activate the endpoint using MyProxy server method
-    # reqs.set_requirement_value("myproxy", "hostname", hostname)
-    # reqs.set_requirement_value("myproxy", "username", username)
-    # reqs.set_requirement_value("myproxy", "passphrase", password)
-    # reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
+    for i, d in enumerate(req["DATA"]):
+        if d["type"] == "myproxy":
+            if d["name"] == "hostname":
+                req["DATA"][i]["value"] = hostname
+            elif d["name"] == "username":
+                req["DATA"][i]["value"] = username
+            elif d["name"] == "passphrase":
+                req["DATA"][i]["value"] = password
+            elif d["name"] == "lifetime_in_hours":
+                req["DATA"][i]["value"] = "168"
 
     try:
         code, reason, result = transfer_client.endpoint_activate(endpoint, reqs)
