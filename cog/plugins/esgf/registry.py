@@ -138,7 +138,7 @@ class LocalWhiteList(WhiteList):
             try:
                 self._reload(filepath, force=True)
             except ParseError as e:
-                log.error(str(e)) # print error from parsing single white-list files and continue
+                log.error(str(e)) # error from parsing single white-list files and continue
 
 
     def _reload(self, filepath, force=False):

@@ -9,6 +9,10 @@ from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
+import logging
+
+log = logging.getLogger(__name__)
+
 class Command(BaseCommand):
     
     help = 'Initializes the current site'
@@ -20,4 +24,4 @@ class Command(BaseCommand):
         current_site.domain = settings.SITE_DOMAIN
         current_site.save()
 
-        print 'Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain)
+        log.info('Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain))

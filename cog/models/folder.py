@@ -4,6 +4,10 @@ from project import Project
 from collections import OrderedDict
 from cog.models.dbutils import UnsavedForeignKey
 
+import logging
+
+log = logging.getLogger()
+
 # name of project top-folder
 TOP_FOLDER = "Bookmarks"
 
@@ -63,7 +67,7 @@ def getTopFolder(project):
     # name = "%s %s" % (project.short_name, TOP_FOLDER)
     folder, created = Folder.objects.get_or_create(name=TOP_FOLDER, parent=None, project=project, active=True)
     if created:
-        print 'Project=%s: created Top-Level folder=%s' % (project.short_name, folder.name)
+        log.debug('Project=%s: created Top-Level folder=%s' % (project.short_name, folder.name))
     return folder
 
 

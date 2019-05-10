@@ -18,6 +18,10 @@ from cog.site_manager import siteManager
 # read /esg/config/esgf_cogs.xml
 FILEPATH = siteManager.get('PEER_NODES')
 
+import logging
+
+log = logging.getLogger(__name__)
+
 class Command(BaseCommand):
 
     help = 'Updates the list of CoG peers in the local database'
@@ -36,5 +40,5 @@ class Command(BaseCommand):
         try:
             pnl = PeerNodesList(FILEPATH)
             pnl.reload(delete=options['delete'])
-        except Exception, error:
-            print "Could not update peer nodes from xml file", error
+        except Exception as error:
+            log.error("Could not update peer nodes from xml file %s" % error)

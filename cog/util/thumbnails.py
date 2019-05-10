@@ -7,6 +7,10 @@ from django.conf import settings
 from cog.models.constants import DEFAULT_IMAGES
 from cog.models.constants import UPLOAD_DIR_PHOTOS
 
+import logging
+
+log = logging.getLogger(__name__)
+
 THUMBNAIL_EXT = "png"
 THUMBNAIL_EXT2 = "jpeg" # old extension
 THUMBNAIL_SIZE_SMALL = 35,35
@@ -53,8 +57,7 @@ def generateThumbnail(filePath, thumbnail_size):
             im.thumbnail(thumbnail_size)
             im.save(thumbnailPath, "PNG")
         except IOError as error:
-            print "Cannot create thumbnail for %s, using full image instead " % filePath
-            print error
+            log.error("Cannot create thumbnail for %s, using full image instead. Error: %s" % (filePath, str(error)))
             shutil.copy(filePath, thumbnailPath)
 
 def deleteThumbnail(filePath):
@@ -63,8 +66,7 @@ def deleteThumbnail(filePath):
         try:
             os.remove(thumbnailPath)
         except IOError as error:
-            print "Cannot delete thumbnail for", filePath
-            print error
+            log.error("Cannot delete thumbnail for %s. Error %s" % (filePath, str(error)))
             
 def deleteImageAndThumbnail(obj):
     '''Method to delete an object image and thumbnail simultaneously.'''

@@ -8,6 +8,10 @@ from django.core.management.base import BaseCommand
 from cog.project_manager import projectManager
 import datetime
 
+import logging
+
+log = logging.getLogger(__name__)
+
 class Command(BaseCommand):
     
     help = 'Updates the list of projects from remote CoG peers'
@@ -15,4 +19,4 @@ class Command(BaseCommand):
     def handle(self, *ags, **options):
         
         sites = projectManager.sync()
-        print 'sync_projects: time=%s synchronized projects from sites=%s' % (datetime.datetime.now(), sites)
+        log.info('sync_projects: time=%s synchronized projects from sites=%s' % (datetime.datetime.now(), sites))

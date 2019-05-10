@@ -13,6 +13,10 @@ from cog.plugins.esgf.groupDao import GroupDAO
 
 from django.conf import settings
 
+import logging
+
+log = logging.getLogger(__name__)
+
 OPENID_EXTENSIONS = [""] + [str(i) for i in range(1,100)]
 ESGF_OPENID_TEMPLATE="https://<ESGF_HOSTNAME>/esgf-idp/openid/<ESGF_USERNAME>"
 
@@ -69,7 +73,7 @@ class ESGFDatabaseManager():
             session = self.Session()
             
             group = session.query(ESGFGroup).filter( func.lower(ESGFGroup.name) == func.lower(name) ).one()
-            print "Group with name=%s already exists" % group.name
+            log.debug("Group with name=%s already exists" % group.name)
             created = False
             
             return group
@@ -125,13 +129,13 @@ class ESGFDatabaseManager():
     
                 session.add(esgfUser)
                 session.commit()
-                print 'Inserted user with openid=%s into ESGF database' % openid
+                log.debug('Inserted user with openid=%s into ESGF database' % openid)
     
             finally:
                 session.close()
 
         else:
-            print 'User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid
+            log.debug('User with openid: %s already existing in ESGF database, no action taken' % esgfUser.openid)
             pass
 
     def getUserByOpenid(self, openid):
@@ -184,7 +188,7 @@ class ESGFDatabaseManager():
         for user in users:
             parts = user.openid.split('/')
             new_username = parts[-1]
-            print 'Updating user: openid=%s new username=%s' % (user.openid, new_username)
+            log.debug('Updating user: openid=%s new username=%s' % (user.openid, new_username))
             user.username = new_username
             
         session.commit()
@@ -228,7 +232,7 @@ class ESGFDatabaseManager():
                     session = self.Session()
                     encPasword = md5_crypt.encrypt(clearTextPwd)
                     esgfUser.password = encPasword
-                    print 'Updated ESGF password for user with openid: %s' % openid
+                    log.debug('Updated ESGF password for user with openid: %s' % openid)
                     session.add(esgfUser)
                     session.commit()
                     session.close()
@@ -251,7 +255,7 @@ class ESGFDatabaseManager():
                     esgfUser.city = user_profile.city
                     esgfUser.state = user_profile.state
                     esgfUser.country = user_profile.country
-                    print 'Updated ESGF data for user with openid: %s' % openid
+                    log.debug('Updated ESGF data for user with openid: %s' % openid)
                     session.add(esgfUser)
                     session.commit()
                     session.close()
@@ -265,7 +269,7 @@ class ESGFDatabaseManager():
                 esgfUser = self.getUserByOpenid(openid)
                 
                 if esgfUser is not None:
-                    print 'Deleting ESGF user with openid=%s' % openid    
+                    log.debug('Deleting ESGF user with openid=%s' % openid)
                     session = self.Session()
                     # delete user permissions
                     permissions = session.query(ESGFPermission).filter(ESGFPermission.user_id==esgfUser.id)

@@ -58,7 +58,6 @@ class Test(unittest.TestCase):
                 response = urllib2.urlopen(openid)
                 self.assertEqual(response.getcode(), 200, 'Invalid openid: %s' % openid)
             except Exception as e:
-                print 'Invalid openid: %s' % openid
                 raise e
 
 

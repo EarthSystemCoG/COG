@@ -1,6 +1,10 @@
 import urllib, urllib2
 from string import join
 
+import logging
+
+log = logging.getLogger(__name__)
+
 # search service that queries a Solr server through the ESGF RESTful search API
 class SolrSearchService:
     
@@ -43,7 +47,7 @@ class SolrSearchService:
                 params.append( ("facets", facetlist) )
                 
         url = self.url+"?"+urllib.urlencode(params)
-        print 'ESGF search URL=%s' % url
+        log.debug('ESGF search URL=%s' % url)
         fh = urllib2.urlopen( url )
         xml = fh.read().decode("UTF-8")
    

@@ -12,9 +12,12 @@ import urllib
 from collections import OrderedDict
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+import logging
+
 from cog.plugins.esgf.registry import LocalKnownProvidersDict
 from cog.views.constants import MAX_COUNTS_PER_PAGE
 
+log = logging.getLogger(__name__)
 # module-scope object that holds list of known ESGF Identity Providers
 # included here because login view is part of django-openid-auth module
 esgf_known_providers = LocalKnownProvidersDict()
@@ -68,7 +71,7 @@ def getProjectNotVisibleRedirect(request, project):
 def set_openid_cookie(response, openid):
     """Utility method to consistently set the openid cookie."""
     
-    print 'SETTING openid cookie to: %s' % openid
+    log.debug('SETTING openid cookie to: %s' % openid)
     
     response.set_cookie('openid', openid, 
                         expires=(datetime.datetime.now() + datetime.timedelta(days=3650)),  # expires in 10 years
@@ -151,7 +154,7 @@ def get_all_shared_user_info(user, includeCurrentSite=True):
         if user.profile.openid() is not None:
             
             openid = user.profile.openid()
-            print 'Retrieving projects, groups for user with openid=%s' % openid
+            log.debug('Retrieving projects, groups for user with openid=%s' % openid)
             
             # loop over remote (enabled) nodes, possibly add current node
             sites = list(getPeerSites())
@@ -161,12 +164,12 @@ def get_all_shared_user_info(user, includeCurrentSite=True):
             for site in sites:
                             
                 url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
-                print 'Retrieving user projects and groups from URL=%s' % url
+                log.debug('Retrieving user projects and groups from URL=%s' % url)
                 jobj = getJson(url)
                 if jobj is not None and openid in jobj['users']:
                     userDict[site] = jobj['users'][openid] 
                 else:
-                    print 'Openid=%s not found at site=%s' % (openid, site)
+                    log.debug('Openid=%s not found at site=%s' % (openid, site))
                                                             
     except UserProfile.DoesNotExist:
         pass  # user profile not yet created

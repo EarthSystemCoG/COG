@@ -1,9 +1,9 @@
-import sys
-import argparse
-import os
-
 from random import SystemRandom
 from uuid import uuid4
+import argparse
+import logging
+import os
+import sys
 
 # Revised version by Matt Pritchard, CEDA/STFC to work with globus-cli
 

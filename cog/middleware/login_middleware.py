@@ -10,6 +10,10 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 from cog.plugins.esgf.registry import LocalWhiteList
 
+import logging
+
+log = logging.getLogger(__name__)
+
 class LoginMiddleware(object):
 
     def __init__(self):
@@ -44,7 +48,7 @@ class LoginMiddleware(object):
             if request.path == self.url2:
     
                 # DEBUG
-                #print 'OpenID login request: %s' % request
+                log.debug('OpenID login request: %s' % request)
     
                 openid_identifier = request.GET.get('openid_identifier', None)
                 next = request.GET.get('next', "/") # preserve 'next' redirection after successful login
@@ -80,8 +84,7 @@ class LoginMiddleware(object):
     
                 if request.method=='POST' and not request.user.is_authenticated():
                     if response.status_code == 500:
-                        print 'Authentication Error'
-                        print response
+                        log.error('Authentication Error: %s' % response)
                         if 'OpenID discovery error' in response.content:
                             return HttpResponseRedirect(reverse('openid-login')+"?message=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
     

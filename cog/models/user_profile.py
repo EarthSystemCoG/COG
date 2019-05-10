@@ -10,6 +10,9 @@ from cog.utils import getJson
 from cog.models.peer_site import getPeerSites
 from cog.models.project_tag import ProjectTag
 import datetime
+import logging
+
+log = logging.getLogger(__name__)
 
 class UserProfile(models.Model):
 
@@ -166,7 +169,7 @@ def getDataCartsForUser(openid):
     #for site in Site.objects.all():  # loop over all sites (e.g. nodes) in database. Note: includes current node
     for site in getPeerSites():  # loop over nodes that are federated
         url = "http://%s/share/user/?openid=%s" % (site.domain, openid)
-        print 'Querying for datacart: url=%s' % url
+        log.debug('Querying for datacart: url=%s' % url)
         jobj = getJson(url)
         if jobj is not None:
             for key, value in jobj['users'].items():

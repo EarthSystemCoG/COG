@@ -6,6 +6,9 @@ import os
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
+import logging
+
+log = logging.getLogger()
 
 def get_upload_path(instance, filename):
     """Function to determine the upload path dynamically at runtime."""
@@ -21,7 +24,7 @@ class OverridingFileStorage(FileSystemStorage):
     def save(self, name, content, max_length=None): 
         # must delete current file first  
         if self.exists(name):
-            print 'Deleting existing file=%s' % name
+            log.debug('Deleting existing file=%s' % name)
             self.delete(name)     
         # also, look for Doc objects for the same named file  
         prefix = getattr(settings, "FILEBROWSER_DIRECTORY", "")

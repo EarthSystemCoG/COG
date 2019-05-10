@@ -5,12 +5,15 @@ from django.contrib.auth.models import User, Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from constants import APPLICATION_LABEL, ROLE_ADMIN, ROLE_CONTRIBUTOR, ROLE_USER
 
-# GROUPS
+import logging
 
+log = logging.getLogger(__name__)
+
+# GROUPS
 def createGroup(group_name):
     group = Group(name=group_name)
     group.save()
-    print "Created group: %s" % group.name
+    log.debug("Created group: %s" % group.name)
     return group
 
 # method to load a named group from the database, or create a new one if not existing already
@@ -40,11 +43,11 @@ def createProjectPermission(pDesc, pCodeName, groups):
         projectContenType = ContentType.objects.get(app_label=APPLICATION_LABEL, model='project')
         permission = Permission(name=pDesc, codename=pCodeName, content_type=projectContenType)
         permission.save()
-        print 'Created permission=%s...' % permission.codename
+        log.debug('Created permission=%s...' % permission.codename)
         for group in groups:
             group.permissions.add(permission)
             group.save()
-            print '...and associated to group=%s' % group.name
+            log.debug('...and associated to group=%s' % group.name)
         return permission
 
 # method to return a named permission from the database, 

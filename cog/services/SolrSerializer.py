@@ -1,6 +1,10 @@
 from xml.etree.ElementTree import Element, ElementTree, SubElement, tostring, fromstring
 from cog.models.search import SearchOutput, Record, Facet, FacetProfile
 
+import logging
+
+log = logging.getLogger(__name__)
+
 # function that serializes a SearchOutput object into Solr XML
 def serialize(input, output):
     
@@ -115,7 +119,7 @@ def deserialize(xml, facetProfile):
                             
         
     except (ValueError, LookupError) as err:
-        print "Error: %s" % err    
+        log.error("Error: %s" % str(err))
     return output
 
 def _encode_field_value(record, name, value):

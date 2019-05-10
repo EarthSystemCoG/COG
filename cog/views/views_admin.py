@@ -97,6 +97,6 @@ def admin_peers(request):
             return HttpResponseRedirect(reverse('admin_peers')+"?status=success")
         
         else:
-            print formset.errors
+            log.debug(formset.errors)
             return render(request,
                           'cog/admin/admin_peers.html', {'formset': formset})

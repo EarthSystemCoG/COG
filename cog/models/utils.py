@@ -21,6 +21,9 @@ import shutil
 import os
 from urllib import quote
 
+import logging
+
+log = logging.getLogger(__name__)
 
 # method to retrieve all news for a given project, ordered by original publication date
 def project_news(project):
@@ -63,7 +66,7 @@ def site_index(project):
 # -) page numbers start at 1 (for Home)
 def init_site_index(project):
     
-    print 'Initializing project index'
+    log.debug('Initializing project index, project=%s' % project.short_name)
     project.topics.clear()
     
     # list all top-level project pages, order by topic first, then title
@@ -94,7 +97,7 @@ def create_project_search_profile(project):
     try:
         profile = project.searchprofile
     except SearchProfile.DoesNotExist:
-        print 'Configuring the project search profile'
+        log.debug('Configuring the project search, project=%s' % project.short_name)
         # assign default URL, if available
         url = getattr(settings, "DEFAULT_SEARCH_URL", "")
         profile = SearchProfile(project=project, url=url)
@@ -159,7 +162,7 @@ def create_project_page(url, project):
                         if _page[0] == 'Logistics':
                             page.title = '%s Agenda' % project.short_name
                             page.save()
-                        print "Created project page: %s" % url
+                        log.debug("Created project page: %s" % url)
                         return page
     return None
 
@@ -194,7 +197,7 @@ def get_or_create_default_search_group(project):
     try:
         group = SearchGroup.objects.filter(profile=profile).filter(name=SearchGroup.DEFAULT_NAME)[0]
     except IndexError:
-        print 'Creating default search group for project=%s' % project.short_name
+        log.debug('Creating default search group for project=%s' % project.short_name)
         group = SearchGroup(profile=profile, name=SearchGroup.DEFAULT_NAME, order=len(list(profile.groups.all())))
         group.save()
     return group    
@@ -228,13 +231,13 @@ def get_or_create_project_tabs(project, save=True):
                     active = False
                 tab = ProjectTab(project=project, label=label, url=url, active=active)
                 if save:
-                    print "Creating tab= %s" % tab
+                    log.debug("Creating tab=%s, project=%s" % (tab, project.short_name))
                     tab.save() 
                     # assign parent tab
                     if i > 0:
                         tab.parent = tablist[0]
                         tab.save()
-                        print "Assigned parent tab=%s to child tab=%s" % (tablist[0], tab)
+                        log.debug("Assigned parent tab=%s to child tab=%s" % (tablist[0], tab))
 
             tablist.append(tab)
         tabs.append(tablist)
@@ -276,7 +279,7 @@ def createOrUpdateProjectSubFolders(project, request=None):
     for name in TOP_SUB_FOLDERS.values():
         folder, created = Folder.objects.get_or_create(name=name, parent=topFolder, project=project)
         if created:
-            print 'Project=%s: created top-level folder=%s' % (project.short_name, folder.name)
+            log.debug('Project=%s: created top-level folder=%s' % (project.short_name, folder.name))
         if request is not None and ("folder_%s" % folder.name) in request.POST.keys():
             folder.active = True
         else:
@@ -287,7 +290,7 @@ def getBookmarkFromDoc(doc):
     '''Returns the first Bookmark with URL matching the Document path.'''
     
     url_fragment = quote(doc.path, safe="%/:=&?~#+!$,;'@()*[]")
-    print 'Looking for bookmark that contains URL fragment: %s' % url_fragment
+    log.debug('Looking for bookmark that contains URL fragment: %s' % url_fragment)
     bookmarks = Bookmark.objects.filter(url__contains=url_fragment)
     for bookmark in bookmarks:
         return bookmark
@@ -298,7 +301,7 @@ def getDocFromBookmark(bookmark):
     
     if 'site_media/' in bookmark.url:
         _, url_fragment = bookmark.url.split('site_media/', 1)
-        print 'Looking for doc that contains path: %s' % url_fragment
+        log.debug('Looking for doc that contains path: %s' % url_fragment)
         docs = Doc.objects.filter(path__contains=url_fragment)
         for doc in docs:
             return doc
@@ -318,7 +321,7 @@ def delete_doc(doc):
     # remove possible associated resource
     bookmark = getBookmarkFromDoc(doc)
     if bookmark is not None:
-        print 'Deleting associated bookmark: %s' % bookmark.url
+        log.debug('Deleting associated bookmark: %s' % bookmark.url)
         bookmark.delete()
         
     # obtain document full path (before deleting object from database)
@@ -331,7 +334,7 @@ def delete_doc(doc):
     # delete document from file system
     for fp in [fullpath, fullpath2]:
         if os.path.exists(fp):
-            print 'Deleting document=%s' % fp
+            log.debug('Deleting document=%s' % fp)
             os.remove(fp)
     
     # also delete possible thumbnail files (created by File Browser)
@@ -349,47 +352,47 @@ def deleteProject(project, dryrun=True, rmdir=False):
     Utility method to delete a project and associated objects, media.
     """
     
-    print "Deleting project=%s" % project.short_name
+    log.info("Deleting project=%s" % project.short_name)
            
     # delete project User group, permissions
     ug = project.getUserGroup()
     for p in ug.permissions.all():
-        print '\tDeleting permission: %s' % p
+        log.debug('Deleting permission: %s' % p)
         if not dryrun:
             p.delete()
-    print '\tDeleting group: %s' % ug
+    log.debug('Deleting group: %s' % ug)
     if not dryrun:
         ug.delete()
         
     # delete project Admin group, permissions
     ag = project.getAdminGroup()
     for p in ag.permissions.all():
-        print '\tDeleting permission: %s' % p
+        log.debug('Deleting permission: %s' % p)
         if not dryrun:
             p.delete()
-    print '\tDeleting group: %s' % ag
+    log.debug('Deleting group: %s' % ag)
     if not dryrun:
         ag.delete()
 
     # delete project Contributor group, permissions
     cg = project.getContributorGroup()
     for p in cg.permissions.all():
-        print '\tDeleting permission: %s' % p
+        log.debug('Deleting permission: %s' % p)
         if not dryrun:
             p.delete()
-    print '\tDeleting group: %s' % cg
+    log.debug('Deleting group: %s' % cg)
     if not dryrun:
         cg.delete()
 
     if rmdir:
         media_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
-        print "\tRemoving directory tree: %s" % media_dir
+        log.debug("Removing directory tree: %s" % media_dir)
         if not dryrun:
             try:
                 shutil.rmtree(media_dir)
             except OSError as e:
-                print e
+                log.error(str(e))
     
-    print '\tDeleting project: %s' % project
+    log.info('Deleting project: %s' % project)
     if not dryrun:
         project.delete()

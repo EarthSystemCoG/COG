@@ -6,6 +6,9 @@ from cog.models.constants import (APPLICATION_LABEL,
                                   OPERATIONAL_MANAGEMENT_BODY_DICT, MANAGEMENT_BODY_DICT)
 from cog.models.project import Project
 
+import logging
+
+log = logging.getLogger()
 
 class ManagementBodyPurpose(models.Model):
     purpose = models.CharField(max_length=50, null=False, default='Other', choices=MANAGEMENT_BODY_CV,
@@ -97,7 +100,7 @@ def initManagementBodyPurpose():
         except ManagementBodyPurpose.DoesNotExist:
             mbp = ManagementBodyPurpose(purpose=purpose, order=order, category=MANAGEMENT_BODY_CATEGORY_STRATEGIC)
             mbp.save()
-            print "Created management body purpose: %s" % mbp
+            log.debug("Created management body purpose: %s" % mbp)
             
     for purpose, order in OPERATIONAL_MANAGEMENT_BODY_DICT.items():
         try:
@@ -105,4 +108,4 @@ def initManagementBodyPurpose():
         except ManagementBodyPurpose.DoesNotExist:
             mbp = ManagementBodyPurpose(purpose=purpose, order=order, category=MANAGEMENT_BODY_CATEGORY_OPERATIONAL)
             mbp.save()
-            print "Created management body purpose: %s" % mbp
+            log.debug("Created management body purpose: %s" % mbp)

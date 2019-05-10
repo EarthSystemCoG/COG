@@ -24,6 +24,9 @@ from cog.models.auth import (getAdminGroupName, getContributorGroupName, getUser
                              getOrCreateGroup, getOrCreateProjectPermission,
                              userHasUserPermission, userHasContributorPermission, userHasAdminPermission)
 
+import logging
+
+log = logging.getLogger()
 
 # Project
 class Project(models.Model):
@@ -237,7 +240,7 @@ class Project(models.Model):
         pubUsers = []
         for user in users:
             try:
-                print 'Checking user=%s' % user  # TODO:FixME
+                log.debug('Checking user=%s' % user)  # TODO:FixME
                 if not user.profile.private:
                     pubUsers.append(user)
             except ObjectDoesNotExist:
@@ -430,7 +433,7 @@ def getProjectsAndRolesForUsers(user, includeRemote=True):
                 elif group.name.endswith('_users'):
                     projects[project.short_name].append(ROLE_USER)
         except ObjectDoesNotExist:
-            print "WARNING: cannot retrieve project for group=%s" % group
+            log.warning("Cannot retrieve project for group=%s" % group)
             pass
         
     return projects
@@ -463,6 +466,6 @@ def create_upload_directory(project):
     fb_upload_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
     if not os.path.exists(fb_upload_dir):
         os.makedirs(fb_upload_dir)
-        print 'Project Upload directory created: %s' % fb_upload_dir
+        log.debug('Project Upload directory created: %s' % fb_upload_dir)
 
 
