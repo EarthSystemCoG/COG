@@ -42,13 +42,13 @@ class KnownProvidersDict(object):
     
 class LocalKnownProvidersDict(KnownProvidersDict):
     '''Implementation of KnownProvidersDict based on a local XML configuration file.'''
-    log = logging.getLogger(__name__)
     
     def __init__(self):
         
         # internal dictionary of known identity providers (empty by default)
         self.idps = {} # (IdP name, IdP url)
         self.init = False
+        self.log = logging.getLogger(__name__)
         
         try:
             
