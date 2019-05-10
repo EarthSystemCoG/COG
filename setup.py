@@ -10,7 +10,8 @@ def read(fname):
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 logging.basicConfig(
     filename=rel('setup.log'),
-    level=logging.DEBUG
+    level=logging.DEBUG,
+    format='%(asctime)s %(name)s: %(message)s',
 )
 
 setup(
