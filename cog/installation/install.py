@@ -33,6 +33,8 @@ import logging
 
 from cog.site_manager import SiteManager
 
+log = logging.getLogger(__name__)
+
 class CoGInstall(object):
     '''
     Class that initializes, populates and upgrades the CoG database.
@@ -94,10 +96,10 @@ class CoGInstall(object):
         # create new database if not existing already
         try:
             conn.execute("create database %s with owner=%s" % (dbname, dbuser))
-            logging.info("Postgres database: %s created" % dbname)
+            log.info("Postgres database: %s created" % dbname)
         except sqlalchemy.exc.ProgrammingError as e:
-            logging.warn(e)
-            logging.info("Postgres database: %s already exists" % dbname)
+            log.warn(e)
+            log.info("Postgres database: %s already exists" % dbname)
  
         conn.close()
         
@@ -106,7 +108,7 @@ class CoGInstall(object):
                 
         # Site: reuse default site 'example.com'
         site = Site.objects.get(pk=1)
-        logging.info("Updating site: %s" % site)
+        log.info("Updating site: %s" % site)
         site.name = self.siteManager.get('SITE_NAME')
         site.domain = self.siteManager.get('SITE_DOMAIN')
         site.save()
@@ -114,7 +116,7 @@ class CoGInstall(object):
         # Test project
         #if not Project.objects.filter(short_name=DEFAULT_PROJECT_SHORT_NAME).exists():
         if Project.objects.count() == 0:
-            logging.info("Creating project: %s" % DEFAULT_PROJECT_SHORT_NAME)
+            log.info("Creating project: %s" % DEFAULT_PROJECT_SHORT_NAME)
             project = Project.objects.create(short_name=DEFAULT_PROJECT_SHORT_NAME, 
                                              long_name='Test Project', 
                                              description='This is a test project',
@@ -126,7 +128,7 @@ class CoGInstall(object):
         if User.objects.count() == 0:
             
             # create User object
-            logging.info("Creating admin user")
+            log.info("Creating admin user")
             user = User(first_name='Admin', last_name='User', 
                         username=ROOTADMIN_USERNAME, 
                         email=self.siteManager.get('EMAIL_SENDER', section=SECTION_EMAIL), 
@@ -150,10 +152,10 @@ class CoGInstall(object):
                 # create rootAdmin openid: https://<ESGF_HOSTNAME>/esgf-idp/openid/rootAdmin
                 openid = esgfDatabaseManager.buildOpenid(ROOTADMIN_USERNAME)
                 UserOpenID.objects.create(user=user, claimed_id=openid, display_id=openid)
-                logging.info("Created openid:%s for CoG administrator: %s" % (openid, user.username) )
+                log.info("Created openid:%s for CoG administrator: %s" % (openid, user.username) )
                 
                 # insert rootAdmin user in ESGF database
-                logging.info("Inserting CoG administrator: %s in ESGF database" % user.username)
+                log.info("Inserting CoG administrator: %s in ESGF database" % user.username)
                 esgfDatabaseManager.insertEsgfUser(user.profile)
                 esgfRegistrationServiceImpl.subscribe(openid, ROOTADMIN_GROUP, ROOTADMIN_ROLE)
                 esgfRegistrationServiceImpl.process(openid, ROOTADMIN_GROUP, ROOTADMIN_ROLE, True)
@@ -168,7 +170,7 @@ class CoGInstall(object):
             except ObjectDoesNotExist:
                 site = Site.objects.create(name=idpHostname, domain=idpHostname)
                 idpPeerSite = PeerSite.objects.create(site=site, enabled=True)
-            print '\tCreated IdP Peer site: %s with enabled=%s' % (idpPeerSite, idpPeerSite.enabled)
+            log.debug('\tCreated IdP Peer site: %s with enabled=%s' % (idpPeerSite, idpPeerSite.enabled))
 
             
     def _getRootAdminPassword(self):
@@ -179,12 +181,12 @@ class CoGInstall(object):
         try:
             with open(ESGF_ROOTADMIN_PASSWORD_FILE, 'r') as f:
                 password = f.read().strip()
-                logging.info("Read ESGF administrator password from file: %s" % ESGF_ROOTADMIN_PASSWORD_FILE)  
+                log.info("Read ESGF administrator password from file: %s" % ESGF_ROOTADMIN_PASSWORD_FILE)  
                 return password
         except IOError:
             # file not found
-            logging.warn("ESGF administrator password file: %s could not found or could not be read" % ESGF_ROOTADMIN_PASSWORD_FILE) 
-            logging.warn("Using standard administrator password, please change it right away.")
+            log.warn("ESGF administrator password file: %s could not found or could not be read" % ESGF_ROOTADMIN_PASSWORD_FILE) 
+            log.warn("Using standard administrator password, please change it right away.")
             return DEFAULT_ROOTADMIN_PWD
 
             

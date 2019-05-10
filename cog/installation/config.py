@@ -41,6 +41,8 @@ from constants import (SECTION_DEFAULT, COG_SECTION_DEFAULT, SECTION_ESGF, SECTI
 COG_CONFIG_DIR = os.getenv('COG_CONFIG_DIR', '/usr/local/cog/cog_config')
 CONFIGFILEPATH = os.path.join(COG_CONFIG_DIR, 'cog_settings.cfg')
 
+log = logging.getLogger(__name__)
+
 class CogConfig(object):
 
     def __init__(self, esgfFlag):
@@ -67,21 +69,20 @@ class CogConfig(object):
         # create configuration directory if not existing already
         if not os.path.exists(COG_CONFIG_DIR):
             os.makedirs( COG_CONFIG_DIR )
-            logging.debug("Created configuration directory: %s" % COG_CONFIG_DIR )
+            log.debug("Created configuration directory: %s" % COG_CONFIG_DIR )
 
         # read existing configuration file
         try:
             filenames = self.cogConfig.read( CONFIGFILEPATH )
-            logging.info("filenames: %s", filenames )
+            log.info("filenames: %s", filenames )
             if len(filenames)>0:
-                logging.info("Using existing configuration file: %s" % CONFIGFILEPATH )
+                log.info("Using existing configuration file: %s" % CONFIGFILEPATH )
             else:
-                logging.info("Configuration file: %s not found, will create new one" % CONFIGFILEPATH )
+                log.info("Configuration file: %s not found, will create new one" % CONFIGFILEPATH )
 
         except Exception as e:
-            print e
-            logging.error("Error reading configuration file: %s" % CONFIGFILEPATH)
-            logging.error(e)
+            log.error("Error reading configuration file: %s" % CONFIGFILEPATH)
+            log.error(e)
 
 
     def _readEsgfConfig(self):
@@ -93,19 +94,19 @@ class CogConfig(object):
             self.esgfConfig.read(ESGF_PROPERTIES_FILE)
         except IOError:
             # file not found
-            logging.warn("ESGF properties file: %s not found" % ESGF_PROPERTIES_FILE)
+            log.warn("ESGF properties file: %s not found" % ESGF_PROPERTIES_FILE)
         else:
             #Functionality for ESGF 3.0 where esgf.properties already has a section header called installer.properties
             if SECTION_DEFAULT in self.esgfConfig.sections():
-                logging.info("Existing section header found.")
-                logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
+                log.info("Existing section header found.")
+                log.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
             else:
                 with open(ESGF_PROPERTIES_FILE, 'r') as f:
                     # transform Java properties file into python configuration file: must prepend a section
                     config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
                     config_file = StringIO.StringIO(config_string)
                     self.esgfConfig.readfp(config_file)
-                logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
+                log.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
 
 
         # $esg_config_dir/.esg_pg_pass
@@ -114,19 +115,19 @@ class CogConfig(object):
                 password = f.read().strip()
                 # if found, value in .esg_pg_pass will override value from esgf.properties
                 self.esgfConfig.set(SECTION_DEFAULT, "db.password", password)
-                logging.info("Read ESGF database password from file: %s" % ESGF_PASSWORD_FILE)
+                log.info("Read ESGF database password from file: %s" % ESGF_PASSWORD_FILE)
         except IOError:
             # file not found
-            logging.warn("ESGF database password file: %s could not found or could not be read" % ESGF_PASSWORD_FILE)
+            log.warn("ESGF database password file: %s could not found or could not be read" % ESGF_PASSWORD_FILE)
 
 
     def _safeSet(self, key, value, section=COG_SECTION_DEFAULT, override=False):
         '''Method to set a configuration option, without overriding an existing value
             (unless explicitly requested).'''
         if not self.cogConfig.has_section(section):
-            logging.debug("Section %s not found", section)
+            log.debug("Section %s not found", section)
             if section != COG_SECTION_DEFAULT:
-                logging.debug("attempting to add section %s", section)
+                log.debug("attempting to add section %s", section)
                 self.cogConfig.add_section(section) # "The DEFAULT section is not acknowledged."
 
         if override or not self.cogConfig.has_option(section, key):
@@ -223,7 +224,7 @@ class CogConfig(object):
         cfgfile = open(CONFIGFILEPATH,'w')
         self.cogConfig.write(cfgfile)
         cfgfile.close()
-        logging.info("Written CoG configuration file: %s" % CONFIGFILEPATH)
+        log.info("Written CoG configuration file: %s" % CONFIGFILEPATH)
 
 
 if __name__ == '__main__':

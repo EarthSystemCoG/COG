@@ -41,7 +41,6 @@ def project_filter(fileobject, user, projects):
     prjdir = fileobject.path.split('/')[1]
     
     for prj in projects:
-        #print 'path=%s project=%s' % (fileobject.path, prj.short_name.lower())
         if prjdir == prj.short_name.lower():
             return True
     

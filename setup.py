@@ -1,10 +1,17 @@
 import os
+import logging
 from setuptools import setup, find_packages
 from cog.installation.setup import CogSetupCommand
 
 # Utility function to read the README file.
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
+rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
+logging.basicConfig(
+    filename=rel('setup.log'),
+    level=logging.DEBUG
+)
 
 setup(
     name = "cog",

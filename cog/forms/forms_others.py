@@ -16,6 +16,8 @@ import magic
 from cog.constants import VALID_MIME_TYPES
 from cog.utils import default_clean_field
 
+import logging
+
 # list of invalid characters in uploaded documents file names
 # ^ at the beginning means the search will match the characters NOT in the set. \s is a space
 INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/\s]"
@@ -23,6 +25,7 @@ INVALID_CHARS = "[^a-zA-Z0-9_\-\.\/\s]"
 # need to allow commas in descriptions but not in the title or file name
 INVALID_CHARS_DESCRIP = "[^a-zA-Z0-9_\,\-\.\/\s]"
 
+log = logging.getLogger(__name__)
 
 class NewsForm(ModelForm):
 
@@ -126,7 +129,7 @@ class DocForm(ModelForm):
                        
             file_ext = str(os.path.splitext(thefile.name)[1])
             mime_type = magic.from_buffer(thefile.read(1024), mime=True)
-            print "Validating file extension=%s, mime type=%s" % (file_ext, mime_type)
+            log.debug("Validating file extension=%s, mime type=%s" % (file_ext, mime_type))
             if not file_ext:
                 self._errors["file"] = self.error_class(["File name must have an extension."])
             elif file_ext.lower() not in VALID_MIME_TYPES.keys():

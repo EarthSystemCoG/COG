@@ -4,7 +4,8 @@ Main installation script for CoG application.
 from distutils.core import Command
 import logging
 import os
-logging.basicConfig(level=logging.INFO)
+
+log = logging.getLogger(__name__)
 
 class CogSetupCommand(Command):
     '''Custom CoG install command to execute post-install configuration.'''
@@ -25,25 +26,25 @@ class CogSetupCommand(Command):
     def run(self):
         
         # 1) create/update cog_settings.cfg BEFORE Django is started
-        print '>>> 1) Executing CogConfig...'
+        log.debug('>>> 1) Executing CogConfig...')
         from config import CogConfig
         cogConfig = CogConfig(self.esgf)
         cogConfig.config()
-        print '<<< ...done with CogConfig'
+        log.debug('<<< ...done with CogConfig')
         
         # 2) setup Django registry to initialize CoG application
-        print '>>> 2) Setting up Django applications registry'
+        log.debug('>>> 2) Setting up Django applications registry')
         os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
         import django
         django.setup()
-        print '<<< ... done with django.setup()'
+        log.debug('<<< ... done with django.setup()')
              
         # 3) use cog_settings.cfg to install/upgrade CoG database
-        print '>>> 3) Executing CoGInstall...'
+        log.debug('>>> 3) Executing CoGInstall...')
         from install import CoGInstall
         cogInstall = CoGInstall()
         cogInstall.install()
-        print '<<< ...done with CoGInstall'
+        log.debug('<<< ...done with CoGInstall')
     
     
 if __name__ == '__main__':

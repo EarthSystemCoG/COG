@@ -13,6 +13,8 @@ from cog.plugins.esgf.security import esgfDatabaseManager
 from cog.models.user_profile import createUsername
 from django.conf import settings
 
+import logging
+
 # list of invalid characters in text fields
 # INVALID_CHARS = "[^a-zA-Z0-9_\-\+\@\.\s,()\.;-]"
 INVALID_CHARS = "[<>&#%{}\[\]\$]"
@@ -25,6 +27,7 @@ PWD_INSTRUCTIONS = 'At least 8 characters, including one lower case letter, one 
                       + 'All characters are allowed EXCEPT for ( ) " . '
 CONFIRM_PWD_INSTRUCTIONS = 'Must match the password above.'
 
+log = logging.getLogger(__name__)
 
 class UserUrlForm(ModelForm):
 
@@ -286,7 +289,7 @@ def validate_username(form, user_id):
                         
                         # once the openid is validated, choose the closest possible username
                         _username = createUsername(username)
-                        print 'Created username=%s from=%s' % (_username, username)
+                        log.debug('Created username=%s from=%s' % (_username, username))
                         cleaned_data['username'] = _username  # override form data
             else:
                 # django will automatically check that the username is unique in the CoG database

@@ -1,9 +1,13 @@
 import sys, os, ConfigParser
+import logging
+
 from django.conf import settings
 from cog.models import Project, SearchGroup, SearchFacet
 from cog.utils import str2bool
 
 SECTION_GLOBAL = 'GLOBAL'
+
+log = logging.getLogger(__name__)
 
 class SearchConfigParser():
     '''Class that enables import/export of project search configuration to local Python configuration files.'''
@@ -25,7 +29,7 @@ class SearchConfigParser():
     def write(self):
         '''Writes the project search configuration to the file $COG_CONFIG_DIR/projects/<project_short_name>/search.cfg'''
         
-        print 'Writing search configuration for project=%s' % self.project.short_name
+        log.debug('Writing search configuration for project=%s' % self.project.short_name)
         
         # load project search profile
         project = Project.objects.get(short_name=self.project.short_name)
@@ -66,7 +70,7 @@ class SearchConfigParser():
     def read(self):
         '''Reads the project search configuration from the file $COG_CONFIG_DIR/projects/<project_short_name>/search.cfg'''
         
-        print 'Reading search configuration for project=%s' % self.project.short_name
+        log.debug('Reading search configuration for project=%s' % self.project.short_name)
         
         # load project search profile
         project = Project.objects.get(short_name=self.project.short_name)
@@ -74,7 +78,7 @@ class SearchConfigParser():
         
         # remove existing groups of facets
         for group in search_profile.groups.all():
-            print 'Deleting search group=%s' % group
+            log.debug('Deleting search group=%s' % group)
             group.delete()
         
         # read project configuration
@@ -82,7 +86,7 @@ class SearchConfigParser():
         try:
             projConfig.read( self.config_file_path )
         except Exception as e:
-            print "Configuration file %s not found" % self.config_file_path
+            log.error("Configuration file %s not found" % self.config_file_path)
             raise e
         
         # loop over configuration sections
@@ -110,7 +114,7 @@ class SearchConfigParser():
         
                 for option in projConfig.options(section):
                     value = projConfig.get(section, option)
-                    print section, option, value
+                    log.debug("Section: %s, Option: %s, Value: %s" % (section, option, value))
                     parts = value.split("|")
                     facet_order = int(option)
                     facet_key = parts[0]

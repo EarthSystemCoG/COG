@@ -1,7 +1,10 @@
 from django.forms import ModelForm, BooleanField
 import os
+import logging
 
 MAX_IMAGE_SIZE = 1048576 # 1MB
+
+log = logging.getLogger(__name__)
 
 class ImageForm(ModelForm):
     '''Generic custom form for models containing an ImageField.'''
@@ -23,6 +26,6 @@ class ImageForm(ModelForm):
                 self._errors["image"] = self.error_class(["Image size exceeds the maximum allowed."])
         except OSError as e:
             # image not existing on disk
-            print e
+            log.error(str(e))
         
         return self.cleaned_data

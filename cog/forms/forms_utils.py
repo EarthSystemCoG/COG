@@ -4,8 +4,11 @@ General utilities for form validation
 @author: Luca Cinquini
 '''
 
-import os
 import imghdr
+import logging
+import os
+
+log = logging.getLogger(__name__)
 
 def validate_image(form, field_name):
     '''
@@ -26,7 +29,7 @@ def validate_image(form, field_name):
         # validate image header
         try:
             image_type = imghdr.what(image)
-            print 'Validating image header: detected image type=%s' % image_type
+            log.debug('Validating image header: detected image type=%s' % image_type)
             if image_type is None:
                 form._errors[field_name] = form.error_class(["Invalid image type: %s" % image_type])
         except Exception as e:
