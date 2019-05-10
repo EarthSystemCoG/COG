@@ -1,7 +1,6 @@
 from django import template
 from cog.models.search import searchMappings
 from cog.site_manager import siteManager
-from string import replace
 import json
 from collections import OrderedDict
 from django.conf import settings

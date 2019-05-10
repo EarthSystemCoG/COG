@@ -1,5 +1,4 @@
 import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse
-from string import join
 
 # search service that queries a Solr server through the ESGF RESTful search API
 class SolrSearchService:
@@ -39,7 +38,7 @@ class SolrSearchService:
             params.append( ("facets", "*") )
         else:
             if len(self.facets)>0:
-                facetlist = join([facet.key for facet in self.facets], ',')
+                facetlist = ','.join([facet.key for facet in self.facets])
                 params.append( ("facets", facetlist) )
                 
         url = self.url+"?"+urllib.parse.urlencode(params)
