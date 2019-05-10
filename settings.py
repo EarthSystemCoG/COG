@@ -23,18 +23,24 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        'file': {
+            'class': 'logging.RotatingFileHandler',
+            'filename': rel('cog.log'),
+            'maxBytes': 100*pow(2,20),
+            'backupCount': 10
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['file'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
         'cog': {
-            'handlers': ['console'],
+            'handlers': ['file'],
             'level': 'DEBUG',
         },
         '__wsgi__': {
-            'handlers': ['console'],
+            'handlers': ['file'],
             'level': 'DEBUG',
         }
     },
