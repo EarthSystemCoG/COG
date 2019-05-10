@@ -5,7 +5,7 @@ import django.views.static, django.views.generic
 from . import cog.views
 from django.http.response import HttpResponseNotFound
 
-from .filebrowser.sites import site
+from filebrowser.sites import site
 
 admin.autodiscover()
 

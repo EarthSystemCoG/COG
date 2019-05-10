@@ -1,7 +1,7 @@
 import os
 import logging
 import re
-from .cog.utils import str2bool
+from cog.utils import str2bool
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -12,8 +12,8 @@ located in directory COG_CONFIG_DIR (or by default '/usr/local/cog/cog_config').
 Each parameter has a default value.
 '''
 
-from .cog.site_manager import siteManager
-from .cog.constants import SECTION_ESGF, SECTION_PID
+from cog.site_manager import siteManager
+from cog.constants import SECTION_ESGF, SECTION_PID
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
