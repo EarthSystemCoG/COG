@@ -19,6 +19,12 @@ from cog.constants import SECTION_ESGF, SECTION_PID
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
@@ -28,6 +34,7 @@ LOGGING = {
             'filename': rel('cog.log'),
             'maxBytes': 100*pow(2,20),
             'backupCount': 10,
+            'formatter': 'verbose',
         },
     },
     'loggers': {
