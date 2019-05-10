@@ -21,7 +21,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s: %(message)s',
+            'format': '%(levelname)s %(asctime)s %(name)s: %(message)s',
             'style': '%',
         },
     },
@@ -45,11 +45,11 @@ LOGGING = {
         },
         'cog': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': os.getenv('COG_LOG_LEVEL', 'INFO'),
         },
         '__wsgi__': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': os.getenv('COG_LOG_LEVEL', 'INFO'),
         }
     },
 }
