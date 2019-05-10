@@ -20,7 +20,7 @@ from cog.views.views_templated import templated_page_display
 from cog.util.thumbnails import *
 from cog.models.auth import userHasAdminPermission
 
-from constants import PERMISSION_DENIED_MESSAGE
+from .constants import PERMISSION_DENIED_MESSAGE
 
 
 def aboutus_display(request, project_short_name, tab):
@@ -95,7 +95,7 @@ def aboutus_update(request, project_short_name, tab):
         else:
             # re-display form view
             if not form.is_valid():
-                print 'Form is invalid  %s' % form.errors
+                print('Form is invalid  %s' % form.errors)
             return render_aboutus_form(request, project, tab, form)
 
 
@@ -159,7 +159,7 @@ def impacts_update(request, project_short_name, tab):
             return HttpResponseRedirect(redirect)
 
         else:
-            print formset.errors
+            print(formset.errors)
             return render_impacts_form(request, project, formset, tab)
 
 
@@ -276,11 +276,11 @@ def _imageformset_update(request, project, tab,
                             deleteImageAndThumbnail(form.instance)
 
                 except ValueError as error:
-                    print error
+                    print(error)
                     
                 # delete object
                 if form.cleaned_data.get('DELETE', False):
-                    print 'Deleting instance=%s' % form.instance
+                    print('Deleting instance=%s' % form.instance)
                     form.instance.delete()
 
             # persist formset data
@@ -310,14 +310,14 @@ def _imageformset_update(request, project, tab,
                     try:
                         generateThumbnail(instance.image.path, thumbnail_size)
                     except ValueError as e:
-                        print e
+                        print(e)
                         pass  # no image supplied
 
             # redirect to people display (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('aboutus_display', args=[project.short_name.lower(), tab]))
 
         else:
-            print 'Formset is invalid  %s' % formset.errors
+            print('Formset is invalid  %s' % formset.errors)
             return render_formset(form_template, request, project, tab, formset)
 
 

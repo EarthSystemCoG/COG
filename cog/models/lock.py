@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
-from project_tab import ProjectTab
+from .project_tab import ProjectTab
 from datetime import datetime, timedelta
 
 # default lock lifetime: 30 minutes

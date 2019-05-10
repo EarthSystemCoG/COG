@@ -23,15 +23,15 @@ The postgres database password is read from the file /esg/config/.esg_pg_pass
 
 '''
 
-import ConfigParser
-import StringIO
+import configparser
+import io
 import collections
 import logging
 import os
 import time
 from django.utils.crypto import get_random_string
 
-from constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
+from .constants import (SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE, 
                        IDP_WHITELIST, KNOWN_PROVIDERS, PEER_NODES,
                        DEFAULT_PROJECT_SHORT_NAME)
@@ -59,7 +59,7 @@ class CogConfig(object):
         '''Method that reads an existing COG configuration file, or create a new one if not existing.'''
         
         # initialize COG configuration file
-        self.cogConfig = ConfigParser.ConfigParser(allow_no_value=True, 
+        self.cogConfig = configparser.ConfigParser(allow_no_value=True, 
                                                    dict_type=collections.OrderedDict)
         # must set following line explicitly to preserve the case of configuration keys
         self.cogConfig.optionxform = str 
@@ -78,7 +78,7 @@ class CogConfig(object):
                 logging.info("Configuration file: %s not found, will create new one" % CONFIGFILEPATH )
             
         except Exception as e:
-            print e
+            print(e)
             logging.error("Error reading configuration file: %s" % CONFIGFILEPATH)
             logging.error(e)
 
@@ -87,14 +87,14 @@ class CogConfig(object):
         '''Method that reads local parameters from ESGF configuration file esgf.properties.'''
         
         # read ESGF configuration file, if available
-        self.esgfConfig = ConfigParser.ConfigParser()
+        self.esgfConfig = configparser.ConfigParser()
         
         # $esg_config_dir/esgf.properties
         try:
             with open(ESGF_PROPERTIES_FILE, 'r') as f:
                 # transform Java properties file into python configuration file: must prepend a section
                 config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
-            config_file = StringIO.StringIO(config_string)
+            config_file = io.StringIO(config_string)
             self.esgfConfig.readfp(config_file)      
             logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)  
         except IOError:

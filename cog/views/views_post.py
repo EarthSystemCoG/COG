@@ -10,11 +10,11 @@ from django.http import HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from string import Template
-from urllib import quote, unquote
+from urllib.parse import quote, unquote
 import copy
-from constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
+from .constants import PERMISSION_DENIED_MESSAGE, LOCAL_PROJECTS_ONLY_MESSAGE
 from cog.models.constants import SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
-from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from .utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from django.utils.timezone import now
 from cog.models.utils import delete_doc
 from django.conf import settings
@@ -292,7 +292,7 @@ def post_add(request, project_short_name, owner=None):
                 
         # invalid data
         else:
-            print form.errors
+            print(form.errors)
             return render_post_form(request, form, project, postType)
 
 
@@ -382,7 +382,7 @@ def post_update(request, post_id):
         # check versions       
         queryDict = getQueryDict(request)
         if post.version != int(queryDict.get('version', -1)):
-            print 'database version=%s form version=%s' % (post.version, queryDict.get('version', -1))
+            print('database version=%s form version=%s' % (post.version, queryDict.get('version', -1)))
             return getLostLockRedirect(request, post.project, post, lock)
 
         #print "1 PAGE URL=%s" % form.data['url']
@@ -433,7 +433,7 @@ def post_update(request, post_id):
                     return HttpResponseRedirect(reverse('project_home', args=[post.project.short_name.lower()]))
 
         else:
-            print form.errors
+            print(form.errors)
             return render_post_form(request, form, post.project, post.type, lock=lock)
 
 

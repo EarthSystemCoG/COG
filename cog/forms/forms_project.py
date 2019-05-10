@@ -156,7 +156,7 @@ class SoftwareForm(ModelForm):
         features = self.cleaned_data.get('software_features')
         if not hasText(features):
             self._errors["software_features"] = self.error_class(["'SoftwareFeatures' must not be empty."])
-            print 'error'
+            print('error')
         return self.cleaned_data
 
 

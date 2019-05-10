@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL, ORGANIZATIONAL_ROLE_CV, ORGANIZATIONAL_ROLE_CATEGORIES_CV
-from project import Project
+from .constants import APPLICATION_LABEL, ORGANIZATIONAL_ROLE_CV, ORGANIZATIONAL_ROLE_CATEGORIES_CV
+from .project import Project
 from django.contrib.auth.models import User
 from cog.models.constants import ROLE_CATEGORY_LEAD, ROLE_CATEGORY_MEMBER, ORGANIZATIONAL_ROLES_DICT, LEAD_ORGANIZATIONAL_ROLES_DICT
 

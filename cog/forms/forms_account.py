@@ -286,7 +286,7 @@ def validate_username(form, user_id):
                         
                         # once the openid is validated, choose the closest possible username
                         _username = createUsername(username)
-                        print 'Created username=%s from=%s' % (_username, username)
+                        print('Created username=%s from=%s' % (_username, username))
                         cleaned_data['username'] = _username  # override form data
             else:
                 # django will automatically check that the username is unique in the CoG database

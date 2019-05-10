@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from project import Project
+from .constants import APPLICATION_LABEL
+from .project import Project
 from django.contrib.auth.models import User
 import os
 from django.conf import settings
@@ -21,7 +21,7 @@ class OverridingFileStorage(FileSystemStorage):
     def save(self, name, content, max_length=None): 
         # must delete current file first  
         if self.exists(name):
-            print 'Deleting existing file=%s' % name
+            print('Deleting existing file=%s' % name)
             self.delete(name)     
         # also, look for Doc objects for the same named file  
         prefix = getattr(settings, "FILEBROWSER_DIRECTORY", "")

@@ -132,7 +132,7 @@ class FileListing():
     def files_listing_filtered(self):
         "Returns FileObjects for filtered files in listing"
         if self.filter_func:
-            listing = filter(self.filter_func, self.files_listing_total())
+            listing = list(filter(self.filter_func, self.files_listing_total()))
         else:
             listing = self.files_listing_total()
         self._results_listing_filtered = len(listing)
@@ -141,7 +141,7 @@ class FileListing():
     def files_walk_filtered(self):
         "Returns FileObjects for filtered files in walk"
         if self.filter_func:
-            listing = filter(self.filter_func, self.files_walk_total())
+            listing = list(filter(self.filter_func, self.files_walk_total()))
         else:
             listing = self.files_walk_total()
         self._results_walk_filtered = len(listing)

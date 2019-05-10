@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 
 MAX_PROJECT_TAG_LENGTH = 20
 

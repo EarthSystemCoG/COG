@@ -137,7 +137,7 @@ class PostForm(ModelForm):
         # validate "topic"
         # cannot set both 'topic' and 'newtopic'
         if topic and newtopic:
-            errmsg = u"Please either choose an existing topic OR create a new one"
+            errmsg = "Please either choose an existing topic OR create a new one"
             self._errors["topic"] = self.error_class([errmsg])
             del cleaned_data["topic"]
             del cleaned_data["newtopic"]

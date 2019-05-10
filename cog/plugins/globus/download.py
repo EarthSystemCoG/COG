@@ -9,10 +9,10 @@ from uuid import uuid4
 
 def listEndpoints(gendpointDict):
 
-    endNames = gendpointDict.keys()
-    print "Endpoints involved:"
+    endNames = list(gendpointDict.keys())
+    print("Endpoints involved:")
     for thisEndName in endNames:
-        print thisEndName
+        print(thisEndName)
 
 def arguments(argv):
 
@@ -42,10 +42,10 @@ def arguments(argv):
     listonly = args.list_endpoints
 
     if '/' in uendpoint:
-        print "Do not include the download path in the endpoint name, please use the -p option"
+        print("Do not include the download path in the endpoint name, please use the -p option")
         sys.exit()
     if '#' in upath:
-        print "The '#' character is invalid in your path, please re-enter"
+        print("The '#' character is invalid in your path, please re-enter")
         sys.exit()
     if upath[0] != '/' and upath != '/~/':
         upath = '/' + upath
@@ -56,7 +56,7 @@ def getFiles(gendpointDict, uendpoint, username, upath):
 
     label = str(uuid4())
 
-    endNames = gendpointDict.keys()
+    endNames = list(gendpointDict.keys())
 
     for thisEndName in endNames:
 

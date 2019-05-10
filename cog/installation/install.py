@@ -164,7 +164,7 @@ class CoGInstall(object):
             except ObjectDoesNotExist:
                 site = Site.objects.create(name=idpHostname, domain=idpHostname)
                 idpPeerSite = PeerSite.objects.create(site=site, enabled=True)
-            print '\tCreated IdP Peer site: %s with enabled=%s' % (idpPeerSite, idpPeerSite.enabled)
+            print('\tCreated IdP Peer site: %s with enabled=%s' % (idpPeerSite, idpPeerSite.enabled))
 
             
     def _getRootAdminPassword(self):

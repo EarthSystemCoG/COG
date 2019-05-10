@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from project import Project
+from .constants import APPLICATION_LABEL
+from .project import Project
 
 # Project-specific search configuration (persisted to the database)
 class SearchProfile(models.Model):

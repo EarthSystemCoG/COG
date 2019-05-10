@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from cog.models import UserProfile
 
 class UserUrl(models.Model):   

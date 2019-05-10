@@ -29,7 +29,7 @@ def account_created_receiver(sender, **kwargs):
             # change the username
             lastPartOfOpenid = userp.openid().split("/")[-1]
             username = createUsername(lastPartOfOpenid)
-            print "New user: changing the username from: %s to: %s" % (userp.user.username, username)
+            print("New user: changing the username from: %s to: %s" % (userp.user.username, username))
             userp.user.username = username
             userp.user.save()
 
@@ -57,13 +57,13 @@ def update_user_projects(user):
         # add new memberships for remote projects
         remoteGroups = [] # updated list of remote groups
         for (project, roles) in projTuples:
-            print 'Updating membership for user: %s project: %s roles: %s' % (user.profile.openid(), project.short_name, roles)
+            print('Updating membership for user: %s project: %s roles: %s' % (user.profile.openid(), project.short_name, roles))
             
             for role in roles:
                 group = project.getGroup(role)
                 remoteGroups.append(group)
                 if not group in ugroups:
-                    print 'Adding group: %s to user: %s' % (group, user)
+                    print('Adding group: %s to user: %s' % (group, user))
                     user.groups.add(group)
                    
         # persist changes to local database 
@@ -76,10 +76,10 @@ def update_user_projects(user):
                 # do not change local projects
                 if not project.isLocal():
                     if not group in remoteGroups:
-                        print 'Removing group: %s from user: %s' % (group, user)
+                        print('Removing group: %s from user: %s' % (group, user))
                         user.groups.remove( group )
             except ObjectDoesNotExist:
-                print 'WARNING: cannot retrieve project for group=%s, removing obsolete group' % group
+                print('WARNING: cannot retrieve project for group=%s, removing obsolete group' % group)
                 user.groups.remove( group )
             
         # persist changes to local database
@@ -92,7 +92,7 @@ def update_user_tags(user):
         
         openid = user.profile.openid()
         url = "http://%s/share/user/?openid=%s" % (user.profile.site.domain, user.profile.openid())
-        print 'Updating user tags: querying URL=%s' % url
+        print('Updating user tags: querying URL=%s' % url)
         jobj = getJson(url)
         
         if jobj is not None and openid in jobj['users'] and 'project_tags' in jobj['users'][openid]:
@@ -111,7 +111,7 @@ def update_user_tags(user):
             userProfile.tags = tags
             userProfile.save()
             transaction.commit()
-            print 'User: %s updated for tags: %s' % (user, tags)
+            print('User: %s updated for tags: %s' % (user, tags))
     
 # NOTE: connecting the login signal is not needed because every time the user logs in,
 # the session is refreshed and updating of projects is triggered already by the CoG session middleware

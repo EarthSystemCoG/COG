@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
-from communication_means import CommunicationMeans
+from .communication_means import CommunicationMeans
 
 class CommunicationMeansMember(models.Model):  
     

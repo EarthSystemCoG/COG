@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from search_profile import SearchProfile
+from .constants import APPLICATION_LABEL
+from .search_profile import SearchProfile
 
 # Group of search facets
 class SearchGroup(models.Model):

@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from search_group import SearchGroup
+from .constants import APPLICATION_LABEL
+from .search_group import SearchGroup
 
 # Search facet displayed in user interface
 class SearchFacet(models.Model):

@@ -1,5 +1,5 @@
-import urllib
-from urlparse import urlparse
+import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urlparse
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -66,7 +66,7 @@ def custom_login_complete(request, **kwargs):
             
         except ObjectDoesNotExist:
 
-            print 'Discovering site for user with openid=%s' % openid
+            print('Discovering site for user with openid=%s' % openid)
             
             # retrieve user home node
             site = discoverSiteForUser(openid)
@@ -74,7 +74,7 @@ def custom_login_complete(request, **kwargs):
                 # set user home node to current node
                 site = Site.objects.get_current()
                 
-            print 'User site=%s... creating user profile...' % site
+            print('User site=%s... creating user profile...' % site)
                 
             # create new ESGF/OpenID login, type=2: ESGF
             UserProfile.objects.create(user=request.user, institution='', city='', country='', type=2, site=site)
@@ -96,7 +96,7 @@ def _custom_login(request, response):
                 
         # missing information
         if isUserLocal(request.user) and not isUserValid(request.user):
-            print 'User is local but some information is missing, redirecting to user update page'
+            print('User is local but some information is missing, redirecting to user update page')
             return HttpResponseRedirect(reverse('user_update', kwargs={'user_id': request.user.id}) +
                                         "?message=incomplete_profile")
         
@@ -180,7 +180,7 @@ def _sendSubsriptionEmail(user, action):
     # body
     message = ''
     
-    print 'Sending subscription email: To=%s Subject=%s' % (toAddress, subject)
+    print('Sending subscription email: To=%s Subject=%s' % (toAddress, subject))
     sendEmail(toAddress, subject, message, fromAddress=user.email)
 
 
@@ -194,8 +194,8 @@ def user_add(request):
     if redirectToIdp():
         redirect_url = settings.IDP_REDIRECT + request.path
         if _next is not None:
-            redirect_url += ("?next=%s" % urllib.quote_plus(_next))
-        print 'Redirecting account creation to: %s' % redirect_url
+            redirect_url += ("?next=%s" % urllib.parse.quote_plus(_next))
+        print('Redirecting account creation to: %s' % redirect_url)
         return HttpResponseRedirect(redirect_url)
 
     # create URLs formset
@@ -226,14 +226,14 @@ def user_add(request):
                         
             # save user to database
             user.save()
-            print 'Created user=%s' % user.username
+            print('Created user=%s' % user.username)
             
             # create openid
             if settings.ESGF_CONFIG:
                 openid = form.cleaned_data['openid']
-                print 'Creating openid=%s' % openid
+                print('Creating openid=%s' % openid)
                 userOpenID = UserOpenID.objects.create(user=user, claimed_id=openid, display_id=openid)
-                print 'Added openid=%s for user=%s into COG database' % (openid, user.username)
+                print('Added openid=%s for user=%s into COG database' % (openid, user.username))
 
             # use additional form fields to create user profile
             userp = UserProfile(user=user,
@@ -287,29 +287,29 @@ def user_add(request):
             # redirect to login page with special message
             login_url = reverse('login')+"?message=user_add"
             if _next is not None and len(_next.strip()) > 0:
-                login_url += ("&next=%s" % urllib.quote_plus(_next))
+                login_url += ("&next=%s" % urllib.parse.quote_plus(_next))
                 # redirect to absolute URL (possibly at an another node)
                 if 'http' in _next:
                     url = urlparse(_next)
                     login_url = '%s://%s%s' % (url.scheme, url.netloc, login_url)
             # append openid to initial login_url
             if userp.openid() is not None:
-                login_url += "&openid=%s" % urllib.quote_plus(userp.openid())
-            login_url += "&username=%s" % urllib.quote_plus(userp.user.username)
+                login_url += "&openid=%s" % urllib.parse.quote_plus(userp.openid())
+            login_url += "&username=%s" % urllib.parse.quote_plus(userp.user.username)
             
             response = HttpResponseRedirect(login_url)
             
             # set openid cookie on this host
             set_openid_cookie(response, userp.openid())
 
-            print 'New user account created: redirecting to login url: %s' % login_url
+            print('New user account created: redirecting to login url: %s' % login_url)
             return response
 
         else:
             if not form.is_valid():
-                print "Form is invalid: %s" % form.errors
+                print("Form is invalid: %s" % form.errors)
             elif not formset.is_valid():
-                print "URL formset is invalid: %s" % formset.errors
+                print("URL formset is invalid: %s" % formset.errors)
             return render_user_form(request, form, formset, title='Create User Profile')
 
 
@@ -327,12 +327,12 @@ def user_detail(request, user_id):
     except:
         user_profile = UserProfile(user=user)
         user_profile.save()
-        print "Created empty profile for user=%s" % user
+        print("Created empty profile for user=%s" % user)
         
     # retrieve map of (project, roles) for this user
     (projTuples, groupTuples) = get_all_shared_user_info(user)
-    print "\nprojTuples="
-    print projTuples
+    print("\nprojTuples=")
+    print(projTuples)
         
     # sort projects, groups alphabetically
     projects = sorted(projTuples, key=lambda x: x[0].short_name)
@@ -486,7 +486,7 @@ def user_update(request, user_id):
             # delete UserUrls if found
             urls = UserUrl.objects.filter(profile=profile)
             for url in urls:
-                print 'Deleting user URL: %s' % url.url
+                print('Deleting user URL: %s' % url.url)
                 url.delete()
 
             # update user
@@ -515,7 +515,7 @@ def user_update(request, user_id):
             if not is_password_usable(user.password):
                 user.set_password(form.cleaned_data['password'])
                 user.save()
-                print 'Reset password for user=%s' % user
+                print('Reset password for user=%s' % user)
 
             # image management
             _generateThumbnail = False
@@ -571,9 +571,9 @@ def user_update(request, user_id):
 
         else:
             if not form.is_valid():
-                print "Form is invalid: %s" % form.errors
+                print("Form is invalid: %s" % form.errors)
             elif not formset.is_valid():
-                print "URL formset is invalid: %s" % formset.errors
+                print("URL formset is invalid: %s" % formset.errors)
                 
             return render_user_form(request, form, formset, title='Update User Profile')
 
@@ -639,7 +639,7 @@ def password_update(request, user_id):
                                                     kwargs={'user_id': user.id})+"?message=password_updated_by_admin")
 
         else:
-            print "Form is invalid: %s" % form.errors
+            print("Form is invalid: %s" % form.errors)
             return render_password_change_form(request, form, user.username)
 
 
@@ -684,7 +684,7 @@ def user_reminder(request):
                 return render_user_reminder_form(request, form, "This email address cannot be found.")
 
         else:
-            print "Form is invalid: %s" % form.errors
+            print("Form is invalid: %s" % form.errors)
             return render_user_reminder_form(request, form)
 
 
@@ -708,7 +708,7 @@ def password_reset(request):
 
         # check form is valid first
         if not form.is_valid():
-            print "Form is invalid: %s" % form.errors
+            print("Form is invalid: %s" % form.errors)
             return render_password_reset_form(request, form)
 
         openid = form.cleaned_data.get('openid')

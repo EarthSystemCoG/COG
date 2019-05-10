@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL, UPLOAD_DIR_LOGOS
-from project import Project
+from .constants import APPLICATION_LABEL, UPLOAD_DIR_LOGOS
+from .project import Project
 
 
 class Organization(models.Model):

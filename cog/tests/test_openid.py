@@ -6,7 +6,7 @@ Tests for ESGF openID authentication
 import os
 import sys
 import unittest
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 # list of openids from different ESGF IdPs
 OPENIDS = ['https://pcmdi9.llnl.gov/esgf-idp/openid/lucacinquini',
@@ -55,10 +55,10 @@ class Test(unittest.TestCase):
         
         for openid in OPENIDS:
             try:
-                response = urllib2.urlopen(openid)
+                response = urllib.request.urlopen(openid)
                 self.assertEqual(response.getcode(), 200, 'Invalid openid: %s' % openid)
             except Exception as e:
-                print 'Invalid openid: %s' % openid
+                print('Invalid openid: %s' % openid)
                 raise e
 
 

@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
-from management_body import ManagementBody
+from .management_body import ManagementBody
 
 class ManagementBodyMember(models.Model):
     

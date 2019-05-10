@@ -2,10 +2,10 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 import django.views.static, django.views.generic
-import cog.views
+from . import cog.views
 from django.http.response import HttpResponseNotFound
 
-from filebrowser.sites import site
+from .filebrowser.sites import site
 
 admin.autodiscover()
 

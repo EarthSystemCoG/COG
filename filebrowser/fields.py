@@ -62,7 +62,7 @@ class FileBrowseWidget(Input):
 class FileBrowseFormField(forms.CharField):
     
     default_error_messages = {
-        'extension': _(u'Extension %(ext)s is not allowed. Only %(allowed)s is allowed.'),
+        'extension': _('Extension %(ext)s is not allowed. Only %(allowed)s is allowed.'),
     }
     
     def __init__(self, max_length=None, min_length=None, site=None, directory=None, extensions=None, format=None, *args, **kwargs):
@@ -85,9 +85,8 @@ class FileBrowseFormField(forms.CharField):
         return value
 
 
-class FileBrowseField(CharField):
+class FileBrowseField(CharField, metaclass=models.SubfieldBase):
     description = "FileBrowseField"
-    __metaclass__ = models.SubfieldBase
     
     def __init__(self, *args, **kwargs):
         self.site = kwargs.pop('filebrowser_site', site)

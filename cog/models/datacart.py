@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
 from cog.models.search import Record
 import json
@@ -51,7 +51,7 @@ class DataCartItem(models.Model):
         item.save()
         
         # save additional metadata            
-        for key, values in metadata.items():
+        for key, values in list(metadata.items()):
             itemKey = DataCartItemMetadataKey(item=item, key=key)
             itemKey.save()
             for value in values:

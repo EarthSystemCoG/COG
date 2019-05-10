@@ -97,7 +97,7 @@ def share_projects(request):
         
         # list projects from this node
         projects = {}
-        print 'Listing ACTIVE projects for current site=%s' % current_site
+        print('Listing ACTIVE projects for current site=%s' % current_site)
         for project in Project.objects.filter(active=True).filter(site=current_site):
             projects[project.short_name] = serialize_project(project)
             
@@ -123,7 +123,7 @@ def share_groups(request):
         response_data['site'] = serialize_site(current_site)
         
         # list groups from this node, index by group name
-        print 'Listing visible groups for current site=%s' % current_site
+        print('Listing visible groups for current site=%s' % current_site)
         groups = {}
         for group in registrationService.listGroups():
             if group['visible'] and group['name'].lower() != 'wheel':
@@ -149,7 +149,7 @@ def share_user(request):
              
         except ObjectDoesNotExist:
             # return empty dictionary
-            print 'User with openid=%s found at this site' % openid
+            print('User with openid=%s found at this site' % openid)
             users = {}
         
         response_data["users"] = users
@@ -169,7 +169,7 @@ def sync_projects(request):
     
     return render(request,
                   'cog/admin/sync_projects.html', 
-                  {'sites':sorted(sites.iteritems(), key=lambda (siteid, sitedict): sitedict['name']), 
+                  {'sites':sorted(iter(sites.items()), key=lambda siteid_sitedict: siteid_sitedict[1]['name']), 
                    'totalNumberOfProjects':totalNumberOfProjects, 'totalNumberOfUsers':totalNumberOfUsers })
         
     

@@ -10,14 +10,14 @@ class InitMiddleware(object):
 
     def __init__(self):
         
-        print 'Executing CoG initialization tasks'
+        print('Executing CoG initialization tasks')
         
         # update name, domain of current site into database
         current_site = Site.objects.get_current()
         current_site.name = settings.SITE_NAME
         current_site.domain = settings.SITE_DOMAIN
         current_site.save()
-        print 'Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain)
+        print('Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain))
         
         # update list of ESGF peers into database
         filepath = siteManager.get('PEER_NODES')
@@ -30,5 +30,5 @@ class InitMiddleware(object):
         raise MiddlewareNotUsed('Do not invoke ever again')
         
     def process_request(self, request):
-        print 'This line should never be printed...'
+        print('This line should never be printed...')
         return None

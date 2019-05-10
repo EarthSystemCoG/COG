@@ -44,8 +44,8 @@ def datacart_display(request, site_id, user_id):
         _dcs = getDataCartsForUser(openid)
         if len(_dcs) > 0:
             dcs[openid] = {}
-            for site, size in _dcs.items():
-                print site, size
+            for site, size in list(_dcs.items()):
+                print(site, size)
                 dcs[openid][site] = size
         
     return render(request,
@@ -135,15 +135,15 @@ def datacart_add_all(request, site_id, user_id):
         searchOutput = data[SEARCH_OUTPUT]
         
         # loop over record
-        print "Adding %s items" % len(searchOutput.results)
+        print("Adding %s items" % len(searchOutput.results))
         for record in searchOutput.results:
             
             # check item is not in cart already
             if DataCartItem.objects.filter(cart=datacart, identifier=record.id).exists():
-                print 'Item %s already in Data Cart' % record.id
+                print('Item %s already in Data Cart' % record.id)
             else:
                 item = DataCartItem.fromRecord(datacart, record)
-                print 'Added item: %s' % record.id
+                print('Added item: %s' % record.id)
 
     # redirect to search results
     back = request.GET.get('back', '/')
@@ -173,12 +173,12 @@ def datacart_delete_all(request, site_id, user_id):
         searchOutput = data[SEARCH_OUTPUT]
         
         # loop over record
-        print "Deleting %s items" % len(searchOutput.results)
+        print("Deleting %s items" % len(searchOutput.results))
         for record in searchOutput.results:
             
             try:
                 item = DataCartItem.objects.get(cart=datacart, identifier=record.id)
-                print 'Deleting item: %s' % item.id
+                print('Deleting item: %s' % item.id)
                 item.delete()
             except ObjectDoesNotExist:
                 pass
@@ -366,6 +366,6 @@ def datacart_pid(request, site_id, user_id):
     pid = connector.create_data_cart_pid(dataset_ids)
     connector.finish_messaging_thread()
 
-    print 'Generated data cart PID for %d datasets: %s' % (len(ids), pid)
+    print('Generated data cart PID for %d datasets: %s' % (len(ids), pid))
 
     return HttpResponse(json.dumps(pid), content_type="application/json")

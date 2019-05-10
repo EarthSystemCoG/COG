@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
-from project import Project
+from .project import Project
 
 # A piece of News about a Project
 class News(models.Model):

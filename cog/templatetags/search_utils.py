@@ -162,7 +162,7 @@ def qcflags(record):
             qcflags[qcflag_name][int(qcflag_order)] = qcflag_value
     # for each qcflag, sort dictionary of values by their key (i.e. by the QC flag value order)
     for key in qcflags:
-        qcflags[key] = OrderedDict(sorted(qcflags[key].items(), key=lambda t: t[0]))
+        qcflags[key] = OrderedDict(sorted(list(qcflags[key].items()), key=lambda t: t[0]))
             
     # note: to enable easy access in html template, return the sorted set of (key, value) pairs
     # where the value is itself an ordered dictionary

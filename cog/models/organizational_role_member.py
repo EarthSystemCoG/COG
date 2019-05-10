@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
-from organizational_role import OrganizationalRole
+from .organizational_role import OrganizationalRole
 
 class OrganizationalRoleMember(models.Model):
     

@@ -1,9 +1,9 @@
 from django.db import models
-from constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
-from project import Project
+from .constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
+from .project import Project
 from django.contrib.auth.models import User
-from doc import Doc
-from topic import Topic
+from .doc import Doc
+from .topic import Topic
 import django.dispatch
 
 # A web site post, which can be of different types

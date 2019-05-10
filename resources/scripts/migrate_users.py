@@ -64,7 +64,7 @@ if settings.ESGF_CONFIG:
                         if settings.ESGF_HOSTNAME in esgfUser.openid and user.username in esgfUser.openid:
                             if not UserOpenID.objects.filter(claimed_id=esgfUser.openid).exists():
                                 openid = UserOpenID.objects.create(user=user, claimed_id=esgfUser.openid, display_id=esgfUser.openid)
-                                print 'Assigned ESGF openid=%s to CoG user=%s' % (openid.claimed_id, user)
+                                print('Assigned ESGF openid=%s to CoG user=%s' % (openid.claimed_id, user))
                                 found = True
                     if not found:
                         esgfDatabaseManager.insertUser(userp)

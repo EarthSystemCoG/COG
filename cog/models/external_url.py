@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from external_url_conf import externalUrlManager
-from project import Project
+from .constants import APPLICATION_LABEL
+from .external_url_conf import externalUrlManager
+from .project import Project
 
 
 # A reference to an external URL

@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL, PURPOSE_CV, COMMUNICATION_CV, MEMBERSHIP_CV
-from project import Project
+from .constants import APPLICATION_LABEL, PURPOSE_CV, COMMUNICATION_CV, MEMBERSHIP_CV
+from .project import Project
 
 
 class CommunicationMeans(models.Model):

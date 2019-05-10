@@ -1,5 +1,5 @@
 # Python script to configure off-band a project advanced search
-import sys, os, ConfigParser
+import sys, os, configparser
 
 sys.path.append( os.path.abspath(os.path.dirname('.')) )
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
@@ -7,7 +7,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from cog.config.search import read_config
 #from django.conf import settings
 
-print 'Upgrading COG'
+print('Upgrading COG')
 
 # read search configurations
 configs = { 'StandardDistribution': 'cog/config/search/standard_distribution.cfg',

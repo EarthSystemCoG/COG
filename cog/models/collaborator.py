@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS
-from project import Project
+from .constants import APPLICATION_LABEL, RESEARCH_KEYWORDS_MAX_CHARS
+from .project import Project
 
 class Collaborator(models.Model):
     

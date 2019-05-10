@@ -1,4 +1,4 @@
-import urllib, urllib2
+import urllib.request, urllib.parse, urllib.error, urllib.request, urllib.error, urllib.parse
 from string import join
 
 # search service that queries a Solr server through the ESGF RESTful search API
@@ -30,7 +30,7 @@ class SolrSearchService:
         if searchInput.min_version:
             params.append( ('min_version', searchInput.min_version.strip()) )
 
-        for key, values in searchInput.constraints.items():
+        for key, values in list(searchInput.constraints.items()):
             for value in values:
                 params.append( (key, value) )
 
@@ -42,9 +42,9 @@ class SolrSearchService:
                 facetlist = join([facet.key for facet in self.facets], ',')
                 params.append( ("facets", facetlist) )
                 
-        url = self.url+"?"+urllib.urlencode(params)
-        print 'ESGF search URL=%s' % url
-        fh = urllib2.urlopen( url )
+        url = self.url+"?"+urllib.parse.urlencode(params)
+        print('ESGF search URL=%s' % url)
+        fh = urllib.request.urlopen( url )
         xml = fh.read().decode("UTF-8")
    
         # return search URL and corresponding results as XML

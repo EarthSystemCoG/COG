@@ -1,6 +1,6 @@
 import os
 from setuptools import setup, find_packages
-from cog.installation.setup import CogSetupCommand
+from .cog.installation.setup import CogSetupCommand
 
 # Utility function to read the README file.
 def read(fname):

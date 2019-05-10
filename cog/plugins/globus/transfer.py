@@ -9,14 +9,14 @@ from cog.site_manager import siteManager
 if siteManager.isGlobusEnabled():    
     from globus_sdk.transfer import TransferData
 import os
-import urlparse
+import urllib.parse
 
 DOWNLOAD_SCRIPT = "download.py"
 
 def generateGlobusDownloadScript(download_map):
 
-    print "Generating script for downloading files: "
-    print download_map
+    print("Generating script for downloading files: ")
+    print(download_map)
 
     # read script 'download.py' located in same directory as this module
     scriptFile = os.path.join(os.path.dirname(__file__), DOWNLOAD_SCRIPT)
@@ -32,12 +32,12 @@ def activateEndpoint(transfer_client, endpoint, openid=None, password=None):
     if not openid or not password:
         # Try to autoactivate the endpoint
         code, reason, result = transfer_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
-        print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
+        print("Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"]))
         if result["code"] == "AutoActivationFailed":
             return (False, "")
         return (True, "")
 
-    openid_parsed = urlparse.urlparse(openid)
+    openid_parsed = urllib.parse.urlparse(openid)
     hostname = openid_parsed.hostname
     username = os.path.basename(openid_parsed.path)
     code, reason, reqs = transfer_client.endpoint_get_activation_requirements(endpoint)
@@ -67,13 +67,13 @@ def activateEndpoint(transfer_client, endpoint, openid=None, password=None):
     try:
         code, reason, result = transfer_client.endpoint_activate(endpoint, reqs)
     except Exception as e:
-        print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
+        print("Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e)))
         return (False, str(e))
     if code != 200:
-        print "Could not aactivate the endpoint: %s. Error: %s - %s" % (endpoint, result["code"], result["message"])
+        print("Could not aactivate the endpoint: %s. Error: %s - %s" % (endpoint, result["code"], result["message"]))
         return (False, result["message"])
 
-    print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
+    print("Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"]))
 
     return (True, "")
 
@@ -93,7 +93,7 @@ def submitTransfer(transfer_client, source_endpoint, source_files, target_endpoi
     
     # create a transfer request
     transfer_task = Transfer(transfer_client, source_endpoint, target_endpoint, deadline=deadline)
-    print "Obtained transfer submission id: %s" % transfer_task["submission_id"]
+    print("Obtained transfer submission id: %s" % transfer_task["submission_id"])
     for source_file in source_files:
         source_directory, filename = os.path.split(source_file)
         target_file = os.path.join(target_directory, filename) 
@@ -103,9 +103,9 @@ def submitTransfer(transfer_client, source_endpoint, source_files, target_endpoi
     try:
         code, reason, data = transfer_client.submit_transfer(transfer_task)
         task_id = data["task_id"]
-        print "Submitted transfer task with id: %s" % task_id
+        print("Submitted transfer task with id: %s" % task_id)
     except Exception as e:
-        print "Could not submit the transfer. Error: %s" % str(e)
+        print("Could not submit the transfer. Error: %s" % str(e))
         task_id = "Could not submit the transfer. Please contact the ESGF node admin to investigate the issue."
     
     return task_id

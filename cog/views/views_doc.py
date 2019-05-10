@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.core.urlresolvers import reverse
 from cog.models import *
 from cog.forms import *
-from constants import PERMISSION_DENIED_MESSAGE
+from .constants import PERMISSION_DENIED_MESSAGE
 from os.path import basename
 from django.views.decorators.csrf import csrf_exempt
 from cog.forms import UploadImageForm
@@ -46,7 +46,7 @@ def doc_upload(request, project_short_name):
             error = ''
             
         else:
-            print 'Form errors:%s' % form.errors
+            print('Form errors:%s' % form.errors)
             error = 'The file uploaded is not an image. Valid files include PNG, JPG, and PDF.'
             url = "%s%s" % (settings.STATIC_URL, 'cog/img/error.jpeg')
     
@@ -155,7 +155,7 @@ def data_download(request, path):
     
     project_short_name = path.split("/")[0]
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    print 'Data for project=%s' % project
+    print('Data for project=%s' % project)
     
     # TODO: check if data is public before forcing login
     return secure_data_download(request, path, project)
@@ -235,7 +235,7 @@ def doc_update(request, doc_id):
                 bookmark.name = doc.title
                 bookmark.description = doc.description
                 bookmark.save()
-                print 'Updated associated bookmark: %s' % bookmark
+                print('Updated associated bookmark: %s' % bookmark)
             
             # redirect to document detail (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('doc_detail', kwargs={'doc_id': doc.id}))

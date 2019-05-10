@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from topic import Topic
-from project import Project
+from .constants import APPLICATION_LABEL
+from .topic import Topic
+from .project import Project
 
 # intermediate model for Project-Topic association
 class ProjectTopic(models.Model):

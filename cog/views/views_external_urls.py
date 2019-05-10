@@ -8,9 +8,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseForbidden
 from django.forms.models import modelformset_factory
-from constants import PERMISSION_DENIED_MESSAGE
+from .constants import PERMISSION_DENIED_MESSAGE
 from cog.models.constants import *
-from utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
+from .utils import getProjectNotActiveRedirect, getProjectNotVisibleRedirect
 from cog.models.navbar import TABS
 from cog.models.external_url_conf import externalUrlManager
 from cog.models.auth import userHasContributorPermission
@@ -107,7 +107,7 @@ def external_urls_update(request, project_short_name, suburl):
     
     # GET
     if request.method == 'GET':
-        print type
+        print(type)
 
         # create formset instance backed by current saved instances
         # must provide the initial data to all the extra instances, 
@@ -148,7 +148,7 @@ def external_urls_update(request, project_short_name, suburl):
             return HttpResponseRedirect(redirect)
         
         else:
-            print formset.errors
+            print(formset.errors)
             return render_external_urls_form(request, project, formset, externalUrlConf, redirect)
 
 
