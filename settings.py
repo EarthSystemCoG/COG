@@ -24,7 +24,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
         'file': {
-            'class': 'logging.RotatingFileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': rel('cog.log'),
             'maxBytes': 100*pow(2,20),
             'backupCount': 10,
