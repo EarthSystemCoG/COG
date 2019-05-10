@@ -6,6 +6,10 @@ from cog.site_manager import siteManager
 
 from cog.constants import SECTION_EMAIL
 
+import logging
+
+log = logging.getLogger(__name__)
+
 class EmailConfig:
     '''
     Class that stores the email server connection properties from a local configuration file.
@@ -24,16 +28,16 @@ class EmailConfig:
                 self.username = siteManager.get('EMAIL_USERNAME', section=SECTION_EMAIL)
                 self.password = siteManager.get('EMAIL_PASSWORD', section=SECTION_EMAIL)
                 self.security = siteManager.get('EMAIL_SECURITY', section=SECTION_EMAIL)
-                print 'Using email server=%s' %  self.server
-                print 'Using email port=%s' %  self.port
-                print 'Using email sender=%s' %  self.sender
-                print 'Using email username=%s' %  self.username
-                #print 'Using email password=%s' %  self.password
-                print 'Using email security=%s' %  self.security
+                log.debug('Using email server=%s' %  self.server)
+                log.debug('Using email port=%s' %  self.port)
+                log.debug('Using email sender=%s' %  self.sender)
+                log.debug('Using email username=%s' %  self.username)
+                #log.debug('Using email password=%s' %  self.password)
+                log.debug('Using email security=%s' %  self.security)
                 self.init = True
             
         if not self.init:
-            print "Email configuration not found, email notification disabled"
+            log.debug("Email configuration not found, email notification disabled")
             
 
 # module scope email configuration
@@ -74,10 +78,10 @@ class EmailThread(Thread):
     def run(self):
         
         #print "From: %s" % self.fromAddress
-        print "To: %s" % self.toAddress
-        print "Subject: %s" % self.subject
-        print "Message: %s" % self.message
-        print "Mime Type: %s" % self.mime_type
+        log.debug("To: %s" % self.toAddress)
+        log.debug("Subject: %s" % self.subject)
+        log.debug("Message: %s" % self.message)
+        log.debug("Mime Type: %s" % self.mime_type)
         
         # use local mail server
         #toUser.email_user(subject, message, from_email=fromAddress)
@@ -100,4 +104,4 @@ class EmailThread(Thread):
                 s.login(emailConfig.username, emailConfig.password )
             s.sendmail(emailConfig.sender, [self.toAddress], msg.as_string())
             s.quit()
-            print 'Email sent.'
+            log.debug('Email sent.')
