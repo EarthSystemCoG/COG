@@ -32,7 +32,7 @@ LOGGING = {
         },
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': rel('cog.log'),
+            'filename': os.getenv('COG_LOG_FILE', rel('cog.log')),
             'maxBytes': 100*pow(2,20),
             'backupCount': 10,
             'formatter': 'verbose',

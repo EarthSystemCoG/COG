@@ -3,6 +3,7 @@ Module containing API and implementation for registry-type objects.
 '''
 
 import abc
+import logging
 import os
 import re
 from xml.etree.ElementTree import fromstring, ParseError
@@ -41,6 +42,7 @@ class KnownProvidersDict(object):
     
 class LocalKnownProvidersDict(KnownProvidersDict):
     '''Implementation of KnownProvidersDict based on a local XML configuration file.'''
+    log = logging.getLogger(__name__)
     
     def __init__(self):
         
@@ -84,7 +86,7 @@ class LocalKnownProvidersDict(KnownProvidersDict):
     
             if force or modtime > self.modtime:
     
-                print 'Loading known IdPs from file: %s, last modified: %s' % (self.filepath, modtime)
+                self.log.info('Loading known IdPs from file: %s, last modified: %s' % (self.filepath, modtime))
                 self.modtime = modtime
                 idps = {}
     
@@ -104,7 +106,7 @@ class LocalKnownProvidersDict(KnownProvidersDict):
                     if name is not None and len(name.strip()) > 0:
                         url = idp.find('URL').text
                         idps[name] = url
-                        print 'Using known IdP: name=%s url=%s' % (name, url)
+                        self.log.debug('Using known IdP: name=%s url=%s' % (name, url))
     
                 # switch the dictionary of knwon providers
                 self.idps = idps
@@ -112,6 +114,7 @@ class LocalKnownProvidersDict(KnownProvidersDict):
 class LocalWhiteList(WhiteList):
     '''Whitelist implementation that reads the list of trusted IdPs
        from one or more files on the local file system.'''
+    log = logging.getLogger(__name__)
 
     def __init__(self, filepath_string):
         
@@ -136,7 +139,7 @@ class LocalWhiteList(WhiteList):
             try:
                 self._reload(filepath, force=True)
             except ParseError as e:
-                print e # print error from parsing single white-list files and continue
+                self.log.error(str(e)) # print error from parsing single white-list files and continue
 
 
     def _reload(self, filepath, force=False):
@@ -146,7 +149,7 @@ class LocalWhiteList(WhiteList):
 
         if force or modtime > self.modtimes[filepath]:
 
-            print 'Loading IdP white list: %s, last modified: %s' % (filepath, modtime)
+            self.log.info('Loading IdP white list: %s, last modified: %s' % (filepath, modtime))
             self.modtimes[filepath] = modtime
             idps = []
 
@@ -162,7 +165,7 @@ class LocalWhiteList(WhiteList):
                 if match:
                     idp = match.group(1)
                     idps.append(idp.lower())
-                    print 'Using trusted IdP: %s' % idp
+                    self.log.debug('Using trusted IdP: %s' % idp)
 
             # switch the list for this file path
             self.idps[filepath] = idps
@@ -189,7 +192,8 @@ class PeerNodesList(object):
     '''
     Class that updates the peer nodes in the database from an XML configuration file.
     '''
-    
+    log = logging.getLogger(__name__)
+   
     def __init__(self, filepath):
         
         self.filepath = filepath
@@ -202,7 +206,7 @@ class PeerNodesList(object):
         
         if self.filepath is not None and os.path.exists(self.filepath):
             
-            print('Updating list of CoG sites from: %s (delete: %s)' % (self.filepath, delete) )
+            self.log.info('Updating list of CoG sites from: %s (delete: %s)' % (self.filepath, delete) )
             
             # current site - must not be updated from file list
             current_site = Site.objects.get_current()
@@ -221,7 +225,7 @@ class PeerNodesList(object):
                     name = site.attrib['name']
                     domain = site.attrib['domain']
                     domains.append(domain)
-                    print 'Updating site domain: %s name: %s' % (domain, name)
+                    self.log.debug('Updating site domain: %s name: %s' % (domain, name))
                     
                     # update Site objects
                     try:
@@ -230,25 +234,25 @@ class PeerNodesList(object):
                             # update site
                             _site.name = name
                             _site.save()
-                            print('Updated site: %s' % _site)
+                            self.log.debug('Updated site: %s' % _site)
                     except ObjectDoesNotExist:
                         _site = Site.objects.create(name=name, domain=domain)
-                        print 'Created site: %s' % _site
+                        self.log.debug('Created site: %s' % _site)
                         
                     # update PeerSite objects
                     try:
                         peersite = PeerSite.objects.get(site=_site)
                     except ObjectDoesNotExist:
                         peersite = PeerSite.objects.create(site=_site, enabled=False)
-                    print '\tPeer site: %s' % peersite
+                    self.log.debug('\tPeer site: %s' % peersite)
                             
             # clean up stale sites
             if delete:
                 for peer in PeerSite.objects.all():
                     if peer.site.domain not in domains:
                         if peer.site != current_site:
-                            print 'Stale peer site found at domain: %s' % peer.site.domain + ", deleting it..."
+                            self.log.warning('Stale peer site found at domain: %s' % peer.site.domain + ", deleting it...")
                             peer.site.delete() # will also delete the PeerSite object on cascade
 
         else:
-            print 'WARNING: File %s does not exist, skipping update of ESGF peer nodes' % self.filepath
+            self.log.warning('File %s does not exist, skipping update of ESGF peer nodes' % self.filepath)
