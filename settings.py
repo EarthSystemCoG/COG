@@ -27,7 +27,7 @@ LOGGING = {
             'class': 'logging.RotatingFileHandler',
             'filename': rel('cog.log'),
             'maxBytes': 100*pow(2,20),
-            'backupCount': 10
+            'backupCount': 10,
         },
     },
     'loggers': {
