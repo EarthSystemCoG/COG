@@ -33,7 +33,7 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
-        'wsgi': {
+        '__wsgi__': {
             'handlers': ['console'],
             'level': 'DEBUG',
         }
