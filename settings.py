@@ -37,6 +37,13 @@ LOGGING = {
             'backupCount': 10,
             'formatter': 'verbose',
         },
+        'search': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.getenv('SEARCH_LOG_FILE', rel('search.log')),
+            'maxBytes': 100*pow(2,20),
+            'backupCount': 10,
+            'formatter': 'verbose',
+        },
     },
     'loggers': {
         'django': {
@@ -47,10 +54,14 @@ LOGGING = {
             'handlers': ['file'],
             'level': os.getenv('COG_LOG_LEVEL', 'INFO'),
         },
+        'cog.models.search': {
+            'handlers': ['search'],
+            'level': os.getenv('SEARCH_LOG_LEVEL', 'DEBUG'),
+        },
         '__wsgi__': {
             'handlers': ['file'],
             'level': os.getenv('COG_LOG_LEVEL', 'INFO'),
-        }
+        },
     },
 }
 
