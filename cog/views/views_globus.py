@@ -16,6 +16,10 @@ import os
 import re
 from cog.views.utils import getQueryDict
 
+import logging
+
+log = logging.getLogger(__name__)
+
 # download parameters
 DOWNLOAD_METHOD_WEB = 'web'
 DOWNLOAD_METHOD_SCRIPT = 'script'

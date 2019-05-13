@@ -107,7 +107,6 @@ def external_urls_update(request, project_short_name, suburl):
     
     # GET
     if request.method == 'GET':
-        print type
 
         # create formset instance backed by current saved instances
         # must provide the initial data to all the extra instances, 
@@ -148,7 +147,6 @@ def external_urls_update(request, project_short_name, suburl):
             return HttpResponseRedirect(redirect)
         
         else:
-            print formset.errors
             return render_external_urls_form(request, project, formset, externalUrlConf, redirect)
 
 

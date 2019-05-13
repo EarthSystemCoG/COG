@@ -19,6 +19,9 @@ from cog.views.constants import VALID_ORDER_BY_VALUES, VALID_FILTER_BY_VALUES
 import os
 from cog.views.utils import getQueryDict, paginate
 
+import logging
+
+log = logging.getLogger(__name__)
 
 @csrf_exempt
 @login_required
@@ -46,7 +49,7 @@ def doc_upload(request, project_short_name):
             error = ''
             
         else:
-            print 'Form errors:%s' % form.errors
+            log.debug('Form errors:%s' % form.errors)
             error = 'The file uploaded is not an image. Valid files include PNG, JPG, and PDF.'
             url = "%s%s" % (settings.STATIC_URL, 'cog/img/error.jpeg')
     
@@ -155,7 +158,7 @@ def data_download(request, path):
     
     project_short_name = path.split("/")[0]
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
-    print 'Data for project=%s' % project
+    log.debug('Data for project=%s' % project)
     
     # TODO: check if data is public before forcing login
     return secure_data_download(request, path, project)
@@ -235,7 +238,7 @@ def doc_update(request, doc_id):
                 bookmark.name = doc.title
                 bookmark.description = doc.description
                 bookmark.save()
-                print 'Updated associated bookmark: %s' % bookmark
+                log.debug('Updated associated bookmark: %s' % bookmark)
             
             # redirect to document detail (GET-POST-REDIRECT)
             return HttpResponseRedirect(reverse('doc_detail', kwargs={'doc_id': doc.id}))
