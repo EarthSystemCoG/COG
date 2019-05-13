@@ -7,7 +7,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from cog.config.search import read_config
 #from django.conf import settings
 
-print 'Upgrading COG'
+print('Upgrading COG')
 
 # read search configurations
 configs = { 'StandardDistribution': 'cog/config/search/standard_distribution.cfg',

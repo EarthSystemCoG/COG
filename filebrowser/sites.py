@@ -406,7 +406,6 @@ class FileBrowserSite(object):
                 # COG: must delete Doc objects
                 docs = Doc.objects.filter(file=fileobject.path)
                 for doc in docs:
-                    print 'Deleting doc=%s' % doc
                     doc.delete()
                 
                 self.filebrowser_pre_delete.send(sender=request, path=fileobject.path, name=fileobject.filename)

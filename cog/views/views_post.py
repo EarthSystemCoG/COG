@@ -292,7 +292,6 @@ def post_add(request, project_short_name, owner=None):
                 
         # invalid data
         else:
-            print form.errors
             return render_post_form(request, form, project, postType)
 
 
@@ -382,7 +381,7 @@ def post_update(request, post_id):
         # check versions       
         queryDict = getQueryDict(request)
         if post.version != int(queryDict.get('version', -1)):
-            print 'database version=%s form version=%s' % (post.version, queryDict.get('version', -1))
+            #print 'database version=%s form version=%s' % (post.version, queryDict.get('version', -1))
             return getLostLockRedirect(request, post.project, post, lock)
 
         #print "1 PAGE URL=%s" % form.data['url']
@@ -433,7 +432,6 @@ def post_update(request, post_id):
                     return HttpResponseRedirect(reverse('project_home', args=[post.project.short_name.lower()]))
 
         else:
-            print form.errors
             return render_post_form(request, form, post.project, post.type, lock=lock)
 
 

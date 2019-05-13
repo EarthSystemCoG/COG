@@ -1,7 +1,8 @@
 from copy import copy, deepcopy
-import json
-import urllib, urllib2
 from urllib2 import HTTPError
+import json
+import logging
+import urllib, urllib2
 
 from cog.config.search import SearchConfigParser
 from cog.forms.forms_search import *
@@ -42,7 +43,8 @@ LAST_SEARCH_URL = "last_search_url"  # stores CoG last search URL (including pro
 # constraints excluded from bread crumbs display
 SEARCH_PATH_EXCLUDE = ["limit","offset","csrfmiddlewaretoken","type","max_version", "min_version"]
 TEMPLATE='template'
-              
+
+log = logging.getLogger(__name__)           
       
 def search(request, project_short_name):
     """
@@ -168,7 +170,11 @@ def search_config(request, searchConfig, extra={}, fromRedirectFlag=False):
             
     # GET/POST switch
     queryDict = getQueryDict(request)
-    print "Search() view: HTTP Request method=%s fromRedirectFlag flag=%s HTTP parameters=%s" % (request.method, fromRedirectFlag, queryDict)
+    log.debug(
+        "Search() view: HTTP Request method=%s fromRedirectFlag flag=%s HTTP parameters=%s" % (
+            request.method, fromRedirectFlag, queryDict
+        )
+    )
     
     if request.method == 'GET':
         # GET pre-seeded search URL -> invoke POST immediately
@@ -196,7 +202,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
     # GET request after POST redirection
     if fromRedirectFlag:
         
-        print "Retrieving search data from session"
+        log.debug("Retrieving search data from session")
         data = request.session.get(SEARCH_DATA)
             
     # direct GET request: must query for all facet values with project-specific constraints
@@ -206,7 +212,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
         request.session[SEARCH_PATH] = []
         
         # add project fixed constraints
-        print 'Search GET: adding fixed project constraints'
+        log.debug('Search GET: adding fixed project constraints')
         _searchInput = _addConfigConstraints(searchInput, searchConfig)
         _searchInput.printme()
         
@@ -229,8 +235,8 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
             # save data in session
             request.session[SEARCH_DATA] = data
             
-        except HTTPError:
-            print "HTTP Request Error"
+        except HTTPError as error:
+            log.error("HTTP Request Error: %s" % str(error))
             # data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
 
@@ -302,7 +308,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
     if valid:
                 
         # add project fixed constraints
-        print 'Search POST: adding fixed project constraints'
+        log.debug('Search POST: adding fixed project constraints')
         _searchInput = _addConfigConstraints(searchInput, searchConfig)
         _searchInput.printme()
     
@@ -323,8 +329,8 @@ def search_post(request, searchInput, searchConfig, extra={}):
             data[FACET_PROFILE] = facetProfile
             # data[FACET_PROFILE] = sorted( facetProfile.getKeys() )  # sort facets by key
             
-        except HTTPError:
-            print "HTTP Request Error"
+        except HTTPError as error:
+            log.error("HTTP Request Error: %s" % str(error))
             data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
 
@@ -332,7 +338,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
                                   "Administrator."
     # invalid user input
     else:
-        print "Invalid Search Input"
+        log.debug("Invalid Search Input")
         # re-use previous data (output, profile and any extra argument) from session
         data = request.session[SEARCH_DATA]
         # override search input from request
@@ -351,7 +357,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
     for key, value in queryDict.items():
         if not key in SEARCH_PATH_EXCLUDE and value != 'on':  # value from 'checkbox_...'
             if value is not None and len(value) > 0:  # disregard empty facet
-                print 'key=%s value=%s' % (key, value)
+                log.debug('key=%s value=%s' % (key, value))
                 constraint = (key, value)     
                 req_constraints.append(constraint)
                 if not constraint in sp:
@@ -393,7 +399,7 @@ def metadata_display(request, project_short_name):
         params.append(('dataset_id', dataset_id))
                 
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-    print 'Metadata Solr search URL=%s' % url
+    log.debug('Metadata Solr search URL=%s' % url)
     fh = urllib2.urlopen(url)
     response = fh.read().decode("UTF-8")
 
@@ -538,7 +544,7 @@ def search_profile_export(request, project_short_name):
         scp.write()
         message = 'search_config_exported'
     except Exception as e:
-        print "ERROR: %s" % e
+        log.error("ERROR: %s" % str(e))
         message = e       
 
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
@@ -559,7 +565,7 @@ def search_profile_import(request, project_short_name):
         scp.read()
         message = 'search_config_imported'
     except Exception as e:
-        print "ERROR: %s" % e
+        log.error("ERROR: %s" % str(e))
         message = 'search_config_not_found'        
 
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
@@ -607,7 +613,7 @@ def search_profile_config(request, project_short_name):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
             
         else:
-            print 'Form is invalid: %s' % form
+            log.debug('Form is invalid: %s' % form)
             return render_search_profile_form(request, project, form, search_groups)
             
 
@@ -663,7 +669,7 @@ def search_facet_add(request, project_short_name):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            log.debug('Form is invalid: %s' % form.errors)
             
             # must retrieve facets again
             facets = _queryFacets(request, project)
@@ -698,7 +704,7 @@ def search_group_add(request, project_short_name):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            log.debug('Form is invalid: %s' % form.errors)
                         
             return render_search_group_form(request, project, form)
 
@@ -727,7 +733,7 @@ def search_group_update(request, group_id):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            log.debug('Form is invalid: %s' % form.errors)
             return render_search_group_form(request, project, form)
 
 
@@ -759,7 +765,7 @@ def search_facet_update(request, facet_id):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            log.debug('Form is invalid: %s' % form.errors)
             return render_search_facet_form(request, project, form, facets)
 
 
@@ -851,7 +857,7 @@ def search_files(request, dataset_id, index_node):
         params.append(("distrib", "false"))
  
     url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-    print 'Searching for files: URL=%s' % url
+    log.debug('Searching for files: URL=%s' % url)
     fh = urllib2.urlopen(url)
     response = fh.read().decode("UTF-8")
 
@@ -863,7 +869,7 @@ def search_reload(request):
        including constraints and results."""
     
     if request.session.get(LAST_SEARCH_URL, None):
-        print 'Reloading search page: %s' % request.session[LAST_SEARCH_URL]
+        log.debug('Reloading search page: %s' % request.session[LAST_SEARCH_URL])
         request.session[SEARCH_REDIRECT] = True  # flag to retrieve constraints, results
         return HttpResponseRedirect(request.session[LAST_SEARCH_URL])  # just like after the last POST
         
@@ -994,18 +1000,18 @@ def citation_display(request):
         fh = urllib2.urlopen(url)
         response = fh.read()
         headers = fh.info().dict
-    except HTTPError, e:
-        print('HTTPError %s for %s' % (str(e.code), url))
+    except HTTPError as e:
+        log.debug('HTTPError %s for %s' % (str(e.code), url))
         return HttpResponseNotFound()
 
     if int(headers['x-cera-rc']) > 0:
-        print 'Citation not found: %s' % url
+        log.debug('Citation not found: %s' % url)
         return HttpResponseNotFound()
 
     try:
         json.loads(response)
-    except ValueError, e:
-        print 'Citation not valid json: %s' % url
+    except ValueError as e:
+        log.errpr('Citation not valid json: %s' % str(e))
         return HttpResponseNotFound()
 
     return HttpResponse(response, content_type="application/json")

@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
@@ -18,6 +20,7 @@ from cog.views.utils import getQueryDict
 from cog.models.auth import userHasAdminPermission
 #from django.contrib.sites.models import Site
 
+log = logging.getLogger(__name__)
 
 # method to add a new project, with optional parent project
 @login_required
@@ -96,7 +99,7 @@ def project_add(request):
         # invalid data
         else:
             
-            print "Form is invalid: %s" % form.errors           
+            log.debug("Form is invalid: %s" % form.errors)
             project = form.instance
             
             # create and set state of project tabs, do not persist
@@ -271,7 +274,7 @@ def project_update(request, project_short_name):
             return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
 
         else:
-            print 'Form is invalid %s' % form.errors
+            log.debug('Form is invalid %s' % form.errors)
             
             # update project tabs, but do not persist state since form had errors
             tabs = get_or_create_project_tabs(project, save=False)
@@ -371,7 +374,7 @@ def contactus_update(request, project_short_name):
         else:
             # re-display form view
             if not form.is_valid():
-                print 'Form is invalid  %s' % form.errors
+                log.debug('Form is invalid  %s' % form.errors)
             return render_contactus_form(request, project, form)
 
 
@@ -419,7 +422,7 @@ def notifyAuthorOfProjectApproval(project, request):
 
 def initProject(project):
     
-    print "Initializing project: %s" % project.short_name
+    log.debug("Initializing project: %s" % project.short_name)
                         
     # create project home page
     create_project_home(project, project.author)
@@ -540,7 +543,7 @@ def tags_update(request, project_short_name):
             return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
             
         else:
-            print 'Form is invalid  %s' % form.errors
+            log.debug('Form is invalid  %s' % form.errors)
             return render_tags_form(request, project, form)
 
 
@@ -613,22 +616,22 @@ def save_user_tag(request):
         queryDict = getQueryDict(request)
         tagName = queryDict['tag']
         redirect = queryDict['redirect']
-        print 'Saving user tag: %s' % tagName
-        print 'Eventually redirecting to: %s' % redirect
+        log.debug('Saving user tag: %s' % tagName)
+        log.debug('Eventually redirecting to: %s' % redirect)
         
         if isUserLocal(request.user):
             try:
                 tag = ProjectTag.objects.get(name__iexact=tagName)
             except ObjectDoesNotExist:
                 tag = ProjectTag.objects.create(name=tagName)
-                print 'Created new tag: %s' % tag
+                log.debug('Created new tag: %s' % tag)
 
             # add this tag to the user preferences
             utags = request.user.profile.tags
             if tag not in utags.all():
                 utags.add(tag)
                 request.user.profile.save()
-                print 'Tag: %s added to user: %s' % (tagName, request.user)
+                log.debug('Tag: %s added to user: %s' % (tagName, request.user))
 
             # set session flag to preselect a tab
             request.session['PROJECT_BROWSER_TAB'] = 3                
@@ -638,7 +641,7 @@ def save_user_tag(request):
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'),
                                                       tagName, redirect)
-            print 'Redirecting save request to URL=%s' % url
+            log.debug('Redirecting save request to URL=%s' % url)
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
             # also set session flag to preselect a tab
@@ -656,8 +659,8 @@ def delete_user_tag(request):
         queryDict = getQueryDict(request)
         tagName = queryDict['tag']
         redirect = queryDict['redirect']
-        print 'Deleting user tag: %s' % tagName
-        print 'Eventually redirecting to: %s' % redirect
+        log.debug('Deleting user tag: %s' % tagName)
+        log.debug('Eventually redirecting to: %s' % redirect)
         
         if isUserLocal(request.user):
             try:
@@ -668,7 +671,7 @@ def delete_user_tag(request):
                     request.user.profile.save()
                     
             except ObjectDoesNotExist:
-                print "Invalid project tag."
+                log.debug("Invalid project tag.")
                 
             # set session flag to preselect a tab
             request.session['PROJECT_BROWSER_TAB'] = 3
@@ -678,7 +681,7 @@ def delete_user_tag(request):
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'),
                                                       tagName, redirect)
-            print 'Redirecting delete request to URL=%s' % url    
+            log.debug('Redirecting delete request to URL=%s' % url)
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
             # also set session flag to preselect a tab
@@ -704,7 +707,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
     if tag_name is not None:
         try:
             tag = ProjectTag.objects.get(name__iexact=tag_name)
-            print "tag in render_project_list = ", tag
+            log.debug("tag in render_project_list = %s" % tag)
         except ObjectDoesNotExist:
             # store error associated with non-existing tag
             tag_error = "Tag does not exist."
@@ -867,7 +870,7 @@ def development_update(request, project_short_name):
             
         # return to form
         else:
-            print 'Form is invalid %s' % form.errors
+            log.debug('Form is invalid %s' % form.errors)
             return render_development_form(request, project, form)
 
 
@@ -933,7 +936,7 @@ def _project_page_update(request, project_short_name,
             
         # return to form
         else:
-            print 'Form is invalid %s' % form.errors
+            log.debug('Form is invalid %s' % form.errors)
             return render(request,
                           form_template,
                           {'title': form_template_title, 'project': project, 'form': form})

@@ -36,11 +36,11 @@ class EmailThread(Thread):
     def run(self):
         
         #print "From: %s" % self.fromAddress
-        print "To: %s" % self.toAddress
-        print 'From: %s' % self.fromAddress 
-        print "Subject: %s" % self.subject
-        print "Message: %s" % self.message
-        print "Mime Type: %s" % self.mime_type
+        # print "To: %s" % self.toAddress
+        # print 'From: %s' % self.fromAddress 
+        # print "Subject: %s" % self.subject
+        # print "Message: %s" % self.message
+        # print "Mime Type: %s" % self.mime_type
         
         # use local mail server
         #toUser.email_user(subject, message, from_email=fromAddress)
@@ -59,7 +59,7 @@ class EmailThread(Thread):
             s.login(EMAIL_USERNAME, EMAIL_PASSWORD)
         s.sendmail(self.fromAddress, [self.toAddress], msg.as_string())
         s.quit()
-        print 'Email sent.'
+        # print 'Email sent.'
 
 
 if __name__ == '__main__':

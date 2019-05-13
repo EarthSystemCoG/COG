@@ -3,6 +3,7 @@ Views for exchanging information with other nodes.
 '''
 from django.http import HttpResponseNotAllowed, HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render
+import logging
 import json
 from cog.models import Project, getProjectsAndRolesForUsers, DataCart
 from django.contrib.sites.models import Site
@@ -16,6 +17,8 @@ from django.conf import settings
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.models.user_profile import UserProfile
 from django.core.exceptions import ObjectDoesNotExist
+
+log = logging.getLogger(__name__)
 
 JSON = "application/json"
 
@@ -97,7 +100,7 @@ def share_projects(request):
         
         # list projects from this node
         projects = {}
-        print 'Listing ACTIVE projects for current site=%s' % current_site
+        log.debug('Listing ACTIVE projects for current site=%s' % current_site)
         for project in Project.objects.filter(active=True).filter(site=current_site):
             projects[project.short_name] = serialize_project(project)
             
@@ -123,7 +126,7 @@ def share_groups(request):
         response_data['site'] = serialize_site(current_site)
         
         # list groups from this node, index by group name
-        print 'Listing visible groups for current site=%s' % current_site
+        log.debug('Listing visible groups for current site=%s' % current_site)
         groups = {}
         for group in registrationService.listGroups():
             if group['visible'] and group['name'].lower() != 'wheel':
@@ -149,7 +152,7 @@ def share_user(request):
              
         except ObjectDoesNotExist:
             # return empty dictionary
-            print 'User with openid=%s found at this site' % openid
+            log.debug('User with openid=%s found at this site' % openid)
             users = {}
         
         response_data["users"] = users

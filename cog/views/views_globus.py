@@ -118,7 +118,7 @@ def download(request):
 
 			
 		url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-		print 'Searching for files at URL: %s' % url
+		log.debug('Searching for files at URL: %s' % url)
 		jobj = getJson(url)
 		
 		# parse response for GridFTP URls
@@ -142,13 +142,13 @@ def download(request):
 							download_map[gendpoint_name] = [] # insert empty list of paths
 						download_map[gendpoint_name].append(path)
 				else:
-					print 'The file is not accessible through Globus'
+					log.debug('The file is not accessible through Globus')
 		else:
 			return HttpResponseServerError("Error querying for files URL")
 						
 	# store map in session
 	request.session[GLOBUS_DOWNLOAD_MAP] = download_map
-	print 'Stored Globus Download Map=%s at session scope' % download_map
+	log.debug('Stored Globus Download Map=%s at session scope' % download_map)
 	
 	# redirect after post (to display page)
 	return HttpResponseRedirect( reverse('globus_transfer') )
@@ -176,7 +176,7 @@ def transfer(request):
 				   ('action', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
 				 ]
 		globus_url = GLOBUS_SELECT_DESTINATION_URL + "?" + urllib.urlencode(params)
-		print "Redirecting to: %s" % globus_url
+		log.debug("Redirecting to: %s" % globus_url)
 		return HttpResponseRedirect(globus_url)
 		# replacement URL for localhost development
 		#return HttpResponseRedirect( request.build_absolute_uri(reverse("globus_oauth")) ) # FIXME
@@ -189,14 +189,20 @@ def oauth(request):
 	# retrieve destination parameters from Globus redirect
 	# example URL with added parameters from Globus redirect: 
 	# /globus/oauth/?label=&verify_checksum=on&submitForm=&folder[0]=tmp&endpoint=cinquiniluca#mymac&path=/~/&ep=GC&lock=ep&method=get&folderlimit=1&action=http://localhost:8000/globus/oauth/
-	print request.GET
+	log.debug(str(request.GET))
 	request.session[TARGET_ENDPOINT] = getQueryDict(request).get('endpoint','#')
 	request.session[TARGET_FOLDER] = getQueryDict(request).get('path','/~/') + getQueryDict(request).get('folder[0]', '')  # default value: user home directory
-	print 'User selected destionation endpoint:%s, path:%s, folder:%s' % (request.session[TARGET_ENDPOINT], getQueryDict(request).get('path','/~/'), getQueryDict(request).get('folder[0]', ''))
+	log.debug(
+		'User selected destionation endpoint:%s, path:%s, folder:%s' % (
+			request.session[TARGET_ENDPOINT],
+			getQueryDict(request).get('path','/~/'),
+			getQueryDict(request).get('folder[0]', '')
+		)
+	)
 
 	# Redirect the user to Globus OAuth server to get an authorization code if the user approves the access request.
 	globus_authorize_url = establishFlow(request).step1_get_authorize_url()
-	print "Redirecting to: %s" % globus_authorize_url
+	log.debug("Redirecting to: %s" % globus_authorize_url)
 	return HttpResponseRedirect(globus_authorize_url)
 
 
@@ -243,8 +249,8 @@ def submit(request):
 	target_endpoint = request.session[TARGET_ENDPOINT]
 	target_folder = request.session[TARGET_FOLDER]
 	
-	print 'Downloading files=%s' % download_map.items()
-	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
+	log.debug('Downloading files=%s' % download_map.items())
+	log.debug('User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder))
 
 	api_client = TransferAPIClient(username, goauth=access_token)
 	# loop over source endpoints and autoactivate them
