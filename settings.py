@@ -60,6 +60,10 @@ LOGGING = {
             'handlers': ['search'],
             'level': os.getenv('SEARCH_LOG_LEVEL', 'DEBUG'),
         },
+        'cog.views.views_search': {
+            'handlers': ['search'],
+            'level': os.getenv('SEARCH_LOG_LEVEL', 'DEBUG'),
+        },
         '__wsgi__': {
             'handlers': ['file'],
             'level': os.getenv('COG_LOG_LEVEL', 'INFO'),
