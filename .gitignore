@@ -7,8 +7,12 @@
 *.pyc
 *.eggs
 
+# CKEditor
+cog/static/cog/ckeditor
+
 # static files
 static/
+
 
 # site media
 site_media/

@@ -1,0 +1,93 @@
+CAS FILE MANAGER INSTALLATION INSTRUCTIONS
+
+references: 
+http://oodt.jpl.nasa.gov/cas-filemgr/user/basic.html
+
+preliminary:
+o place settings.xml file containing JPL repository into local directory ~/.m2
+
+o check out the latest release version:
+cd /Users/cinquini/Documents/workspace/cas-build
+svn ls http://oodt/repo/cas-filemgr/tags
+
+o build
+cd cas-filemgr-v1.8.0
+mvn package
+
+o install
+cd /Users/cinquini/Documents/workspace/cas-install
+cp /Users/cinquini/Documents/workspace/cas/cas-filemgr-v1.8.0/target/cas-filemgr-1.8.0-dist.tar.gz .
+tar xvfz cas-filemgr-1.8.0-dist.tar.gz 
+export FILEMGR_HOME=/Users/cinquini/Documents/workspace/cas-install/cas-filemgr-1.8.0
+
+o configuration
+bin/filemgr
+	- set server port [9000]
+	- JAVA_HOME
+	- RUN_HOME [for the pid file]
+bin/filemgr-client
+	- JAVA_HOME
+etc/filemgr.properties
+	- gov.nasa.jpl.oodt.cas.filemgr.catalog.lucene.idxPath=[FILEMGR_HOME]/catalog
+	NOTE: DO NOT CREATE THE /catalog DIRECTORY!!!
+	- gov.nasa.jpl.oodt.cas.filemgr.repositorymgr.dirs=file://[FILEMGR_HOME]/policy
+	- gov.nasa.jpl.oodt.cas.filemgr.validation.dirs=file://[FILEMGR_HOME]/policy
+	- gov.nasa.jpl.oodt.cas.filemgr.mime.type.repository=[FILEMGR_HOME]/etc/mime-types.xml
+	
+o start:
+	cd $FILEMGR_HOME/bin
+	./filemgr start
+
+o stop:
+	./filemgr stop
+
+o test:
+	create file bin/blah.txt
+	create metadata file bin/blah.txt.met
+	run command:
+./filemgr-client --url http://localhost:9000 --operation --ingestProduct --productName Blah.txt --productStructure Flat --productTypeName GenericFile --metadataFile file:///Users/cinquini/Documents/workspace/cas-install/cas-filemgr-1.8.0/bin/blah.txt.met --refs file:///Users/cinquini/Documents/workspace/cas-install/cas-filemgr-1.8.0/bin/blah.txt
+
+./filemgr-client --url http://localhost:9000 --operation --ingestProduct --productName Blah.txt --productStructure Flat --productTypeName GenericFile -metadataFile file:///Users/cinquini/Documents/workspace/cas-install/cas-filemgr-1.8.0/bin/blah.txt.met --refs file:///Users/cinquini/Documents/workspace/cas-install/cas-filemgr-1.8.0/bin/blah.txt
+
+./filemgr-client --url http://localhost:9000 --operation --getNumProducts --productTypeName GenericFile
+
+
+o querying
+
+- cd bin
+- java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.MetadataDumper
+- java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.QueryTool --url http://jpl-esg.jpl.nasa.gov:9010 --lucene -query *
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.MetadataDumper --url http://jpl-esg.jpl.nasa.gov:9010 --productId d1497915-7889-11df-85cb-958d2c1382b8
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.QueryTool --url http://jpl-esg.jpl.nasa.gov:9010 --lucene -query ProductType:GenericFile
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.QueryTool --url http://jpl-esg.jpl.nasa.gov:9010 --lucene -query ProductStructure:Flat
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.QueryTool --url http://jpl-esg.jpl.nasa.gov:9010 --lucene -query MimeType:text
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.QueryTool --url http://jpl-esg.jpl.nasa.gov:9010 --lucene -query Filename:myblah.txt
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.QueryTool --url http://jpl-esg.jpl.nasa.gov:9010 --lucene -query 'ProductType:GenericFile AND ProductStructure:Flat'
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.QueryTool --url http://jpl-esg.jpl.nasa.gov:9010 --lucene -query Filename:L0b.dat
+
+java -Djava.ext.dirs=../lib gov.nasa.jpl.oodt.cas.filemgr.tools.DeleteProduct  --fileManagerUrl http://jpl-esg.jpl.nasa.gov:9010 --productID d1497915-7889-11df-85cb-958d2c1382b8
+
+
+RECIPE FOR DEFINING A NEW MIME TYPE ASSOCIATED WITH EXTENSION .mytxt
+
+o insert new mime type in file mime-types.xml BOTH ON CLIENT AND SERVER SIDE
+
+    <mime-type name="text/mine"
+               description="My Text File">
+        <ext>mytxt</ext>
+    </mime-type>
+
+
+
+
+o client side (workflow manager):
+	- start workflow manager with -Dgov.nasa.jpl.oodt.cas.filemgr.mime.type.repository=${FILEMGR_HOME}/etc/mime-types.xml \
+
+o server side (file manager):
+	- reference mime-type repository in filemanager.properties:
+		gov.nasa.jpl.oodt.cas.filemgr.mime.type.repository=[FILEMGR_HOME]/etc/mime-types.xml
+
+
+NOTE: DOCUMENTATION INACCURACIES
+o Must place file ~/.m2/settings.xml under home directory to download artifacts from JPL repository, otherwise the distribution won't build
+o the file etc/filemgr.properties must reference the installation directory as [FILEMGR_HOME] (not $FILEMGR_HOME)
