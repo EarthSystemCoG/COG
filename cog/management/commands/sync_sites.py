@@ -16,23 +16,25 @@ from cog.site_manager import siteManager
 
 
 # read /esg/config/esgf_cogs.xml
-FILEPATH = siteManager.get('PEER_NODES') 
+FILEPATH = siteManager.get('PEER_NODES')
 
 class Command(BaseCommand):
-    
+
     help = 'Updates the list of CoG peers in the local database'
-    
+
 
     def add_arguments(self, parser):
-        
+
         # Named (optional) arguments
         parser.add_argument('--delete',
                             action='store_true',
                             dest='delete',
                             default=False,
                             help='Delete stale sites that are found in database but not in the XML file')
-    
+
     def handle(self, *args, **options):
-        
-        pnl = PeerNodesList(FILEPATH)
-        pnl.reload(delete=options['delete'])
+        try:
+            pnl = PeerNodesList(FILEPATH)
+            pnl.reload(delete=options['delete'])
+        except Exception, error:
+            print "Could not update peer nodes from xml file", error
