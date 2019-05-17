@@ -28,8 +28,8 @@
 		<strong>{{record.fields.title.0}}</strong>
 		<div id="message_{{record.id}}" style="display:none; color: #FF0000;">Message</div>
 		{% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 |urlizetrunc:30|linebreaksbr }}{% endif %}
-		{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }}
-		{% if  record.fields.data_node.0|getDataNodeStatus %}
+		{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }} 
+		{% if not record.fields.data_node.0|getDataNodeStatus %}
 			<span style="color: #FF0000;">WARNING: this node is reported offline.  Files may not be available for download.</span>
 		{% endif %}
         {% endif %}

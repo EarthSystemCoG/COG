@@ -183,7 +183,7 @@ def getDataNodeStatus(data_node):
     dnstatus = getattr(settings, 'DATANODE_STATUS_FILE', None)
 
     if data_node in dnstatus:
-        return (dnstatus[data_node][status] == 1)
+        return (dnstatus[data_node]['status'] == 1)
     return True
 
 @register.filter
