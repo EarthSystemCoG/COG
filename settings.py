@@ -2,6 +2,7 @@ import os
 import logging
 import re
 from cog.utils import str2bool
+import json
 
 rel = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 
@@ -329,3 +330,5 @@ CAPTCHA_IMAGE_SIZE = (100, 40)
 #==== Quality Control Flags references ==================================
 
 QCFLAGS_URLS = { 'obs4mips_indicators': 'https://www.earthsystemcog.org/projects/obs4mips/data-indicators' }
+
+DATANODE_STATUS_FILE = json.load(open('/esg/config/datanode_status.json'))

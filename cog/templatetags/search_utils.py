@@ -179,6 +179,14 @@ def qcflag_url(qcflag_name):
     return qcflag_urls.get(qcflag_name, '') # return empty link by default
 
 @register.filter
+def getDataNodeStatus(data_node):
+    dnstatus = getattr(settings, 'DATANODE_STATUS_FILE', None)
+
+    if data_node in dnstatus:
+        return (dnstatus[data_node][status] == 1)
+    return True
+
+@register.filter
 def sortResults(results, fieldName):
     
     return sorted(results, key = lambda result: result.fields.get(fieldName,""))
