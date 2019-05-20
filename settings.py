@@ -331,4 +331,4 @@ CAPTCHA_IMAGE_SIZE = (100, 40)
 
 QCFLAGS_URLS = { 'obs4mips_indicators': 'https://www.earthsystemcog.org/projects/obs4mips/data-indicators' }
 
-DATANODE_STATUS_FILE = json.load(open('/esg/config/datanode_status.json'))
+DATANODE_STATUS_FILE = json.load(open('/esg/config/esgf_datanode_status.json'))
