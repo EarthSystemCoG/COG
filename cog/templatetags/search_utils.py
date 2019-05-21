@@ -180,7 +180,13 @@ def qcflag_url(qcflag_name):
 
 @register.filter
 def getDataNodeStatus(data_node):
-    dnstatus = getattr(settings, 'DATANODE_STATUS_FILE', None)
+
+    try:
+
+        dnstatusfn = getattr(settings, 'DATANODE_STATUS_FILE', None)
+        dnstatus = json.load(open(dnstatusfn))
+    except Exception as e:
+        return True
 
     if data_node in dnstatus:
         return (dnstatus[data_node]['status'] == 1)
