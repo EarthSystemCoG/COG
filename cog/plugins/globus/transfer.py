@@ -30,9 +30,8 @@ def generateGlobusDownloadScript(download_map):
     return script
 
 
-def activateEndpoint(api_client, endpoint, openid=None, password=None):
-
-    if not openid or not password:
+def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, password=None, cert=None, key=None):
+    if (not myproxy_server or not password) and (not myproxy_server or not cert):
         # Try to autoactivate the endpoint
         code, reason, result = api_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
         print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
@@ -40,26 +39,27 @@ def activateEndpoint(api_client, endpoint, openid=None, password=None):
             return (False, "")
         return (True, "")
 
-    openid_parsed = urlparse.urlparse(openid)
-    hostname = openid_parsed.hostname
-    username = os.path.basename(openid_parsed.path)
     code, reason, reqs = api_client.endpoint_activation_requirements(endpoint)
 
     # Activate the endpoint using an X.509 user credential stored by esgf-idp in /tmp/x509up_<idp_hostname>_<username>
-    #cred_file = "/tmp/x509up_%s_%s" % (hostname, username)
-    #public_key = reqs.get_requirement_value("delegate_proxy", "public_key")
-    #try:
-    #    proxy = x509_proxy.create_proxy_from_file(cred_file, public_key, lifetime_hours=72)
-    #except Exception as e:
-    #    print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
-    #    return False
-    #reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
-
-    # Activate the endpoint using MyProxy server method
-    reqs.set_requirement_value("myproxy", "hostname", hostname)
-    reqs.set_requirement_value("myproxy", "username", username)
-    reqs.set_requirement_value("myproxy", "passphrase", password)
-    reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
+    if cert and key:
+        cred_file = "/tmp/x509up_%s_%s" % (myproxy_server, username)
+        with open(cred_file, 'w') as cred:
+            cred.write(cert)
+            cred.write(key)
+        public_key = reqs.get_requirement_value("delegate_proxy", "public_key")
+        try:
+            proxy = x509_proxy.create_proxy_from_file(cred_file, public_key, lifetime_hours=72)
+        except Exception as e:
+            print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
+            return False
+        reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
+    else:
+        # Activate the endpoint using MyProxy server method
+        reqs.set_requirement_value("myproxy", "hostname", myproxy_server)
+        reqs.set_requirement_value("myproxy", "username", username)
+        reqs.set_requirement_value("myproxy", "passphrase", password)
+        reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
 
     try:
         code, reason, result = api_client.endpoint_activate(endpoint, reqs)
