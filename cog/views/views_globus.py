@@ -38,7 +38,7 @@ if siteManager.isGlobusEnabled():
 	from base64 import urlsafe_b64encode
 	from oauth2client import client as oauth_client
 	from cog.plugins.globus.transfer import activateEndpoint, submitTransfer, generateGlobusDownloadScript
-	from globusonline.transfer.api_client import TransferAPIClient
+	from globus_sdk.transfer import TransferClient, AccessTokenAuthorizer
 
 	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
 	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
@@ -242,12 +242,13 @@ def submit(request):
 	print 'Downloading files=%s' % download_map.items()
 	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
-	api_client = TransferAPIClient(username, goauth=access_token)
+	authorizer = AccessTokenAuthorizer(access_token)
+	transfer_client = TransferClient(authorizer)
 	# loop over source endpoints and autoactivate them
 	# if the autoactivation fails, redirect to a form asking for a password
-	activateEndpoint(api_client, target_endpoint)
+	activateEndpoint(transfer_client, target_endpoint)
 	for source_endpoint, source_files in download_map.items():
-		status, message = activateEndpoint(api_client, source_endpoint, openid, password)
+		status, message = activateEndpoint(transfer_client, source_endpoint, openid, password)
 		if not status:
 			return render(request,
                           'cog/globus/password.html',
@@ -258,7 +259,7 @@ def submit(request):
 	for source_endpoint, source_files in download_map.items():
 			
 		# submit transfer request
-		task_id = submitTransfer(api_client, source_endpoint, source_files, target_endpoint, target_folder)
+		task_id = submitTransfer(transfer_client, source_endpoint, source_files, target_endpoint, target_folder)
 		task_ids.append(task_id)
 	
 	# display confirmation page
