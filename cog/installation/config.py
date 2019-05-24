@@ -103,7 +103,7 @@ class CogConfig(object):
                 with open(ESGF_PROPERTIES_FILE, 'r') as f:
                     # transform Java properties file into python configuration file: must prepend a section
                     config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
-                    config_file = StringIO.StringIO(config_string)
+                    config_file = io.StringIO(config_string)
                     self.esgfConfig.readfp(config_file)
                 logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
 
