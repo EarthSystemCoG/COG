@@ -23,7 +23,7 @@ The postgres database password is read from the file /esg/config/.esg_pg_pass
 
 '''
 
-import ConfigParser
+import configparser
 import io
 import collections
 import logging
@@ -59,7 +59,7 @@ class CogConfig(object):
         '''Method that reads an existing COG configuration file, or create a new one if not existing.'''
 
         # initialize COG configuration file
-        self.cogConfig = ConfigParser.ConfigParser(allow_no_value=True, 
+        self.cogConfig = configparser.ConfigParser(allow_no_value=True, 
                                                    dict_type=collections.OrderedDict)
         # must set following line explicitly to preserve the case of configuration keys
         self.cogConfig.optionxform = str
@@ -88,7 +88,7 @@ class CogConfig(object):
         '''Method that reads local parameters from ESGF configuration file esgf.properties.'''
 
         # read ESGF configuration file ($esg_config_dir/esgf.properties), if available
-        self.esgfConfig = ConfigParser.ConfigParser()
+        self.esgfConfig = configparser.ConfigParser()
         try:
             self.esgfConfig.read(ESGF_PROPERTIES_FILE)
         except IOError:
