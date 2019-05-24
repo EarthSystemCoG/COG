@@ -21,14 +21,17 @@ class InitMiddleware(object):
         
         # update list of ESGF peers into database
         filepath = siteManager.get('PEER_NODES')
-        pnl = PeerNodesList(filepath)
-        pnl.reload() # delete=False
-        
+        try:
+            pnl = PeerNodesList(filepath)
+            pnl.reload() # delete=False
+        except Exception, error:
+            print "Could not update peer nodes from xml file", error
+
         # read IdP whitelist
-        
+
         # remove this class from the middleware that is invoked for every request
         raise MiddlewareNotUsed('Do not invoke ever again')
-        
+
     def process_request(self, request):
         print('This line should never be printed...')
         return None

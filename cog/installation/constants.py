@@ -3,7 +3,8 @@ Module containing shared constants for CoG installation.
 '''
 import os
 
-SECTION_DEFAULT = 'DEFAULT'
+COG_SECTION_DEFAULT = 'DEFAULT'
+SECTION_DEFAULT = 'installer.properties'
 SECTION_ESGF = 'ESGF'
 SECTION_EMAIL = 'EMAIL'
 
@@ -14,6 +15,8 @@ IDP_WHITELIST = "%s/esgf_idp.xml, %s/esgf_idp_static.xml" % (ESG_CONFIG_DIR, ESG
 ESGF_ROOTADMIN_PASSWORD_FILE = '%s/.esgf_pass' % ESG_CONFIG_DIR
 ROOTADMIN_USERNAME = "rootAdmin"
 DEFAULT_ROOTADMIN_PWD = "changeit"
+ROOTADMIN_GROUP = "wheel"
+ROOTADMIN_ROLE = "super"
 KNOWN_PROVIDERS = "%s/esgf_known_providers.xml" % ESG_CONFIG_DIR
 PEER_NODES = "%s/esgf_cogs.xml" % ESG_CONFIG_DIR
 

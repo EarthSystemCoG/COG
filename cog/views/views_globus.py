@@ -30,7 +30,7 @@ TARGET_FOLDER = 'target_folder'
 ESGF_PASSWORD = 'password'
 
 # external URLs
-GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/app/browse-endpoint'
+GLOBUS_SELECT_DESTINATION_URL = 'https://app.globus.org/file-manager'
 GLOBUS_AUTH_URL = 'https://auth.globus.org'
 
 if siteManager.isGlobusEnabled():
