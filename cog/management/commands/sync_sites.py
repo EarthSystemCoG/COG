@@ -36,5 +36,6 @@ class Command(BaseCommand):
         try:
             pnl = PeerNodesList(FILEPATH)
             pnl.reload(delete=options['delete'])
-        except Exception, error:
-            print "Could not update peer nodes from xml file", error
+        except Exception as error:
+            print("Could not update peer nodes from xml file")
+            print(error)

@@ -24,8 +24,9 @@ class InitMiddleware(object):
         try:
             pnl = PeerNodesList(filepath)
             pnl.reload() # delete=False
-        except Exception, error:
-            print "Could not update peer nodes from xml file", error
+        except Exception as error:
+            print("Could not update peer nodes from xml file")
+            print(error)
 
         # read IdP whitelist
 
