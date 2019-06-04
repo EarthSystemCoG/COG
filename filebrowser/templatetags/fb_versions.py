@@ -7,7 +7,7 @@ from time import gmtime
 # DJANGO IMPORTS
 from django.template import Library, Node, Variable, VariableDoesNotExist, TemplateSyntaxError
 from django.conf import settings
-from django.utils.encoding import force_unicode, smart_str
+from django.utils.encoding import force_text
 from django.core.files import File
 
 
@@ -48,7 +48,7 @@ class VersionNode(Node):
                 source = source.path
             if isinstance(source, File):
                 source = source.name
-            source = force_unicode(source)
+            source = force_text(source)
             if FORCE_PLACEHOLDER:
                 source = PLACEHOLDER
             elif SHOW_PLACEHOLDER and not site.storage.isfile(source):
@@ -113,7 +113,7 @@ class VersionObjectNode(Node):
                 source = source.path
             if isinstance(source, File):
                 source = source.name
-            source = force_unicode(source)
+            source = force_text(source)
             if FORCE_PLACEHOLDER:
                 source = PLACEHOLDER
             elif SHOW_PLACEHOLDER and not site.storage.isfile(source):

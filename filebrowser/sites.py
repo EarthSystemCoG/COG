@@ -28,7 +28,7 @@ from django import forms
 from django.core.urlresolvers import reverse, get_urlconf, get_resolver
 from django.dispatch import Signal
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.core.files.base import ContentFile
@@ -544,11 +544,11 @@ class FileBrowserSite(object):
             uploadedfile = handle_file_upload(path, filedata, site=self)
             
             if file_already_exists:
-                old_file = smart_unicode(file_name)
-                new_file = smart_unicode(uploadedfile)
+                old_file = smart_text(file_name)
+                new_file = smart_text(uploadedfile)
                 self.storage.move(new_file, old_file, allow_overwrite=True)
             
-            self.filebrowser_post_upload.send(sender=request, path=request.POST.get('folder'), file=FileObject(smart_unicode(file_name), site=self))
+            self.filebrowser_post_upload.send(sender=request, path=request.POST.get('folder'), file=FileObject(smart_text(file_name), site=self))
             
             # let Ajax Upload know whether we saved it or not
             ret_json = {'success': True, 'filename': filedata.name}

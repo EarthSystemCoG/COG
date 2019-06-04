@@ -8,7 +8,7 @@ from tempfile import NamedTemporaryFile
 # django imports
 from django.utils.translation import ugettext as _
 from django.core.files import File
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 
 # filebrowser imports
 from filebrowser.settings import *
@@ -166,7 +166,7 @@ def get_file(path, filename, site=None):
     """
     Get file (or folder).
     """
-    converted_path = smart_unicode(os.path.join(site.directory, path, filename))
+    converted_path = smart_text(os.path.join(site.directory, path, filename))
     if not site.storage.isfile(converted_path) and not site.storage.isdir(converted_path):
         return None
     return filename

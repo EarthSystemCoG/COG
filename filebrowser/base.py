@@ -4,7 +4,7 @@
 import mimetypes
 import os, shutil, re, datetime, time
 
-from django.utils.encoding import smart_str, smart_unicode
+from django.utils.encoding import smart_bytes, smart_text
 from django.utils.translation import ugettext as _
 from filebrowser.functions import (get_file_type, url_join, get_version_path, get_original_path, sort_by_attr, 
                                    version_generator, path_strip, url_strip, validate_path)
@@ -199,10 +199,10 @@ class FileObject():
 
     
     def __str__(self):
-        return smart_str(self.path)
+        return smart_bytes(self.path)
     
     def __unicode__(self):
-        return smart_unicode(self.path)
+        return smart_text(self.path)
     
     @property
     def name(self):
