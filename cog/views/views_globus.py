@@ -1,4 +1,3 @@
-
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
@@ -14,6 +13,8 @@ from constants import GLOBUS_NOT_ENABLED_MESSAGE
 from functools import wraps
 import os
 import re
+from openid.yadis.services import getServiceEndpoints
+from openid.yadis.discover import DiscoveryFailure
 from cog.views.utils import getQueryDict
 
 # download parameters
@@ -27,10 +28,11 @@ GLOBUS_ACCESS_TOKEN = 'globus_access_token'
 GLOBUS_USERNAME = 'globus_username'
 TARGET_ENDPOINT = 'target_endpoint'
 TARGET_FOLDER = 'target_folder'
+ESGF_USERNAME = 'username'
 ESGF_PASSWORD = 'password'
 
 # external URLs
-GLOBUS_SELECT_DESTINATION_URL = 'https://www.globus.org/app/browse-endpoint'
+GLOBUS_SELECT_DESTINATION_URL = 'https://app.globus.org/file-manager'
 GLOBUS_AUTH_URL = 'https://auth.globus.org'
 
 if siteManager.isGlobusEnabled():
@@ -42,6 +44,18 @@ if siteManager.isGlobusEnabled():
 
 	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
 	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
+
+
+def discover_myproxy(openid):
+	try:
+		uri, endpoints = getServiceEndpoints(openid)
+	except DiscoveryFailure:
+		return None
+	for e in endpoints:
+		if e.matchTypes(['urn:esg:security:myproxy-service']):
+			myproxy_url_parsed = urlparse(e.uri)
+			return myproxy_url_parsed.hostname
+	return None
 
 
 def establishFlow(request):
@@ -167,7 +181,7 @@ def transfer(request):
 	else:
 						
 		# redirect to Globus OAuth URL
-		params = [ ('ep','GC'), ('method','get'), ('folderlimit','1'),
+		params = [ ('method','get'), ('folderlimit','1'),
 				   # ('lock', 'ep'), # do NOT allow the user to change their endpoint
 				   ('action', request.build_absolute_uri(reverse("globus_oauth")) ), # redirect to CoG Oauth URL
 				 ]
@@ -185,7 +199,6 @@ def oauth(request):
 	# retrieve destination parameters from Globus redirect
 	# example URL with added parameters from Globus redirect: 
 	# /globus/oauth/?label=&verify_checksum=on&submitForm=&folder[0]=tmp&endpoint=cinquiniluca#mymac&path=/~/&ep=GC&lock=ep&method=get&folderlimit=1&action=http://localhost:8000/globus/oauth/
-	print request.GET
 	request.session[TARGET_ENDPOINT] = getQueryDict(request).get('endpoint','#')
 	request.session[TARGET_FOLDER] = getQueryDict(request).get('path','/~/') + getQueryDict(request).get('folder[0]', '')  # default value: user home directory
 	print 'User selected destionation endpoint:%s, path:%s, folder:%s' % (request.session[TARGET_ENDPOINT], getQueryDict(request).get('path','/~/'), getQueryDict(request).get('folder[0]', ''))
@@ -230,16 +243,24 @@ def submit(request):
 	   The access token and files to download are retrieved from the session. '''
 
 	openid = request.user.profile.openid()
-	# get a password if authoactivation failed and a user was asked for a password
-	password = request.POST.get(ESGF_PASSWORD)
+	openid_parsed = urlparse(openid)
+	hostname = openid_parsed.hostname
+	# get a username and password if autoactivation failed and a user was asked for a password
+	if hostname == "ceda.ac.uk":
+		myproxy_server = discover_myproxy(openid)
+		esgf_username = request.POST.get(ESGF_USERNAME)
+	else:
+		myproxy_server = hostname
+		esgf_username = os.path.basename(openid_parsed.path)
+	esgf_password = request.POST.get(ESGF_PASSWORD)
 	# retrieve all data transfer request parameters from session
-	username = request.session[GLOBUS_USERNAME]
-	access_token = request.session[GLOBUS_ACCESS_TOKEN]
-	download_map = request.session[GLOBUS_DOWNLOAD_MAP]
-	target_endpoint = request.session[TARGET_ENDPOINT]
-	target_folder = request.session[TARGET_FOLDER]
-	
-	print 'Downloading files=%s' % download_map.items()
+	username = request.session.get(GLOBUS_USERNAME)
+	access_token = request.session.get(GLOBUS_ACCESS_TOKEN)
+	download_map = request.session.get(GLOBUS_DOWNLOAD_MAP)
+	target_endpoint = request.session.get(TARGET_ENDPOINT)
+	target_folder = request.session.get(TARGET_FOLDER)
+
+	#print 'Downloading files=%s' % download_map.items()
 	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
 
 	api_client = TransferAPIClient(username, goauth=access_token)
@@ -247,18 +268,23 @@ def submit(request):
 	# if the autoactivation fails, redirect to a form asking for a password
 	activateEndpoint(api_client, target_endpoint)
 	for source_endpoint, source_files in download_map.items():
-		status, message = activateEndpoint(api_client, source_endpoint, openid, password)
+		status, message = activateEndpoint(
+			api_client, source_endpoint,
+			myproxy_server=myproxy_server, username=esgf_username, password=esgf_password)
 		if not status:
+                        print hostname
 			return render(request,
                           'cog/globus/password.html',
-                          { 'openid': openid, 'message': message })
+                          { 'openid': openid, 'username': hostname=='ceda.ac.uk', 'message': message })
 
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = []  # list of submitted task ids
 	for source_endpoint, source_files in download_map.items():
 			
 		# submit transfer request
-		task_id = submitTransfer(api_client, source_endpoint, source_files, target_endpoint, target_folder)
+		task_id = submitTransfer(
+			api_client, source_endpoint, source_files,
+			target_endpoint, target_folder)
 		task_ids.append(task_id)
 	
 	# display confirmation page
