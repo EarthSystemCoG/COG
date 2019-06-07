@@ -1,0 +1,24 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+<table>
+<tr><th>Data Node</th><th>Status</th>
+
+{% for nstatus in status arr %}
+
+<tr>
+	<td>{{ nstatus.0 }}</td>
+	<td>{% if nstatus.1 == 1%}
+		<font color="#00FF00">UP</font>
+		{% else %}
+		<font color="#FF0000">DOWN</font>
+		{% endif %}
+	</td>
+
+
+{% endfor %}
+</table>
+
+
+{% endblock %}
