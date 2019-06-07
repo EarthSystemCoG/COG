@@ -5,7 +5,7 @@
 <table>
 <tr><th>Data Node</th><th>Status</th>
 
-{% for nstatus in status arr %}
+{% for nstatus in status_arr %}
 
 <tr>
 	<td>{{ nstatus.0 }}</td>
@@ -16,7 +16,7 @@
 		{% endif %}
 	</td>
 
-
+</tr>
 {% endfor %}
 </table>
 
