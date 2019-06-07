@@ -24,6 +24,6 @@ def node_status(request):
 
     	status_arr.append((n, dnstatus[n]["status"], dnstatus[n]["time"]))
 
-	return render(request, 'cog/status/node_status.html', { 'status' : status_arr } )
+    return render(request, 'cog/status/node_status.html', { 'status_arr' : status_arr } )
 
 
