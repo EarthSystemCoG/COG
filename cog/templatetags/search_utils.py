@@ -137,6 +137,12 @@ def recordUrls(record):
     return sorted(urls, key = lambda url: url_order(url[1]))
 
 @register.filter
+def supplenoteUrls(record):
+
+    ret = []
+    return ret
+    
+@register.filter
 def qcflags(record):
     '''
     Parses the record QC flags metadata into a dictionary indexed by the QC flag type.
@@ -196,6 +202,7 @@ def getDataNodeStatus(data_node):
 def sortResults(results, fieldName):
     
     return sorted(results, key = lambda result: result.fields.get(fieldName,""))
+
 
 @register.filter
 def showSearchConfigMessage(message, project):

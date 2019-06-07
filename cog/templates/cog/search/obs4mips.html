@@ -18,6 +18,7 @@
 				 <th><strong>Dataset Name</strong></th>
 				 <th><strong>Variables</strong></th>
 				 <th><strong>Tech Note</strong></th>
+				 <th><strong>Supplementary Data</strong></th> 
 				 <th><strong>Maturity Indicators</strong></th>
 			 </tr>
 
@@ -31,13 +32,30 @@
           					    {{ variable }} <br/>
           				     {% endfor %}
                          </td>
-          			     <td style="width:60px;">
+
+                     <td style="width:60px;">
           				     {% for url in record|recordUrls %}
-          					     {% if url.2 == 'Tech Note' %}
-          						     <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a>
+
+          					     {% if url.2 == 'summary'  %}
+
+
+          						     <a href="{{url.0}}"><strong>Tech Note</strong></a>
+{% elif url.2 == 'Tech Note' %}
+          						     <a href="{{url.0}}"><strong>Tech Note</strong></a>
+
+
           					     {% endif %}
+
+
           				     {% endfor %}
-          			     </td>
+                     </td>
+                     <td style="width:60px;">
+			     {% for url in record|recordUrls %}
+          					     {% if url.2 == 'Supplementary Data'  %}
+		     <a href="{{url.0}}"><strong>{{url.2}}</strong></a>
+			     {% endif %}
+          				     {% endfor %}
+</td>
           			     <td style="width:120px;">
           			     	<!-- Quality Control Flags -->
 							{% for qcflag, qcdict in record|qcflags %}
