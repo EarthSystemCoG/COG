@@ -2,7 +2,7 @@ from django.db import models
 from .constants import APPLICATION_LABEL
 from .navbar import PROJECT_PAGES, DEFAULT_TABS
 from .project import Project
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from cog.models.dbutils import UnsavedForeignKey
 
     

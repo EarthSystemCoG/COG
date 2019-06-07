@@ -7,7 +7,7 @@ from django.contrib.auth.hashers import is_password_usable
 from django.contrib.auth.views import login
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms.models import modelformset_factory
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError
 from django.shortcuts import get_object_or_404, render

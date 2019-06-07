@@ -18,7 +18,7 @@ from types import MethodType
 # DJANGO IMPORTS
 from django.test import TestCase
 from django.test.client import Client
-from django.core.urlresolvers import get_resolver, get_urlconf, resolve, reverse
+from django.urls import get_resolver, get_urlconf, resolve, reverse
 
 # FILEBROWSER IMPORTS
 from filebrowser.settings import *

@@ -1,7 +1,7 @@
 from cog.forms import *
 from cog.models import *
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext

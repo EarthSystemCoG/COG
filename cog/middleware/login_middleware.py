@@ -6,7 +6,7 @@ and redirect to the authentication page with informative error messages.
 '''
 
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from cog.plugins.esgf.registry import LocalWhiteList
 

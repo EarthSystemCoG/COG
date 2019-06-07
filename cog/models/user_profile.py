@@ -5,7 +5,7 @@ from django.conf import settings
 
 from cog.utils import hasText
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from cog.utils import getJson
 from cog.models.peer_site import getPeerSites
 from cog.models.project_tag import ProjectTag

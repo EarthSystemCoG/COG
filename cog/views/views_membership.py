@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseForbidden
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from cog.views.utils import getUsersThatMatch, getQueryDict
 from django.contrib.sites.models import Site

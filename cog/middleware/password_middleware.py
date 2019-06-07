@@ -3,7 +3,7 @@ Password-related middleware.
 '''
 
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 EXEMPT_URLS = ['/password/update/', 'site_media', 'logout']

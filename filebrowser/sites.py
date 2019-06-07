@@ -25,7 +25,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.cache import never_cache
 from django.utils.translation import ugettext as _
 from django import forms
-from django.core.urlresolvers import reverse, get_urlconf, get_resolver
+from django.urls import reverse, get_urlconf, get_resolver
 from django.dispatch import Signal
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.utils.encoding import smart_text
@@ -96,7 +96,7 @@ def get_default_site(app_name='filebrowser'):
     resolver = get_resolver(get_urlconf())
     name = 'filebrowser'
 
-    # Django's default name resolution method (see django.core.urlresolvers.reverse())
+    # Django's default name resolution method (see django.urls.reverse())
     app_list = resolver.app_dict[app_name]
     if not name in app_list:
         name = app_list[0]

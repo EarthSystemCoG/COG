@@ -3,7 +3,7 @@ from .constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_U
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.core.signals import request_finished
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.dispatch import receiver
 from .post import Post, post_signal
 from .doc import Doc

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from cog.models import *
 from django.contrib.auth.decorators import login_required
 import re

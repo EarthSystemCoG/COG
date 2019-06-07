@@ -17,7 +17,7 @@ import os
 import sys
 import re
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
 from cog.models.auth import (getAdminGroupName, getContributorGroupName, getUserGroupName, 

@@ -4,10 +4,9 @@ from cog.models.utils import site_index, listPeople
 from cog.views import encodeMembershipPar, NEW_MEMBERSHIP, OLD_MEMBERSHIP, NO_MEMBERSHIP
 from cog.views import userCanPost, userCanView
 from django import template
-from django.core.urlresolvers import reverse
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import re
 from cog.utils import smart_truncate, INVALID_CHARS
 from cog.models.utils import get_project_communication_means
