@@ -46,7 +46,7 @@ def update_user_projects(user):
     and save the updated information in the local database.
     '''
 
-    if user.is_authenticated():
+    if user.is_authenticated:
         
         # current user groups in local database
         ugroups = user.groups.all()

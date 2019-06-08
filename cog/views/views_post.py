@@ -533,7 +533,7 @@ def getNotAuthorizedRedirect(request, post):
     
     # user is NOT authorized
     if not userCanView(request.user, post):
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path)
         else:
             messages = ['This page is only viewable to members of %s.' % post.project.short_name,

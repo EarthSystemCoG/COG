@@ -19,7 +19,7 @@ class SessionMiddleware(object):
         
         # must not use shared anonymous session
         try:
-            if request.user.is_authenticated() and request.user.profile.openid() is not None:
+            if request.user.is_authenticated and request.user.profile.openid() is not None:
             
                 s = request.session
                 last_accessed_seconds = s.get('LAST_ACCESSED', 0) # defaults to Unix Epoch

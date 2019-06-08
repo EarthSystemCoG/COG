@@ -64,7 +64,7 @@ def search(request, project_short_name):
         
     # check permission
     if project.private:
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path)
         else:
             if not userHasUserPermission(request.user, project):

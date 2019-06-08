@@ -577,13 +577,13 @@ def project_browser(request, project_short_name, tab):
     elif tab == 'all':
         html += render_project_list(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':
-        if not request.user.is_anonymous():
+        if not request.user.is_anonymous:
             html += render_project_list(project, tab, tag, request.user, None, 'my_projects', None)
         else:
             html += '<div id="tags_projects" style="display:block; padding:3px"><em class="message">' \
                     'Please login to display your projects.</em></div>'
     elif tab == 'tags':
-        if not request.user.is_anonymous():
+        if not request.user.is_anonymous:
             display = DisplayStatus(True)  # open all sub-widgets by default
             # loop over user tags (sorted by name)
             utags = request.user.profile.tags.all()
@@ -745,7 +745,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             html += '<em class="message">'+tag_error+'</em>'
         else:
             # special case: cannot retrieve list of projects for guest user
-            if (tab == 'my' or tab == 'tags') and not user.is_authenticated():
+            if (tab == 'my' or tab == 'tags') and not user.is_authenticated:
                 html += '<em class="message">Please login to display your projects.</em>'
             else:
                 html += '<em class="message">No projects found.</em>'
@@ -788,7 +788,7 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         # retrieve all active projects for this user
         projects = getProjectsForUser(user, False)  # includePending==False
     elif tab == 'tags':
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             projects = Project.objects.none()
         else:
             # widgetName==user tag name

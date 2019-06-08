@@ -59,7 +59,7 @@ def custom_login_complete(request, **kwargs):
     response = login_complete(request, **kwargs)
 
     # create a stub profile with blank mandatory fields
-    if not request.user.is_anonymous():
+    if not request.user.is_anonymous:
         openid = request.GET.get('openid.claimed_id', None)
         try:
             request.user.profile
@@ -92,7 +92,7 @@ def custom_login_complete(request, **kwargs):
 def _custom_login(request, response):
     
     # successful login
-    if not request.user.is_anonymous():
+    if not request.user.is_anonymous:
                 
         # missing information
         if isUserLocal(request.user) and not isUserValid(request.user):

@@ -253,7 +253,7 @@ def doc_list(request, project_short_name):
     #list_title = 'All Documents'
     
     # do not list private documents unless user is a project member
-    if request.user.is_anonymous() or not userHasUserPermission(request.user, project):
+    if request.user.is_anonymous or not userHasUserPermission(request.user, project):
         qset = qset & Q(is_private=False)
     
     # optional query parameters

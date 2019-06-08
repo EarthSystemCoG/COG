@@ -78,7 +78,7 @@ class LoginMiddleware(object):
             # process errors from openid authentication
             if request.path == self.url2:
     
-                if request.method=='POST' and not request.user.is_authenticated():
+                if request.method=='POST' and not request.user.is_authenticated:
                     if response.status_code == 500:
                         print('Authentication Error')
                         print(response)
@@ -88,7 +88,7 @@ class LoginMiddleware(object):
             # process errors from standard authentication
             elif request.path == self.url1:
     
-                if request.method=='POST' and not request.user.is_authenticated():
+                if request.method=='POST' and not request.user.is_authenticated:
                     return HttpResponseRedirect(reverse('login')+"?message=login_failed&next=%s&username=%s" % (next, username) )
 
         return response
