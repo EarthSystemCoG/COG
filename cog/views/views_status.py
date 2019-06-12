@@ -20,7 +20,7 @@ def node_status(request):
 
     status_arr = []
 
-    for n in dnstatus:
+    for n in sorted(dnstatus):
 
     	status_arr.append((n, dnstatus[n]["status"], dnstatus[n]["time"]))
 
