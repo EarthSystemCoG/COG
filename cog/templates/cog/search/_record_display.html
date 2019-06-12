@@ -30,7 +30,7 @@
 		{% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 |urlizetrunc:30|linebreaksbr }}{% endif %}
 		{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }} 
 		{% if not record.fields.data_node.0|getDataNodeStatus %}
-			<span style="color: #FF0000;">WARNING: this node is reported offline.  Files may not be available for download.</span>
+			<span style="color: #FF0000;">is reported as unavailable. Any existing replica data sets can be seen by selecting 'Show All Replicas' .</span>
 		{% endif %}
         {% endif %}
 		{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
