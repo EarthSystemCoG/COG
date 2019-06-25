@@ -187,6 +187,9 @@ def qcflag_url(qcflag_name):
 @register.filter
 def getDataNodeStatus(data_node):
 
+    if not getattr(settings, 'HAS_DATANODE_STATUS', None)
+        return True
+
     try:
 
         dnstatusfn = getattr(settings, 'DATANODE_STATUS_FILE', None)
