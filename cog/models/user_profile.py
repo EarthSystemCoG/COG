@@ -14,10 +14,10 @@ import datetime
 class UserProfile(models.Model):
 
     # user
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     
     # node (using the django site object)
-    site = models.ForeignKey(Site, default=1)
+    site = models.ForeignKey(Site, default=1, on_delete=models.CASCADE)
 
     # additional mandatory fields
     institution = models.CharField(max_length=100, blank=False, default='')

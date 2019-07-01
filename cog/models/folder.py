@@ -20,10 +20,10 @@ TOP_SUB_FOLDERS = OrderedDict([('PRESENTATIONS', 'Presentations'),
 
 class Folder(models.Model):
 
-    project = UnsavedForeignKey(Project, blank=False)
+    project = UnsavedForeignKey(Project, blank=False, on_delete=models.CASCADE)
     
     name = models.CharField(max_length=200, blank=False)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='parent_folder')
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='parent_folder', on_delete=models.CASCADE)
     active = models.BooleanField(default=True, blank=False, null=False)
     order = models.IntegerField(blank=True, default=0)
 

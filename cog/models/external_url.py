@@ -12,7 +12,7 @@ class ExternalUrl(models.Model):
     url = models.URLField('URL', blank=False, max_length=1000)
     type = models.CharField(max_length=20, verbose_name='URL Type', blank=False,
                             choices=externalUrlManager.external_url_choices())
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     
     def __unicode__(self):
         return "URL Type=%s Title='%s' url='%s' description='%s'" % (self.type, self.title, self.url, self.description)

@@ -5,8 +5,8 @@ from .project import Project
 
 # intermediate model for Project-Topic association
 class ProjectTopic(models.Model):
-    topic = models.ForeignKey(Topic)
-    project = models.ForeignKey(Project)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     # topic order within project index
     order = models.IntegerField(blank=False, null=False, default=0)
     

@@ -9,7 +9,7 @@ from cog.models.dbutils import UnsavedForeignKey
 # Tab displayed in project top navigation menu
 class ProjectTab(models.Model):
         
-    project = UnsavedForeignKey(Project, blank=False, null=False, related_name="tabs")
+    project = UnsavedForeignKey(Project, blank=False, null=False, related_name="tabs", on_delete=models.CASCADE)
     
     # the URL of a corresponding project page
     url = models.CharField(max_length=200, verbose_name='URL', blank=True, unique=True, default='')
@@ -18,7 +18,7 @@ class ProjectTab(models.Model):
     # whether or not the tab will be displayed
     active = models.BooleanField(default=True, null=False, blank=False)
     # optional parent tab (null for top-level tabs)
-    parent = models.ForeignKey('self', blank=True, null=True)
+    parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
     
     def __unicode__(self):
         return "Project Tab label='%s', url='%s', active=%s" % (self.label, self.url, self.active)

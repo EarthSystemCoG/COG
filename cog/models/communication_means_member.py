@@ -5,8 +5,8 @@ from .communication_means import CommunicationMeans
 
 class CommunicationMeansMember(models.Model):  
     
-    user = models.ForeignKey(User, blank=False, null=False)
-    communicationMeans = models.ForeignKey(CommunicationMeans, blank=False, null=False)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    communicationMeans = models.ForeignKey(CommunicationMeans, blank=False, null=False, on_delete=models.CASCADE)
             
     class Meta:
         unique_together = (("user", "communicationMeans"),)

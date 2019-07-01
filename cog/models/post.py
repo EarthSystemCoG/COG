@@ -27,7 +27,7 @@ class Post(models.Model):
         publication_date = models.DateTimeField('Date Published', auto_now_add=True)
         update_date = models.DateTimeField('Date Updated')
         # project context
-        project = models.ForeignKey(Project)
+        project = models.ForeignKey(Project, on_delete=models.CASCADE)
         # order of post within project index
         order = models.IntegerField(blank=True, null=False, default=0)
         # optional topic

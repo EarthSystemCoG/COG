@@ -13,8 +13,8 @@ from .news import News
 class LoggedEvent(models.Model):
     '''Class that represents an important event that is logged to the database.'''
 
-    user = models.ForeignKey(User, blank=False)
-    project = models.ForeignKey('Project', blank=False)
+    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
+    project = models.ForeignKey('Project', blank=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=200, blank=False)
     url = models.URLField(blank=True)

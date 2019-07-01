@@ -39,7 +39,7 @@ class ManagementBody(models.Model):
     category = models.CharField(max_length=50, blank=True, null=False, default=MANAGEMENT_BODY_CATEGORY_STRATEGIC,
                                 choices=MANAGEMENT_BODY_CATEGORIES_CV, verbose_name='Category',
                                 help_text='Strategic or Operational management body purpose.')
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
     # sort list of members my last name and ignore case
     def members(self):

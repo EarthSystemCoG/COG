@@ -5,8 +5,8 @@ from .organizational_role import OrganizationalRole
 
 class OrganizationalRoleMember(models.Model):
     
-    user = models.ForeignKey(User, blank=False, null=False)
-    organizationalRole = models.ForeignKey(OrganizationalRole, blank=False, null=False)
+    user = models.ForeignKey(User, blank=False, null=False, on_delete=models.CASCADE)
+    organizationalRole = models.ForeignKey(OrganizationalRole, blank=False, null=False, on_delete=models.CASCADE)
             
     class Meta:
         unique_together = (("user", "organizationalRole"),)    

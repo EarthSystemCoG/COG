@@ -8,7 +8,7 @@ class Collaborator(models.Model):
     last_name = models.CharField(max_length=100, blank=False, default='')
     institution = models.CharField(max_length=100, blank=False, default='')
     researchKeywords = models.CharField(max_length=RESEARCH_KEYWORDS_MAX_CHARS, blank=True, null=True, default='')
-    project = models.ForeignKey(Project, blank=False)
+    project = models.ForeignKey(Project, blank=False, on_delete=models.CASCADE)
     
     # optional picture
     image = models.ImageField(upload_to='photos/', blank=True, null=True)

@@ -5,7 +5,7 @@ from .project import Project
 # Project-specific search configuration (persisted to the database)
 class SearchProfile(models.Model):
     
-    project = models.OneToOneField(Project, blank=False, null=False)
+    project = models.OneToOneField(Project, blank=False, null=False, on_delete=models.CASCADE)
     
     # name that identifies this configuration
     #name = models.CharField(max_length=50, blank=False, unique=True, default='')

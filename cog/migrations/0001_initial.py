@@ -54,15 +54,15 @@ class Migration(migrations.Migration):
             name='CommunicationMeansMember',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('communicationMeans', models.ForeignKey(to='cog.CommunicationMeans')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('communicationMeans', models.ForeignKey(to='cog.CommunicationMeans', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
             name='DataCart',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('user', models.OneToOneField(related_name='datacart', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(related_name='datacart', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -71,7 +71,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('identifier', models.CharField(max_length=200)),
                 ('date', models.DateTimeField(auto_now_add=True, verbose_name=b'Date Time')),
-                ('cart', models.ForeignKey(related_name='items', to='cog.DataCart')),
+                ('cart', models.ForeignKey(related_name='items', to='cog.DataCart', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('key', models.CharField(max_length=200)),
-                ('item', models.ForeignKey(related_name='keys', to='cog.DataCartItem')),
+                ('item', models.ForeignKey(related_name='keys', to='cog.DataCartItem', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('value', models.CharField(max_length=1000, null=True, blank=True)),
-                ('key', models.ForeignKey(related_name='values', to='cog.DataCartItemMetadataKey')),
+                ('key', models.ForeignKey(related_name='values', to='cog.DataCartItemMetadataKey', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -121,7 +121,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=200)),
                 ('active', models.BooleanField(default=True)),
                 ('order', models.IntegerField(default=0, blank=True)),
-                ('parent', models.ForeignKey(related_name='parent_folder', blank=True, to='cog.Folder', null=True)),
+                ('parent', models.ForeignKey(related_name='parent_folder', blank=True, to='cog.Folder', null=True, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -151,7 +151,7 @@ class Migration(migrations.Migration):
                 ('is_private', models.BooleanField(default=False, verbose_name=b'Private?')),
                 ('order', models.IntegerField(default=0, blank=True)),
                 ('author', models.ForeignKey(related_name='forum_topics', on_delete=django.db.models.deletion.SET_NULL, verbose_name=b'Author', to=settings.AUTH_USER_MODEL, null=True)),
-                ('forum', models.ForeignKey(related_name='topics', to='cog.Forum')),
+                ('forum', models.ForeignKey(related_name='topics', to='cog.Forum', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -170,7 +170,7 @@ class Migration(migrations.Migration):
                 ('object_type', models.CharField(max_length=100, verbose_name=b'Object Type')),
                 ('object_id', models.IntegerField(verbose_name=b'Object Identifier')),
                 ('timestamp', models.DateTimeField(auto_now=True, verbose_name=b'Last Update Date')),
-                ('owner', models.ForeignKey(verbose_name=b'Owner', to=settings.AUTH_USER_MODEL)),
+                ('owner', models.ForeignKey(verbose_name=b'Owner', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -199,8 +199,8 @@ class Migration(migrations.Migration):
             name='ManagementBodyMember',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('managementBody', models.ForeignKey(to='cog.ManagementBody')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('managementBody', models.ForeignKey(to='cog.ManagementBody', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -217,8 +217,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('date', models.DateTimeField(auto_now=True, verbose_name=b'Request Date')),
-                ('group', models.ForeignKey(to='auth.Group')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('group', models.ForeignKey(to='auth.Group', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -255,8 +255,8 @@ class Migration(migrations.Migration):
             name='OrganizationalRoleMember',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('organizationalRole', models.ForeignKey(to='cog.OrganizationalRole')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('organizationalRole', models.ForeignKey(to='cog.OrganizationalRole', on_delete=models.CASCADE)),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -264,7 +264,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('enabled', models.BooleanField(default=False)),
-                ('site', models.OneToOneField(related_name='peersite', to='sites.Site')),
+                ('site', models.OneToOneField(related_name='peersite', to='sites.Site', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -327,7 +327,7 @@ class Migration(migrations.Migration):
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, default=None, blank=True, to=settings.AUTH_USER_MODEL, null=True)),
                 ('parents', models.ManyToManyField(related_name='parent_projects', to='cog.Project', blank=True)),
                 ('peers', models.ManyToManyField(related_name='peer_projects', to='cog.Project', blank=True)),
-                ('site', models.ForeignKey(default=1, to='sites.Site')),
+                ('site', models.ForeignKey(default=1, to='sites.Site', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -337,7 +337,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(default=b'', help_text=b'Title for this impact.', max_length=200)),
                 ('description', models.TextField(help_text=b'Describe a major impact of this project in its field.', verbose_name=b'Project Impact')),
                 ('order', models.IntegerField(blank=True)),
-                ('project', models.ForeignKey(related_name='impacts', to='cog.Project')),
+                ('project', models.ForeignKey(related_name='impacts', to='cog.Project', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -347,8 +347,8 @@ class Migration(migrations.Migration):
                 ('url', models.CharField(default=b'', unique=True, max_length=200, verbose_name=b'URL', blank=True)),
                 ('label', models.CharField(max_length=40)),
                 ('active', models.BooleanField(default=True)),
-                ('parent', models.ForeignKey(blank=True, to='cog.ProjectTab', null=True)),
-                ('project', models.ForeignKey(related_name='tabs', to='cog.Project')),
+                ('parent', models.ForeignKey(blank=True, to='cog.ProjectTab', null=True, on_delete=models.CASCADE)),
+                ('project', models.ForeignKey(related_name='tabs', to='cog.Project', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -363,7 +363,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('order', models.IntegerField(default=0)),
-                ('project', models.ForeignKey(to='cog.Project')),
+                ('project', models.ForeignKey(to='cog.Project', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -394,7 +394,7 @@ class Migration(migrations.Migration):
                 ('latestSearchFlag', models.BooleanField(default=False)),
                 ('localSearchFlag', models.BooleanField(default=False)),
                 ('description', models.TextField(help_text=b'Optional description of this project search capabilities.', null=True, verbose_name=b'Search Help', blank=True)),
-                ('project', models.OneToOneField(to='cog.Project')),
+                ('project', models.OneToOneField(to='cog.Project', on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -421,9 +421,9 @@ class Migration(migrations.Migration):
                 ('researchKeywords', models.CharField(default=b'', max_length=60, null=True, blank=True)),
                 ('type', models.IntegerField(default=1)),
                 ('last_password_update', models.DateTimeField(null=True, verbose_name=b'Date and Time when Password was Last Updated', blank=True)),
-                ('site', models.ForeignKey(default=1, to='sites.Site')),
+                ('site', models.ForeignKey(default=1, to='sites.Site', on_delete=models.CASCADE)),
                 ('tags', models.ManyToManyField(related_name='users', to='cog.ProjectTag', blank=True)),
-                ('user', models.OneToOneField(related_name='profile', to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(related_name='profile', to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -432,23 +432,23 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('url', models.URLField(max_length=1000, verbose_name=b'URL')),
                 ('name', models.CharField(max_length=200)),
-                ('profile', models.ForeignKey(to='cog.UserProfile')),
+                ('profile', models.ForeignKey(to='cog.UserProfile', on_delete=models.CASCADE)),
             ],
         ),
         migrations.AddField(
             model_name='searchgroup',
             name='profile',
-            field=models.ForeignKey(related_name='groups', to='cog.SearchProfile'),
+            field=models.ForeignKey(related_name='groups', to='cog.SearchProfile', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='searchfacet',
             name='group',
-            field=models.ForeignKey(related_name='facets', to='cog.SearchGroup', null=True),
+            field=models.ForeignKey(related_name='facets', to='cog.SearchGroup', null=True, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='projecttopic',
             name='topic',
-            field=models.ForeignKey(to='cog.Topic'),
+            field=models.ForeignKey(to='cog.Topic', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='project',
@@ -463,7 +463,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='post',
@@ -473,12 +473,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='organizationalrole',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='organization',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='news',
@@ -488,12 +488,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='news',
             name='project',
-            field=models.ForeignKey(verbose_name=b'About Project', to='cog.Project'),
+            field=models.ForeignKey(verbose_name=b'About Project', to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='managementbody',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='managementbody',
@@ -503,57 +503,57 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='loggedevent',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='loggedevent',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='fundingsource',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='forumthread',
             name='topic',
-            field=models.ForeignKey(related_name='threads', to='cog.ForumTopic'),
+            field=models.ForeignKey(related_name='threads', to='cog.ForumTopic', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='forum',
             name='project',
-            field=models.OneToOneField(related_name='forum', to='cog.Project'),
+            field=models.OneToOneField(related_name='forum', to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='folder',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='externalurl',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='doc',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='communicationmeans',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='collaborator',
             name='project',
-            field=models.ForeignKey(to='cog.Project'),
+            field=models.ForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='bookmark',
             name='folder',
-            field=models.ForeignKey(to='cog.Folder'),
+            field=models.ForeignKey(to='cog.Folder', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='bookmark',

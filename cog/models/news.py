@@ -11,7 +11,7 @@ class News(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
-    project = models.ForeignKey(Project, verbose_name='About Project')
+    project = models.ForeignKey(Project, verbose_name='About Project', on_delete=models.CASCADE)
     other_projects = models.ManyToManyField(Project, verbose_name='Projects Notified', related_name='other_news', blank=True)
     
     def __unicode__(self):

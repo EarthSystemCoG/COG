@@ -5,7 +5,7 @@ from .search_group import SearchGroup
 # Search facet displayed in user interface
 class SearchFacet(models.Model):
     
-    group = models.ForeignKey(SearchGroup, related_name="facets", blank=False, null=True)
+    group = models.ForeignKey(SearchGroup, related_name="facets", blank=False, null=True, on_delete=models.CASCADE)
     
     key =  models.CharField(max_length=40, blank=False)
     label =  models.CharField(max_length=40, blank=False)

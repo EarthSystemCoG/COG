@@ -7,7 +7,7 @@ class SearchGroup(models.Model):
     
     DEFAULT_NAME = 'default'
     
-    profile = models.ForeignKey(SearchProfile, related_name="groups", blank=False, null=False)
+    profile = models.ForeignKey(SearchProfile, related_name="groups", blank=False, null=False, on_delete=models.CASCADE)
     name =  models.CharField(max_length=40, null=False, blank=False, default=DEFAULT_NAME)
     order = models.IntegerField(blank=True, default=0)
     

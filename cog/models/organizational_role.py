@@ -11,7 +11,7 @@ class OrganizationalRole(models.Model):
     title = models.CharField(max_length=200, blank=True, null=True, verbose_name='Title',  help_text='Optional string used to succinctly describe an organizational role.')
     description = models.TextField(blank=True, null=True, verbose_name='Description', help_text='Long description providing extra information about an organizational role.')
     category = models.CharField(max_length=50, blank=True, null=False, default='Member', choices=ORGANIZATIONAL_ROLE_CATEGORIES_CV, verbose_name='Category', help_text='Lead or Member role.')
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
     def set_category(self, dict={}):
         """Method to select the object category from the other fields. """

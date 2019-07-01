@@ -23,7 +23,7 @@ class CommunicationMeans(models.Model):
     participationDetails = models.TextField(blank=True, null=True, verbose_name='Participation Details',
                                             help_text='Information about how a person would participate: phone number, '
                                                       'pass code, meeting venue, etc.')
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     
     # opt-out privacy option
     internal = models.BooleanField(default=True, null=False)

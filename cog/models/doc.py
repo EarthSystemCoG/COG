@@ -47,7 +47,7 @@ class Doc(models.Model):
     file = models.FileField(upload_to=get_upload_path, storage=ofs, max_length=400)
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     # public/private flag
     is_private = models.BooleanField(verbose_name='Private?', default=False, null=False)
     

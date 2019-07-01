@@ -35,7 +35,7 @@ class Project(models.Model):
     long_name = models.CharField(max_length=120, unique=True, help_text='Fully spelled project name.')
     description = models.TextField(blank=False, null=True, help_text='A short paragraph that describes the project.')
     
-    site = models.ForeignKey(Site, default=settings.SITE_ID)
+    site = models.ForeignKey(Site, default=settings.SITE_ID, on_delete=models.CASCADE)
     
     # optional attributes
     mission = models.TextField(blank=True, help_text='Succinctly describes why the project exists and what it does.')
