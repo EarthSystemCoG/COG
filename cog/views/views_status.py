@@ -11,6 +11,9 @@ from django.conf import settings
 
 def node_status(request):
 
+    if not getattr(settings, 'HAS_DATANODE_STATUS', False):
+        return	render(request, 'cog/status/node_status.html', { 'no_status' : True } )
+
     try:
 
         dnstatusfn = getattr(settings, 'DATANODE_STATUS_FILE', None)

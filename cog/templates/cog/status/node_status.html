@@ -2,6 +2,11 @@
 
 {% block main %}
 
+{% if no_status %}
+
+<h2>This feature is not enabled on this node.</h2>
+
+{% else %}
 <table>
 <tr><th width="200">&nbsp;</th><th width="300"><b>Data Node</b></th><th><b>Status</b></th>
 </tr>
@@ -19,6 +24,6 @@
 </tr>
 {% endfor %}
 </table>
-
+{% endif %}
 
 {% endblock %}
