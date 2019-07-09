@@ -70,9 +70,12 @@
                            {% endfor %}
 				       {% endfor %}
                    {% else %}
-                       <li><a href="http://{{site.domain }}">{{ site.name }} Home</a></li>
+                       <li><a href="https://{{site.domain }}">{{ site.name }} Home</a></li>
 		           {% endif %}
+               {% if 'HAS_DATANODE_STATUS'|settings_value %}
+               <li><a href="https://{{site.domain}}/status/">Data Nodes Status</a>a</li>
                </ul>
+               {% endif %}
 		   </div> <!--// end div id=top_nav_left //-->
 	   </div> <!--//end div.span-26 //-->
 	
