@@ -8,7 +8,8 @@ from cog.site_manager import siteManager
 
 class InitMiddleware(object):
 
-    def __init__(self):
+    def __init__(self, get_response):
+        self.get_response = get_response
         
         print('Executing CoG initialization tasks')
         
@@ -32,6 +33,10 @@ class InitMiddleware(object):
 
         # remove this class from the middleware that is invoked for every request
         raise MiddlewareNotUsed('Do not invoke ever again')
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
 
     def process_request(self, request):
         print('This line should never be printed...')

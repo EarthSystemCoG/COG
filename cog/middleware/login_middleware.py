@@ -12,10 +12,11 @@ from cog.plugins.esgf.registry import LocalWhiteList
 
 class LoginMiddleware(object):
 
-    def __init__(self):
+    def __init__(self, get_response):
 
-        
         try:
+            self.get_response = get_response
+
             # initialize the white list service
             self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
                 
@@ -31,6 +32,10 @@ class LoginMiddleware(object):
         except OSError:
             # OSError: [Errno 2] No such file or directory: '/esg/config/esgf_idp_static.xml'
             self.init = False
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
 
     def process_request(self, request):
         '''
