@@ -32,11 +32,11 @@ urlpatterns = [
     
     # Filebrowser Admin pages
     #(r'^filebrowser/', include('filebrowser.urls')),
-    url(r'^admin/filebrowser/', include(site.urls)),
+    url(r'^admin/filebrowser/', site.urls),
 
     # Administrator application
     #(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
             
     # django-simple-captcha
     url(r'^captcha/', include('captcha.urls')),
