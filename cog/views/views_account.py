@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import is_password_usable
-from django.contrib.auth.views import login
+from django.contrib.auth.views import LoginView
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
@@ -43,7 +43,7 @@ def custom_login(request, **kwargs):
     """
     
     # authenticate user via standard login
-    response = login(request, **kwargs)
+    response = LoginView.as_view(**kwargs)(request)
 
     # check if user is valid
     return _custom_login(request, response)
