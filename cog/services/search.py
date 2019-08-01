@@ -44,7 +44,7 @@ class SolrSearchService:
         url = self.url+"?"+urllib.parse.urlencode(params)
         print('ESGF search URL=%s' % url)
         fh = urllib.request.urlopen( url )
-        xml = fh.read().decode("UTF-8")
+        xml = fh.read()
    
         # return search URL and corresponding results as XML
         return (url, xml)

@@ -304,6 +304,6 @@ def validate_field(form, field_name, field_value):
 def validate_ascii(form, field_name, field_value):
     if field_value:
         try:
-            field_value.decode('ascii')
+            field_value.encode('ascii')
         except (UnicodeDecodeError, UnicodeEncodeError):
             form._errors[field_name] = form.error_class(["'%s' contains invalid characters." % field_name])

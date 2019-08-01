@@ -395,7 +395,7 @@ def metadata_display(request, project_short_name):
     url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
     print('Metadata Solr search URL=%s' % url)
     fh = urllib.request.urlopen(url)
-    response = fh.read().decode("UTF-8")
+    response = fh.read()
 
     # parse JSON response (containing only one matching 'doc)
     jsondoc = json.loads(response)
@@ -408,7 +408,7 @@ def metadata_display(request, project_short_name):
         url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
         # print 'Solr search URL=%s' % url
         fh = urllib.request.urlopen(url)
-        response = fh.read().decode("UTF-8")
+        response = fh.read()
         jsondoc = json.loads(response)
         parentMetadata = _processDoc(jsondoc["response"]["docs"][0])
     
@@ -853,7 +853,7 @@ def search_files(request, dataset_id, index_node):
     url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
     print('Searching for files: URL=%s' % url)
     fh = urllib.request.urlopen(url)
-    response = fh.read().decode("UTF-8")
+    response = fh.read()
 
     return HttpResponse(response, content_type="application/json")
 

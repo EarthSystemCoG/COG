@@ -99,7 +99,7 @@ class ProjectForm(ModelForm):
         
         # check for non-ascii characters
         try:
-            long_name.decode('ascii')
+            long_name.encode('ascii')
         except (UnicodeDecodeError, UnicodeEncodeError):
             raise forms.ValidationError("Project long name contains invalid non-ASCII characters")
         return long_name

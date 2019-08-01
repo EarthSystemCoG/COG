@@ -24,7 +24,7 @@ class Command(BaseCommand):
                 
                 # test user existence by accessing the profile page
                 userProfileUrl = user.profile.getAbsoluteUrl()
-                print("\nChecking user at URL: %s" % userProfileUrl.decode("utf-8"))
+                print("\nChecking user at URL: %s" % userProfileUrl)
                 
                 try:
                     response = urllib.request.urlopen( userProfileUrl )
