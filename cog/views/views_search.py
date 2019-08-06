@@ -241,7 +241,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
     offset = data[SEARCH_INPUT].offset
     limit = data[SEARCH_INPUT].limit
     if limit > 0 and data.get(SEARCH_OUTPUT, None):
-        currentPage = offset/limit + 1
+        currentPage = offset//limit + 1
         numResults = len(data[SEARCH_OUTPUT].results)
         totResults = data[SEARCH_OUTPUT].counts
         data[SEARCH_PAGES] = []
