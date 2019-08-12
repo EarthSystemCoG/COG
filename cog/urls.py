@@ -35,6 +35,9 @@ urlpatterns = [
     url(r'^search_reload/$', cog.views.search_reload, name='search_reload' ),
     url(r'^citation_display/$', cog.views.citation_display, name='citation_display'),
 
+    # WGET Script
+    url(r'^wget/script/$', cog.views.wget_script, name='wget_script'),
+
     # authentication options
     # a) django (username/password) login
     #url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),
