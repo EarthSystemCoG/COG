@@ -1,76 +1,101 @@
-import os
-import urllib
-import urllib2
 import json
+import requests
 
+from django.utils import timezone
+from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.views.generic import View
 from social_django.utils import load_strategy
 
-from cog.models.search import INVALID_CHARACTERS, ERROR_MESSAGE_INVALID_TEXT
 
+class WgetScriptView(View):
+    """
+    View for generating a wget shell script for downloading files from one or
+    more datasets. The script includes a short-lived certificate retrieved from
+    a social auth provider.
+    """
 
-def wget_script(request):
-    
-    certificate = get_certificate(request)
-    
-    dataset_id = request.GET.get('dataset_id')
-    index_node = request.GET.get('index_node')
-    shard = request.GET.get('shard')
+    script_template = 'cog/download/wget_script.sh'
+    search_limit = 10000
 
-    # maximum number of files to query for
-    limit = request.GET.get('limit', 1000)
+    def get(self, request, *args, **kwargs):
+        """
+        Get method for the view. Query parameters specify dataset IDs and which
+        index to search on.
+        """
 
-    params = [('type', "File"), ('dataset_id', dataset_id),
-              ("format", "application/solr+json"), ('offset', '0'), ('limit', limit)]
-    
-    # optional query filter
-    query = request.GET.get('query', None)
-    if query is not None and len(query.strip()) > 0:
-        # validate query value
-        for c in INVALID_CHARACTERS:
-            if c in query:
-                return HttpResponseBadRequest(ERROR_MESSAGE_INVALID_TEXT, content_type="text/plain")
-        params.append(('query', query))
-        
-    # optional shard
-    shard = request.GET.get('shard', '')
-    if shard is not None and len(shard.strip()) > 0:
-        params.append(('shards', shard+"/solr"))
-    else:
-        params.append(("distrib", "false"))
- 
-    url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
-    fh = urllib2.urlopen(url)
-    response = fh.read().decode("UTF-8")
-    data = json.loads(response)
+        index_node = request.GET.get('index_node')
+        index_node_url = 'http://{}/esg-search/search'.format(index_node)
 
-    download_urls = []
-    try:
-        for doc in data['response']['docs']:
-            download_urls.append(doc['url'][0].split('|')[0])
-    except (KeyError, IndexError) as e:
-        raise e
-    context = {
-        'download_urls': download_urls,
-        'certificate': certificate,
-    }
+        # Construct params for search request
+        params = {
+            'type': 'File',
+            'format': 'application/solr+json',
+            'offset': '0',
+            'limit': self.search_limit
+        }
 
-    script = render_to_string('cog/download/wget_script.sh', context)
+        # Optional shard
+        shard = request.GET.get('shard', '')
+        if shard is not None and len(shard.strip()) > 0:
+            params['shards'] = shard + '/solr'
+        else:
+            params['distrib'] = 'false'
 
-    response = HttpResponse(script, content_type='application/x-sh')
-    response['Content-Disposition'] = 'attachment; filename="get_script.sh"'
+        # Query index nodes for all file download urls for each dataset
+        dataset_ids = request.GET.getlist('dataset_id')
+        download_urls = []
+        for dataset_id in dataset_ids:
+            params['dataset_id'] = dataset_id
+            response = requests.get(url=index_node_url, params=params)
+            download_urls += self._parse_download_urls(response.json())
 
-    return response
+        # Request a short-lived certificate to be placed in the script
+        certificate = self._get_certificate(request)
 
+        script = render_to_string(self.script_template,
+            { 'download_urls': download_urls, 'certificate': certificate }
+        )
+        response = HttpResponse(script, content_type='application/x-sh')
 
-def get_certificate(request):
-    
-    social = request.user.social_auth.get(provider='esgf')
-    access_token = social.extra_data['access_token']
-    strategy = load_strategy()
-    backend = social.get_backend_instance(strategy)
+        # Specify downloaded file name
+        script_timestamp = timezone.now().strftime('%Y%m%d%f')
+        response['Content-Disposition'] = \
+            'attachment; filename="wget-{}.sh"'.format(script_timestamp)
 
-    key, cert, _ = backend.get_certificate(access_token)
-    return key + cert
+        return response
+
+    @staticmethod
+    def _parse_download_urls(data):
+        """
+        Parses the output of an index search request.
+
+        Returns a list of urls
+        """
+
+        download_urls = []
+        try:
+            for doc in data['response']['docs']:
+                download_urls.append(doc['url'][0].split('|')[0])
+        except (KeyError, IndexError) as e:
+            raise e
+
+        return download_urls
+
+    @staticmethod
+    def _get_certificate(request):
+        """
+        Generates a short-lived certificate from the user's session.
+        The user must have been authenticated with the 'esgf' social auth
+        provider.
+
+        Returns a pem-style certificate
+        """
+
+        social = request.user.social_auth.get(provider='esgf')
+        access_token = social.extra_data['access_token']
+        strategy = load_strategy()
+        backend = social.get_backend_instance(strategy)
+
+        key, cert, _ = backend.get_certificate(access_token)
+        return key + cert

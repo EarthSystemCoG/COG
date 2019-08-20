@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^citation_display/$', cog.views.citation_display, name='citation_display'),
 
     # WGET Script
-    url(r'^wget/script/$', cog.views.wget_script, name='wget_script'),
+    url(r'^download/wget/$', cog.views.WgetScriptView.as_view(), name='wget_script'),
 
     # authentication options
     # a) django (username/password) login
