@@ -118,7 +118,11 @@ def recordUrls(record):
         for value in record.fields['url']:
             urls.append(value)
     
-    # add special WGET endpoint
+    # add special WGET endpoints
+    urls.append( ("javascript:wgetScript('%s','%s','%s')" % (record.fields['index_node'][0], record.fields.get('shard', [''])[0], record.id) , 
+                "application/wget", 
+                "WGET Script") )
+    
     query = {
         'dataset_id': record.id,
         'index_node': record.fields['index_node'][0],
@@ -126,7 +130,7 @@ def recordUrls(record):
     }
     script_url = '{url}?{query}'.format(url=reverse_lazy('wget_script'), query=urlencode(query))
     
-    urls.append((script_url, "", "WGET Script"))
+    urls.append((script_url, "application/simple-wget", "Simplified WGET Script"))
 
     # add Globus endpoints
     if siteManager.isGlobusEnabled():  # only if this node has been registered with Globus
