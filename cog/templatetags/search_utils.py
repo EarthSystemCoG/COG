@@ -1,6 +1,4 @@
 from django import template
-from django.urls import reverse_lazy
-from urllib import urlencode
 from cog.models.search import searchMappings
 from cog.site_manager import siteManager
 from string import replace
@@ -123,15 +121,6 @@ def recordUrls(record):
                 "application/wget", 
                 "WGET Script") )
     
-    query = {
-        'dataset_id': record.id,
-        'index_node': record.fields['index_node'][0],
-        'shard': record.fields.get('shard', [''])[0],
-    }
-    script_url = '{url}?{query}'.format(url=reverse_lazy('wget_script'), query=urlencode(query))
-    
-    urls.append((script_url, "application/simple-wget", "Simplified WGET Script"))
-
     # add Globus endpoints
     if siteManager.isGlobusEnabled():  # only if this node has been registered with Globus
         if 'access' in record.fields and 'index_node' in record.fields and 'data_node' in record.fields:

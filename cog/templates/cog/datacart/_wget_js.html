@@ -137,13 +137,13 @@
 			  	html += "</a>";
 				
 				// Generate simplified wget script links
-				{% if request.user.is_authenticated %}
+				{% if request.user.is_authenticated and backends.associated %}
 				var query_string = "index_node=" + index_node + "&shard=" + shard;
 				for (var id_index in ids) {
 					dataset_id = jsonResponse[wget_key][id_index];
 					query_string += "&dataset_id=" + dataset_id;
 				}
-				html += " ( <a href='{% url 'wget_script' %}?"+query_string+"'>Simple WGET Script</a> )";
+				html += " ( <a href='{% url 'wget_script' %}?"+query_string+"'><em><span style=\"color:red\">NEW</span> Simplified Script</em></a> )";
 				{% endif %}
 			  }
 		}
