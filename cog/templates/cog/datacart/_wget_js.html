@@ -143,7 +143,11 @@
 					dataset_id = jsonResponse[wget_key][id_index];
 					query_string += "&dataset_id=" + dataset_id;
 				}
-				html += " ( <a href='{% url 'wget_script' %}?"+query_string+"'><em><span style=\"color:red\">NEW</span> Simplified Script</em></a> )";
+				var link_parts = [
+					" | <a href=\"{% url 'wget_script' %}?", query_string, "\" title=\"",
+					"An improved version of the standard WGET script utilising a short-lived certificate to authorize your access to the data.",
+					"\"><em><span style=\"color:red\">NEW</span> Simplified Script</em></a>"]
+				html += link_parts.join("");
 				{% endif %}
 			  }
 		}

@@ -88,9 +88,10 @@
 							<strong>WGET Script</strong>
 						</a>
 						{% if request.user.is_authenticated and backends.associated %}
-						(<a href="{% url 'wget_script' %}?index_node={{ record.fields.index_node.0 }}&shard={{ record.fields.shard.0 }}&dataset_id={{ record.id }}">
-							<em><span style="color:red">NEW</span> Simplified Script</em>
-						</a>)
+						| <a href="{% url 'wget_script' %}?index_node={{ record.fields.index_node.0 }}&shard={{ record.fields.shard.0 }}&dataset_id={{ record.id }}"
+						     title="An improved version of the standard WGET script utilising a short-lived certificate to authorize your access to the data.">
+							<strong><em><span style="color:red">NEW</span> Simplified Script</em></strong>
+						</a>
 						{% endif %}
 						]
 					</div>
