@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.views.generic import View
 from social_django.utils import load_strategy
+from social_django.models import UserSocialAuth
 
 
 class WgetScriptView(View):
@@ -16,6 +17,8 @@ class WgetScriptView(View):
     """
 
     script_template = 'cog/download/wget_script.sh'
+
+    # High arbitrary file search limit
     search_limit = 10000
 
     def get(self, request, *args, **kwargs):
@@ -23,6 +26,20 @@ class WgetScriptView(View):
         Get method for the view. Query parameters specify dataset IDs and which
         index to search on.
         """
+
+        social_session = None
+        if hasattr(request.user, "social_auth"):
+
+            try:
+                social_session = request.user.social_auth.get(provider='esgf')
+            except UserSocialAuth.DoesNotExist:
+                pass
+
+        if not social_session:
+            return HttpResponse('Unauthorized', status=401)
+
+        # Request a short-lived certificate to be placed in the script
+        certificate = self._get_certificate(social_session)
 
         index_node = request.GET.get('index_node')
         index_node_url = 'http://{}/esg-search/search'.format(index_node)
@@ -49,9 +66,6 @@ class WgetScriptView(View):
             params['dataset_id'] = dataset_id
             response = requests.get(url=index_node_url, params=params)
             download_urls += self._parse_download_urls(response.json())
-
-        # Request a short-lived certificate to be placed in the script
-        certificate = self._get_certificate(request)
 
         script = render_to_string(self.script_template,
             { 'download_urls': download_urls, 'certificate': certificate }
@@ -83,7 +97,7 @@ class WgetScriptView(View):
         return download_urls
 
     @staticmethod
-    def _get_certificate(request):
+    def _get_certificate(social_session):
         """
         Generates a short-lived certificate from the user's session.
         The user must have been authenticated with the 'esgf' social auth
@@ -92,10 +106,9 @@ class WgetScriptView(View):
         Returns a pem-style certificate
         """
 
-        social = request.user.social_auth.get(provider='esgf')
-        access_token = social.extra_data['access_token']
+        access_token = social_session.extra_data['access_token']
         strategy = load_strategy()
-        backend = social.get_backend_instance(strategy)
+        backend = social_session.get_backend_instance(strategy)
 
         key, cert, _ = backend.get_certificate(access_token)
         return key + cert
