@@ -23,13 +23,6 @@
 	<style scoped type="text/css">
 		#datacart-table td,th { padding-bottom: 0; padding-top:2px; margin:0; }
 	</style>
-	
-	<!-- function triggered on other datacart selection -->
-	<script type="text/javascript">
-		function handleOtherDataCartSelect(elm) {
-			window.location = elm.value;
-		}
-	</script>
 
 {% endblock %}
 
@@ -40,34 +33,13 @@
     <p>
         <strong>About Data Carts:</strong> You have a Data Cart on every ESGF node you have logged into. This is your
         Data Cart on the <a href="http://{{ site.domain }}">{{ site.domain }} </a> node.
-        {% if datacars.items|length > 0  %}
-            Use the pull down menu below to navigate between Data Carts.
-        {%  endif %}
         The items in this cart will persist until removed.
     </p>
 	<div style="text-align:center; font-weight:bold">
 		
 		<!-- local data cart -->
 		Number of Items (<span id="datacart_size2">{{ datacart.items.all|length }})</span>
-				
-		<!-- remote data carts -->
-		{% if datacarts.items|length > 0 %}
-			&nbsp; | &nbsp;
-            <label for="dataCartSelect">My Other Data Carts</label>
-			<select name="dataCartSelect" id="dataCartSelect" onchange="javascript:handleOtherDataCartSelect(this)">
-				<option id="other_datacart">My Other Data Carts</option>
-				{% for openid, dc in datacarts.items %}
-					{% for site, value in dc.items %}
-						<option id="{{ site_name }}_datacart" 
-								value="http://{{ site.domain }}/datacart/byopenid?openid={{openid}}">
-							{{ site.name }}: {{ value }}
-						</option>
-					{% endfor %}
-				{% endfor %}				
-			</select>
 
-		{% endif %}
-		
 		<!-- link back to search -->
 		{% if request.session.last_search_url %}
 			&nbsp; | &nbsp;
