@@ -7,10 +7,7 @@ Module to interact with Globus data transfer services.
 from datetime import datetime, timedelta
 from cog.site_manager import siteManager
 if siteManager.isGlobusEnabled():    
-    from globusonline.transfer.api_client import Transfer
-    from globusonline.transfer.api_client import TransferAPIClient
-    from globusonline.transfer.api_client import TransferAPIError
-    from globusonline.transfer.api_client import x509_proxy
+    from globus_sdk.transfer import TransferData
 import os
 import urlparse
 
@@ -30,14 +27,17 @@ def generateGlobusDownloadScript(download_map):
     return script
 
 
+
 def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, password=None, cert=None, key=None):
     if (not myproxy_server or not password) and (not myproxy_server or not cert):
+
         # Try to autoactivate the endpoint
-        code, reason, result = api_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
+        code, reason, result = transfer_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
         print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
         if result["code"] == "AutoActivationFailed":
             return (False, "")
         return (True, "")
+
 
     code, reason, reqs = api_client.endpoint_activation_requirements(endpoint)
 
@@ -62,7 +62,7 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
         reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
 
     try:
-        code, reason, result = api_client.endpoint_activate(endpoint, reqs)
+        code, reason, result = transfer_client.endpoint_activate(endpoint, reqs)
     except Exception as e:
         print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
         return (False, str(e))
@@ -75,21 +75,22 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
     return (True, "")
 
 
-def submitTransfer(api_client, source_endpoint, source_files, target_endpoint, target_directory):
+def submitTransfer(transfer_client, source_endpoint, source_files, target_endpoint, target_directory):
     '''
     Method to submit a data transfer request to Globus.
     '''
     
     # obtain a submission id from Globus
-    code, message, data = api_client.transfer_submission_id()
-    submission_id = data["value"]
-    print "Obtained transfer submission id: %s" % submission_id
+    # code, message, data = transfer_client.transfer_submission_id()
+    # submission_id = data["value"]
+    # print "Obtained transfer submission id: %s" % submission_id
     
     # maximum time for completing the transfer
     deadline = datetime.utcnow() + timedelta(days=10)
     
     # create a transfer request
-    transfer_task = Transfer(submission_id, source_endpoint, target_endpoint, deadline)
+    transfer_task = Transfer(transfer_client, source_endpoint, target_endpoint, deadline=deadline)
+    print "Obtained transfer submission id: %s" % transfer_task["submission_id"]
     for source_file in source_files:
         source_directory, filename = os.path.split(source_file)
         target_file = os.path.join(target_directory, filename) 
@@ -97,7 +98,7 @@ def submitTransfer(api_client, source_endpoint, source_files, target_endpoint, t
     
     # submit the transfer request
     try:
-        code, reason, data = api_client.transfer(transfer_task)
+        code, reason, data = transfer_client.submit_transfer(transfer_task)
         task_id = data["task_id"]
         print "Submitted transfer task with id: %s" % task_id
     except Exception as e:
