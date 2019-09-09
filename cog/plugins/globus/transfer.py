@@ -27,9 +27,10 @@ def generateGlobusDownloadScript(download_map):
     return script
 
 
-def activateEndpoint(transfer_client, endpoint, openid=None, password=None, cert=None, key=None):
+def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, password=None, cert=None, key=None):
+    if (not myproxy_server or not password) and (not myproxy_server or not cert):
 
-    if (not openid or not password) and (not openid or not cert):
+
         # Try to autoactivate the endpoint
         code, reason, result = transfer_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
         print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
@@ -37,14 +38,14 @@ def activateEndpoint(transfer_client, endpoint, openid=None, password=None, cert
             return (False, "")
         return (True, "")
 
-    openid_parsed = urlparse.urlparse(openid)
-    hostname = openid_parsed.hostname
-    username = os.path.basename(openid_parsed.path)
-    code, reason, reqs = transfer_client.endpoint_get_activation_requirements(endpoint)
+
+    code, reason, reqs = api_client.endpoint_activation_requirements(endpoint)
 
     # Activate the endpoint using an X.509 user credential stored by esgf-idp in /tmp/x509up_<idp_hostname>_<username>
     if cert and key:
-        cred_file = "/tmp/x509up_%s_%s" % (hostname, username)
+
+        cred_file = "/tmp/x509up_%s_%s" % (myproxy_server, username)
+
         with open(cred_file, 'w') as cred:
             cred.write(cert)
             cred.write(key)
@@ -57,16 +58,12 @@ def activateEndpoint(transfer_client, endpoint, openid=None, password=None, cert
         reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
     else:
         # Activate the endpoint using MyProxy server method
-        for i, d in enumerate(req["DATA"]):
-            if d["type"] == "myproxy":
-                if d["name"] == "hostname":
-                    req["DATA"][i]["value"] = hostname
-                elif d["name"] == "username":
-                    req["DATA"][i]["value"] = username
-                elif d["name"] == "passphrase":
-                    req["DATA"][i]["value"] = password
-                elif d["name"] == "lifetime_in_hours":
-                    req["DATA"][i]["value"] = "168"
+
+        reqs.set_requirement_value("myproxy", "hostname", myproxy_server)
+        reqs.set_requirement_value("myproxy", "username", username)
+        reqs.set_requirement_value("myproxy", "passphrase", password)
+        reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
+
 
     try:
         code, reason, result = transfer_client.endpoint_activate(endpoint, reqs)
