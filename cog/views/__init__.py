@@ -3,6 +3,7 @@ from views_templated import *
 from views_bookmarks import *
 from views_account import *
 from views_datacart import *
+from views_download import *
 from views_doc import *
 from views_external_urls import *
 from views_account import *

@@ -115,11 +115,11 @@ def recordUrls(record):
     if 'url' in record.fields:
         for value in record.fields['url']:
             urls.append(value)
-        
-    # add special WGET endpoint
+    
+    # add special WGET endpoints
     urls.append( ("javascript:wgetScript('%s','%s','%s')" % (record.fields['index_node'][0], record.fields.get('shard', [''])[0], record.id) , 
-                  "application/wget", 
-                  "WGET Script") )
+                "application/wget", 
+                "WGET Script") )
     
     # add Globus endpoints
     if siteManager.isGlobusEnabled():  # only if this node has been registered with Globus

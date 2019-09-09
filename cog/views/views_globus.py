@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import render
 from django.template import RequestContext
+from social_django.utils import load_strategy
 import urllib
 from cog.utils import getJson
 from urlparse import urlparse
@@ -243,6 +244,7 @@ def submit(request):
 	   The access token and files to download are retrieved from the session. '''
 
 	openid = request.user.profile.openid()
+
 	openid_parsed = urlparse(openid)
 	hostname = openid_parsed.hostname
 	# get a username and password if autoactivation failed and a user was asked for a password
@@ -253,6 +255,7 @@ def submit(request):
 		myproxy_server = hostname
 		esgf_username = os.path.basename(openid_parsed.path)
 	esgf_password = request.POST.get(ESGF_PASSWORD)
+
 	# retrieve all data transfer request parameters from session
 	username = request.session.get(GLOBUS_USERNAME)
 	access_token = request.session.get(GLOBUS_ACCESS_TOKEN)
@@ -270,9 +273,11 @@ def submit(request):
 	activateEndpoint(transfer_client, target_endpoint)
 	for source_endpoint, source_files in download_map.items():
 
+
 		status, message = activateEndpoint(
 			api_client, source_endpoint,
 			myproxy_server=myproxy_server, username=esgf_username, password=esgf_password)
+
 
 		if not status:
                         print hostname

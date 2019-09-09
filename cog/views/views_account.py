@@ -1,7 +1,9 @@
 import urllib
 from urlparse import urlparse
+import json
+import traceback
 
-from django.contrib.auth import logout
+from django.contrib.auth import logout, REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.hashers import is_password_usable
 from django.contrib.auth.views import login
@@ -9,8 +11,8 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms.models import modelformset_factory
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponseServerError, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django_openid_auth.models import UserOpenID
 from django_openid_auth.views import login_complete
@@ -34,6 +36,38 @@ def redirectToIdp():
         return False
 
 
+from cog.backends.esgf import discover
+
+
+def get_oauth2_cred(openid_identifier):
+    """
+    Get a key and secret pair from /esg/config/.esgf_oauth2.json
+    """
+    parsed_openid = urlparse(openid_identifier)
+    with open(settings.ESGF_OAUTH2_SECRET_FILE, 'r') as f:
+        try:
+            creds = json.loads(f.read())
+            cred = creds.get(parsed_openid.netloc)
+            if cred and cred.get('key') and cred.get('secret'):
+                return cred
+        except Exception:
+            traceback.print_exc()
+    print('Could not find an OAuth2 client key and secret for {} in {}'
+          .format(parsed_openid.netloc, settings.ESGF_OAUTH2_SECRET_FILE))
+    return None
+
+
+def auth_discover(request, **kwargs):
+    openid = request.GET.get('openid_identifier', None)
+    protocol = discover(openid)
+    credential = get_oauth2_cred(openid)
+    if protocol == 'OAuth2' and credential:
+        settings.SOCIAL_AUTH_ESGF_KEY = credential['key']
+        settings.SOCIAL_AUTH_ESGF_SECRET = credential['secret']
+        return JsonResponse({'auth': 'OAuth2'})
+    return JsonResponse({'auth': 'OpenID'})
+
+
 def custom_login(request, **kwargs):
     """
     Overrides standard login view that checks whether the authenticated user has any missing information.
@@ -41,7 +75,6 @@ def custom_login(request, **kwargs):
     :param kwargs:
     :return:
     """
-    
     # authenticate user via standard login
     response = login(request, **kwargs)
 
@@ -101,6 +134,26 @@ def _custom_login(request, response):
                                         "?message=incomplete_profile")
         
     return response
+
+
+def oauth2_login(request, form_class=OAuth2LoginForm):
+    
+    if request.POST:
+        
+        # parse the login form
+        form = form_class(request.POST)
+        if form.is_valid():
+            openid_identifier = form.cleaned_data['openid_identifier']
+            redirect_to = form.cleaned_data['next']
+            
+            # store social-auth fields in session
+            request.session['openid_identifier'] = openid_identifier
+            request.session[REDIRECT_FIELD_NAME] = redirect_to
+            
+            return redirect('social:begin', 'esgf')
+    
+    # fallback to login view
+    return redirect('login')
 
 
 def notifyAdminsOfUserRegistration(user,request):
@@ -328,7 +381,11 @@ def user_detail(request, user_id):
         user_profile = UserProfile(user=user)
         user_profile.save()
         print "Created empty profile for user=%s" % user
-        
+    if request.user.is_authenticated():
+        if request.user.social_auth.filter(provider='esgf'):
+            social = request.user.social_auth.get(provider='esgf')
+            setattr(user_profile, 'openids', [social.uid])
+            setattr(user_profile, 'localOpenid', False)
     # retrieve map of (project, roles) for this user
     (projTuples, groupTuples) = get_all_shared_user_info(user)
     print "\nprojTuples="

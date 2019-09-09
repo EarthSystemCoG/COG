@@ -35,6 +35,9 @@ urlpatterns = [
     url(r'^search_reload/$', cog.views.search_reload, name='search_reload' ),
     url(r'^citation_display/$', cog.views.citation_display, name='citation_display'),
 
+    # WGET Script
+    url(r'^download/wget/$', cog.views.WgetScriptView.as_view(), name='wget_script'),
+
     # authentication options
     # a) django (username/password) login
     #url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),
@@ -47,13 +50,17 @@ urlpatterns = [
     # c) openid-only login
     url(r'^login/$', cog.views.custom_login, {'template_name': 'cog/openid/login.html'}, name='login'),
     url(r'^openid/login/$', django_openid_auth.views.login_begin, {'template_name': 'cog/openid/login.html'}, name='openid-login'),
+    url(r'^oauth2/login/$', cog.views.oauth2_login, name='oauth2-login'),
     
     # b) or c)
     #url(r'^openid/complete/$', 'django_openid_auth.views.login_complete', name='openid-complete'),
     url(r'^openid/complete/$', cog.views.custom_login_complete, name='openid-complete'),
     url(r'^openid/logo.gif$', django_openid_auth.views.logo, name='openid-logo'),
 
-    
+    # add OAuth2 urls
+    url(r'', include('social_django.urls', namespace='social')),
+    url(r'^auth/discover/$', cog.views.auth_discover, name='auth-discover'),
+
     # force redirection to login page after logout
     #url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     # use next=... to redirect to previous page after logout

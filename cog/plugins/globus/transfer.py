@@ -27,9 +27,9 @@ def generateGlobusDownloadScript(download_map):
     return script
 
 
-
 def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, password=None, cert=None, key=None):
     if (not myproxy_server or not password) and (not myproxy_server or not cert):
+
 
         # Try to autoactivate the endpoint
         code, reason, result = transfer_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
@@ -43,7 +43,9 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
 
     # Activate the endpoint using an X.509 user credential stored by esgf-idp in /tmp/x509up_<idp_hostname>_<username>
     if cert and key:
+
         cred_file = "/tmp/x509up_%s_%s" % (myproxy_server, username)
+
         with open(cred_file, 'w') as cred:
             cred.write(cert)
             cred.write(key)
@@ -56,10 +58,12 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
         reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
     else:
         # Activate the endpoint using MyProxy server method
+
         reqs.set_requirement_value("myproxy", "hostname", myproxy_server)
         reqs.set_requirement_value("myproxy", "username", username)
         reqs.set_requirement_value("myproxy", "passphrase", password)
         reqs.set_requirement_value("myproxy", "lifetime_in_hours", "168")
+
 
     try:
         code, reason, result = transfer_client.endpoint_activate(endpoint, reqs)
