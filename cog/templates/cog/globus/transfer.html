@@ -32,7 +32,8 @@ Globus uses the high performance, reliable GridFTP protocol to transfer many fil
 			<td width="50%">
 				<div class="box-globus">
 					<div style="font-weight:bold; text-align:center; padding: 4px;">Option 1: Web Download</div>
-					<div style="text-align:center;">Submit the download request through this web browser.</div>
+					<div style="text-align:center;">Submit the download request through this web browser.  This transfer method will redirect you to the Globus File Manager, where you will need to select a destination "Collection" (Globus Endpoint) for your requested data.
+</div>
 					<div style="text-align: center; padding:5px;">
 						<form name="globusTransferForm" method="post" action="{% url 'globus_transfer' %}">
 							{% csrf_token %}
