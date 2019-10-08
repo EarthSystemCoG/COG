@@ -40,7 +40,8 @@ if siteManager.isGlobusEnabled():
 	from base64 import urlsafe_b64encode
 	from oauth2client import client as oauth_client
 	from cog.plugins.globus.transfer import activateEndpoint, submitTransfer, generateGlobusDownloadScript
-	from globus_sdk.transfer import TransferClient, AccessTokenAuthorizer
+	from globus_sdk.transfer import TransferClient
+	from globus_sdk import AccessTokenAuthorizer
 
 	client_id = siteManager.get('OAUTH_CLIENT_ID', section=SECTION_GLOBUS)
 	client_secret = siteManager.get('OAUTH_CLIENT_SECRET', section=SECTION_GLOBUS)
