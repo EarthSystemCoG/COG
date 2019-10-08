@@ -6,8 +6,6 @@ Module to interact with Globus data transfer services.
 
 from datetime import datetime, timedelta
 from cog.site_manager import siteManager
-if siteManager.isGlobusEnabled():    
-    from globus_sdk.transfer import TransferData
 import os
 import urlparse
 
