@@ -272,7 +272,7 @@ def submit(request):
 	for source_endpoint, source_files in download_map.items():
 
 		status, message = activateEndpoint(
-			api_client, source_endpoint,
+			transfer_client, source_endpoint,
 			myproxy_server=myproxy_server, username=esgf_username, password=esgf_password)
 
 		if not status:
@@ -288,7 +288,7 @@ def submit(request):
 		# submit transfer request
 
 		task_id = submitTransfer(
-			api_client, source_endpoint, source_files,
+			transfer_client, source_endpoint, source_files,
 			target_endpoint, target_folder)
 
 		task_ids.append(task_id)
