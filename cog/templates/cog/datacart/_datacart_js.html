@@ -96,7 +96,7 @@
 		  // relative path to COG application
 		  // note: cannot execute HTTP requests to other hosts because of javascript security restrictions
 		  // note: do not use django URL tag because it is interpreted before the 'dataset_id', 'index_node' values are known
-		  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit
+		  var url = "/search_files/"+dataset_id+"/"+index_node+"/?limit="+limit+"&project="+project
 		          // add optional query filter
 				  + getQueryFilter('GET');
 		  // add optional 'local' shard
