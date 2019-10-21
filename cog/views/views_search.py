@@ -15,6 +15,7 @@ from cog.services.search import SolrSearchService
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, TEMPLATE_NOT_FOUND_MESSAGE
 from cog.views.utils import getQueryDict
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
@@ -829,12 +830,6 @@ def search_files(request, dataset_id, index_node):
     
     # maximum number of files to query for
     limit = request.GET.get('limit', 20)
-    project_short_name = request.GET.get('project', None)
-    if project_short_name is not None:
-        project = get_object_or_404(Project, short_name__iexact=project_short_name)
-        endpoint = project.searchprofile.url
-    else:
-        endpoint = 'http://'+index_node+'/esg-search/search/'
     params = [('type', "File"), ('dataset_id', dataset_id),
               ("format", "application/solr+json"), ('offset', '0'), ('limit', limit)]
     
@@ -853,7 +848,7 @@ def search_files(request, dataset_id, index_node):
     if shard is not None and len(shard.strip()) > 0:
         params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
  
-    url = endpoint+"?"+urllib.urlencode(params)
+    url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
     print 'Searching for files: URL=%s' % url
     fh = urllib2.urlopen(url)
     response = fh.read().decode("UTF-8")
