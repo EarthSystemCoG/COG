@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
+from djanog.conf import settings
+from urlparse import urlparse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.core.urlresolvers import reverse
 from cog.models import *
@@ -213,7 +215,7 @@ def datacart_wget(request, site_id, user_id):
             if item.identifier in ids:
 
                 # group selected dataset by index_node
-                index_node = item.getValue('index_node')
+                index_node = urlparse(settings.DEFAULT_SEARCH_URL).netloc
                 wget_key = index_node
                 shard = item.getValue('shard')
                 if shard is not None and len(shard.strip())>0:
