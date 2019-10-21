@@ -388,11 +388,11 @@ def metadata_display(request, project_short_name):
     config = _getSearchConfig(request, project)
 
     # retrieve result metadata
-    params = [('type', type), ('id', id), ("format", "application/solr+json"), ("distrib", "false")]
+    params = [('type', type), ('id', id), ("format", "application/solr+json")]
     if type == 'File':
         params.append(('dataset_id', dataset_id))
                 
-    url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
+    url = project.searchprofile.url+"?"+urllib.urlencode(params)
     print 'Metadata Solr search URL=%s' % url
     fh = urllib2.urlopen(url)
     response = fh.read().decode("UTF-8")
@@ -404,8 +404,8 @@ def metadata_display(request, project_short_name):
     # retrieve parent metadata    
     parentMetadata = {}
     if type == 'File':
-        params = [('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json"), ("distrib", "false")]
-        url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
+        params = [('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json")]
+        url = project.searchprofile.url+"?"+urllib.urlencode(params)
         # print 'Solr search URL=%s' % url
         fh = urllib2.urlopen(url)
         response = fh.read().decode("UTF-8")
