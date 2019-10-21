@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
-from djanog.conf import settings
+from django.conf import settings
 from urlparse import urlparse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.core.urlresolvers import reverse
