@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
@@ -123,11 +124,9 @@ def download(request):
 		shard = request.GET.get('shard', '')
 		if shard is not None and len(shard.strip()) > 0:
 			params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
-		else:
-			params.append(("distrib", "false"))
 
 			
-		url = "http://"+index_node+"/esg-search/search?"+urllib.urlencode(params)
+		url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
 		print 'Searching for files at URL: %s' % url
 		jobj = getJson(url)
 		
