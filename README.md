@@ -14,3 +14,8 @@ and organizations in the Earth system sciences.  Its structure encourages inform
 
 For more information, visit: http://earthsystemcog.org/
 
+Latest release: v3.15.3
+-----------------------
+
+ - Lists of files will now be performed at the local index node rather than a remote one
+ - Updates to templates for help information in preparation for the retirement of the CU CoG site.
