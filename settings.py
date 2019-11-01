@@ -16,7 +16,7 @@ Each parameter has a default value.
 from cog.site_manager import siteManager
 from cog.constants import SECTION_ESGF, SECTION_PID
 
-COG_VERSION = 'v3.15.2'
+COG_VERSION = 'v3.15.3'
 
 SITE_NAME = siteManager.get('SITE_NAME', default='Local CoG')
 SITE_DOMAIN = siteManager.get('SITE_DOMAIN', default='localhost:8000')
