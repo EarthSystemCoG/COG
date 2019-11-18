@@ -14,3 +14,7 @@ and organizations in the Earth system sciences.  Its structure encourages inform
 
 For more information, visit: http://earthsystemcog.org/
 
+Latest release: v3.15.3
+-----------------------
+
+ - Updates to templates for help information in preparation for the retirement of the CU CoG site.
