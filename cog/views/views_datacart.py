@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
+from django.conf import settings
+from urlparse import urlparse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden, HttpResponseNotAllowed
 from django.urls import reverse
 from cog.models import *
@@ -36,21 +38,9 @@ def datacart_display(request, site_id, user_id):
         datacart = DataCart.objects.get(user=user)
     except DataCart.DoesNotExist:
         datacart = None
-        
-    # inspect remote data carts
-    dcs = {}
-    # combine from possible multiple user openids
-    for openid in user.profile.openids():
-        _dcs = getDataCartsForUser(openid)
-        if len(_dcs) > 0:
-            dcs[openid] = {}
-            for site, size in list(_dcs.items()):
-                print(site, size)
-                dcs[openid][site] = size
-        
     return render(request,
                   'cog/datacart/datacart.html', 
-                  {'datacart': datacart, 'datacarts': dcs})    
+                  {'datacart': datacart})    
     
 
 # view to display a user datacart by openid
@@ -224,7 +214,7 @@ def datacart_wget(request, site_id, user_id):
             if item.identifier in ids:
 
                 # group selected dataset by index_node
-                index_node = item.getValue('index_node')
+                index_node = urlparse(settings.DEFAULT_SEARCH_URL).netloc
                 wget_key = index_node
                 shard = item.getValue('shard')
                 if shard is not None and len(shard.strip())>0:

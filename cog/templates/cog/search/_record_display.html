@@ -28,7 +28,11 @@
 		<strong>{{record.fields.title.0}}</strong>
 		<div id="message_{{record.id}}" style="display:none; color: #FF0000;">Message</div>
 		{% if record.fields.description.0 %} <br/>Description: {{ record.fields.description.0 |urlizetrunc:30|linebreaksbr }}{% endif %}
-		{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }}{% endif %}
+		{% if record.fields.data_node.0 %} <br/>Data Node: {{ record.fields.data_node.0 }} 
+		{% if not record.fields.data_node.0|getDataNodeStatus %}
+			<span style="color: #FF0000;">is reported as unavailable. Any existing replica data sets can be seen by selecting 'Show All Replicas' .</span>
+		{% endif %}
+        {% endif %}
 		{% if record.fields.version.0 %} <br/>Version: {{ record.fields.version.0 }}{% endif %}
 		{% if record.fields.number_of_files.0 %} <br/>Total Number of Files (for all variables): {{ record.fields.number_of_files.0 }}{% endif %}
 	</div>
@@ -116,14 +120,22 @@
 		               [ <a href="{{url.0}}" target="_blank"><strong>PID</strong></a> ]
 		               </div>
 		
+
+			{% elif url.2 == 'summary' %}
+					&nbsp; 
+					<div style="display: inline-block;">
+					[ <a href="{{url.0}}"><strong>Tech Note</strong></a> ]
+					</div>
+
+
 				<!--  all other services -->
-				{% else %}
+			{% else %}
 					&nbsp; 
 					<div style="display: inline-block;">
 					[ <a href="{{url.0}}"><strong>{{ url.2 }}</strong></a> ]
 					</div>
 		
-			    {% endif %}
+			{% endif %}
 		
 			{% endfor %}
 		

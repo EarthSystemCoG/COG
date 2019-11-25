@@ -15,6 +15,7 @@ from cog.services.search import SolrSearchService
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, TEMPLATE_NOT_FOUND_MESSAGE
 from cog.views.utils import getQueryDict
+from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
@@ -388,14 +389,14 @@ def metadata_display(request, project_short_name):
     config = _getSearchConfig(request, project)
 
     # retrieve result metadata
-    params = [('type', type), ('id', id), ("format", "application/solr+json"), ("distrib", "false")]
+    params = [('type', type), ('id', id), ("format", "application/solr+json")]
     if type == 'File':
         params.append(('dataset_id', dataset_id))
                 
-    url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
-    print('Metadata Solr search URL=%s' % url)
-    fh = urllib.request.urlopen(url)
-    response = fh.read()
+    url = project.searchprofile.url+"?"+urllib.urlencode(params)
+    print 'Metadata Solr search URL=%s' % url
+    fh = urllib2.urlopen(url)
+    response = fh.read().decode("UTF-8")
 
     # parse JSON response (containing only one matching 'doc)
     jsondoc = json.loads(response)
@@ -404,8 +405,8 @@ def metadata_display(request, project_short_name):
     # retrieve parent metadata    
     parentMetadata = {}
     if type == 'File':
-        params = [('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json"), ("distrib", "false")]
-        url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
+        params = [('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json")]
+        url = project.searchprofile.url+"?"+urllib.urlencode(params)
         # print 'Solr search URL=%s' % url
         fh = urllib.request.urlopen(url)
         response = fh.read()
@@ -829,7 +830,6 @@ def search_files(request, dataset_id, index_node):
     
     # maximum number of files to query for
     limit = request.GET.get('limit', 20)
-            
     params = [('type', "File"), ('dataset_id', dataset_id),
               ("format", "application/solr+json"), ('offset', '0'), ('limit', limit)]
     
@@ -847,13 +847,11 @@ def search_files(request, dataset_id, index_node):
     shard = request.GET.get('shard', '')
     if shard is not None and len(shard.strip()) > 0:
         params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
-    else:
-        params.append(("distrib", "false"))
  
-    url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
-    print('Searching for files: URL=%s' % url)
-    fh = urllib.request.urlopen(url)
-    response = fh.read()
+    url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
+    print 'Searching for files: URL=%s' % url
+    fh = urllib2.urlopen(url)
+    response = fh.read().decode("UTF-8")
 
     return HttpResponse(response, content_type="application/json")
 

@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<catalog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.unidata.ucar.edu/namespaces/thredds/InvCatalog/v1.0" name="TDS configuration file" xsi:schemaLocation="http://www.unidata.ucar.edu/namespaces/thredds/InvCatalog/v1.0 http://www.unidata.ucar.edu/schemas/thredds/InvCatalog.1.0.2.xsd">
+  <service serviceType="OpenDAP" base="/thredds/dodsC/" name="gridded" desc="PCMDI OPeNDAP">
+    <property name="requires_authorization" value="false"/>
+    <property name="application" value="Web Browser"/>
+  </service>
+  <service name="LASatPCMDI" serviceType="LAS" base="http://pcmdi3.llnl.gov/las/getUI.do" desc="PCMDI LAS">
+    <property name="requires_authorization" value="false" />
+    <property name="application" value="Web Browser" />
+  </service>
+  <service serviceType="Compound" base="" name="fileservice">
+    <service serviceType="HTTPServer" base="/thredds/fileServer/" name="HTTPServer" desc="PCMDI TDS">
+      <property name="requires_authorization" value="true"/>
+      <property name="application" value="Web Browser"/>
+      <property name="application" value="Web Script"/>
+    </service>
+    <service serviceType="GridFTP" base="gsiftp://pcmdi3.llnl.gov:2811/" name="GRIDFTPatPCMDI" desc="PCMDI GridFTP">
+      <property name="requires_authorization" value="true"/>
+      <property name="application" value="DataMover-Lite"/>
+    </service>
+  </service>
+  <service serviceType="SRM" base="srm://host.sample.gov:6288/srm/v2/server?SFN=/archive.sample.gov/" name="HRMatPCMDI" desc="SRM">
+    <property name="requires_authorization" value="false"/>
+  </service>
+  <property name="catalog_version" value="2"/>
+  <dataset restrictAccess="esg-user" ID="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.v1" name="project=CMIP5 / IPCC Fifth Assessment Report, model=CanESM2, Canadian Centre for Climate Modelling and Analysis, experiment=historical, time_frequency=mon, modeling realm=atmos, run=r1i1p1, version=1">
+    <property name="dataset_id" value="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1"/>
+    <property name="dataset_version" value="1"/>
+    <property name="project" value="cmip5"/>
+    <property name="experiment" value="historical"/>
+    <property name="product" value="output1"/>
+    <property name="model" value="CanESM2"/>
+    <property name="time_frequency" value="mon"/>
+    <property name="realm" value="atmos"/>
+    <property name="cmor_table" value="Amon"/>
+    <property name="ensemble" value="r1i1p1"/>
+    <property name="institute" value="CCCma"/>
+    <property name="forcing" value="GHG,Oz,SA,BC,OC,LU,Sl,Vl (GHG includes CO2,CH4,N2O,CFC11,effective CFC12)"/>
+    <property name="title" value="CanESM2 model output prepared for CMIP5 Historical"/>
+    <property name="creation_time" value="2011-01-14 12:29:23"/>
+    <property name="format" value="netCDF, CF-1.4"/>
+    <property name="drs_id" value="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1"/>
+    <metadata>
+      <variables vocabulary="CF-1.0">
+        <variable name="tas" vocabulary_name="air_temperature" units="K">Near-Surface Air Temperature</variable>
+      </variables>
+    </metadata>
+    <metadata inherited="true">
+      <dataType>Grid</dataType>
+      <dataFormat>NetCDF</dataFormat>
+    </metadata>
+    <access urlPath="?dsid=0A05774572417402AB51EF2856959E20_ns_cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.v1" serviceName="LASatPCMDI" dataFormat="NetCDF" />
+    <dataset name="tas_Amon_CanESM2_historical_r1i1p1_185001-200512.nc" ID="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.v1.tas_Amon_CanESM2_historical_r1i1p1_185001-200512.nc" urlPath="home_test/cmip5/CCCMA/tas_Amon_CanESM2_historical_r1i1p1_185001-200512.nc" serviceName="HTTPServer">
+      <property name="file_id" value="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas_Amon_CanESM2_historical_r1i1p1_185001-200512.nc"/>
+      <property name="file_version" value="1"/>
+      <property name="size" value="61400312"/>
+      <property name="tracking_id" value="d5f39dc0-6923-42e1-ba0c-2c5b9027f5be"/>
+      <property name="mod_time" value="2011-01-07 11:58:07"/>
+      <variables vocabulary="CF-1.0">
+        <variable name="tas" vocabulary_name="air_temperature" units="K">Near-Surface Air Temperature</variable>
+      </variables>
+      <dataSize units="bytes">61400312</dataSize>
+    </dataset>
+    <dataset ID="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation" name="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation">
+      <property name="aggregation_id" value="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation"/>
+      <variables vocabulary="CF-1.0">
+        <variable name="tas" vocabulary_name="air_temperature" units="K">Near-Surface Air Temperature</variable>
+      </variables>
+      <metadata inherited="true">
+        <geospatialCoverage>
+          <northsouth>
+            <start>-87.863801</start>
+            <size>175.727602</size>
+            <units>degrees_north</units>
+          </northsouth>
+          <eastwest>
+            <start>0.000000</start>
+            <size>357.1875</size>
+            <units>degrees_east</units>
+          </eastwest>
+        </geospatialCoverage>
+        <timeCoverage>
+          <start>1850-01-16T12:00:00</start>
+          <end>2005-12-16T12:00:00</end>
+        </timeCoverage>
+      </metadata>
+      <access urlPath="?dsid=0A05774572417402AB51EF2856959E20_ns_cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation" serviceName="LASatPCMDI" dataFormat="NetCDF" />
+      <dataset urlPath="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation.1" serviceName="gridded" ID="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation.1" name="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation - Subset 1">
+        <property name="aggregation_id" value="cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation.1"/>
+        <property name="time_delta" value="1 month"/>
+        <property name="calendar" value="365_day"/>
+        <property name="start" value="1850-1-1 0:0:0.0"/>
+        <property name="time_length" value="1872"/>
+        <access urlPath="?dsid=0A05774572417402AB51EF2856959E20_ns_cmip5.output1.CCCma.CanESM2.historical.mon.atmos.Amon.r1i1p1.tas.v1.aggregation.1" serviceName="LASatPCMDI" dataFormat="NetCDF" />
+        <netcdf xmlns="http://www.unidata.ucar.edu/namespaces/netcdf/ncml-2.2">
+          <aggregation dimName="time" type="joinExisting">
+            <netcdf ncoords="1872" location="/home/drach1/data/cmip5/CCCMA/tas_Amon_CanESM2_historical_r1i1p1_185001-200512.nc"/>
+          </aggregation>
+        </netcdf>
+      </dataset>
+    </dataset>
+  </dataset>
+</catalog>

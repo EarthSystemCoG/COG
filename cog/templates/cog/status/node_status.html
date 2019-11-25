@@ -1,0 +1,29 @@
+{% extends "cog/common/layout_center.html" %}
+
+{% block main %}
+
+{% if no_status %}
+
+<h2>This feature is not enabled on this node.</h2>
+
+{% else %}
+<table>
+<tr><th width="200">&nbsp;</th><th width="300"><b>Data Node</b></th><th><b>Status</b></th>
+</tr>
+{% for nstatus in status_arr %}
+
+<tr> <td>&nbsp;</td>
+	<td>{{ nstatus.0 }}</td>
+	<td>{% if nstatus.1 == 1%}
+		<font color="#00FF00"><b>UP</b></font>
+		{% else %}
+		<font color="#FF0000"><b>DOWN</b></font>
+		{% endif %}
+	</td>
+
+</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}
