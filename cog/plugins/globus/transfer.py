@@ -34,7 +34,7 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
     if (not myproxy_server or not password) and (not myproxy_server or not cert):
         # Try to autoactivate the endpoint
         code, reason, result = api_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
-        print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
+        print("Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"]))
         if result["code"] == "AutoActivationFailed":
             return (False, "")
         return (True, "")
@@ -51,7 +51,7 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
         try:
             proxy = x509_proxy.create_proxy_from_file(cred_file, public_key, lifetime_hours=72)
         except Exception as e:
-            print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
+            print("Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e)))
             return False
         reqs.set_requirement_value("delegate_proxy", "proxy_chain", proxy)
     else:
@@ -83,7 +83,7 @@ def submitTransfer(api_client, source_endpoint, source_files, target_endpoint, t
     # obtain a submission id from Globus
     code, message, data = api_client.transfer_submission_id()
     submission_id = data["value"]
-    print "Obtained transfer submission id: %s" % submission_id
+    print("Obtained transfer submission id: %s" % submission_id)
     
     # maximum time for completing the transfer
     deadline = datetime.utcnow() + timedelta(days=10)

@@ -127,7 +127,7 @@ def download(request):
 
 			
 		url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
-		print 'Searching for files at URL: %s' % url
+		print('Searching for files at URL: %s' % url)
 		jobj = getJson(url)
 		
 		# parse response for GridFTP URls
@@ -260,7 +260,7 @@ def submit(request):
 	target_folder = request.session.get(TARGET_FOLDER)
 
 	#print 'Downloading files=%s' % download_map.items()
-	print 'User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder)
+	print('User selected destionation endpoint:%s, folder: %s' % (target_endpoint, target_folder))
 
 	api_client = TransferAPIClient(username, goauth=access_token)
 	# loop over source endpoints and autoactivate them
@@ -271,7 +271,7 @@ def submit(request):
 			api_client, source_endpoint,
 			myproxy_server=myproxy_server, username=esgf_username, password=esgf_password)
 		if not status:
-                        print hostname
+                        print(hostname)
 			return render(request,
                           'cog/globus/password.html',
                           { 'openid': openid, 'username': hostname=='ceda.ac.uk', 'message': message })

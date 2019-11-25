@@ -394,7 +394,7 @@ def metadata_display(request, project_short_name):
         params.append(('dataset_id', dataset_id))
                 
     url = project.searchprofile.url+"?"+urllib.urlencode(params)
-    print 'Metadata Solr search URL=%s' % url
+    print('Metadata Solr search URL=%s' % url)
     fh = urllib2.urlopen(url)
     response = fh.read().decode("UTF-8")
 
@@ -849,7 +849,7 @@ def search_files(request, dataset_id, index_node):
         params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
  
     url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
-    print 'Searching for files: URL=%s' % url
+    print('Searching for files: URL=%s' % url)
     fh = urllib2.urlopen(url)
     response = fh.read().decode("UTF-8")
 
