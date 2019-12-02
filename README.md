@@ -14,7 +14,19 @@ and organizations in the Earth system sciences.  Its structure encourages inform
 
 For more information, visit: http://earthsystemcog.org/
 
+Manual CoG update
+-----------------
 
+```
+cd /usr/local/cog/cog_install
+git fetch
+git checkout v3.15.4 # or master, devel, etc.
+/etc/cog-wsgi-8889/apachectl restart  # for ESGF > v4.0.0 
+# previous versions restart node: esg-node restart 
+```
+
+
+https://github.com/ESGF/esg-search/releases/download/v4.17.10/esg-search.war
 
 Latest release: v3.15.4
 -----------------------
