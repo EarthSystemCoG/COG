@@ -25,9 +25,6 @@ git checkout v3.15.4 # or master, devel, etc.
 # previous versions restart node: esg-node restart 
 ```
 
-
-https://github.com/ESGF/esg-search/releases/download/v4.17.10/esg-search.war
-
 Latest release: v3.15.4
 -----------------------
 
