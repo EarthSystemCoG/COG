@@ -114,18 +114,29 @@
 	   </div> <!--// end div.span-26 //-->
 
        <!--add links to MyProfile and the DataCart-->
+
 	   <div class="span-5 last">
 	       <div id="top_subnav_right">
 	           {% if request.user.is_authenticated %}
+                  <form name="emptyDataCartForm" action="{% url 'datacart_empty' site.id request.user.id %}" method='post'>
+
+                </form>
 		           <!--<a href="{% url 'user_profile_redirect' request.user.id %}">My Profile</a>-->
-                   {% if request.session.last_search_url %}
+                {% if request.session.last_search_url %}
 			           <a href="{% url 'search_reload' %}"> Last Search</a> |
-		           {% endif %}
+		            {% endif %}
                    <img src="{{STATIC_URL}}cog/img/datacart.png" height="20px" style="vertical-align:middle;
                    margin-left:0;" alt="datacart logo"/>
 		           <a href="{% url 'datacart_display' site.id request.user.id %}">
                        My Data Cart (<span id="datacart_size">{{ request.user.datacart.items.all|length }}</span>)
-		           </a>
+		           </a> | 
+
+                 <a href="javascript:document.forms['emptyDataCartForm'].submit();"
+                 onclick="return urlConfirmationDialog('Empty Data Cart Confirmation',
+                 'Are you sure you want to remove ALL items from the cart ?', this)">
+
+                                  Clear Data Cart</a>
+
 	           {% endif %}
 	       </div> <!--// end div id=top_subnav_right //-->
 	   </div>	<!--// end div.span-5 last//-->
