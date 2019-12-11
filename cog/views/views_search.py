@@ -393,9 +393,9 @@ def metadata_display(request, project_short_name):
     if type == 'File':
         params.append(('dataset_id', dataset_id))
                 
-    url = project.searchprofile.url+"?"+urllib.urlencode(params)
+    url = project.searchprofile.url+"?"+urllib.parse.urlencode(params)
     print('Metadata Solr search URL=%s' % url)
-    fh = urllib2.urlopen(url)
+    fh = urllib.request.urlopen(url)
     response = fh.read().decode("UTF-8")
 
     # parse JSON response (containing only one matching 'doc)
@@ -406,7 +406,7 @@ def metadata_display(request, project_short_name):
     parentMetadata = {}
     if type == 'File':
         params = [('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json")]
-        url = project.searchprofile.url+"?"+urllib.urlencode(params)
+        url = project.searchprofile.url+"?"+urllib.parse.urlencode(params)
         # print 'Solr search URL=%s' % url
         fh = urllib.request.urlopen(url)
         response = fh.read()
@@ -848,9 +848,9 @@ def search_files(request, dataset_id, index_node):
     if shard is not None and len(shard.strip()) > 0:
         params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
  
-    url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
+    url = settings.DEFAULT_SEARCH_URL+"?"+urllib.parse.urlencode(params)
     print('Searching for files: URL=%s' % url)
-    fh = urllib2.urlopen(url)
+    fh = urllib.request.urlopen(url)
     response = fh.read().decode("UTF-8")
 
     return HttpResponse(response, content_type="application/json")
