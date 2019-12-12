@@ -991,12 +991,11 @@ def citation_display(request):
     try:
         fh = urllib.request.urlopen(url)
         response = fh.read()
-        headers = fh.info().dict
     except HTTPError as e:
         print(('HTTPError %s for %s' % (str(e.code), url)))
         return HttpResponseNotFound()
 
-    if int(headers['x-cera-rc']) > 0:
+    if int(fh.getheader('x-cera-rc')) > 0:
         print('Citation not found: %s' % url)
         return HttpResponseNotFound()
 
