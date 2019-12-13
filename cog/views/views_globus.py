@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import render
@@ -61,8 +61,8 @@ def discover_myproxy(openid):
 
 
 def establishFlow(request):
-	basic_auth_str = urlsafe_b64encode("{}:{}".format(client_id, client_secret))
-	auth_header = "Basic " + basic_auth_str
+	basic_auth_str = urlsafe_b64encode('{}:{}'.format(client_id, client_secret).encode())
+	auth_header = b'Basic ' + basic_auth_str
 	return oauth_client.OAuth2WebServerFlow(
 		client_id = client_id,
 		authorization_header = auth_header,
@@ -127,7 +127,7 @@ def download(request):
 			params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
 
 			
-		url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
+		url = settings.DEFAULT_SEARCH_URL+"?"+urllib.parse.urlencode(params)
 		print('Searching for files at URL: %s' % url)
 		jobj = getJson(url)
 		
@@ -269,14 +269,10 @@ def submit(request):
 	# if the autoactivation fails, redirect to a form asking for a password
 	activateEndpoint(transfer_client, target_endpoint)
 	for source_endpoint, source_files in download_map.items():
-		status, message = activateEndpoint(
-			transfer_client, source_endpoint,
-			myproxy_server=myproxy_server, username=esgf_username, password=esgf_password)
+		status, message = activateEndpoint(transfer_client, source_endpoint, myproxy_server=myproxy_server, username=esgf_username, password=esgf_password)
 		if not status:
-                        print(hostname)
-			return render(request,
-                          'cog/globus/password.html',
-                          { 'openid': openid, 'username': hostname=='ceda.ac.uk', 'message': message })
+			print(hostname)
+			return render(request, 'cog/globus/password.html', { 'openid': openid, 'username': hostname=='ceda.ac.uk', 'message': message })
 
 	# loop over source endpoints, submit one transfer for each source endpoint
 	task_ids = []  # list of submitted task ids
