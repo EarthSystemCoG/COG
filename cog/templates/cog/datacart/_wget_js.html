@@ -66,21 +66,24 @@
 	  ids = ids.split(",");
 
 	  // FIXME: relative wget URL is hard-wired to ESGF web service endpoint
-	  var url = "http://"+index_node+"/esg-search/wget/"; 
+	  var url = "http://"+index_node+"/esg-search/wget/?"; 
+
+	  // add dataset ids
+	  for (i=0; i<ids.length; i++) {
+		if(i>0) {
+		  url += "&";
+		}
+	    url += "dataset_id="+encodeURIComponent(ids[i]);
+	  }
 	
 	  // add optional 'local' shard
 	  if (shard.length>0) {
-	  	  url += "?shards=" + encodeURI(shard+"/solr");  // "?shards=localhost:8982/solr"
+	  	  url += "&shards=" + encodeURI(shard+"/solr");  // "?shards=localhost:8982/solr"
 	  // or target shared "slave" shard only
 	  }
 	  
 	  // add optional query filter
 	  url += getQueryFilter('GET');
-
-	  // add dataset ids
-	  for (i=0; i<ids.length; i++) {
-		url += "&dataset_id="+encodeURIComponent(ids[i]);
-	  }
 	  
 	  // execute synchronous request for one wget script
 	  // execute HTTP GET request
