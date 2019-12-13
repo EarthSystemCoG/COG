@@ -14,3 +14,22 @@ and organizations in the Earth system sciences.  Its structure encourages inform
 
 For more information, visit: http://earthsystemcog.org/
 
+Manual CoG update
+-----------------
+
+```
+cd /usr/local/cog/cog_install
+git fetch
+git checkout v3.15.4 # or master, devel, etc.
+/etc/cog-wsgi-8889/apachectl restart  # for ESGF > v4.0.0 
+# previous versions restart node: esg-node restart 
+```
+
+Latest release: v3.15.4
+-----------------------
+
+ - Add link to clear data cart to appear on pages that import the "middle navbar"
+
+Previous updates
+
+ - Updates to templates for help information in preparation for the retirement of the CU CoG site.
