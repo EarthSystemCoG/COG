@@ -53,6 +53,7 @@
             var title = jsonResponse.titles[0];
             var publisher = jsonResponse.publisher;
             var publication_year = jsonResponse.publicationYear;
+            var license = jsonResponse.rightsList[0].rights;
 
             // point to DOI landing page if it is a DOI
             if(id_type=="DOI") {
@@ -85,6 +86,9 @@
             html += "<div style='text-align:left'><b>Title:</b> "+title+"</div>";
             html += "<div style='text-align:left'><b>Publisher:</b> "+publisher+"</div>";
             html += "<div style='text-align:left'><b>Publication Year:</b> "+publication_year+"</div>";
+            if(license != "unknown") {
+                html += "<div style='text-align:left'><b>License:</b> "+license+"</div>";
+            }
 
             fdiv.innerHTML = html;
     }
