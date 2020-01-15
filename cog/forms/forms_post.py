@@ -152,6 +152,13 @@ class PostForm(ModelForm):
 
             cleaned_data["topic"] = topic
 
+        # check if the 'label' field is set for hyperlink and page posts
+        # if 'label' is blank, then fill the field with the first 28 characters of 'title'        
+        if type == Post.TYPE_PAGE or type == Post.TYPE_HYPERLINK:
+            label = cleaned_data["label"]
+            if label is None:
+                cleaned_data["label"] = cleaned_data["title"][:28]
+
         # prevent XSS on fields 'title', 'label', 'newtopic'
         for key in ["title", "label", "newtopic"]:
             if key in cleaned_data:
