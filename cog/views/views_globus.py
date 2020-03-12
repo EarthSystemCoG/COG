@@ -125,9 +125,11 @@ def download(request):
 		shard = request.GET.get('shard', '')
 		if shard is not None and len(shard.strip()) > 0:
 			params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
+		else:
+			params.append(("distrib", "false"))
 
 			
-		url = settings.DEFAULT_SEARCH_URL+"?"+urllib.parse.urlencode(params)
+		url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
 		print('Searching for files at URL: %s' % url)
 		jobj = getJson(url)
 		
