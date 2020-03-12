@@ -214,7 +214,7 @@ def datacart_wget(request, site_id, user_id):
             if item.identifier in ids:
 
                 # group selected dataset by index_node
-                index_node = urlparse(settings.DEFAULT_SEARCH_URL).netloc
+                index_node = item.getValue('index_node')
                 wget_key = index_node
                 shard = item.getValue('shard')
                 if shard is not None and len(shard.strip())>0:
