@@ -829,12 +829,7 @@ def search_files(request, dataset_id, index_node):
     
     # maximum number of files to query for
     limit = request.GET.get('limit', 20)
-    project_short_name = request.GET.get('project', None)
-    if project_short_name is not None:
-        project = get_object_or_404(Project, short_name__iexact=project_short_name)
-        endpoint = project.searchprofile.url
-    else:
-        endpoint = 'http://'+index_node+'/esg-search/search/'
+            
     params = [('type', "File"), ('dataset_id', dataset_id),
               ("format", "application/solr+json"), ('offset', '0'), ('limit', limit)]
     
@@ -852,8 +847,10 @@ def search_files(request, dataset_id, index_node):
     shard = request.GET.get('shard', '')
     if shard is not None and len(shard.strip()) > 0:
         params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
+    else:
+        params.append(("distrib", "false"))
  
-    url = endpoint+"?"+urllib.parse.urlencode(params)
+    url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
     print('Searching for files: URL=%s' % url)
     fh = urllib.request.urlopen(url)
     response = fh.read().decode("UTF-8")
