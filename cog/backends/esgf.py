@@ -13,10 +13,6 @@ from openid.yadis.discover import DiscoveryFailure
 
 class ESGFOAuth2(BaseOAuth2):
     name = 'esgf'
-    AUTHORIZATION_URL = 'https://slcs.ceda.ac.uk/oauth/authorize'
-    ACCESS_TOKEN_URL = 'https://slcs.ceda.ac.uk/oauth/access_token'
-    CERTIFICATE_URL = 'https://slcs.ceda.ac.uk/oauth/certificate/'
-    DEFAULT_SCOPE = ['https://slcs.ceda.ac.uk/oauth/certificate/']
     REDIRECT_STATE = True
     ACCESS_TOKEN_METHOD = 'POST'
     EXTRA_DATA = [
@@ -26,8 +22,30 @@ class ESGFOAuth2(BaseOAuth2):
         ('openid', 'openid', True)
     ]
 
+    @property
+    def AUTHORIZATION_URL(self):
+        return self._authorization_url
+
+    @property
+    def ACCESS_TOKEN_URL(self):
+        return self._access_token_url
+
+    @property
+    def CERTIFICATE_URL(self):
+        return self._certificate_url
+
+    @property
+    def DEFAULT_SCOPE(self):
+        return self._default_scope
+
 
     def __init__(self, strategy=None, redirect_uri=None):
+
+        self._authorization_url = None
+        self._access_token_url = None
+        self._certificate_url = None
+        self._default_scope = None
+
         super(ESGFOAuth2, self).__init__(strategy, redirect_uri)
 
         # Get openid_identifier added to the session by PSA. Requires
@@ -46,12 +64,12 @@ class ESGFOAuth2(BaseOAuth2):
             return
         for e in endpoints:
             if e.matchTypes(['urn:esg:security:oauth:endpoint:authorize']):
-                self.AUTHORIZATION_URL = e.uri
+                self._authorization_url = e.uri
             elif e.matchTypes(['urn:esg:security:oauth:endpoint:access']):
-                self.ACCESS_TOKEN_URL = e.uri
+                self._access_token_url = e.uri
             elif e.matchTypes(['urn:esg:security:oauth:endpoint:resource']):
-                self.CERTIFICATE_URL = e.uri
-                self.DEFAULT_SCOPE = [e.uri]
+                self._certificate_url = e.uri
+                self._default_scope = [e.uri]
 
 
 
