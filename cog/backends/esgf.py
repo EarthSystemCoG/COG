@@ -4,9 +4,10 @@ from social_core.exceptions import AuthMissingParameter
 from six.moves.urllib_parse import urlencode, unquote
 
 import os
+import logging
 from base64 import b64encode
 from OpenSSL import crypto
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from openid.yadis.services import getServiceEndpoints
 from openid.yadis.discover import DiscoveryFailure
@@ -94,8 +95,8 @@ class ESGFOAuth2(BaseOAuth2):
         try:
             response = self.request(url, method='POST', **request_args)
             response.raise_for_status()
-        except Exception, err:
-            print Exception, err
+        except Exception as e:
+            logging.error(e)
         self.cert = response.text
         cert = crypto.load_certificate(crypto.FILETYPE_PEM, response.text)
         self.subject = cert.get_subject()
@@ -159,7 +160,6 @@ class ESGFOpenId(OpenIdAuth):
 
 
     def get_user_details(self, response):
-        print response.identity_url
         username = os.path.basename(urlparse(response.identity_url).path)
         return {'openid': response.identity_url,
                 'username': username,
