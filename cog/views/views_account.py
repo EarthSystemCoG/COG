@@ -381,7 +381,7 @@ def user_detail(request, user_id):
         user_profile = UserProfile(user=user)
         user_profile.save()
         print("Created empty profile for user=%s" % user)
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         if request.user.social_auth.filter(provider='esgf'):
             social = request.user.social_auth.get(provider='esgf')
             setattr(user_profile, 'openids', [social.uid])
