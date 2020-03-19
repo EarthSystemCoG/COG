@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseForbidden
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from cog.views.utils import getUsersThatMatch, getQueryDict
 from django.contrib.sites.models import Site
@@ -12,7 +12,7 @@ from cog.models.auth import userHasAdminPermission
 from cog.views.utils import paginate
 
 from cog.notification import notify
-from constants import PERMISSION_DENIED_MESSAGE
+from .constants import PERMISSION_DENIED_MESSAGE
 
 # HTTP parameters
 NEW_MEMBERSHIP = "new_membership"
@@ -216,7 +216,7 @@ def membership_process(request, project_short_name):
 
     queryDict = getQueryDict(request)
     
-    for (name, value) in queryDict.items():
+    for (name, value) in list(queryDict.items()):
 
         if name.startswith(NEW_MEMBERSHIP) or name.startswith(OLD_MEMBERSHIP) or name.startswith(NO_MEMBERSHIP):
             (prefix, group_name, user_id) = name.split(":")

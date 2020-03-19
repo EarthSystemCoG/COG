@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from project import Project
+from .constants import APPLICATION_LABEL
+from .project import Project
 from collections import OrderedDict
 from cog.models.dbutils import UnsavedForeignKey
 
@@ -20,10 +20,10 @@ TOP_SUB_FOLDERS = OrderedDict([('PRESENTATIONS', 'Presentations'),
 
 class Folder(models.Model):
 
-    project = UnsavedForeignKey(Project, blank=False)
+    project = UnsavedForeignKey(Project, blank=False, on_delete=models.CASCADE)
     
     name = models.CharField(max_length=200, blank=False)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='parent_folder')
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='parent_folder', on_delete=models.CASCADE)
     active = models.BooleanField(default=True, blank=False, null=False)
     order = models.IntegerField(blank=True, default=0)
 
@@ -47,7 +47,7 @@ class Folder(models.Model):
             return self.parent.topParent()  # recursion
 
     def isPredefined(self):
-        return self.parent is None or self.name in TOP_SUB_FOLDERS.values()
+        return self.parent is None or self.name in list(TOP_SUB_FOLDERS.values())
 
     class Meta:
         unique_together = (("project", "name"),)
@@ -63,7 +63,7 @@ def getTopFolder(project):
     # name = "%s %s" % (project.short_name, TOP_FOLDER)
     folder, created = Folder.objects.get_or_create(name=TOP_FOLDER, parent=None, project=project, active=True)
     if created:
-        print 'Project=%s: created Top-Level folder=%s' % (project.short_name, folder.name)
+        print('Project=%s: created Top-Level folder=%s' % (project.short_name, folder.name))
     return folder
 
 
@@ -80,7 +80,7 @@ def getTopSubFolders(project):
     _folders = []
     # select pre-defined folders
     for folder in folders:
-        if folder.name in TOP_SUB_FOLDERS.values():
+        if folder.name in list(TOP_SUB_FOLDERS.values()):
             _folders.append(folder)
 
     return _folders

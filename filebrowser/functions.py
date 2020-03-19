@@ -8,7 +8,7 @@ from tempfile import NamedTemporaryFile
 # django imports
 from django.utils.translation import ugettext as _
 from django.core.files import File
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 
 # filebrowser imports
 from filebrowser.settings import *
@@ -125,9 +125,9 @@ def sort_by_attr(seq, attr):
     # (seq[i].attr, i, seq[i]) and sort it. The second item of tuple is needed not
     # only to provide stable sorting, but mainly to eliminate comparison of objects
     # (which can be expensive or prohibited) in case of equal attribute values.
-    intermed = map(None, map(getattr, seq, (attr,)*len(seq)), xrange(len(seq)), seq)
+    intermed = map(None, list(map(getattr, seq, (attr,)*len(seq))), range(len(seq)), seq)
     intermed.sort()
-    return map(operator.getitem, intermed, (-1,) * len(intermed))
+    return list(map(operator.getitem, intermed, (-1,) * len(intermed)))
 
 
 def url_join(*args):
@@ -166,7 +166,7 @@ def get_file(path, filename, site=None):
     """
     Get file (or folder).
     """
-    converted_path = smart_unicode(os.path.join(site.directory, path, filename))
+    converted_path = smart_text(os.path.join(site.directory, path, filename))
     if not site.storage.isfile(converted_path) and not site.storage.isdir(converted_path):
         return None
     return filename
@@ -179,7 +179,7 @@ def get_file_type(filename):
     
     file_extension = os.path.splitext(filename)[1].lower()
     file_type = ''
-    for k,v in EXTENSIONS.iteritems():
+    for k,v in EXTENSIONS.items():
         for extension in v:
             if file_extension == extension.lower():
                 file_type = k
@@ -261,7 +261,7 @@ def handle_file_upload(path, file, site):
     try:
         file_path = os.path.join(path, file.name)
         uploadedfile = site.storage.save(file_path, file)
-    except Exception, inst:
+    except Exception as inst:
         raise inst
     return uploadedfile
 
@@ -273,7 +273,7 @@ def is_selectable(filename, selecttype):
     
     file_extension = os.path.splitext(filename)[1].lower()
     select_types = []
-    for k,v in SELECT_FORMATS.iteritems():
+    for k,v in SELECT_FORMATS.items():
         for extension in v:
             if file_extension == extension.lower():
                 select_types.append(k)
@@ -309,7 +309,7 @@ def version_generator(value, version_prefix, force=None, site=None):
         version = scale_and_crop(im, VERSIONS[version_prefix]['width'], VERSIONS[version_prefix]['height'], VERSIONS[version_prefix]['opts'])
         if not version:
             version = im
-        if 'methods' in VERSIONS[version_prefix].keys():
+        if 'methods' in list(VERSIONS[version_prefix].keys()):
             for m in VERSIONS[version_prefix]['methods']:
                 if callable(m):
                     version = m(version)
@@ -379,7 +379,7 @@ def convert_filename(value):
         chunks = value.split(os.extsep)
         normalized = []
         for v in chunks:
-            v = unicodedata.normalize('NFKD', unicode(v)).encode('ascii', 'ignore')
+            v = unicodedata.normalize('NFKD', str(v)).encode('ascii', 'ignore')
             v = re.sub('[^\w\s-]', '', v).strip()
             normalized.append(v)
 

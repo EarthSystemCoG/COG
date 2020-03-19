@@ -8,30 +8,36 @@ from cog.site_manager import siteManager
 
 class InitMiddleware(object):
 
-    def __init__(self):
-
-        print 'Executing CoG initialization tasks'
-
+    def __init__(self, get_response):
+        self.get_response = get_response
+        
+        print('Executing CoG initialization tasks')
+        
         # update name, domain of current site into database
         current_site = Site.objects.get_current()
         current_site.name = settings.SITE_NAME
         current_site.domain = settings.SITE_DOMAIN
         current_site.save()
-        print 'Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain)
-
+        print('Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain))
+        
         # update list of ESGF peers into database
         filepath = siteManager.get('PEER_NODES')
         try:
             pnl = PeerNodesList(filepath)
             pnl.reload() # delete=False
-        except Exception, error:
-            print "Could not update peer nodes from xml file", error
+        except Exception as error:
+            print("Could not update peer nodes from xml file")
+            print(error)
 
         # read IdP whitelist
 
         # remove this class from the middleware that is invoked for every request
         raise MiddlewareNotUsed('Do not invoke ever again')
 
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
     def process_request(self, request):
-        print 'This line should never be printed...'
+        print('This line should never be printed...')
         return None

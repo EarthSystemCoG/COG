@@ -4,10 +4,9 @@ from cog.models.utils import site_index, listPeople
 from cog.views import encodeMembershipPar, NEW_MEMBERSHIP, OLD_MEMBERSHIP, NO_MEMBERSHIP
 from cog.views import userCanPost, userCanView
 from django import template
-from django.core.urlresolvers import reverse
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import re
 from cog.utils import smart_truncate, INVALID_CHARS
 from cog.models.utils import get_project_communication_means
@@ -18,7 +17,7 @@ from cog.models.constants import DEFAULT_IMAGES
 from cog.util.thumbnails import getThumbnailPath
 from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
-import urlparse
+import urllib.parse
 import string
 import bleach
 from cog.views.utils import getKnownIdentityProviders, getQueryDict, paginate
@@ -31,13 +30,13 @@ def wps_arguments(the_dict):
 
     for f in settings.WPS_FIELDS:
         if f in the_dict:
-	    args[f] = the_dict[f]
+	        args[f] = the_dict[f]
 
     return args
 
 @register.filter
 def knownIdentityProviders(request):
-    return getKnownIdentityProviders().items()
+    return list(getKnownIdentityProviders().items())
 
 
 @register.filter
@@ -48,7 +47,7 @@ def concat(astring, bstring):
 @register.filter
 def sortdict(the_dict):
     tuples = []
-    for key, value in the_dict.iteritems():
+    for key, value in the_dict.items():
         tuples.append((key, value))
     return sorted(tuples, key=lambda tuple: tuple[0])
 
@@ -178,7 +177,7 @@ def _folder_tree(folder, user, esc, expanded=False, icon='folder'):
         #   its child folders in reverse order to keep the most recent folder on top.
         # closing upper-level child folders by default (e.g. folders under Presentations)
 
-        years = reversed(range(2000, 2025))  # create list of reversed integers representing years
+        years = reversed(list(range(2000, 2025)))  # create list of reversed integers representing years
         years_str = [str(_year) for _year in years]  # convert that list to a list of strings
 
         if folder.name == "Bookmarks":
@@ -776,7 +775,7 @@ def get_domain(url):
     Returns the domain part of a URL
     """
     
-    return urlparse.urlparse(url)[1]
+    return urllib.parse.urlparse(url)[1]
 
 @register.filter
 def get_target_url_with_next_url(request, target_url_name):
@@ -884,7 +883,7 @@ def getDisplayStatus(flag1, flag2):
     
 @register.filter
 def startsWith(text, starts):
-    if isinstance(text, basestring):
+    if isinstance(text, str):
         return text.starts_with(starts)
     return False
 

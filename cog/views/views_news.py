@@ -2,12 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from cog.models import *
 from cog.models.auth import userHasContributorPermission
 from cog.forms import *
-from constants import PERMISSION_DENIED_MESSAGE
+from .constants import PERMISSION_DENIED_MESSAGE
 from cog.views.utils import paginate
 
 
@@ -75,7 +75,7 @@ def news_update(request, news_id):
         
         # invalid data
         else:
-            print "Form is invalid: %s" % form.errors
+            print("Form is invalid: %s" % form.errors)
             news = form.instance
             return render_news_form(request, request.POST, form, news.project)
 
@@ -130,7 +130,7 @@ def news_add(request, project_short_name):
         
         # invalid data
         else:
-            print "Form is invalid: %s" % form.errors
+            print("Form is invalid: %s" % form.errors)
             news = form.instance
             return render_news_form(request, request.POST, form, news.project)
 

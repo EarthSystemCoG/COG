@@ -20,4 +20,4 @@ from cog.views.views_share import *
 from cog.views.views_access_control import *
 from cog.views.views_globus import *
 from cog.views.utils import *
-from views_status import *
+from cog.views.views_status import *

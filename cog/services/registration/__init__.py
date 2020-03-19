@@ -1,2 +1,2 @@
-from registration import RegistrationService
-from registration_impl import ESGFRegistrationServiceImpl, esgfRegistrationServiceImpl
+from .registration import RegistrationService
+from .registration_impl import ESGFRegistrationServiceImpl, esgfRegistrationServiceImpl

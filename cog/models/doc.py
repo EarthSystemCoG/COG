@@ -1,6 +1,6 @@
 from django.db import models
-from constants import APPLICATION_LABEL
-from project import Project
+from .constants import APPLICATION_LABEL
+from .project import Project
 from django.contrib.auth.models import User
 import os
 from django.conf import settings
@@ -21,7 +21,7 @@ class OverridingFileStorage(FileSystemStorage):
     def save(self, name, content, max_length=None): 
         # must delete current file first  
         if self.exists(name):
-            print 'Deleting existing file=%s' % name
+            print('Deleting existing file=%s' % name)
             self.delete(name)     
         # also, look for Doc objects for the same named file  
         prefix = getattr(settings, "FILEBROWSER_DIRECTORY", "")
@@ -47,7 +47,7 @@ class Doc(models.Model):
     file = models.FileField(upload_to=get_upload_path, storage=ofs, max_length=400)
     publication_date = models.DateTimeField('Date Published', auto_now_add=True)
     update_date = models.DateTimeField('Date Updated', auto_now=True)
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     # public/private flag
     is_private = models.BooleanField(verbose_name='Private?', default=False, null=False)
     

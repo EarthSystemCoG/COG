@@ -137,7 +137,7 @@ class PostForm(ModelForm):
         # validate "topic"
         # cannot set both 'topic' and 'newtopic'
         if topic and newtopic:
-            errmsg = u"Please either choose an existing topic OR create a new one"
+            errmsg = "Please either choose an existing topic OR create a new one"
             self._errors["topic"] = self.error_class([errmsg])
             del cleaned_data["topic"]
             del cleaned_data["newtopic"]
@@ -151,6 +151,13 @@ class PostForm(ModelForm):
                 topic = Topic.objects.create(name=newtopic)
 
             cleaned_data["topic"] = topic
+
+        # check if the 'label' field is set for hyperlink and page posts
+        # if 'label' is blank, then fill the field with the first 28 characters of 'title'        
+        if type == Post.TYPE_PAGE or type == Post.TYPE_HYPERLINK:
+            label = cleaned_data["label"]
+            if label is None:
+                cleaned_data["label"] = cleaned_data["title"][:28]
 
         # prevent XSS on fields 'title', 'label', 'newtopic'
         for key in ["title", "label", "newtopic"]:

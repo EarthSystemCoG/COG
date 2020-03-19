@@ -6,16 +6,17 @@ and redirect to the authentication page with informative error messages.
 '''
 
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 from cog.plugins.esgf.registry import LocalWhiteList
 
 class LoginMiddleware(object):
 
-    def __init__(self):
+    def __init__(self, get_response):
 
-        
         try:
+            self.get_response = get_response
+
             # initialize the white list service
             self.whitelist = LocalWhiteList(settings.IDP_WHITELIST)
                 
@@ -31,6 +32,10 @@ class LoginMiddleware(object):
         except OSError:
             # OSError: [Errno 2] No such file or directory: '/esg/config/esgf_idp_static.xml'
             self.init = False
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
 
     def process_request(self, request):
         '''
@@ -78,17 +83,17 @@ class LoginMiddleware(object):
             # process errors from openid authentication
             if request.path == self.url2:
     
-                if request.method=='POST' and not request.user.is_authenticated():
+                if request.method=='POST' and not request.user.is_authenticated:
                     if response.status_code == 500:
-                        print 'Authentication Error'
-                        print response
+                        print('Authentication Error')
+                        print(response)
                         if 'OpenID discovery error' in response.content:
                             return HttpResponseRedirect(reverse('openid-login')+"?message=openid_discovery_error&next=%s&openid=%s" % (next, openid_identifier) )
     
             # process errors from standard authentication
             elif request.path == self.url1:
     
-                if request.method=='POST' and not request.user.is_authenticated():
+                if request.method=='POST' and not request.user.is_authenticated:
                     return HttpResponseRedirect(reverse('login')+"?message=login_failed&next=%s&username=%s" % (next, username) )
 
         return response

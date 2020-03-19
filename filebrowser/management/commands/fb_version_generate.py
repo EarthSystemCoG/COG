@@ -33,7 +33,7 @@ class Command(BaseCommand):
             for version in VERSIONS:
                 self.stdout.write(' * %s\n' % version)
             
-            version_name = raw_input('(leave blank to generate all versions): ')
+            version_name = input('(leave blank to generate all versions): ')
             
             if version_name == "":
                 selected_version = None
@@ -52,7 +52,7 @@ class Command(BaseCommand):
         filter_re = []
         for exp in EXCLUDE:
            filter_re.append(re.compile(exp))
-        for k,v in VERSIONS.iteritems():
+        for k,v in VERSIONS.items():
             exp = (r'_%s(%s)') % (k, '|'.join(EXTENSION_LIST))
             filter_re.append(re.compile(exp))
         

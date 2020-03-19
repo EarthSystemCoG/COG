@@ -58,7 +58,7 @@ class ProjectManager(object):
                                                site__domain=site_domain)
                 objList.add(aproject)
             except Project.DoesNotExist: # correct short name, wrong site ?
-                print 'Associated project does not exist in local database: short_name=%s site_domain=%s, will ignore' % (apdict['short_name'], apdict['site_domain'])
+                print('Associated project does not exist in local database: short_name=%s site_domain=%s, will ignore' % (apdict['short_name'], apdict['site_domain']))
                 pass 
                     
         
@@ -79,14 +79,14 @@ class ProjectManager(object):
             
             remote_site, created = Site.objects.get_or_create(domain=sdict['domain'])
             if created:
-                print 'Created remote site: %s' % remote_site
+                print('Created remote site: %s' % remote_site)
             else:
-                print 'Remote site %s already existing' % remote_site
+                print('Remote site %s already existing' % remote_site)
             #remote_site.name = sdict["name"] # don't change the site 'name', keep value from esgf_cogs.xml instead
             #remote_site.save()
                         
             # first loop to create ALL projects first
-            for key, pdict in jobj["projects"].items():
+            for key, pdict in list(jobj["projects"].items()):
                               
                 short_name = pdict['short_name']
                 long_name = pdict['long_name']
@@ -97,17 +97,17 @@ class ProjectManager(object):
                     
                     if not Project.objects.filter(short_name__iexact=short_name).exists(): # avoid conflicts with existing projects, from ANY site
                         # create new project
-                        print 'Creating project=%s (%s) for site=%s in local database' % (short_name, long_name, remote_site)
+                        print('Creating project=%s (%s) for site=%s in local database' % (short_name, long_name, remote_site))
                         try:
                             Project.objects.create(short_name=short_name, long_name=long_name, site=remote_site, active=True)
-                            print 'Created project=%s for site=%s in local database' % (short_name, remote_site)
+                            print('Created project=%s for site=%s in local database' % (short_name, remote_site))
                         except Exception as e:
-                            print e # ignore errors while creating any one project from remote site, continue iteration
+                            print(e) # ignore errors while creating any one project from remote site, continue iteration
                     else:
-                        print 'Project with name:%s already exists (local or remote)' % short_name
+                        print('Project with name:%s already exists (local or remote)' % short_name)
             
             # second loop to update project attributes and associations
-            for key, pdict in jobj["projects"].items():
+            for key, pdict in list(jobj["projects"].items()):
                 
                 short_name = pdict['short_name']
                 long_name = pdict['long_name']
@@ -121,7 +121,7 @@ class ProjectManager(object):
                     try:
                         # load existing project from remote site
                         project = Project.objects.get(short_name=short_name, site=remote_site)
-                        print 'Loaded project: %s from site: %s' % (short_name, site_domain)
+                        print('Loaded project: %s from site: %s' % (short_name, site_domain))
                         
                         # update project attributes
                         project.long_name = long_name
@@ -140,9 +140,9 @@ class ProjectManager(object):
                         
                         # update project associations
                         self._associateProjects(project.peers, pdict['peers'])
-                        print 'Updated project peers=%s' % project.peers.all()
+                        print('Updated project peers=%s' % project.peers.all())
                         self._associateProjects(project.parents, pdict['parents'])
-                        print 'Updated project parents=%s' % project.parents.all()                    
+                        print('Updated project parents=%s' % project.parents.all())                    
                         
                         project.save()
                         

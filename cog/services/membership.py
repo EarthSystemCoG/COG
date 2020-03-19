@@ -9,7 +9,7 @@ and reference projects, as opposed to groups.
 from django.contrib.auth.models import User, Group, Permission
 from cog.models import (MembershipRequest, ManagementBodyMember, OrganizationalRoleMember, 
                         getProjectForGroup, CommunicationMeansMember, LoggedEvent)
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 import django.dispatch
 
 # return codes
@@ -35,7 +35,7 @@ def cancelMembershipRequest(user, group):
     mrlist = MembershipRequest.objects.filter(group=group).filter(user=user)
     if len(mrlist)>0:
         for mr in mrlist:
-            print 'Cancelling membership request for user=%s group=%s' % (user.username, group.name)
+            print('Cancelling membership request for user=%s group=%s' % (user.username, group.name))
             mr.delete()
             
 # Method to cancel ALL membership requests for a given user, project
@@ -51,7 +51,7 @@ def addMembership(user, group, admin=None):
     
     if not group in user.groups.all():
         user.groups.add(group)
-        print "Enrolled user=%s in group=%s" % (user.username, group.name)
+        print("Enrolled user=%s in group=%s" % (user.username, group.name))
         cancelMembershipRequests(user, project)
         # log event
         if admin is not None:
@@ -62,7 +62,7 @@ def addMembership(user, group, admin=None):
         return RESULT_SUCCESS
     
     else:
-        print "User=%s is already enrolled in group=%s" % (user.username, group.name)
+        print("User=%s is already enrolled in group=%s" % (user.username, group.name))
         cancelMembershipRequests(user, project)
         return RESULT_DUPLICATE
 
@@ -78,7 +78,7 @@ def cancelMembership(user, group, admin=None):
            
         # first remove user from that group
         user.groups.remove(group)
-        print "Removed user=%s from group=%s" % (user.username, group.name)
+        print("Removed user=%s from group=%s" % (user.username, group.name))
         
         # if user is not part of the project any more, remove from all project management bodies
         project = getProjectForGroup(group)
@@ -86,17 +86,17 @@ def cancelMembership(user, group, admin=None):
             # Management Bodies
             objs = ManagementBodyMember.objects.filter(user=user).filter(managementBody__project=project)
             for obj in objs:
-                print 'Deleting ManagementBodyMember for project=%s user=%s managementBody=%s' % (project, user, obj.managementBody.title)
+                print('Deleting ManagementBodyMember for project=%s user=%s managementBody=%s' % (project, user, obj.managementBody.title))
                 obj.delete()
             # Organization Roles
             objs = OrganizationalRoleMember.objects.filter(user=user).filter(organizationalRole__project=project)
             for obj in objs:
-                print 'Deleting OrganizationalRoleMember for project=%s user=%s organizationalRole=%s' % (project, user, obj.organizationalRole.title)
+                print('Deleting OrganizationalRoleMember for project=%s user=%s organizationalRole=%s' % (project, user, obj.organizationalRole.title))
                 obj.delete()
             # Communication Means
             objs = CommunicationMeansMember.objects.filter(user=user).filter(communicationMeans__project=project)
             for obj in objs:
-                print 'Deleting CommunicationMeansMember for project=%s user=%s communicationMeans=%s' % (project, user, obj.communicationMeans.title)
+                print('Deleting CommunicationMeansMember for project=%s user=%s communicationMeans=%s' % (project, user, obj.communicationMeans.title))
                 obj.delete()
             
         # log event
@@ -110,5 +110,5 @@ def cancelMembership(user, group, admin=None):
         return RESULT_SUCCESS
     
     else:
-        print "User=%s not found in group=%s" % (user.username, group.name)
+        print("User=%s not found in group=%s" % (user.username, group.name))
         return RESULT_NOT_FOUND

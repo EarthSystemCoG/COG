@@ -19,7 +19,7 @@ class FileInput(DjangoClearableFileInput):
     initial_text = ugettext_lazy('Currently')
     input_text = ugettext_lazy('Change')
     clear_checkbox_label = ugettext_lazy('Clear')
-    template_with_initial = u'%(input)s %(preview)s'
+    template_with_initial = '%(input)s %(preview)s'
     
     def render(self, name, value, attrs=None):
         substitutions = {
@@ -29,7 +29,7 @@ class FileInput(DjangoClearableFileInput):
             'preview': '',
             'clear_checkbox_label': self.clear_checkbox_label,
         }
-        template = u'%(input)s'
+        template = '%(input)s'
         substitutions['input'] = super(DjangoClearableFileInput, self).render(name, value, attrs)
         
         if value and hasattr(value, "url"):
@@ -53,8 +53,8 @@ class ClearableFileInput(DjangoClearableFileInput):
     input_text = ugettext_lazy('Change')
     clear_checkbox_label = ugettext_lazy('Clear')
     
-    template_with_initial = u'<p class="file-upload">%(initial_text)s: %(initial)s<span class="clearable-file-input">%(clear_template)s</span><br />%(input_text)s: %(input)s %(preview)s</p>'
-    template_with_clear = u'%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label>'
+    template_with_initial = '<p class="file-upload">%(initial_text)s: %(initial)s<span class="clearable-file-input">%(clear_template)s</span><br />%(input_text)s: %(input)s %(preview)s</p>'
+    template_with_clear = '%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label>'
 
     # template_with_initial = u'%(initial_text)s: %(initial)s %(clear_template)s<br />%(input_text)s: %(input)s'
     # template_with_clear = u'%(clear)s <label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label>'
@@ -70,12 +70,12 @@ class ClearableFileInput(DjangoClearableFileInput):
             'preview': '',
             'clear_checkbox_label': self.clear_checkbox_label,
         }
-        template = u'%(input)s'
+        template = '%(input)s'
         substitutions['input'] = super(DjangoClearableFileInput, self).render(name, value, attrs)
         
         if value and hasattr(value, "url"):
             template = self.template_with_initial
-            substitutions['initial'] = (u'<a target="_blank" href="%s">%s</a>' % (value.url, value))
+            substitutions['initial'] = ('<a target="_blank" href="%s">%s</a>' % (value.url, value))
             if not self.is_required:
                 checkbox_name = self.clear_checkbox_name(name)
                 checkbox_id = self.clear_checkbox_id(checkbox_name)

@@ -19,10 +19,10 @@ class ProjectForm(ModelForm):
     # define the widget for parent/peer selection so we can set the styling. The class is set to .selectfilter and its
     # styles are controlled in cogstyle.css
 
-    parents = forms.ModelMultipleChoiceField("parents", required=False,
+    parents = forms.ModelMultipleChoiceField(queryset=Project.objects.all(), required=False,
                                              widget=forms.SelectMultiple(attrs={'size': '20',
                                                                                 'class': 'selectprojects'}))
-    peers = forms.ModelMultipleChoiceField("peers", required=False,
+    peers = forms.ModelMultipleChoiceField(queryset=Project.objects.all(), required=False,
                                            widget=forms.SelectMultiple(attrs={'size': '20',
                                                                               'class': 'selectprojects'}))
     # filtering of what is see in the form is done down below. 
@@ -99,7 +99,7 @@ class ProjectForm(ModelForm):
         
         # check for non-ascii characters
         try:
-            long_name.decode('ascii')
+            long_name.encode('ascii')
         except (UnicodeDecodeError, UnicodeEncodeError):
             raise forms.ValidationError("Project long name contains invalid non-ASCII characters")
         return long_name
@@ -156,7 +156,7 @@ class SoftwareForm(ModelForm):
         features = self.cleaned_data.get('software_features')
         if not hasText(features):
             self._errors["software_features"] = self.error_class(["'SoftwareFeatures' must not be empty."])
-            print 'error'
+            print('error')
         return self.cleaned_data
 
 
@@ -174,7 +174,7 @@ class ProjectTagForm(ModelForm):
     # form constructor in views_project.py
 
     # field['tags'] is the list of preexisting tags
-    tags = forms.ModelMultipleChoiceField("tags", required=False,
+    tags = forms.ModelMultipleChoiceField(queryset=Project.objects.all(), required=False,
                                           widget=forms.SelectMultiple(attrs={'size': '7'}))
 
     # override __init__ method to change the queryset for 'tags'

@@ -42,20 +42,20 @@ def arguments(argv):
 	dlocation = args.download_location
 
 	if '#' not in uendpoint:
-		print "Please supply a valid Globus endpoint (local host)"
+		print("Please supply a valid Globus endpoint (local host)")
 		sys.exit()
 	if '#' not in gendpoint:
-		print "Please supply a valid Globus endpoint (remote host)"
+		print("Please supply a valid Globus endpoint (remote host)")
 	if '/' in uendpoint:
-		print "Do not include the download path in the local endpoint name, please use the -p option"
+		print("Do not include the download path in the local endpoint name, please use the -p option")
 		sys.exit()
 	if '/' in gendpoint:
-		print "Do not include the download path in the remote endpoint name, please use the -p option"
+		print("Do not include the download path in the remote endpoint name, please use the -p option")
 	if '#' in path:
-		print "The '#' character is invalid in your path, please re-enter"
+		print("The '#' character is invalid in your path, please re-enter")
 		sys.exit()
 	if '#' in dlocation:
-		print "The '#' character is invalid in your download location, please re-enter"
+		print("The '#' character is invalid in your download location, please re-enter")
 	if path[-1] != '/':
 		path = path + '/'
 	if path[0] != '/':

@@ -1,5 +1,5 @@
 from django.db import models
-import ConfigParser
+import configparser
 from datetime import datetime
 import os
 
@@ -35,9 +35,9 @@ class Facet:
         return [(value, self.values[value]) for value in sorted(self.values.keys())]
         
     def printme(self):
-        print "Facet key=%s label=%s" % (self.key, self.label)
-        for value, counts in self.values.items():
-            print "\tValue=%s counts=%d" % (value, counts)
+        print("Facet key=%s label=%s" % (self.key, self.label))
+        for value, counts in list(self.values.items()):
+            print("\tValue=%s counts=%d" % (value, counts))
             
 class SearchInput:
     
@@ -58,7 +58,7 @@ class SearchInput:
             self.constraints[name].append(value)
         except KeyError:
             self.constraints[name] = [value]
-        print "constraint name=%s value(s)=%s" % (name, self.constraints[name])
+        print("constraint name=%s value(s)=%s" % (name, self.constraints[name]))
         
     def setConstraint(self, name, values):
         self.constraints[name] = values
@@ -98,11 +98,11 @@ class SearchInput:
         return self.query == '' and len(self.constraints)==0
         
     def printme(self):
-        print "Search Input"
-        print "\t Query=%s Type=%s Offset=%d Limit=%d Max Version=%s Min Version=%s" % (self.query, self.type, self.offset, self.limit, 
-                                                                                        self.max_version, self.min_version)
-        for key, values in self.constraints.items():
-            print "\t Constraint key=%s value(s)=%s" % (key, values)
+        print("Search Input")
+        print("\t Query=%s Type=%s Offset=%d Limit=%d Max Version=%s Min Version=%s" % (self.query, self.type, self.offset, self.limit, 
+                                                                                        self.max_version, self.min_version))
+        for key, values in list(self.constraints.items()):
+            print("\t Constraint key=%s value(s)=%s" % (key, values))
         
         
 class SearchOutput:
@@ -116,8 +116,8 @@ class SearchOutput:
         self.facets[facet.key] = facet
         
     def printme(self):
-        print "Search Output: total number of results=%d" % self.counts
-        for facet in self.facets.values():
+        print("Search Output: total number of results=%d" % self.counts)
+        for facet in list(self.facets.values()):
             facet.printme()
         for record in self.results:
             record.printme()
@@ -136,9 +136,9 @@ class Record:
             self.fields[name] = [value]
             
     def printme(self):
-        print "Record id=%s" % self.id
-        for name, values in self.fields.items():
-            print "\tField name=%s values=%s" % (name, values)
+        print("Record id=%s" % self.id)
+        for name, values in list(self.fields.items()):
+            print("\tField name=%s values=%s" % (name, values))
                         
 class FacetProfile:
     
@@ -156,7 +156,7 @@ class FacetProfile:
         self.map = {}
         for group in self.facetGroups:
             self.keys = self.keys + group.keys
-            self.map = dict( self.map.items() + group.map.items() )
+            self.map = dict( list(self.map.items()) + list(group.map.items()) )
                         
     def getAllKeys(self):
         """Returns a list of keys over all its facet groups."""
@@ -217,14 +217,14 @@ class SearchConfig:
         self.localFlag = localFlag
         
     def printme(self):
-        print 'Search Configuration Service:%s' % self.searchService
-        print 'Search Configuration Facets:'
+        print('Search Configuration Service:%s' % self.searchService)
+        print('Search Configuration Facets:')
         for facetGroup in self.facetProfile.facetGroups:
-            print "\tFacet Group=%s" % facetGroup.name
+            print("\tFacet Group=%s" % facetGroup.name)
             for key in facetGroup.getKeys():
-                print "\t\tFacet key=%s, label=%s" % (key, facetGroup.getLabel(key))
-        print 'Search Configuration Fixed Constraints=%s' % self.fixedConstraints
-        print 'Search Configuration options: show replica checkbox: %s, show latest checkbox: %s, show local checkbox:%s' % (self.replicaFlag, self.latestFlag, self.localFlag)
+                print("\t\tFacet key=%s, label=%s" % (key, facetGroup.getLabel(key)))
+        print('Search Configuration Fixed Constraints=%s' % self.fixedConstraints)
+        print('Search Configuration options: show replica checkbox: %s, show latest checkbox: %s, show local checkbox:%s' % (self.replicaFlag, self.latestFlag, self.localFlag))
     
 class SearchMappings(object):
     """Class that reads facet option mappings from a local configuration file,
@@ -237,7 +237,7 @@ class SearchMappings(object):
         CONFIGFILEPATH = os.path.join(cog_config_dir, 'cog_search.cfg')
         
         self.mappings = {}
-        config = ConfigParser.RawConfigParser()
+        config = configparser.RawConfigParser()
         try:
             config.read( CONFIGFILEPATH )
             for facet_key in config.sections():
@@ -249,8 +249,8 @@ class SearchMappings(object):
                 self.mappings[facet_key] = fmap
             #print 'Loaded search mappinsg from file: %s' % filepath
         except Exception as e:
-            print "Search mappings file not found"
-            print e
+            print("Search mappings file not found")
+            print(e)
             
     def getFacetOptionLabel(self, facet_key, facet_option):
         """Returns the facet_option for the given facet_key if found,

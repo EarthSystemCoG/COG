@@ -1,4 +1,4 @@
-import sys, os, ConfigParser
+import sys, os, configparser
 from django.conf import settings
 from cog.models import Project, SearchGroup, SearchFacet
 from cog.utils import str2bool
@@ -15,7 +15,7 @@ class SearchConfigParser():
     def _getConfigParser(self):
         
         # read project configuration
-        configParser = ConfigParser.RawConfigParser()
+        configParser = configparser.RawConfigParser()
         # must set following line explicitly to preserve the case of configuration keys
         configParser.optionxform = str 
         
@@ -25,7 +25,7 @@ class SearchConfigParser():
     def write(self):
         '''Writes the project search configuration to the file $COG_CONFIG_DIR/projects/<project_short_name>/search.cfg'''
         
-        print 'Writing search configuration for project=%s' % self.project.short_name
+        print('Writing search configuration for project=%s' % self.project.short_name)
         
         # load project search profile
         project = Project.objects.get(short_name=self.project.short_name)
@@ -66,7 +66,7 @@ class SearchConfigParser():
     def read(self):
         '''Reads the project search configuration from the file $COG_CONFIG_DIR/projects/<project_short_name>/search.cfg'''
         
-        print 'Reading search configuration for project=%s' % self.project.short_name
+        print('Reading search configuration for project=%s' % self.project.short_name)
         
         # load project search profile
         project = Project.objects.get(short_name=self.project.short_name)
@@ -74,7 +74,7 @@ class SearchConfigParser():
         
         # remove existing groups of facets
         for group in search_profile.groups.all():
-            print 'Deleting search group=%s' % group
+            print('Deleting search group=%s' % group)
             group.delete()
         
         # read project configuration
@@ -82,7 +82,7 @@ class SearchConfigParser():
         try:
             projConfig.read( self.config_file_path )
         except Exception as e:
-            print "Configuration file %s not found" % self.config_file_path
+            print("Configuration file %s not found" % self.config_file_path)
             raise e
         
         # loop over configuration sections
@@ -110,7 +110,7 @@ class SearchConfigParser():
         
                 for option in projConfig.options(section):
                     value = projConfig.get(section, option)
-                    print section, option, value
+                    print(section, option, value)
                     parts = value.split("|")
                     facet_order = int(option)
                     facet_key = parts[0]

@@ -41,7 +41,7 @@ urlpatterns = [
     # authentication options
     # a) django (username/password) login
     #url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'cog/account/login.html'}, name='login'),
-    url(r'^login2/$', django.contrib.auth.views.login, {'template_name': 'cog/account/login.html'}, name='login'),
+    url(r'^login2/$', django.contrib.auth.views.LoginView.as_view(template_name='cog/account/login.html'), name='login'),
     
     # b) combined django + openid login
     #url(r'^login/$', custom_login, {'template_name': 'cog/openid/login2.html'}, name='login'),
@@ -64,7 +64,7 @@ urlpatterns = [
     # force redirection to login page after logout
     #url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
     # use next=... to redirect to previous page after logout
-    url(r'^logout/$', django.contrib.auth.views.logout, name='logout'),
+    url(r'^logout/$', django.contrib.auth.views.LogoutView.as_view(), name='logout'),
 
     # user management
     url(r'^user/add/$', cog.views.user_add, name='user_add' ),

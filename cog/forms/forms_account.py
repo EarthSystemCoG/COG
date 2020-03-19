@@ -292,7 +292,7 @@ def validate_username(form, user_id):
                         
                         # once the openid is validated, choose the closest possible username
                         _username = createUsername(username)
-                        print 'Created username=%s from=%s' % (_username, username)
+                        print('Created username=%s from=%s' % (_username, username))
                         cleaned_data['username'] = _username  # override form data
             else:
                 # django will automatically check that the username is unique in the CoG database
@@ -310,6 +310,6 @@ def validate_field(form, field_name, field_value):
 def validate_ascii(form, field_name, field_value):
     if field_value:
         try:
-            field_value.decode('ascii')
+            field_value.encode('ascii')
         except (UnicodeDecodeError, UnicodeEncodeError):
             form._errors[field_name] = form.error_class(["'%s' contains invalid characters." % field_name])

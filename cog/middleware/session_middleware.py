@@ -11,6 +11,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class SessionMiddleware(object):
     
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
     def process_request(self, request):
         '''
         Method called before processing of the view.
@@ -19,7 +26,7 @@ class SessionMiddleware(object):
         
         # must not use shared anonymous session
         try:
-            if request.user.is_authenticated() and request.user.profile.openid() is not None:
+            if request.user.is_authenticated and request.user.profile.openid() is not None:
             
                 s = request.session
                 last_accessed_seconds = s.get('LAST_ACCESSED', 0) # defaults to Unix Epoch

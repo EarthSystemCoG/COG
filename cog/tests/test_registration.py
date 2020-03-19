@@ -35,7 +35,7 @@ class Test(unittest.TestCase):
 
     def testGroups(self):
         groups = self.registrationService.listGroups()
-        g = {'visible': True, 'automatic_approval': False, 'name': u'TestGroup', 'description': u'Description'}
+        g = {'visible': True, 'automatic_approval': False, 'name': 'TestGroup', 'description': 'Description'}
         self.assertIn(g, groups)
         
     def _testUserRegistration(self):

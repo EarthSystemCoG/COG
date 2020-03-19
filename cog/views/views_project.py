@@ -96,7 +96,7 @@ def project_add(request):
         # invalid data
         else:
             
-            print "Form is invalid: %s" % form.errors           
+            print("Form is invalid: %s" % form.errors)           
             project = form.instance
             
             # create and set state of project tabs, do not persist
@@ -160,7 +160,7 @@ def project_index(request, project_short_name):
                 topicvalue = request.POST[topickey]
                 ii.order = topicvalue
                 # validate topic order
-                if topicvalue in topicMap.values():
+                if topicvalue in list(topicMap.values()):
                     valid = False
                     errors[topickey] = "Duplicate topic number: %d" % int(topicvalue)
                 else:
@@ -173,7 +173,7 @@ def project_index(request, project_short_name):
                 pagevalue = request.POST[pagekey]
                 page.order = pagevalue
                 # validate page order
-                if pagevalue in pageMap.values():
+                if pagevalue in list(pageMap.values()):
                     valid = False
                     errors[pagekey] = "Duplicate page number: %d" % int(pagevalue)
                 else:
@@ -271,7 +271,7 @@ def project_update(request, project_short_name):
             return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
 
         else:
-            print 'Form is invalid %s' % form.errors
+            print('Form is invalid %s' % form.errors)
             
             # update project tabs, but do not persist state since form had errors
             tabs = get_or_create_project_tabs(project, save=False)
@@ -371,7 +371,7 @@ def contactus_update(request, project_short_name):
         else:
             # re-display form view
             if not form.is_valid():
-                print 'Form is invalid  %s' % form.errors
+                print('Form is invalid  %s' % form.errors)
             return render_contactus_form(request, project, form)
 
 
@@ -419,7 +419,7 @@ def notifyAuthorOfProjectApproval(project, request):
 
 def initProject(project):
     
-    print "Initializing project: %s" % project.short_name
+    print("Initializing project: %s" % project.short_name)
                         
     # create project home page
     create_project_home(project, project.author)
@@ -540,7 +540,7 @@ def tags_update(request, project_short_name):
             return HttpResponseRedirect(reverse('project_home', args=[project.short_name.lower()]))
             
         else:
-            print 'Form is invalid  %s' % form.errors
+            print('Form is invalid  %s' % form.errors)
             return render_tags_form(request, project, form)
 
 
@@ -577,13 +577,13 @@ def project_browser(request, project_short_name, tab):
     elif tab == 'all':
         html += render_project_list(project, tab, tag, request.user, None, 'all_projects', None)
     elif tab == 'my':
-        if not request.user.is_anonymous():
+        if not request.user.is_anonymous:
             html += render_project_list(project, tab, tag, request.user, None, 'my_projects', None)
         else:
             html += '<div id="tags_projects" style="display:block; padding:3px"><em class="message">' \
                     'Please login to display your projects.</em></div>'
     elif tab == 'tags':
-        if not request.user.is_anonymous():
+        if not request.user.is_anonymous:
             display = DisplayStatus(True)  # open all sub-widgets by default
             # loop over user tags (sorted by name)
             utags = request.user.profile.tags.all()
@@ -613,22 +613,22 @@ def save_user_tag(request):
         queryDict = getQueryDict(request)
         tagName = queryDict['tag']
         redirect = queryDict['redirect']
-        print 'Saving user tag: %s' % tagName
-        print 'Eventually redirecting to: %s' % redirect
+        print('Saving user tag: %s' % tagName)
+        print('Eventually redirecting to: %s' % redirect)
         
         if isUserLocal(request.user):
             try:
                 tag = ProjectTag.objects.get(name__iexact=tagName)
             except ObjectDoesNotExist:
                 tag = ProjectTag.objects.create(name=tagName)
-                print 'Created new tag: %s' % tag
+                print('Created new tag: %s' % tag)
 
             # add this tag to the user preferences
             utags = request.user.profile.tags
             if tag not in utags.all():
                 utags.add(tag)
                 request.user.profile.save()
-                print 'Tag: %s added to user: %s' % (tagName, request.user)
+                print('Tag: %s added to user: %s' % (tagName, request.user))
 
             # set session flag to preselect a tab
             request.session['PROJECT_BROWSER_TAB'] = 3                
@@ -638,7 +638,7 @@ def save_user_tag(request):
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('save_user_tag'),
                                                       tagName, redirect)
-            print 'Redirecting save request to URL=%s' % url
+            print('Redirecting save request to URL=%s' % url)
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
             # also set session flag to preselect a tab
@@ -656,8 +656,8 @@ def delete_user_tag(request):
         queryDict = getQueryDict(request)
         tagName = queryDict['tag']
         redirect = queryDict['redirect']
-        print 'Deleting user tag: %s' % tagName
-        print 'Eventually redirecting to: %s' % redirect
+        print('Deleting user tag: %s' % tagName)
+        print('Eventually redirecting to: %s' % redirect)
         
         if isUserLocal(request.user):
             try:
@@ -668,7 +668,7 @@ def delete_user_tag(request):
                     request.user.profile.save()
                     
             except ObjectDoesNotExist:
-                print "Invalid project tag."
+                print("Invalid project tag.")
                 
             # set session flag to preselect a tab
             request.session['PROJECT_BROWSER_TAB'] = 3
@@ -678,7 +678,7 @@ def delete_user_tag(request):
         else:
             url = "http://%s%s?tag=%s&redirect=%s" % (request.user.profile.site.domain, reverse('delete_user_tag'),
                                                       tagName, redirect)
-            print 'Redirecting delete request to URL=%s' % url    
+            print('Redirecting delete request to URL=%s' % url)    
             # set session flag to eventually force reloading of user tags
             request.session['LAST_ACCESSED'] = 0
             # also set session flag to preselect a tab
@@ -704,7 +704,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
     if tag_name is not None:
         try:
             tag = ProjectTag.objects.get(name__iexact=tag_name)
-            print "tag in render_project_list = ", tag
+            print("tag in render_project_list = ", tag)
         except ObjectDoesNotExist:
             # store error associated with non-existing tag
             tag_error = "Tag does not exist."
@@ -745,7 +745,7 @@ def render_project_list(project, tab, tag_name, user, widget_name, widget_id, di
             html += '<em class="message">'+tag_error+'</em>'
         else:
             # special case: cannot retrieve list of projects for guest user
-            if (tab == 'my' or tab == 'tags') and not user.is_authenticated():
+            if (tab == 'my' or tab == 'tags') and not user.is_authenticated:
                 html += '<em class="message">Please login to display your projects.</em>'
             else:
                 html += '<em class="message">No projects found.</em>'
@@ -788,7 +788,7 @@ def listBrowsableProjects(project, tab, tag, user, widgetName):
         # retrieve all active projects for this user
         projects = getProjectsForUser(user, False)  # includePending==False
     elif tab == 'tags':
-        if not user.is_authenticated():
+        if not user.is_authenticated:
             projects = Project.objects.none()
         else:
             # widgetName==user tag name
@@ -867,7 +867,7 @@ def development_update(request, project_short_name):
             
         # return to form
         else:
-            print 'Form is invalid %s' % form.errors
+            print('Form is invalid %s' % form.errors)
             return render_development_form(request, project, form)
 
 
@@ -933,7 +933,7 @@ def _project_page_update(request, project_short_name,
             
         # return to form
         else:
-            print 'Form is invalid %s' % form.errors
+            print('Form is invalid %s' % form.errors)
             return render(request,
                           form_template,
                           {'title': form_template_title, 'project': project, 'form': form})
@@ -952,9 +952,9 @@ def _getUnsavedProjectSubFolders(project, request):
     """
     
     folders = []
-    for key, value in TOP_SUB_FOLDERS.items():
+    for key, value in list(TOP_SUB_FOLDERS.items()):
         folder = Folder(name=value, project=project, active=False)
-        if request is not None and ("folder_%s" % value) in getQueryDict(request).keys():
+        if request is not None and ("folder_%s" % value) in list(getQueryDict(request).keys()):
             folder.active = True
         folders.append(folder)
     return folders

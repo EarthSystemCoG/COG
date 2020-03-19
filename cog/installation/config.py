@@ -23,15 +23,15 @@ The postgres database password is read from the file /esg/config/.esg_pg_pass
 
 '''
 
-import ConfigParser
-import StringIO
+import configparser
+import io
 import collections
 import logging
 import os
 import time
 from django.utils.crypto import get_random_string
 
-from constants import (SECTION_DEFAULT, COG_SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
+from .constants import (SECTION_DEFAULT, COG_SECTION_DEFAULT, SECTION_ESGF, SECTION_EMAIL,
                        ESGF_PROPERTIES_FILE, ESGF_PASSWORD_FILE,
                        IDP_WHITELIST, KNOWN_PROVIDERS, PEER_NODES,
                        DEFAULT_PROJECT_SHORT_NAME)
@@ -59,7 +59,7 @@ class CogConfig(object):
         '''Method that reads an existing COG configuration file, or create a new one if not existing.'''
 
         # initialize COG configuration file
-        self.cogConfig = ConfigParser.ConfigParser(allow_no_value=True,
+        self.cogConfig = configparser.ConfigParser(allow_no_value=True, 
                                                    dict_type=collections.OrderedDict)
         # must set following line explicitly to preserve the case of configuration keys
         self.cogConfig.optionxform = str
@@ -79,7 +79,7 @@ class CogConfig(object):
                 logging.info("Configuration file: %s not found, will create new one" % CONFIGFILEPATH )
 
         except Exception as e:
-            print e
+            print(e)
             logging.error("Error reading configuration file: %s" % CONFIGFILEPATH)
             logging.error(e)
 
@@ -88,7 +88,7 @@ class CogConfig(object):
         '''Method that reads local parameters from ESGF configuration file esgf.properties.'''
 
         # read ESGF configuration file ($esg_config_dir/esgf.properties), if available
-        self.esgfConfig = ConfigParser.ConfigParser()
+        self.esgfConfig = configparser.ConfigParser()
         try:
             self.esgfConfig.read(ESGF_PROPERTIES_FILE)
         except IOError:
@@ -103,7 +103,7 @@ class CogConfig(object):
                 with open(ESGF_PROPERTIES_FILE, 'r') as f:
                     # transform Java properties file into python configuration file: must prepend a section
                     config_string = '[%s]\n' % SECTION_DEFAULT + f.read()
-                    config_file = StringIO.StringIO(config_string)
+                    config_file = io.StringIO(config_string)
                     self.esgfConfig.readfp(config_file)
                 logging.info("Read ESGF configuration parameters from file: %s" % ESGF_PROPERTIES_FILE)
 
@@ -168,7 +168,7 @@ class CogConfig(object):
         # default search service URL, before any project customization
         self._safeSet('DEFAULT_SEARCH_URL','http://%s/esg-search/search/' % hostName)
         # interval between updates of user's projects, during user session
-        self._safeSet('MY_PROJECTS_REFRESH_SECONDS', 3600)
+        self._safeSet('MY_PROJECTS_REFRESH_SECONDS', '3600')
         # optional number of days after which password expire
         self._safeSet('PWD_EXPIRATION_DAYS','0')
         # optional top-level URL to redirect user registration (no trailing '/')
@@ -188,13 +188,13 @@ class CogConfig(object):
         # PEER_NODES = /esg/config/esgf_cogs.xml
         self._safeSet('PEER_NODES', PEER_NODES)
         # option to send SESSION and CSRF cookies via SSL only - requires full SSL-encrypted site
-        self._safeSet('PRODUCTION_SERVER', True)
+        self._safeSet('PRODUCTION_SERVER', 'True')
         # ESGF software stack version
         esgfVersion = self._safeGet("version", default=None)
         if esgfVersion:
             self._safeSet('ESGF_VERSION', esgfVersion, override=True)
         # option to disable CAPTCHA for creating account in automatic testing
-        self._safeSet('USE_CAPTCHA', True)
+        self._safeSet('USE_CAPTCHA', 'True')
 
 
         #[ESGF]

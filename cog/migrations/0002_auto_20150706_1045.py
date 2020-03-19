@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='folder',
             name='project',
-            field=cog.models.dbutils.UnsavedForeignKey(to='cog.Project'),
+            field=cog.models.dbutils.UnsavedForeignKey(to='cog.Project', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='projecttab',
             name='project',
-            field=cog.models.dbutils.UnsavedForeignKey(related_name='tabs', to='cog.Project'),
+            field=cog.models.dbutils.UnsavedForeignKey(related_name='tabs', to='cog.Project', on_delete=models.CASCADE),
         ),
     ]

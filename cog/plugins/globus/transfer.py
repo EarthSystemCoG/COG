@@ -7,16 +7,16 @@ Module to interact with Globus data transfer services.
 from datetime import datetime, timedelta
 from cog.site_manager import siteManager
 if siteManager.isGlobusEnabled():    
-    from globus_sdk.transfer import TransferData
+    from globus_sdk import TransferData
 import os
-import urlparse
+import urllib.parse
 
 DOWNLOAD_SCRIPT = "download.py"
 
 def generateGlobusDownloadScript(download_map):
 
-    print "Generating script for downloading files: "
-    print download_map
+    print("Generating script for downloading files: ")
+    print(download_map)
 
     # read script 'download.py' located in same directory as this module
     scriptFile = os.path.join(os.path.dirname(__file__), DOWNLOAD_SCRIPT)
@@ -32,8 +32,8 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
 
 
         # Try to autoactivate the endpoint
-        code, reason, result = transfer_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
-        print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
+        result = transfer_client.endpoint_autoactivate(endpoint, if_expires_in=2880)
+        print("Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"]))
         if result["code"] == "AutoActivationFailed":
             return (False, "")
         return (True, "")
@@ -66,15 +66,15 @@ def activateEndpoint(api_client, endpoint, myproxy_server=None, username=None, p
 
 
     try:
-        code, reason, result = transfer_client.endpoint_activate(endpoint, reqs)
+        result = transfer_client.endpoint_activate(endpoint, requirements_json)
     except Exception as e:
-        print "Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e))
+        print("Could not activate the endpoint: %s. Error: %s" % (endpoint, str(e)))
         return (False, str(e))
-    if code != 200:
-        print "Could not aactivate the endpoint: %s. Error: %s - %s" % (endpoint, result["code"], result["message"])
+    if result["code"] != "Activated.MyProxyCredential":
+        print("Could not aactivate the endpoint: %s. Error: %s - %s" % (endpoint, result["code"], result["message"]))
         return (False, result["message"])
 
-    print "Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"])
+    print("Endpoint Activation: %s. %s: %s" % (endpoint, result["code"], result["message"]))
 
     return (True, "")
 
@@ -84,17 +84,13 @@ def submitTransfer(transfer_client, source_endpoint, source_files, target_endpoi
     Method to submit a data transfer request to Globus.
     '''
     
-    # obtain a submission id from Globus
-    # code, message, data = transfer_client.transfer_submission_id()
-    # submission_id = data["value"]
-    # print "Obtained transfer submission id: %s" % submission_id
-    
     # maximum time for completing the transfer
     deadline = datetime.utcnow() + timedelta(days=10)
     
     # create a transfer request
-    transfer_task = Transfer(transfer_client, source_endpoint, target_endpoint, deadline=deadline)
-    print "Obtained transfer submission id: %s" % transfer_task["submission_id"]
+    transfer_task = TransferData(transfer_client, source_endpoint, target_endpoint, deadline=deadline)
+    print("Obtained transfer submission id: %s" % transfer_task["submission_id"])
+
     for source_file in source_files:
         source_directory, filename = os.path.split(source_file)
         target_file = os.path.join(target_directory, filename) 
@@ -102,11 +98,11 @@ def submitTransfer(transfer_client, source_endpoint, source_files, target_endpoi
     
     # submit the transfer request
     try:
-        code, reason, data = transfer_client.submit_transfer(transfer_task)
+        data = transfer_client.submit_transfer(transfer_task)
         task_id = data["task_id"]
-        print "Submitted transfer task with id: %s" % task_id
+        print("Submitted transfer task with id: %s" % task_id)
     except Exception as e:
-        print "Could not submit the transfer. Error: %s" % str(e)
+        print("Could not submit the transfer. Error: %s" % str(e))
         task_id = "Could not submit the transfer. Please contact the ESGF node admin to investigate the issue."
     
     return task_id

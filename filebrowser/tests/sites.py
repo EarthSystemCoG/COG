@@ -12,13 +12,13 @@ instance methods from functions.
 import os
 import sys
 import shutil
-from urllib import urlencode
+from urllib.parse import urlencode
 from types import MethodType
 
 # DJANGO IMPORTS
 from django.test import TestCase
 from django.test.client import Client
-from django.core.urlresolvers import get_resolver, get_urlconf, resolve, reverse
+from django.urls import get_resolver, get_urlconf, resolve, reverse
 
 # FILEBROWSER IMPORTS
 from filebrowser.settings import *
@@ -136,7 +136,7 @@ def test_detail(test):
     # At this moment all versions should be generated. Check that.
     for version_suffix in VERSIONS:
         path = get_version_path(test.testfile.path, version_suffix, site=test.site)
-        print 'PATH=%s' % path
+        print('PATH=%s' % path)
         test.assertTrue(test.site.storage.exists(path))
     
     # Attemp renaming the file
@@ -218,7 +218,7 @@ def setUp(self):
 def tearDown(self):
     # Delete a left-over tmp directories, if there's any
     if hasattr(self, 'tmpdir') and self.tmpdir:
-        print "Removing left-over tmp dir:", self.tmpdir.path
+        print("Removing left-over tmp dir:", self.tmpdir.path)
         self.site.storage.rmtree(self.tmpdir.path)
 
 def runTest(self):
@@ -243,7 +243,7 @@ this_module = sys.modules[__name__]
 
 ## Create a test class for each deployed filebrowser site        
 for site in all_sites:
-    print 'Creating Test for the FileBrowser site:', site
+    print('Creating Test for the FileBrowser site:', site)
     # Create a subclass of TestCase
     testcase_class = type('TestSite_' + site, (TestCase,), {'site_name': site, 'c': Client(), 'tmpdirs': None})
     # Add setUp, tearDown, and runTest methods
