@@ -277,7 +277,7 @@ def submit(request):
 
 
 		status, message = activateEndpoint(
-			api_client, source_endpoint,
+			transfer_client, source_endpoint,
 			myproxy_server=myproxy_server, username=esgf_username, password=esgf_password)
 
 
