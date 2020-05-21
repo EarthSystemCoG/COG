@@ -12,24 +12,16 @@ and that exposing those characteristics and linking them is a way to make a comp
 The CoG project created the CoG environment - this website - as a way of promoting good governance across numerous projects 
 and organizations in the Earth system sciences.  Its structure encourages information sharing among projects, transparency and trust.
 
-For more information, visit: http://earthsystemcog.org/
+For more information, visit: http://esgf.github.io/COG
 
-Manual CoG update
------------------
+Python3 Update
+--------------
 
-```
-cd /usr/local/cog/cog_install
-git fetch
-git checkout v3.15.4 # or master, devel, etc.
-/etc/cog-wsgi-8889/apachectl restart  # for ESGF > v4.0.0 
-# previous versions restart node: esg-node restart 
-```
+This branch migrates CoG to Python3 and Django2. (v4.0.0b) 
 
-Latest release: v3.15.4
------------------------
+Updating CoG
+------------
 
- - Add link to clear data cart to appear on pages that import the "middle navbar"
+Use the Ansible playbook from the following branch: `python3_cog` - See https://esgf.github.io/esgf-ansible for instructions on how to run the playbooks. 
+The installation must be performed on a server that already has the cogdb deployed to PostgreSQL.  In other words, in order to install CoG v4 from scratch, you must first run the latest Ansible playbook for ESGF, which will deploy CoG v3.15 (Python2) and create the cogdb database.  Then, run the  `python3_cog` branch playbook to setup CoG.  Note that this installation will create a distinct Python3 conda environment for which to run the CoG service in mod_wsgi_express `py3_cog`.  The previous `cog` environment will still be present, but is no longer used (and could be safely deleted).
 
-Previous updates
-
- - Updates to templates for help information in preparation for the retirement of the CU CoG site.
