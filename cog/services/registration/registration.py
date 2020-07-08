@@ -6,10 +6,8 @@ Service for managing registration of users in access control groups.
 
 import abc
 
-class RegistrationService(object):
+class RegistrationService(object, metaclass=abc.ABCMeta):
     
-    __metaclass__ = abc.ABCMeta
-
     @abc.abstractmethod
     def createGroup(self, name, description='', visible=True, automatic_approval=False):
         '''

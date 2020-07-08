@@ -49,6 +49,25 @@
 		}
 		return true;
 	}
+
+        function submit_form() {
+            var idp = document.getElementById('openid_identifier').value.trim();
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    var form = document.getElementById('login_form');
+                    if (response.auth == 'OAuth2')
+                        form.action = "{% url 'oauth2-login' %}";
+                    else
+                        form.action = "{% url 'openid-login' %}";
+                    form.submit();
+                }
+            };
+            xmlhttp.open("GET", "{% url 'auth-discover' %}?openid_identifier=" + idp, true);
+            xmlhttp.send();
+            return false;
+        }
 	
 	function init() {
 				
@@ -145,7 +164,7 @@
  	    </div>
  	
 	    <!--Begin login form-->
-	    <form name="fopenid" action="{% url 'openid-login' %}" method="post">
+	    <form name="fopenid" action="" method="post" id="login_form" onsubmit="return submit_form()">
 		    {% csrf_token %}
 		    <div class="mybox">
     	        <table>

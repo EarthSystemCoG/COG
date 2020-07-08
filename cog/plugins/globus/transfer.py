@@ -9,14 +9,14 @@ from cog.site_manager import siteManager
 if siteManager.isGlobusEnabled():    
     from globus_sdk import TransferData
 import os
-import urlparse
+import urllib.parse
 
 DOWNLOAD_SCRIPT = "download.py"
 
 def generateGlobusDownloadScript(download_map):
 
-    print "Generating script for downloading files: "
-    print download_map
+    print("Generating script for downloading files: ")
+    print(download_map)
 
     # read script 'download.py' located in same directory as this module
     scriptFile = os.path.join(os.path.dirname(__file__), DOWNLOAD_SCRIPT)
@@ -50,6 +50,7 @@ def activateEndpoint(transfer_client, endpoint, myproxy_server=None, username=No
                 requirements_json["DATA"][i]["value"] = password
             elif d["name"] == "lifetime_in_hours":
                 requirements_json["DATA"][i]["value"] = "168"
+
 
     try:
         result = transfer_client.endpoint_activate(endpoint, requirements_json)

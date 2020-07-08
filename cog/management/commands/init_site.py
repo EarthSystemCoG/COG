@@ -20,4 +20,4 @@ class Command(BaseCommand):
         current_site.domain = settings.SITE_DOMAIN
         current_site.save()
 
-        print 'Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain)
+        print('Updated current site: name=%s domain=%s' % (current_site.name, current_site.domain))

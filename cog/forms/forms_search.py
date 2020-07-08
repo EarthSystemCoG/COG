@@ -15,7 +15,12 @@ class SearchProfileForm(ModelForm):
         return clean_url_field(self, 'url')
     
     def clean_constraints(self):
-        return clean_url_field(self, 'constraints')
+        # if no constraints are found, then return an empty string
+        data = self.cleaned_data['constraints']
+        if data is None:
+            return ''
+        else:
+            return clean_url_field(self, 'constraints')
 
 
 class SearchFacetForm(ModelForm):

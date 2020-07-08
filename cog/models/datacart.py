@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
 from cog.models.search import Record
 import json
@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class DataCart(models.Model):
     
-    user = models.OneToOneField(User, related_name='datacart')
+    user = models.OneToOneField(User, related_name='datacart', on_delete=models.CASCADE)
     
     def contains(self, item_identifier):
         '''Checks whether the data cart contains an item with the given identifier.'''
@@ -20,7 +20,7 @@ class DataCart(models.Model):
         
 class DataCartItem(models.Model):
     
-    cart = models.ForeignKey(DataCart, related_name="items", blank=False, null=False)
+    cart = models.ForeignKey(DataCart, related_name="items", blank=False, null=False, on_delete=models.CASCADE)
     
     # used to enforce uniqueness within a single user datacart
     identifier =  models.CharField(max_length=200, blank=False, null=False)
@@ -51,7 +51,7 @@ class DataCartItem(models.Model):
         item.save()
         
         # save additional metadata            
-        for key, values in metadata.items():
+        for key, values in list(metadata.items()):
             itemKey = DataCartItemMetadataKey(item=item, key=key)
             itemKey.save()
             for value in values:
@@ -109,7 +109,7 @@ class DataCartItem(models.Model):
         
 class DataCartItemMetadataKey(models.Model):
 
-    item = models.ForeignKey(DataCartItem, related_name='keys', blank=False, null=False)
+    item = models.ForeignKey(DataCartItem, related_name='keys', blank=False, null=False, on_delete=models.CASCADE)
     key =  models.CharField(max_length=200, blank=False, null=False)
     
     class Meta:
@@ -117,7 +117,7 @@ class DataCartItemMetadataKey(models.Model):
     
 class DataCartItemMetadataValue(models.Model):
 
-    key = models.ForeignKey(DataCartItemMetadataKey, related_name='values', blank=False, null=False)
+    key = models.ForeignKey(DataCartItemMetadataKey, related_name='values', blank=False, null=False, on_delete=models.CASCADE)
     value =  models.CharField(max_length=1000, blank=True, null=True)
 
     class Meta:

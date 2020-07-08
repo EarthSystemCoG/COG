@@ -19,7 +19,7 @@ def serialize(input, output):
         strEl = SubElement(docEl, "str", attrib={ "name":"id" } )
         strEl.text = record.id
         
-        for key, values in record.fields.items():
+        for key, values in list(record.fields.items()):
             # <str name="type">Dataset</str>
             # single-valued fields (as from Solr schema)
             if key == 'url' or key=='type':
@@ -41,9 +41,9 @@ def serialize(input, output):
     facetFieldsEl  = SubElement(facetCountsEl, "lst", attrib={ "name": "facet_fields" })
     
     # loop over facets
-    for key, facet in output.facets.items():
+    for key, facet in list(output.facets.items()):
         facetEl = SubElement(facetFieldsEl, "lst", attrib={ "name": key })
-        for value, counts in facet.getValues().items():
+        for value, counts in list(facet.getValues().items()):
             facetSubEl = SubElement(facetEl, "int", attrib={ "name": value })
             facetSubEl.text = str(counts)
     
@@ -115,7 +115,7 @@ def deserialize(xml, facetProfile):
                             
         
     except (ValueError, LookupError) as err:
-        print "Error: %s" % err    
+        print("Error: %s" % err)    
     return output
 
 def _encode_field_value(record, name, value):

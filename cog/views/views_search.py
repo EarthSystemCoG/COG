@@ -1,7 +1,7 @@
 from copy import copy, deepcopy
 import json
-import urllib, urllib2
-from urllib2 import HTTPError
+import urllib.request, urllib.parse, urllib.error
+from urllib.error import HTTPError
 
 from cog.config.search import SearchConfigParser
 from cog.forms.forms_search import *
@@ -15,10 +15,9 @@ from cog.services.search import SolrSearchService
 from cog.templatetags.search_utils import displayMetadataKey, formatMetadataKey
 from cog.views.constants import PERMISSION_DENIED_MESSAGE, TEMPLATE_NOT_FOUND_MESSAGE
 from cog.views.utils import getQueryDict
-from django.conf import settings
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest, HttpResponseNotFound
 from django.http.response import HttpResponseServerError
 from django.shortcuts import get_object_or_404, render
@@ -65,7 +64,7 @@ def search(request, project_short_name):
         
     # check permission
     if project.private:
-        if request.user.is_anonymous():
+        if request.user.is_anonymous:
             return HttpResponseRedirect(reverse('login')+"?next=%s" % request.path)
         else:
             if not userHasUserPermission(request.user, project):
@@ -94,7 +93,7 @@ def _addConfigConstraints(searchInput, searchConfig):
     _searchInput = deepcopy(searchInput)
     
     # add fixed constraints - but do NOT override previous values
-    for key, values in searchConfig.fixedConstraints.items():
+    for key, values in list(searchConfig.fixedConstraints.items()):
         if not _searchInput.hasConstraint(key):
             _searchInput.setConstraint(key, values)            
     return _searchInput
@@ -169,11 +168,11 @@ def search_config(request, searchConfig, extra={}, fromRedirectFlag=False):
             
     # GET/POST switch
     queryDict = getQueryDict(request)
-    print "Search() view: HTTP Request method=%s fromRedirectFlag flag=%s HTTP parameters=%s" % (request.method, fromRedirectFlag, queryDict)
+    print("Search() view: HTTP Request method=%s fromRedirectFlag flag=%s HTTP parameters=%s" % (request.method, fromRedirectFlag, queryDict))
     
     if request.method == 'GET':
         # GET pre-seeded search URL -> invoke POST immediately
-        if len(queryDict.keys()) > 0 and not fromRedirectFlag: 
+        if len(list(queryDict.keys())) > 0 and not fromRedirectFlag: 
             return search_post(request, searchInput, searchConfig, extra)
         else:
             return search_get(request, searchInput, searchConfig, extra, fromRedirectFlag)
@@ -197,7 +196,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
     # GET request after POST redirection
     if fromRedirectFlag:
         
-        print "Retrieving search data from session"
+        print("Retrieving search data from session")
         data = request.session.get(SEARCH_DATA)
             
     # direct GET request: must query for all facet values with project-specific constraints
@@ -207,7 +206,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
         request.session[SEARCH_PATH] = []
         
         # add project fixed constraints
-        print 'Search GET: adding fixed project constraints'
+        print('Search GET: adding fixed project constraints')
         _searchInput = _addConfigConstraints(searchInput, searchConfig)
         _searchInput.printme()
         
@@ -231,7 +230,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
             request.session[SEARCH_DATA] = data
             
         except HTTPError:
-            print "HTTP Request Error"
+            print("HTTP Request Error")
             # data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
 
@@ -242,7 +241,7 @@ def search_get(request, searchInput, searchConfig, extra={}, fromRedirectFlag=Fa
     offset = data[SEARCH_INPUT].offset
     limit = data[SEARCH_INPUT].limit
     if limit > 0 and data.get(SEARCH_OUTPUT, None):
-        currentPage = offset/limit + 1
+        currentPage = offset//limit + 1
         numResults = len(data[SEARCH_OUTPUT].results)
         totResults = data[SEARCH_OUTPUT].counts
         data[SEARCH_PAGES] = []
@@ -303,7 +302,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
     if valid:
                 
         # add project fixed constraints
-        print 'Search POST: adding fixed project constraints'
+        print('Search POST: adding fixed project constraints')
         _searchInput = _addConfigConstraints(searchInput, searchConfig)
         _searchInput.printme()
     
@@ -325,7 +324,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
             # data[FACET_PROFILE] = sorted( facetProfile.getKeys() )  # sort facets by key
             
         except HTTPError:
-            print "HTTP Request Error"
+            print("HTTP Request Error")
             data = request.session[SEARCH_DATA]
             data[SEARCH_INPUT] = searchInput
 
@@ -333,7 +332,7 @@ def search_post(request, searchInput, searchConfig, extra={}):
                                   "Administrator."
     # invalid user input
     else:
-        print "Invalid Search Input"
+        print("Invalid Search Input")
         # re-use previous data (output, profile and any extra argument) from session
         data = request.session[SEARCH_DATA]
         # override search input from request
@@ -349,10 +348,10 @@ def search_post(request, searchInput, searchConfig, extra={}):
     # for key, values in searchInput.constraints.items():
     # note: request parameters do NOT include the project fixed constraints
     req_constraints = []  # latest constraints from request
-    for key, value in queryDict.items():
+    for key, value in list(queryDict.items()):
         if not key in SEARCH_PATH_EXCLUDE and value != 'on':  # value from 'checkbox_...'
             if value is not None and len(value) > 0:  # disregard empty facet
-                print 'key=%s value=%s' % (key, value)
+                print('key=%s value=%s' % (key, value))
                 constraint = (key, value)     
                 req_constraints.append(constraint)
                 if not constraint in sp:
@@ -389,13 +388,13 @@ def metadata_display(request, project_short_name):
     config = _getSearchConfig(request, project)
 
     # retrieve result metadata
-    params = [('type', type), ('id', id), ("format", "application/solr+json")]
+    params = [('type', type), ('id', id), ("format", "application/solr+json"), ("distrib", "false")]
     if type == 'File':
         params.append(('dataset_id', dataset_id))
                 
-    url = project.searchprofile.url+"?"+urllib.urlencode(params)
-    print 'Metadata Solr search URL=%s' % url
-    fh = urllib2.urlopen(url)
+    url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
+    print('Metadata Solr search URL=%s' % url)
+    fh = urllib.request.urlopen(url)
     response = fh.read().decode("UTF-8")
 
     # parse JSON response (containing only one matching 'doc)
@@ -405,11 +404,11 @@ def metadata_display(request, project_short_name):
     # retrieve parent metadata    
     parentMetadata = {}
     if type == 'File':
-        params = [('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json")]
-        url = project.searchprofile.url+"?"+urllib.urlencode(params)
+        params = [('type', 'Dataset'), ('id', dataset_id), ("format", "application/solr+json"), ("distrib", "false")]
+        url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
         # print 'Solr search URL=%s' % url
-        fh = urllib2.urlopen(url)
-        response = fh.read().decode("UTF-8")
+        fh = urllib.request.urlopen(url)
+        response = fh.read()
         jsondoc = json.loads(response)
         parentMetadata = _processDoc(jsondoc["response"]["docs"][0])
     
@@ -539,7 +538,7 @@ def search_profile_export(request, project_short_name):
         scp.write()
         message = 'search_config_exported'
     except Exception as e:
-        print "ERROR: %s" % e
+        print("ERROR: %s" % e)
         message = e       
 
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
@@ -560,7 +559,7 @@ def search_profile_import(request, project_short_name):
         scp.read()
         message = 'search_config_imported'
     except Exception as e:
-        print "ERROR: %s" % e
+        print("ERROR: %s" % e)
         message = 'search_config_not_found'        
 
     return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])+"?message=%s" % message)
@@ -608,7 +607,7 @@ def search_profile_config(request, project_short_name):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()]))
             
         else:
-            print 'Form is invalid: %s' % form
+            print('Form is invalid: %s' % form)
             return render_search_profile_form(request, project, form, search_groups)
             
 
@@ -664,7 +663,7 @@ def search_facet_add(request, project_short_name):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            print('Form is invalid: %s' % form.errors)
             
             # must retrieve facets again
             facets = _queryFacets(request, project)
@@ -699,7 +698,7 @@ def search_group_add(request, project_short_name):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            print('Form is invalid: %s' % form.errors)
                         
             return render_search_group_form(request, project, form)
 
@@ -728,7 +727,7 @@ def search_group_update(request, group_id):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            print('Form is invalid: %s' % form.errors)
             return render_search_group_form(request, project, form)
 
 
@@ -760,7 +759,7 @@ def search_facet_update(request, facet_id):
             return HttpResponseRedirect(reverse('search_profile_config', args=[project.short_name.lower()])) 
         
         else:     
-            print 'Form is invalid: %s' % form.errors
+            print('Form is invalid: %s' % form.errors)
             return render_search_facet_form(request, project, form, facets)
 
 
@@ -830,6 +829,7 @@ def search_files(request, dataset_id, index_node):
     
     # maximum number of files to query for
     limit = request.GET.get('limit', 20)
+            
     params = [('type', "File"), ('dataset_id', dataset_id),
               ("format", "application/solr+json"), ('offset', '0'), ('limit', limit)]
     
@@ -847,10 +847,12 @@ def search_files(request, dataset_id, index_node):
     shard = request.GET.get('shard', '')
     if shard is not None and len(shard.strip()) > 0:
         params.append(('shards', shard+"/solr"))  # '&shards=localhost:8982/solr'
+    else:
+        params.append(("distrib", "false"))
  
-    url = settings.DEFAULT_SEARCH_URL+"?"+urllib.urlencode(params)
-    print 'Searching for files: URL=%s' % url
-    fh = urllib2.urlopen(url)
+    url = "http://"+index_node+"/esg-search/search?"+urllib.parse.urlencode(params)
+    print('Searching for files: URL=%s' % url)
+    fh = urllib.request.urlopen(url)
     response = fh.read().decode("UTF-8")
 
     return HttpResponse(response, content_type="application/json")
@@ -861,7 +863,7 @@ def search_reload(request):
        including constraints and results."""
     
     if request.session.get(LAST_SEARCH_URL, None):
-        print 'Reloading search page: %s' % request.session[LAST_SEARCH_URL]
+        print('Reloading search page: %s' % request.session[LAST_SEARCH_URL])
         request.session[SEARCH_REDIRECT] = True  # flag to retrieve constraints, results
         return HttpResponseRedirect(request.session[LAST_SEARCH_URL])  # just like after the last POST
         
@@ -918,13 +920,13 @@ def search_profile_order(request, project_short_name):
         valid = True  # form data validation flag
         errors = {} # form validation errors
         
-        for group, facets in groups.items():
+        for group, facets in list(groups.items()):
                         
             group_key = SEARCH_GROUP_KEY + str(group.name)
             group_order = request.POST[group_key]
             group.order = int(group_order) # reassign the group orde WITHOUT saving to the database for now
             # validate group order
-            if group_order in groupOrderMap.values():
+            if group_order in list(groupOrderMap.values()):
                 valid = False
                 errors[group_key] = "Duplicate search facet number: %d" % int(group_order)
             else:
@@ -937,7 +939,7 @@ def search_profile_order(request, project_short_name):
                 facet_order = request.POST[facet_key]
                 facet.order = facet_order
                 # validate facet order within this group
-                if facet_order in facetOrderMap.values():
+                if facet_order in list(facetOrderMap.values()):
                     valid = False
                     errors[facet_key] = "Duplicate facet number: %d" % int(facet_order)
                 else:
@@ -947,7 +949,7 @@ def search_profile_order(request, project_short_name):
         if valid:
             
             # save new ordering for groups, facets
-            for group, facets in groups.items():
+            for group, facets in list(groups.items()):
                 group.save()
                 for facet in facets:
                     facet.save()
@@ -989,21 +991,20 @@ def citation_display(request):
     url = request.GET.get('url', '')
 
     try:
-        fh = urllib2.urlopen(url)
+        fh = urllib.request.urlopen(url)
         response = fh.read()
-        headers = fh.info().dict
-    except HTTPError, e:
-        print('HTTPError %s for %s' % (str(e.code), url))
+    except HTTPError as e:
+        print(('HTTPError %s for %s' % (str(e.code), url)))
         return HttpResponseNotFound()
 
-    if int(headers['x-cera-rc']) > 0:
-        print 'Citation not found: %s' % url
+    if int(fh.getheader('x-cera-rc')) > 0:
+        print('Citation not found: %s' % url)
         return HttpResponseNotFound()
 
     try:
         json.loads(response)
-    except ValueError, e:
-        print 'Citation not valid json: %s' % url
+    except ValueError as e:
+        print('Citation not valid json: %s' % url)
         return HttpResponseNotFound()
 
     return HttpResponse(response, content_type="application/json")

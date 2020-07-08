@@ -1,7 +1,6 @@
 from django import template
 from cog.models.search import searchMappings
 from cog.site_manager import siteManager
-from string import replace
 import json
 from collections import OrderedDict
 from django.conf import settings
@@ -115,11 +114,11 @@ def recordUrls(record):
     if 'url' in record.fields:
         for value in record.fields['url']:
             urls.append(value)
-        
-    # add special WGET endpoint
+    
+    # add special WGET endpoints
     urls.append( ("javascript:wgetScript('%s','%s','%s')" % (record.fields['index_node'][0], record.fields.get('shard', [''])[0], record.id) , 
-                  "application/wget", 
-                  "WGET Script") )
+                "application/wget", 
+                "WGET Script") )
     
     # add Globus endpoints
     if siteManager.isGlobusEnabled():  # only if this node has been registered with Globus
@@ -168,7 +167,7 @@ def qcflags(record):
             qcflags[qcflag_name][int(qcflag_order)] = qcflag_value
     # for each qcflag, sort dictionary of values by their key (i.e. by the QC flag value order)
     for key in qcflags:
-        qcflags[key] = OrderedDict(sorted(qcflags[key].items(), key=lambda t: t[0]))
+        qcflags[key] = OrderedDict(sorted(list(qcflags[key].items()), key=lambda t: t[0]))
             
     # note: to enable easy access in html template, return the sorted set of (key, value) pairs
     # where the value is itself an ordered dictionary

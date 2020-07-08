@@ -1,20 +1,20 @@
 from django.db import models
-from constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
+from .constants import APPLICATION_LABEL, SIGNAL_OBJECT_CREATED, SIGNAL_OBJECT_UPDATED, SIGNAL_OBJECT_DELETED
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.core.signals import request_finished
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.dispatch import receiver
-from post import Post, post_signal
-from doc import Doc
-from news import News
+from .post import Post, post_signal
+from .doc import Doc
+from .news import News
 
 
 class LoggedEvent(models.Model):
     '''Class that represents an important event that is logged to the database.'''
 
-    user = models.ForeignKey(User, blank=False)
-    project = models.ForeignKey('Project', blank=False)
+    user = models.ForeignKey(User, blank=False, on_delete=models.CASCADE)
+    project = models.ForeignKey('Project', blank=False, on_delete=models.CASCADE)
     title = models.CharField(max_length=200, blank=False)
     description = models.CharField(max_length=200, blank=False)
     url = models.URLField(blank=True)

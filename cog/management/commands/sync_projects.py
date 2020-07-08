@@ -15,4 +15,4 @@ class Command(BaseCommand):
     def handle(self, *ags, **options):
         
         sites = projectManager.sync()
-        print 'sync_projects: time=%s synchronized projects from sites=%s' % (datetime.datetime.now(), sites)
+        print('sync_projects: time=%s synchronized projects from sites=%s' % (datetime.datetime.now(), sites))

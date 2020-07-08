@@ -44,23 +44,23 @@ if siteManager.get('DEBUG', default='False').lower() == 'true':
 else:
     DEBUG = False
 ALLOWED_HOSTS = siteManager.get('ALLOWED_HOSTS', default=SITE_DOMAIN).split(",")
-print 'Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS)
+print('Using DEBUG=%s ALLOWED_HOSTS=%s' % (DEBUG, ALLOWED_HOSTS))
 IDP_WHITELIST = siteManager.get('IDP_WHITELIST', default=None)
-print 'Using IdP whitelist(s): %s' % IDP_WHITELIST
+print('Using IdP whitelist(s): %s' % IDP_WHITELIST)
 KNOWN_PROVIDERS = siteManager.get('KNOWN_PROVIDERS', default=None)
-print 'Using list of known Identity Providers: %s' % KNOWN_PROVIDERS
+print('Using list of known Identity Providers: %s' % KNOWN_PROVIDERS)
 PEER_NODES = siteManager.get('PEER_NODES', default=None)
 USE_CAPTCHA = str2bool(siteManager.get('USE_CAPTCHA', default='True'))
-print 'Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES
+print('Using list of ESGF/CoG peer nodes from: %s' % PEER_NODES)
 # DEVELOPMENT/PRODUCTION server switch
 PRODUCTION_SERVER = str2bool(siteManager.get('PRODUCTION_SERVER', default='False'))
-print 'Production server flag=%s' % PRODUCTION_SERVER
+print('Production server flag=%s' % PRODUCTION_SERVER)
 
 WPS_ENDPOINT = siteManager.get('WPS_ENDPOINT', default=None);
 # Fields that will be added to the query string
 WPS_FIELDS = siteManager.get('WPS_FIELDS', default='index_node').split(',');
 WPS_DATACART = str2bool(siteManager.get('WPS_DATACART', default='False'))
-print 'WPS endpoint: %s, datacart enabled: %s, fields: %s' % (WPS_ENDPOINT, WPS_DATACART, ','.join(WPS_FIELDS))
+print('WPS endpoint: %s, datacart enabled: %s, fields: %s' % (WPS_ENDPOINT, WPS_DATACART, ','.join(WPS_FIELDS)))
 
 # FIXME
 # ESGF specific settings
@@ -172,7 +172,7 @@ MYMEDIA = os.path.join(siteManager.cog_config_dir, 'mymedia')
 # must be writable by web server
 PROJECT_CONFIG_DIR = os.path.join(MEDIA_ROOT, 'config')
 
-print 'Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDIA)
+print('Loading custom templates from directories: %s, %s' % (MYTEMPLATES, MYMEDIA))
 
 # Make this unique, and don't share it with anybody.
 #SECRET_KEY = 'yb@$-bub$i_mrxqe5it)v%p=^(f-h&x3%uy040x))19g^iha&#'
@@ -197,6 +197,8 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.request',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
                 'cog.context_processors.cog_settings',
             ],
             'debug': DEBUG,
@@ -204,7 +206,7 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -236,6 +238,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'captcha',
     'layouts',
+    'social_django',
     'cog.apps.CogConfig',
     'cog.templatetags',
 )
@@ -244,7 +247,34 @@ MIGRATION_MODULES = { 'django_openid_auth': 'cog.db_migrations.django_openid_aut
 
 AUTHENTICATION_BACKENDS = (
     'django_openid_auth.auth.OpenIDBackend',
+    'cog.backends.esgf.ESGFOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'cog.backends.esgf.associate_by_openid',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details'
+)
+
+# Appears not to work correctly + not be needed in Django 2.2
+#SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['openid_identifier',]
+
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+SOCIAL_AUTH_SANITIZE_REDIRECTS = False
+SOCIAL_AUTH_ESGF_AUTH_EXTRA_ARGUMENTS = {
+    'access_type': 'offline',
+}
+ESGF_OAUTH2_SECRET_FILE = os.environ.get(
+    'ESGF_OAUTH2_SECRET_FILE',
+    '/esg/config/.esgf_oauth2.json'
 )
 
 # Default is X_FRAME_OPTIONS='SAMEORIGIN'

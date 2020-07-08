@@ -1,23 +1,23 @@
 
 from cog.utils import smart_truncate
-from constants import *
-from navbar import *
+from .constants import *
+from .navbar import *
 from django.conf import settings
 from django.contrib.auth.models import User, Permission, Group
 from django.db import models
 from django.db.models import Q
 from django.forms import Textarea
-from membership import MembershipRequest
+from .membership import MembershipRequest
 from os.path import basename
 from cog.models.user_profile import UserProfile
 from cog.models.topic import Topic
 from cog.models.project_tag import ProjectTag
-from urllib import quote, unquote
+from urllib.parse import quote, unquote
 import os
 import sys
 import re
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from collections import OrderedDict
 from django.core.exceptions import ObjectDoesNotExist
 from cog.models.auth import (getAdminGroupName, getContributorGroupName, getUserGroupName, 
@@ -35,7 +35,7 @@ class Project(models.Model):
     long_name = models.CharField(max_length=120, unique=True, help_text='Fully spelled project name.')
     description = models.TextField(blank=False, null=True, help_text='A short paragraph that describes the project.')
     
-    site = models.ForeignKey(Site, default=settings.SITE_ID)
+    site = models.ForeignKey(Site, default=settings.SITE_ID, on_delete=models.CASCADE)
     
     # optional attributes
     mission = models.TextField(blank=True, help_text='Succinctly describes why the project exists and what it does.')
@@ -237,7 +237,7 @@ class Project(models.Model):
         pubUsers = []
         for user in users:
             try:
-                print 'Checking user=%s' % user  # TODO:FixME
+                print('Checking user=%s' % user)  # TODO:FixME
                 if not user.profile.private:
                     pubUsers.append(user)
             except ObjectDoesNotExist:
@@ -430,7 +430,7 @@ def getProjectsAndRolesForUsers(user, includeRemote=True):
                 elif group.name.endswith('_users'):
                     projects[project.short_name].append(ROLE_USER)
         except ObjectDoesNotExist:
-            print "WARNING: cannot retrieve project for group=%s" % group
+            print("WARNING: cannot retrieve project for group=%s" % group)
             pass
         
     return projects
@@ -463,6 +463,6 @@ def create_upload_directory(project):
     fb_upload_dir = os.path.join(settings.MEDIA_ROOT, settings.FILEBROWSER_DIRECTORY, project.short_name.lower())
     if not os.path.exists(fb_upload_dir):
         os.makedirs(fb_upload_dir)
-        print 'Project Upload directory created: %s' % fb_upload_dir
+        print('Project Upload directory created: %s' % fb_upload_dir)
 
 

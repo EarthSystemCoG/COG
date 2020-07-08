@@ -8,7 +8,6 @@ from django.db import models
 from django import forms
 from django.forms.widgets import Input
 from django.db.models.fields import Field, CharField
-from django.utils.encoding import force_unicode
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.core import urlresolvers
@@ -62,7 +61,7 @@ class FileBrowseWidget(Input):
 class FileBrowseFormField(forms.CharField):
     
     default_error_messages = {
-        'extension': _(u'Extension %(ext)s is not allowed. Only %(allowed)s is allowed.'),
+        'extension': _('Extension %(ext)s is not allowed. Only %(allowed)s is allowed.'),
     }
     
     def __init__(self, max_length=None, min_length=None, site=None, directory=None, extensions=None, format=None, *args, **kwargs):
@@ -85,9 +84,8 @@ class FileBrowseFormField(forms.CharField):
         return value
 
 
-class FileBrowseField(CharField):
+class FileBrowseField(CharField, metaclass=models.SubfieldBase):
     description = "FileBrowseField"
-    __metaclass__ = models.SubfieldBase
     
     def __init__(self, *args, **kwargs):
         self.site = kwargs.pop('filebrowser_site', site)

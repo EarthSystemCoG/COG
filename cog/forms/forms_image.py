@@ -23,6 +23,6 @@ class ImageForm(ModelForm):
                 self._errors["image"] = self.error_class(["Image size exceeds the maximum allowed."])
         except OSError as e:
             # image not existing on disk
-            print e
+            print(e)
         
         return self.cleaned_data

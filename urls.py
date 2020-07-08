@@ -12,15 +12,15 @@ admin.autodiscover()
 urlpatterns = [
                        
     # forbidden extensions (case-insensitive)
-    url(r'(?i).*\.asp\/?$', HttpResponseNotFound),
-    url(r'(?i).*\.aspx\/?$', HttpResponseNotFound),
-    url(r'(?i).*\.cfm\/?$', HttpResponseNotFound),
-    url(r'.*\.cgi\/?$', HttpResponseNotFound),
-    url(r'(?i).*\.jsp\/?$', HttpResponseNotFound),
-    url(r'(?i).*\.php\/?$', HttpResponseNotFound),
-    url(r'(?i).*\.php3\/?$', HttpResponseNotFound),
-    url(r'(?i).*\.pl\/?$', HttpResponseNotFound),
-    url(r'(?i).*\.shtml\/?$', HttpResponseNotFound),
+    url(r'.*\.asp\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.aspx\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.cfm\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.cgi\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.jsp\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.php\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.php3\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.pl\/?$(?i)', HttpResponseNotFound),
+    url(r'.*\.shtml\/?$(?i)', HttpResponseNotFound),
     
     url(r'^robots\.txt$', django.views.generic.TemplateView.as_view(template_name='robots.txt', content_type='text/plain'), name='robots.txt'),
                                                       
@@ -32,11 +32,11 @@ urlpatterns = [
     
     # Filebrowser Admin pages
     #(r'^filebrowser/', include('filebrowser.urls')),
-    url(r'^admin/filebrowser/', include(site.urls)),
+    url(r'^admin/filebrowser/', site.urls),
 
     # Administrator application
     #(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
             
     # django-simple-captcha
     url(r'^captcha/', include('captcha.urls')),

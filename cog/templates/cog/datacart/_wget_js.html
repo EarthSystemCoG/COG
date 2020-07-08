@@ -72,6 +72,8 @@
 	  if (shard.length>0) {
 	  	  url += "?shards=" + encodeURI(shard+"/solr");  // "?shards=localhost:8982/solr"
 	  // or target shared "slave" shard only
+	  } else {
+      	  url += "?distrib=false";
 	  }
 	  
 	  // add optional query filter
@@ -133,6 +135,20 @@
 			  		html += " (shard="+shard+")";
 			  	}
 			  	html += "</a>";
+				
+				// Generate simplified wget script links
+				{% if request.user.is_authenticated and backends.associated %}
+				var query_string = "index_node=" + index_node + "&shard=" + shard;
+				for (var id_index in ids) {
+					dataset_id = jsonResponse[wget_key][id_index];
+					query_string += "&dataset_id=" + dataset_id;
+				}
+				var link_parts = [
+					" | <a href=\"{% url 'wget_script' %}?", query_string, "\" title=\"",
+					"An improved version of the standard WGET script utilising a short-lived certificate to authorize your access to the data.",
+					"\"><em><span style=\"color:red\">NEW</span> Simplified Script</em></a>"]
+				html += link_parts.join("");
+				{% endif %}
 			  }
 		}
 		html += "</div>";

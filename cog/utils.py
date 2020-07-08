@@ -2,7 +2,7 @@ import re
 from django import forms
 import os
 import datetime
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import json
 
 # timeout for JSON HTTP requests
@@ -35,7 +35,7 @@ def clean_field(form, field, invalid_characters):
     #    raise forms.ValidationError("The field %s contains invalid characters" % field)
     for c in data:
         if re.match(invalid_characters, c):
-            print 'Invalid character: %s' % c
+            print('Invalid character: %s' % c)
             raise forms.ValidationError("The character '%s' is invalid." % c)
     return data
 
@@ -65,15 +65,15 @@ def getJson(url):
     '''Retrieves and parses a JSON document at some URL.'''
     
     try:
-        opener = urllib2.build_opener()
-        request = urllib2.Request(url)
+        opener = urllib.request.build_opener()
+        request = urllib.request.Request(url)
         response = opener.open(request, timeout=TIMEOUT)
         jdoc = response.read()
         return json.loads(jdoc)
         
     except Exception as e:
-        print e
-        print 'Error retrieving URL=%s' % url
+        print(e)
+        print('Error retrieving URL=%s' % url)
         return None
     
 def check_filepath(file_full_path, expected_file_names):

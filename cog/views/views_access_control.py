@@ -7,8 +7,7 @@ from collections import OrderedDict
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
@@ -24,7 +23,7 @@ from cog.notification import notify
 from cog.plugins.esgf.objects import ROLE_USER, ROLE_PUBLISHER, ROLE_SUPERUSER, ROLE_ADMIN
 from cog.services.registration import esgfRegistrationServiceImpl as registrationService
 from cog.utils import getJson
-from constants import PERMISSION_DENIED_MESSAGE, SAVED, GROUP_NOT_FOUND_MESSAGE
+from .constants import PERMISSION_DENIED_MESSAGE, SAVED, GROUP_NOT_FOUND_MESSAGE
 from cog.plugins.esgf.security import esgfDatabaseManager
 
 
@@ -55,7 +54,7 @@ def ac_subscribe(request, group_name):
             status = registrationService.status(request.user.profile.openid(), group_name, ROLE_USER)
         except ObjectDoesNotExist:
             # user does not exist in ESGF database
-            print 'Inserting user into ESGF security database'
+            print('Inserting user into ESGF security database')
             esgfDatabaseManager.insertEsgfUser(request.user.profile)
             status = None
         
@@ -114,7 +113,7 @@ def ac_process(request, group_name, user_id):
         # set initial status of check boxes from database
         initial = {}
         permissions = registrationService.list(openid, group_name)
-        for role, approved in permissions.items():
+        for role, approved in list(permissions.items()):
             initial['%sPermissionCheckbox' % role] = approved
         
         form = PermissionForm(initial=initial)
@@ -150,7 +149,7 @@ def ac_process(request, group_name, user_id):
                                         + "?message=%s" % SAVED)
             
         else:
-            print "Form is invalid: %s" % form.errors
+            print("Form is invalid: %s" % form.errors)
             return render(request, template, 
                           {'group_name': group_name, 'title': title, 'user': user, 'form': form})
 
@@ -173,7 +172,7 @@ def ac_list(request):
             site_domain = jobj['site']['domain']
 
             # loop over groups for this node
-            for group_name, group_dict in jobj['groups'].items():
+            for group_name, group_dict in list(jobj['groups'].items()):
                 # augment group dictionary
                 group_dict['site_name'] = site_name
                 group_dict['site_domain'] = site_domain
@@ -227,7 +226,7 @@ def notifyUser(group_name, user, permissions):
     subject = "'%s' Data Access Notification" % group_name
     message = "Your permissions in group '%s' have been updated" % group_name
     
-    for (role, status) in permissions.items():
+    for (role, status) in list(permissions.items()):
         message += "\nRole: %s status=%s" % (role, status)
         
     notify(user, subject, message)

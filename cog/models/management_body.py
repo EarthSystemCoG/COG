@@ -39,7 +39,7 @@ class ManagementBody(models.Model):
     category = models.CharField(max_length=50, blank=True, null=False, default=MANAGEMENT_BODY_CATEGORY_STRATEGIC,
                                 choices=MANAGEMENT_BODY_CATEGORIES_CV, verbose_name='Category',
                                 help_text='Strategic or Operational management body purpose.')
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
     # sort list of members my last name and ignore case
     def members(self):
@@ -91,18 +91,18 @@ def getManagementBodies(project, category):
 def initManagementBodyPurpose():
     """Function to populate the database with the necessary instances of ManagementBodyPurpose."""
     
-    for purpose, order in STRATEGIC_MANAGEMENT_BODY_DICT.items():
+    for purpose, order in list(STRATEGIC_MANAGEMENT_BODY_DICT.items()):
         try:
             mbp = ManagementBodyPurpose.objects.get(purpose=purpose, category=MANAGEMENT_BODY_CATEGORY_STRATEGIC)
         except ManagementBodyPurpose.DoesNotExist:
             mbp = ManagementBodyPurpose(purpose=purpose, order=order, category=MANAGEMENT_BODY_CATEGORY_STRATEGIC)
             mbp.save()
-            print "Created management body purpose: %s" % mbp
+            print("Created management body purpose: %s" % mbp)
             
-    for purpose, order in OPERATIONAL_MANAGEMENT_BODY_DICT.items():
+    for purpose, order in list(OPERATIONAL_MANAGEMENT_BODY_DICT.items()):
         try:
             mbp = ManagementBodyPurpose.objects.get(purpose=purpose, category=MANAGEMENT_BODY_CATEGORY_OPERATIONAL)
         except ManagementBodyPurpose.DoesNotExist:
             mbp = ManagementBodyPurpose(purpose=purpose, order=order, category=MANAGEMENT_BODY_CATEGORY_OPERATIONAL)
             mbp.save()
-            print "Created management body purpose: %s" % mbp
+            print("Created management body purpose: %s" % mbp)

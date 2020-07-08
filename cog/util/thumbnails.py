@@ -53,8 +53,8 @@ def generateThumbnail(filePath, thumbnail_size):
             im.thumbnail(thumbnail_size)
             im.save(thumbnailPath, "PNG")
         except IOError as error:
-            print "Cannot create thumbnail for %s, using full image instead " % filePath
-            print error
+            print("Cannot create thumbnail for %s, using full image instead " % filePath)
+            print(error)
             shutil.copy(filePath, thumbnailPath)
 
 def deleteThumbnail(filePath):
@@ -63,8 +63,8 @@ def deleteThumbnail(filePath):
         try:
             os.remove(thumbnailPath)
         except IOError as error:
-            print "Cannot delete thumbnail for", filePath
-            print error
+            print("Cannot delete thumbnail for", filePath)
+            print(error)
             
 def deleteImageAndThumbnail(obj):
     '''Method to delete an object image and thumbnail simultaneously.'''

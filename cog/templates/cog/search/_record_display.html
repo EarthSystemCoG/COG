@@ -82,14 +82,24 @@
 				    <div style="display: inline-block;">
 				    [ <a href="{{url.0}}" target="_blank"><strong>LAS Visualization</strong></a> ]
 				    </div>
-		
+
 				<!-- WGET -->
 				{% elif url.1 == 'application/wget' %}
 					&nbsp; 
 					<div style="display: inline-block;">
-						[ <a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.fields.shard.0 }}','{{ record.id }}')"><strong>WGET Script</strong></a> ]
+						[
+						<a href="javascript:wgetScript('{{ record.fields.index_node.0}}','{{ record.fields.shard.0 }}','{{ record.id }}')">
+							<strong>WGET Script</strong>
+						</a>
+						{% if request.user.is_authenticated and backends.associated %}
+						| <a href="{% url 'wget_script' %}?index_node={{ record.fields.index_node.0 }}&shard={{ record.fields.shard.0 }}&dataset_id={{ record.id }}"
+						     title="An improved version of the standard WGET script utilising a short-lived certificate to authorize your access to the data.">
+							<strong><em><span style="color:red">NEW</span> Simplified Script</em></strong>
+						</a>
+						{% endif %}
+						]
 					</div>
-		
+
 				<!-- Globus -->
 				{% elif url.1 == 'application/gridftp' %}
 					&nbsp; 

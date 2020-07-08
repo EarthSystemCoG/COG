@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from cog.models import Post
 
 
@@ -7,7 +7,7 @@ class Bookmark(models.Model):
     
     url = models.URLField('URL', blank=False, max_length=1000)
     name = models.CharField(max_length=1000, blank=False)
-    folder = models.ForeignKey('Folder', blank=False, null=False)
+    folder = models.ForeignKey('Folder', blank=False, null=False, on_delete=models.CASCADE)
     description = models.TextField(max_length=1000, blank=True, null=True)
     order = models.IntegerField(blank=True, default=0)
     # note: do not delete bookmark if notes is deleted

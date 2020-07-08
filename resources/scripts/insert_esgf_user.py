@@ -28,11 +28,11 @@ userProfile = UserProfile.objects.create(user=user, institution='Institution', c
 openid = ''
 for userOpenID in user.useropenid_set.all():
     openid = userOpenID.claimed_id
-    print 'User openid=%s' % openid
+    print('User openid=%s' % openid)
 
 # verify user was inserted
 esgfUser2 = esgfDatabaseManager.getUserByOpenid( openid )
-print "Retrieved user with openid=%s" % esgfUser2.openid
+print("Retrieved user with openid=%s" % esgfUser2.openid)
 
 # cleanup tgis execution
 user.delete()

@@ -1,7 +1,7 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from django.contrib.auth.models import User
-from project_tab import ProjectTab
+from .project_tab import ProjectTab
 from datetime import datetime, timedelta
 
 # default lock lifetime: 30 minutes
@@ -13,7 +13,7 @@ class Lock(models.Model):
     object_type = models.CharField(max_length=100, verbose_name='Object Type', blank=False)
     object_id = models.IntegerField(verbose_name='Object Identifier', blank=False)
     timestamp = models.DateTimeField('Last Update Date', auto_now=True)    
-    owner = models.ForeignKey(User, verbose_name='Owner', blank=False)
+    owner = models.ForeignKey(User, verbose_name='Owner', blank=False, on_delete=models.CASCADE)
         
     def __unicode__(self):
         return "Object type=%s id=%s expiration=%s owner=%s" % (self.object_type, self.object_id, self.get_expiration(), self.owner.get_full_name())

@@ -1,5 +1,5 @@
 from django.db import models
-from constants import APPLICATION_LABEL
+from .constants import APPLICATION_LABEL
 from cog.models import UserProfile
 
 class UserUrl(models.Model):   
@@ -7,7 +7,7 @@ class UserUrl(models.Model):
     
     url = models.URLField('URL', blank=False, null=False, max_length=1000)
     name = models.CharField(max_length=200, blank=False, null=False)
-    profile = models.ForeignKey(UserProfile, blank=False, null=False)
+    profile = models.ForeignKey(UserProfile, blank=False, null=False, on_delete=models.CASCADE)
     
     class Meta:
         app_label = APPLICATION_LABEL

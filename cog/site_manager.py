@@ -1,6 +1,6 @@
 import os
 import time
-import ConfigParser
+import configparser
 import logging
 
 from cog.constants import (SECTION_ESGF, SECTION_GLOBUS, SECTION_PID)
@@ -22,16 +22,16 @@ class SiteManager(object):
             logging.info("Waiting to read configuration file: %s" % SiteManager.CONFIGFILEPATH )
             time.sleep(1)
 
-        self.config = ConfigParser.ConfigParser(allow_no_value=True)
+        self.config = configparser.ConfigParser(allow_no_value=True)
         # location of site specific settings configuration file
         self.cog_config_dir = SiteManager.COG_CONFIG_DIR
         try:
             config = self.config.read( SiteManager.CONFIGFILEPATH )
             logging.info("Site manager: using CoG settings from file(s): %s" % config)
-            print 'Initialized CoG settings from file: %s' % SiteManager.CONFIGFILEPATH
+            print('Initialized CoG settings from file: %s' % SiteManager.CONFIGFILEPATH)
             
         except Exception as e:
-            print "Error reading site settings configuration file: %s" % SiteManager.CONFIGFILEPATH
+            print("Error reading site settings configuration file: %s" % SiteManager.CONFIGFILEPATH)
 
     def get(self, name, section='DEFAULT', default=None):
         '''Method that retrieves a settings value from a specified section of the configuration file.'''
