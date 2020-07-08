@@ -267,6 +267,7 @@ SOCIAL_AUTH_PIPELINE = (
 # Appears not to work correctly + not be needed in Django 2.2
 #SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['openid_identifier',]
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SOCIAL_AUTH_SANITIZE_REDIRECTS = False
 SOCIAL_AUTH_ESGF_AUTH_EXTRA_ARGUMENTS = {
     'access_type': 'offline',
