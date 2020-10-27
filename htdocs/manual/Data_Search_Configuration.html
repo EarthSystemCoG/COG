@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Data Search Configuration &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data Access Control Setup" href="Data_Access_Control_setup.html" />
+    <link rel="prev" title="Home Page Example" href="Home_Page_Example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Search Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-turn-on-the-data-search-widget-figure-1">Step 1: Turn on the Data Search widget (Figure 1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-customize-the-data-search-constraints">Step 2: Customize the Data Search Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-enable-new-search-facets">Optional: Enable New Search Facets</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Data Search Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Data_Search_Configuration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="data-search-configuration">
+<h1>Data Search Configuration<a class="headerlink" href="#data-search-configuration" title="Permalink to this headline">¶</a></h1>
+<p>Each CoG project can be configured to expose a data search page that
+allows users to search the distributed ESGF metadata archives with
+custom settings. To do so, the project administrator first needs to
+enable the Data Search widget (see Step 1 below) for that project, then
+use the “Configure Search” page to customize the search target and
+constriaints (Step 2). The project search configuration can be
+completely built using the web interface, or it can be
+exported/imported/changed through text files that are stored on the Node
+where CoG is running.</p>
+<div class="section" id="step-1-turn-on-the-data-search-widget-figure-1">
+<h2>Step 1: Turn on the Data Search widget (Figure 1)<a class="headerlink" href="#step-1-turn-on-the-data-search-widget-figure-1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>CoG has widgets that exist on the right side of the page.</p></li>
+<li><p>The Data Search widget allows users to access an ESGF search.</p></li>
+<li><p>The Data Search widget is OFF by default and must be enabled.</p>
+<ul>
+<li><p>View tutorial with screenshots on how to enable the widget <a class="reference external" href="https://www.earthsystemcog.org/projects/cog/doc/data_widget">https://www.earthsystemcog.org/projects/cog/doc/data_widget</a></p></li>
+</ul>
+</li>
+<li><p>The Data Search widget will always be the first widget in the right
+column.</p></li>
+<li><p>Wiki pages have the option of turning off the right widgets.</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/search_widget.png"><img alt="" src="../_images/search_widget.png" style="width: 189.04999999999998px; height: 78.85px;" /></a>
+</div>
+<p>Figure 1: Screenshot of the Data Search widget</p>
+</div>
+<div class="section" id="step-2-customize-the-data-search-constraints">
+<h2>Step 2: Customize the Data Search Constraints<a class="headerlink" href="#step-2-customize-the-data-search-constraints" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>By default, the search (for any CoG project) will be configured to
+query the local ESGF search services with no constraints (in
+particular, this means executing a distributed search across all
+federated ESGF Nodes). - Most likely, you will want to configure the
+search for the project specific audience. This can be done either
+through the web interface, or by importing an already existing search
+configuration file. These options are described in detail in the
+following pages:</p>
+<ul>
+<li><p>View tutorial on how to configure general search options <a class="reference external" href="https://www.earthsystemcog.org/projects/cog/doc/data_options">https://www.earthsystemcog.org/projects/cog/doc/data_options</a></p></li>
+<li><p>View tutorial on how to configure the search facets <a class="reference external" href="https://www.earthsystemcog.org/projects/cog/doc/search_facet_config">https://www.earthsystemcog.org/projects/cog/doc/search_facet_config</a></p></li>
+<li><p>View tutorial on how to import/export the project search
+configuration <a class="reference external" href="https://www.earthsystemcog.org/projects/cog/search_import_export">https://www.earthsystemcog.org/projects/cog/search_import_export</a></p></li>
+</ul>
+</li>
+<li><dl class="simple">
+<dt>After saving your changes, access the project</dt><dd><p>search page and test that results are returned as you expect.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="optional-enable-new-search-facets">
+<h2>Optional: Enable New Search Facets<a class="headerlink" href="#optional-enable-new-search-facets" title="Permalink to this headline">¶</a></h2>
+<p>Because of security constraints, the ESGF Search Services can not be
+queried with arbitrary facet names, although arbitrary facet names and
+values can be ingested at publishing time into the Solr metadata
+(provided they are valid and don’t create any conflicts). Nontheless, to
+enable a new facet as a valid query parameter, the ESGF Node
+administrator needs only insert that facet in the ESGF configuration
+file:</p>
+<p>/esg/config/facets.properties</p>
+<p>and restart the Node.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Data_Access_Control_setup.html" class="btn btn-neutral float-right" title="Data Access Control Setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Home_Page_Example.html" class="btn btn-neutral float-left" title="Home Page Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

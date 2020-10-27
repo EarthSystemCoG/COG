@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>“Local Shard” Setup &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CoG Installation or Upgrade" href="CoG_Installation_or_Upgrade.html" />
+    <link rel="prev" title="Restore from Backup" href="Restore_from_Backup.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">“Local Shard” Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-setup-a-local-shard">Step 1) Setup a “local shard”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-publish-data-collections-to-the-local-shard">Step 2) Publish data collections to the “local shard”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-configure-the-cog-search-user-interface">Step 3) Configure the CoG Search User Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>“Local Shard” Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Local_Shard_Setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="local-shard-setup">
+<h1>“Local Shard” Setup<a class="headerlink" href="#local-shard-setup" title="Permalink to this headline">¶</a></h1>
+<p>In many cases, data collections accessed through the ESGF system
+comprise data that are hosted on distributed servers, and that must be
+found by federated searches initiated at any node in the federation.
+Such is the case for prominent data collections such as CMIP5/6, CORDEX,
+obs4MIPs, ana4MIPs etc. For these collections, the search indexes are
+distributed on multiple nodes, and replicated by the other nodes so that
+a distributed search can retrieve the complete set of results.</p>
+<p>In other cases, data collections are interesting only to specific
+projects or institutions, and they only need to be exposed through a
+single ESGF node for users to be able to find them and download the
+data. In these cases, their metadata should not be replicated across all
+ESGF nodes in the federarion, with the result of over-inflating all the
+search indexes, and consequent reduction in performance.</p>
+<p>It turns out that an ESGF node administrator can setup and publish data
+to a “local shard” that is not shared with the rest of the ESGF
+federation, following a few simple steps, as described below.</p>
+<p>Note: local shard supports requires esg-search version 4.3.0 or above,
+and CoG version 3.0.3 or above.</p>
+<div class="section" id="step-1-setup-a-local-shard">
+<h2>Step 1) Setup a “local shard”<a class="headerlink" href="#step-1-setup-a-local-shard" title="Permalink to this headline">¶</a></h2>
+<p>The following command will create a new Solr instance configuration
+suitable for publishing and searching local data:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">esg-node –add-replica-shard localhost:8982</span>
+</pre></div>
+</div>
+<p>(note that for various reasons it is best to choose “8982” as the local
+shard port).</p>
+<p>This command will:</p>
+<ul class="simple">
+<li><p>Create a local shard configuration directory
+/usr/local/solr-home/localhost-8982</p></li>
+<li><p>Create a local shard Solr index directory
+/esg/solr-index/localhost-8982</p></li>
+<li><p>Insert the local shard in the file
+/esg/config/esgf_shards_static.xml, which is used by the local ESGF
+search service to create a list of shards to query. In other words,
+the local shard at port 8982 will be included by default in all
+searches executed by the local ESGF search service</p></li>
+<li><p>Insert the local shard in the file /esg/config/esgf_shards.config, so
+that the corresponding Solr instance is always started/stopped
+together with the rest of the ESGF services (and shards) on that node</p></li>
+</ul>
+<p>The local 8982 shard will be started by the esg-node command with
+neither the option -Denable.master=true, nor with the option
+-Denable.slave=true (instead, the flag -Denable.localhost=true is used):
+this means that this shard will not replicate from any other shard, and
+it will not expose itself to replication from other shards.</p>
+</div>
+<div class="section" id="step-2-publish-data-collections-to-the-local-shard">
+<h2>Step 2) Publish data collections to the “local shard”<a class="headerlink" href="#step-2-publish-data-collections-to-the-local-shard" title="Permalink to this headline">¶</a></h2>
+<p>In general, data can be published to the local shard by following two
+simple requirements:</p>
+<ul class="simple">
+<li><p>Target the Solr index on port 8982</p></li>
+<li><p>Include an additional piece of metadata: shard=localhost:8982 to all
+dataset-level records (this informatoin is used by search clients to
+efficiently find all files that belong to a given dataset).</p></li>
+</ul>
+<p>If using the ESGF publisher client to publish data, the above
+requirements can be fulfilled by a few simple changes in the esg.ini
+file:</p>
+<ul class="simple">
+<li><p>Change the URL of the target publishing service:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">from: https://your.host.name/esg-search/remote/secure/client-cert/hessian/publishingService</span>
+<span class="go">to: https://your.host.name/esg-search/remote/secure/client-cert/hessian/publishingServiceLocal</span>
+</pre></div>
+</div>
+<p>Add the “shard” metadata field as part of the specific project
+configuration:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">categories =</span>
+<span class="go">      project | enum | true | true | 0</span>
+<span class="go">      ..............................................</span>
+<span class="go">      shard | string | true | true | 14</span>
+
+<span class="go">category_default =</span>
+<span class="go">      project |</span>
+<span class="go">      .......................</span>
+<span class="go">      shard | localhost:8982</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-configure-the-cog-search-user-interface">
+<h2>Step 3) Configure the CoG Search User Interface<a class="headerlink" href="#step-3-configure-the-cog-search-user-interface" title="Permalink to this headline">¶</a></h2>
+<p>With CoG, each project can configure its search space by targetting a
+specific search URL and optionally adding other fixed search constraints
+(such as project=XYZ). An ESGF administraor can configure a CoG project
+to find data indexed on the local shard in two ways:</p>
+<ul class="simple">
+<li><p>By targeting the local ESGF search service with no additional
+federation constraints: as mentioned before, the 8982 shard is
+contained in the esgf_shards_static.xml file and therefore will be
+picked up by the local ESGF search service by default. Specifically,
+configure the CoG project search as follows:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Search Service URL: http://your.host.name/esg-search/search/</span>
+<span class="go">Constraints: do NOT add distrib=false and do NOT specifiy any shard constraint</span>
+</pre></div>
+</div>
+<p>By targeting the local ESGF search service AND adding a specific shard
+constraint that includes that shard. In this case, the local ESGF
+service will query only those shards that are specified in the
+constraint. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Search Service URL: http://your.host.name/esg-search/search/</span>
+<span class="go">Constraints: shards=localhost:8983/solr,localhost:8982/solr</span>
+</pre></div>
+</div>
+<p>The first configuration will cause the CoG interface to return results
+from ALL shards configured in the local file esgf_shards_static.xml
+(which may include other ESGF nodes throughout the federation); the
+second configuration will return results only from those shards that are
+explicitely listed.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="CoG_Installation_or_Upgrade.html" class="btn btn-neutral float-right" title="CoG Installation or Upgrade" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Restore_from_Backup.html" class="btn btn-neutral float-left" title="Restore from Backup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

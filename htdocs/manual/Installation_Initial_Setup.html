@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation: Initial setup &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation: Install or Upgrade" href="Installation_Install_or_Upgrade.html" />
+    <link rel="prev" title="Installation: Prerequisites" href="Installation_Prerequisites.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation: Initial setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-create-the-main-cog-directory">Step 1: Create the main CoG directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-create-a-cog-configuration-directory">Step 2: Create a CoG configuration directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-create-a-cog-installation-directory">Step 3: Create a CoG installation directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-ensure-all-environment-variables-are-set">Step 4: Ensure all environment variables are set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-set-up-a-python-virtual-environment">Step 5: Set up a Python virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#results">Results:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation: Initial setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Installation_Initial_Setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-initial-setup">
+<h1>Installation: Initial setup<a class="headerlink" href="#installation-initial-setup" title="Permalink to this headline">¶</a></h1>
+<p>NOTE: If installing CoG through the ESGF Installer, all these steps will
+be executed automatically. If not using the ESGF Installer, please read
+on.</p>
+<div class="section" id="step-1-create-the-main-cog-directory">
+<h2>Step 1: Create the main CoG directory<a class="headerlink" href="#step-1-create-the-main-cog-directory" title="Permalink to this headline">¶</a></h2>
+<p>This will be the parent directory under which all CoG-related software
+(Python, CoG installation, CoG configuration) will be installed.</p>
+<ul class="simple">
+<li><p>For example, use = /usr/local/cog</p></li>
+<li><p>But the directory can be located anywhere on the system if needed
+(e.g. you don’t have write permissions to /usr/local/cog).</p></li>
+<li><p>The user executing the installation must have write permissions to
+this directory.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir &lt;COG_DIR&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2-create-a-cog-configuration-directory">
+<h2>Step 2: Create a CoG configuration directory<a class="headerlink" href="#step-2-create-a-cog-configuration-directory" title="Permalink to this headline">¶</a></h2>
+<p>This will create a directory to hold the node-specific configuration
+file and external media sub-directories.</p>
+<ul class="simple">
+<li><p>The default location for = /usr/local/cog/cog_config</p></li>
+<li><p>Preferably, this directory should be located under</p></li>
+<li><p>But the directory can be located anywhere on the system if needed.</p></li>
+<li><p>The user executing the installation must have write permissions to
+this directory.</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir &lt;COG_CONFIG_DIR&gt;r</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-3-create-a-cog-installation-directory">
+<h2>Step 3: Create a CoG installation directory<a class="headerlink" href="#step-3-create-a-cog-installation-directory" title="Permalink to this headline">¶</a></h2>
+<p>This is where the source code will be located.</p>
+<ul class="simple">
+<li><p>Preferably, this directory should be located under</p></li>
+<li><p>For example, use = /usr/local/cog/cog_install</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">mkdir &lt;COG_INSTALL_DIR&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-ensure-all-environment-variables-are-set">
+<h2>Step 4: Ensure all environment variables are set<a class="headerlink" href="#step-4-ensure-all-environment-variables-are-set" title="Permalink to this headline">¶</a></h2>
+<p>How environment variables are set varies from shell to shell. Below is
+the example for Bash. These commands would be placed in the
+~/.bash_profile or ~/.bashrc files. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export COG_DIR=/usr/local/cog</span>
+<span class="go">export COG_CONFIG_DIR=$COG_DIR/cog_config</span>
+<span class="go">export COG_INSTALL_DIR=$COG_DIR/cog_install</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-5-set-up-a-python-virtual-environment">
+<h2>Step 5: Set up a Python virtual environment<a class="headerlink" href="#step-5-set-up-a-python-virtual-environment" title="Permalink to this headline">¶</a></h2>
+<p>This will be the location for the CoG specific Python libraries and
+related dependencies.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd virtualenv venv</span>
+</pre></div>
+</div>
+<p>This will create the sub-directory venv under with:</p>
+<ul class="simple">
+<li><p>copy of python executable in &lt;COG_DIR&gt;/venv/bin/python</p></li>
+<li><p>location for installation of additional needed packages in &lt;COG_DIR&gt;/venv/lib/python2.7/site-packages</p></li>
+</ul>
+<p>Note, if you have multiple installations of python installed, you can
+specify which python to use through the -p option. By default,
+virtualenv will use the python used to install virtualenv.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd &lt;COG_DIR&gt;</span>
+<span class="go">virtualenv -p /usr/bin/python venv</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="results">
+<h2>Results:<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>After these steps, the directory structure will look like:</p>
+<ul class="simple">
+<li><p>/usr/local/cog</p>
+<ul>
+<li><p>/cog_config</p></li>
+<li><p>/cog_install</p></li>
+<li><p>/venv</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Installation_Install_or_Upgrade.html" class="btn btn-neutral float-right" title="Installation: Install or Upgrade" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Installation_Prerequisites.html" class="btn btn-neutral float-left" title="Installation: Prerequisites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

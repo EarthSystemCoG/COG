@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Authorization for ESGF Data Access &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Logging in with OpenID" href="Logging_in_with_OpenID.html" />
+    <link rel="prev" title="Create an account" href="Create_an_account.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Authorization for ESGF Data Access</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#why-data-access-control-groups">Why data access control groups?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#which-data-access-control-groups-currently-exist-in-esgf">Which data access control groups currently exist in ESGF?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#who-has-to-join">Who has to join?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-join">How to join?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Authorization for ESGF Data Access</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Authorization_for_ESGF_Data_Access.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="authorization-for-esgf-data-access">
+<h1>Authorization for ESGF Data Access<a class="headerlink" href="#authorization-for-esgf-data-access" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="why-data-access-control-groups">
+<h2>Why data access control groups?<a class="headerlink" href="#why-data-access-control-groups" title="Permalink to this headline">¶</a></h2>
+<p>Often data users must accept a “terms of use” (e.g. agree to acknowledge
+the data producers in publications) before downloading data. Therefore,
+the creation of a ESGF-CoG account is normally not sufficient for data
+access, you also need the authorization to access data. User’s must join
+a data access control group for the project they wish to download data
+from. If the right group is not joined, for example, Wget scripts will
+prematurely fail with a “Forbidden” error message.</p>
+</div>
+<div class="section" id="which-data-access-control-groups-currently-exist-in-esgf">
+<h2>Which data access control groups currently exist in ESGF?<a class="headerlink" href="#which-data-access-control-groups-currently-exist-in-esgf" title="Permalink to this headline">¶</a></h2>
+<p>Below is a list of access control groups by project:</p>
+<table class="colwidths-given docutils align-left">
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Project</p></th>
+<th class="head"><p>Group Name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CMIP5</p></td>
+<td><p>CMIP5 Research, CMIP5 Commercial</p></td>
+</tr>
+<tr class="row-odd"><td><p>EUCLIPSE</p></td>
+<td><p>CMIP5 Research</p></td>
+</tr>
+<tr class="row-even"><td><p>GeoMIP</p></td>
+<td><p>CMIP5 Research</p></td>
+</tr>
+<tr class="row-odd"><td><p>LUCID</p></td>
+<td><p>CMIP5 Research</p></td>
+</tr>
+<tr class="row-even"><td><p>Obs4MIPS</p></td>
+<td><p>CMIP5 Research NASA OBS</p></td>
+</tr>
+<tr class="row-odd"><td><p>PMIP3</p></td>
+<td><p>CMIP5 Research</p></td>
+</tr>
+<tr class="row-even"><td><p>TAMIP</p></td>
+<td><p>CMIP5 Research</p></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>ACME</p></td>
+<td><p>ACME</p></td>
+</tr>
+<tr class="row-odd"><td><p>CORDEX</p></td>
+<td><p>CORDEX Research, CORDEX Commercial</p></td>
+</tr>
+<tr class="row-even"><td><p>ISI-MIP</p></td>
+<td><p>ISI-MIPResearch, ISI-MIP Unrestricted</p></td>
+</tr>
+<tr class="row-odd"><td><p>specs</p></td>
+<td><p>SPECS</p></td>
+</tr>
+</tbody>
+</table>
+<p>For example, if you need CMIP5 data, you will need to join either CMIP5
+Research or CMIP5 Commercial. Which CMIP5 data are restricted to
+non-commercial research and education and which data can also be used
+for commercial purposes is tabulated in the CMIP5 document Modeling
+Groups and their Terms of Use. A membership in CMIP5 Research is also
+sufficient for download of data of other MIPs, not just CMIP5. An
+exception is ISI-MIP. Other projects such as CORDEX have their own
+groups. Which CORDEX data can only be used for non-commercial purposes
+and which thoroughly is listed in the CORDEX Models overview.</p>
+</div>
+<div class="section" id="who-has-to-join">
+<h2>Who has to join?<a class="headerlink" href="#who-has-to-join" title="Permalink to this headline">¶</a></h2>
+<p>Everyone who has created a CoG account and wants to download data from
+one of the projects listed in the table above must join the appropriate
+access control group. This will need to be repeated for each ESGF OpenID
+since ESGF cannot assign group memberships to persons, only to OpenIDs.
+You will need to do this for each group you need data from. It is not
+necessary to create a new CoG account for each group. It is possible to
+have several memberships with one OpenID.</p>
+</div>
+<div class="section" id="how-to-join">
+<h2>How to join?<a class="headerlink" href="#how-to-join" title="Permalink to this headline">¶</a></h2>
+<p>Two different ways to join a data access control group in ESGF:</p>
+<ol class="arabic simple">
+<li><p>View list of data access control groups</p></li>
+</ol>
+<p>A comprehensive list of access control groups can be found at: ESGF Data
+Access Control Groups , which contains a list of groups and links for
+registration. Note, the home pages of ESGF nodes may list or exclude
+groups based on their individual holdings.</p>
+<ol class="arabic simple" start="2">
+<li><p>Download a file with your browser</p></li>
+</ol>
+<p>The easiest way to join a data access control group is a download a file
+with your browser’s download manager. This process will automatically
+present a window for group registration.</p>
+<p>Step 2a: In an ESGF portal, select a dataset with data of the project
+you are interested in and click on “Show Files” (Figure 1).</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/group_registration_select_dataset.png"><img alt="" src="../_images/group_registration_select_dataset.png" style="width: 842.35px; height: 465.8px;" /></a>
+</div>
+<p>Figure 1: Screenshot of the some search results showing the “Show Files”
+link.</p>
+<p>Step 2b: Click on “HTTPServer” (Figure 2).</p>
+<ul class="simple">
+<li><p>After login you will be guided to the Group Registration Request page
+(Figure 3) if a group membership is missing.</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/group_registration_filelist.png"><img alt="" src="../_images/group_registration_filelist.png" style="width: 838.9499999999999px; height: 374.0px;" /></a>
+</div>
+<p>Figure 2: Screenshot of the search results expanded to show the
+“HTTPServer” link.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/group_registration_groups.png"><img alt="" src="../_images/group_registration_groups.png" style="width: 504.90000000000003px; height: 206.55px;" /></a>
+</div>
+<p>Figure 3: Screen shot of the the group registration page.</p>
+<p>Step 2c: Choose a group and click on “Register”.</p>
+<ul class="simple">
+<li><p>A sub-window opens with the terms of use (Figure 4).</p></li>
+<li><p>After accepting the terms, group membership is immediately active and
+the download window will open.</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/group_registration_terms.png"><img alt="" src="../_images/group_registration_terms.png" style="width: 829.6px; height: 412.25px;" /></a>
+</div>
+<p>Figure 4: Screenshot of the terms of use window. It will be different
+for each group.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Logging_in_with_OpenID.html" class="btn btn-neutral float-right" title="Logging in with OpenID" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Create_an_account.html" class="btn btn-neutral float-left" title="Create an account" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

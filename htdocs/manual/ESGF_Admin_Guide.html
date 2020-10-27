@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ESGF/CoG Administrator Guide Overview &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ESGF/CoG Administrator Login" href="Node_Administrator_Login.html" />
+    <link rel="prev" title="Welcome to ESGF CoG’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ESGF/CoG Administrator Guide Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1b-upgrade-cog-standalone">Step 1b: Upgrade CoG standalone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-configure-cog">Step 2: Configure CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-upgrade-cog">Step 3: Upgrade CoG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>ESGF/CoG Administrator Guide Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/ESGF_Admin_Guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="esgf-cog-administrator-guide-overview">
+<h1>ESGF/CoG Administrator Guide Overview<a class="headerlink" href="#esgf-cog-administrator-guide-overview" title="Permalink to this headline">¶</a></h1>
+<p>The Earth System CoG Collaboration Environment has replaced the Web
+Front End as the public face to ESGF. This page describes the steps
+necessary to setup, configure, and maintain CoG for your ESGF node. It
+is intended to be used by existing ESGF Node administrators with
+root-level access.</p>
+<p>Step 1a: Install CoG using the ESGF installer CoG is installed as part
+of a standard ESGF Index Node by running the ESGF installer. Currently,
+CoG is configured to run behind the Apache httpd server on the standard
+port SSL port 443 (redirection from port 80 will be configured soon).
+After the ESGF installer completes succesfully, check that you can
+access the node by typing the following URL in your favorite browser</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Open URL: https//&lt;hostname&gt;/</span>
+<span class="go">Replace: &lt;hostname&gt; with your Node’s fully qualified domain name (note the “https” protocol).</span>
+</pre></div>
+</div>
+<p>This should redirect to <a class="reference external" href="https:////projects/testproject/">https:////projects/testproject/</a></p>
+<div class="section" id="step-1b-upgrade-cog-standalone">
+<h2>Step 1b: Upgrade CoG standalone<a class="headerlink" href="#step-1b-upgrade-cog-standalone" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively, if you already have a working ESGF/CoG setup, you can
+upgrade CoG without running the full ESGF installer with the following
+procedure (as root, or prepend commands with sudo):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Stop the ESGF node: # /usr/local/bin/esg-node stop</span>
+<span class="go">But start Postgres: # /etc/init.d/postgresql start</span>
+<span class="go">Checkout the latest esg-cog script from GitHub (devel branch):</span>
+<span class="gp">#</span> <span class="nb">cd</span> /usr/local/bin
+<span class="gp">#</span> wget <span class="s1">&#39;https://github.com/ESGF/esgf-installer/blob/devel/cog/esg-cog&#39;</span>
+<span class="go">Execute the script: # ./esg-cog</span>
+<span class="go">Stop Postgres: # /etc/init.d/postgresql stop</span>
+<span class="go">Restart the ESGF node: # /usr/local/bin/esg-node start</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2-configure-cog">
+<h2>Step 2: Configure CoG<a class="headerlink" href="#step-2-configure-cog" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Once ESGF-COG is installed, the ESGF Node administrator must complete
+a sequence of one-time tasks to configure and customize the node.</p></li>
+<li><p>These tasks can be completed at different times to progressively
+enhance the node functionality.</p></li>
+<li><p>Please note that any configuration and content will be persisted
+across sub-sequent upgrades of the ESGF Node, but will be completely
+wiped out if the ESGF Node is re-installed from scratch (since CoG
+content is kept in the Postgres database, which will be erased by a
+total ESGF Node re-install). So, if you plan on later re-installing
+the whole Node from scratch, it is recommended to only follow steps
+1-3 below to execute some basic post-installation testing. Proceed
+with the additional steps only when you believe that your Node
+installation is final, about to go into production, and you will only
+have to upgrade the Node, not re-install it.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><a class="reference external" href="ESGF_Admin_Guide.html">Login as ESGF/CoG Administrator</a></p></li>
+<li><p><a class="reference external" href="COG/source.html#Home_Project_Setup">Setup the Node Home Project</a></p></li>
+<li><p><a class="reference external" href="COG/source.html#Data_Search_Configuration">Configure the Home Project Search</a></p></li>
+<li><p><a class="reference external" href="COG/source.html#Data_Access_Control_Setup">Data Access Control Setup</a></p></li>
+<li><p>Customize the Node Header and Footer</p></li>
+<li><p>Customize Google Analytics</p></li>
+<li><p>Setup the ESGF Node Federation</p></li>
+<li><p>Configure Globus Downloads</p></li>
+<li><p><a class="reference external" href="COG/source.html#Cron_Jobs">Setup Cron Jobs</a></p></li>
+<li><p><a class="reference external" href="COG/source.html#Local_Shard_Setup">Local Shard Setup and Publishing</a></p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<p>Additionally, the following pages contain additional content related to
+understanding and operating an ESGF-CoG node:</p>
+<ul class="simple">
+<li><p>CoG-to-ESGF User Accounts</p></li>
+<li><p>Restore from backup</p></li>
+</ul>
+</div>
+<div class="section" id="step-3-upgrade-cog">
+<h2>Step 3: Upgrade CoG<a class="headerlink" href="#step-3-upgrade-cog" title="Permalink to this headline">¶</a></h2>
+<p>In general, CoG upgrades are best executed within a complete ESGF
+release, by runinnig the full ESGF installer. But there might be
+situations where an ESGF Node administrator might want to install a new
+CoG version right away - for example, because a security patch or a new
+piece of functionality must be installed as soon as possible. CoG can be
+upgraded standalone by leveraging the ESGF installation infrastructure,
+simply by editing and executing the esg-cog script (as root):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd /usr/local/bin</span>
+<span class="go">edit esg-cog: set VERSION=...whatever is the CoG version you want to install...</span>
+<span class="go">execute esg-cog: ./esg-cog</span>
+<span class="go">restart the node: ./esg-node restart</span>
+</pre></div>
+</div>
+<p>IMPORTANT: please note that the esg-cog script requires that the ESGF
+Postgres database be running while it executes. So either leave the
+whole ESGF node running, upgrade CoG, and then restart the node; or shut
+down the node but start up the Postgres database alone before running
+the upgrade script.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Node_Administrator_Login.html" class="btn btn-neutral float-right" title="ESGF/CoG Administrator Login" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to ESGF CoG’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

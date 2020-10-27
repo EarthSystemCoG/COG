@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation Testing: Initial Testing of the Installation &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation Configuration" href="Installation_Configuration.html" />
+    <link rel="prev" title="Installation: Install or Upgrade" href="Installation_Install_or_Upgrade.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Testing: Initial Testing of the Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-run-cog-with-the-django-development-server">Step 1: Run CoG with the Django development server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-open-http-host-8000">Step 2: Open http://&lt;host&gt;:8000/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-login">Step 3: Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-important-immediately-change-the-admin-password-by">Step 4: IMPORTANT: immediately change the “admin” password by:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-change-all-other-admin-data">Step 5: Change all other “admin” data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-start-experimenting-with-creating-other-projects-and-registering-new-users">Step 6: Start experimenting with creating other projects and registering new users.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation Testing: Initial Testing of the Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Installation_Testing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-testing-initial-testing-of-the-installation">
+<h1>Installation Testing: Initial Testing of the Installation<a class="headerlink" href="#installation-testing-initial-testing-of-the-installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="step-1-run-cog-with-the-django-development-server">
+<h2>Step 1: Run CoG with the Django development server<a class="headerlink" href="#step-1-run-cog-with-the-django-development-server" title="Permalink to this headline">¶</a></h2>
+<p>Make sure you have defined the necessary environment variables and
+activated the CoG Python virtual environment as described in the
+previous steps:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export COG_DIR=/usr/local/cog</span>
+<span class="go">export COG_CONFIG_DIR=$COG_DIR/cog_config</span>
+<span class="go">export COG_INSTALL_DIR=$COG_DIR/cog_install</span>
+<span class="go">cd $COG_DIR</span>
+<span class="go">source venv/bin/activate</span>
+</pre></div>
+</div>
+<p>Then, start the CoG application on the local host and specific port:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd $COG_INSTALL_DIR</span>
+<span class="go">python manage.py runserver &lt;host&gt;:&lt;port&gt;</span>
+<span class="gp">#</span> example: python manage.py runserver test-datanode.jpl.nasa.gov:8000
+</pre></div>
+</div>
+<p>By default, =localhost and =8000, although you’ll be able to point a
+browser at localhost only if you are installing CoG on your local
+laptop.</p>
+<p>Note: you might need to also define the following environment variable:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export PYTHON_EGG_CACHE=/tmp</span>
+</pre></div>
+</div>
+<p>(or other directory that exists and is writable by the user running the
+application).</p>
+<p>Note: you might also need to insert the location of the postgres library
+in the system dynamic library path, for example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/pgsql/lib</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2-open-http-host-8000">
+<h2>Step 2: Open <a class="reference external" href="http:/">http:/</a>/&lt;host&gt;:8000/<a class="headerlink" href="#step-2-open-http-host-8000" title="Permalink to this headline">¶</a></h2>
+<p>You should be presented with the CoG home page.</p>
+</div>
+<div class="section" id="step-3-login">
+<h2>Step 3: Login<a class="headerlink" href="#step-3-login" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>if an ESGF node is installed (e.g. –esgf=true), use the standard
+login URL <a class="reference external" href="http://:/login/">http://:/login/</a> with the openid
+<a class="reference external" href="https:///esgf-idp/openid/rootAdmin">https:///esgf-idp/openid/rootAdmin</a> and your usual ESGF rootAdmin
+password (or “changeit” if the usual password could not be found)</p></li>
+<li><p>if an ESGF node is NOT installed (e.g. (–esgf=false), use the
+“hidden” local login URL <a class="reference external" href="http://:login2/">http://:login2/</a> with username “rootAdmin”
+and the password “changeit”</p></li>
+</ul>
+</div>
+<div class="section" id="step-4-important-immediately-change-the-admin-password-by">
+<h2>Step 4: IMPORTANT: immediately change the “admin” password by:<a class="headerlink" href="#step-4-important-immediately-change-the-admin-password-by" title="Permalink to this headline">¶</a></h2>
+<p>If you logged in for the first time as user “rootAdmin” with password
+“changeit”, you should really change the password right away:</p>
+<ul class="simple">
+<li><p>clicking on “My Profile” -&gt; “Change Password” or</p></li>
+<li><p>directly accessing the URL “<a class="reference external" href="http://:8000/password/update/">http://:8000/password/update/</a></p></li>
+</ul>
+<p>Note: to fully test the password change, you need to log out of CoG AND
+quit the browser and log-in as ‘admin’ again.</p>
+<p>Changing the password is not necessary if you were able to login with
+your usual ESGF password.</p>
+</div>
+<div class="section" id="step-5-change-all-other-admin-data">
+<h2>Step 5: Change all other “admin” data.<a class="headerlink" href="#step-5-change-all-other-admin-data" title="Permalink to this headline">¶</a></h2>
+<p>Ensure the information matches the local Node Administrator, especially
+the email address where all node-level notifications will be sent.</p>
+</div>
+<div class="section" id="step-6-start-experimenting-with-creating-other-projects-and-registering-new-users">
+<h2>Step 6: Start experimenting with creating other projects and registering new users.<a class="headerlink" href="#step-6-start-experimenting-with-creating-other-projects-and-registering-new-users" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Verify that email notification is working. The Node Administrator
+should get an email whenever a project is requested or a new user
+registers.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Installation_Configuration.html" class="btn btn-neutral float-right" title="Installation Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Installation_Install_or_Upgrade.html" class="btn btn-neutral float-left" title="Installation: Install or Upgrade" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

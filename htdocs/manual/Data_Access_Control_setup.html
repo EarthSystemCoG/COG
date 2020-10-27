@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Data Access Control Setup &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Node Federation" href="Node_Federation.html" />
+    <link rel="prev" title="Data Search Configuration" href="Data_Search_Configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Access Control Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-configure-the-esgf-postgres-database">Step 1: Configure the ESGF Postgres database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-edit-the-esgf-xml-configuration-files">Step 2: Edit the ESGF XML configuration files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-optional-publish-the-group-registration-url">Step 3 (optional): Publish the Group Registration URL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-case-unrestricted-data">Special Case: Unrestricted Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#special-case-authentication-only-data">Special Case: Authentication Only Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Data Access Control Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Data_Access_Control_setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="data-access-control-setup">
+<h1>Data Access Control Setup<a class="headerlink" href="#data-access-control-setup" title="Permalink to this headline">¶</a></h1>
+<p>This short tutorial will explain how to setup the ESGF Access Control
+infrastructure for publishing and downloading a specific dataset. As an
+example, we will consider the case of NASA “obs4MIPs” data.</p>
+<div class="section" id="step-1-configure-the-esgf-postgres-database">
+<h2>Step 1: Configure the ESGF Postgres database<a class="headerlink" href="#step-1-configure-the-esgf-postgres-database" title="Permalink to this headline">¶</a></h2>
+<p>Use the command line client to interact with the Postgres database:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">psql -U dbsuper -d esgcet</span>
+</pre></div>
+</div>
+<p>(type in your Postgres super-user password).</p>
+<p>Create a new group that will control all operations on the dataset (all
+SQL commands below must be typed in only one line):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">esgcet=# insert into esgf_security.group (id, name, description, visible, automatic_approval)</span>
+<span class="go">         values (2, ‘NASA OBS’, ‘NASA observations’, true, true);</span>
+</pre></div>
+</div>
+<p>Note that:</p>
+<ul class="simple">
+<li><p>visible=true will cause the group to be exposed to the public for
+registration</p></li>
+<li><p>automatic_approval=true will enroll users into the group (with
+READ-ONLY priileges) upon request, without the need for the group
+administrators to approve the request</p></li>
+</ul>
+<p>Then, assign read/write privileges to one or more users who will be
+publishing the data. In this case, we look up the “rootAdmin” user and
+assign him/her priileges on the group just created:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">esgcet=# select id from esgf_security.user where openid like ‘%rootAdmin%’;</span>
+
+<span class="go">esgcet=# insert into esgf_security.permission (user_id, group_id, role_id, approved)</span>
+<span class="go">         values (1, 2, 4, true); # ‘publisher’ role, aka ‘write’ privileges</span>
+
+<span class="go">esgcet=# insert into esgf_security.permission (user_id, group_id, role_id, approved)</span>
+<span class="go">         values (1, 2, 6, true); # ‘user’ role, aka ‘read’ privileges</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-2-edit-the-esgf-xml-configuration-files">
+<h2>Step 2: Edit the ESGF XML configuration files<a class="headerlink" href="#step-2-edit-the-esgf-xml-configuration-files" title="Permalink to this headline">¶</a></h2>
+<p>As root, edit the file /esg/config/esgf_policy_local.xml to specify one
+or more policies for reading/writing the files of your dataset. For
+example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">vi /esg/config/esgf_policies_local.xml</span>
+
+<span class="go">&lt;!-- URLs that contain NASA-JPL can be downloaed by users</span>
+<span class="go">    with NASA-OBS &quot;user&quot; permission --&gt;</span>
+
+<span class="go">&lt;policy resource=&quot;.*NASA-JPL.*&quot; attribute_type=&quot;NASA OBS&quot;</span>
+<span class="go">    attribute_value=&quot;user&quot; action=&quot;Read&quot;/&gt;</span>
+
+<span class="go">&lt;!-- datasets with ID that contain NASA-JPL can be published by users</span>
+<span class="go">     with NASA-OBS &quot;publisher&quot; permission --&gt;</span>
+<span class="go">&lt;policy resource=&quot;.*NASA-JPL.*&quot; attribute_type=&quot;NASA OBS&quot;</span>
+<span class="go">    attribute_value=&quot;publisher&quot; action=&quot;Write&quot;/&gt;</span>
+</pre></div>
+</div>
+<p>Also, you must edit the file /esg/config/esgf_ats_static.xml to specify
+the URLs of the Attribute and Registration services that manage
+membership in the access control group. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">vi /esg/config/esgf_ats_static.xml</span>
+
+<span class="go">&lt;!-- NASA Obs4MIPs --&gt;</span>
+<span class="go">&lt;attribute type=&quot;NASA OBS&quot;</span>
+<span class="go">attributeService=&quot;https://esgf-node.llnl.gov/esgf-idp/saml/soap/secure/attributeService.htm&quot;</span>
+<span class="go">description=&quot;NASA Observational Data&quot;</span>
+<span class="go">registrationService=&quot;https://esgf-node.llnl.gov/esgf-idp/secure/registrationService.htm&quot;/&gt;</span>
+</pre></div>
+</div>
+<p>When done, you may restart the node, but there is really no need to as
+the above files should be automatically reloaded.</p>
+</div>
+<div class="section" id="step-3-optional-publish-the-group-registration-url">
+<h2>Step 3 (optional): Publish the Group Registration URL<a class="headerlink" href="#step-3-optional-publish-the-group-registration-url" title="Permalink to this headline">¶</a></h2>
+<p>CoG provides functionality for streamlining the user registration into
+the ESGF access control groups. Whenever CoG is connected to an ESFG
+“security” database back-end, it will automatically create an
+appropriate registration page for each of the ESGF access control groups
+read from the local database. These pages all have URLs of the form:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">https://&lt;hostname&gt;/ac/subscribe/&lt;group name&gt;/</span>
+</pre></div>
+</div>
+<p>(for example: <a class="reference external" href="https://esgf-node.llnl.gov/ac/subscribe/NASA%20OBS/">https://esgf-node.llnl.gov/ac/subscribe/NASA%20OBS/</a>),
+so as an node administrator you can embed this URL anywhere on your node
+where content is allowed: for example, on the node home page, or on the
+home page for the specific “NASA OBS” project. Users can visit the
+registration page directly to request READ permission, without having to
+go through the old ESGF data download workflow.</p>
+<p>Additionally, the registration page can be “embedded” with a license for
+the users to read before they request membership. To do so, place a file
+called .html (in HTML format) or .txt (in plain text format) under your
+local templates directory, specifically:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">/usr/local/cog/cog_config/mytemplates/cog/access_control/licenses/.html</span>
+<span class="go">or:</span>
+<span class="go">/usr/local/cog/cog_config/mytemplates/cog/access_control/licenses/.txt</span>
+</pre></div>
+</div>
+<p>The figure below shows an example registration page with embedded HTML
+license.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/ESGF-CoG_group_registration_page.png"><img alt="" src="../_images/ESGF-CoG_group_registration_page.png" style="width: 982.8000000000001px; height: 1055.7px;" /></a>
+</div>
+<p>Figure1. Example ESGF-CoG registration page with optional license
+agreement display.</p>
+</div>
+<div class="section" id="special-case-unrestricted-data">
+<h2>Special Case: Unrestricted Data<a class="headerlink" href="#special-case-unrestricted-data" title="Permalink to this headline">¶</a></h2>
+<p>In some cases, the data might be available for download without any
+restrictions at all, i.e. simply to guest users. In this case, the Node
+administrator only needs to insert a policy statement in the file
+/esg/config/esgf_policies_local.xml that matches the data URLs, and uses
+the special attribute_type=“ANY”. Note that your will still want to have
+a restricted access control group to enable publishing of the data. For
+example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">vi /esg/config/esgf_policies_local.xml</span>
+
+<span class="go">&lt;!-- URLs that contain COUND can be downloaed by guest users</span>
+<span class="go">    (no authentication or group membershp required) --&gt;</span>
+<span class="go">&lt;policy resource=&quot;.*COUND.*&quot; attribute_type=&quot;ANY&quot; attribute_value=&quot;&quot; action=&quot;Read&quot;/&gt;</span>
+
+<span class="go">&lt;!-- datasets with ID that contain COUND can be published by users</span>
+<span class="go">    with NASA-OBS &quot;publisher&quot; permission --&gt;</span>
+<span class="go">&lt;policy resource=&quot;.*COUND.*&quot; attribute_type=&quot;NASA OBS&quot; attribute_value=&quot;publisher&quot; action=&quot;Write&quot;/&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="special-case-authentication-only-data">
+<h2>Special Case: Authentication Only Data<a class="headerlink" href="#special-case-authentication-only-data" title="Permalink to this headline">¶</a></h2>
+<p>In other cases, the data providers might want to require users to
+authenticate before downloading the data, so they can capture their
+openid for metrics reporting, but they don’t need users to enroll in any
+group. In this case, they can use a policy statement with the special
+attribute_type=“AUTH_ONLY”. For example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">vi /esg/config/esgf_policies_local.xml</span>
+
+<span class="go">&lt;!-- URLs that contain COUND can be downloaed by guest users (no authentication or group membershp required) --&gt;</span>
+<span class="go">&lt;policy resource=&quot;.*COUND.*&quot; attribute_type=&quot;ANY&quot; attribute_value=&quot;&quot; action=&quot;Read&quot;/&gt;</span>
+
+<span class="go">&lt;!-- datasets with ID that contain COUND can be published by users with NASA-OBS &quot;publisher&quot; permission --&gt;</span>
+<span class="go">&lt;policy resource=&quot;.*COUND.*&quot; attribute_type=&quot;NASA OBS&quot; attribute_value=&quot;publisher&quot; action=&quot;Write&quot;/&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Node_Federation.html" class="btn btn-neutral float-right" title="Node Federation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Data_Search_Configuration.html" class="btn btn-neutral float-left" title="Data Search Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

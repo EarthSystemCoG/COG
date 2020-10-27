@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Create an account &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Authorization for ESGF Data Access" href="Authorization_for_ESGF_Data_Access.html" />
+    <link rel="prev" title="CoG Installation or Upgrade" href="CoG_Installation_or_Upgrade.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Create an account</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-register-for-cog">How to Register for CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dont-create-an-account-unless-you-plan-to-join-a-project-or-download-data-from-esgf">*** Don’t create an account unless you plan to join a project or download data from ESGF ***</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-create-account">Step 1: Create Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-fill-in-the-user-profile-figure-2">Step 2: Fill in the User Profile (Figure 2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-join-or-create-a-project">Step 3: Join or Create a project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#a-join-an-existing-project">a) Join an existing project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#b-create-a-project">b) Create a project</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Create an account</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Create_an_account.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="create-an-account">
+<h1>Create an account<a class="headerlink" href="#create-an-account" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="how-to-register-for-cog">
+<h2>How to Register for CoG<a class="headerlink" href="#how-to-register-for-cog" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="dont-create-an-account-unless-you-plan-to-join-a-project-or-download-data-from-esgf">
+<h2>*** Don’t create an account unless you plan to join a project or download data from ESGF ***<a class="headerlink" href="#dont-create-an-account-unless-you-plan-to-join-a-project-or-download-data-from-esgf" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Many projects are public, and can be viewed without creating an
+account.</p></li>
+<li><p>An account will allow you to join a project and edit that project’s
+wiki pages.</p></li>
+<li><p>An account is required to download data from an ESGF node.</p></li>
+<li><p>You do not need to join the CoG project, which is also hosted on CoG.</p></li>
+</ul>
+</div>
+<div class="section" id="step-1-create-account">
+<h2>Step 1: Create Account<a class="headerlink" href="#step-1-create-account" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/login_link.png"><img alt="" src="../_images/login_link.png" style="width: 277.15px; height: 140.29999999999998px;" /></a>
+</div>
+<p>Figure 1: Screenshot of the upper section of the CoG page with the
+“Create Account” link.</p>
+</div>
+<div class="section" id="step-2-fill-in-the-user-profile-figure-2">
+<h2>Step 2: Fill in the User Profile (Figure 2)<a class="headerlink" href="#step-2-fill-in-the-user-profile-figure-2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Items in bold are mandatory.</p></li>
+<li><p>Interest keywords, photo, and institution will show up on a project’s
+People listing (see example).</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/profile_blank.png"><img alt="" src="../_images/profile_blank.png" style="width: 852.15px; height: 900.4499999999999px;" /></a>
+</div>
+<p>Figure 2: Screenshot of the user profile page.</p>
+</div>
+<div class="section" id="step-3-join-or-create-a-project">
+<h2>Step 3: Join or Create a project<a class="headerlink" href="#step-3-join-or-create-a-project" title="Permalink to this headline">¶</a></h2>
+<p>To join a project or create a project, you must first have an account
+(step 1).</p>
+<div class="section" id="a-join-an-existing-project">
+<h3>a) Join an existing project<a class="headerlink" href="#a-join-an-existing-project" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Navigate to the project you are interested in. The project owner may
+send you the URL in an
+email, or you can use the Project Browser to view a list of projects.</p></li>
+<li><p>Click the “Join the X project” in the upper right corner of the
+project page (Figure 3).</p></li>
+<li><p>Wait for approval. Only project administrators can approve new
+members.</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/upper_links.png"><img alt="" src="../_images/upper_links.png" style="width: 543.9499999999999px; height: 150.64999999999998px;" /></a>
+</div>
+<p>Figure 3: Screenshot of the upper corner of CoG (when a user is logged
+in) showing the join a project link.</p>
+</div>
+<div class="section" id="b-create-a-project">
+<h3>b) Create a project<a class="headerlink" href="#b-create-a-project" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>There is a separate tutorial on how to create a project.</p></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Authorization_for_ESGF_Data_Access.html" class="btn btn-neutral float-right" title="Authorization for ESGF Data Access" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CoG_Installation_or_Upgrade.html" class="btn btn-neutral float-left" title="CoG Installation or Upgrade" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

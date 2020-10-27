@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Node Home Project Setup &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Home Page Example" href="Home_Page_Example.html" />
+    <link rel="prev" title="ESGF/CoG Administrator Login" href="Node_Administrator_Login.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Node Home Project Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-register-a-new-project">Step 1: Register a new project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-approve-the-new-project">Step 2: Approve the new project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-configure-the-new-project-as-the-node-home-project">Step 3: Configure the new project as the Node “home” project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-save-the-file-and-restart-the-esgf-node">Step 4: Save the file and restart the ESGF Node.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-edit-the-node-home-project-home-page">Step 5: Edit the node “home” project “home” page</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Node Home Project Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Node_Home_Project_Setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="node-home-project-setup">
+<h1>Node Home Project Setup<a class="headerlink" href="#node-home-project-setup" title="Permalink to this headline">¶</a></h1>
+<p>Each ESGF-CoG node has a “home” project, which is the top-level project
+that users are redirected to when they access the Node’s top-level URL.
+Typically, the home project describes the Node itself, the institution
+hosting the Node, and the main goals/activities of that Node. When an
+ESGF Node is installed from scratch, a stub project called “TestProject”
+is created and configured as that node home project. You will want to
+replace it with a project named more appropriately for your Node,
+following the steps below (as you are logged in as Node administrator):</p>
+<div class="section" id="step-1-register-a-new-project">
+<h2>Step 1: Register a new project<a class="headerlink" href="#step-1-register-a-new-project" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Click on the “Register a New Project” link (Figure 1) in the upper
+right corner of CoG.</p></li>
+<li><p>You must populate at least the following mandatory fields (all other
+fields can be populated and changed at a later time):</p>
+<ul>
+<li><p>Short Name: choose a short name (no spaces) that is unique for
+your node. Theconvention for ESGF Nodes is to choose a home
+project name of the form “ESGF-XXX” where XXX is a unique name for
+your ESGF Node and institution. Examples: “ESGF-LLNL” (for
+<a class="reference external" href="https://esgf-node.llnl.gov/projects/esgf-llnl/">https://esgf-node.llnl.gov/projects/esgf-llnl/</a>) or
+“ESGF-GFDL” (for <a class="reference external" href="https://esgdata.gfdl.noaa.gov/projects/esgf-gfdl/">https://esgdata.gfdl.noaa.gov/projects/esgf-gfdl/</a>).
+The home project short name is the only attribute of a project
+that can never be changed, since it enters (in lower case form) in
+ALL URLs for that project. If you decide you don’t like the name
+you have chosen, you will have to create a new project, transfer
+all content from the old to the new project, then deleted the old
+project.</p></li>
+<li><p>Long Name: the project long name will appear as the title of the
+node home page. This can be changed later using the “Update
+Project” link in the left “Administrators” menu. Example:
+“ESGF-LLNL”.</p></li>
+<li><p>Description: the project description will be used as the initial
+content of the node home page. This can be changed later by
+editing the project home page via the wiki functionality. Example:
+“Welcome to the ESGF Node at NASA/JPL”.</p></li>
+</ul>
+</li>
+<li><p>When done, click “Submit”.</p></li>
+</ul>
+<p>For more detailed instructions: View tutorial with screenshots</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/register_project.png"><img alt="" src="../_images/register_project.png" style="width: 696.9px; height: 72.44999999999999px;" /></a>
+</div>
+<p>Figure 1: Screenshot of the upper corner of a node showing the “Register
+a New Project” link.</p>
+</div>
+<div class="section" id="step-2-approve-the-new-project">
+<h2>Step 2: Approve the new project<a class="headerlink" href="#step-2-approve-the-new-project" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>All CoG projects, before being accessible, must be approved by the
+Node Administrator.</p></li>
+<li><p>While you are still logged in as Node Administrator, click on the
+“CoG Admin” link (Figure 2).</p></li>
+<li><p>On the list of projects, locate the project you just created and
+click on the corresponding “Update” link.</p></li>
+<li><p>Check the “Is Active?” checkbox to make the project accessible.</p></li>
+<li><p>Click “Submit”.</p></li>
+<li><p>Optionally, you may want to check “Is Private?” to prevent the
+project from becoming public before if you are satisfied with its
+initial content.</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/node_admin_links.png"><img alt="" src="../_images/node_admin_links.png" style="width: 189.74999999999997px; height: 147.2px;" /></a>
+</div>
+<p>Figure 2: Screenshot of the lower left portion of the left navigation
+bar showing the “Activate Projets” link (valid in version 3.1 or later).</p>
+</div>
+<div class="section" id="step-3-configure-the-new-project-as-the-node-home-project">
+<h2>Step 3: Configure the new project as the Node “home” project<a class="headerlink" href="#step-3-configure-the-new-project-as-the-node-home-project" title="Permalink to this headline">¶</a></h2>
+<p>To make the new project the node home project:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">edit: /usr/local/cog/cog_config/cog_settings.cfg</span>
+<span class="go">change: HOME_PROJECT = TestProject</span>
+<span class="go">to: HOME_PROJECT = &lt;home project short name&gt;</span>
+<span class="go">example: HOME_PROJECT = ESGF-LLNL</span>
+</pre></div>
+</div>
+<p>Since you are editing this file, you may also want to:</p>
+<ul class="simple">
+<li><p>Choose a new SECRET_KEY (any long, random, unique sequence of
+characters) : a random string is generated when CoG is first
+installed, but you may want to replace it with your own long sequence
+of random characters (any character is allowed).</p></li>
+<li><p>Setup your TIME_ZONE (any valid time zone name supported by the
+Python datetime package - see wikipedia page for full listing).</p></li>
+</ul>
+</div>
+<div class="section" id="step-4-save-the-file-and-restart-the-esgf-node">
+<h2>Step 4: Save the file and restart the ESGF Node.<a class="headerlink" href="#step-4-save-the-file-and-restart-the-esgf-node" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Check that the node top-level URL: <a class="reference external" href="https:///">https:///</a> redirects to:
+<a class="reference external" href="https:///projects//">https:///projects//</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="step-5-edit-the-node-home-project-home-page">
+<h2>Step 5: Edit the node “home” project “home” page<a class="headerlink" href="#step-5-edit-the-node-home-project-home-page" title="Permalink to this headline">¶</a></h2>
+<p>At this point, you may want to start populating the content of the home
+page for your node home project.</p>
+<p>For convenience, we have created an example of a generic ESGF Node home
+page that you are welcome to use as a starting point - see this ESGF
+Node Home Page Example. If you like the example, you can use your
+browser to view the HTML source, and cut-and-paste the HTML code
+(between the “START ESGF HOME PAGE EXAMPLE” and “END ESGF HOME PAGE
+EXAMPLE” lines) into the wiki content of your Node home page. Note that
+you will have to manually download the banner image to your desktop, and
+upload it to your project using the wiki. Also, the template is
+formatted for the “Main Content, Right Widgets” layout (selectable when
+you update the page in the wiki). Then, keep using the wiki to further
+customize the home page with information specific to your Node.</p>
+<p>For help in using the wiki, formatting images etc, there is a list of
+web-based tutorials to help you get started.</p>
+<p>For live examples of customized ESGF home pages, see the ESGF Node &#64;
+NOAA/ESRL and ESGF Node &#64; LLNL.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Home_Page_Example.html" class="btn btn-neutral float-right" title="Home Page Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Node_Administrator_Login.html" class="btn btn-neutral float-left" title="ESGF/CoG Administrator Login" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
