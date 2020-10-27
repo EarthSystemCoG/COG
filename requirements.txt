@@ -1,5 +1,5 @@
 # CoG application dependencies
-django==1.10.4
+django==1.11.29
 django-grappelli==2.8.1
 #django-openid-auth==0.7', # must be installed independently from fork
 sqlalchemy>=1.0.11,<1.3
