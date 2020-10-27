@@ -1,0 +1,352 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation: Prerequisites &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation: Initial setup" href="Installation_Initial_Setup.html" />
+    <link rel="prev" title="CoG Installation from Docker" href="CoG_Installation_from_Docker.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation: Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-install-python">Step 1: Install Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-install-postgres">Step 2: Install Postgres</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-3-set-up-git-and-github">Step 3: Set up git and github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-4-update-pip">Step 4: Update pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-5-install-virtualenv">Step 5: Install virtualenv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-6-centos-only-install-c-headers-for-sqlite-devel-and-freetype-devel">Step 6: (CentOS only) Install C-headers for sqlite-devel and freetype-devel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-7-macosx-only-copy-image-libraries">Step 7: (MacOSX only) Copy image libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-8-install-xcode-command-line-tools">Step 8: Install Xcode command line tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-9-manually-install-pillow">Step 9: Manually install Pillow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation: Prerequisites</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Installation_Prerequisites.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-prerequisites">
+<h1>Installation: Prerequisites<a class="headerlink" href="#installation-prerequisites" title="Permalink to this headline">¶</a></h1>
+<p>The following items are required to install CoG for developmental
+purposes:</p>
+<ul class="simple">
+<li><p>A system running a *-nix operating system, including Cent-OS, Linux
+and MacOSX</p></li>
+</ul>
+<div class="section" id="step-1-install-python">
+<h2>Step 1: Install Python<a class="headerlink" href="#step-1-install-python" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Install Anaconda</p></li>
+<li><p>2.7.10 does not work with cog, you will need to downgrade</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>downgrade python install conda install
+<span class="go">conda install python=2.7.9</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Python setup_tools (should come with python)</p></li>
+</ul>
+</div>
+<div class="section" id="step-2-install-postgres">
+<h2>Step 2: Install Postgres<a class="headerlink" href="#step-2-install-postgres" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="http://postgresapp.com/">http://postgresapp.com/</a></p></li>
+<li><p><a class="reference external" href="http://postgresapp.com/documentation/cli-tools.html">http://postgresapp.com/documentation/cli-tools.html</a></p></li>
+<li><p>you may need to add the location of the pg_config file to your $PATH</p></li>
+</ul>
+</div>
+<div class="section" id="step-3-set-up-git-and-github">
+<h2>Step 3: Set up git and github<a class="headerlink" href="#step-3-set-up-git-and-github" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Install git: <a class="reference external" href="https://git-scm.com/download/mac">https://git-scm.com/download/mac</a></p></li>
+<li><p>Generate SSH keys:
+<a class="reference external" href="https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/">https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/</a></p></li>
+<li><p>Add the SSH keys to your github account:
+<a class="reference external" href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/</a></p></li>
+<li><p>Setup username and email</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git config –global user.name “username”</span>
+
+<span class="go">git config –global email “email”</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-4-update-pip">
+<h2>Step 4: Update pip<a class="headerlink" href="#step-4-update-pip" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install -U pip</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-5-install-virtualenv">
+<h2>Step 5: Install virtualenv<a class="headerlink" href="#step-5-install-virtualenv" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install virtualenv</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-6-centos-only-install-c-headers-for-sqlite-devel-and-freetype-devel">
+<h2>Step 6: (CentOS only) Install C-headers for sqlite-devel and freetype-devel<a class="headerlink" href="#step-6-centos-only-install-c-headers-for-sqlite-devel-and-freetype-devel" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">yum install sqlite-devel freetype-devel</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-7-macosx-only-copy-image-libraries">
+<h2>Step 7: (MacOSX only) Copy image libraries<a class="headerlink" href="#step-7-macosx-only-copy-image-libraries" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Ensure the following libraries are located in /usr/local/lib (copy
+from anaconda lib…requires sudo)</p>
+<ul>
+<li><p>libcrypto.1.0.0.dylib</p></li>
+<li><p>libjpeg.8.dylib</p></li>
+<li><p>libssl.1.0.0.dylib</p></li>
+<li><p>libtiff.5.dylib</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> example
+<span class="go">sudo cp ~/anaconda/lib/libtiff.5.dylib /usr/local/lib</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-8-install-xcode-command-line-tools">
+<h2>Step 8: Install Xcode command line tools<a class="headerlink" href="#step-8-install-xcode-command-line-tools" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">xcode-select –install</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="step-9-manually-install-pillow">
+<h2>Step 9: Manually install Pillow<a class="headerlink" href="#step-9-manually-install-pillow" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Normally Pillow is automatically installed via the
+/cog_install/setup.py script</p></li>
+<li><p>Modify this file and comment out that installation, and install
+manually</p></li>
+<li><p>wheel may be required in the install</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install wheel</span>
+<span class="go">pip install –use-wheel Pillow==2.8.2</span>
+<span class="gp">#</span>note <span class="m">3</span>.1.0 does not install w/o jpeg support, may cause install to fail
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Installation_Initial_Setup.html" class="btn btn-neutral float-right" title="Installation: Initial setup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CoG_Installation_from_Docker.html" class="btn btn-neutral float-left" title="CoG Installation from Docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

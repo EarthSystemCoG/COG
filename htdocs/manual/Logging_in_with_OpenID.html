@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Logging in with OpenID &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Forgot OpenID" href="Forgot_OpenID.html" />
+    <link rel="prev" title="Authorization for ESGF Data Access" href="Authorization_for_ESGF_Data_Access.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Logging in with OpenID</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#method-1-enter-your-full-openid">Method 1: Enter your full OpenID</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-enter-your-full-openid-in-the-login-box-figure-1-and-click-login">Step 1: Enter your full OpenID in the login box (Figure 1) and click “Login”.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-enter-your-password-in-the-esgf-openid-password-box">Step 2: Enter your password in the ESGF OpenID password box</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#method-2-use-the-pull-down-to-select-your-openid-issuer">Method 2: Use the pull down to select your OpenID issuer.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-use-the-arrow-icon-in-figure-1-to-invoke-the-list-of-openid-providers">Step 1: Use the arrow icon in Figure 1 to invoke the list of OpenID providers.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-enter-your-username-and-password-figure-3">Step 2: Enter your username and password (Figure 3).</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Logging in with OpenID</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Logging_in_with_OpenID.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="logging-in-with-openid">
+<h1>Logging in with OpenID<a class="headerlink" href="#logging-in-with-openid" title="Permalink to this headline">¶</a></h1>
+<p>An OpenID is merely a username in the form of a URL. Do not try to open
+this URL in a browser window. Instead:</p>
+<div class="section" id="method-1-enter-your-full-openid">
+<h2>Method 1: Enter your full OpenID<a class="headerlink" href="#method-1-enter-your-full-openid" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="step-1-enter-your-full-openid-in-the-login-box-figure-1-and-click-login">
+<h3>Step 1: Enter your full OpenID in the login box (Figure 1) and click “Login”.<a class="headerlink" href="#step-1-enter-your-full-openid-in-the-login-box-figure-1-and-click-login" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/login.png"><img alt="" src="../_images/login.png" style="width: 610.3px; height: 99.45px;" /></a>
+</div>
+<p>Figure 1: Screenshot of the OpenID box.</p>
+</div>
+<div class="section" id="step-2-enter-your-password-in-the-esgf-openid-password-box">
+<h3>Step 2: Enter your password in the ESGF OpenID password box<a class="headerlink" href="#step-2-enter-your-password-in-the-esgf-openid-password-box" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Note that ESGF uses a self-signed SSL certificate. Your browser may
+reject this with a security warning.</p></li>
+<li><p>View the tutorials on how to manually clear this warning. There is
+one tutorial per browser.</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/chrome_sucess.png"><img alt="" src="../_images/chrome_sucess.png" style="width: 648.55px; height: 265.2px;" /></a>
+</div>
+<p>Figure 2: Screenshot of the ESGF interface for entering a password.</p>
+</div>
+</div>
+<div class="section" id="method-2-use-the-pull-down-to-select-your-openid-issuer">
+<h2>Method 2: Use the pull down to select your OpenID issuer.<a class="headerlink" href="#method-2-use-the-pull-down-to-select-your-openid-issuer" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>If your provider is not listed in the pulldown, then you have to use
+method 1 above.</p></li>
+<li><p>This method is a short cut to entering the full OpenID.</p></li>
+</ul>
+<div class="section" id="step-1-use-the-arrow-icon-in-figure-1-to-invoke-the-list-of-openid-providers">
+<h3>Step 1: Use the arrow icon in Figure 1 to invoke the list of OpenID providers.<a class="headerlink" href="#step-1-use-the-arrow-icon-in-figure-1-to-invoke-the-list-of-openid-providers" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Note that ESGF uses a self-signed SSL certificate. Your browser may
+reject this with a security warning.</p></li>
+<li><p>View the tutorials on how to manually clear this warning. There is
+one tutorial per browser.</p></li>
+</ul>
+</div>
+<div class="section" id="step-2-enter-your-username-and-password-figure-3">
+<h3>Step 2: Enter your username and password (Figure 3).<a class="headerlink" href="#step-2-enter-your-username-and-password-figure-3" title="Permalink to this headline">¶</a></h3>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/openid_user_pw.png"><img alt="" src="../_images/openid_user_pw.png" style="width: 395.25px; height: 175.1px;" /></a>
+</div>
+<p>Figure 3: Screenshot of the ESGF interface for entering a username and
+password.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Forgot_OpenID.html" class="btn btn-neutral float-right" title="Forgot OpenID" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Authorization_for_ESGF_Data_Access.html" class="btn btn-neutral float-left" title="Authorization for ESGF Data Access" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

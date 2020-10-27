@@ -1,0 +1,380 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation Configuration &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/manual/sav/Installation_Configuration.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-configuration">
+<h1>Installation Configuration<a class="headerlink" href="#installation-configuration" title="Permalink to this headline">¶</a></h1>
+<p>Configuration of CoG is handled via the $COG_CONFIG_DIR/cog_settings.cfg
+file. There are several environment variables that must be set and many
+more that can be set if desired to modify the node configuration.</p>
+<p>Values set in this file will not be overridden by future upgrades.</p>
+<div class="section" id="updating-the-site-name">
+<h2>Updating the SITE_NAME<a class="headerlink" href="#updating-the-site-name" title="Permalink to this headline">¶</a></h2>
+<p>If for any reason or of the current node needs to change, the command
+below will need to be run (You do not have to do this for any other
+variable in the cog_settings.cfg file.)</p>
+<p>python manage.py init_site</p>
+</div>
+<div class="section" id="configuration-variables">
+<h2>Configuration Variables<a class="headerlink" href="#configuration-variables" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-left">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Meaning</p></th>
+<th class="head"><p>Example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SITE_NAME</p></td>
+<td><p>A short human readable name identifying this specific CoG instance</p></td>
+<td><p>SITE_NAME = LOCALHOST</p></td>
+</tr>
+<tr class="row-odd"><td><p>SITE_DOMAIN</p></td>
+<td><p>The node domain name and optional port number, without any protocol.</p></td>
+<td><p>SITE_DOMAIN = localhost:8000</p></td>
+</tr>
+<tr class="row-even"><td><p>TIME_ZONE</p></td>
+<td><p>The node specific time zone - see list of Django values for time zones</p></td>
+<td><p>TIME_ZONE=America/Denver</p></td>
+</tr>
+<tr class="row-odd"><td><p>SECRET_KEY</p></td>
+<td><p>The node specific key: an arbitrary string with lots of strange characters. A random string is
+generated when CoG is first installed, but you may want to replace it with your own long sequence of random characters
+and keep it secret.</p></td>
+<td><p>SECRET_KEY=yb&#64;$-bub$i_mr34dda%p=^(f-h&amp;dsdaudssduy040x))19g^iha&amp;#1134df4</p></td>
+</tr>
+<tr class="row-even"><td><p>COG_MAILING_LIST</p></td>
+<td><p>Low-traffic CoG mailing list used to announce downtimes and system upgrades.</p></td>
+<td><p><a class="reference external" href="mailto:COG_MAILING_LIST=cog_info&#37;&#52;&#48;list&#46;woc&#46;noaa&#46;gov">COG_MAILING_LIST=cog_info<span>&#64;</span>list<span>&#46;</span>woc<span>&#46;</span>noaa<span>&#46;</span>gov</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>DJANGO_DATABASE</p></td>
+<td><p>The specific database back-end database. ‘postgres’ or ‘sqllite3’ are the only two options.</p></td>
+<td><p>DJANGO_DATABASE = sqllite3</p></td>
+</tr>
+<tr class="row-even"><td><p>DATABASE_PATH</p></td>
+<td><p>Location of the database</p></td>
+<td><p>DATABASE_PATH = /Users/sylvia.murphy/COG/cog_config/django.data</p></td>
+</tr>
+<tr class="row-odd"><td><p>DATABASE_NAME</p></td>
+<td><p>Name of CoG postgres database (only needed if using Postgres database.)</p></td>
+<td><p>DATABASE_NAME=cogdb</p></td>
+</tr>
+<tr class="row-even"><td><p>DATABASE_USER</p></td>
+<td><p>Username to access the database (only needed if using Postgres).</p></td>
+<td><p>DATABASE_USER=None</p></td>
+</tr>
+<tr class="row-odd"><td><p>DATABASE_PASSWORD</p></td>
+<td><p>Password to access the database (only needed if using Postgres).</p></td>
+<td><p>DATABASE_PASSWORD=&lt;db_password&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>DATABASE_PORT</p></td>
+<td><p>Port of database (only needed if using Postgres)</p></td>
+<td><p>DATABASE_PORT=5432</p></td>
+</tr>
+<tr class="row-odd"><td><p>HOME_PROJECT</p></td>
+<td><p>short name of the project that serves as the node home (i.e. where requests to ‘/’ are redirected).</p></td>
+<td><p>HOME_PROJECT=TestProject</p></td>
+</tr>
+<tr class="row-even"><td><p>MY_PROJECTS_REFRESH_SECONDS</p></td>
+<td><p>Time interval to check for updates of user project memberships. Do not make this too short. Units is seconds.</p></td>
+<td><p>MY_PROJECTS_REFRESH_SECONDS = 3600</p></td>
+</tr>
+<tr class="row-odd"><td><p>PASSWORD_EXPIRATION_DAYS</p></td>
+<td><p>Optional number of days after which password expire. 0 means passwords never expire.</p></td>
+<td><p>PASSWORD_EXPIRATION_DAYS=150</p></td>
+</tr>
+<tr class="row-even"><td><p>IDP_REDIRECT</p></td>
+<td><p>Optional top-level URL to redirect user registration (no trailing ‘/’). Use only if the CoG installation has no associated ESGF node.</p></td>
+<td><p>IDP_REDIRECT=</p></td>
+</tr>
+<tr class="row-odd"><td><p>MEDIA_ROOT</p></td>
+<td><p>Location of node-specific site_media directory (where all projects and users content is uploaded to)</p></td>
+<td><p>MEDIA_ROOT = /Users/sylvia.murphy/COG/cog_config/site_media</p></td>
+</tr>
+<tr class="row-even"><td><p>DEFAULT_SEARCH_URL</p></td>
+<td><p>Default ESGF search service URL for projects that enable the data search</p></td>
+<td><p>DEFAULT_SEARCH_URL=http://esg-datanode.jpl.nasa.gov/esg-search/search/ [ESGF]</p></td>
+</tr>
+<tr class="row-odd"><td><p>ESGF_HOSTNAME</p></td>
+<td><p>ESGF Identity Provider hostname</p></td>
+<td><p>ESGF_HOSTNAME=hydra.fsl.noaa.gov</p></td>
+</tr>
+<tr class="row-even"><td><p>ESGF_DBURL</p></td>
+<td><p>ESGF postgres database access string</p></td>
+<td><p>ESGF_DBURL=postgresql://:&#64;localhost/esgcet</p></td>
+</tr>
+<tr class="row-odd"><td><p>IDP_WHITELIST</p></td>
+<td><p>White list of trusted ESGF identity providers</p></td>
+<td><p>IDP_WHITELIST = /esg/config/esgf_idp.xml, /esg/config/esgf_idp_static.xml</p></td>
+</tr>
+<tr class="row-even"><td><p>EMAIL_SERVER</p></td>
+<td><p>Email server</p></td>
+<td><p>EMAIL_SERVER = smtp.gmail.com</p></td>
+</tr>
+<tr class="row-odd"><td><p>EMAIL_PORT</p></td>
+<td><p>Email port (leave blank if using the default)</p></td>
+<td><p>EMAIL_PORT = # Address that will show up as sending CoG emails</p></td>
+</tr>
+<tr class="row-even"><td><p>EMAIL_SENDER</p></td>
+<td><p>Address that will show up as sending CoG emails</p></td>
+<td><p>EMAIL_SENDER = Earth System COG</p></td>
+</tr>
+<tr class="row-odd"><td><p>EMAIL_USERNAME</p></td>
+<td><p>Email server username</p></td>
+<td><p>EMAIL_USERNAME = &lt;username&gt;</p></td>
+</tr>
+<tr class="row-even"><td><p>EMAIL_PASSWORD</p></td>
+<td><p>Email server password</p></td>
+<td><p>EMAIL_PASSWORD = &lt;password&gt;</p></td>
+</tr>
+<tr class="row-odd"><td><p>EMAIL_SECURITY</p></td>
+<td><p>Email server handshake startup instruction (use only if needed)</p></td>
+<td><p>EMAIL_SECURITY = STARTTLS</p></td>
+</tr>
+<tr class="row-even"><td><p>DEBUG</p></td>
+<td><p>Always use False in production!!!</p></td>
+<td><p>DEBUG=False</p></td>
+</tr>
+<tr class="row-odd"><td><p>ALLOWED_HOSTS</p></td>
+<td><p>Coma separated list of node names, without port. Mandatory if DEBUG=False otherwise every request will result in HTTP Error 400</p></td>
+<td><p>ALLOWED_HOSTS = localhost</p></td>
+</tr>
+<tr class="row-even"><td><p>KNOWN_PROVIDERS</p></td>
+<td><p>_</p></td>
+<td><p>KNOWN_PROVIDERS = /esg/config/esgf_known_providers.xml</p></td>
+</tr>
+<tr class="row-odd"><td><p>PRODUCTION_SERVER</p></td>
+<td><p>It needs to be set to True only when using a server with SSL support, other wise login will</p></td>
+<td><p>PRODUCTION_SERVER = False</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

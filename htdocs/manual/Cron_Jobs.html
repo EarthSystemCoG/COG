@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Cron Jobs &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Restore from Backup" href="Restore_from_Backup.html" />
+    <link rel="prev" title="Setup Federation" href="Setup_Federation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cron Jobs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup-cron-jobs-to-execute-periodic-administration-tasks">Setup cron jobs to execute periodic administration tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#periodically-update-the-projects-around-the-federation">1) Periodically update the projects around the federation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#backup-the-postgres-databases-content-every-night">2) Backup the postgres databases content every night</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#remove-stale-user-stubs-from-local-database">3) Remove stale user stubs from local database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Cron Jobs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Cron_Jobs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cron-jobs">
+<h1>Cron Jobs<a class="headerlink" href="#cron-jobs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="setup-cron-jobs-to-execute-periodic-administration-tasks">
+<h2>Setup cron jobs to execute periodic administration tasks<a class="headerlink" href="#setup-cron-jobs-to-execute-periodic-administration-tasks" title="Permalink to this headline">¶</a></h2>
+<p>Following is a list of CoG tasks that should be executed periodically,
+and are therefore best setup as cron jobs on the server hosting CoG:</p>
+</div>
+<div class="section" id="periodically-update-the-projects-around-the-federation">
+<h2>1) Periodically update the projects around the federation<a class="headerlink" href="#periodically-update-the-projects-around-the-federation" title="Permalink to this headline">¶</a></h2>
+<p>Each CoG needs to periodically query its federated peers to obtain their
+latest projects. An example script to accomplis this task is included in
+the CoG source code itself: resources/scripts/sync_projects.sh - which
+may need to be customized to your environment. For example, to
+synchronize the projects every hour:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">0 * * * * /esg/config/sync_projects.sh</span>
+</pre></div>
+</div>
+<p>The script sets up some needed environment variables. then executes the
+“sync_project” management command that is included with the CoG
+distribution:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/sh
+
+<span class="gp">#</span>script to update the state of CoG projects around the federation
+
+<span class="gp">#</span>setup environment
+<span class="go">source /usr/local/cog/venv/bin/activate</span>
+<span class="go">export LD_LIBRARY_PATH=/opt/esgf/python/lib:$LD_LIBRARY_PATH</span>
+<span class="gp">#</span> reference the COG installation
+<span class="go">export COG_INSTALL_DIR=/usr/local/cog/cog_install</span>
+
+<span class="gp">#</span> reference the COG configuration
+<span class="go">export COG_CONFIG_DIR=/usr/local/cog/cog_config</span>
+
+<span class="go">python $COG_INSTALL_DIR/manage.py sync_projects</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="backup-the-postgres-databases-content-every-night">
+<h2>2) Backup the postgres databases content every night<a class="headerlink" href="#backup-the-postgres-databases-content-every-night" title="Permalink to this headline">¶</a></h2>
+<p>It is highly recommended that both the CoG and the ESGCET databases be
+backed up daily. This can be accomplished by setting up a cron job to
+run nightly as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">crontab -l</span>
+<span class="go">0 0 * * * /esg/config/db_backups.sh</span>
+</pre></div>
+</div>
+<p>where the script has the following content:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin.sh
+<span class="go">export PATH=/usr/local/pgsql/bin:PATH</span>
+<span class="go">pg_dump -p 5432 -U dbsuper cogdb &gt; /tmp/cogdb_$ (date+%Y-%m-%d).sql</span>
+<span class="go">pg_dump -p 5432 -U dbsuper esgcet &gt; /tmp/esgcet_$(date+%Y-%m-%d).sql</span>
+</pre></div>
+</div>
+<p>NOTE: for the script to run as cron, the postgres database password must
+be located in file ~/.pgpass with the format:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">host_name:port:database_name:database_user:database_password</span>
+</pre></div>
+</div>
+<p>Also the file permissions must be set as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">chmod 0600 ~/.pgpass</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="remove-stale-user-stubs-from-local-database">
+<h2>3) Remove stale user stubs from local database<a class="headerlink" href="#remove-stale-user-stubs-from-local-database" title="Permalink to this headline">¶</a></h2>
+<p>When a user from another CoG logs onto the local CoG with their OpenID,
+a user object stub is created in the local database to store some needed
+information. Unfortunately, if the user account is deleted on the remote
+server, the local account is not. To remedy this situation, i.e. to
+delete local user stubs of remote users that have been deleted, the ESGF
+node administraor can run the following command (in the proper python
+virtual environment):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd $COG_iNSTALL_DIR</span>
+<span class="go">python manage.py sync_users</span>
+</pre></div>
+</div>
+<p>The same command can also be run as a cron job. An example such script
+is provided as part of the CoG distribution:
+resources/scripts/sync_users.sh, and may need to be customized to your
+ESGF installation. For example, to run the script every night at
+midnight:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">0 0 * * * /esg/config/sync_users.sh</span>
+</pre></div>
+</div>
+<p>where the script content is:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>!/bin/sh
+
+<span class="gp">#</span>example script to delete stale user stubs from the <span class="nb">local</span> database
+
+<span class="gp">#</span>setup environment
+<span class="go">source /usr/local/cog/venv/bin/activate</span>
+<span class="go">export LD_LIBRARY_PATH=/opt/esgf/python/lib:$LD_LIBRARY_PATH</span>
+
+<span class="gp">#</span> reference the COG installation
+<span class="go">export COG_INSTALL_DIR=/usr/local/cog/cog_install</span>
+
+<span class="gp">#</span> reference the COG configuration
+<span class="go">export COG_CONFIG_DIR=/usr/local/cog/cog_config</span>
+
+<span class="go">python $COG_INSTALL_DIR/manage.py sync_users</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Restore_from_Backup.html" class="btn btn-neutral float-right" title="Restore from Backup" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Setup_Federation.html" class="btn btn-neutral float-left" title="Setup Federation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

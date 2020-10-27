@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Setup Federation &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Cron Jobs" href="Cron_Jobs.html" />
+    <link rel="prev" title="ESGF CoG User Accounts" href="ESGF_CoG_User_Accounts.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setup Federation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup-federation-with-other-cog-instances">Setup federation with other CoG instances:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#choosing-peer-nodes">Choosing Peer Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-projects-from-peer-nodes">Loading Projects from Peer Nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#notes">NOTES:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Setup Federation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Setup_Federation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="setup-federation">
+<h1>Setup Federation<a class="headerlink" href="#setup-federation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="setup-federation-with-other-cog-instances">
+<h2>Setup federation with other CoG instances:<a class="headerlink" href="#setup-federation-with-other-cog-instances" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="choosing-peer-nodes">
+<h2>Choosing Peer Nodes<a class="headerlink" href="#choosing-peer-nodes" title="Permalink to this headline">¶</a></h2>
+<p>ESGF maintains a list of available ESGF peer nodes in a file that is
+located by default on each system at the path:
+/esg/config/esgf_cogs.xml. This file is updated every time the ESGF
+software stack is installed, or it can be updated manually by fatching
+the latest version from the ESGF “config” repository on GitHub. An
+alternate location can be specified using the PEER_NODES variable in the
+configuration file.</p>
+<p>At startup time, CoG reads this file and takes the following actions:</p>
+<ul class="simple">
+<li><p>If a node with a new domain name is found, it will be inserted as a
+new peer node in the database (but NOT activated)</p></li>
+<li><p>if a node with an existing domain name is found, its server name will
+be updated into the database with the new value read from the file</p></li>
+<li><p>If an existing node has been removed from the file, it will NOT be
+deleted from the database automatically</p></li>
+</ul>
+<p>The list of peer nodes can also be updated without having to restart the
+local ESGF node. To do so, run the following django management command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd $COG_INSTALL_DIR</span>
+<span class="go">source $COG_DIR/venv/bin/activate</span>
+<span class="go">export LD_LIBRARY_PATH=/opt/esgf/python/lib:`\ LD_LIBRARY_PATH</span>
+<span class="go">python manage.py sync_sites</span>
+</pre></div>
+</div>
+<p>Just like when restarting CoG, this command will insert any missing
+nodes in the local database (and update their names if they have
+changed), but it will not activate the nodes by default. Note that the
+same command can also be passed the ‘–delete’ option to delete stale
+nodes that are found in the local database, but are missing from the
+esgf_nodes.xml file:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python manage.py sync_sites –delete</span>
+</pre></div>
+</div>
+<p>Once the nodes are listed in the local database, they can be enabled by
+logging in as a Node Administrator and clicking on the ‘Configure Peers’
+link in the ‘Admin’ menu in the lower left navigation bar.</p>
+</div>
+<div class="section" id="loading-projects-from-peer-nodes">
+<h2>Loading Projects from Peer Nodes<a class="headerlink" href="#loading-projects-from-peer-nodes" title="Permalink to this headline">¶</a></h2>
+<p>The local CoG application can be instructed to load the most recent list
+of projects from the other federated instances in one of three ways:</p>
+<ul class="simple">
+<li><p>By visiting the page “Configure Peers” and clicking on the lower link
+“Synchronize with Peer CoGs Now” (or directly invoking the URL
+“<a class="reference external" href="http:/">http:/</a>/&lt;your cog domain name&gt;/share/sync/projects/”)</p></li>
+<li><p>By invoking the following django management command:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cd $COG_INSTALL_DIR</span>
+<span class="go">source $COG_DIR/venv/bin/activate</span>
+<span class="go">export LD_LIBRARY_PATH=/opt/esgf/python/lib:$LD_LIBRARY_PATH</span>
+<span class="go">python manage.py sync_projects</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>By setting up a cron job that executes the same command above. For
+example:</p></li>
+</ul>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">crontab -l</span>
+<span class="go">0 * * * * source ~/.bashrc;</span>
+<span class="go">python/usr/local/cog/cog_install/manage.py sync_projects</span>
+<span class="gp">&gt;</span>&gt; /tmp/crontab.log <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>will parse the user environment, and run the command at minute 0 of
+every hour, appending the output to file.</p>
+<div class="section" id="notes">
+<h3>NOTES:<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Projects will be updated only from peer nodes that are “enabled”.
+IMPORTANT: a node will only share projects correctly if its ‘Node’
+domain name {{site_name}} equals its real domain.</p></li>
+<li><p>If its node domain has been recently updated, CoG must be restarted
+for that change to take effect, otherwise the other CoGs won’t see
+its projects.</p></li>
+<li><p>A node will only share those projects that are ‘active’</p></li>
+<li><p>If a peer node is disabled through the admin interface:</p>
+<ul>
+<li><p>Its projects won’t show up in the projects browser (for none of
+the tabs)</p></li>
+<li><p>Its projects will not be selectable as peers/parent/children in
+the project configuration panel</p></li>
+<li><p>Its data cart won’t show up in the current data cart page</p></li>
+<li><p>The node will not be queried for user projects updates</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Cron_Jobs.html" class="btn btn-neutral float-right" title="Cron Jobs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ESGF_CoG_User_Accounts.html" class="btn btn-neutral float-left" title="ESGF CoG User Accounts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

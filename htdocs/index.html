@@ -1,0 +1,522 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to ESGF CoG’s Administrator Guide &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ESGF/CoG Administrator Guide Overview" href="manual/ESGF_Admin_Guide.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="manual/ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to ESGF CoG’s Administrator Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-esgf-cog-s-administrator-guide">
+<h1>Welcome to ESGF CoG’s Administrator Guide<a class="headerlink" href="#welcome-to-esgf-cog-s-administrator-guide" title="Permalink to this headline">¶</a></h1>
+<p>This Guide is intended for administrators of ESGF CoG sites.  For anyone looking for help in using CoG to find or download ESGF data, please see <a class="reference external" href="https://esgf.github.io/esgf-user-support/user_guide.html">https://esgf.github.io/esgf-user-support/user_guide.html</a>.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="manual/ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/ESGF_Admin_Guide.html#step-1b-upgrade-cog-standalone">Step 1b: Upgrade CoG standalone</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/ESGF_Admin_Guide.html#step-2-configure-cog">Step 2: Configure CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/ESGF_Admin_Guide.html#step-3-upgrade-cog">Step 3: Upgrade CoG</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Node_Administrator_Login.html">ESGF/CoG Administrator Login</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Administrator_Login.html#option-1-username-password-login">Option 1: Username/Password login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Administrator_Login.html#option-2-openid-login">Option 2: OpenID login</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Node_Home_Project_Setup.html">Node Home Project Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Home_Project_Setup.html#step-1-register-a-new-project">Step 1: Register a new project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Home_Project_Setup.html#step-2-approve-the-new-project">Step 2: Approve the new project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Home_Project_Setup.html#step-3-configure-the-new-project-as-the-node-home-project">Step 3: Configure the new project as the Node “home” project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Home_Project_Setup.html#step-4-save-the-file-and-restart-the-esgf-node">Step 4: Save the file and restart the ESGF Node.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Home_Project_Setup.html#step-5-edit-the-node-home-project-home-page">Step 5: Edit the node “home” project “home” page</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Home_Page_Example.html">Home Page Example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Home_Page_Example.html#welcome-to-the-institution-esgf-cog-node">Welcome to the [institution] ESGF-CoG Node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Home_Page_Example.html#what-can-i-do-on-the-institution-data-node">What can I do on the [institution] data node?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Home_Page_Example.html#search-data">Search Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Home_Page_Example.html#host-a-project">Host a Project</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Data_Search_Configuration.html">Data Search Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Search_Configuration.html#step-1-turn-on-the-data-search-widget-figure-1">Step 1: Turn on the Data Search widget (Figure 1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Search_Configuration.html#step-2-customize-the-data-search-constraints">Step 2: Customize the Data Search Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Search_Configuration.html#optional-enable-new-search-facets">Optional: Enable New Search Facets</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Data_Access_Control_setup.html">Data Access Control Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Access_Control_setup.html#step-1-configure-the-esgf-postgres-database">Step 1: Configure the ESGF Postgres database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Access_Control_setup.html#step-2-edit-the-esgf-xml-configuration-files">Step 2: Edit the ESGF XML configuration files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Access_Control_setup.html#step-3-optional-publish-the-group-registration-url">Step 3 (optional): Publish the Group Registration URL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Access_Control_setup.html#special-case-unrestricted-data">Special Case: Unrestricted Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Access_Control_setup.html#special-case-authentication-only-data">Special Case: Authentication Only Data</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Node_Federation.html">Node Federation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Federation.html#step-1-click-on-the-configure-peers-link-at-the-bottom-of-the-left-navigation-bar-figure-1">Step 1: Click on the “Configure Peers” link at the bottom of the left navigation bar (Figure 1)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Federation.html#step-2-select-nodes-to-federate-with">Step 2: Select nodes to federate with</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Federation.html#step-3-save-your-selections">Step 3: Save your selections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Federation.html#step-4-click-the-syncronize-projects-link-figure-2">Step 4: Click the “Syncronize projects” link (Figure 2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Node_Federation.html#step-5-look-for-an-instance-of-a-federated-project-in-the-project-browser-figure-3">Step 5: Look for an instance of a federated project in the Project Browser (Figure 3).</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Configuring_Globus.html">Configuring Globus</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Configuring_Globus.html#configuring-esgf-cog-with-globus-downloads">Configuring ESGF/CoG with Globus Downloads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Configuring_Globus.html#restricted-datasets">Restricted datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-1-preliminary-obtain-globus-credentials-for-the-node">Step 1: (Preliminary) obtain Globus credentials for the node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-2-publish-datasets-with-globus-enabled">Step 2: Publish datasets with Globus enabled</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-3-add-globus-urls-to-already-published-datasets">Step 3: Add Globus URLs to already published datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-4-register-the-url-with-globus">Step 4: Register the URL with Globus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-5-update-the-node-configuration-of-globus-endpoints">Step 5: Update the node configuration of Globus endpoints</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Configuring_Globus.html#public-datasets">Public datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-1-configure-the-globus-connect-server">Step 1: Configure the Globus Connect Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-3-activate-the-default-globus-endpoint-on-the-node">Step 3: Activate the default Globus Endpoint on the node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-4-create-a-shared-globus-endpoint">Step 4: Create a shared Globus endpoint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Configuring_Globus.html#step-3-publish-public-datasets-with-globus-enabled">Step 3: Publish public datasets with Globus enabled</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html#install-globus-connect-server-io">1. Install Globus Connect Server IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html#add-the-esgf-software-repository">2. Add the ESGF software repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html#install-esgf-authorization-packages">3. Install ESGF authorization packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html#configure-globus-connect-server-io">4. Configure Globus Connect Server IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html#add-esgf-specific-gridftp-configuration">6. Add ESGF specific GridfTP configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Data_Transfer_Node_Setup.html#test">7. Test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Header_and_Footer.html">Header and Footer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Header_and_Footer.html#customizing-the-header-and-footer">Customizing the header and footer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Header_and_Footer.html#the-defaults">The Defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Header_and_Footer.html#overridding-the-defaults">Overridding the Defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Header_and_Footer.html#example-code">Example code</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Google_Analytics.html">Google Analytics</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Google_Analytics.html#customizing-federal-google-analytics">Customizing Federal Google Analytics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Google_Analytics.html#the-default">The Default</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Google_Analytics.html#overriding-the-default">Overriding the Default</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Notification_Header.html">Notification Header</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Notification_Header.html#the-defaults">The Defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Notification_Header.html#overriding-the-defaults">Overriding the Defaults</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/ESGF_CoG_User_Accounts.html#migrating-cog-user-accounts-to-esgf">Migrating CoG User Accounts to ESGF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Setup_Federation.html">Setup Federation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Setup_Federation.html#setup-federation-with-other-cog-instances">Setup federation with other CoG instances:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Setup_Federation.html#choosing-peer-nodes">Choosing Peer Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Setup_Federation.html#loading-projects-from-peer-nodes">Loading Projects from Peer Nodes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Setup_Federation.html#notes">NOTES:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Cron_Jobs.html">Cron Jobs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Cron_Jobs.html#setup-cron-jobs-to-execute-periodic-administration-tasks">Setup cron jobs to execute periodic administration tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Cron_Jobs.html#periodically-update-the-projects-around-the-federation">1) Periodically update the projects around the federation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Cron_Jobs.html#backup-the-postgres-databases-content-every-night">2) Backup the postgres databases content every night</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Cron_Jobs.html#remove-stale-user-stubs-from-local-database">3) Remove stale user stubs from local database</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Restore_from_Backup.html">Restore from Backup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Restore_from_Backup.html#restoring-cog-from-backup">Restoring CoG from backup</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Local_Shard_Setup.html">“Local Shard” Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Local_Shard_Setup.html#step-1-setup-a-local-shard">Step 1) Setup a “local shard”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Local_Shard_Setup.html#step-2-publish-data-collections-to-the-local-shard">Step 2) Publish data collections to the “local shard”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Local_Shard_Setup.html#step-3-configure-the-cog-search-user-interface">Step 3) Configure the CoG Search User Interface</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Create_an_account.html">Create an account</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Create_an_account.html#how-to-register-for-cog">How to Register for CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Create_an_account.html#dont-create-an-account-unless-you-plan-to-join-a-project-or-download-data-from-esgf">*** Don’t create an account unless you plan to join a project or download data from ESGF ***</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Create_an_account.html#step-1-create-account">Step 1: Create Account</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Create_an_account.html#step-2-fill-in-the-user-profile-figure-2">Step 2: Fill in the User Profile (Figure 2)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Create_an_account.html#step-3-join-or-create-a-project">Step 3: Join or Create a project</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Create_an_account.html#a-join-an-existing-project">a) Join an existing project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Create_an_account.html#b-create-a-project">b) Create a project</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Authorization_for_ESGF_Data_Access.html#why-data-access-control-groups">Why data access control groups?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Authorization_for_ESGF_Data_Access.html#which-data-access-control-groups-currently-exist-in-esgf">Which data access control groups currently exist in ESGF?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Authorization_for_ESGF_Data_Access.html#who-has-to-join">Who has to join?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Authorization_for_ESGF_Data_Access.html#how-to-join">How to join?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Logging_in_with_OpenID.html">Logging in with OpenID</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Logging_in_with_OpenID.html#method-1-enter-your-full-openid">Method 1: Enter your full OpenID</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Logging_in_with_OpenID.html#step-1-enter-your-full-openid-in-the-login-box-figure-1-and-click-login">Step 1: Enter your full OpenID in the login box (Figure 1) and click “Login”.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Logging_in_with_OpenID.html#step-2-enter-your-password-in-the-esgf-openid-password-box">Step 2: Enter your password in the ESGF OpenID password box</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Logging_in_with_OpenID.html#method-2-use-the-pull-down-to-select-your-openid-issuer">Method 2: Use the pull down to select your OpenID issuer.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Logging_in_with_OpenID.html#step-1-use-the-arrow-icon-in-figure-1-to-invoke-the-list-of-openid-providers">Step 1: Use the arrow icon in Figure 1 to invoke the list of OpenID providers.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Logging_in_with_OpenID.html#step-2-enter-your-username-and-password-figure-3">Step 2: Enter your username and password (Figure 3).</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Forgot_OpenID.html">Forgot OpenID</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Forgot_OpenID.html#step-1-go-to-the-login-page">Step 1: Go to the Login page</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Forgot_OpenID.html#step-2-click-the-forgot-openid-link-located-beneath-the-login-box">Step 2: Click the Forgot OpenID link located beneath the login box</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Forgot_OpenID.html#step-3-fill-out-the-template">Step 3: Fill out the template.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Forgot_Password.html">Forgot Password</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Forgot_Password.html#step-1-click-the-login-link-in-the-upper-right-corner-of-the-cog-page">Step 1: Click the Login link in the upper right corner of the CoG page.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Forgot_Password.html#step-2-click-the-forgot-password-link-on-the-login-page">Step 2: Click the “Forgot Password?” link on the login page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Forgot_Password.html#step-3-enter-the-esgf-openid-and-emal-associated-with-that-openid-into-the-form-and-submit">Step 3: Enter the ESGF OpenID and emal associated with that OpenID into the form and submit.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Update_Password.html">Update Password</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Update_Password.html#step-1-login">Step 1: Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Update_Password.html#step-2-click-on-my-profile">Step 2: Click on “My Profile”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Update_Password.html#step-3-click-on-update-password">Step 3: Click on Update password</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html#step-1-enter-your-esgf-openid-or-select-an-openid-provider-from-the-pulldown-in-the-login-box-and-click-login">Step 1: Enter your ESGF OpenID (or select an OpenID provider from the pulldown) in the login box and click “Login”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html#step-2-click-the-show-certificate-button">Step 2: Click the “Show Certificate” button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html#step-3-expand-the-trust-section">Step 3: Expand the Trust section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html#step-4-change-the-trust-settings">Step 4: Change the Trust settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html#step-5-authenticate">Step 5: Authenticate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Safari_to_accept_the_ESGF_OpenID_certificate.html#step-6-proceed-with-authentication">Step 6: Proceed with authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html#step-1-insert-your-openid-or-select-an-openid-provider-using-the-pulldown-in-the-login-box-and-press-login">Step 1: Insert your OpenID (or select an OpenID provider using the pulldown) in the login box and press “Login”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html#step-2-click-advanced-on-the-warning-page">Step 2: Click “Advanced” on the warning page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html#step-3-click-proceed-to-node-unsafe">Step 3: Click “Proceed to $node (unsafe)”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html#step-4-proceed-with-authentication">Step 4: Proceed with authentication.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html#step-1-enter-your-openid-in-the-box-and-click-login">Step 1: Enter your OpenID in the box and click “Login”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html#step-2-click-the-continue-to-this-website-not-recommended-link">Step 2: Click the “Continue to this website (not recommended) link.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html#step-3-enter-your-password-in-the-box-provided">Step 3: Enter your password in the box provided</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html#step-1-enter-your-openid-or-select-your-openid-providing-using-the-pulldown-in-the-login-box-and-click-login">Step 1: Enter your OpenID (or select your OpenID providing using the pulldown) in the login box and click “Login”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html#step-2-click-on-advanced">Step 2: Click on “Advanced”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html#step-2-click-add-exception">Step 2: Click “Add Exception…”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html#step-3-click-confirm-security-exception">Step 3: Click “Confirm Security Exception”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html#step-4-click-resend">Step 4: Click “Resend”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html#step-5-proceed-with-authentication">Step 5: Proceed with authentication</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html">CoG Installation from Docker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html#prerequisites-for-installation-and-general-operation">Prerequisites (for installation and general operation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html#run-cog-from-the-container-installation-directory">Run CoG from the container installation directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html#stop-cog">Stop CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html#restart-cog">Restart CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/CoG_Installation_from_Docker.html#run-cog-from-the-local-source-directory">Run CoG from the local source directory</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Prerequisites.html">Installation: Prerequisites</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-1-install-python">Step 1: Install Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-2-install-postgres">Step 2: Install Postgres</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-3-set-up-git-and-github">Step 3: Set up git and github</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-4-update-pip">Step 4: Update pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-5-install-virtualenv">Step 5: Install virtualenv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-6-centos-only-install-c-headers-for-sqlite-devel-and-freetype-devel">Step 6: (CentOS only) Install C-headers for sqlite-devel and freetype-devel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-7-macosx-only-copy-image-libraries">Step 7: (MacOSX only) Copy image libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-8-install-xcode-command-line-tools">Step 8: Install Xcode command line tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Prerequisites.html#step-9-manually-install-pillow">Step 9: Manually install Pillow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Initial_Setup.html">Installation: Initial setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Initial_Setup.html#step-1-create-the-main-cog-directory">Step 1: Create the main CoG directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Initial_Setup.html#step-2-create-a-cog-configuration-directory">Step 2: Create a CoG configuration directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Initial_Setup.html#step-3-create-a-cog-installation-directory">Step 3: Create a CoG installation directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Initial_Setup.html#step-4-ensure-all-environment-variables-are-set">Step 4: Ensure all environment variables are set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Initial_Setup.html#step-5-set-up-a-python-virtual-environment">Step 5: Set up a Python virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Initial_Setup.html#results">Results:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-1-activate-the-cog-python-virtual-environment">Step 1: Activate the CoG Python virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-2-checkout-the-cog-software-stack">Step 2: Checkout the CoG software stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-3-install-cog-and-dependencies">Step 3: Install CoG and dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-4-install-patched-version-of-django-openid-auth">Step 4: Install patched version of django-openid-auth</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-4a-install-mkproxy-optional">Step 4a: Install mkproxy (optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-5-configure-cog">Step 5: Configure CoG</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-5a-to-configure-cog-without-an-esgf-node-e-g-esgf-false">Step 5a: To configure CoG WITHOUT an ESGF node (e.g. –esgf=false)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-5b-to-configure-cog-with-an-esgf-node-e-g-esgf-true">Step 5b: To configure CoG with an ESGF node (e.g. –esgf=true)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-6-modify-configuration-file">Step 6: Modify configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-7-check-django-admin-for-empty-site">Step 7: Check Django Admin for empty Site</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Install_or_Upgrade.html#step-8-remove-potential-python-conflicts">Step 8: Remove potential Python conflicts</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Testing.html#step-1-run-cog-with-the-django-development-server">Step 1: Run CoG with the Django development server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Testing.html#step-2-open-http-host-8000">Step 2: Open http://&lt;host&gt;:8000/</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Testing.html#step-3-login">Step 3: Login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Testing.html#step-4-important-immediately-change-the-admin-password-by">Step 4: IMPORTANT: immediately change the “admin” password by:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Testing.html#step-5-change-all-other-admin-data">Step 5: Change all other “admin” data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Testing.html#step-6-start-experimenting-with-creating-other-projects-and-registering-new-users">Step 6: Start experimenting with creating other projects and registering new users.</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manual/Installation_Configuration.html">Installation Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Configuration.html#updating-the-site-name">Updating the SITE_NAME</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/Installation_Configuration.html#configuration-variables">Configuration Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="manual/ESGF_Admin_Guide.html" class="btn btn-neutral float-right" title="ESGF/CoG Administrator Guide Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

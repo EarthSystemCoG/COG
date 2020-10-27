@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CoG Installation from Docker &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation: Prerequisites" href="Installation_Prerequisites.html" />
+    <link rel="prev" title="Getting Firefox to accept the ESGF OpenID certificate" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Transfer_Node_Setup.html">Data Transfer Node Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CoG Installation from Docker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites-for-installation-and-general-operation">Prerequisites (for installation and general operation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-cog-from-the-container-installation-directory">Run CoG from the container installation directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#stop-cog">Stop CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#restart-cog">Restart CoG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-cog-from-the-local-source-directory">Run CoG from the local source directory</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>CoG Installation from Docker</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/CoG_Installation_from_Docker.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cog-installation-from-docker">
+<h1>CoG Installation from Docker<a class="headerlink" href="#cog-installation-from-docker" title="Permalink to this headline">¶</a></h1>
+<p>The recommended way to install and run CoG in in development environment
+is to use Docker. Docker is a software containerization platform. Docker
+containers wrap software in a complete filesystem that contains
+everything needed to run: code, runtime, system tools, system libraries,
+etc. This guarantees that the software will always run the same,
+regardless of its environment.</p>
+<p>CoG has been packaged to work with Docker and starting and running a
+Docker container based on one of the publicly available CoG Docker
+images is a simple process, and allows to CoG to be restared from a
+completely clean state (no projects or users), or upgrad an already
+populated CoG instance.</p>
+<div class="section" id="prerequisites-for-installation-and-general-operation">
+<h2>Prerequisites (for installation and general operation)<a class="headerlink" href="#prerequisites-for-installation-and-general-operation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>You must have the Docker Engine installed on your personal machine
+(MacOSX, Windows or Linux). See the Docker Documentation for
+instructions on how to install Docker on different platforms. Basic
+familiarity with Docker is also recommended - this can be achieved by
+following one of the many training seminars available on the site</p></li>
+<li><p>The Docker Engine MUST BE RUNNING. On a Mac this is done by clicking
+on the icon (Figure 1).</p></li>
+</ul>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/docker_terminal.png"><img alt="" src="../_images/docker_terminal.png" style="width: 90.85px; height: 95.44999999999999px;" /></a>
+</div>
+<p>Figure 1: Mac Docker icon.</p>
+</div>
+<div class="section" id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p>Images for several CoG versions are publicly available on DockerHub
+(project esgfhub/esgf-cog). To download a specific version issue the
+following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker pull esgfhub/esgf-cog:&lt;cog_version&gt;
+
+<span class="go">For example:</span>
+
+<span class="gp">$</span> docker pull esgfhub/esgf-cog:v3.7.RC2
+</pre></div>
+</div>
+<p>To download the latest development version (built at some unspecified
+time from the github ‘devel’ branch):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker pull esgfhub/esgf-cog:latest
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-cog-from-the-container-installation-directory">
+<h2>Run CoG from the container installation directory<a class="headerlink" href="#run-cog-from-the-container-installation-directory" title="Permalink to this headline">¶</a></h2>
+<p>Start a Docker terminal, then use the following command to create a new
+Docker container based on CoG image you have downloaded, start the
+container, and start CoG within the container (enter the command below
+in only one line):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker run -ti -p <span class="m">8000</span>:8000 –name mycog esgfhub/esgf-cog: <span class="sb">``</span>docker-machine ip<span class="sb">``</span> <span class="nb">false</span> <span class="nb">true</span>
+</pre></div>
+</div>
+<p>The command line arguments are explained below:</p>
+<ul class="simple">
+<li><p>-ti : creates an interactive terminal to the Docker container, so
+that you can view the Django logs, and stop the Django server when
+desired</p></li>
+<li><p>-p 8000:8000 : maps port 8000 on the Docker Host to port 8000 in the
+Docker container, i.e. makes port 8000 reachable on the Docker Host</p></li>
+<li><p>–name:mycog : the container is given the name “mycog” - Docker
+containers must have unique names. You must delete a named container
+before attempting to create a new one with the name name, for
+example: docker rm mycog</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docker-machine</span> <span class="pre">ip</span></code> : this command retrieves the current IP address
+of the Docker host and passes it as an argument to the container
+startup. This IP address must be configured in the ALLOWED_HOST
+directive in cog_settings.cfg to enable HTTP requests to that host</p></li>
+<li><p>false : run without ESGF configuration, i.e. with a sqllite database
+back-end</p></li>
+<li><p>true : start the django development server on port 8000 (otherwise
+the Docker container will exit…)</p></li>
+</ul>
+<p>By default, the Docker entrypoint script will start CoG from the
+installation directory $COG_INSTALL_DIR = /usr/local/cog/cog_install,
+and will run CoG as the non-privileged user “cogadmin” (instead of the
+“root” user).</p>
+<p>After the container has started, you can access the CoG site at the
+following URL:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://:8000/">http://:8000/</a></p></li>
+</ul>
+<p>For example:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="http://192.168.99.100:8000/">http://192.168.99.100:8000/</a></p></li>
+</ul>
+<p>You can log in at <a class="reference external" href="http://:8000/login2/">http://:8000/login2/</a> with the temporary credentials:</p>
+<ul class="simple">
+<li><p>username = rootAdmin</p></li>
+<li><p>password = changeit</p></li>
+</ul>
+</div>
+<div class="section" id="stop-cog">
+<h2>Stop CoG<a class="headerlink" href="#stop-cog" title="Permalink to this headline">¶</a></h2>
+<p>To stop the CoG container, and the CoG application running within,
+simply type ^C in the Docker terminal window. This will stop but NOT
+delete the “mycog” container.</p>
+</div>
+<div class="section" id="restart-cog">
+<h2>Restart CoG<a class="headerlink" href="#restart-cog" title="Permalink to this headline">¶</a></h2>
+<p>To restart the same CoG container, using the same configuration,
+database, and data, issue the following command at a Docker terminal:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker start -ai mycog
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>ai : attaches the Docker container to the terminal STDIN, STDOUT and STDERR</p></li>
+</ul>
+<p>To restart CoG from a completely clean slate, first delete the previous container:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker rm  mycog
+</pre></div>
+</div>
+<p>then use the “docker run…” command again with the same container name.
+Or, use the “docker run…” command with a different container name.</p>
+</div>
+<div class="section" id="run-cog-from-the-local-source-directory">
+<h2>Run CoG from the local source directory<a class="headerlink" href="#run-cog-from-the-local-source-directory" title="Permalink to this headline">¶</a></h2>
+<p>If you are doing CoG development, you may want to startup CoG from your local source code directory, so that you can work with Git to commit and push changes to GitHub.</p>
+<p>First, clone the CoG repository to a location on your system, here named $COG_SRC_DIR:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> git clone https://github.com/EarthSystemCoG/COG.git
+<span class="gp">#</span> optionally, check out a branch or tag
+<span class="gp">$</span> git checkout -b devel origin/devel
+<span class="gp">$</span> <span class="nb">export</span> <span class="nv">COG_SRC_DIR</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+</pre></div>
+</div>
+<p>Then run the CoG Docker container by mounting the local source directory on top of the image CoG installation directory:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> docker run -ti -p <span class="m">8000</span>:8000 –name mycog -v <span class="nv">$COG_SRC_DIR</span>:/usr/local/cog/cog_install esgfhub/esgf-cog: <span class="sb">``</span>docker-machine ip<span class="sb">``</span> <span class="nb">false</span> <span class="nb">true</span>
+</pre></div>
+</div>
+<p>Inside the container, CoG will still be started from $COG_INSTALL_DIR,
+but this directory is now a copy of the local source directory
+$COG_SRC_DIR. Any changes to the code in $COG_SRC_DIR will be
+immediately reflected onto the running web application. Additionally,
+using a local terminal, these changes can be committed to GitHub, if
+desired.</p>
+<p>Note that every time the CoG container is restarted, the CoG
+installation is automatically upgraded to the latest database schema
+version, and all static files are collected into the standard directory
+tree.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Installation_Prerequisites.html" class="btn btn-neutral float-right" title="Installation: Prerequisites" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html" class="btn btn-neutral float-left" title="Getting Firefox to accept the ESGF OpenID certificate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

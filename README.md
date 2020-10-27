@@ -12,7 +12,25 @@ and that exposing those characteristics and linking them is a way to make a comp
 The CoG project created the CoG environment - this website - as a way of promoting good governance across numerous projects 
 and organizations in the Earth system sciences.  Its structure encourages information sharing among projects, transparency and trust.
 
-For more information, visit: http://earthsystemcog.org/
+CoG Administrator's Guide
+-------------------------
+
+The Guide is no longer accessible online. However you can open the guide through this repository.
+Clone this repository and open `COG/htdocs/index.html` in your browser.
+
+
+Installation of CoG
+-------------------
+
+The simplest way to install CoG is to do so as part of an ESGF index node deployment using ESGF Ansible, see: 
+https://github.com/ESGF/esgf-ansible
+
+
+Python 2 vs 3
+-------------
+
+CoG supports Python 3.  For the time being this is in its own branch.  Due to library and PostGreSQL Database compatibility issues, this version requires PG v9.6. Note that this PG version is not distibuted with CentOS/RHEL 7 standard yum repositories.  The esgf-ansible installation default only supports, but the playbooks could be modified to support more recent versions of PG.  Alternatively, we have found that Python 3 CoG can be installed following a successul deployment of the Python 2 version, where the CoG schema deployment is compatible with PostgreSQL v9.2, the version that is distributed with RHEL/CentOS 7.
+
 
 Manual CoG update
 -----------------

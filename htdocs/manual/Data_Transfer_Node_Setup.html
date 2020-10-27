@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Data Transfer Node Setup &mdash; ESGF CoG Administrator 0.0.0 documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/esgf_globe.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Header and Footer" href="Header_and_Footer.html" />
+    <link rel="prev" title="Configuring Globus" href="Configuring_Globus.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ESGF CoG Administrator
+          
+
+          
+            
+            <img src="../_static/esgf_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ESGF_Admin_Guide.html">ESGF/CoG Administrator Guide Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Administrator_Login.html">ESGF/CoG Administrator Login</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Home_Project_Setup.html">Node Home Project Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Home_Page_Example.html">Home Page Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Search_Configuration.html">Data Search Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Data_Access_Control_setup.html">Data Access Control Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Node_Federation.html">Node Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Configuring_Globus.html">Configuring Globus</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data Transfer Node Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-globus-connect-server-io">1. Install Globus Connect Server IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-the-esgf-software-repository">2. Add the ESGF software repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-esgf-authorization-packages">3. Install ESGF authorization packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-globus-connect-server-io">4. Configure Globus Connect Server IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-esgf-specific-gridftp-configuration">6. Add ESGF specific GridfTP configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test">7. Test</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Header_and_Footer.html">Header and Footer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Google_Analytics.html">Google Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Notification_Header.html">Notification Header</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ESGF_CoG_User_Accounts.html">ESGF CoG User Accounts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Setup_Federation.html">Setup Federation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Cron_Jobs.html">Cron Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Restore_from_Backup.html">Restore from Backup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Local_Shard_Setup.html">“Local Shard” Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_or_Upgrade.html">CoG Installation or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Create_an_account.html">Create an account</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Authorization_for_ESGF_Data_Access.html">Authorization for ESGF Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Logging_in_with_OpenID.html">Logging in with OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_OpenID.html">Forgot OpenID</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Forgot_Password.html">Forgot Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Update_Password.html">Update Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Safari_to_accept_the_ESGF_OpenID_certificate.html">Getting Safari to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Chrome_to_accept_the_ESGF_OpenID_certificate.html">Getting Chrome to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Internet_Explorer_to_accept_the_ESGF_OpenID_certificate.html">Getting Internet Explorer to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Get_Firefox_to_accept_the_ESGF_OpenID_certificate.html">Getting Firefox to accept the ESGF OpenID certificate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CoG_Installation_from_Docker.html">CoG Installation from Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Prerequisites.html">Installation: Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Initial_Setup.html">Installation: Initial setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Install_or_Upgrade.html">Installation: Install or Upgrade</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Testing.html">Installation Testing: Initial Testing of the Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation_Configuration.html">Installation Configuration</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ESGF CoG Administrator</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Data Transfer Node Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/manual/Data_Transfer_Node_Setup.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="data-transfer-node-setup">
+<h1>Data Transfer Node Setup<a class="headerlink" href="#data-transfer-node-setup" title="Permalink to this headline">¶</a></h1>
+<p>Due to increasing size of climatology datasets published recently, a
+network link to the data nodes becomes frequently a bottleneck what
+forces the ESGF admins to migrate the data nodes to hardware with a
+higher bandwidth network link. Taking into account that the hardware
+upgrade is not always possible or an upgraded link may become a
+bottleneck in the near future, setting up a DTN node
+(<a class="reference external" href="https://fasterdata.es.net/science-dmz/DTN/">https://fasterdata.es.net/science-dmz/DTN/</a>) with access to the same
+filesystem to do load balancing can be considered as another option.
+This page describes all steps needed to install GridFTP server with the
+esgsaml authorization callout and configure load balancing by adding the
+server to an existing Globus endpoint pointing to the data node. It is
+assumed that Linux system installed on the DTN node satisfies the same
+requirements as the ESGF data node - it is RHEL 6 or CentOS 6 with the
+EPEL software repository configured.</p>
+<div class="section" id="install-globus-connect-server-io">
+<h2>1. Install Globus Connect Server IO<a class="headerlink" href="#install-globus-connect-server-io" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> rpm --import http://www.globus.org/ftppub/globus-connect-server/RPM-GPG-KEY-Globus
+<span class="gp">#</span> yum -y install http://toolkit.globus.org/ftppub/globus-connect-server/globus-connect-server-repo-latest.noarch.rpm
+<span class="gp">#</span> yum -y install globus-connect-server-io
+</pre></div>
+</div>
+<p>More information about installing Globus Connect Server can be found at <a class="reference external" href="https://www.globus.org/globus-connect-server">https://www.globus.org/globus-connect-server</a>.</p>
+</div>
+<div class="section" id="add-the-esgf-software-repository">
+<h2>2. Add the ESGF software repository<a class="headerlink" href="#add-the-esgf-software-repository" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> cat &gt; /etc/yum.repos.d/esgf.repo
+<span class="go">[esgf]</span>
+<span class="go">name=ESGF</span>
+<span class="go">baseurl=http://distrib-coffee.ipsl.jussieu.fr/esgf/RPM/centos/6/x86_64</span>
+<span class="go">failovermethod=priority</span>
+<span class="go">enabled=1</span>
+<span class="go">priority=90</span>
+<span class="go">gpgcheck=0</span>
+</pre></div>
+</div>
+<p>If the DTN node runs RHEL Linux, replace ‘centos’ with ‘redhat’ in the
+path above. You can also copy this file from the data node.</p>
+</div>
+<div class="section" id="install-esgf-authorization-packages">
+<h2>3. Install ESGF authorization packages<a class="headerlink" href="#install-esgf-authorization-packages" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">yum -y install globus-authz-esgsaml-callout globus-gaa globus-adq customgsiauthzinterface</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-globus-connect-server-io">
+<h2>4. Configure Globus Connect Server IO<a class="headerlink" href="#configure-globus-connect-server-io" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Copy /etc/globus-connect-server-esgf.conf from the data node</span>
+<span class="go">[Globus]</span>
+<span class="go">User = %(GLOBUS_USER)s</span>
+<span class="go">Password = %(GLOBUS_PASSWORD)s</span>
+<span class="go">[Endpoint]</span>
+<span class="go">Name =  &lt;short_hostname_of_the_data_node&gt;</span>
+<span class="go">Public = True</span>
+<span class="go">[Security]</span>
+<span class="go">FetchCredentialFromRelay = True</span>
+<span class="gp">#</span><span class="nv">CertificateFile</span> <span class="o">=</span> /etc/grid-security/hostcert.pem
+<span class="gp">#</span><span class="nv">KeyFile</span> <span class="o">=</span> /etc/grid-security/hostkey.pem
+<span class="go">TrustedCertificateDirectory = /etc/grid-security/certificates/</span>
+<span class="go">IdentityMethod = MyProxy</span>
+<span class="go">AuthorizationMethod = Gridmap</span>
+<span class="go">[GridFTP]</span>
+<span class="go">Server = %(HOSTNAME)s</span>
+<span class="go">IncomingPortRange = 50000,51000</span>
+<span class="go">OutgoingPortRange = 50000,51000</span>
+<span class="go">RestrictPaths = R/,N/etc,N/tmp,N/dev</span>
+<span class="go">Sharing = False</span>
+<span class="go">SharingRestrictPaths = R/</span>
+<span class="go">SharingStateDir = /etc/grid-security/sharing/$USER</span>
+<span class="go">[MyProxy]</span>
+<span class="go">Server = &lt;FQDN of the IdP node&gt;</span>
+</pre></div>
+</div>
+<p>To add the GridFTP server to the existing Globus endpoint associated
+with the data node, you must use the same Globus username as you used
+when running esg-node on the data node and the same endpoint name. The
+endpoint name on the data node was picked automatically - it is a short
+hostname of the data node. You can also comment out ‘CertificateFile’
+and ‘KeyFile’ and let Globus Connect Server setup script to obtain a
+certificate and a private key from Globus. After all the changes run:
+globus-connect-server-io-setup -v -c
+/etc/globus-connect-server-esgf.conf</p>
+</div>
+<div class="section" id="add-esgf-specific-gridftp-configuration">
+<h2>6. Add ESGF specific GridfTP configuration<a class="headerlink" href="#add-esgf-specific-gridftp-configuration" title="Permalink to this headline">¶</a></h2>
+<p>GridFTP server on the dat node runs in a chroot jail that is set up at
+/esg/gridftp_root. To keep the same configuration consistent with the
+data node, you can create the same directory with subdirectories on the
+DTN node and bind shared dataset root directories to the subdirectories.
+For example: mount –bind /esg/data /esg/gridftp_root/esg_dataroot</p>
+<p>Dataset files in /esg/data on your data node may be mounted at a
+different directory on the DTN node, so you will have to change
+‘/esg/data’ in the command above accordingly. When all dataset root
+directories are accessible on the DTN node under /esg/gridftp_root the
+same as on the data node, you can copy /etc/gridftp.d/globus-esgf file
+from the data node:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span>cat &gt; /etc/gridftp.d/globus-esgf
+<span class="go"> chroot_path /esg/gridftp_root</span>
+<span class="go"> usage_stats_id ESGF2811</span>
+<span class="go"> usage_stats_target usage-stats.globus.org:4810</span>
+<span class="go"> acl customgsiauthzinterface</span>
+<span class="gp"> $</span>GLOBUS_USAGE_DEBUG “MESSAGES,/esg/log/esg-server-usage-gridftp.log”
+<span class="gp"> $</span>GSI_AUTHZ_CONF “/etc/grid-security/authz_callouts_esgsaml.conf”
+<span class="gp"> $</span>GLOBUS_GSI_AUTHZ_DEBUG_LEVEL “10”
+<span class="gp"> $</span>GLOBUS_GSI_AUTHZ_DEBUG_FILE “/var/log/gridftp-debug.log”
+</pre></div>
+</div>
+<p>Copy /etc/grid-security/esgsaml_auth.conf from the data node:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> cat &gt;/etc/grid-security/esgsaml_auth.conf
+<span class="go">AUTHSERVICE=https:///esg-orp/saml/soap/secure/authorizationService.htm</span>
+</pre></div>
+</div>
+<p>Because GridFTP server will run in a chroot jail, you have to setup a
+chroot environment. The following command will copy CA certificates,
+passwd, group, nsswitch.conf and other files required by GridFTP server:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> globus-gridftp-server-setup-chroot -r /esg/gridftp_root
+</pre></div>
+</div>
+<p>And restart GridFTP server:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">#</span> service globus-gridftp-server restart
+</pre></div>
+</div>
+</div>
+<div class="section" id="test">
+<h2>7. Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h2>
+<p>Now, you should be able to access datasets through the Globus Web UI
+which will do load balancing across the data node and the DTN. When you
+go to <a class="reference external" href="https://www.globus.org/app/endpoints?scope=my-endpoints">https://www.globus.org/app/endpoints?scope=my-endpoints</a>, and
+select an enpoint associated with the dat node and click the ‘Server’
+tab, you should see two GridFTP servers. On the example screenshot,
+dev.esgf.anl.gov is the IdP node with MyProxy server (‘Identity
+Provider’) and the data node with GridFTP server (‘Servers’).
+App007.cels.anl.gov is the DTN node with GridFTP server
+(gsiftp://app007.cels.anl.gov:2811):</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/esgf_dtn_added.png"><img alt="" src="../_images/esgf_dtn_added.png" style="width: 613.6px; height: 649.35px;" /></a>
+</div>
+<p>To see datasets, go to <a class="reference external" href="https://www.globus.org/app/transfer">https://www.globus.org/app/transfer</a> and select
+your Globus endpoint. Click the ‘Go’ button to be sure that Globus hits
+your new DTN GridFTP server when listing the root directory.</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/esgf_dtn_list.png"><img alt="" src="../_images/esgf_dtn_list.png" style="width: 637.0px; height: 492.05px;" /></a>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Header_and_Footer.html" class="btn btn-neutral float-right" title="Header and Footer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Configuring_Globus.html" class="btn btn-neutral float-left" title="Configuring Globus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, ESGF User Interface Team
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
