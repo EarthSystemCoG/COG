@@ -141,7 +141,7 @@ def _encode_field_value(record, name, value):
             elif name=='xlink':
                 # NOTE: 'xlink' metadata is renamed to 'url' metadata
                 if parts[2] == 'pid':
-                    record.addField('url', (parts[0], 'application/pid', 'PID'))
+                    record.addField('url', (parts[0].replace('/hd1.', '/hdl.'), 'application/pid', 'PID'))
                 elif parts[2] == 'citation':
                     record.addField('url', (parts[0], 'application/citation', 'Citation'))
                 elif parts[2] == 'technote':
