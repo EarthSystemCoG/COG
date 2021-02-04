@@ -17,7 +17,10 @@ For more information, visit: http://esgf.github.io/COG
 Python3 Update
 --------------
 
-This branch migrates CoG to Python3 and Django2. (v4.0.0b) 
+
+This is v4.0.1 of CoG that supports Python3 and Django 2.2.18.  Given that this Django 2.2 version has run in LLNL production for over eight months now, it is time that we release this version of COG as the master branch.  We strongly encourage all sites to upgrade their deployments to this version.
+
+The last v3.x version of CoG running with Python2 is preserved for legacy.  This version is still needed to create the cogdb database (see below) for a standard legacy ESGF deployment using the Ansible playbooks (although a Postgres >9.5 supported version may be forthcoming....).
 
 Updating CoG
 ------------
