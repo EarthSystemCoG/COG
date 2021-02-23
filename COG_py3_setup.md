@@ -10,7 +10,8 @@ Use these steps if you need to upgrade an existing ESGF installation that is run
 
 ## Update cog repo
     cd /usr/local/cog/cog_install
-    Git checkout python3_cog  
+    git fetch #
+    Git checkout python_3 
 
 
 ## Create CoG conda env
