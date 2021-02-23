@@ -57,7 +57,7 @@ Use these steps if you need to upgrade an existing ESGF installation that is run
     --server-root /etc/cog-wsgi-8889 \
     --user apache --group apache \
     --host localhost --port 8889 \
-    --url-alias /static {{ cog.dest }}/static/
+    --url-alias /static /usr/local/cog/cog_install/static/
 
 
 ## Set Ownership
