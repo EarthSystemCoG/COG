@@ -28,17 +28,6 @@ Use these steps if you need to upgrade an existing ESGF installation that is run
 
     pip install 'mod_wsgi' 'git+https://github.com/edx-unsupported/django-openid-auth' -r requirements.txt
 
-##  Clone Transfer API Client Repo
-   cd /usr/local/cog
-   git clone https://github.com/globusonline/transfer-api-client-python.git"
-
-
-## Make and Install mkproxy
-    
-  cd transfer-api-client-python/mkproxy"
-  conda activate cog_py3
-  make && make install
-
 
 ## Install CoG into conda env
 
