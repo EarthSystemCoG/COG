@@ -74,6 +74,8 @@ def submitTransfer(transfer_client, source_endpoint, source_files, target_endpoi
     deadline = datetime.utcnow() + timedelta(days=10)
     
     # create a transfer request
+    if "%23" in target_endpoint:
+        target_endpoint = target_endpoint.replace("%23", "#")
     transfer_task = TransferData(transfer_client, source_endpoint, target_endpoint, deadline=deadline)
     print("Obtained transfer submission id: %s" % transfer_task["submission_id"])
 
