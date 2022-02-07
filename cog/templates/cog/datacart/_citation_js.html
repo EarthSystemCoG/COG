@@ -53,7 +53,10 @@
             var title = jsonResponse.titles[0];
             var publisher = jsonResponse.publisher;
             var publication_year = jsonResponse.publicationYear;
-            var license = jsonResponse.rightsList[0].rights;
+            var license = "unknown";
+            if (jsonResponse.rightsList.length > 0) {
+               license = jsonResponse.rightsList[0].rights;
+            }
 
             // point to DOI landing page if it is a DOI
             if(id_type=="DOI") {
