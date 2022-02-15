@@ -147,7 +147,9 @@ def notifyUserOfRegistration(user):
     message += "\n"
     message += "\nPlease note that you will need your OpenID to login."
     message += "\n"
-    message += "\nTutorials and FAQ: https://esgf.github.io/esgf-user-support"
+    message += "\nCoG Tutorials: https://www.earthsystemcog.org/projects/cog/tutorials_web"
+    message += "\n"
+    message += "\nCoG Support: cog_support@list.woc.noaa.gov"
 
     notify(user, subject, message)
 
@@ -186,8 +188,9 @@ def _sendSubsriptionEmail(user, action):
 def user_add(request):
     
     # redirection URL
-    _next = request.GET.get('next', None) or request.POST.get('next', None)
-    
+#    _next = request.GET.get('next', None) or request.POST.get('next', None)
+    _next = None
+
     # redirect to another node if necessary
     if redirectToIdp():
         redirect_url = settings.IDP_REDIRECT + request.path
@@ -764,6 +767,7 @@ def password_reset(request):
                         return render_password_reset_form(request, form, "Invalid OpenID/email combination")
 
                 # 1b) user used an external ESGF openid (for example, http://dkrz...) to login onto this node
+                # (for example, http://www.earthsystemcog.org/...)
                 else:
                     idpurl = urlparse(openid)
                     idpurl = "%s://%s/" % (idpurl.scheme, idpurl.netloc)
