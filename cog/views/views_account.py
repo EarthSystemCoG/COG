@@ -316,11 +316,12 @@ def user_add(request):
 
 # view to display user data
 # require login to limit exposure of user information
-#@login_required
+@login_required
 def user_detail(request, user_id):
 
     # load User object
     user = get_object_or_404(User, pk=user_id)
+
     # try loading user profile
     try:
         user_profile = UserProfile.objects.get(user=user)
@@ -338,6 +339,10 @@ def user_detail(request, user_id):
     # sort projects, groups alphabetically
     projects = sorted(projTuples, key=lambda x: x[0].short_name)
     groups = sorted(groupTuples, key=lambda x: x[0])
+
+    if user != request.user and not request.user.is_staff:
+        return HttpResponseServerError("Not authorized to access another user's profile..")
+
             
     return render(request, 'cog/account/user_detail.html',
                   {'user_profile': user_profile, 'projects': projects, 'groups':groups, 'title': 'User Profile'})
@@ -444,7 +449,8 @@ def user_update(request, user_id):
 
     # security check
     if str(request.user.id) != user_id and not request.user.is_staff:
-        raise Exception("User not authorized to change profile data")
+        return HttpResponseServerError("Not authorized to update another user's profile..")
+
 
     # get user
     user = get_object_or_404(User, pk=user_id)
