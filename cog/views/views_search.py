@@ -383,6 +383,9 @@ def metadata_display(request, project_short_name):
     index_node = request.GET.get('index_node', None)
     back = request.GET.get('back', None)
     
+    if not index_node in ["esgf-node.llnl.gov", "esgf.ceda.ac.uk", "esgf-data.dkrz.de", "esgf-node.ipsl.upmc.fr", "esg-dn1.nsc.liu.se", "esgf.nci.org.au", "esgdata.gfdl.noaa.gov"]:
+        return HttpResponseBadRequest()
+
     # retrieve project from database
     project = get_object_or_404(Project, short_name__iexact=project_short_name)
     config = _getSearchConfig(request, project)
@@ -827,6 +830,9 @@ def search_group_delete(request, group_id):
 def search_files(request, dataset_id, index_node):
     """View that searches for all files of a given dataset, and returns the response as JSON"""
     
+    if not index_node in ["esgf-node.llnl.gov", "esgf.ceda.ac.uk", "esgf-data.dkrz.de", "esgf-node.ipsl.upmc.fr", "esg-dn1.nsc.liu.se", "esgf.nci.org.au", "esgdata.gfdl.noaa.gov"]:
+        return HttpResponseBadRequest()
+    
     # maximum number of files to query for
     limit = request.GET.get('limit', 20)
             
@@ -989,6 +995,11 @@ def citation_display(request):
 
     # get citation info in json format
     url = request.GET.get('url', '')
+
+    # Whitelist the citation request to just the DKRZ server for now
+    res = urllib.parse.urlparse(url)
+    if res.hostname != "cera-www.dkrz.de":
+        return HttpResponseBadRequest()
 
     try:
         fh = urllib.request.urlopen(url)
